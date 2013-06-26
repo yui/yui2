@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: menu   menuitem.js  (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: menu   menuitem.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Menu&nbsp; <span class="subtitle">2.8.2r1</span></h3>
+        <h3>Menu  <span class="subtitle">2.8.2r1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_menu.html" title="menu">menu</a>
                 
                  &gt; menuitem.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,32 +22,29 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <div id="srcout">
                         <style>
                             #doc3 .classopts { display:none; }
-                        </style>
-                        <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                        </style><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
 
 <span class="cm">/**</span>
 <span class="cm">* Creates an item for a menu.</span>
 <span class="cm">* </span>
 <span class="cm">* @param {String} p_oObject String specifying the text of the menu item.</span>
-<span class="cm">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="cm">* one-html.html#ID-74680021&quot;&gt;HTMLLIElement&lt;/a&gt;} p_oObject Object specifying </span>
+<span class="cm">* @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="cm">* one-html.html#ID-74680021"&gt;HTMLLIElement&lt;/a&gt;} p_oObject Object specifying </span>
 <span class="cm">* the &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element of the menu item.</span>
-<span class="cm">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="cm">* one-html.html#ID-38450247&quot;&gt;HTMLOptGroupElement&lt;/a&gt;} p_oObject Object </span>
+<span class="cm">* @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="cm">* one-html.html#ID-38450247"&gt;HTMLOptGroupElement&lt;/a&gt;} p_oObject Object </span>
 <span class="cm">* specifying the &lt;code&gt;&amp;#60;optgroup&amp;#62;&lt;/code&gt; element of the menu item.</span>
-<span class="cm">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="cm">* one-html.html#ID-70901257&quot;&gt;HTMLOptionElement&lt;/a&gt;} p_oObject Object </span>
+<span class="cm">* @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="cm">* one-html.html#ID-70901257"&gt;HTMLOptionElement&lt;/a&gt;} p_oObject Object </span>
 <span class="cm">* specifying the &lt;code&gt;&amp;#60;option&amp;#62;&lt;/code&gt; element of the menu item.</span>
 <span class="cm">* @param {Object} p_oConfig Optional. Object literal specifying the </span>
 <span class="cm">* configuration for the menu item. See configuration class documentation </span>
@@ -97,63 +81,63 @@
 
 	<span class="c1">// Private string constants</span>
 
-	<span class="nx">_TEXT</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span><span class="p">,</span>
-	<span class="nx">_HASH</span> <span class="o">=</span> <span class="s2">&quot;#&quot;</span><span class="p">,</span>
-	<span class="nx">_HYPHEN</span> <span class="o">=</span> <span class="s2">&quot;-&quot;</span><span class="p">,</span>
-	<span class="nx">_HELP_TEXT</span> <span class="o">=</span> <span class="s2">&quot;helptext&quot;</span><span class="p">,</span>
-	<span class="nx">_URL</span> <span class="o">=</span> <span class="s2">&quot;url&quot;</span><span class="p">,</span>
-	<span class="nx">_TARGET</span> <span class="o">=</span> <span class="s2">&quot;target&quot;</span><span class="p">,</span>
-	<span class="nx">_EMPHASIS</span> <span class="o">=</span> <span class="s2">&quot;emphasis&quot;</span><span class="p">,</span>
-	<span class="nx">_STRONG_EMPHASIS</span> <span class="o">=</span> <span class="s2">&quot;strongemphasis&quot;</span><span class="p">,</span>
-	<span class="nx">_CHECKED</span> <span class="o">=</span> <span class="s2">&quot;checked&quot;</span><span class="p">,</span>
-	<span class="nx">_SUBMENU</span> <span class="o">=</span> <span class="s2">&quot;submenu&quot;</span><span class="p">,</span>
-	<span class="nx">_DISABLED</span> <span class="o">=</span> <span class="s2">&quot;disabled&quot;</span><span class="p">,</span>
-	<span class="nx">_SELECTED</span> <span class="o">=</span> <span class="s2">&quot;selected&quot;</span><span class="p">,</span>
-	<span class="nx">_HAS_SUBMENU</span> <span class="o">=</span> <span class="s2">&quot;hassubmenu&quot;</span><span class="p">,</span>
-	<span class="nx">_CHECKED_DISABLED</span> <span class="o">=</span> <span class="s2">&quot;checked-disabled&quot;</span><span class="p">,</span>
-	<span class="nx">_HAS_SUBMENU_DISABLED</span> <span class="o">=</span> <span class="s2">&quot;hassubmenu-disabled&quot;</span><span class="p">,</span>
-	<span class="nx">_HAS_SUBMENU_SELECTED</span> <span class="o">=</span> <span class="s2">&quot;hassubmenu-selected&quot;</span><span class="p">,</span>
-	<span class="nx">_CHECKED_SELECTED</span> <span class="o">=</span> <span class="s2">&quot;checked-selected&quot;</span><span class="p">,</span>
-	<span class="nx">_ONCLICK</span> <span class="o">=</span> <span class="s2">&quot;onclick&quot;</span><span class="p">,</span>
-	<span class="nx">_CLASSNAME</span> <span class="o">=</span> <span class="s2">&quot;classname&quot;</span><span class="p">,</span>
-	<span class="nx">_EMPTY_STRING</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
-	<span class="nx">_OPTION</span> <span class="o">=</span> <span class="s2">&quot;OPTION&quot;</span><span class="p">,</span>
-	<span class="nx">_OPTGROUP</span> <span class="o">=</span> <span class="s2">&quot;OPTGROUP&quot;</span><span class="p">,</span>
-	<span class="nx">_LI_UPPERCASE</span> <span class="o">=</span> <span class="s2">&quot;LI&quot;</span><span class="p">,</span>
-	<span class="nx">_HREF</span> <span class="o">=</span> <span class="s2">&quot;href&quot;</span><span class="p">,</span>
-	<span class="nx">_SELECT</span> <span class="o">=</span> <span class="s2">&quot;SELECT&quot;</span><span class="p">,</span>
-	<span class="nx">_DIV</span> <span class="o">=</span> <span class="s2">&quot;DIV&quot;</span><span class="p">,</span>
-	<span class="nx">_START_HELP_TEXT</span> <span class="o">=</span> <span class="s2">&quot;&lt;em class=\&quot;helptext\&quot;&gt;&quot;</span><span class="p">,</span>
-	<span class="nx">_START_EM</span> <span class="o">=</span> <span class="s2">&quot;&lt;em&gt;&quot;</span><span class="p">,</span>
-	<span class="nx">_END_EM</span> <span class="o">=</span> <span class="s2">&quot;&lt;/em&gt;&quot;</span><span class="p">,</span>
-	<span class="nx">_START_STRONG</span> <span class="o">=</span> <span class="s2">&quot;&lt;strong&gt;&quot;</span><span class="p">,</span>
-	<span class="nx">_END_STRONG</span> <span class="o">=</span> <span class="s2">&quot;&lt;/strong&gt;&quot;</span><span class="p">,</span>
-	<span class="nx">_PREVENT_CONTEXT_OVERLAP</span> <span class="o">=</span> <span class="s2">&quot;preventcontextoverlap&quot;</span><span class="p">,</span>
-	<span class="nx">_OBJ</span> <span class="o">=</span> <span class="s2">&quot;obj&quot;</span><span class="p">,</span>
-	<span class="nx">_SCOPE</span> <span class="o">=</span> <span class="s2">&quot;scope&quot;</span><span class="p">,</span>
-	<span class="nx">_NONE</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="p">,</span>
-	<span class="nx">_VISIBLE</span> <span class="o">=</span> <span class="s2">&quot;visible&quot;</span><span class="p">,</span>
-	<span class="nx">_SPACE</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="p">,</span>
-	<span class="nx">_MENUITEM</span> <span class="o">=</span> <span class="s2">&quot;MenuItem&quot;</span><span class="p">,</span>
-	<span class="nx">_CLICK</span> <span class="o">=</span> <span class="s2">&quot;click&quot;</span><span class="p">,</span>
-	<span class="nx">_SHOW</span> <span class="o">=</span> <span class="s2">&quot;show&quot;</span><span class="p">,</span>
-	<span class="nx">_HIDE</span> <span class="o">=</span> <span class="s2">&quot;hide&quot;</span><span class="p">,</span>
-	<span class="nx">_LI_LOWERCASE</span> <span class="o">=</span> <span class="s2">&quot;li&quot;</span><span class="p">,</span>
-	<span class="nx">_ANCHOR_TEMPLATE</span> <span class="o">=</span> <span class="s2">&quot;&lt;a href=\&quot;#\&quot;&gt;&lt;/a&gt;&quot;</span><span class="p">,</span>
+	<span class="nx">_TEXT</span> <span class="o">=</span> <span class="s2">"text"</span><span class="p">,</span>
+	<span class="nx">_HASH</span> <span class="o">=</span> <span class="s2">"#"</span><span class="p">,</span>
+	<span class="nx">_HYPHEN</span> <span class="o">=</span> <span class="s2">"-"</span><span class="p">,</span>
+	<span class="nx">_HELP_TEXT</span> <span class="o">=</span> <span class="s2">"helptext"</span><span class="p">,</span>
+	<span class="nx">_URL</span> <span class="o">=</span> <span class="s2">"url"</span><span class="p">,</span>
+	<span class="nx">_TARGET</span> <span class="o">=</span> <span class="s2">"target"</span><span class="p">,</span>
+	<span class="nx">_EMPHASIS</span> <span class="o">=</span> <span class="s2">"emphasis"</span><span class="p">,</span>
+	<span class="nx">_STRONG_EMPHASIS</span> <span class="o">=</span> <span class="s2">"strongemphasis"</span><span class="p">,</span>
+	<span class="nx">_CHECKED</span> <span class="o">=</span> <span class="s2">"checked"</span><span class="p">,</span>
+	<span class="nx">_SUBMENU</span> <span class="o">=</span> <span class="s2">"submenu"</span><span class="p">,</span>
+	<span class="nx">_DISABLED</span> <span class="o">=</span> <span class="s2">"disabled"</span><span class="p">,</span>
+	<span class="nx">_SELECTED</span> <span class="o">=</span> <span class="s2">"selected"</span><span class="p">,</span>
+	<span class="nx">_HAS_SUBMENU</span> <span class="o">=</span> <span class="s2">"hassubmenu"</span><span class="p">,</span>
+	<span class="nx">_CHECKED_DISABLED</span> <span class="o">=</span> <span class="s2">"checked-disabled"</span><span class="p">,</span>
+	<span class="nx">_HAS_SUBMENU_DISABLED</span> <span class="o">=</span> <span class="s2">"hassubmenu-disabled"</span><span class="p">,</span>
+	<span class="nx">_HAS_SUBMENU_SELECTED</span> <span class="o">=</span> <span class="s2">"hassubmenu-selected"</span><span class="p">,</span>
+	<span class="nx">_CHECKED_SELECTED</span> <span class="o">=</span> <span class="s2">"checked-selected"</span><span class="p">,</span>
+	<span class="nx">_ONCLICK</span> <span class="o">=</span> <span class="s2">"onclick"</span><span class="p">,</span>
+	<span class="nx">_CLASSNAME</span> <span class="o">=</span> <span class="s2">"classname"</span><span class="p">,</span>
+	<span class="nx">_EMPTY_STRING</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span>
+	<span class="nx">_OPTION</span> <span class="o">=</span> <span class="s2">"OPTION"</span><span class="p">,</span>
+	<span class="nx">_OPTGROUP</span> <span class="o">=</span> <span class="s2">"OPTGROUP"</span><span class="p">,</span>
+	<span class="nx">_LI_UPPERCASE</span> <span class="o">=</span> <span class="s2">"LI"</span><span class="p">,</span>
+	<span class="nx">_HREF</span> <span class="o">=</span> <span class="s2">"href"</span><span class="p">,</span>
+	<span class="nx">_SELECT</span> <span class="o">=</span> <span class="s2">"SELECT"</span><span class="p">,</span>
+	<span class="nx">_DIV</span> <span class="o">=</span> <span class="s2">"DIV"</span><span class="p">,</span>
+	<span class="nx">_START_HELP_TEXT</span> <span class="o">=</span> <span class="s2">"&lt;em class=\"helptext\"&gt;"</span><span class="p">,</span>
+	<span class="nx">_START_EM</span> <span class="o">=</span> <span class="s2">"&lt;em&gt;"</span><span class="p">,</span>
+	<span class="nx">_END_EM</span> <span class="o">=</span> <span class="s2">"&lt;/em&gt;"</span><span class="p">,</span>
+	<span class="nx">_START_STRONG</span> <span class="o">=</span> <span class="s2">"&lt;strong&gt;"</span><span class="p">,</span>
+	<span class="nx">_END_STRONG</span> <span class="o">=</span> <span class="s2">"&lt;/strong&gt;"</span><span class="p">,</span>
+	<span class="nx">_PREVENT_CONTEXT_OVERLAP</span> <span class="o">=</span> <span class="s2">"preventcontextoverlap"</span><span class="p">,</span>
+	<span class="nx">_OBJ</span> <span class="o">=</span> <span class="s2">"obj"</span><span class="p">,</span>
+	<span class="nx">_SCOPE</span> <span class="o">=</span> <span class="s2">"scope"</span><span class="p">,</span>
+	<span class="nx">_NONE</span> <span class="o">=</span> <span class="s2">"none"</span><span class="p">,</span>
+	<span class="nx">_VISIBLE</span> <span class="o">=</span> <span class="s2">"visible"</span><span class="p">,</span>
+	<span class="nx">_SPACE</span> <span class="o">=</span> <span class="s2">" "</span><span class="p">,</span>
+	<span class="nx">_MENUITEM</span> <span class="o">=</span> <span class="s2">"MenuItem"</span><span class="p">,</span>
+	<span class="nx">_CLICK</span> <span class="o">=</span> <span class="s2">"click"</span><span class="p">,</span>
+	<span class="nx">_SHOW</span> <span class="o">=</span> <span class="s2">"show"</span><span class="p">,</span>
+	<span class="nx">_HIDE</span> <span class="o">=</span> <span class="s2">"hide"</span><span class="p">,</span>
+	<span class="nx">_LI_LOWERCASE</span> <span class="o">=</span> <span class="s2">"li"</span><span class="p">,</span>
+	<span class="nx">_ANCHOR_TEMPLATE</span> <span class="o">=</span> <span class="s2">"&lt;a href=\"#\"&gt;&lt;/a&gt;"</span><span class="p">,</span>
 
     <span class="nx">EVENT_TYPES</span> <span class="o">=</span> <span class="p">[</span>
     
-        <span class="p">[</span><span class="s2">&quot;mouseOverEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;mouseover&quot;</span><span class="p">],</span>
-        <span class="p">[</span><span class="s2">&quot;mouseOutEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;mouseout&quot;</span><span class="p">],</span>
-        <span class="p">[</span><span class="s2">&quot;mouseDownEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;mousedown&quot;</span><span class="p">],</span>
-        <span class="p">[</span><span class="s2">&quot;mouseUpEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;mouseup&quot;</span><span class="p">],</span>
-        <span class="p">[</span><span class="s2">&quot;clickEvent&quot;</span><span class="p">,</span> <span class="nx">_CLICK</span><span class="p">],</span>
-        <span class="p">[</span><span class="s2">&quot;keyPressEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;keypress&quot;</span><span class="p">],</span>
-        <span class="p">[</span><span class="s2">&quot;keyDownEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;keydown&quot;</span><span class="p">],</span>
-        <span class="p">[</span><span class="s2">&quot;keyUpEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;keyup&quot;</span><span class="p">],</span>
-        <span class="p">[</span><span class="s2">&quot;focusEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;focus&quot;</span><span class="p">],</span>
-        <span class="p">[</span><span class="s2">&quot;blurEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;blur&quot;</span><span class="p">],</span>
-        <span class="p">[</span><span class="s2">&quot;destroyEvent&quot;</span><span class="p">,</span> <span class="s2">&quot;destroy&quot;</span><span class="p">]</span>
+        <span class="p">[</span><span class="s2">"mouseOverEvent"</span><span class="p">,</span> <span class="s2">"mouseover"</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">"mouseOutEvent"</span><span class="p">,</span> <span class="s2">"mouseout"</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">"mouseDownEvent"</span><span class="p">,</span> <span class="s2">"mousedown"</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">"mouseUpEvent"</span><span class="p">,</span> <span class="s2">"mouseup"</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">"clickEvent"</span><span class="p">,</span> <span class="nx">_CLICK</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">"keyPressEvent"</span><span class="p">,</span> <span class="s2">"keypress"</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">"keyDownEvent"</span><span class="p">,</span> <span class="s2">"keydown"</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">"keyUpEvent"</span><span class="p">,</span> <span class="s2">"keyup"</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">"focusEvent"</span><span class="p">,</span> <span class="s2">"focus"</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">"blurEvent"</span><span class="p">,</span> <span class="s2">"blur"</span><span class="p">],</span>
+        <span class="p">[</span><span class="s2">"destroyEvent"</span><span class="p">,</span> <span class="s2">"destroy"</span><span class="p">]</span>
     
     <span class="p">],</span>
 
@@ -239,7 +223,7 @@
 	<span class="p">},</span>
     
 	<span class="nx">KEY_LISTENER_CONFIG</span> <span class="o">=</span> <span class="p">{</span>
-		<span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;keylistener&quot;</span><span class="p">,</span> 
+		<span class="nx">key</span><span class="o">:</span> <span class="s2">"keylistener"</span><span class="p">,</span> 
 		<span class="nx">value</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span> 
 		<span class="nx">suppressEvent</span><span class="o">:</span> <span class="kc">true</span>
 	<span class="p">},</span>
@@ -255,7 +239,7 @@
 <span class="cm">* yet exist, it is created and stored in the CLASS_NAMES object to increase performance.</span>
 <span class="cm">* @private</span>
 <span class="cm">* @param {String} prefix String representing the prefix for the class name</span>
-<span class="cm">* @param {String} state String representing a state - &quot;disabled,&quot; &quot;checked,&quot; etc.</span>
+<span class="cm">* @param {String} state String representing a state - "disabled," "checked," etc.</span>
 <span class="cm">*/</span>  
 <span class="kd">var</span> <span class="nx">getClassNameForState</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">prefix</span><span class="p">,</span> <span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
 
@@ -281,10 +265,10 @@
 
 <span class="cm">/**</span>
 <span class="cm">* @method addClassNameForState</span>
-<span class="cm">* @description Applies a class name to a MenuItem instance&#39;s &amp;#60;LI&amp;#62; and &amp;#60;A&amp;#62; elements</span>
-<span class="cm">* that represents a MenuItem&#39;s state - &quot;disabled,&quot; &quot;checked,&quot; etc.</span>
+<span class="cm">* @description Applies a class name to a MenuItem instance's &amp;#60;LI&amp;#62; and &amp;#60;A&amp;#62; elements</span>
+<span class="cm">* that represents a MenuItem's state - "disabled," "checked," etc.</span>
 <span class="cm">* @private</span>
-<span class="cm">* @param {String} state String representing a state - &quot;disabled,&quot; &quot;checked,&quot; etc.</span>
+<span class="cm">* @param {String} state String representing a state - "disabled," "checked," etc.</span>
 <span class="cm">*/</span>  
 <span class="kd">var</span> <span class="nx">addClassNameForState</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
 
@@ -295,10 +279,10 @@
 
 <span class="cm">/**</span>
 <span class="cm">* @method removeClassNameForState</span>
-<span class="cm">* @description Removes a class name from a MenuItem instance&#39;s &amp;#60;LI&amp;#62; and &amp;#60;A&amp;#62; elements</span>
-<span class="cm">* that represents a MenuItem&#39;s state - &quot;disabled,&quot; &quot;checked,&quot; etc.</span>
+<span class="cm">* @description Removes a class name from a MenuItem instance's &amp;#60;LI&amp;#62; and &amp;#60;A&amp;#62; elements</span>
+<span class="cm">* that represents a MenuItem's state - "disabled," "checked," etc.</span>
 <span class="cm">* @private</span>
-<span class="cm">* @param {String} state String representing a state - &quot;disabled,&quot; &quot;checked,&quot; etc.</span>
+<span class="cm">* @param {String} state String representing a state - "disabled," "checked," etc.</span>
 <span class="cm">*/</span>  
 <span class="kd">var</span> <span class="nx">removeClassNameForState</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">state</span><span class="p">)</span> <span class="p">{</span>
 
@@ -314,28 +298,28 @@
 <span class="cm">    * @property CSS_CLASS_NAME</span>
 <span class="cm">    * @description String representing the CSS class(es) to be applied to the </span>
 <span class="cm">    * &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element of the menu item.</span>
-<span class="cm">    * @default &quot;yuimenuitem&quot;</span>
+<span class="cm">    * @default "yuimenuitem"</span>
 <span class="cm">    * @final</span>
 <span class="cm">    * @type String</span>
 <span class="cm">    */</span>
-    <span class="nx">CSS_CLASS_NAME</span><span class="o">:</span> <span class="s2">&quot;yuimenuitem&quot;</span><span class="p">,</span>
+    <span class="nx">CSS_CLASS_NAME</span><span class="o">:</span> <span class="s2">"yuimenuitem"</span><span class="p">,</span>
 
 
     <span class="cm">/**</span>
 <span class="cm">    * @property CSS_LABEL_CLASS_NAME</span>
 <span class="cm">    * @description String representing the CSS class(es) to be applied to the </span>
-<span class="cm">    * menu item&#39;s &lt;code&gt;&amp;#60;a&amp;#62;&lt;/code&gt; element.</span>
-<span class="cm">    * @default &quot;yuimenuitemlabel&quot;</span>
+<span class="cm">    * menu item's &lt;code&gt;&amp;#60;a&amp;#62;&lt;/code&gt; element.</span>
+<span class="cm">    * @default "yuimenuitemlabel"</span>
 <span class="cm">    * @final</span>
 <span class="cm">    * @type String</span>
 <span class="cm">    */</span>
-    <span class="nx">CSS_LABEL_CLASS_NAME</span><span class="o">:</span> <span class="s2">&quot;yuimenuitemlabel&quot;</span><span class="p">,</span>
+    <span class="nx">CSS_LABEL_CLASS_NAME</span><span class="o">:</span> <span class="s2">"yuimenuitemlabel"</span><span class="p">,</span>
 
 
     <span class="cm">/**</span>
 <span class="cm">    * @property SUBMENU_TYPE</span>
 <span class="cm">    * @description Object representing the type of menu to instantiate and </span>
-<span class="cm">    * add when parsing the child nodes of the menu item&#39;s source HTML element.</span>
+<span class="cm">    * add when parsing the child nodes of the menu item's source HTML element.</span>
 <span class="cm">    * @final</span>
 <span class="cm">    * @type YAHOO.widget.Menu</span>
 <span class="cm">    */</span>
@@ -348,31 +332,31 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @property _oAnchor</span>
-<span class="cm">    * @description Object reference to the menu item&#39;s </span>
+<span class="cm">    * @description Object reference to the menu item's </span>
 <span class="cm">    * &lt;code&gt;&amp;#60;a&amp;#62;&lt;/code&gt; element.</span>
 <span class="cm">    * @default null </span>
 <span class="cm">    * @private</span>
-<span class="cm">    * @type &lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="cm">    * one-html.html#ID-48250443&quot;&gt;HTMLAnchorElement&lt;/a&gt;</span>
+<span class="cm">    * @type &lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="cm">    * one-html.html#ID-48250443"&gt;HTMLAnchorElement&lt;/a&gt;</span>
 <span class="cm">    */</span>
     <span class="nx">_oAnchor</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
     
     
     <span class="cm">/**</span>
 <span class="cm">    * @property _oHelpTextEM</span>
-<span class="cm">    * @description Object reference to the menu item&#39;s help text </span>
+<span class="cm">    * @description Object reference to the menu item's help text </span>
 <span class="cm">    * &lt;code&gt;&amp;#60;em&amp;#62;&lt;/code&gt; element.</span>
 <span class="cm">    * @default null</span>
 <span class="cm">    * @private</span>
-<span class="cm">    * @type &lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="cm">    * one-html.html#ID-58190037&quot;&gt;HTMLElement&lt;/a&gt;</span>
+<span class="cm">    * @type &lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="cm">    * one-html.html#ID-58190037"&gt;HTMLElement&lt;/a&gt;</span>
 <span class="cm">    */</span>
     <span class="nx">_oHelpTextEM</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
     
     
     <span class="cm">/**</span>
 <span class="cm">    * @property _oSubmenu</span>
-<span class="cm">    * @description Object reference to the menu item&#39;s submenu.</span>
+<span class="cm">    * @description Object reference to the menu item's submenu.</span>
 <span class="cm">    * @default null</span>
 <span class="cm">    * @private</span>
 <span class="cm">    * @type YAHOO.widget.Menu</span>
@@ -382,8 +366,8 @@
 
     <span class="cm">/** </span>
 <span class="cm">    * @property _oOnclickAttributeValue</span>
-<span class="cm">    * @description Object reference to the menu item&#39;s current value for the </span>
-<span class="cm">    * &quot;onclick&quot; configuration attribute.</span>
+<span class="cm">    * @description Object reference to the menu item's current value for the </span>
+<span class="cm">    * "onclick" configuration attribute.</span>
 <span class="cm">    * @default null</span>
 <span class="cm">    * @private</span>
 <span class="cm">    * @type Object</span>
@@ -393,7 +377,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @property _sClassName</span>
-<span class="cm">    * @description The current value of the &quot;classname&quot; configuration attribute.</span>
+<span class="cm">    * @description The current value of the "classname" configuration attribute.</span>
 <span class="cm">    * @default null</span>
 <span class="cm">    * @private</span>
 <span class="cm">    * @type String</span>
@@ -407,7 +391,7 @@
 
 	<span class="cm">/**</span>
 <span class="cm">    * @property constructor</span>
-<span class="cm">	* @description Object reference to the menu item&#39;s constructor function.</span>
+<span class="cm">	* @description Object reference to the menu item's constructor function.</span>
 <span class="cm">    * @default YAHOO.widget.MenuItem</span>
 <span class="cm">	* @type YAHOO.widget.MenuItem</span>
 <span class="cm">	*/</span>
@@ -436,7 +420,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @property parent</span>
-<span class="cm">    * @description Object reference to the menu item&#39;s parent menu.</span>
+<span class="cm">    * @description Object reference to the menu item's parent menu.</span>
 <span class="cm">    * @default null</span>
 <span class="cm">    * @type YAHOO.widget.Menu</span>
 <span class="cm">    */</span>
@@ -445,12 +429,12 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @property element</span>
-<span class="cm">    * @description Object reference to the menu item&#39;s </span>
+<span class="cm">    * @description Object reference to the menu item's </span>
 <span class="cm">    * &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element.</span>
-<span class="cm">    * @default &lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level</span>
-<span class="cm">    * -one-html.html#ID-74680021&quot;&gt;HTMLLIElement&lt;/a&gt;</span>
-<span class="cm">    * @type &lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="cm">    * one-html.html#ID-74680021&quot;&gt;HTMLLIElement&lt;/a&gt;</span>
+<span class="cm">    * @default &lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level</span>
+<span class="cm">    * -one-html.html#ID-74680021"&gt;HTMLLIElement&lt;/a&gt;</span>
+<span class="cm">    * @type &lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="cm">    * one-html.html#ID-74680021"&gt;HTMLLIElement&lt;/a&gt;</span>
 <span class="cm">    */</span>
     <span class="nx">element</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 
@@ -460,23 +444,23 @@
 <span class="cm">    * @description Object reference to the HTML element (either </span>
 <span class="cm">    * &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt;, &lt;code&gt;&amp;#60;optgroup&amp;#62;&lt;/code&gt; or </span>
 <span class="cm">    * &lt;code&gt;&amp;#60;option&amp;#62;&lt;/code&gt;) used create the menu item.</span>
-<span class="cm">    * @default &lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
-<span class="cm">    * level-one-html.html#ID-74680021&quot;&gt;HTMLLIElement&lt;/a&gt;|&lt;a href=&quot;http://www.</span>
-<span class="cm">    * w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-38450247&quot;</span>
-<span class="cm">    * &gt;HTMLOptGroupElement&lt;/a&gt;|&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-</span>
-<span class="cm">    * Level-1-20000929/level-one-html.html#ID-70901257&quot;&gt;HTMLOptionElement&lt;/a&gt;</span>
-<span class="cm">    * @type &lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="cm">    * one-html.html#ID-74680021&quot;&gt;HTMLLIElement&lt;/a&gt;|&lt;a href=&quot;http://www.w3.</span>
-<span class="cm">    * org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-38450247&quot;&gt;</span>
-<span class="cm">    * HTMLOptGroupElement&lt;/a&gt;|&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-</span>
-<span class="cm">    * Level-1-20000929/level-one-html.html#ID-70901257&quot;&gt;HTMLOptionElement&lt;/a&gt;</span>
+<span class="cm">    * @default &lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
+<span class="cm">    * level-one-html.html#ID-74680021"&gt;HTMLLIElement&lt;/a&gt;|&lt;a href="http://www.</span>
+<span class="cm">    * w3.org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-38450247"</span>
+<span class="cm">    * &gt;HTMLOptGroupElement&lt;/a&gt;|&lt;a href="http://www.w3.org/TR/2000/WD-DOM-</span>
+<span class="cm">    * Level-1-20000929/level-one-html.html#ID-70901257"&gt;HTMLOptionElement&lt;/a&gt;</span>
+<span class="cm">    * @type &lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="cm">    * one-html.html#ID-74680021"&gt;HTMLLIElement&lt;/a&gt;|&lt;a href="http://www.w3.</span>
+<span class="cm">    * org/TR/2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-38450247"&gt;</span>
+<span class="cm">    * HTMLOptGroupElement&lt;/a&gt;|&lt;a href="http://www.w3.org/TR/2000/WD-DOM-</span>
+<span class="cm">    * Level-1-20000929/level-one-html.html#ID-70901257"&gt;HTMLOptionElement&lt;/a&gt;</span>
 <span class="cm">    */</span>
     <span class="nx">srcElement</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 
 
     <span class="cm">/**</span>
 <span class="cm">    * @property value</span>
-<span class="cm">    * @description Object reference to the menu item&#39;s value.</span>
+<span class="cm">    * @description Object reference to the menu item's value.</span>
 <span class="cm">    * @default null</span>
 <span class="cm">    * @type Object</span>
 <span class="cm">    */</span>
@@ -494,10 +478,10 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @property id</span>
-<span class="cm">    * @description Id of the menu item&#39;s root &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; </span>
+<span class="cm">    * @description Id of the menu item's root &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; </span>
 <span class="cm">    * element.  This property should be set via the constructor using the </span>
 <span class="cm">    * configuration object literal.  If an id is not specified, then one will </span>
-<span class="cm">    * be created using the &quot;generateId&quot; method of the Dom utility.</span>
+<span class="cm">    * be created using the "generateId" method of the Dom utility.</span>
 <span class="cm">    * @default null</span>
 <span class="cm">    * @type String</span>
 <span class="cm">    */</span>
@@ -510,7 +494,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @event destroyEvent</span>
-<span class="cm">    * @description Fires when the menu item&#39;s &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; </span>
+<span class="cm">    * @description Fires when the menu item's &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; </span>
 <span class="cm">    * element is removed from its parent &lt;code&gt;&amp;#60;ul&amp;#62;&lt;/code&gt; element.</span>
 <span class="cm">    * @type YAHOO.util.CustomEvent</span>
 <span class="cm">    */</span>
@@ -596,19 +580,19 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method init</span>
-<span class="cm">    * @description The MenuItem class&#39;s initialization method. This method is </span>
+<span class="cm">    * @description The MenuItem class's initialization method. This method is </span>
 <span class="cm">    * automatically called by the constructor, and sets up all DOM references </span>
 <span class="cm">    * for pre-existing markup, and creates required markup if it is not </span>
 <span class="cm">    * already present.</span>
 <span class="cm">    * @param {String} p_oObject String specifying the text of the menu item.</span>
-<span class="cm">    * @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="cm">    * one-html.html#ID-74680021&quot;&gt;HTMLLIElement&lt;/a&gt;} p_oObject Object specifying </span>
+<span class="cm">    * @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="cm">    * one-html.html#ID-74680021"&gt;HTMLLIElement&lt;/a&gt;} p_oObject Object specifying </span>
 <span class="cm">    * the &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element of the menu item.</span>
-<span class="cm">    * @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="cm">    * one-html.html#ID-38450247&quot;&gt;HTMLOptGroupElement&lt;/a&gt;} p_oObject Object </span>
+<span class="cm">    * @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="cm">    * one-html.html#ID-38450247"&gt;HTMLOptGroupElement&lt;/a&gt;} p_oObject Object </span>
 <span class="cm">    * specifying the &lt;code&gt;&amp;#60;optgroup&amp;#62;&lt;/code&gt; element of the menu item.</span>
-<span class="cm">    * @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="cm">    * one-html.html#ID-70901257&quot;&gt;HTMLOptionElement&lt;/a&gt;} p_oObject Object </span>
+<span class="cm">    * @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="cm">    * one-html.html#ID-70901257"&gt;HTMLOptionElement&lt;/a&gt;} p_oObject Object </span>
 <span class="cm">    * specifying the &lt;code&gt;&amp;#60;option&amp;#62;&lt;/code&gt; element of the menu item.</span>
 <span class="cm">    * @param {Object} p_oConfig Optional. Object literal specifying the </span>
 <span class="cm">    * configuration for the menu item. See configuration class documentation </span>
@@ -685,7 +669,7 @@
                     <span class="nx">oAnchor</span> <span class="o">=</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">getFirstChild</span><span class="p">(</span><span class="nx">p_oObject</span><span class="p">);</span>
 
 
-                    <span class="c1">// Capture the &quot;text&quot; and/or the &quot;URL&quot;</span>
+                    <span class="c1">// Capture the "text" and/or the "URL"</span>
 
                     <span class="k">if</span> <span class="p">(</span><span class="nx">oAnchor</span><span class="p">)</span> <span class="p">{</span>
 
@@ -703,7 +687,7 @@
                     <span class="cm">/*</span>
 <span class="cm">                        Set these properties silently to sync up the </span>
 <span class="cm">                        configuration object without making changes to the </span>
-<span class="cm">                        element&#39;s DOM</span>
+<span class="cm">                        element's DOM</span>
 <span class="cm">                    */</span> 
 
                     <span class="nx">oConfig</span><span class="p">.</span><span class="nx">setProperty</span><span class="p">(</span><span class="nx">_TEXT</span><span class="p">,</span> <span class="nx">sText</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
@@ -800,7 +784,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method _initSubTree</span>
-<span class="cm">    * @description Iterates the source element&#39;s childNodes collection and uses </span>
+<span class="cm">    * @description Iterates the source element's childNodes collection and uses </span>
 <span class="cm">    * the child nodes to instantiate other menus.</span>
 <span class="cm">    * @private</span>
 <span class="cm">    */</span>
@@ -886,7 +870,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method configText</span>
-<span class="cm">    * @description Event handler for when the &quot;text&quot; configuration property of </span>
+<span class="cm">    * @description Event handler for when the "text" configuration property of </span>
 <span class="cm">    * the menu item changes.</span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -940,7 +924,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method configHelpText</span>
-<span class="cm">    * @description Event handler for when the &quot;helptext&quot; configuration property </span>
+<span class="cm">    * @description Event handler for when the "helptext" configuration property </span>
 <span class="cm">    * of the menu item changes.</span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -957,7 +941,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method configURL</span>
-<span class="cm">    * @description Event handler for when the &quot;url&quot; configuration property of </span>
+<span class="cm">    * @description Event handler for when the "url" configuration property of </span>
 <span class="cm">    * the menu item changes.</span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -990,7 +974,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method configTarget</span>
-<span class="cm">    * @description Event handler for when the &quot;target&quot; configuration property </span>
+<span class="cm">    * @description Event handler for when the "target" configuration property </span>
 <span class="cm">    * of the menu item changes.  </span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -1019,7 +1003,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method configEmphasis</span>
-<span class="cm">    * @description Event handler for when the &quot;emphasis&quot; configuration property</span>
+<span class="cm">    * @description Event handler for when the "emphasis" configuration property</span>
 <span class="cm">    * of the menu item changes.</span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -1047,7 +1031,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method configStrongEmphasis</span>
-<span class="cm">    * @description Event handler for when the &quot;strongemphasis&quot; configuration </span>
+<span class="cm">    * @description Event handler for when the "strongemphasis" configuration </span>
 <span class="cm">    * property of the menu item changes.</span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -1074,7 +1058,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method configChecked</span>
-<span class="cm">    * @description Event handler for when the &quot;checked&quot; configuration property </span>
+<span class="cm">    * @description Event handler for when the "checked" configuration property </span>
 <span class="cm">    * of the menu item changes. </span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -1121,7 +1105,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method configDisabled</span>
-<span class="cm">    * @description Event handler for when the &quot;disabled&quot; configuration property </span>
+<span class="cm">    * @description Event handler for when the "disabled" configuration property </span>
 <span class="cm">    * of the menu item changes. </span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -1188,7 +1172,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method configSelected</span>
-<span class="cm">    * @description Event handler for when the &quot;selected&quot; configuration property </span>
+<span class="cm">    * @description Event handler for when the "selected" configuration property </span>
 <span class="cm">    * of the menu item changes. </span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -1264,7 +1248,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method _onSubmenuBeforeHide</span>
-<span class="cm">    * @description &quot;beforehide&quot; Custom Event handler for a submenu.</span>
+<span class="cm">    * @description "beforehide" Custom Event handler for a submenu.</span>
 <span class="cm">    * @private</span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -1296,7 +1280,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method configSubmenu</span>
-<span class="cm">    * @description Event handler for when the &quot;submenu&quot; configuration property </span>
+<span class="cm">    * @description Event handler for when the "submenu" configuration property </span>
 <span class="cm">    * of the menu item changes. </span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -1408,7 +1392,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method configOnClick</span>
-<span class="cm">    * @description Event handler for when the &quot;onclick&quot; configuration property </span>
+<span class="cm">    * @description Event handler for when the "onclick" configuration property </span>
 <span class="cm">    * of the menu item changes. </span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -1421,7 +1405,7 @@
         <span class="kd">var</span> <span class="nx">oObject</span> <span class="o">=</span> <span class="nx">p_aArgs</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
 
         <span class="cm">/*</span>
-<span class="cm">            Remove any existing listeners if a &quot;click&quot; event handler has </span>
+<span class="cm">            Remove any existing listeners if a "click" event handler has </span>
 <span class="cm">            already been specified.</span>
 <span class="cm">        */</span>
 
@@ -1451,7 +1435,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method configClassName</span>
-<span class="cm">    * @description Event handler for when the &quot;classname&quot; configuration </span>
+<span class="cm">    * @description Event handler for when the "classname" configuration </span>
 <span class="cm">    * property of a menu item changes.</span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -1477,7 +1461,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method _dispatchClickEvent</span>
-<span class="cm">    * @description Dispatches a DOM &quot;click&quot; event to the anchor element of a </span>
+<span class="cm">    * @description Dispatches a DOM "click" event to the anchor element of a </span>
 <span class="cm">	* MenuItem instance.</span>
 <span class="cm">	* @private	</span>
 <span class="cm">    */</span>
@@ -1491,9 +1475,9 @@
 
 			<span class="nx">oAnchor</span> <span class="o">=</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">getFirstChild</span><span class="p">(</span><span class="nx">oMenuItem</span><span class="p">.</span><span class="nx">element</span><span class="p">);</span>
 
-			<span class="c1">//	Dispatch a &quot;click&quot; event to the MenuItem&#39;s anchor so that its</span>
-			<span class="c1">//	&quot;click&quot; event handlers will get called in response to the user </span>
-			<span class="c1">//	pressing the keyboard shortcut defined by the &quot;keylistener&quot;</span>
+			<span class="c1">//	Dispatch a "click" event to the MenuItem's anchor so that its</span>
+			<span class="c1">//	"click" event handlers will get called in response to the user </span>
+			<span class="c1">//	pressing the keyboard shortcut defined by the "keylistener"</span>
 			<span class="c1">//	configuration property.</span>
 
 			<span class="k">if</span> <span class="p">(</span><span class="nx">UA</span><span class="p">.</span><span class="nx">ie</span><span class="p">)</span> <span class="p">{</span>
@@ -1503,13 +1487,13 @@
 
 				<span class="k">if</span> <span class="p">((</span><span class="nx">UA</span><span class="p">.</span><span class="nx">gecko</span> <span class="o">&amp;&amp;</span> <span class="nx">UA</span><span class="p">.</span><span class="nx">gecko</span> <span class="o">&gt;=</span> <span class="mf">1.9</span><span class="p">)</span> <span class="o">||</span> <span class="nx">UA</span><span class="p">.</span><span class="nx">opera</span> <span class="o">||</span> <span class="nx">UA</span><span class="p">.</span><span class="nx">webkit</span><span class="p">)</span> <span class="p">{</span>
 
-					<span class="nx">oEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">&quot;HTMLEvents&quot;</span><span class="p">);</span>
+					<span class="nx">oEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">"HTMLEvents"</span><span class="p">);</span>
 					<span class="nx">oEvent</span><span class="p">.</span><span class="nx">initEvent</span><span class="p">(</span><span class="nx">_CLICK</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 
 				<span class="p">}</span>
 				<span class="k">else</span> <span class="p">{</span>
 
-					<span class="nx">oEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">&quot;MouseEvents&quot;</span><span class="p">);</span>
+					<span class="nx">oEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">"MouseEvents"</span><span class="p">);</span>
 					<span class="nx">oEvent</span><span class="p">.</span><span class="nx">initMouseEvent</span><span class="p">(</span><span class="nx">_CLICK</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="nb">window</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> 
 						<span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="kc">false</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
 
@@ -1526,7 +1510,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method _createKeyListener</span>
-<span class="cm">    * @description &quot;show&quot; event handler for a Menu instance - responsible for </span>
+<span class="cm">    * @description "show" event handler for a Menu instance - responsible for </span>
 <span class="cm">	* setting up the KeyListener instance for a MenuItem.</span>
 <span class="cm">	* @private	</span>
 <span class="cm">    * @param {String} type String representing the name of the event that </span>
@@ -1565,7 +1549,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method configKeyListener</span>
-<span class="cm">    * @description Event handler for when the &quot;keylistener&quot; configuration </span>
+<span class="cm">    * @description Event handler for when the "keylistener" configuration </span>
 <span class="cm">    * property of a menu item changes.</span>
 <span class="cm">    * @param {String} p_sType String representing the name of the event that </span>
 <span class="cm">    * was fired.</span>
@@ -1579,7 +1563,7 @@
 
 		<span class="k">if</span> <span class="p">(</span><span class="nx">oMenuItem</span><span class="p">.</span><span class="nx">_keyData</span><span class="p">)</span> <span class="p">{</span>
 
-			<span class="c1">//	Unsubscribe from the &quot;show&quot; event in case the keylistener </span>
+			<span class="c1">//	Unsubscribe from the "show" event in case the keylistener </span>
 			<span class="c1">//	config was changed before the Menu was ever made visible.</span>
 
 			<span class="nx">oMenu</span><span class="p">.</span><span class="nx">unsubscribe</span><span class="p">(</span><span class="nx">_SHOW</span><span class="p">,</span> 
@@ -1590,7 +1574,7 @@
 		<span class="p">}</span>
 
 
-		<span class="c1">//	Tear down for the previous value of the &quot;keylistener&quot; property</span>
+		<span class="c1">//	Tear down for the previous value of the "keylistener" property</span>
 
 		<span class="k">if</span> <span class="p">(</span><span class="nx">oMenuItem</span><span class="p">.</span><span class="nx">_keyListener</span><span class="p">)</span> <span class="p">{</span>
 
@@ -1625,7 +1609,7 @@
 
 	<span class="cm">/**</span>
 <span class="cm">    * @method initDefaultConfig</span>
-<span class="cm">	* @description Initializes an item&#39;s configurable properties.</span>
+<span class="cm">	* @description Initializes an item's configurable properties.</span>
 <span class="cm">	*/</span>
 	<span class="nx">initDefaultConfig</span> <span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
 
@@ -1638,8 +1622,8 @@
 <span class="cm">        * @config text</span>
 <span class="cm">        * @description String specifying the text label for the menu item.  </span>
 <span class="cm">        * When building a menu from existing HTML the value of this property</span>
-<span class="cm">        * will be interpreted from the menu&#39;s markup.</span>
-<span class="cm">        * @default &quot;&quot;</span>
+<span class="cm">        * will be interpreted from the menu's markup.</span>
+<span class="cm">        * @default ""</span>
 <span class="cm">        * @type String</span>
 <span class="cm">        */</span>
         <span class="nx">oConfig</span><span class="p">.</span><span class="nx">addProperty</span><span class="p">(</span>
@@ -1657,12 +1641,12 @@
 <span class="cm">        * @config helptext</span>
 <span class="cm">        * @description String specifying additional instructional text to </span>
 <span class="cm">        * accompany the text for the menu item.</span>
-<span class="cm">        * @deprecated Use &quot;text&quot; configuration property to add help text markup.  </span>
-<span class="cm">        * For example: &lt;code&gt;oMenuItem.cfg.setProperty(&quot;text&quot;, &quot;Copy &amp;#60;em </span>
-<span class="cm">        * class=\&quot;helptext\&quot;&amp;#62;Ctrl + C&amp;#60;/em&amp;#62;&quot;);&lt;/code&gt;</span>
+<span class="cm">        * @deprecated Use "text" configuration property to add help text markup.  </span>
+<span class="cm">        * For example: &lt;code&gt;oMenuItem.cfg.setProperty("text", "Copy &amp;#60;em </span>
+<span class="cm">        * class=\"helptext\"&amp;#62;Ctrl + C&amp;#60;/em&amp;#62;");&lt;/code&gt;</span>
 <span class="cm">        * @default null</span>
-<span class="cm">        * @type String|&lt;a href=&quot;http://www.w3.org/TR/</span>
-<span class="cm">        * 2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037&quot;&gt;</span>
+<span class="cm">        * @type String|&lt;a href="http://www.w3.org/TR/</span>
+<span class="cm">        * 2000/WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037"&gt;</span>
 <span class="cm">        * HTMLElement&lt;/a&gt;</span>
 <span class="cm">        */</span>
         <span class="nx">oConfig</span><span class="p">.</span><span class="nx">addProperty</span><span class="p">(</span>
@@ -1677,10 +1661,10 @@
 
         <span class="cm">/**</span>
 <span class="cm">        * @config url</span>
-<span class="cm">        * @description String specifying the URL for the menu item&#39;s anchor&#39;s </span>
-<span class="cm">        * &quot;href&quot; attribute.  When building a menu from existing HTML the value </span>
-<span class="cm">        * of this property will be interpreted from the menu&#39;s markup.</span>
-<span class="cm">        * @default &quot;#&quot;</span>
+<span class="cm">        * @description String specifying the URL for the menu item's anchor's </span>
+<span class="cm">        * "href" attribute.  When building a menu from existing HTML the value </span>
+<span class="cm">        * of this property will be interpreted from the menu's markup.</span>
+<span class="cm">        * @default "#"</span>
 <span class="cm">        * @type String</span>
 <span class="cm">        */</span>        
         <span class="nx">oConfig</span><span class="p">.</span><span class="nx">addProperty</span><span class="p">(</span>
@@ -1695,12 +1679,12 @@
 
         <span class="cm">/**</span>
 <span class="cm">        * @config target</span>
-<span class="cm">        * @description String specifying the value for the &quot;target&quot; attribute </span>
-<span class="cm">        * of the menu item&#39;s anchor element. &lt;strong&gt;Specifying a target will </span>
-<span class="cm">        * require the user to click directly on the menu item&#39;s anchor node in</span>
+<span class="cm">        * @description String specifying the value for the "target" attribute </span>
+<span class="cm">        * of the menu item's anchor element. &lt;strong&gt;Specifying a target will </span>
+<span class="cm">        * require the user to click directly on the menu item's anchor node in</span>
 <span class="cm">        * order to cause the browser to navigate to the specified URL.&lt;/strong&gt; </span>
 <span class="cm">        * When building a menu from existing HTML the value of this property </span>
-<span class="cm">        * will be interpreted from the menu&#39;s markup.</span>
+<span class="cm">        * will be interpreted from the menu's markup.</span>
 <span class="cm">        * @default null</span>
 <span class="cm">        * @type String</span>
 <span class="cm">        */</span>        
@@ -1717,9 +1701,9 @@
 <span class="cm">        * @config emphasis</span>
 <span class="cm">        * @description Boolean indicating if the text of the menu item will be </span>
 <span class="cm">        * rendered with emphasis.</span>
-<span class="cm">        * @deprecated Use the &quot;text&quot; configuration property to add emphasis.  </span>
-<span class="cm">        * For example: &lt;code&gt;oMenuItem.cfg.setProperty(&quot;text&quot;, &quot;&amp;#60;em&amp;#62;Some </span>
-<span class="cm">        * Text&amp;#60;/em&amp;#62;&quot;);&lt;/code&gt;</span>
+<span class="cm">        * @deprecated Use the "text" configuration property to add emphasis.  </span>
+<span class="cm">        * For example: &lt;code&gt;oMenuItem.cfg.setProperty("text", "&amp;#60;em&amp;#62;Some </span>
+<span class="cm">        * Text&amp;#60;/em&amp;#62;");&lt;/code&gt;</span>
 <span class="cm">        * @default false</span>
 <span class="cm">        * @type Boolean</span>
 <span class="cm">        */</span>
@@ -1739,9 +1723,9 @@
 <span class="cm">        * @config strongemphasis</span>
 <span class="cm">        * @description Boolean indicating if the text of the menu item will be </span>
 <span class="cm">        * rendered with strong emphasis.</span>
-<span class="cm">        * @deprecated Use the &quot;text&quot; configuration property to add strong emphasis.  </span>
-<span class="cm">        * For example: &lt;code&gt;oMenuItem.cfg.setProperty(&quot;text&quot;, &quot;&amp;#60;strong&amp;#62; </span>
-<span class="cm">        * Some Text&amp;#60;/strong&amp;#62;&quot;);&lt;/code&gt;</span>
+<span class="cm">        * @deprecated Use the "text" configuration property to add strong emphasis.  </span>
+<span class="cm">        * For example: &lt;code&gt;oMenuItem.cfg.setProperty("text", "&amp;#60;strong&amp;#62; </span>
+<span class="cm">        * Some Text&amp;#60;/strong&amp;#62;");&lt;/code&gt;</span>
 <span class="cm">        * @default false</span>
 <span class="cm">        * @type Boolean</span>
 <span class="cm">        */</span>
@@ -1819,14 +1803,14 @@
 <span class="cm">        * menu item.  The value can be one of the following: &lt;ul&gt;&lt;li&gt;Object </span>
 <span class="cm">        * specifying a Menu instance.&lt;/li&gt;&lt;li&gt;Object literal specifying the</span>
 <span class="cm">        * menu to be created.  Format: &lt;code&gt;{ id: [menu id], itemdata: </span>
-<span class="cm">        * [&lt;a href=&quot;YAHOO.widget.Menu.html#itemData&quot;&gt;array of values for </span>
+<span class="cm">        * [&lt;a href="YAHOO.widget.Menu.html#itemData"&gt;array of values for </span>
 <span class="cm">        * items&lt;/a&gt;] }&lt;/code&gt;.&lt;/li&gt;&lt;li&gt;String specifying the id attribute </span>
 <span class="cm">        * of the &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element of the menu.&lt;/li&gt;&lt;li&gt;</span>
 <span class="cm">        * Object specifying the &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element of the </span>
 <span class="cm">        * menu.&lt;/li&gt;&lt;/ul&gt;</span>
 <span class="cm">        * @default null</span>
-<span class="cm">        * @type Menu|String|Object|&lt;a href=&quot;http://www.w3.org/TR/2000/</span>
-<span class="cm">        * WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037&quot;&gt;</span>
+<span class="cm">        * @type Menu|String|Object|&lt;a href="http://www.w3.org/TR/2000/</span>
+<span class="cm">        * WD-DOM-Level-1-20000929/level-one-html.html#ID-58190037"&gt;</span>
 <span class="cm">        * HTMLElement&lt;/a&gt;</span>
 <span class="cm">        */</span>
         <span class="nx">oConfig</span><span class="p">.</span><span class="nx">addProperty</span><span class="p">(</span>
@@ -1862,10 +1846,10 @@
 
         <span class="cm">/**</span>
 <span class="cm">        * @config classname</span>
-<span class="cm">        * @description CSS class to be applied to the menu item&#39;s root </span>
+<span class="cm">        * @description CSS class to be applied to the menu item's root </span>
 <span class="cm">        * &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element.  The specified class(es) are </span>
 <span class="cm">        * appended in addition to the default class as specified by the menu </span>
-<span class="cm">        * item&#39;s CSS_CLASS_NAME constant.</span>
+<span class="cm">        * item's CSS_CLASS_NAME constant.</span>
 <span class="cm">        * @default null</span>
 <span class="cm">        * @type String</span>
 <span class="cm">        */</span>
@@ -1883,7 +1867,7 @@
         <span class="cm">/**</span>
 <span class="cm">        * @config keylistener</span>
 <span class="cm">        * @description Object literal representing the key(s) that can be used </span>
-<span class="cm"> 		* to trigger the MenuItem&#39;s &quot;click&quot; event.  Possible attributes are </span>
+<span class="cm"> 		* to trigger the MenuItem's "click" event.  Possible attributes are </span>
 <span class="cm">		* shift (boolean), alt (boolean), ctrl (boolean) and keys (either an int </span>
 <span class="cm">		* or an array of ints representing keycodes).</span>
 <span class="cm">        * @default null</span>
@@ -1902,13 +1886,13 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method getNextSibling</span>
-<span class="cm">    * @description Finds the menu item&#39;s next sibling.</span>
+<span class="cm">    * @description Finds the menu item's next sibling.</span>
 <span class="cm">    * @return YAHOO.widget.MenuItem</span>
 <span class="cm">    */</span>
 	<span class="nx">getNextSibling</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
 	
 		<span class="kd">var</span> <span class="nx">isUL</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
-				<span class="k">return</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">===</span> <span class="s2">&quot;ul&quot;</span><span class="p">);</span>
+				<span class="k">return</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">===</span> <span class="s2">"ul"</span><span class="p">);</span>
 			<span class="p">},</span>
 	
 			<span class="nx">menuitemEl</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">element</span><span class="p">,</span>
@@ -1939,7 +1923,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method getNextEnabledSibling</span>
-<span class="cm">    * @description Finds the menu item&#39;s next enabled sibling.</span>
+<span class="cm">    * @description Finds the menu item's next enabled sibling.</span>
 <span class="cm">    * @return YAHOO.widget.MenuItem</span>
 <span class="cm">    */</span>
 	<span class="nx">getNextEnabledSibling</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
@@ -1953,13 +1937,13 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method getPreviousSibling</span>
-<span class="cm">    * @description Finds the menu item&#39;s previous sibling.</span>
+<span class="cm">    * @description Finds the menu item's previous sibling.</span>
 <span class="cm">    * @return {YAHOO.widget.MenuItem}</span>
 <span class="cm">    */</span>	
 	<span class="nx">getPreviousSibling</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
 
 		<span class="kd">var</span> <span class="nx">isUL</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
-				<span class="k">return</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">===</span> <span class="s2">&quot;ul&quot;</span><span class="p">);</span>
+				<span class="k">return</span> <span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">nodeName</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span> <span class="o">===</span> <span class="s2">"ul"</span><span class="p">);</span>
 			<span class="p">},</span>
 
 			<span class="nx">menuitemEl</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">element</span><span class="p">,</span>
@@ -1991,7 +1975,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">    * @method getPreviousEnabledSibling</span>
-<span class="cm">    * @description Finds the menu item&#39;s previous enabled sibling.</span>
+<span class="cm">    * @description Finds the menu item's previous enabled sibling.</span>
 <span class="cm">    * @return {YAHOO.widget.MenuItem}</span>
 <span class="cm">    */</span>
 	<span class="nx">getPreviousEnabledSibling</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
@@ -2103,7 +2087,7 @@
 
 	<span class="cm">/**</span>
 <span class="cm">    * @method destroy</span>
-<span class="cm">	* @description Removes the menu item&#39;s &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element </span>
+<span class="cm">	* @description Removes the menu item's &lt;code&gt;&amp;#60;li&amp;#62;&lt;/code&gt; element </span>
 <span class="cm">	* from its parent &lt;code&gt;&amp;#60;ul&amp;#62;&lt;/code&gt; element.</span>
 <span class="cm">	*/</span>
     <span class="nx">destroy</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
@@ -2198,8 +2182,7 @@
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -2247,26 +2230,22 @@
                                 <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.ContextMenu.html" title="YAHOO.widget.ContextMenu">YAHOO.widget.ContextMenu</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.ContextMenu.html" title="YAHOO.widget.ContextMenu">YAHOO.widget.ContextMenu</a></li>
                                 <li class=""><a href="YAHOO.widget.ContextMenuItem.html" title="YAHOO.widget.ContextMenuItem">YAHOO.widget.ContextMenuItem</a></li>
                                 <li class=""><a href="YAHOO.widget.Menu.html" title="YAHOO.widget.Menu">YAHOO.widget.Menu</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuBar.html" title="YAHOO.widget.MenuBar">YAHOO.widget.MenuBar</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuBarItem.html" title="YAHOO.widget.MenuBarItem">YAHOO.widget.MenuBarItem</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuItem.html" title="YAHOO.widget.MenuItem">YAHOO.widget.MenuItem</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuManager.html" title="YAHOO.widget.MenuManager">YAHOO.widget.MenuManager</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="contextmenu.js.html" title="contextmenu.js">contextmenu.js</a></li>
+                        <ul class="content"><li class=""><a href="contextmenu.js.html" title="contextmenu.js">contextmenu.js</a></li>
                                 <li class=""><a href="contextmenuitem.js.html" title="contextmenuitem.js">contextmenuitem.js</a></li>
                                 <li class=""><a href="menu.js.html" title="menu.js">menu.js</a></li>
                                 <li class=""><a href="menuariaplugin.js.html" title="menuariaplugin.js">menuariaplugin.js</a></li>
@@ -2274,8 +2253,7 @@
                                 <li class=""><a href="menubaritem.js.html" title="menubaritem.js">menubaritem.js</a></li>
                                 <li class="selected"><a href="menuitem.js.html" title="menuitem.js">menuitem.js</a></li>
                                 <li class=""><a href="menumanager.js.html" title="menumanager.js">menumanager.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -2285,13 +2263,10 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2010 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2010 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
 
     var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.Menu", "name": "activeItem", "url": "YAHOO.widget.Menu.html#property_activeItem", "type": "property"}, {"access": "private", "host": "YAHOO.widget.MenuItem", "name": "addClassNameForState", "url": "YAHOO.widget.MenuItem.html#method_addClassNameForState", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "addItem", "url": "YAHOO.widget.Menu.html#method_addItem", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "addItems", "url": "YAHOO.widget.Menu.html#method_addItems", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_addItemToGroup", "url": "YAHOO.widget.Menu.html#method__addItemToGroup", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuManager", "name": "addMenu", "url": "YAHOO.widget.MenuManager.html#method_addMenu", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_aGroupTitleElements", "url": "YAHOO.widget.Menu.html#property__aGroupTitleElements", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_aItemGroups", "url": "YAHOO.widget.Menu.html#property__aItemGroups", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_aListElements", "url": "YAHOO.widget.Menu.html#property__aListElements", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "autosubmenudisplay", "url": "YAHOO.widget.Menu.html#config_autosubmenudisplay", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuBar", "name": "autosubmenudisplay", "url": "YAHOO.widget.MenuBar.html#config_autosubmenudisplay", "type": "config"}, {"access": "private", "host": "YAHOO.widget.ContextMenu", "name": "_bCancelled", "url": "YAHOO.widget.ContextMenu.html#property__bCancelled", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_bHandledMouseOutEvent", "url": "YAHOO.widget.Menu.html#property__bHandledMouseOutEvent", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_bHandledMouseOverEvent", "url": "YAHOO.widget.Menu.html#property__bHandledMouseOverEvent", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "blur", "url": "YAHOO.widget.Menu.html#method_blur", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "blur", "url": "YAHOO.widget.MenuItem.html#method_blur", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "blurEvent", "url": "YAHOO.widget.MenuItem.html#event_blurEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "browser", "url": "YAHOO.widget.MenuItem.html#property_browser", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_bStopMouseEventHandlers", "url": "YAHOO.widget.Menu.html#property__bStopMouseEventHandlers", "type": "property"}, {"access": "", "host": "YAHOO.widget.ContextMenu", "name": "cancel", "url": "YAHOO.widget.ContextMenu.html#method_cancel", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_cancelHideDelay", "url": "YAHOO.widget.Menu.html#method__cancelHideDelay", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_cancelShowDelay", "url": "YAHOO.widget.Menu.html#method__cancelShowDelay", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "checked", "url": "YAHOO.widget.MenuItem.html#config_checked", "type": "config"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "checkPosition", "url": "YAHOO.widget.Menu.html#method_checkPosition", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuBar", "name": "checkPosition", "url": "YAHOO.widget.MenuBar.html#method_checkPosition", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "classname", "url": "YAHOO.widget.Menu.html#config_classname", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "classname", "url": "YAHOO.widget.MenuItem.html#config_classname", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "clearActiveItem", "url": "YAHOO.widget.Menu.html#method_clearActiveItem", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "clearContent", "url": "YAHOO.widget.Menu.html#method_clearContent", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_clearSetWidthFlag", "url": "YAHOO.widget.Menu.html#method__clearSetWidthFlag", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "clickEvent", "url": "YAHOO.widget.Menu.html#event_clickEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "clickEvent", "url": "YAHOO.widget.MenuItem.html#event_clickEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "clicktohide", "url": "YAHOO.widget.Menu.html#config_clicktohide", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "configChecked", "url": "YAHOO.widget.MenuItem.html#method_configChecked", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "configClassName", "url": "YAHOO.widget.Menu.html#method_configClassName", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "configClassName", "url": "YAHOO.widget.MenuItem.html#method_configClassName", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "configContainer", "url": "YAHOO.widget.Menu.html#method_configContainer", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "configDisabled", "url": "YAHOO.widget.Menu.html#method_configDisabled", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "configDisabled", "url": "YAHOO.widget.MenuItem.html#method_configDisabled", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "configEmphasis", "url": "YAHOO.widget.MenuItem.html#method_configEmphasis", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "configHelpText", "url": "YAHOO.widget.MenuItem.html#method_configHelpText", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "configHideDelay", "url": "YAHOO.widget.Menu.html#method_configHideDelay", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "configIframe", "url": "YAHOO.widget.Menu.html#method_configIframe", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "configKeyListener", "url": "YAHOO.widget.MenuItem.html#method_configKeyListener", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "configMaxHeight", "url": "YAHOO.widget.Menu.html#method_configMaxHeight", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "configOnClick", "url": "YAHOO.widget.MenuItem.html#method_configOnClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "configPosition", "url": "YAHOO.widget.Menu.html#method_configPosition", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "configSelected", "url": "YAHOO.widget.MenuItem.html#method_configSelected", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "configShadow", "url": "YAHOO.widget.Menu.html#method_configShadow", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "configStrongEmphasis", "url": "YAHOO.widget.MenuItem.html#method_configStrongEmphasis", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "configSubmenu", "url": "YAHOO.widget.MenuItem.html#method_configSubmenu", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuBar", "name": "configSubmenuToggle", "url": "YAHOO.widget.MenuBar.html#method_configSubmenuToggle", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "configTarget", "url": "YAHOO.widget.MenuItem.html#method_configTarget", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "configText", "url": "YAHOO.widget.MenuItem.html#method_configText", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContextMenu", "name": "configTrigger", "url": "YAHOO.widget.ContextMenu.html#method_configTrigger", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_configureSubmenu", "url": "YAHOO.widget.Menu.html#method__configureSubmenu", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "configURL", "url": "YAHOO.widget.MenuItem.html#method_configURL", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "configVisible", "url": "YAHOO.widget.Menu.html#method_configVisible", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "constraintoviewport", "url": "YAHOO.widget.Menu.html#config_constraintoviewport", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "constructor", "url": "YAHOO.widget.MenuItem.html#property_constructor", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "container", "url": "YAHOO.widget.Menu.html#config_container", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "context", "url": "YAHOO.widget.Menu.html#config_context", "type": "config"}, {"access": "", "host": "YAHOO.widget.ContextMenu", "name": "contextEventTarget", "url": "YAHOO.widget.ContextMenu.html#property_contextEventTarget", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_createItemGroup", "url": "YAHOO.widget.Menu.html#method__createItemGroup", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuItem", "name": "_createKeyListener", "url": "YAHOO.widget.MenuItem.html#method__createKeyListener", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuItem", "name": "_createRootNodeStructure", "url": "YAHOO.widget.MenuItem.html#method__createRootNodeStructure", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "CSS_CLASS_NAME", "url": "YAHOO.widget.Menu.html#property_CSS_CLASS_NAME", "type": "property"}, {"access": "", "host": "YAHOO.widget.MenuBar", "name": "CSS_CLASS_NAME", "url": "YAHOO.widget.MenuBar.html#property_CSS_CLASS_NAME", "type": "property"}, {"access": "", "host": "YAHOO.widget.MenuBarItem", "name": "CSS_CLASS_NAME", "url": "YAHOO.widget.MenuBarItem.html#property_CSS_CLASS_NAME", "type": "property"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "CSS_CLASS_NAME", "url": "YAHOO.widget.MenuItem.html#property_CSS_CLASS_NAME", "type": "property"}, {"access": "", "host": "YAHOO.widget.MenuBarItem", "name": "CSS_LABEL_CLASS_NAME", "url": "YAHOO.widget.MenuBarItem.html#property_CSS_LABEL_CLASS_NAME", "type": "property"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "CSS_LABEL_CLASS_NAME", "url": "YAHOO.widget.MenuItem.html#property_CSS_LABEL_CLASS_NAME", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ContextMenu", "name": "DEFAULT_CONFIG", "url": "YAHOO.widget.ContextMenu.html#property_DEFAULT_CONFIG", "type": "property"}, {"access": "", "host": "YAHOO.widget.ContextMenu", "name": "destroy", "url": "YAHOO.widget.ContextMenu.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "destroy", "url": "YAHOO.widget.Menu.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "destroy", "url": "YAHOO.widget.MenuItem.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "destroyEvent", "url": "YAHOO.widget.MenuItem.html#event_destroyEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "disabled", "url": "YAHOO.widget.Menu.html#config_disabled", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "disabled", "url": "YAHOO.widget.MenuItem.html#config_disabled", "type": "config"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_disableScrollFooter", "url": "YAHOO.widget.Menu.html#method__disableScrollFooter", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_disableScrollHeader", "url": "YAHOO.widget.Menu.html#method__disableScrollHeader", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuItem", "name": "_dispatchClickEvent", "url": "YAHOO.widget.MenuItem.html#method__dispatchClickEvent", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "effect", "url": "YAHOO.widget.Menu.html#config_effect", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "element", "url": "YAHOO.widget.MenuItem.html#property_element", "type": "property"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "emphasis", "url": "YAHOO.widget.MenuItem.html#config_emphasis", "type": "config"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_enableScrollFooter", "url": "YAHOO.widget.Menu.html#method__enableScrollFooter", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_enableScrollHeader", "url": "YAHOO.widget.Menu.html#method__enableScrollHeader", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ContextMenu", "name": "EVENT_TYPES", "url": "YAHOO.widget.ContextMenu.html#property_EVENT_TYPES", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_execHideDelay", "url": "YAHOO.widget.Menu.html#method__execHideDelay", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_execSubmenuHideDelay", "url": "YAHOO.widget.Menu.html#method__execSubmenuHideDelay", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "fixedcenter", "url": "YAHOO.widget.Menu.html#config_fixedcenter", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "focus", "url": "YAHOO.widget.Menu.html#method_focus", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "focus", "url": "YAHOO.widget.MenuItem.html#method_focus", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "focusEvent", "url": "YAHOO.widget.MenuItem.html#event_focusEvent", "type": "event"}, {"access": "private", "host": "YAHOO.widget.MenuItem", "name": "getClassNameForState", "url": "YAHOO.widget.MenuItem.html#method_getClassNameForState", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_getFirstEnabledItem", "url": "YAHOO.widget.Menu.html#method__getFirstEnabledItem", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuManager", "name": "getFocusedMenu", "url": "YAHOO.widget.MenuManager.html#method_getFocusedMenu", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuManager", "name": "getFocusedMenuItem", "url": "YAHOO.widget.MenuManager.html#method_getFocusedMenuItem", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "getItem", "url": "YAHOO.widget.Menu.html#method_getItem", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_getItemGroup", "url": "YAHOO.widget.Menu.html#method__getItemGroup", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "getItemGroups", "url": "YAHOO.widget.Menu.html#method_getItemGroups", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "getItems", "url": "YAHOO.widget.Menu.html#method_getItems", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuManager", "name": "getMenu", "url": "YAHOO.widget.MenuManager.html#method_getMenu", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuManager", "name": "getMenuItem", "url": "YAHOO.widget.MenuManager.html#method_getMenuItem", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuManager", "name": "getMenuItemGroup", "url": "YAHOO.widget.MenuManager.html#method_getMenuItemGroup", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuManager", "name": "getMenuRootElement", "url": "YAHOO.widget.MenuManager.html#method_getMenuRootElement", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuManager", "name": "getMenus", "url": "YAHOO.widget.MenuManager.html#method_getMenus", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "getNextEnabledSibling", "url": "YAHOO.widget.MenuItem.html#method_getNextEnabledSibling", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "getNextSibling", "url": "YAHOO.widget.MenuItem.html#method_getNextSibling", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "getPreviousEnabledSibling", "url": "YAHOO.widget.MenuItem.html#method_getPreviousEnabledSibling", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "getPreviousSibling", "url": "YAHOO.widget.MenuItem.html#method_getPreviousSibling", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "getRoot", "url": "YAHOO.widget.Menu.html#method_getRoot", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "getSubmenus", "url": "YAHOO.widget.Menu.html#method_getSubmenus", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuManager", "name": "getVisible", "url": "YAHOO.widget.MenuManager.html#method_getVisible", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "groupIndex", "url": "YAHOO.widget.MenuItem.html#property_groupIndex", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "GROUP_TITLE_TAG_NAME", "url": "YAHOO.widget.Menu.html#property_GROUP_TITLE_TAG_NAME", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "hasFocus", "url": "YAHOO.widget.Menu.html#method_hasFocus", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "hasFocus", "url": "YAHOO.widget.MenuItem.html#method_hasFocus", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "helptext", "url": "YAHOO.widget.MenuItem.html#config_helptext", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "hidedelay", "url": "YAHOO.widget.Menu.html#config_hidedelay", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuManager", "name": "hideVisible", "url": "YAHOO.widget.MenuManager.html#method_hideVisible", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "id", "url": "YAHOO.widget.MenuItem.html#property_id", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "iframe", "url": "YAHOO.widget.Menu.html#config_iframe", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "index", "url": "YAHOO.widget.MenuItem.html#property_index", "type": "property"}, {"access": "", "host": "YAHOO.widget.ContextMenu", "name": "init", "url": "YAHOO.widget.ContextMenu.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "init", "url": "YAHOO.widget.Menu.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuBar", "name": "init", "url": "YAHOO.widget.MenuBar.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuBarItem", "name": "init", "url": "YAHOO.widget.MenuBarItem.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "init", "url": "YAHOO.widget.MenuItem.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContextMenu", "name": "initDefaultConfig", "url": "YAHOO.widget.ContextMenu.html#method_initDefaultConfig", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "initDefaultConfig", "url": "YAHOO.widget.Menu.html#method_initDefaultConfig", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuBar", "name": "initDefaultConfig", "url": "YAHOO.widget.MenuBar.html#method_initDefaultConfig", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "initDefaultConfig", "url": "YAHOO.widget.MenuItem.html#method_initDefaultConfig", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContextMenu", "name": "initEvents", "url": "YAHOO.widget.ContextMenu.html#method_initEvents", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "initEvents", "url": "YAHOO.widget.Menu.html#method_initEvents", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_initSubTree", "url": "YAHOO.widget.Menu.html#method__initSubTree", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuItem", "name": "_initSubTree", "url": "YAHOO.widget.MenuItem.html#method__initSubTree", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "insertItem", "url": "YAHOO.widget.Menu.html#method_insertItem", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "itemAddedEvent", "url": "YAHOO.widget.Menu.html#event_itemAddedEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "itemData", "url": "YAHOO.widget.Menu.html#property_itemData", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "itemRemovedEvent", "url": "YAHOO.widget.Menu.html#event_itemRemovedEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "ITEM_TYPE", "url": "YAHOO.widget.Menu.html#property_ITEM_TYPE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "keepopen", "url": "YAHOO.widget.Menu.html#config_keepopen", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "keyDownEvent", "url": "YAHOO.widget.Menu.html#event_keyDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "keyDownEvent", "url": "YAHOO.widget.MenuItem.html#event_keyDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "keylistener", "url": "YAHOO.widget.MenuItem.html#config_keylistener", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "keyPressEvent", "url": "YAHOO.widget.Menu.html#event_keyPressEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "keyPressEvent", "url": "YAHOO.widget.MenuItem.html#event_keyPressEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "keyUpEvent", "url": "YAHOO.widget.Menu.html#event_keyUpEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "keyUpEvent", "url": "YAHOO.widget.MenuItem.html#event_keyUpEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "lazyLoad", "url": "YAHOO.widget.Menu.html#property_lazyLoad", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "maxheight", "url": "YAHOO.widget.Menu.html#config_maxheight", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "minscrollheight", "url": "YAHOO.widget.Menu.html#config_minscrollheight", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "mouseDownEvent", "url": "YAHOO.widget.Menu.html#event_mouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "mouseDownEvent", "url": "YAHOO.widget.MenuItem.html#event_mouseDownEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "mouseOutEvent", "url": "YAHOO.widget.Menu.html#event_mouseOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "mouseOutEvent", "url": "YAHOO.widget.MenuItem.html#event_mouseOutEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "mouseOverEvent", "url": "YAHOO.widget.Menu.html#event_mouseOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "mouseOverEvent", "url": "YAHOO.widget.MenuItem.html#event_mouseOverEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "mouseUpEvent", "url": "YAHOO.widget.Menu.html#event_mouseUpEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "mouseUpEvent", "url": "YAHOO.widget.MenuItem.html#event_mouseUpEvent", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_nCurrentMouseX", "url": "YAHOO.widget.Menu.html#property__nCurrentMouseX", "type": "property"}, {"access": "private", "host": "YAHOO.widget.MenuItem", "name": "_oAnchor", "url": "YAHOO.widget.MenuItem.html#property__oAnchor", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "OFF_SCREEN_POSITION", "url": "YAHOO.widget.Menu.html#property_OFF_SCREEN_POSITION", "type": "property"}, {"access": "private", "host": "YAHOO.widget.MenuItem", "name": "_oHelpTextEM", "url": "YAHOO.widget.MenuItem.html#property__oHelpTextEM", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_onBeforeHide", "url": "YAHOO.widget.Menu.html#method__onBeforeHide", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_onBeforeRender", "url": "YAHOO.widget.Menu.html#method__onBeforeRender", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_onBeforeShow", "url": "YAHOO.widget.Menu.html#method__onBeforeShow", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_onBlur", "url": "YAHOO.widget.Menu.html#method__onBlur", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_onClick", "url": "YAHOO.widget.Menu.html#method__onClick", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.MenuBar", "name": "_onClick", "url": "YAHOO.widget.MenuBar.html#method__onClick", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "onclick", "url": "YAHOO.widget.MenuItem.html#config_onclick", "type": "config"}, {"access": "private", "host": "YAHOO.widget.MenuManager", "name": "onDOMEvent", "url": "YAHOO.widget.MenuManager.html#method_onDOMEvent", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_onHide", "url": "YAHOO.widget.Menu.html#method__onHide", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_onInit", "url": "YAHOO.widget.Menu.html#method__onInit", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_onItemAdded", "url": "YAHOO.widget.Menu.html#method__onItemAdded", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuManager", "name": "onItemAdded", "url": "YAHOO.widget.MenuManager.html#method_onItemAdded", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuManager", "name": "onItemDestroy", "url": "YAHOO.widget.MenuManager.html#method_onItemDestroy", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_onKeyDown", "url": "YAHOO.widget.Menu.html#method__onKeyDown", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuBar", "name": "_onKeyDown", "url": "YAHOO.widget.MenuBar.html#method__onKeyDown", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_onKeyPress", "url": "YAHOO.widget.Menu.html#method__onKeyPress", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuManager", "name": "onMenuBlur", "url": "YAHOO.widget.MenuManager.html#method_onMenuBlur", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuManager", "name": "onMenuDestroy", "url": "YAHOO.widget.MenuManager.html#method_onMenuDestroy", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuManager", "name": "onMenuFocus", "url": "YAHOO.widget.MenuManager.html#method_onMenuFocus", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_onMenuItemConfigChange", "url": "YAHOO.widget.Menu.html#method__onMenuItemConfigChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_onMenuItemDestroy", "url": "YAHOO.widget.Menu.html#method__onMenuItemDestroy", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuManager", "name": "onMenuVisibleConfigChange", "url": "YAHOO.widget.MenuManager.html#method_onMenuVisibleConfigChange", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_onMouseMove", "url": "YAHOO.widget.Menu.html#method__onMouseMove", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_onMouseOut", "url": "YAHOO.widget.Menu.html#method__onMouseOut", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_onMouseOver", "url": "YAHOO.widget.Menu.html#method__onMouseOver", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_onParentMenuConfigChange", "url": "YAHOO.widget.Menu.html#method__onParentMenuConfigChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_onParentMenuRender", "url": "YAHOO.widget.Menu.html#method__onParentMenuRender", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_onRender", "url": "YAHOO.widget.Menu.html#method__onRender", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_onScrollTargetMouseOut", "url": "YAHOO.widget.Menu.html#method__onScrollTargetMouseOut", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_onScrollTargetMouseOver", "url": "YAHOO.widget.Menu.html#method__onScrollTargetMouseOver", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_onShow", "url": "YAHOO.widget.Menu.html#method__onShow", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuItem", "name": "_onSubmenuBeforeHide", "url": "YAHOO.widget.MenuItem.html#method__onSubmenuBeforeHide", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ContextMenu", "name": "_onTriggerClick", "url": "YAHOO.widget.ContextMenu.html#method__onTriggerClick", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ContextMenu", "name": "_onTriggerContextMenu", "url": "YAHOO.widget.ContextMenu.html#method__onTriggerContextMenu", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_onVisibleChange", "url": "YAHOO.widget.Menu.html#method__onVisibleChange", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.Menu", "name": "_onYChange", "url": "YAHOO.widget.Menu.html#method__onYChange", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuItem", "name": "_oOnclickAttributeValue", "url": "YAHOO.widget.MenuItem.html#property__oOnclickAttributeValue", "type": "property"}, {"access": "private", "host": "YAHOO.widget.MenuItem", "name": "_oSubmenu", "url": "YAHOO.widget.MenuItem.html#property__oSubmenu", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ContextMenu", "name": "_oTrigger", "url": "YAHOO.widget.ContextMenu.html#property__oTrigger", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "parent", "url": "YAHOO.widget.Menu.html#property_parent", "type": "property"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "parent", "url": "YAHOO.widget.MenuItem.html#property_parent", "type": "property"}, {"access": "private", "host": "YAHOO.widget.ContextMenu", "name": "position", "url": "YAHOO.widget.ContextMenu.html#method_position", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "position", "url": "YAHOO.widget.Menu.html#config_position", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuBar", "name": "position", "url": "YAHOO.widget.MenuBar.html#config_position", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "positionOffScreen", "url": "YAHOO.widget.Menu.html#method_positionOffScreen", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "preventcontextoverlap", "url": "YAHOO.widget.Menu.html#config_preventcontextoverlap", "type": "config"}, {"access": "private", "host": "YAHOO.widget.MenuItem", "name": "removeClassNameForState", "url": "YAHOO.widget.MenuItem.html#method_removeClassNameForState", "type": "method"}, {"access": "private", "host": "YAHOO.widget.ContextMenu", "name": "_removeEventHandlers", "url": "YAHOO.widget.ContextMenu.html#method__removeEventHandlers", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "removeItem", "url": "YAHOO.widget.Menu.html#method_removeItem", "type": "method"}, {"access": "private", "host": "YAHOO.widget.MenuManager", "name": "removeItem", "url": "YAHOO.widget.MenuManager.html#method_removeItem", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_removeItemFromGroupByIndex", "url": "YAHOO.widget.Menu.html#method__removeItemFromGroupByIndex", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_removeItemFromGroupByValue", "url": "YAHOO.widget.Menu.html#method__removeItemFromGroupByValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuManager", "name": "removeMenu", "url": "YAHOO.widget.MenuManager.html#method_removeMenu", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_sClassName", "url": "YAHOO.widget.Menu.html#property__sClassName", "type": "property"}, {"access": "private", "host": "YAHOO.widget.MenuItem", "name": "_sClassName", "url": "YAHOO.widget.MenuItem.html#property__sClassName", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "scrollincrement", "url": "YAHOO.widget.Menu.html#config_scrollincrement", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "selected", "url": "YAHOO.widget.MenuItem.html#config_selected", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "setInitialFocus", "url": "YAHOO.widget.Menu.html#method_setInitialFocus", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "setInitialSelection", "url": "YAHOO.widget.Menu.html#method_setInitialSelection", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "setItemGroupTitle", "url": "YAHOO.widget.Menu.html#method_setItemGroupTitle", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_setMaxHeight", "url": "YAHOO.widget.Menu.html#method__setMaxHeight", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_setScrollHeight", "url": "YAHOO.widget.Menu.html#method__setScrollHeight", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "shadow", "url": "YAHOO.widget.Menu.html#config_shadow", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "showdelay", "url": "YAHOO.widget.Menu.html#config_showdelay", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "srcElement", "url": "YAHOO.widget.Menu.html#property_srcElement", "type": "property"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "srcElement", "url": "YAHOO.widget.MenuItem.html#property_srcElement", "type": "property"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "strongemphasis", "url": "YAHOO.widget.MenuItem.html#config_strongemphasis", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "submenu", "url": "YAHOO.widget.MenuItem.html#config_submenu", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "submenualignment", "url": "YAHOO.widget.Menu.html#config_submenualignment", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuBar", "name": "submenualignment", "url": "YAHOO.widget.MenuBar.html#config_submenualignment", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "submenuhidedelay", "url": "YAHOO.widget.Menu.html#config_submenuhidedelay", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuBar", "name": "submenutoggleregion", "url": "YAHOO.widget.MenuBar.html#config_submenutoggleregion", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuBar", "name": "SUBMENU_TOGGLE_REGION_WIDTH", "url": "YAHOO.widget.MenuBar.html#property_SUBMENU_TOGGLE_REGION_WIDTH", "type": "property"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "SUBMENU_TYPE", "url": "YAHOO.widget.MenuItem.html#property_SUBMENU_TYPE", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "subscribe", "url": "YAHOO.widget.Menu.html#method_subscribe", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_subscribeToItemEvents", "url": "YAHOO.widget.Menu.html#method__subscribeToItemEvents", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "target", "url": "YAHOO.widget.MenuItem.html#config_target", "type": "config"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "text", "url": "YAHOO.widget.MenuItem.html#config_text", "type": "config"}, {"access": "", "host": "YAHOO.widget.ContextMenu", "name": "toString", "url": "YAHOO.widget.ContextMenu.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "toString", "url": "YAHOO.widget.Menu.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuBar", "name": "toString", "url": "YAHOO.widget.MenuBar.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuBarItem", "name": "toString", "url": "YAHOO.widget.MenuBarItem.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "toString", "url": "YAHOO.widget.MenuItem.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuManager", "name": "toString", "url": "YAHOO.widget.MenuManager.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.ContextMenu", "name": "trigger", "url": "YAHOO.widget.ContextMenu.html#config_trigger", "type": "config"}, {"access": "", "host": "YAHOO.widget.ContextMenu", "name": "triggerContextMenuEvent", "url": "YAHOO.widget.ContextMenu.html#event_triggerContextMenuEvent", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_updateItemProperties", "url": "YAHOO.widget.Menu.html#method__updateItemProperties", "type": "method"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "url", "url": "YAHOO.widget.MenuItem.html#config_url", "type": "config"}, {"access": "private", "host": "YAHOO.widget.Menu", "name": "_useHideDelay", "url": "YAHOO.widget.Menu.html#property__useHideDelay", "type": "property"}, {"access": "", "host": "YAHOO.widget.MenuItem", "name": "value", "url": "YAHOO.widget.MenuItem.html#property_value", "type": "property"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "visible", "url": "YAHOO.widget.Menu.html#config_visible", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "x", "url": "YAHOO.widget.Menu.html#config_x", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "xy", "url": "YAHOO.widget.Menu.html#config_xy", "type": "config"}, {"access": "", "host": "YAHOO.widget.Menu", "name": "y", "url": "YAHOO.widget.Menu.html#config_y", "type": "config"}];
-</script>
-</body>
-</html>
+</script></body>

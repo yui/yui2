@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: event   Event.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: event   Event.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Event Utility&nbsp; <span class="subtitle">2.4.1</span></h3>
+        <h3>Event Utility  <span class="subtitle">2.4.1</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_event.html">event</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * The Event Utility provides utilities for managing DOM Events and tools</span>
 <span class="c"> * for building event systems</span>
 <span class="c"> *</span>
@@ -48,7 +39,7 @@
 <span class="c">// The first instance of Event will win if it is loaded more than once.</span>
 <span class="c">// @TODO this needs to be changed so that only the state data that needs to</span>
 <span class="c">// be preserved is kept, while methods are overwritten/added as needed.</span>
-<span class="c">// This means that the module pattern can&#39;t be used.</span>
+<span class="c">// This means that the module pattern can't be used.</span>
 <span class="c"></span><span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">)</span> <span class="o">{</span>
 
 <span class="c">/**</span>
@@ -414,7 +405,7 @@
 <span class="c">             * &lt;p&gt;type &amp;lt;string&amp;gt;, args &amp;lt;array&amp;gt;, customobject &amp;lt;object&amp;gt;&lt;/p&gt;</span>
 <span class="c">             * &lt;p&gt;For DOMReady events, there are no fire argments, so the</span>
 <span class="c">             * signature is:&lt;/p&gt;</span>
-<span class="c">             * &lt;p&gt;&quot;DOMReady&quot;, [], obj&lt;/p&gt;</span>
+<span class="c">             * &lt;p&gt;"DOMReady", [], obj&lt;/p&gt;</span>
 <span class="c">             *</span>
 <span class="c">             *</span>
 <span class="c">             * @method onDOMReady</span>
@@ -439,7 +430,7 @@
                                 <span class="nx">s</span> <span class="o">=</span> <span class="nx">p_override</span><span class="o">;</span>
                             <span class="o">}</span>
                         <span class="o">}</span>
-                        <span class="nx">p_fn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">s</span><span class="o">,</span> <span class="s2">&quot;DOMReady&quot;</span><span class="o">,</span> <span class="o">[],</span> <span class="nx">p_obj</span><span class="o">);</span>
+                        <span class="nx">p_fn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">s</span><span class="o">,</span> <span class="s2">"DOMReady"</span><span class="o">,</span> <span class="o">[],</span> <span class="nx">p_obj</span><span class="o">);</span>
                     <span class="o">},</span> <span class="m">0</span><span class="o">);</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">DOMReadyEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">p_fn</span><span class="o">,</span> <span class="nx">p_obj</span><span class="o">,</span> <span class="nx">p_override</span><span class="o">);</span>
@@ -471,8 +462,8 @@
             <span class="nx">addListener</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">)</span> <span class="o">{</span>
 
                 <span class="k">if</span> <span class="o">(!</span><span class="nx">fn</span> <span class="o">||</span> <span class="o">!</span><span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">)</span> <span class="o">{</span>
-<span class="c">// throw new TypeError(sType + &quot; addListener call failed, callback undefined&quot;);</span>
-<span class="c"></span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">sType</span> <span class="o">+</span> <span class="s2">&quot; addListener call failed, invalid callback&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;Event&quot;</span><span class="o">);</span>
+<span class="c">// throw new TypeError(sType + " addListener call failed, callback undefined");</span>
+<span class="c"></span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">sType</span> <span class="o">+</span> <span class="s2">" addListener call failed, invalid callback"</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">,</span> <span class="s2">"Event"</span><span class="o">);</span>
                     <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
                 <span class="o">}</span>
 
@@ -512,7 +503,7 @@
                 <span class="c">// Element should be an html element or an array if we get </span>
 <span class="c"></span>                <span class="c">// here.</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="c">// this.logger.debug(&quot;unable to attach event &quot; + sType);</span>
+                    <span class="c">// this.logger.debug("unable to attach event " + sType);</span>
 <span class="c"></span>                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
                 <span class="o">}</span>
 
@@ -520,13 +511,13 @@
 <span class="c"></span>                <span class="c">// prior to automatically unhooking them.  So we hang on to </span>
 <span class="c"></span>                <span class="c">// these instead of attaching them to the window and fire the</span>
 <span class="c"></span>                <span class="c">// handles explicitly during our one unload event.</span>
-<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;unload&quot;</span> <span class="o">==</span> <span class="nx">sType</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span> <span class="o">!==</span> <span class="k">this</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="s2">"unload"</span> <span class="o">==</span> <span class="nx">sType</span> <span class="o">&amp;&amp;</span> <span class="nx">obj</span> <span class="o">!==</span> <span class="k">this</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">unloadListeners</span><span class="o">[</span><span class="nx">unloadListeners</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span>
                             <span class="o">[</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">];</span>
                     <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
                 <span class="o">}</span>
 
-                <span class="c">// this.logger.debug(&quot;Adding handler: &quot; + el + &quot;, &quot; + sType);</span>
+                <span class="c">// this.logger.debug("Adding handler: " + el + ", " + sType);</span>
 <span class="c"></span>
                 <span class="c">// if the user chooses to override the scope, we use the custom</span>
 <span class="c"></span>                <span class="c">// object passed in, otherwise the executing scope will be the</span>
@@ -566,10 +557,10 @@
                         <span class="c">// cache the signature for the DOM0 event, and </span>
 <span class="c"></span>                        <span class="c">// include the existing handler for the event, if any</span>
 <span class="c"></span>                        <span class="nx">legacyEvents</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">]</span> <span class="o">=</span> 
-                            <span class="o">[</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">el</span><span class="o">[</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">]];</span>
+                            <span class="o">[</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">el</span><span class="o">[</span><span class="s2">"on"</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">]];</span>
                         <span class="nx">legacyHandlers</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">]</span> <span class="o">=</span> <span class="o">[];</span>
 
-                        <span class="nx">el</span><span class="o">[</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">]</span> <span class="o">=</span> 
+                        <span class="nx">el</span><span class="o">[</span><span class="s2">"on"</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">]</span> <span class="o">=</span> 
                             <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
                                 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">fireLegacyEvent</span><span class="o">(</span>
                                     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getEvent</span><span class="o">(</span><span class="nx">e</span><span class="o">),</span> <span class="nx">legacyIndex</span><span class="o">);</span>
@@ -605,7 +596,7 @@
 <span class="c">             * @private</span>
 <span class="c">             */</span>
             <span class="nx">fireLegacyEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">legacyIndex</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c">// this.logger.debug(&quot;fireLegacyEvent &quot; + legacyIndex);</span>
+                <span class="c">// this.logger.debug("fireLegacyEvent " + legacyIndex);</span>
 <span class="c"></span>                <span class="k">var</span> <span class="nx">ok</span><span class="o">=</span><span class="kc">true</span><span class="o">,</span><span class="nx">le</span><span class="o">,</span><span class="nx">lh</span><span class="o">,</span><span class="nx">li</span><span class="o">,</span><span class="nx">scope</span><span class="o">,</span><span class="nx">ret</span><span class="o">;</span>
                 
                 <span class="nx">lh</span> <span class="o">=</span> <span class="nx">legacyHandlers</span><span class="o">[</span><span class="nx">legacyIndex</span><span class="o">];</span>
@@ -639,7 +630,7 @@
 <span class="c">             */</span>
             <span class="nx">getLegacyIndex</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">key</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">;</span>
-                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">legacyMap</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span> <span class="o">{</span> 
+                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">legacyMap</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">==</span> <span class="s2">"undefined"</span><span class="o">)</span> <span class="o">{</span> 
                     <span class="k">return</span> <span class="o">-</span><span class="m">1</span><span class="o">;</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                     <span class="k">return</span> <span class="nx">legacyMap</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
@@ -655,7 +646,7 @@
 <span class="c">             * @private</span>
 <span class="c">             */</span>
             <span class="nx">useLegacyEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="s2">&quot;click&quot;</span><span class="o">==</span><span class="nx">sType</span> <span class="o">||</span> <span class="s2">&quot;dblclick&quot;</span><span class="o">==</span><span class="nx">sType</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">webkit</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="s2">"click"</span><span class="o">==</span><span class="nx">sType</span> <span class="o">||</span> <span class="s2">"dblclick"</span><span class="o">==</span><span class="nx">sType</span><span class="o">))</span> <span class="o">{</span>
                     <span class="k">var</span> <span class="nx">v</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">webkit</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
                     <span class="k">if</span> <span class="o">(!</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">v</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">v</span><span class="o">&lt;</span><span class="m">418</span><span class="o">)</span> <span class="o">{</span>
                         <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
@@ -684,7 +675,7 @@
                 <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">len</span><span class="o">,</span> <span class="nx">li</span><span class="o">;</span>
 
                 <span class="c">// The el argument can be a string</span>
-<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">el</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">el</span> <span class="o">==</span> <span class="s2">"string"</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
                 <span class="c">// The el argument can be an array of elements or element ids.</span>
 <span class="c"></span>                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">_isValidCollection</span><span class="o">(</span><span class="nx">el</span><span class="o">))</span> <span class="o">{</span>
@@ -696,12 +687,12 @@
                 <span class="o">}</span>
 
                 <span class="k">if</span> <span class="o">(!</span><span class="nx">fn</span> <span class="o">||</span> <span class="o">!</span><span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="c">// this.logger.debug(&quot;Error, function is not valid &quot; + fn);</span>
+                    <span class="c">// this.logger.debug("Error, function is not valid " + fn);</span>
 <span class="c"></span>                    <span class="c">//return false;</span>
 <span class="c"></span>                    <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">purgeElement</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="kc">false</span><span class="o">,</span> <span class="nx">sType</span><span class="o">);</span>
                 <span class="o">}</span>
 
-                <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;unload&quot;</span> <span class="o">==</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="s2">"unload"</span> <span class="o">==</span> <span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
 
                     <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">unloadListeners</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
                         <span class="nx">li</span> <span class="o">=</span> <span class="nx">unloadListeners</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
@@ -725,7 +716,7 @@
 <span class="c"></span>                <span class="c">// try and take advantage of it, which is not possible.</span>
 <span class="c"></span>                <span class="k">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">arguments</span><span class="o">[</span><span class="m">3</span><span class="o">];</span>
   
-                <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;undefined&quot;</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">index</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="s2">"undefined"</span> <span class="o">===</span> <span class="k">typeof</span> <span class="nx">index</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">index</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getCacheIndex</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
                 <span class="o">}</span>
 
@@ -734,11 +725,11 @@
                 <span class="o">}</span>
 
                 <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span> <span class="o">||</span> <span class="o">!</span><span class="nx">cacheItem</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="c">// this.logger.debug(&quot;cached listener not found&quot;);</span>
+                    <span class="c">// this.logger.debug("cached listener not found");</span>
 <span class="c"></span>                    <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
                 <span class="o">}</span>
 
-                <span class="c">// this.logger.debug(&quot;Removing handler: &quot; + el + &quot;, &quot; + sType);</span>
+                <span class="c">// this.logger.debug("Removing handler: " + el + ", " + sType);</span>
 <span class="c"></span>
                 <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">useLegacyEvent</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">))</span> <span class="o">{</span>
                     <span class="k">var</span> <span class="nx">legacyIndex</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getLegacyIndex</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">);</span>
@@ -777,16 +768,16 @@
             <span class="o">},</span>
 
             <span class="c">/**</span>
-<span class="c">             * Returns the event&#39;s target element.  Safari sometimes provides</span>
+<span class="c">             * Returns the event's target element.  Safari sometimes provides</span>
 <span class="c">             * a text node, and this is automatically resolved to the text</span>
-<span class="c">             * node&#39;s parent so that it behaves like other browsers.</span>
+<span class="c">             * node's parent so that it behaves like other browsers.</span>
 <span class="c">             * @method getTarget</span>
 <span class="c">             * @param {Event} ev the event</span>
-<span class="c">             * @param {boolean} resolveTextNode when set to true the target&#39;s</span>
+<span class="c">             * @param {boolean} resolveTextNode when set to true the target's</span>
 <span class="c">             *                  parent will be returned if the target is a </span>
 <span class="c">             *                  text node.  @deprecated, the text node is</span>
 <span class="c">             *                  now resolved automatically</span>
-<span class="c">             * @return {HTMLElement} the event&#39;s target</span>
+<span class="c">             * @return {HTMLElement} the event's target</span>
 <span class="c">             * @static</span>
 <span class="c">             */</span>
             <span class="nx">getTarget</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">,</span> <span class="nx">resolveTextNode</span><span class="o">)</span> <span class="o">{</span>
@@ -812,10 +803,10 @@
             <span class="o">},</span>
 
             <span class="c">/**</span>
-<span class="c">             * Returns the event&#39;s pageX</span>
+<span class="c">             * Returns the event's pageX</span>
 <span class="c">             * @method getPageX</span>
 <span class="c">             * @param {Event} ev the event</span>
-<span class="c">             * @return {int} the event&#39;s pageX</span>
+<span class="c">             * @return {int} the event's pageX</span>
 <span class="c">             * @static</span>
 <span class="c">             */</span>
             <span class="nx">getPageX</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
@@ -832,10 +823,10 @@
             <span class="o">},</span>
 
             <span class="c">/**</span>
-<span class="c">             * Returns the event&#39;s pageY</span>
+<span class="c">             * Returns the event's pageY</span>
 <span class="c">             * @method getPageY</span>
 <span class="c">             * @param {Event} ev the event</span>
-<span class="c">             * @return {int} the event&#39;s pageY</span>
+<span class="c">             * @return {int} the event's pageY</span>
 <span class="c">             * @static</span>
 <span class="c">             */</span>
             <span class="nx">getPageY</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
@@ -864,18 +855,18 @@
             <span class="o">},</span>
 
             <span class="c">/**</span>
-<span class="c">             * Returns the event&#39;s related target </span>
+<span class="c">             * Returns the event's related target </span>
 <span class="c">             * @method getRelatedTarget</span>
 <span class="c">             * @param {Event} ev the event</span>
-<span class="c">             * @return {HTMLElement} the event&#39;s relatedTarget</span>
+<span class="c">             * @return {HTMLElement} the event's relatedTarget</span>
 <span class="c">             * @static</span>
 <span class="c">             */</span>
             <span class="nx">getRelatedTarget</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">relatedTarget</span><span class="o">;</span>
                 <span class="k">if</span> <span class="o">(!</span><span class="nx">t</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="nx">ev</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;mouseout&quot;</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">ev</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">"mouseout"</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">t</span> <span class="o">=</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">toElement</span><span class="o">;</span>
-                    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ev</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;mouseover&quot;</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ev</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">"mouseover"</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">t</span> <span class="o">=</span> <span class="nx">ev</span><span class="o">.</span><span class="nx">fromElement</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
@@ -945,7 +936,7 @@
             <span class="o">},</span>
              
             <span class="c">/**</span>
-<span class="c">             * Finds the event in the window object, the caller&#39;s arguments, or</span>
+<span class="c">             * Finds the event in the window object, the caller's arguments, or</span>
 <span class="c">             * in the arguments of another method in the callstack.  This is</span>
 <span class="c">             * executed automatically for events registered through the event</span>
 <span class="c">             * manager, so the implementer should not normally need to execute</span>
@@ -987,8 +978,8 @@
 <span class="c"></span>
 <span class="c">                    } catch(ex) {</span>
 <span class="c"></span>
-<span class="c">                        YAHOO.log(&quot;Inspecting the target caused an error, &quot; +</span>
-<span class="c">                            &quot;setting the target to the bound element.&quot;, &quot;warn&quot;);</span>
+<span class="c">                        YAHOO.log("Inspecting the target caused an error, " +</span>
+<span class="c">                            "setting the target to the bound element.", "warn");</span>
 <span class="c">                         </span>
 <span class="c">                        ev.target = boundEl;</span>
 <span class="c">                    }</span>
@@ -1003,7 +994,7 @@
 <span class="c">             * Returns the charcode for an event</span>
 <span class="c">             * @method getCharCode</span>
 <span class="c">             * @param {Event} ev the event</span>
-<span class="c">             * @return {int} the event&#39;s charCode</span>
+<span class="c">             * @return {int} the event's charCode</span>
 <span class="c">             * @static</span>
 <span class="c">             */</span>
             <span class="nx">getCharCode</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
@@ -1049,7 +1040,7 @@
                 <span class="k">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">id</span><span class="o">;</span>
 
                 <span class="k">if</span> <span class="o">(!</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">id</span> <span class="o">=</span> <span class="s2">&quot;yuievtautoid-&quot;</span> <span class="o">+</span> <span class="nx">counter</span><span class="o">;</span>
+                    <span class="nx">id</span> <span class="o">=</span> <span class="s2">"yuievtautoid-"</span> <span class="o">+</span> <span class="nx">counter</span><span class="o">;</span>
                     <span class="o">++</span><span class="nx">counter</span><span class="o">;</span>
                     <span class="nx">el</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">id</span><span class="o">;</span>
                 <span class="o">}</span>
@@ -1073,14 +1064,14 @@
             <span class="nx">_isValidCollection</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">try</span> <span class="o">{</span>
                     <span class="k">return</span> <span class="o">(</span> <span class="nx">o</span>                     <span class="o">&amp;&amp;</span> <span class="c">// o is something</span>
-<span class="c"></span>                             <span class="k">typeof</span> <span class="nx">o</span> <span class="o">!==</span> <span class="s2">&quot;string&quot;</span> <span class="o">&amp;&amp;</span> <span class="c">// o is not a string</span>
+<span class="c"></span>                             <span class="k">typeof</span> <span class="nx">o</span> <span class="o">!==</span> <span class="s2">"string"</span> <span class="o">&amp;&amp;</span> <span class="c">// o is not a string</span>
 <span class="c"></span>                             <span class="nx">o</span><span class="o">.</span><span class="nx">length</span>              <span class="o">&amp;&amp;</span> <span class="c">// o is indexed</span>
 <span class="c"></span>                             <span class="o">!</span><span class="nx">o</span><span class="o">.</span><span class="nx">tagName</span>            <span class="o">&amp;&amp;</span> <span class="c">// o is not an HTML element</span>
 <span class="c"></span>                             <span class="o">!</span><span class="nx">o</span><span class="o">.</span><span class="nx">alert</span>              <span class="o">&amp;&amp;</span> <span class="c">// o is not a window</span>
-<span class="c"></span>                             <span class="k">typeof</span> <span class="nx">o</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">!==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">);</span>
+<span class="c"></span>                             <span class="k">typeof</span> <span class="nx">o</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">!==</span> <span class="s2">"undefined"</span> <span class="o">);</span>
                 <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">ex</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;_isValidCollection error, assuming that &quot;</span> <span class="o">+</span>
-                <span class="s2">&quot; this is a cross frame problem and not a collection&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"_isValidCollection error, assuming that "</span> <span class="o">+</span>
+                <span class="s2">" this is a cross frame problem and not a collection"</span><span class="o">,</span> <span class="s2">"warn"</span><span class="o">);</span>
                     <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
                 <span class="o">}</span>
 
@@ -1105,7 +1096,7 @@
 <span class="c">             * @deprecated Elements are not cached any longer</span>
 <span class="c">             */</span>
             <span class="nx">getEl</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">id</span> <span class="o">===</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">?</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">:</span> <span class="nx">id</span><span class="o">;</span>
+                <span class="k">return</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">id</span> <span class="o">===</span> <span class="s2">"string"</span><span class="o">)</span> <span class="o">?</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">:</span> <span class="nx">id</span><span class="o">;</span>
             <span class="o">},</span>
 
             <span class="c">/**</span>
@@ -1121,7 +1112,7 @@
 <span class="c">             * Custom event the fires when the dom is initially usable</span>
 <span class="c">             * @event DOMReadyEvent</span>
 <span class="c">             */</span>
-            <span class="nx">DOMReadyEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;DOMReady&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">),</span>
+            <span class="nx">DOMReadyEvent</span><span class="o">:</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">"DOMReady"</span><span class="o">,</span> <span class="k">this</span><span class="o">),</span>
 
             <span class="c">/**</span>
 <span class="c">             * hook up any deferred listeners</span>
@@ -1147,7 +1138,7 @@
                     <span class="c">// Remove the listener to assist with the IE memory issue, but not</span>
 <span class="c"></span>                    <span class="c">// for other browsers because FF 1.0x does not like it.</span>
 <span class="c"></span>                    <span class="c">//if (this.isIE) {</span>
-<span class="c"></span>                        <span class="c">//EU._simpleRemove(window, &quot;load&quot;, EU._load);</span>
+<span class="c"></span>                        <span class="c">//EU._simpleRemove(window, "load", EU._load);</span>
 <span class="c"></span>                    <span class="c">//}</span>
 <span class="c"></span>                <span class="o">}</span>
             <span class="o">},</span>
@@ -1168,7 +1159,7 @@
 <span class="c"></span>                    <span class="nx">EU</span><span class="o">.</span><span class="nx">DOMReadyEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
 
                     <span class="c">// Remove the DOMContentLoaded (FF/Opera)</span>
-<span class="c"></span>                    <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="s2">&quot;DOMContentLoaded&quot;</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_ready</span><span class="o">);</span>
+<span class="c"></span>                    <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="s2">"DOMContentLoaded"</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_ready</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">},</span>
 
@@ -1190,7 +1181,7 @@
                     <span class="c">// Hold off if DOMReady has not fired and check current</span>
 <span class="c"></span>                    <span class="c">// readyState to protect against the IE operation aborted</span>
 <span class="c"></span>                    <span class="c">// issue.</span>
-<span class="c"></span>                    <span class="c">//if (!this.DOMReady || &quot;complete&quot; !== document.readyState) {</span>
+<span class="c"></span>                    <span class="c">//if (!this.DOMReady || "complete" !== document.readyState) {</span>
 <span class="c"></span>                    <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">DOMReady</span><span class="o">)</span> <span class="o">{</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">startInterval</span><span class="o">();</span>
                         <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
@@ -1199,7 +1190,7 @@
 
                 <span class="k">this</span><span class="o">.</span><span class="nx">locked</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 
-                <span class="c">// this.logger.debug(&quot;tryPreloadAttach&quot;);</span>
+                <span class="c">// this.logger.debug("tryPreloadAttach");</span>
 <span class="c"></span>
                 <span class="c">// keep trying until after the page is loaded.  We need to </span>
 <span class="c"></span>                <span class="c">// check the page load state prior to trying to bind the </span>
@@ -1278,11 +1269,11 @@
 
             <span class="c">/**</span>
 <span class="c">             * Removes all listeners attached to the given element via addListener.</span>
-<span class="c">             * Optionally, the node&#39;s children can also be purged.</span>
+<span class="c">             * Optionally, the node's children can also be purged.</span>
 <span class="c">             * Optionally, you can specify a specific type of event to remove.</span>
 <span class="c">             * @method purgeElement</span>
 <span class="c">             * @param {HTMLElement} el the element to purge</span>
-<span class="c">             * @param {boolean} recurse recursively purge this element&#39;s children</span>
+<span class="c">             * @param {boolean} recurse recursively purge this element's children</span>
 <span class="c">             * as well.  Use with caution.</span>
 <span class="c">             * @param {string} sType optional type of listener to purge. If</span>
 <span class="c">             * left out, all listeners will be removed</span>
@@ -1294,7 +1285,7 @@
                 <span class="k">if</span> <span class="o">(</span><span class="nx">elListeners</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">elListeners</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span> <span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
                         <span class="k">var</span> <span class="nx">l</span> <span class="o">=</span> <span class="nx">elListeners</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
-                        <span class="c">// can&#39;t use the index on the changing collection</span>
+                        <span class="c">// can't use the index on the changing collection</span>
 <span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">oEl</span><span class="o">,</span> <span class="nx">l</span><span class="o">.</span><span class="nx">type</span><span class="o">,</span> <span class="nx">l</span><span class="o">.</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">l</span><span class="o">.</span><span class="nx">index</span><span class="o">);</span>
                         <span class="c">//this.removeListener(oEl, l.type, l.fn);</span>
 <span class="c"></span>                    <span class="o">}</span>
@@ -1327,7 +1318,7 @@
                 <span class="k">var</span> <span class="nx">results</span><span class="o">=[],</span> <span class="nx">searchLists</span><span class="o">;</span>
                 <span class="k">if</span> <span class="o">(!</span><span class="nx">sType</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">searchLists</span> <span class="o">=</span> <span class="o">[</span><span class="nx">listeners</span><span class="o">,</span> <span class="nx">unloadListeners</span><span class="o">];</span>
-                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">sType</span> <span class="o">===</span> <span class="s2">&quot;unload&quot;</span><span class="o">)</span> <span class="o">{</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">sType</span> <span class="o">===</span> <span class="s2">"unload"</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">searchLists</span> <span class="o">=</span> <span class="o">[</span><span class="nx">unloadListeners</span><span class="o">];</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                     <span class="nx">searchLists</span> <span class="o">=</span> <span class="o">[</span><span class="nx">listeners</span><span class="o">];</span>
@@ -1440,7 +1431,7 @@
 
                 <span class="nx">legacyEvents</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
-                <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s2">&quot;unload&quot;</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_unload</span><span class="o">);</span>
+                <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleRemove</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s2">"unload"</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_unload</span><span class="o">);</span>
 
             <span class="o">},</span>
 
@@ -1496,10 +1487,10 @@
 
 <span class="c">/*</span>
 <span class="c">            testIEReady: function (){</span>
-<span class="c">                var n = document.createElement(&#39;p&#39;), ready = false;</span>
+<span class="c">                var n = document.createElement('p'), ready = false;</span>
 <span class="c">                try {</span>
 <span class="c">                    // throws an error until the doc is ready</span>
-<span class="c">                    n.doScroll(&#39;left&#39;); </span>
+<span class="c">                    n.doScroll('left'); </span>
 <span class="c">                    ready = true;</span>
 <span class="c">                } catch(ex){ </span>
 <span class="c">                    // document is not ready</span>
@@ -1528,7 +1519,7 @@
                     <span class="o">};</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">attachEvent</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">return</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">,</span> <span class="nx">capture</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="nx">el</span><span class="o">.</span><span class="nx">attachEvent</span><span class="o">(</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
+                        <span class="nx">el</span><span class="o">.</span><span class="nx">attachEvent</span><span class="o">(</span><span class="s2">"on"</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
                     <span class="o">};</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                     <span class="k">return</span> <span class="k">function</span><span class="o">(){};</span>
@@ -1553,7 +1544,7 @@
                     <span class="o">};</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">detachEvent</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">return</span> <span class="k">function</span> <span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="nx">el</span><span class="o">.</span><span class="nx">detachEvent</span><span class="o">(</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
+                        <span class="nx">el</span><span class="o">.</span><span class="nx">detachEvent</span><span class="o">(</span><span class="s2">"on"</span> <span class="o">+</span> <span class="nx">sType</span><span class="o">,</span> <span class="nx">fn</span><span class="o">);</span>
                     <span class="o">};</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                     <span class="k">return</span> <span class="k">function</span><span class="o">(){};</span>
@@ -1580,7 +1571,7 @@
 <span class="c"></span>
         <span class="c">// Internet Explorer: use the readyState of a defered script.</span>
 <span class="c"></span>        <span class="c">// This isolates what appears to be a safe moment to manipulate</span>
-<span class="c"></span>        <span class="c">// the DOM prior to when the document&#39;s readyState suggests</span>
+<span class="c"></span>        <span class="c">// the DOM prior to when the document's readyState suggests</span>
 <span class="c"></span>        <span class="c">// it is safe to do so.</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="nx">EU</span><span class="o">.</span><span class="nx">isIE</span><span class="o">)</span> <span class="o">{</span>
 
@@ -1592,31 +1583,31 @@
 
             <span class="c">/*</span>
 <span class="c"></span>
-<span class="c">            //YAHOO.log(&quot;-&quot; + document.readyState + &quot;-&quot;);</span>
+<span class="c">            //YAHOO.log("-" + document.readyState + "-");</span>
 <span class="c"></span>
 <span class="c">            var el, d=document, b=d.body;</span>
 <span class="c"></span>
 <span class="c">            // If the library is being injected after window.onload, it</span>
 <span class="c">            // is not safe to document.write the script tag.  Detecting</span>
-<span class="c">            // this state doesn&#39;t appear possible, so we expect a flag</span>
+<span class="c">            // this state doesn't appear possible, so we expect a flag</span>
 <span class="c">            // in YAHOO_config to be set if the library is being injected.</span>
-<span class="c">            if ((&quot;undefined&quot; !== typeof YAHOO_config) &amp;&amp; YAHOO_config.injecting) {</span>
+<span class="c">            if (("undefined" !== typeof YAHOO_config) &amp;&amp; YAHOO_config.injecting) {</span>
 <span class="c"></span>
-<span class="c">                el = document.createElement(&quot;script&quot;);</span>
-<span class="c">                var p=d.getElementsByTagName(&quot;head&quot;)[0] || b;</span>
+<span class="c">                el = document.createElement("script");</span>
+<span class="c">                var p=d.getElementsByTagName("head")[0] || b;</span>
 <span class="c">                p.insertBefore(el, p.firstChild);</span>
 <span class="c"></span>
 <span class="c">            } else {</span>
-<span class="c">                //YAHOO.log(&quot;-dw-&quot;);</span>
-<span class="c">    d.write(&#39;&lt;scr&#39;+&#39;ipt id=&quot;_yui_eu_dr&quot; defer=&quot;true&quot; src=&quot;//:&quot;&gt;&lt;&#39;+&#39;/script&gt;&#39;);</span>
-<span class="c">                el=document.getElementById(&quot;_yui_eu_dr&quot;);</span>
+<span class="c">                //YAHOO.log("-dw-");</span>
+<span class="c">    d.write('&lt;scr'+'ipt id="_yui_eu_dr" defer="true" src="//:"&gt;&lt;'+'/script&gt;');</span>
+<span class="c">                el=document.getElementById("_yui_eu_dr");</span>
 <span class="c">            }</span>
 <span class="c">            </span>
 <span class="c"></span>
 <span class="c">            if (el) {</span>
 <span class="c">                el.onreadystatechange = function() {</span>
-<span class="c">                    //YAHOO.log(&quot;;comp-&quot; + this.readyState + &quot;;&quot;);</span>
-<span class="c">                    if (&quot;complete&quot; === this.readyState) {</span>
+<span class="c">                    //YAHOO.log(";comp-" + this.readyState + ";");</span>
+<span class="c">                    if ("complete" === this.readyState) {</span>
 <span class="c">                        this.parentNode.removeChild(this);</span>
 <span class="c">                        YAHOO.util.Event._ready();</span>
 <span class="c">                    }</span>
@@ -1633,10 +1624,10 @@
 
 <span class="c">/*</span>
 <span class="c">            (function (){</span>
-<span class="c">                var n = document.createElement(&#39;p&#39;);  </span>
+<span class="c">                var n = document.createElement('p');  </span>
 <span class="c">                try {</span>
 <span class="c">                    // throws an error if doc is not ready</span>
-<span class="c">                    n.doScroll(&#39;left&#39;);</span>
+<span class="c">                    n.doScroll('left');</span>
 <span class="c">                    n = null;</span>
 <span class="c">                    YAHOO.util.Event._ready();</span>
 <span class="c">                } catch (ex){</span>
@@ -1647,10 +1638,10 @@
 <span class="c">*/</span>
 
             <span class="nx">EU</span><span class="o">.</span><span class="nx">_dri</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-                <span class="k">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;p&#39;</span><span class="o">);</span>  
+                <span class="k">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'p'</span><span class="o">);</span>  
                 <span class="k">try</span> <span class="o">{</span>
                     <span class="c">// throws an error if doc is not ready</span>
-<span class="c"></span>                    <span class="nx">n</span><span class="o">.</span><span class="nx">doScroll</span><span class="o">(</span><span class="s1">&#39;left&#39;</span><span class="o">);</span>
+<span class="c"></span>                    <span class="nx">n</span><span class="o">.</span><span class="nx">doScroll</span><span class="o">(</span><span class="s1">'left'</span><span class="o">);</span>
                     <span class="nx">clearInterval</span><span class="o">(</span><span class="nx">EU</span><span class="o">.</span><span class="nx">_dri</span><span class="o">);</span>
                     <span class="nx">EU</span><span class="o">.</span><span class="nx">_dri</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
                     <span class="nx">EU</span><span class="o">.</span><span class="nx">_ready</span><span class="o">();</span>
@@ -1661,14 +1652,14 @@
             <span class="o">},</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">POLL_INTERVAL</span><span class="o">);</span> 
 
         
-        <span class="c">// Safari: The document&#39;s readyState in Safari currently will</span>
+        <span class="c">// Safari: The document's readyState in Safari currently will</span>
 <span class="c"></span>        <span class="c">// change to loaded/complete before images are loaded.</span>
 <span class="c"></span>        <span class="c">//} else if (EU.webkit) {</span>
 <span class="c"></span>        <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">EU</span><span class="o">.</span><span class="nx">webkit</span><span class="o">)</span> <span class="o">{</span>
 
             <span class="nx">EU</span><span class="o">.</span><span class="nx">_dri</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">rs</span><span class="o">=</span><span class="nb">document</span><span class="o">.</span><span class="nx">readyState</span><span class="o">;</span>
-                <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;loaded&quot;</span> <span class="o">==</span> <span class="nx">rs</span> <span class="o">||</span> <span class="s2">&quot;complete&quot;</span> <span class="o">==</span> <span class="nx">rs</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="s2">"loaded"</span> <span class="o">==</span> <span class="nx">rs</span> <span class="o">||</span> <span class="s2">"complete"</span> <span class="o">==</span> <span class="nx">rs</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">clearInterval</span><span class="o">(</span><span class="nx">EU</span><span class="o">.</span><span class="nx">_dri</span><span class="o">);</span>
                     <span class="nx">EU</span><span class="o">.</span><span class="nx">_dri</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
                     <span class="nx">EU</span><span class="o">.</span><span class="nx">_ready</span><span class="o">();</span>
@@ -1681,14 +1672,14 @@
 
             <span class="c">// @todo will this fire when the library is injected?</span>
 <span class="c"></span>
-            <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="s2">&quot;DOMContentLoaded&quot;</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_ready</span><span class="o">);</span>
+            <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="s2">"DOMContentLoaded"</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_ready</span><span class="o">);</span>
 
         <span class="o">}</span>
         <span class="c">/////////////////////////////////////////////////////////////</span>
 <span class="c"></span>
 
-        <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s2">&quot;load&quot;</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_load</span><span class="o">);</span>
-        <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s2">&quot;unload&quot;</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_unload</span><span class="o">);</span>
+        <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s2">"load"</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_load</span><span class="o">);</span>
+        <span class="nx">EU</span><span class="o">.</span><span class="nx">_simpleAdd</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s2">"unload"</span><span class="o">,</span> <span class="nx">EU</span><span class="o">.</span><span class="nx">_unload</span><span class="o">);</span>
         <span class="nx">EU</span><span class="o">.</span><span class="nx">_tryPreloadAttach</span><span class="o">();</span>
     <span class="o">})();</span>
 
@@ -1702,9 +1693,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -1765,29 +1754,24 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
                                 <li class=""><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
                                 <li class=""><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
                                 <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
                                 <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
+                        <ul class="content"><li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
                                 <li class="selected"><a href="Event.js.html">Event.js</a></li>
                                 <li class=""><a href="EventProvider.js.html">EventProvider.js</a></li>
                                 <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -1797,9 +1781,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

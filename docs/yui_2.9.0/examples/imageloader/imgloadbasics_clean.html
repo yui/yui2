@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Basic Features of the ImageLoader Utility</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Basic Features of the ImageLoader Utility</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,32 +8,16 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/imageloader/imageloader-min.js"></script>
-
-<!--there is no custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Basic Features of the ImageLoader Utility</h1>
-
-<div class="exampleIntro">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/imageloader/imageloader-min.js"></script><!--there is no custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Basic Features of the ImageLoader Utility</h1><div class="exampleIntro">
 	<p>Displayed here are the basic abilities of the <a href="http://developer.yahoo.com/yui/imageloader/">ImageLoader Utility</a>. Images are loaded only after triggers are fired or time limits are reached.</p>
 
 <p>Hover over each image to show its triggers and its time limit. Try tripping the triggers to see the load reactions. Refresh the page to reset the images.</p>
 
 			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<style>
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><style>
 
 .everything { position:relative; height:420px; }
 .everything div { border:1px solid #888; }
@@ -51,21 +27,14 @@ body {
 .png { position:absolute; top:240px; left:140px; height:34px; width:61px; }
 .scroll { position:absolute; top:320px; left:120px; height:72px; width:100px; }
 
-</style>
-
-
-<div class='everything' id='everything'>
-	<div class='topmain' id='topmain' title='group 1; mouse over image; 2 sec limit'></div>
-	<div class='duo1' id='duo1' title='group 2; mouse over left image, or click on right image; 4 sec limit'></div>
-	<div class='duo2' id='duo2' title='group 2; mouse over left image, or click on right image; 4 sec limit'></div>
-	<div class='png' id='pngimg' title='group 3; no trigger; 5 sec limit'></div>
-	<div class='scroll' title='group 4; scroll; no time limit'>
-		<img id='scrollImg' style='visibility:hidden;' />
-	</div>
-</div>
-
-
-<script>
+</style><div class="everything" id="everything">
+	<div class="topmain" id="topmain" title="group 1; mouse over image; 2 sec limit"></div>
+	<div class="duo1" id="duo1" title="group 2; mouse over left image, or click on right image; 4 sec limit"></div>
+	<div class="duo2" id="duo2" title="group 2; mouse over left image, or click on right image; 4 sec limit"></div>
+	<div class="png" id="pngimg" title="group 3; no trigger; 5 sec limit"></div>
+	<div class="scroll" title="group 4; scroll; no time limit">
+		<img id="scrollImg" style="visibility:hidden;"></div>
+</div><script>
 
 var mainGroup = new YAHOO.util.ImageLoader.group('topmain', 'mouseover', 2);
 mainGroup.registerBgImage('topmain', 'http://developer.yahoo.com/yui/docs/assets/examples/exampleimages/small/museum.jpg');
@@ -86,9 +55,4 @@ var scrollImg = scrollGroup.registerSrcImage('scrollImg', 'http://developer.yaho
 scrollImg.setVisible = true;
 scrollGroup.name = 'group 4';
 
-</script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: calendar  YAHOO.widget.DateMath   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: calendar  YAHOO.widget.DateMath   (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Calendar&nbsp; <span class="subtitle">2.5.1</span></h3>
+        <h3>Calendar  <span class="subtitle">2.5.1</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_calendar.html">calendar</a>
@@ -27,8 +19,8 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <h2>
@@ -43,7 +35,7 @@
                         <span class="extends">
                         </span>
                         
-                        </code>
+                        
                     </h2>
                     <!-- class tree goes here -->
                     
@@ -72,8 +64,7 @@ used for adding, subtracting, and comparing dates.
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="property_MONTH">MONTH</a>
                                         <code>- static final String</code>
@@ -87,8 +78,7 @@ used for adding, subtracting, and comparing dates.
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="property_ONE_DAY_MS">ONE_DAY_MS</a>
                                         <code>- static final Number</code>
@@ -102,8 +92,7 @@ used for adding, subtracting, and comparing dates.
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="property_WEEK">WEEK</a>
                                         <code>- static final String</code>
@@ -117,8 +106,7 @@ used for adding, subtracting, and comparing dates.
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="property_WEEK_ONE_JAN_DATE">WEEK_ONE_JAN_DATE</a>
                                         <code>- static Number</code>
@@ -137,8 +125,7 @@ ISO 8601, used widely throughout Europe, uses Jan 4th, based on a Monday start o
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4><a name="property_YEAR">YEAR</a>
                                         <code>- static final String</code>
@@ -152,8 +139,7 @@ ISO 8601, used widely throughout Europe, uses Jan 4th, based on a Monday start o
                                         
 
 
-                                    <hr />
-                                    </div>
+                                    <hr></div>
 
 
                             </div>
@@ -187,18 +173,15 @@ ISO 8601, used widely throughout Europe, uses Jan 4th, based on a Monday start o
                                         </code>
                                         
                                         <div class="description">
-                                            Private helper method to account for bug in Safari 2 (webkit < 420)
-when Date.setDate(n) is called with n less than -128 or greater than 127.
-<p>
+                                            Private helper method to account for bug in Safari 2 (webkit 
 Fix approach and original findings are available here:
 http://brianary.blogspot.com/2006/03/safari-date-bug.html
-</p>
+
                                         </div>
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>d &lt;Date&gt;</code>
                                                              JavaScript date object
@@ -207,21 +190,15 @@ http://brianary.blogspot.com/2006/03/safari-date-bug.html
                                                             <code>nDays &lt;Number&gt;</code>
                                                              The number of days to add to the date object (can be negative)
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_add">add</a></h4>
@@ -255,8 +232,7 @@ http://brianary.blogspot.com/2006/03/safari-date-bug.html
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;Date&gt;</code>
                                                             	The JavaScript Date object to perform addition on
@@ -269,21 +245,15 @@ http://brianary.blogspot.com/2006/03/safari-date-bug.html
                                                             <code>amount &lt;Number&gt;</code>
                                                             	The number of units (measured in the field constant) to add to the date.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Date
                                                     </code></dt>
                                                     <dd>The resulting Date object</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_after">after</a></h4>
@@ -313,8 +283,7 @@ http://brianary.blogspot.com/2006/03/safari-date-bug.html
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;Date&gt;</code>
                                                             		The Date object to compare with the compare argument
@@ -323,21 +292,15 @@ http://brianary.blogspot.com/2006/03/safari-date-bug.html
                                                             <code>compareTo &lt;Date&gt;</code>
                                                             	The Date object to use for the comparison
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Boolean
                                                     </code></dt>
                                                     <dd>true if the date occurs after the compared date; false if not.</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_before">before</a></h4>
@@ -367,8 +330,7 @@ http://brianary.blogspot.com/2006/03/safari-date-bug.html
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;Date&gt;</code>
                                                             		The Date object to compare with the compare argument
@@ -377,21 +339,15 @@ http://brianary.blogspot.com/2006/03/safari-date-bug.html
                                                             <code>compareTo &lt;Date&gt;</code>
                                                             	The Date object to use for the comparison
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Boolean
                                                     </code></dt>
                                                     <dd>true if the date occurs before the compared date; false if not.</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_between">between</a></h4>
@@ -425,8 +381,7 @@ http://brianary.blogspot.com/2006/03/safari-date-bug.html
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;Date&gt;</code>
                                                             		The date to check for
@@ -439,21 +394,15 @@ http://brianary.blogspot.com/2006/03/safari-date-bug.html
                                                             <code>dateEnd &lt;Date&gt;</code>
                                                             		The end of the range
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Boolean
                                                     </code></dt>
                                                     <dd>true if the date occurs between the compared dates; false if not.</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_clearTime">clearTime</a></h4>
@@ -479,27 +428,20 @@ http://brianary.blogspot.com/2006/03/safari-date-bug.html
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;Date&gt;</code>
                                                             	The JavaScript Date for which the time fields will be cleared
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Date
                                                     </code></dt>
                                                     <dd>The JavaScript Date cleared of all time fields</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_findMonthEnd">findMonthEnd</a></h4>
@@ -525,27 +467,20 @@ http://brianary.blogspot.com/2006/03/safari-date-bug.html
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;Date&gt;</code>
                                                             	The JavaScript Date used to calculate the month end
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Date
                                                     </code></dt>
                                                     <dd>The JavaScript Date representing the last day of the month</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_findMonthStart">findMonthStart</a></h4>
@@ -571,27 +506,20 @@ http://brianary.blogspot.com/2006/03/safari-date-bug.html
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;Date&gt;</code>
                                                             	The JavaScript Date used to calculate the month start
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Date
                                                     </code></dt>
                                                     <dd>The JavaScript Date representing the first day of the month</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getDate">getDate</a></h4>
@@ -631,8 +559,7 @@ arguments are valid as per the ECMAScript-262 Date object specification for the 
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>y &lt;Number&gt;</code>
                                                              Year.
@@ -645,21 +572,15 @@ arguments are valid as per the ECMAScript-262 Date object specification for the 
                                                             <code>d &lt;Number&gt;</code>
                                                              (optional) Date from 1 to 31. If not provided, defaults to 1.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Date
                                                     </code></dt>
                                                     <dd>The JavaScript date object with year, month, date set as provided.</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getDayOffset">getDayOffset</a></h4>
@@ -690,8 +611,7 @@ Passing January 1 to this function would return an offset value of zero.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;Date&gt;</code>
                                                             	The JavaScript date for which to find the offset
@@ -700,21 +620,15 @@ Passing January 1 to this function would return an offset value of zero.
                                                             <code>calendarYear &lt;Number&gt;</code>
                                                             	The calendar year to use for determining the offset
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Number
                                                     </code></dt>
                                                     <dd>The number of days since January 1 of the given year</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getFirstDayOfWeek">getFirstDayOfWeek</a></h4>
@@ -744,8 +658,7 @@ Passing January 1 to this function would return an offset value of zero.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>dt &lt;Date&gt;</code>
                                                              The date in the week for which the first day is required.
@@ -754,21 +667,15 @@ Passing January 1 to this function would return an offset value of zero.
                                                             <code>startOfWeek &lt;Number&gt;</code>
                                                              The index for the first day of the week, 0 = Sun, 1 = Mon ... 6 = Sat (defaults to 0)
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Date
                                                     </code></dt>
                                                     <dd>The first day of the week</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getJan1">getJan1</a></h4>
@@ -794,27 +701,20 @@ Passing January 1 to this function would return an offset value of zero.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>calendarYear &lt;Number&gt;</code>
                                                             		The calendar year for which to retrieve January 1
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Date
                                                     </code></dt>
                                                     <dd>January 1 of the calendar year specified.</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getWeekNumber">getWeekNumber</a></h4>
@@ -850,8 +750,7 @@ ISO8601 week numbers, based on Jan 4th defining the 1st week of the year.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;Date&gt;</code>
                                                              The JavaScript date for which to find the week number
@@ -867,21 +766,15 @@ Defaults to 0
 Defaults to the value of YAHOO.widget.DateMath.WEEK_ONE_JAN_DATE, which is 1 (Jan 1st). 
 For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first week of the year.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Number
                                                     </code></dt>
                                                     <dd>The number of the week containing the given date.</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_isMonthOverlapWeek">isMonthOverlapWeek</a></h4>
@@ -907,27 +800,20 @@ For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first 
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>weekBeginDate &lt;Date&gt;</code>
                                                             	The JavaScript Date representing the first day of the week.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Boolean
                                                     </code></dt>
                                                     <dd>true if the date overlaps two different months.</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_isYearOverlapWeek">isYearOverlapWeek</a></h4>
@@ -953,27 +839,20 @@ For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first 
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>weekBeginDate &lt;Date&gt;</code>
                                                             	The JavaScript Date representing the first day of the week.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Boolean
                                                     </code></dt>
                                                     <dd>true if the date overlaps two different years.</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_subtract">subtract</a></h4>
@@ -1007,8 +886,7 @@ For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first 
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>date &lt;Date&gt;</code>
                                                             	The JavaScript Date object to perform subtraction on
@@ -1021,21 +899,15 @@ For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first 
                                                             <code>amount &lt;Number&gt;</code>
                                                             	The number of units (measured in the field constant) to subtract from the date.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Date
                                                     </code></dt>
                                                     <dd>The resulting Date object</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                             </div>
                         </div>
 
@@ -1052,9 +924,7 @@ For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first 
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -1123,35 +993,29 @@ For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first 
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.Calendar.html">YAHOO.widget.Calendar</a></li>
                                 <li class=""><a href="YAHOO.widget.Calendar2up.html">YAHOO.widget.Calendar2up</a></li>
                                 <li class=""><a href="YAHOO.widget.Calendar_Core.html">YAHOO.widget.Calendar_Core</a></li>
                                 <li class=""><a href="YAHOO.widget.CalendarGroup.html">YAHOO.widget.CalendarGroup</a></li>
                                 <li class=""><a href="YAHOO.widget.CalendarNavigator.html">YAHOO.widget.CalendarNavigator</a></li>
                                 <li class="selected"><a href="YAHOO.widget.DateMath.html">YAHOO.widget.DateMath</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Calendar.js.html">Calendar.js</a></li>
+                        <ul class="content"><li class=""><a href="Calendar.js.html">Calendar.js</a></li>
                                 <li class=""><a href="CalendarGroup.js.html">CalendarGroup.js</a></li>
                                 <li class=""><a href="CalendarNavigator.js.html">CalendarNavigator.js</a></li>
                                 <li class=""><a href="DateMath.js.html">DateMath.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Properties</h4>
-                        <ul class="content">        
-                                <li class=""><a href="#property_DAY">DAY</a>
+                        <ul class="content"><li class=""><a href="#property_DAY">DAY</a>
                                         <!--<code>&lt;String&gt;</code>-->
                                 </li>
                                 <li class=""><a href="#property_MONTH">MONTH</a>
@@ -1169,13 +1033,11 @@ For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first 
                                 <li class=""><a href="#property_YEAR">YEAR</a>
                                         <!--<code>&lt;String&gt;</code>-->
                                 </li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Methods</h4>
-                        <ul class="content">        
-                                <li class="private"><!--<code>void</code>-->
+                        <ul class="content"><li class="private"><!--<code>void</code>-->
                                 <a href="#method__addDays">_addDays</a>
                                 </li>
                                 <li class=""><!--<code>Date</code>-->
@@ -1223,8 +1085,7 @@ For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first 
                                 <li class=""><!--<code>Date</code>-->
                                 <a href="#method_subtract">subtract</a>
                                 </li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -1232,9 +1093,7 @@ For the U.S, this is normally Jan 1st. ISO8601 uses Jan 4th to define the first 
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

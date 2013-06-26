@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: menu   menumanager.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: menu   menumanager.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Menu&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <h3>Menu  <span class="subtitle">2.6.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_menu.html">menu</a>
@@ -28,16 +20,15 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
-    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"><label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"><label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated"><label for="showdeprecated">Show Deprecated</label></span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c">* @module menu</span>
 <span class="c">* @description &lt;p&gt;The Menu family of components features a collection of </span>
 <span class="c">* controls that make it easy to add menus to your website or web application.  </span>
@@ -46,10 +37,10 @@
 <span class="c">* scripting.&lt;/p&gt;&lt;p&gt;The Menu family of controls features:&lt;/p&gt;</span>
 <span class="c">* &lt;ul&gt;</span>
 <span class="c">*    &lt;li&gt;Keyboard and mouse navigation.&lt;/li&gt;</span>
-<span class="c">*    &lt;li&gt;A rich event model that provides access to all of a menu&#39;s </span>
+<span class="c">*    &lt;li&gt;A rich event model that provides access to all of a menu's </span>
 <span class="c">*    interesting moments.&lt;/li&gt;</span>
 <span class="c">*    &lt;li&gt;Support for </span>
-<span class="c">*    &lt;a href=&quot;http://en.wikipedia.org/wiki/Progressive_Enhancement&quot;&gt;Progressive</span>
+<span class="c">*    &lt;a href="http://en.wikipedia.org/wiki/Progressive_Enhancement"&gt;Progressive</span>
 <span class="c">*    Enhancement&lt;/a&gt;; Menus can be created from simple, </span>
 <span class="c">*    semantic markup on the page or purely through JavaScript.&lt;/li&gt;</span>
 <span class="c">* &lt;/ul&gt;</span>
@@ -59,29 +50,29 @@
 <span class="c">*/</span>
 <span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
-    <span class="k">var</span> <span class="nx">_DIV</span> <span class="o">=</span> <span class="s2">&quot;DIV&quot;</span><span class="o">,</span>
-    	<span class="nx">_HD</span> <span class="o">=</span> <span class="s2">&quot;hd&quot;</span><span class="o">,</span>
-    	<span class="nx">_BD</span> <span class="o">=</span> <span class="s2">&quot;bd&quot;</span><span class="o">,</span>
-    	<span class="nx">_FT</span> <span class="o">=</span> <span class="s2">&quot;ft&quot;</span><span class="o">,</span>
-    	<span class="nx">_LI</span> <span class="o">=</span> <span class="s2">&quot;LI&quot;</span><span class="o">,</span>
-    	<span class="nx">_DISABLED</span> <span class="o">=</span> <span class="s2">&quot;disabled&quot;</span><span class="o">,</span>
-		<span class="nx">_MOUSEOVER</span> <span class="o">=</span> <span class="s2">&quot;mouseover&quot;</span><span class="o">,</span>
-		<span class="nx">_MOUSEOUT</span> <span class="o">=</span> <span class="s2">&quot;mouseout&quot;</span><span class="o">,</span>
-		<span class="nx">_MOUSEDOWN</span> <span class="o">=</span> <span class="s2">&quot;mousedown&quot;</span><span class="o">,</span>
-		<span class="nx">_MOUSEUP</span> <span class="o">=</span> <span class="s2">&quot;mouseup&quot;</span><span class="o">,</span>
-		<span class="nx">_FOCUS</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">?</span> <span class="s2">&quot;focusin&quot;</span> <span class="o">:</span> <span class="s2">&quot;focus&quot;</span><span class="o">,</span>		
-		<span class="nx">_CLICK</span> <span class="o">=</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span>
-		<span class="nx">_KEYDOWN</span> <span class="o">=</span> <span class="s2">&quot;keydown&quot;</span><span class="o">,</span>
-		<span class="nx">_KEYUP</span> <span class="o">=</span> <span class="s2">&quot;keyup&quot;</span><span class="o">,</span>
-		<span class="nx">_KEYPRESS</span> <span class="o">=</span> <span class="s2">&quot;keypress&quot;</span><span class="o">,</span>
-		<span class="nx">_CLICK_TO_HIDE</span> <span class="o">=</span> <span class="s2">&quot;clicktohide&quot;</span><span class="o">,</span>
-		<span class="nx">_POSITION</span> <span class="o">=</span> <span class="s2">&quot;position&quot;</span><span class="o">,</span> 
-		<span class="nx">_DYNAMIC</span> <span class="o">=</span> <span class="s2">&quot;dynamic&quot;</span><span class="o">,</span>
-		<span class="nx">_SHOW_DELAY</span> <span class="o">=</span> <span class="s2">&quot;showdelay&quot;</span><span class="o">,</span>
-		<span class="nx">_SELECTED</span> <span class="o">=</span> <span class="s2">&quot;selected&quot;</span><span class="o">,</span>
-		<span class="nx">_VISIBLE</span> <span class="o">=</span> <span class="s2">&quot;visible&quot;</span><span class="o">,</span>
-		<span class="nx">_UL</span> <span class="o">=</span> <span class="s2">&quot;UL&quot;</span><span class="o">,</span>
-		<span class="nx">_MENUMANAGER</span> <span class="o">=</span> <span class="s2">&quot;MenuManager&quot;</span><span class="o">,</span>
+    <span class="k">var</span> <span class="nx">_DIV</span> <span class="o">=</span> <span class="s2">"DIV"</span><span class="o">,</span>
+    	<span class="nx">_HD</span> <span class="o">=</span> <span class="s2">"hd"</span><span class="o">,</span>
+    	<span class="nx">_BD</span> <span class="o">=</span> <span class="s2">"bd"</span><span class="o">,</span>
+    	<span class="nx">_FT</span> <span class="o">=</span> <span class="s2">"ft"</span><span class="o">,</span>
+    	<span class="nx">_LI</span> <span class="o">=</span> <span class="s2">"LI"</span><span class="o">,</span>
+    	<span class="nx">_DISABLED</span> <span class="o">=</span> <span class="s2">"disabled"</span><span class="o">,</span>
+		<span class="nx">_MOUSEOVER</span> <span class="o">=</span> <span class="s2">"mouseover"</span><span class="o">,</span>
+		<span class="nx">_MOUSEOUT</span> <span class="o">=</span> <span class="s2">"mouseout"</span><span class="o">,</span>
+		<span class="nx">_MOUSEDOWN</span> <span class="o">=</span> <span class="s2">"mousedown"</span><span class="o">,</span>
+		<span class="nx">_MOUSEUP</span> <span class="o">=</span> <span class="s2">"mouseup"</span><span class="o">,</span>
+		<span class="nx">_FOCUS</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">?</span> <span class="s2">"focusin"</span> <span class="o">:</span> <span class="s2">"focus"</span><span class="o">,</span>		
+		<span class="nx">_CLICK</span> <span class="o">=</span> <span class="s2">"click"</span><span class="o">,</span>
+		<span class="nx">_KEYDOWN</span> <span class="o">=</span> <span class="s2">"keydown"</span><span class="o">,</span>
+		<span class="nx">_KEYUP</span> <span class="o">=</span> <span class="s2">"keyup"</span><span class="o">,</span>
+		<span class="nx">_KEYPRESS</span> <span class="o">=</span> <span class="s2">"keypress"</span><span class="o">,</span>
+		<span class="nx">_CLICK_TO_HIDE</span> <span class="o">=</span> <span class="s2">"clicktohide"</span><span class="o">,</span>
+		<span class="nx">_POSITION</span> <span class="o">=</span> <span class="s2">"position"</span><span class="o">,</span> 
+		<span class="nx">_DYNAMIC</span> <span class="o">=</span> <span class="s2">"dynamic"</span><span class="o">,</span>
+		<span class="nx">_SHOW_DELAY</span> <span class="o">=</span> <span class="s2">"showdelay"</span><span class="o">,</span>
+		<span class="nx">_SELECTED</span> <span class="o">=</span> <span class="s2">"selected"</span><span class="o">,</span>
+		<span class="nx">_VISIBLE</span> <span class="o">=</span> <span class="s2">"visible"</span><span class="o">,</span>
+		<span class="nx">_UL</span> <span class="o">=</span> <span class="s2">"UL"</span><span class="o">,</span>
+		<span class="nx">_MENUMANAGER</span> <span class="o">=</span> <span class="s2">"MenuManager"</span><span class="o">,</span>
     	
     
     	<span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
@@ -126,18 +117,18 @@
         <span class="c">// Map of DOM event types to their equivalent CustomEvent types</span>
 <span class="c"></span>        
         <span class="nx">m_oEventTypes</span> <span class="o">=</span> <span class="o">{</span>
-            <span class="s2">&quot;click&quot;</span><span class="o">:</span> <span class="s2">&quot;clickEvent&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;mousedown&quot;</span><span class="o">:</span> <span class="s2">&quot;mouseDownEvent&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;mouseup&quot;</span><span class="o">:</span> <span class="s2">&quot;mouseUpEvent&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;mouseover&quot;</span><span class="o">:</span> <span class="s2">&quot;mouseOverEvent&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;mouseout&quot;</span><span class="o">:</span> <span class="s2">&quot;mouseOutEvent&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;keydown&quot;</span><span class="o">:</span> <span class="s2">&quot;keyDownEvent&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;keyup&quot;</span><span class="o">:</span> <span class="s2">&quot;keyUpEvent&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;keypress&quot;</span><span class="o">:</span> <span class="s2">&quot;keyPressEvent&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;focus&quot;</span><span class="o">:</span> <span class="s2">&quot;focusEvent&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;focusin&quot;</span><span class="o">:</span> <span class="s2">&quot;focusEvent&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;blur&quot;</span><span class="o">:</span> <span class="s2">&quot;blurEvent&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;focusout&quot;</span><span class="o">:</span> <span class="s2">&quot;blurEvent&quot;</span>
+            <span class="s2">"click"</span><span class="o">:</span> <span class="s2">"clickEvent"</span><span class="o">,</span>
+            <span class="s2">"mousedown"</span><span class="o">:</span> <span class="s2">"mouseDownEvent"</span><span class="o">,</span>
+            <span class="s2">"mouseup"</span><span class="o">:</span> <span class="s2">"mouseUpEvent"</span><span class="o">,</span>
+            <span class="s2">"mouseover"</span><span class="o">:</span> <span class="s2">"mouseOverEvent"</span><span class="o">,</span>
+            <span class="s2">"mouseout"</span><span class="o">:</span> <span class="s2">"mouseOutEvent"</span><span class="o">,</span>
+            <span class="s2">"keydown"</span><span class="o">:</span> <span class="s2">"keyDownEvent"</span><span class="o">,</span>
+            <span class="s2">"keyup"</span><span class="o">:</span> <span class="s2">"keyUpEvent"</span><span class="o">,</span>
+            <span class="s2">"keypress"</span><span class="o">:</span> <span class="s2">"keyPressEvent"</span><span class="o">,</span>
+            <span class="s2">"focus"</span><span class="o">:</span> <span class="s2">"focusEvent"</span><span class="o">,</span>
+            <span class="s2">"focusin"</span><span class="o">:</span> <span class="s2">"focusEvent"</span><span class="o">,</span>
+            <span class="s2">"blur"</span><span class="o">:</span> <span class="s2">"blurEvent"</span><span class="o">,</span>
+            <span class="s2">"focusout"</span><span class="o">:</span> <span class="s2">"blurEvent"</span>
         <span class="o">},</span>
 
 
@@ -158,8 +149,8 @@
 <span class="c">        * @description Finds the root DIV node of a menu or the root LI node of </span>
 <span class="c">        * a menu item.</span>
 <span class="c">        * @private</span>
-<span class="c">        * @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
-<span class="c">        * level-one-html.html#ID-58190037&quot;&gt;HTMLElement&lt;/a&gt;} p_oElement Object </span>
+<span class="c">        * @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
+<span class="c">        * level-one-html.html#ID-58190037"&gt;HTMLElement&lt;/a&gt;} p_oElement Object </span>
 <span class="c">        * specifying an HTML element.</span>
 <span class="c">        */</span>
         <span class="k">function</span> <span class="nx">getMenuRootElement</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">)</span> <span class="o">{</span>
@@ -175,7 +166,7 @@
     
                     <span class="nx">oParentNode</span> <span class="o">=</span> <span class="nx">p_oElement</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
     
-                    <span class="c">// Check if the DIV is the inner &quot;body&quot; node of a menu</span>
+                    <span class="c">// Check if the DIV is the inner "body" node of a menu</span>
 <span class="c"></span>
                     <span class="k">if</span> <span class="o">((</span>
                             <span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="nx">_HD</span><span class="o">)</span> <span class="o">||</span>
@@ -230,10 +221,10 @@
     
         <span class="c">/**</span>
 <span class="c">        * @method onDOMEvent</span>
-<span class="c">        * @description Generic, global event handler for all of a menu&#39;s </span>
+<span class="c">        * @description Generic, global event handler for all of a menu's </span>
 <span class="c">        * DOM-based events.  This listens for events against the document </span>
 <span class="c">        * object.  If the target of a given event is a member of a menu or </span>
-<span class="c">        * menu item&#39;s DOM, the instance&#39;s corresponding Custom Event is fired.</span>
+<span class="c">        * menu item's DOM, the instance's corresponding Custom Event is fired.</span>
 <span class="c">        * @private</span>
 <span class="c">        * @param {Event} p_oEvent Object representing the DOM event object  </span>
 <span class="c">        * passed back by the event utility (YAHOO.util.Event).</span>
@@ -302,7 +293,7 @@
             <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">p_oEvent</span><span class="o">.</span><span class="nx">type</span> <span class="o">==</span> <span class="nx">_MOUSEDOWN</span><span class="o">)</span> <span class="o">{</span>
     
                 <span class="c">/*</span>
-<span class="c">                    If the target of the event wasn&#39;t a menu, hide all </span>
+<span class="c">                    If the target of the event wasn't a menu, hide all </span>
 <span class="c">                    dynamically positioned menus</span>
 <span class="c">                */</span>
                 
@@ -355,7 +346,7 @@
     
         <span class="c">/**</span>
 <span class="c">        * @method onMenuDestroy</span>
-<span class="c">        * @description &quot;destroy&quot; event handler for a menu.</span>
+<span class="c">        * @description "destroy" event handler for a menu.</span>
 <span class="c">        * @private</span>
 <span class="c">        * @param {String} p_sType String representing the name of the event </span>
 <span class="c">        * that was fired.</span>
@@ -376,7 +367,7 @@
     
         <span class="c">/**</span>
 <span class="c">        * @method onMenuFocus</span>
-<span class="c">        * @description &quot;focus&quot; event handler for a MenuItem instance.</span>
+<span class="c">        * @description "focus" event handler for a MenuItem instance.</span>
 <span class="c">        * @private</span>
 <span class="c">        * @param {String} p_sType String representing the name of the event </span>
 <span class="c">        * that was fired.</span>
@@ -398,7 +389,7 @@
     
         <span class="c">/**</span>
 <span class="c">        * @method onMenuBlur</span>
-<span class="c">        * @description &quot;blur&quot; event handler for a MenuItem instance.</span>
+<span class="c">        * @description "blur" event handler for a MenuItem instance.</span>
 <span class="c">        * @private</span>
 <span class="c">        * @param {String} p_sType String representing the name of the event  </span>
 <span class="c">        * that was fired.</span>
@@ -414,14 +405,14 @@
 
         <span class="c">/**</span>
 <span class="c">        * @method onMenuHide</span>
-<span class="c">        * @description &quot;hide&quot; event handler for a Menu instance.</span>
+<span class="c">        * @description "hide" event handler for a Menu instance.</span>
 <span class="c">        * @private</span>
 <span class="c">        * @param {String} p_sType String representing the name of the event  </span>
 <span class="c">        * that was fired.</span>
 <span class="c">        * @param {Array} p_aArgs Array of arguments sent when the event </span>
 <span class="c">        * was fired.</span>
-<span class="c">		* @param &lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
-<span class="c">		* level-one-html.html#ID-58190037&quot;&gt;p_oFocusedElement&lt;/a&gt; The HTML element that had focus</span>
+<span class="c">		* @param &lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/</span>
+<span class="c">		* level-one-html.html#ID-58190037"&gt;p_oFocusedElement&lt;/a&gt; The HTML element that had focus</span>
 <span class="c">		* prior to the Menu being made visible</span>
 <span class="c">        */</span>    
     	<span class="k">function</span> <span class="nx">onMenuHide</span><span class="o">(</span><span class="nx">p_sType</span><span class="o">,</span> <span class="nx">p_aArgs</span><span class="o">,</span> <span class="nx">p_oFocusedElement</span><span class="o">)</span> <span class="o">{</span>
@@ -448,7 +439,7 @@
 
         <span class="c">/**</span>
 <span class="c">        * @method onMenuShow</span>
-<span class="c">        * @description &quot;show&quot; event handler for a MenuItem instance.</span>
+<span class="c">        * @description "show" event handler for a MenuItem instance.</span>
 <span class="c">        * @private</span>
 <span class="c">        * @param {String} p_sType String representing the name of the event  </span>
 <span class="c">        * that was fired.</span>
@@ -475,7 +466,7 @@
     
         <span class="c">/**</span>
 <span class="c">        * @method onMenuVisibleConfigChange</span>
-<span class="c">        * @description Event handler for when the &quot;visible&quot; configuration  </span>
+<span class="c">        * @description Event handler for when the "visible" configuration  </span>
 <span class="c">        * property of a Menu instance changes.</span>
 <span class="c">        * @private</span>
 <span class="c">        * @param {String} p_sType String representing the name of the event  </span>
@@ -492,16 +483,16 @@
     
                 <span class="nx">m_oVisibleMenus</span><span class="o">[</span><span class="nx">sId</span><span class="o">]</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
                 
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span> <span class="o">+</span> <span class="s2">&quot; added to the collection of visible menus.&quot;</span><span class="o">,</span> 
-                	<span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span> <span class="o">+</span> <span class="s2">" added to the collection of visible menus."</span><span class="o">,</span> 
+                	<span class="s2">"info"</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
             
             <span class="o">}</span>
             <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">m_oVisibleMenus</span><span class="o">[</span><span class="nx">sId</span><span class="o">])</span> <span class="o">{</span>
             
                 <span class="nx">delete</span> <span class="nx">m_oVisibleMenus</span><span class="o">[</span><span class="nx">sId</span><span class="o">];</span>
                 
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span> <span class="o">+</span> <span class="s2">&quot; removed from the collection of visible menus.&quot;</span><span class="o">,</span> 
-                	<span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span> <span class="o">+</span> <span class="s2">" removed from the collection of visible menus."</span><span class="o">,</span> 
+                	<span class="s2">"info"</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
             
             <span class="o">}</span>
         
@@ -510,7 +501,7 @@
     
         <span class="c">/**</span>
 <span class="c">        * @method onItemDestroy</span>
-<span class="c">        * @description &quot;destroy&quot; event handler for a MenuItem instance.</span>
+<span class="c">        * @description "destroy" event handler for a MenuItem instance.</span>
 <span class="c">        * @private</span>
 <span class="c">        * @param {String} p_sType String representing the name of the event  </span>
 <span class="c">        * that was fired.</span>
@@ -526,7 +517,7 @@
 
         <span class="c">/**</span>
 <span class="c">        * @method removeItem</span>
-<span class="c">        * @description Removes a MenuItem instance from the MenuManager&#39;s collection of MenuItems.</span>
+<span class="c">        * @description Removes a MenuItem instance from the MenuManager's collection of MenuItems.</span>
 <span class="c">        * @private</span>
 <span class="c">        * @param {MenuItem} p_oMenuItem The MenuItem instance to be removed.</span>
 <span class="c">        */</span>    
@@ -546,7 +537,7 @@
                 
                 <span class="nx">p_oMenuItem</span><span class="o">.</span><span class="nx">destroyEvent</span><span class="o">.</span><span class="nx">unsubscribe</span><span class="o">(</span><span class="nx">onItemDestroy</span><span class="o">);</span>
     
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">p_oMenuItem</span> <span class="o">+</span> <span class="s2">&quot; successfully unregistered.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">p_oMenuItem</span> <span class="o">+</span> <span class="s2">" successfully unregistered."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
     
             <span class="o">}</span>
 
@@ -555,7 +546,7 @@
     
         <span class="c">/**</span>
 <span class="c">        * @method onItemAdded</span>
-<span class="c">        * @description &quot;itemadded&quot; event handler for a Menu instance.</span>
+<span class="c">        * @description "itemadded" event handler for a Menu instance.</span>
 <span class="c">        * @private</span>
 <span class="c">        * @param {String} p_sType String representing the name of the event  </span>
 <span class="c">        * that was fired.</span>
@@ -577,7 +568,7 @@
         
                     <span class="nx">oItem</span><span class="o">.</span><span class="nx">destroyEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">onItemDestroy</span><span class="o">);</span>
         
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">oItem</span> <span class="o">+</span> <span class="s2">&quot; successfully registered.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">oItem</span> <span class="o">+</span> <span class="s2">" successfully registered."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
         
                 <span class="o">}</span>
     
@@ -625,7 +616,7 @@
     
                         <span class="nx">m_bInitializedEventHandlers</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
                         
-                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;DOM event handlers initialized.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"DOM event handlers initialized."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
             
                     <span class="o">}</span>
             
@@ -636,7 +627,7 @@
                     <span class="nx">p_oMenu</span><span class="o">.</span><span class="nx">blurEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">onMenuBlur</span><span class="o">);</span>
                     <span class="nx">p_oMenu</span><span class="o">.</span><span class="nx">showEvent</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="nx">onMenuShow</span><span class="o">);</span>
         
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">p_oMenu</span> <span class="o">+</span> <span class="s2">&quot; successfully registered.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">p_oMenu</span> <span class="o">+</span> <span class="s2">" successfully registered."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
         
                 <span class="o">}</span>
         
@@ -683,7 +674,7 @@
 <span class="c"></span>
                         <span class="nx">delete</span> <span class="nx">m_oMenus</span><span class="o">[</span><span class="nx">sId</span><span class="o">];</span>
             
-                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">p_oMenu</span> <span class="o">+</span> <span class="s2">&quot; successfully unregistered.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">p_oMenu</span> <span class="o">+</span> <span class="s2">" successfully unregistered."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
         
 
                         <span class="c">/*</span>
@@ -695,8 +686,8 @@
             
                             <span class="nx">delete</span> <span class="nx">m_oVisibleMenus</span><span class="o">[</span><span class="nx">sId</span><span class="o">];</span>
                             
-                            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">p_oMenu</span> <span class="o">+</span> <span class="s2">&quot; unregistered from the&quot;</span> <span class="o">+</span> 
-                                        <span class="s2">&quot; collection of visible menus.&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
+                            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">p_oMenu</span> <span class="o">+</span> <span class="s2">" unregistered from the"</span> <span class="o">+</span> 
+                                        <span class="s2">" collection of visible menus."</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="nx">_MENUMANAGER</span><span class="o">);</span>
        
                         <span class="o">}</span>
 
@@ -948,9 +939,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -1023,34 +1012,29 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
                                 <li class=""><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
                                 <li class=""><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuBar.html">YAHOO.widget.MenuBar</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="contextmenu.js.html">contextmenu.js</a></li>
+                        <ul class="content"><li class=""><a href="contextmenu.js.html">contextmenu.js</a></li>
                                 <li class=""><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
                                 <li class=""><a href="menu.js.html">menu.js</a></li>
                                 <li class=""><a href="menubar.js.html">menubar.js</a></li>
                                 <li class=""><a href="menubaritem.js.html">menubaritem.js</a></li>
                                 <li class=""><a href="menuitem.js.html">menuitem.js</a></li>
                                 <li class="selected"><a href="menumanager.js.html">menumanager.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -1060,9 +1044,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2008 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

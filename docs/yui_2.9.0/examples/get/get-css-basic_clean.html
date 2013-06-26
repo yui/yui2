@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Getting CSS Style Sheets</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Getting CSS Style Sheets</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,18 +8,7 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/element/element-min.js"></script>
-<script type="text/javascript" src="../../build/button/button-min.js"></script>
-<script type="text/javascript" src="../../build/get/get-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css" id="styleoverrides">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/element/element-min.js"></script><script type="text/javascript" src="../../build/button/button-min.js"></script><script type="text/javascript" src="../../build/get/get-min.js"></script><!--begin custom header content for this example--><style type="text/css" id="styleoverrides">
 	
 	#container .hd {
 		background-image:url(http://l.yimg.com/a/i/us/nt/ma/ma_nws_1.gif);
@@ -62,18 +43,10 @@ body {
     but want to override some of the styles.
 
 */
-</style>
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Getting CSS Style Sheets</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Getting CSS Style Sheets</h1><div class="exampleIntro">
 	<p><a href="http://developer.yahoo.com/yui/get">The YUI Get Utility</a> can be
 used to fetch CSS stylesheets after the page has loaded.  This allows you to
 reduce the size of your "main" stylesheet by segregating the style rules for
@@ -83,21 +56,14 @@ dynamically using the Get Utility.</p>
 
 <p>The example below demonstrates the dynamic addition and removal of three
 stylesheets that change the appearance of the News module.  By clicking on the
-buttons (which make use of the <a
-href="http://developer.yahoo.com/yui/button/">YUI Button Control</a>), you can
+buttons (which make use of the <a href="http://developer.yahoo.com/yui/button/">YUI Button Control</a>), you can
 add/remove border, background, and font treatments for the module.
 (<strong>Note:</strong> The News module itself is built using the Get Utility
-to fetch JSON data from the <a
-href="http://developer.yahoo.com/search/news/V1/newsSearch.html">Yahoo! News
-Search web service</a>; it follows the same code pattern described in the <a
-href="get-script-basic.html">"Getting a Script Node with JSON Data"</a>
+to fetch JSON data from the <a href="http://developer.yahoo.com/search/news/V1/newsSearch.html">Yahoo! News
+Search web service</a>; it follows the same code pattern described in the <a href="get-script-basic.html">"Getting a Script Node with JSON Data"</a>
 example.) </p>
 			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<div id="container">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><div id="container">
 
     <div id="buttonContainer">
         <!--YUI Button instances, created from script, will go here.-->
@@ -112,15 +78,11 @@ example.) </p>
             <div id="searchControls">
                 <!--Use a real form that works without JavaScript:-->
                 <form method="GET" action="http://search.yahooapis.com/NewsSearchService/V1/newsSearch" id="newsSearch">            
-                    <label for="searchString">Search Yahoo! News:</label> <input type="text" name="p" id="searchString" value="San Francisco" size="40">                
-                    <input type="submit" id="getNewsData" value="Search Yahoo! News">                
-                </form>            
+                    <label for="searchString">Search Yahoo! News:</label> <input type="text" name="p" id="searchString" value="San Francisco" size="40"><input type="submit" id="getNewsData" value="Search Yahoo! News"></form>            
             </div>
         </div>
     </div>
-</div>
-
-<script language="javascript">
+</div><script language="javascript">
 
 // Encapsulating our code in a self-executing anonymous function
 // is one way to create a namespace:
@@ -225,11 +187,4 @@ var onSuccess = function(o) {
 }
 
 })();
-</script>
-
-<script src="../get/assets/getNews.js" type="text/javascript"></script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><script src="../get/assets/getNews.js" type="text/javascript"></script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

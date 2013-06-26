@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: treeview   TreeViewEd.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: treeview   TreeViewEd.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>TreeView Widget&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <h3>TreeView Widget  <span class="subtitle">2.6.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_treeview.html">treeview</a>
@@ -28,16 +20,15 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
-    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"><label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"><label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated"><label for="showdeprecated">Show Deprecated</label></span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                        </style><div class="highlight"><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
         <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span> 
         <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
@@ -53,7 +44,7 @@
 <span class="c">    * &lt;li&gt;nodeType {string} value of static Node._type property, allows reuse of input element if node is of the same type.&lt;/li&gt;</span>
 <span class="c">    * &lt;li&gt;editorPanel {HTMLelement (&amp;lt;div&amp;gt;)} element holding the in-line editor&lt;/li&gt;</span>
 <span class="c">    * &lt;li&gt;inputContainer {HTMLelement (&amp;lt;div&amp;gt;)} element which will hold the type-specific input element(s) to be filled by the fillEditorContainer method&lt;/li&gt;</span>
-<span class="c">    * &lt;li&gt;buttonsContainer {HTMLelement (&amp;lt;div&amp;gt;)} element which holds the &amp;lt;button&amp;gt; elements for Ok/Cancel.  If you don&#39;t want any of the buttons, hide it via CSS styles, don&#39;t destroy it&lt;/li&gt;</span>
+<span class="c">    * &lt;li&gt;buttonsContainer {HTMLelement (&amp;lt;div&amp;gt;)} element which holds the &amp;lt;button&amp;gt; elements for Ok/Cancel.  If you don't want any of the buttons, hide it via CSS styles, don't destroy it&lt;/li&gt;</span>
 <span class="c">    * &lt;li&gt;node {YAHOO.widget.Node} reference to the Node being edited&lt;/li&gt;</span>
 <span class="c">    * &lt;li&gt;saveOnEnter {boolean}, whether the Enter key should be accepted as a Save command (Esc. is always taken as Cancel), disable for multi-line input elements &lt;/li&gt;</span>
 <span class="c">    * &lt;/ul&gt;</span>
@@ -90,49 +81,49 @@
             <span class="nx">editorData</span><span class="o">.</span><span class="nx">active</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
             <span class="nx">editorData</span><span class="o">.</span><span class="nx">whoHasIt</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
             <span class="k">if</span> <span class="o">(!</span><span class="nx">editorData</span><span class="o">.</span><span class="nx">nodeType</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">editorData</span><span class="o">.</span><span class="nx">editorPanel</span> <span class="o">=</span> <span class="nx">ed</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">));</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">&#39;ygtv-label-editor&#39;</span><span class="o">);</span>
+                <span class="nx">editorData</span><span class="o">.</span><span class="nx">editorPanel</span> <span class="o">=</span> <span class="nx">ed</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'div'</span><span class="o">));</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">'ygtv-label-editor'</span><span class="o">);</span>
 
-                <span class="nx">buttons</span> <span class="o">=</span> <span class="nx">editorData</span><span class="o">.</span><span class="nx">buttonsContainer</span> <span class="o">=</span> <span class="nx">ed</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">));</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">buttons</span><span class="o">,</span><span class="s1">&#39;ygtv-button-container&#39;</span><span class="o">);</span>
-                <span class="nx">button</span> <span class="o">=</span> <span class="nx">buttons</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;button&#39;</span><span class="o">));</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">button</span><span class="o">,</span><span class="s1">&#39;ygtvok&#39;</span><span class="o">);</span>
-                <span class="nx">button</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">;</span>
-                <span class="nx">button</span> <span class="o">=</span> <span class="nx">buttons</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;button&#39;</span><span class="o">));</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">button</span><span class="o">,</span><span class="s1">&#39;ygtvcancel&#39;</span><span class="o">);</span>
-                <span class="nx">button</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span><span class="o">;</span>
-                <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">buttons</span><span class="o">,</span> <span class="s1">&#39;click&#39;</span><span class="o">,</span> <span class="k">function</span> <span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;click on editor&#39;</span><span class="o">);</span>
+                <span class="nx">buttons</span> <span class="o">=</span> <span class="nx">editorData</span><span class="o">.</span><span class="nx">buttonsContainer</span> <span class="o">=</span> <span class="nx">ed</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'div'</span><span class="o">));</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">buttons</span><span class="o">,</span><span class="s1">'ygtv-button-container'</span><span class="o">);</span>
+                <span class="nx">button</span> <span class="o">=</span> <span class="nx">buttons</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'button'</span><span class="o">));</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">button</span><span class="o">,</span><span class="s1">'ygtvok'</span><span class="o">);</span>
+                <span class="nx">button</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">' '</span><span class="o">;</span>
+                <span class="nx">button</span> <span class="o">=</span> <span class="nx">buttons</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'button'</span><span class="o">));</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">button</span><span class="o">,</span><span class="s1">'ygtvcancel'</span><span class="o">);</span>
+                <span class="nx">button</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">' '</span><span class="o">;</span>
+                <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">buttons</span><span class="o">,</span> <span class="s1">'click'</span><span class="o">,</span> <span class="k">function</span> <span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'click on editor'</span><span class="o">);</span>
                     <span class="k">var</span> <span class="nx">target</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getTarget</span><span class="o">(</span><span class="nx">ev</span><span class="o">);</span>
                     <span class="k">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="nx">TV</span><span class="o">.</span><span class="nx">editorData</span><span class="o">.</span><span class="nx">node</span><span class="o">;</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span><span class="s1">&#39;ygtvok&#39;</span><span class="o">))</span> <span class="o">{</span>
-                        <span class="nx">node</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;ygtvok&#39;</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span><span class="s1">'ygtvok'</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="nx">node</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'ygtvok'</span><span class="o">);</span>
                         <span class="nx">Event</span><span class="o">.</span><span class="nx">stopEvent</span><span class="o">(</span><span class="nx">ev</span><span class="o">);</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">_closeEditor</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
                     <span class="o">}</span>
-                    <span class="k">if</span> <span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span><span class="s1">&#39;ygtvcancel&#39;</span><span class="o">))</span> <span class="o">{</span>
-                        <span class="nx">node</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;ygtvcancel&#39;</span><span class="o">);</span>
+                    <span class="k">if</span> <span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">hasClass</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span><span class="s1">'ygtvcancel'</span><span class="o">))</span> <span class="o">{</span>
+                        <span class="nx">node</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'ygtvcancel'</span><span class="o">);</span>
                         <span class="nx">Event</span><span class="o">.</span><span class="nx">stopEvent</span><span class="o">(</span><span class="nx">ev</span><span class="o">);</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">_closeEditor</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
                     <span class="o">}</span>
                 <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
-                <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputContainer</span> <span class="o">=</span> <span class="nx">ed</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">));</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">editorData</span><span class="o">.</span><span class="nx">inputContainer</span><span class="o">,</span><span class="s1">&#39;ygtv-input&#39;</span><span class="o">);</span>
+                <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputContainer</span> <span class="o">=</span> <span class="nx">ed</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'div'</span><span class="o">));</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">editorData</span><span class="o">.</span><span class="nx">inputContainer</span><span class="o">,</span><span class="s1">'ygtv-input'</span><span class="o">);</span>
                 
-                <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">&#39;keydown&#39;</span><span class="o">,</span><span class="k">function</span> <span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">'keydown'</span><span class="o">,</span><span class="k">function</span> <span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">var</span> <span class="nx">editorData</span> <span class="o">=</span> <span class="nx">TV</span><span class="o">.</span><span class="nx">editorData</span><span class="o">,</span>
                         <span class="nx">KEY</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">KeyListener</span><span class="o">.</span><span class="nx">KEY</span><span class="o">;</span>
                     <span class="nx">switch</span> <span class="o">(</span><span class="nx">ev</span><span class="o">.</span><span class="nx">keyCode</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">case</span> <span class="nx">KEY</span><span class="o">.</span><span class="nx">ENTER</span><span class="o">:</span>
-                            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;ENTER&#39;</span><span class="o">);</span>
+                            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'ENTER'</span><span class="o">);</span>
                             <span class="nx">Event</span><span class="o">.</span><span class="nx">stopEvent</span><span class="o">(</span><span class="nx">ev</span><span class="o">);</span>
                             <span class="k">if</span> <span class="o">(</span><span class="nx">editorData</span><span class="o">.</span><span class="nx">saveOnEnter</span><span class="o">)</span> <span class="o">{</span> 
                                 <span class="k">this</span><span class="o">.</span><span class="nx">_closeEditor</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
                             <span class="o">}</span>
                             <span class="k">break</span><span class="o">;</span>
                         <span class="nx">case</span> <span class="nx">KEY</span><span class="o">.</span><span class="nx">ESCAPE</span><span class="o">:</span>
-                            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;ESC&#39;</span><span class="o">);</span>
+                            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'ESC'</span><span class="o">);</span>
                             <span class="nx">Event</span><span class="o">.</span><span class="nx">stopEvent</span><span class="o">(</span><span class="nx">ev</span><span class="o">);</span>
                             <span class="k">this</span><span class="o">.</span><span class="nx">_closeEditor</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span>
                             <span class="k">break</span><span class="o">;</span>
@@ -146,17 +137,17 @@
             <span class="o">}</span>
             <span class="nx">editorData</span><span class="o">.</span><span class="nx">node</span> <span class="o">=</span> <span class="nx">node</span><span class="o">;</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">editorData</span><span class="o">.</span><span class="nx">nodeType</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">&#39;ygtv-edit-&#39;</span> <span class="o">+</span> <span class="nx">editorData</span><span class="o">.</span><span class="nx">nodeType</span><span class="o">);</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">'ygtv-edit-'</span> <span class="o">+</span> <span class="nx">editorData</span><span class="o">.</span><span class="nx">nodeType</span><span class="o">);</span>
             <span class="o">}</span>
-            <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">&#39; ygtv-edit-&#39;</span> <span class="o">+</span> <span class="nx">node</span><span class="o">.</span><span class="nx">_type</span><span class="o">);</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">' ygtv-edit-'</span> <span class="o">+</span> <span class="nx">node</span><span class="o">.</span><span class="nx">_type</span><span class="o">);</span>
             <span class="nx">topLeft</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="nx">node</span><span class="o">.</span><span class="nx">getContentEl</span><span class="o">());</span>
-            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">&#39;left&#39;</span><span class="o">,</span><span class="nx">topLeft</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">);</span>
-            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">&#39;top&#39;</span><span class="o">,</span><span class="nx">topLeft</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">);</span>
-            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">&#39;display&#39;</span><span class="o">,</span><span class="s1">&#39;block&#39;</span><span class="o">);</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">'left'</span><span class="o">,</span><span class="nx">topLeft</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">);</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">'top'</span><span class="o">,</span><span class="nx">topLeft</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">);</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ed</span><span class="o">,</span><span class="s1">'display'</span><span class="o">,</span><span class="s1">'block'</span><span class="o">);</span>
             <span class="nx">ed</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
             <span class="nx">node</span><span class="o">.</span><span class="nx">fillEditorContainer</span><span class="o">(</span><span class="nx">editorData</span><span class="o">);</span>
 
-            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>  <span class="c">// If inline editor available, don&#39;t do anything else.</span>
+            <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>  <span class="c">// If inline editor available, don't do anything else.</span>
 <span class="c"></span>        <span class="o">}</span>
     <span class="o">};</span>
     
@@ -190,13 +181,13 @@
         <span class="k">if</span> <span class="o">(</span><span class="nx">save</span><span class="o">)</span> <span class="o">{</span> 
             <span class="nx">ed</span><span class="o">.</span><span class="nx">node</span><span class="o">.</span><span class="nx">saveEditorValue</span><span class="o">(</span><span class="nx">ed</span><span class="o">);</span> 
         <span class="o">}</span>
-        <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ed</span><span class="o">.</span><span class="nx">editorPanel</span><span class="o">,</span><span class="s1">&#39;display&#39;</span><span class="o">,</span><span class="s1">&#39;none&#39;</span><span class="o">);</span>  
+        <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ed</span><span class="o">.</span><span class="nx">editorPanel</span><span class="o">,</span><span class="s1">'display'</span><span class="o">,</span><span class="s1">'none'</span><span class="o">);</span>  
         <span class="nx">ed</span><span class="o">.</span><span class="nx">active</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
         <span class="nx">node</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
     <span class="o">};</span>
     
     <span class="c">/**</span>
-<span class="c">    *  Entry point for TreeView&#39;s destroy method to destroy whatever the editing plug-in has created</span>
+<span class="c">    *  Entry point for TreeView's destroy method to destroy whatever the editing plug-in has created</span>
 <span class="c">    * @method _destroyEditor</span>
 <span class="c">    * @private</span>
 <span class="c">     * @for YAHOO.widget.TreeView</span>
@@ -204,8 +195,8 @@
     <span class="nx">TVproto</span><span class="o">.</span><span class="nx">_destroyEditor</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">ed</span> <span class="o">=</span> <span class="nx">TV</span><span class="o">.</span><span class="nx">editorData</span><span class="o">;</span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">ed</span> <span class="o">&amp;&amp;</span> <span class="nx">ed</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">&amp;&amp;</span> <span class="o">(!</span><span class="nx">ed</span><span class="o">.</span><span class="nx">active</span> <span class="o">||</span> <span class="nx">ed</span><span class="o">.</span><span class="nx">whoHasIt</span> <span class="o">===</span> <span class="k">this</span><span class="o">))</span> <span class="o">{</span>
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">ed</span><span class="o">.</span><span class="nx">editorPanel</span><span class="o">,</span><span class="s1">&#39;keydown&#39;</span><span class="o">);</span>
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">ed</span><span class="o">.</span><span class="nx">buttonContainer</span><span class="o">,</span><span class="s1">&#39;click&#39;</span><span class="o">);</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">ed</span><span class="o">.</span><span class="nx">editorPanel</span><span class="o">,</span><span class="s1">'keydown'</span><span class="o">);</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nx">ed</span><span class="o">.</span><span class="nx">buttonContainer</span><span class="o">,</span><span class="s1">'click'</span><span class="o">);</span>
             <span class="nx">ed</span><span class="o">.</span><span class="nx">node</span><span class="o">.</span><span class="nx">destroyEditorContents</span><span class="o">(</span><span class="nx">ed</span><span class="o">);</span>
             <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="nx">ed</span><span class="o">.</span><span class="nx">editorPanel</span><span class="o">);</span>
             <span class="nx">ed</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">=</span> <span class="nx">ed</span><span class="o">.</span><span class="nx">editorPanel</span> <span class="o">=</span> <span class="nx">ed</span><span class="o">.</span><span class="nx">inputContainer</span> <span class="o">=</span> <span class="nx">ed</span><span class="o">.</span><span class="nx">buttonsContainer</span> <span class="o">=</span> <span class="nx">ed</span><span class="o">.</span><span class="nx">whoHasIt</span> <span class="o">=</span> <span class="nx">ed</span><span class="o">.</span><span class="nx">node</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
@@ -260,7 +251,7 @@
         <span class="c">// In the worst case, if the input editor (such as the Calendar) has no destroy method</span>
 <span class="c"></span>        <span class="c">// we can only try to remove all possible events on it.</span>
 <span class="c"></span>        <span class="nx">Event</span><span class="o">.</span><span class="nx">purgeElement</span><span class="o">(</span><span class="nx">editorData</span><span class="o">.</span><span class="nx">inputContainer</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
-        <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputContainer</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">;</span>
+        <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputContainer</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">''</span><span class="o">;</span>
     <span class="o">};</span>
 
     <span class="c">/**</span>
@@ -293,7 +284,7 @@
             <span class="nx">editorData</span><span class="o">.</span><span class="nx">saveOnEnter</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
             <span class="nx">editorData</span><span class="o">.</span><span class="nx">node</span><span class="o">.</span><span class="nx">destroyEditorContents</span><span class="o">(</span><span class="nx">editorData</span><span class="o">);</span>
 
-            <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputElement</span> <span class="o">=</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputContainer</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;input&#39;</span><span class="o">));</span>
+            <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputElement</span> <span class="o">=</span> <span class="nx">input</span> <span class="o">=</span> <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputContainer</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'input'</span><span class="o">));</span>
             
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
             <span class="c">// if the last node edited was of the same time, reuse the input element.</span>
@@ -322,13 +313,13 @@
     <span class="c">/**</span>
 <span class="c">    * Destroys the contents of the inline editor panel</span>
 <span class="c">    * Overrides Node.destroyEditorContent</span>
-<span class="c">    * Since we didn&#39;t set any event listeners on this inline editor, it is more efficient to avoid the generic method in Node</span>
+<span class="c">    * Since we didn't set any event listeners on this inline editor, it is more efficient to avoid the generic method in Node</span>
 <span class="c">    * @method destroyEditorContents</span>
 <span class="c">     * @param editorData {YAHOO.widget.TreeView.editorData}  a shortcut to the static object holding editing information</span>
 <span class="c">     * @for YAHOO.widget.TextNode</span>
 <span class="c">     */</span>
     <span class="nx">TNproto</span><span class="o">.</span><span class="nx">destroyEditorContents</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">editorData</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputContainer</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">;</span>
+        <span class="nx">editorData</span><span class="o">.</span><span class="nx">inputContainer</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">''</span><span class="o">;</span>
     <span class="o">};</span>
 <span class="o">})();</span>
 </pre></div>
@@ -340,9 +331,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -415,13 +404,11 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.DateNode.html">YAHOO.widget.DateNode</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.DateNode.html">YAHOO.widget.DateNode</a></li>
                                 <li class=""><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
                                 <li class=""><a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a></li>
@@ -431,13 +418,11 @@
                                 <li class=""><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
                                 <li class=""><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
                                 <li class=""><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="DateNode.js.html">DateNode.js</a></li>
+                        <ul class="content"><li class=""><a href="DateNode.js.html">DateNode.js</a></li>
                                 <li class=""><a href="HTMLNode.js.html">HTMLNode.js</a></li>
                                 <li class=""><a href="MenuNode.js.html">MenuNode.js</a></li>
                                 <li class=""><a href="Node.js.html">Node.js</a></li>
@@ -448,8 +433,7 @@
                                 <li class=""><a href="TVAnim.js.html">TVAnim.js</a></li>
                                 <li class=""><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
                                 <li class=""><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -459,9 +443,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2008 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

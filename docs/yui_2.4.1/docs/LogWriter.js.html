@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: logger   LogWriter.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: logger   LogWriter.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Logger Widget&nbsp; <span class="subtitle">2.4.1</span></h3>
+        <h3>Logger Widget  <span class="subtitle">2.4.1</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_logger.html">logger</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/****************************************************************************/</span>
+                        </style><div class="highlight"><pre><span class="c">/****************************************************************************/</span>
 <span class="c">/****************************************************************************/</span>
 <span class="c">/****************************************************************************/</span>
 
@@ -49,8 +40,8 @@
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sSource</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">if</span><span class="o">(!</span><span class="nx">sSource</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not instantiate LogWriter due to invalid source.&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;LogWriter&quot;</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Could not instantiate LogWriter due to invalid source."</span><span class="o">,</span>
+            <span class="s2">"error"</span><span class="o">,</span> <span class="s2">"LogWriter"</span><span class="o">);</span>
         <span class="k">return</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">_source</span> <span class="o">=</span> <span class="nx">sSource</span><span class="o">;</span>
@@ -69,7 +60,7 @@
 <span class="c"> * @return {String} Unique name of the LogWriter instance.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="s2">&quot;LogWriter &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sSource</span><span class="o">;</span>
+    <span class="k">return</span> <span class="s2">"LogWriter "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sSource</span><span class="o">;</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
@@ -101,7 +92,7 @@
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">setSource</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sSource</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">if</span><span class="o">(!</span><span class="nx">sSource</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not set source due to invalid source.&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Could not set source due to invalid source."</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="k">return</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
@@ -132,9 +123,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -195,28 +184,23 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.Logger.html">YAHOO.widget.Logger</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.Logger.html">YAHOO.widget.Logger</a></li>
                                 <li class=""><a href="YAHOO.widget.LogMsg.html">YAHOO.widget.LogMsg</a></li>
                                 <li class=""><a href="YAHOO.widget.LogReader.html">YAHOO.widget.LogReader</a></li>
                                 <li class=""><a href="YAHOO.widget.LogWriter.html">YAHOO.widget.LogWriter</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Logger.js.html">Logger.js</a></li>
+                        <ul class="content"><li class=""><a href="Logger.js.html">Logger.js</a></li>
                                 <li class=""><a href="LogMsg.js.html">LogMsg.js</a></li>
                                 <li class=""><a href="LogReader.js.html">LogReader.js</a></li>
                                 <li class="selected"><a href="LogWriter.js.html">LogWriter.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -226,9 +210,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

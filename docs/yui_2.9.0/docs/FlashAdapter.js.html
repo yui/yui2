@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: uploader   FlashAdapter.js  (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: uploader   FlashAdapter.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Uploader&nbsp; <span class="subtitle">2.9.0</span></h3>
+        <h3>Uploader  <span class="subtitle">2.9.0</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_uploader.html" title="uploader">uploader</a>
                 
                  &gt; FlashAdapter.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,19 +22,16 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <div id="srcout">
                         <style>
                             #doc3 .classopts { display:none; }
-                        </style>
-                        <div class="highlight"><pre><span class="cm">/**</span>
+                        </style><div class="highlight"><pre><span class="cm">/**</span>
 <span class="cm"> * Wraps Flash embedding functionality and allows communication with SWF through</span>
 <span class="cm"> * attributes.</span>
 <span class="cm"> *</span>
@@ -63,13 +47,13 @@
 	<span class="k">this</span><span class="p">.</span><span class="nx">_configs</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">_configs</span> <span class="o">||</span> <span class="p">{};</span>
 	<span class="nx">attributes</span> <span class="o">=</span> <span class="nx">attributes</span> <span class="o">||</span> <span class="p">{};</span>
 	
-	<span class="c1">//the Flash Player external interface code from Adobe doesn&#39;t play nicely</span>
+	<span class="c1">//the Flash Player external interface code from Adobe doesn't play nicely</span>
 	<span class="c1">//with the default value, yui-gen, in IE</span>
-	<span class="k">this</span><span class="p">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">generateId</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s2">&quot;yuigen&quot;</span><span class="p">);</span>
-	<span class="nx">attributes</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">version</span> <span class="o">||</span> <span class="s2">&quot;9.0.45&quot;</span><span class="p">;</span>
-	<span class="nx">attributes</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">||</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">;</span>
+	<span class="k">this</span><span class="p">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">generateId</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="s2">"yuigen"</span><span class="p">);</span>
+	<span class="nx">attributes</span><span class="p">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">version</span> <span class="o">||</span> <span class="s2">"9.0.45"</span><span class="p">;</span>
+	<span class="nx">attributes</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">attributes</span><span class="p">.</span><span class="nx">backgroundColor</span> <span class="o">||</span> <span class="s2">"#ffffff"</span><span class="p">;</span>
 	
-	<span class="c1">//we can&#39;t use the initial attributes right away</span>
+	<span class="c1">//we can't use the initial attributes right away</span>
 	<span class="c1">//so save them for once the SWF finishes loading</span>
 	<span class="k">this</span><span class="p">.</span><span class="nx">_attributes</span> <span class="o">=</span> <span class="nx">attributes</span><span class="p">;</span>
 	
@@ -87,7 +71,7 @@
 	<span class="c1">//Fix for iframe cross-domain issue with FF2x </span>
 	<span class="k">try</span>
 	<span class="p">{</span>
-		<span class="k">this</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">&quot;contentReady&quot;</span><span class="p">);</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">"contentReady"</span><span class="p">);</span>
 	<span class="p">}</span>
 	<span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">){}</span>
 <span class="p">};</span>
@@ -152,7 +136,7 @@
 <span class="cm">	 */</span>
 	<span class="nx">toString</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span>
 	<span class="p">{</span>
-		<span class="k">return</span> <span class="s2">&quot;FlashAdapter &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">;</span>
+		<span class="k">return</span> <span class="s2">"FlashAdapter "</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">_id</span><span class="p">;</span>
 	<span class="p">},</span>
 
 	<span class="cm">/**</span>
@@ -183,7 +167,7 @@
 			<span class="p">}</span>
 		<span class="p">}</span>
 		
-		<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;FlashAdapter instance destroyed: &quot;</span> <span class="o">+</span> <span class="nx">instanceName</span><span class="p">);</span>
+		<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"FlashAdapter instance destroyed: "</span> <span class="o">+</span> <span class="nx">instanceName</span><span class="p">);</span>
 	<span class="p">},</span>
 
 	<span class="cm">/**</span>
@@ -195,7 +179,7 @@
 	<span class="nx">_embedSWF</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">swfURL</span><span class="p">,</span> <span class="nx">containerID</span><span class="p">,</span> <span class="nx">swfID</span><span class="p">,</span> <span class="nx">version</span><span class="p">,</span> <span class="nx">backgroundColor</span><span class="p">,</span> <span class="nx">expressInstall</span><span class="p">,</span> <span class="nx">wmode</span><span class="p">,</span> <span class="nx">buttonSkin</span><span class="p">)</span>
 	<span class="p">{</span>
 		<span class="c1">//standard SWFObject embed</span>
-		<span class="kd">var</span> <span class="nx">swfObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">deconcept</span><span class="p">.</span><span class="nx">SWFObject</span><span class="p">(</span><span class="nx">swfURL</span><span class="p">,</span> <span class="nx">swfID</span><span class="p">,</span> <span class="s2">&quot;100%&quot;</span><span class="p">,</span> <span class="s2">&quot;100%&quot;</span><span class="p">,</span> <span class="nx">version</span><span class="p">,</span> <span class="nx">backgroundColor</span><span class="p">);</span>
+		<span class="kd">var</span> <span class="nx">swfObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">deconcept</span><span class="p">.</span><span class="nx">SWFObject</span><span class="p">(</span><span class="nx">swfURL</span><span class="p">,</span> <span class="nx">swfID</span><span class="p">,</span> <span class="s2">"100%"</span><span class="p">,</span> <span class="s2">"100%"</span><span class="p">,</span> <span class="nx">version</span><span class="p">,</span> <span class="nx">backgroundColor</span><span class="p">);</span>
 
 		<span class="k">if</span><span class="p">(</span><span class="nx">expressInstall</span><span class="p">)</span>
 		<span class="p">{</span>
@@ -203,25 +187,25 @@
 		<span class="p">}</span>
 
 		<span class="c1">//make sure we can communicate with ExternalInterface</span>
-		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addParam</span><span class="p">(</span><span class="s2">&quot;allowScriptAccess&quot;</span><span class="p">,</span> <span class="s2">&quot;always&quot;</span><span class="p">);</span>
+		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addParam</span><span class="p">(</span><span class="s2">"allowScriptAccess"</span><span class="p">,</span> <span class="s2">"always"</span><span class="p">);</span>
 		
 		<span class="k">if</span><span class="p">(</span><span class="nx">wmode</span><span class="p">)</span>
 		<span class="p">{</span>
-			<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addParam</span><span class="p">(</span><span class="s2">&quot;wmode&quot;</span><span class="p">,</span> <span class="nx">wmode</span><span class="p">);</span>
+			<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addParam</span><span class="p">(</span><span class="s2">"wmode"</span><span class="p">,</span> <span class="nx">wmode</span><span class="p">);</span>
 		<span class="p">}</span>
 		
-		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addParam</span><span class="p">(</span><span class="s2">&quot;menu&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">);</span>
+		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addParam</span><span class="p">(</span><span class="s2">"menu"</span><span class="p">,</span> <span class="s2">"false"</span><span class="p">);</span>
 		
 		<span class="c1">//again, a useful ExternalInterface trick</span>
-		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">&quot;allowedDomain&quot;</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hostname</span><span class="p">);</span>
+		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">"allowedDomain"</span><span class="p">,</span> <span class="nb">document</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hostname</span><span class="p">);</span>
 
 		<span class="c1">//tell the SWF which HTML element it is in</span>
-		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">&quot;YUISwfId&quot;</span><span class="p">,</span> <span class="nx">swfID</span><span class="p">);</span>
+		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">"YUISwfId"</span><span class="p">,</span> <span class="nx">swfID</span><span class="p">);</span>
 
 		<span class="c1">// set the name of the function to call when the swf has an event</span>
-		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">&quot;YUIBridgeCallback&quot;</span><span class="p">,</span> <span class="s2">&quot;YAHOO.widget.FlashAdapter.eventHandler&quot;</span><span class="p">);</span>
+		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">"YUIBridgeCallback"</span><span class="p">,</span> <span class="s2">"YAHOO.widget.FlashAdapter.eventHandler"</span><span class="p">);</span>
 		<span class="k">if</span> <span class="p">(</span><span class="nx">buttonSkin</span><span class="p">)</span> <span class="p">{</span>
-		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">&quot;buttonSkin&quot;</span><span class="p">,</span> <span class="nx">buttonSkin</span><span class="p">);</span>
+		<span class="nx">swfObj</span><span class="p">.</span><span class="nx">addVariable</span><span class="p">(</span><span class="s2">"buttonSkin"</span><span class="p">,</span> <span class="nx">buttonSkin</span><span class="p">);</span>
 		<span class="p">}</span>
 		<span class="kd">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">containerID</span><span class="p">);</span>
 		<span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">swfObj</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nx">container</span><span class="p">);</span>
@@ -232,7 +216,7 @@
 		<span class="p">}</span>
 		<span class="k">else</span>
 		<span class="p">{</span>
-			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Unable to load SWF &quot;</span> <span class="o">+</span> <span class="nx">swfURL</span><span class="p">);</span>
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Unable to load SWF "</span> <span class="o">+</span> <span class="nx">swfURL</span><span class="p">);</span>
 		<span class="p">}</span>
 	<span class="p">},</span>
 
@@ -247,10 +231,10 @@
 		<span class="kd">var</span> <span class="nx">type</span> <span class="o">=</span> <span class="nx">event</span><span class="p">.</span><span class="nx">type</span><span class="p">;</span>
 		<span class="k">switch</span><span class="p">(</span><span class="nx">type</span><span class="p">)</span>
 		<span class="p">{</span>
-			<span class="k">case</span> <span class="s2">&quot;swfReady&quot;</span><span class="o">:</span>
+			<span class="k">case</span> <span class="s2">"swfReady"</span><span class="o">:</span>
    				<span class="k">this</span><span class="p">.</span><span class="nx">_loadHandler</span><span class="p">();</span>
 				<span class="k">return</span><span class="p">;</span>
-			<span class="k">case</span> <span class="s2">&quot;log&quot;</span><span class="o">:</span>
+			<span class="k">case</span> <span class="s2">"log"</span><span class="o">:</span>
 				<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">message</span><span class="p">,</span> <span class="nx">event</span><span class="p">.</span><span class="nx">category</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
 				<span class="k">return</span><span class="p">;</span>
 		<span class="p">}</span>
@@ -273,7 +257,7 @@
 		<span class="k">this</span><span class="p">.</span><span class="nx">setAttributes</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_attributes</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 		
 		<span class="k">this</span><span class="p">.</span><span class="nx">_initialized</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-		<span class="k">this</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;contentReady&quot;</span><span class="p">);</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">"contentReady"</span><span class="p">);</span>
 	<span class="p">},</span>
 	
 	<span class="nx">set</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span>
@@ -297,14 +281,14 @@
 		<span class="cm">/**</span>
 <span class="cm">		 * @attribute wmode</span>
 <span class="cm">		 * @description Sets the window mode of the Flash Player control. May be</span>
-<span class="cm">		 *		&quot;window&quot;, &quot;opaque&quot;, or &quot;transparent&quot;. Only available in the constructor</span>
+<span class="cm">		 *		"window", "opaque", or "transparent". Only available in the constructor</span>
 <span class="cm">		 *		because it may not be set after Flash Player has been embedded in the page.</span>
 <span class="cm">		 * @type String</span>
 <span class="cm">		 */</span>
 		 
 		<span class="cm">/**</span>
 <span class="cm">		 * @attribute expressInstall</span>
-<span class="cm">		 * @description URL pointing to a SWF file that handles Flash Player&#39;s express</span>
+<span class="cm">		 * @description URL pointing to a SWF file that handles Flash Player's express</span>
 <span class="cm">		 *		install feature. Only available in the constructor because it may not be</span>
 <span class="cm">		 *		set after Flash Player has been embedded in the page.</span>
 <span class="cm">		 * @type String</span>
@@ -329,11 +313,11 @@
 <span class="cm">		 * @description The alternative text to provide for screen readers and other assistive technology.</span>
 <span class="cm">		 * @type String</span>
 <span class="cm">		 */</span>
-		<span class="k">this</span><span class="p">.</span><span class="nx">getAttributeConfig</span><span class="p">(</span><span class="s2">&quot;altText&quot;</span><span class="p">,</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">getAttributeConfig</span><span class="p">(</span><span class="s2">"altText"</span><span class="p">,</span>
 		<span class="p">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_getAltText</span>
 		<span class="p">});</span>
-		<span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">&quot;altText&quot;</span><span class="p">,</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">setAttributeConfig</span><span class="p">(</span><span class="s2">"altText"</span><span class="p">,</span>
 		<span class="p">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_setAltText</span>
 		<span class="p">});</span>
@@ -344,7 +328,7 @@
 <span class="cm">		 *		set after Flash Player has been embedded in the page.</span>
 <span class="cm">		 * @type String</span>
 <span class="cm">		 */</span>
-		<span class="k">this</span><span class="p">.</span><span class="nx">getAttributeConfig</span><span class="p">(</span><span class="s2">&quot;swfURL&quot;</span><span class="p">,</span>
+		<span class="k">this</span><span class="p">.</span><span class="nx">getAttributeConfig</span><span class="p">(</span><span class="s2">"swfURL"</span><span class="p">,</span>
 		<span class="p">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="p">.</span><span class="nx">_getSWFURL</span>
 		<span class="p">});</span>
@@ -398,7 +382,7 @@
 
 	<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">FlashAdapter</span><span class="p">.</span><span class="nx">owners</span><span class="p">[</span><span class="nx">elementID</span><span class="p">])</span>
 	<span class="p">{</span>
-		<span class="c1">//fix for ie: if owner doesn&#39;t exist yet, try again in a moment</span>
+		<span class="c1">//fix for ie: if owner doesn't exist yet, try again in a moment</span>
 		<span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">FlashAdapter</span><span class="p">.</span><span class="nx">eventHandler</span><span class="p">(</span> <span class="nx">elementID</span><span class="p">,</span> <span class="nx">event</span> <span class="p">);</span> <span class="p">},</span> <span class="mi">0</span><span class="p">);</span>
 	<span class="p">}</span>
 	<span class="k">else</span>
@@ -416,7 +400,7 @@
 
 <span class="cm">/**</span>
 <span class="cm"> * Creates a globally accessible function that wraps a function reference.</span>
-<span class="cm"> * Returns the proxy function&#39;s name as a string for use by the SWF through</span>
+<span class="cm"> * Returns the proxy function's name as a string for use by the SWF through</span>
 <span class="cm"> * ExternalInterface.</span>
 <span class="cm"> *</span>
 <span class="cm"> * @method YAHOO.widget.FlashAdapter.createProxyFunction</span>
@@ -426,12 +410,12 @@
 <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">FlashAdapter</span><span class="p">.</span><span class="nx">createProxyFunction</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">func</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="kd">var</span> <span class="nx">index</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">FlashAdapter</span><span class="p">.</span><span class="nx">proxyFunctionCount</span><span class="p">;</span>
-	<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">FlashAdapter</span><span class="p">[</span><span class="s2">&quot;proxyFunction&quot;</span> <span class="o">+</span> <span class="nx">index</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span>
+	<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">FlashAdapter</span><span class="p">[</span><span class="s2">"proxyFunction"</span> <span class="o">+</span> <span class="nx">index</span><span class="p">]</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span>
 	<span class="p">{</span>
 		<span class="k">return</span> <span class="nx">func</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span>
 	<span class="p">};</span>
 	<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">FlashAdapter</span><span class="p">.</span><span class="nx">proxyFunctionCount</span><span class="o">++</span><span class="p">;</span>
-	<span class="k">return</span> <span class="s2">&quot;YAHOO.widget.FlashAdapter.proxyFunction&quot;</span> <span class="o">+</span> <span class="nx">index</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
+	<span class="k">return</span> <span class="s2">"YAHOO.widget.FlashAdapter.proxyFunction"</span> <span class="o">+</span> <span class="nx">index</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>
 <span class="p">};</span>
 
 <span class="cm">/**</span>
@@ -444,7 +428,7 @@
 <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">FlashAdapter</span><span class="p">.</span><span class="nx">removeProxyFunction</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">funcName</span><span class="p">)</span>
 <span class="p">{</span>
 	<span class="c1">//quick error check</span>
-	<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">funcName</span> <span class="o">||</span> <span class="nx">funcName</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;YAHOO.widget.FlashAdapter.proxyFunction&quot;</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+	<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">funcName</span> <span class="o">||</span> <span class="nx">funcName</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">"YAHOO.widget.FlashAdapter.proxyFunction"</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
 	<span class="p">{</span>
 		<span class="k">return</span><span class="p">;</span>
 	<span class="p">}</span>
@@ -462,8 +446,7 @@
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -511,25 +494,20 @@
                                 <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.FlashAdapter.html" title="YAHOO.widget.FlashAdapter">YAHOO.widget.FlashAdapter</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.FlashAdapter.html" title="YAHOO.widget.FlashAdapter">YAHOO.widget.FlashAdapter</a></li>
                                 <li class=""><a href="YAHOO.widget.Uploader.html" title="YAHOO.widget.Uploader">YAHOO.widget.Uploader</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="FlashAdapter.js.html" title="FlashAdapter.js">FlashAdapter.js</a></li>
+                        <ul class="content"><li class="selected"><a href="FlashAdapter.js.html" title="FlashAdapter.js">FlashAdapter.js</a></li>
                                 <li class=""><a href="swfobject.js.html" title="swfobject.js">swfobject.js</a></li>
                                 <li class=""><a href="Uploader.js.html" title="Uploader.js">Uploader.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -539,13 +517,10 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2011 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2011 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
 
     var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "altText", "url": "YAHOO.widget.FlashAdapter.html#config_altText", "type": "config"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "altTextChange", "url": "YAHOO.widget.FlashAdapter.html#event_altTextChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_attributes", "url": "YAHOO.widget.FlashAdapter.html#property__attributes", "type": "property"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "backgroundColor", "url": "YAHOO.widget.FlashAdapter.html#config_backgroundColor", "type": "config"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "backgroundColorChange", "url": "YAHOO.widget.FlashAdapter.html#event_backgroundColorChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeAltTextChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeAltTextChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeBackgroundColorChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeBackgroundColorChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeExpressInstallChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeExpressInstallChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeSwfURLChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeSwfURLChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeVersionChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeVersionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "beforeWmodeChange", "url": "YAHOO.widget.FlashAdapter.html#event_beforeWmodeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "cancel", "url": "YAHOO.widget.Uploader.html#method_cancel", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Uploader", "name": "Chart.SWFURL", "url": "YAHOO.widget.Uploader.html#property_Chart.SWFURL", "type": "property"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "clearFileList", "url": "YAHOO.widget.Uploader.html#method_clearFileList", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "click", "url": "YAHOO.widget.Uploader.html#event_click", "type": "event"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_containerID", "url": "YAHOO.widget.FlashAdapter.html#property__containerID", "type": "property"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "contentReady", "url": "YAHOO.widget.FlashAdapter.html#event_contentReady", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "destroy", "url": "YAHOO.widget.FlashAdapter.html#method_destroy", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "disable", "url": "YAHOO.widget.Uploader.html#method_disable", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_embedSWF", "url": "YAHOO.widget.FlashAdapter.html#method__embedSWF", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "enable", "url": "YAHOO.widget.Uploader.html#method_enable", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_eventHandler", "url": "YAHOO.widget.FlashAdapter.html#method__eventHandler", "type": "method"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "expressInstall", "url": "YAHOO.widget.FlashAdapter.html#config_expressInstall", "type": "config"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "expressInstallChange", "url": "YAHOO.widget.FlashAdapter.html#event_expressInstallChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "fileSelect", "url": "YAHOO.widget.Uploader.html#event_fileSelect", "type": "event"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_getAltText", "url": "YAHOO.widget.FlashAdapter.html#method__getAltText", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_getSWFURL", "url": "YAHOO.widget.FlashAdapter.html#method__getSWFURL", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_id", "url": "YAHOO.widget.FlashAdapter.html#property__id", "type": "property"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_initAttributes", "url": "YAHOO.widget.FlashAdapter.html#method__initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_initialized", "url": "YAHOO.widget.FlashAdapter.html#property__initialized", "type": "property"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_loadHandler", "url": "YAHOO.widget.FlashAdapter.html#method__loadHandler", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "mouseDown", "url": "YAHOO.widget.Uploader.html#event_mouseDown", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "mouseUp", "url": "YAHOO.widget.Uploader.html#event_mouseUp", "type": "event"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "proxyFunctionCount", "url": "YAHOO.widget.FlashAdapter.html#property_proxyFunctionCount", "type": "property"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "removeFile", "url": "YAHOO.widget.Uploader.html#method_removeFile", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "rollOut", "url": "YAHOO.widget.Uploader.html#event_rollOut", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "rollOver", "url": "YAHOO.widget.Uploader.html#event_rollOver", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "setAllowLogging", "url": "YAHOO.widget.Uploader.html#method_setAllowLogging", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "setAllowMultipleFiles", "url": "YAHOO.widget.Uploader.html#method_setAllowMultipleFiles", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_setAltText", "url": "YAHOO.widget.FlashAdapter.html#method__setAltText", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "setFileFilters", "url": "YAHOO.widget.Uploader.html#method_setFileFilters", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "setSimUploadLimit", "url": "YAHOO.widget.Uploader.html#method_setSimUploadLimit", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_swf", "url": "YAHOO.widget.FlashAdapter.html#property__swf", "type": "property"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "_swfURL", "url": "YAHOO.widget.FlashAdapter.html#property__swfURL", "type": "property"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "swfURL", "url": "YAHOO.widget.FlashAdapter.html#config_swfURL", "type": "config"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "swfURLChange", "url": "YAHOO.widget.FlashAdapter.html#event_swfURLChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "toString", "url": "YAHOO.widget.FlashAdapter.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "upload", "url": "YAHOO.widget.Uploader.html#method_upload", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadAll", "url": "YAHOO.widget.Uploader.html#method_uploadAll", "type": "method"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadCancel", "url": "YAHOO.widget.Uploader.html#event_uploadCancel", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadComplete", "url": "YAHOO.widget.Uploader.html#event_uploadComplete", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadCompleteData", "url": "YAHOO.widget.Uploader.html#event_uploadCompleteData", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadError", "url": "YAHOO.widget.Uploader.html#event_uploadError", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadProgress", "url": "YAHOO.widget.Uploader.html#event_uploadProgress", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadStart", "url": "YAHOO.widget.Uploader.html#event_uploadStart", "type": "event"}, {"access": "", "host": "YAHOO.widget.Uploader", "name": "uploadThese", "url": "YAHOO.widget.Uploader.html#method_uploadThese", "type": "method"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "version", "url": "YAHOO.widget.FlashAdapter.html#config_version", "type": "config"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "versionChange", "url": "YAHOO.widget.FlashAdapter.html#event_versionChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "wmode", "url": "YAHOO.widget.FlashAdapter.html#config_wmode", "type": "config"}, {"access": "", "host": "YAHOO.widget.FlashAdapter", "name": "wmodeChange", "url": "YAHOO.widget.FlashAdapter.html#event_wmodeChange", "type": "event"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "YAHOO.widget.FlashAdapter.createProxyFunction", "url": "YAHOO.widget.FlashAdapter.html#method_YAHOO.widget.FlashAdapter.createProxyFunction", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "YAHOO.widget.FlashAdapter.eventHandler", "url": "YAHOO.widget.FlashAdapter.html#method_YAHOO.widget.FlashAdapter.eventHandler", "type": "method"}, {"access": "private", "host": "YAHOO.widget.FlashAdapter", "name": "YAHOO.widget.FlashAdapter.removeProxyFunction", "url": "YAHOO.widget.FlashAdapter.html#method_YAHOO.widget.FlashAdapter.removeProxyFunction", "type": "method"}];
-</script>
-</body>
-</html>
+</script></body>

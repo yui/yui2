@@ -1,16 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: event  YAHOO.util.EventProvider   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-</head>
-
-<body id="yahoo-com">
-<div id="doc3" class="yui-t2">
+<head><title>API: event  YAHOO.util.EventProvider   (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>Event Utility&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <h3>Event Utility  <span class="subtitle">2.2.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_event.html">event</a>
@@ -36,7 +31,7 @@
                         <span class="extends">
                         </span>
                         
-                        </code>
+                        
                     </h2>
                     <!-- class tree goes here -->
                     
@@ -67,8 +62,7 @@ not be created at all.
                                         
 
 
-                                    <hr />
-                                    <h4><a name="__yui_subscribers">__yui_subscribers</a>
+                                    <hr><h4><a name="__yui_subscribers">__yui_subscribers</a>
                                         <code>- private Object[]</code>
                                     </h4>
                                     <div class="detail">
@@ -80,10 +74,7 @@ not be created at all.
                                         
 
 
-                                    <hr />
-
-
-                            </div>
+                                    <hr></div>
                         </div>
 
 
@@ -120,8 +111,7 @@ case the custom event is returned.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>p_type &lt;string&gt;</code>
                                                               the type, or name of the event
@@ -129,8 +119,7 @@ case the custom event is returned.
                                                         <dd>
                                                             <code>p_config &lt;object&gt;</code>
                                                               optional config params.  Valid properties are:
-<ul>
-<li>
+<ul><li>
 scope: defines the default execution scope.  If not defined
 the default scope will be this instance.
 </li>
@@ -144,23 +133,16 @@ event has a new subscriber.  This will fire immediately for
 each queued subscriber if any exist prior to the creation of
 the event.
 </li>
-</ul>
-                                                        </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+</ul></dd>
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         CustomEvent
                                                     </code></dt>
                                                     <dd>the custom event</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    <h4>
+                                    <hr><h4>
                                         <a name="fireEvent">fireEvent</a></h4>
                                     <div class="detail">
                                         <code>
@@ -186,17 +168,14 @@ the event.
                                             Fire a custom event by name.  The callback functions will be executed
 from the scope specified when the event was created, and with the 
 following parameters:
-<ul>
-<li>The first argument fire() was executed with</li>
+<ul><li>The first argument fire() was executed with</li>
 <li>The custom object (if any) that was passed into the subscribe() 
 method</li>
-</ul>
-                                        </div>
+</ul></div>
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>p_type &lt;string&gt;</code>
                                                                   the type, or name of the event
@@ -206,22 +185,16 @@ method</li>
                                                               an arbitrary set of parameters to pass to 
 the handler.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         boolean
                                                     </code></dt>
                                                     <dd>the return value from CustomEvent.fire, or null if 
 the custom event does not exist.</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    <h4>
+                                    <hr><h4>
                                         <a name="hasEvent">hasEvent</a></h4>
                                     <div class="detail">
                                         <code>
@@ -246,27 +219,20 @@ with createEvent.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>type &lt;string&gt;</code>
                                                               the type, or name of the event
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    <h4>
+                                    <hr><h4>
                                         <a name="subscribe">subscribe</a></h4>
                                     <div class="detail">
                                         <code>
@@ -304,8 +270,7 @@ with createEvent.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>p_type &lt;string&gt;</code>
                                                                     the type, or name of the event
@@ -328,21 +293,15 @@ fires
                                                                If true, the obj passed in becomes the 
 execution scope of the listener
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    <h4>
+                                    <hr><h4>
                                         <a name="unsubscribe">unsubscribe</a></h4>
                                     <div class="detail">
                                         <code>
@@ -374,8 +333,7 @@ execution scope of the listener
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>p_type &lt;string&gt;</code>
                                                                 The type, or name of the event
@@ -393,21 +351,15 @@ disambiguate multiple listeners that are the same
 (e.g., you subscribe many object using a function
 that lives on the prototype)
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         boolean
                                                     </code></dt>
                                                     <dd>true if the subscriber was found and detached.</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    <h4>
+                                    <hr><h4>
                                         <a name="unsubscribeAll">unsubscribeAll</a></h4>
                                     <div class="detail">
                                         <code>
@@ -431,27 +383,20 @@ that lives on the prototype)
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>p_type &lt;string&gt;</code>
                                                                 The type, or name of the event
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                            </div>
+                                    <hr></div>
                         </div>
 
 
@@ -467,9 +412,7 @@ that lives on the prototype)
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -506,44 +449,36 @@ that lives on the prototype)
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
                                 <li class=""><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
                                 <li class="selected"><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
                                 <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
+                        <ul class="content"><li class=""><a href="CustomEvent.js.html">CustomEvent.js</a></li>
                                 <li class=""><a href="Event.js.html">Event.js</a></li>
                                 <li class=""><a href="EventProvider.js.html">EventProvider.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Properties</h4>
-                        <ul class="content">        
-                                <li><a href="#__yui_events">__yui_events</a>
+                        <ul class="content"><li><a href="#__yui_events">__yui_events</a>
                                         <!--<code>&lt;Object[]&gt;</code>-->
                                 </li>
                                 <li><a href="#__yui_subscribers">__yui_subscribers</a>
                                         <!--<code>&lt;Object[]&gt;</code>-->
                                 </li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Methods</h4>
-                        <ul class="content">        
-                                <li><!--<code>CustomEvent</code>-->
+                        <ul class="content"><li><!--<code>CustomEvent</code>-->
                                 <a href="#createEvent">createEvent</a>
                                 </li>
                                 <li><!--<code>boolean</code>-->
@@ -561,8 +496,7 @@ that lives on the prototype)
                                 <li><!--<code>void</code>-->
                                 <a href="#unsubscribeAll">unsubscribeAll</a>
                                 </li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -570,9 +504,7 @@ that lives on the prototype)
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

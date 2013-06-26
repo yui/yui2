@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: json   JSON.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: json   JSON.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>json&nbsp; <span class="subtitle">2.5.2</span></h3>
+        <h3>json  <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_json.html">json</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s1">&#39;lang&#39;</span><span class="o">);</span>
+                        </style><div class="highlight"><pre><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s1">'lang'</span><span class="o">);</span>
 
 <span class="c">/**</span>
 <span class="c"> * Provides methods to parse JSON strings and convert objects to JSON strings.</span>
@@ -47,22 +38,22 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">JSON</span> <span class="o">=</span> <span class="o">{</span>
     <span class="c">/**</span>
 <span class="c">     * First step in the validation.  Regex used to replace all escape</span>
-<span class="c">     * sequences (i.e. &quot;\\&quot;, etc) with &#39;@&#39; characters (a non-JSON character).</span>
+<span class="c">     * sequences (i.e. "\\", etc) with '@' characters (a non-JSON character).</span>
 <span class="c">     * @property _ESCAPES</span>
 <span class="c">     * @type {RegExp}</span>
 <span class="c">     * @static</span>
 <span class="c">     * @private</span>
 <span class="c">     */</span>
-    <span class="nx">_ESCAPES</span> <span class="o">:</span> <span class="sr">/\\[&quot;\\\/bfnrtu]/g</span><span class="o">,</span>
+    <span class="nx">_ESCAPES</span> <span class="o">:</span> <span class="sr">/\\["\\\/bfnrtu]/g</span><span class="o">,</span>
     <span class="c">/**</span>
 <span class="c">     * Second step in the validation.  Regex used to replace all simple</span>
-<span class="c">     * values with &#39;]&#39; characters.</span>
+<span class="c">     * values with ']' characters.</span>
 <span class="c">     * @property _VALUES</span>
 <span class="c">     * @type {RegExp}</span>
 <span class="c">     * @static</span>
 <span class="c">     * @private</span>
 <span class="c">     */</span>
-    <span class="nx">_VALUES</span>  <span class="o">:</span> <span class="sr">/&quot;[^&quot;\\\n\r]*&quot;|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g</span><span class="o">,</span>
+    <span class="nx">_VALUES</span>  <span class="o">:</span> <span class="sr">/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g</span><span class="o">,</span>
     <span class="c">/**</span>
 <span class="c">     * Third step in the validation.  Regex used to remove all open square</span>
 <span class="c">     * brackets following a colon, comma, or at the beginning of the string.</span>
@@ -90,7 +81,7 @@
 <span class="c">     * @static</span>
 <span class="c">     * @private</span>
 <span class="c">     */</span>
-    <span class="nx">_SPECIAL_CHARS</span> <span class="o">:</span> <span class="sr">/[&quot;\\\x00-\x1f\x7f-\x9f]/g</span><span class="o">,</span>
+    <span class="nx">_SPECIAL_CHARS</span> <span class="o">:</span> <span class="sr">/["\\\x00-\x1f\x7f-\x9f]/g</span><span class="o">,</span>
 
     <span class="c">/**</span>
 <span class="c">     * Regex used to reconstitute serialized Dates.</span>
@@ -109,13 +100,13 @@
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="nx">_CHARS</span> <span class="o">:</span> <span class="o">{</span>
-        <span class="s1">&#39;\b&#39;</span><span class="o">:</span> <span class="s1">&#39;\\b&#39;</span><span class="o">,</span>
-        <span class="s1">&#39;\t&#39;</span><span class="o">:</span> <span class="s1">&#39;\\t&#39;</span><span class="o">,</span>
-        <span class="s1">&#39;\n&#39;</span><span class="o">:</span> <span class="s1">&#39;\\n&#39;</span><span class="o">,</span>
-        <span class="s1">&#39;\f&#39;</span><span class="o">:</span> <span class="s1">&#39;\\f&#39;</span><span class="o">,</span>
-        <span class="s1">&#39;\r&#39;</span><span class="o">:</span> <span class="s1">&#39;\\r&#39;</span><span class="o">,</span>
-        <span class="s1">&#39;&quot;&#39;</span> <span class="o">:</span> <span class="s1">&#39;\\&quot;&#39;</span><span class="o">,</span>
-        <span class="s1">&#39;\\&#39;</span><span class="o">:</span> <span class="s1">&#39;\\\\&#39;</span>
+        <span class="s1">'\b'</span><span class="o">:</span> <span class="s1">'\\b'</span><span class="o">,</span>
+        <span class="s1">'\t'</span><span class="o">:</span> <span class="s1">'\\t'</span><span class="o">,</span>
+        <span class="s1">'\n'</span><span class="o">:</span> <span class="s1">'\\n'</span><span class="o">,</span>
+        <span class="s1">'\f'</span><span class="o">:</span> <span class="s1">'\\f'</span><span class="o">,</span>
+        <span class="s1">'\r'</span><span class="o">:</span> <span class="s1">'\\r'</span><span class="o">,</span>
+        <span class="s1">'"'</span> <span class="o">:</span> <span class="s1">'\\"'</span><span class="o">,</span>
+        <span class="s1">'\\'</span><span class="o">:</span> <span class="s1">'\\\\'</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -133,7 +124,7 @@
     <span class="nx">_applyFilter</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">data</span><span class="o">,</span> <span class="nx">filter</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">walk</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">k</span><span class="o">,</span><span class="nx">v</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">i</span><span class="o">,</span> <span class="nx">n</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="nx">v</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">v</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">v</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">v</span> <span class="o">===</span> <span class="s1">'object'</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">v</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">v</span><span class="o">,</span><span class="nx">i</span><span class="o">))</span> <span class="o">{</span>
                         <span class="nx">n</span> <span class="o">=</span> <span class="nx">walk</span><span class="o">(</span><span class="nx">i</span><span class="o">,</span> <span class="nx">v</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
@@ -149,7 +140,7 @@
         <span class="o">};</span>
 
         <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isFunction</span><span class="o">(</span><span class="nx">filter</span><span class="o">))</span> <span class="o">{</span>
-            <span class="nx">walk</span><span class="o">(</span><span class="s1">&#39;&#39;</span><span class="o">,</span><span class="nx">data</span><span class="o">);</span>
+            <span class="nx">walk</span><span class="o">(</span><span class="s1">''</span><span class="o">,</span><span class="nx">data</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="k">return</span> <span class="nx">data</span><span class="o">;</span>
@@ -171,9 +162,9 @@
         <span class="o">}</span>
 
         <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_INVALID</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">str</span><span class="o">.</span>
-                <span class="nx">replace</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_ESCAPES</span><span class="o">,</span><span class="s1">&#39;@&#39;</span><span class="o">).</span>
-                <span class="nx">replace</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_VALUES</span><span class="o">,</span><span class="s1">&#39;]&#39;</span><span class="o">).</span>
-                <span class="nx">replace</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_BRACKETS</span><span class="o">,</span><span class="s1">&#39;&#39;</span><span class="o">));</span>
+                <span class="nx">replace</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_ESCAPES</span><span class="o">,</span><span class="s1">'@'</span><span class="o">).</span>
+                <span class="nx">replace</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_VALUES</span><span class="o">,</span><span class="s1">']'</span><span class="o">).</span>
+                <span class="nx">replace</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_BRACKETS</span><span class="o">,</span><span class="s1">''</span><span class="o">));</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -187,15 +178,15 @@
 <span class="c">     */</span>
     <span class="nx">dateToString</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">d</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">function</span> <span class="nx">_zeroPad</span><span class="o">(</span><span class="nx">v</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="nx">v</span> <span class="o">&lt;</span> <span class="m">10</span> <span class="o">?</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="nx">v</span> <span class="o">:</span> <span class="nx">v</span><span class="o">;</span>
+            <span class="k">return</span> <span class="nx">v</span> <span class="o">&lt;</span> <span class="m">10</span> <span class="o">?</span> <span class="s1">'0'</span> <span class="o">+</span> <span class="nx">v</span> <span class="o">:</span> <span class="nx">v</span><span class="o">;</span>
         <span class="o">}</span>
 
-        <span class="k">return</span> <span class="s1">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="nx">d</span><span class="o">.</span><span class="nx">getUTCFullYear</span><span class="o">()</span>   <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span>
-            <span class="nx">_zeroPad</span><span class="o">(</span><span class="nx">d</span><span class="o">.</span><span class="nx">getUTCMonth</span><span class="o">()</span> <span class="o">+</span> <span class="m">1</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span>
-            <span class="nx">_zeroPad</span><span class="o">(</span><span class="nx">d</span><span class="o">.</span><span class="nx">getUTCDate</span><span class="o">())</span>      <span class="o">+</span> <span class="s1">&#39;T&#39;</span> <span class="o">+</span>
-            <span class="nx">_zeroPad</span><span class="o">(</span><span class="nx">d</span><span class="o">.</span><span class="nx">getUTCHours</span><span class="o">())</span>     <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span>
-            <span class="nx">_zeroPad</span><span class="o">(</span><span class="nx">d</span><span class="o">.</span><span class="nx">getUTCMinutes</span><span class="o">())</span>   <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span>
-            <span class="nx">_zeroPad</span><span class="o">(</span><span class="nx">d</span><span class="o">.</span><span class="nx">getUTCSeconds</span><span class="o">())</span>   <span class="o">+</span> <span class="s1">&#39;Z&quot;&#39;</span><span class="o">;</span>
+        <span class="k">return</span> <span class="s1">'"'</span> <span class="o">+</span> <span class="nx">d</span><span class="o">.</span><span class="nx">getUTCFullYear</span><span class="o">()</span>   <span class="o">+</span> <span class="s1">'-'</span> <span class="o">+</span>
+            <span class="nx">_zeroPad</span><span class="o">(</span><span class="nx">d</span><span class="o">.</span><span class="nx">getUTCMonth</span><span class="o">()</span> <span class="o">+</span> <span class="m">1</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'-'</span> <span class="o">+</span>
+            <span class="nx">_zeroPad</span><span class="o">(</span><span class="nx">d</span><span class="o">.</span><span class="nx">getUTCDate</span><span class="o">())</span>      <span class="o">+</span> <span class="s1">'T'</span> <span class="o">+</span>
+            <span class="nx">_zeroPad</span><span class="o">(</span><span class="nx">d</span><span class="o">.</span><span class="nx">getUTCHours</span><span class="o">())</span>     <span class="o">+</span> <span class="s1">':'</span> <span class="o">+</span>
+            <span class="nx">_zeroPad</span><span class="o">(</span><span class="nx">d</span><span class="o">.</span><span class="nx">getUTCMinutes</span><span class="o">())</span>   <span class="o">+</span> <span class="s1">':'</span> <span class="o">+</span>
+            <span class="nx">_zeroPad</span><span class="o">(</span><span class="nx">d</span><span class="o">.</span><span class="nx">getUTCSeconds</span><span class="o">())</span>   <span class="o">+</span> <span class="s1">'Z"'</span><span class="o">;</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -231,11 +222,11 @@
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isValid</span><span class="o">(</span><span class="nx">s</span><span class="o">))</span> <span class="o">{</span>
             <span class="c">// Eval the text into a JavaScript data structure, apply any</span>
 <span class="c"></span>            <span class="c">// filter function, and return</span>
-<span class="c"></span>            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_applyFilter</span><span class="o">(</span> <span class="nb">eval</span><span class="o">(</span><span class="s1">&#39;(&#39;</span> <span class="o">+</span> <span class="nx">s</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="o">),</span> <span class="nx">filter</span> <span class="o">);</span>
+<span class="c"></span>            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_applyFilter</span><span class="o">(</span> <span class="nb">eval</span><span class="o">(</span><span class="s1">'('</span> <span class="o">+</span> <span class="nx">s</span> <span class="o">+</span> <span class="s1">')'</span><span class="o">),</span> <span class="nx">filter</span> <span class="o">);</span>
         <span class="o">}</span>
 
         <span class="c">// The text is not JSON parsable</span>
-<span class="c"></span>        <span class="k">throw</span> <span class="k">new</span> <span class="nx">SyntaxError</span><span class="o">(</span><span class="s1">&#39;parseJSON&#39;</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">throw</span> <span class="k">new</span> <span class="nx">SyntaxError</span><span class="o">(</span><span class="s1">'parseJSON'</span><span class="o">);</span>
     <span class="o">},</span>
 
 
@@ -265,7 +256,7 @@
 <span class="c"></span>        <span class="k">var</span> <span class="nx">_char</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">c</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">if</span> <span class="o">(!</span><span class="nx">m</span><span class="o">[</span><span class="nx">c</span><span class="o">])</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">charCodeAt</span><span class="o">();</span>
-                <span class="nx">m</span><span class="o">[</span><span class="nx">c</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;\\u00&#39;</span> <span class="o">+</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="nx">a</span> <span class="o">/</span> <span class="m">16</span><span class="o">).</span><span class="nx">toString</span><span class="o">(</span><span class="m">16</span><span class="o">)</span> <span class="o">+</span>
+                <span class="nx">m</span><span class="o">[</span><span class="nx">c</span><span class="o">]</span> <span class="o">=</span> <span class="s1">'\\u00'</span> <span class="o">+</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="nx">a</span> <span class="o">/</span> <span class="m">16</span><span class="o">).</span><span class="nx">toString</span><span class="o">(</span><span class="m">16</span><span class="o">)</span> <span class="o">+</span>
                                            <span class="o">(</span><span class="nx">a</span> <span class="o">%</span> <span class="m">16</span><span class="o">).</span><span class="nx">toString</span><span class="o">(</span><span class="m">16</span><span class="o">);</span>
             <span class="o">}</span>
             <span class="k">return</span> <span class="nx">m</span><span class="o">[</span><span class="nx">c</span><span class="o">];</span>
@@ -273,7 +264,7 @@
 
         <span class="c">// Enclose the escaped string in double quotes</span>
 <span class="c"></span>        <span class="k">var</span> <span class="nx">_string</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">s</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="s1">&#39;&quot;&#39;</span> <span class="o">+</span> <span class="nx">s</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="nx">str_re</span><span class="o">,</span> <span class="nx">_char</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
+            <span class="k">return</span> <span class="s1">'"'</span> <span class="o">+</span> <span class="nx">s</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="nx">str_re</span><span class="o">,</span> <span class="nx">_char</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="o">;</span>
         <span class="o">};</span>
 
         <span class="c">// Use the configured date conversion</span>
@@ -289,18 +280,18 @@
 <span class="c"></span>                <span class="nx">a</span><span class="o">;</span>       <span class="c">// composition array for performance over string concat</span>
 <span class="c"></span>
             <span class="c">// String</span>
-<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">t</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">t</span> <span class="o">===</span> <span class="s1">'string'</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">return</span> <span class="nx">_string</span><span class="o">(</span><span class="nx">o</span><span class="o">);</span>
             <span class="o">}</span>
 
             <span class="c">// native boolean and Boolean instance</span>
-<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">t</span> <span class="o">===</span> <span class="s1">&#39;boolean&#39;</span> <span class="o">||</span> <span class="nx">o</span> <span class="k">instanceof</span> <span class="nb">Boolean</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">t</span> <span class="o">===</span> <span class="s1">'boolean'</span> <span class="o">||</span> <span class="nx">o</span> <span class="k">instanceof</span> <span class="nb">Boolean</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">return</span> <span class="nb">String</span><span class="o">(</span><span class="nx">o</span><span class="o">);</span>
             <span class="o">}</span>
 
             <span class="c">// native number and Number instance</span>
-<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">t</span> <span class="o">===</span> <span class="s1">&#39;number&#39;</span> <span class="o">||</span> <span class="nx">o</span> <span class="k">instanceof</span> <span class="nb">Number</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="nb">isFinite</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">?</span> <span class="nb">String</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">:</span> <span class="s1">&#39;null&#39;</span><span class="o">;</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">t</span> <span class="o">===</span> <span class="s1">'number'</span> <span class="o">||</span> <span class="nx">o</span> <span class="k">instanceof</span> <span class="nb">Number</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="nb">isFinite</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">?</span> <span class="nb">String</span><span class="o">(</span><span class="nx">o</span><span class="o">)</span> <span class="o">:</span> <span class="s1">'null'</span><span class="o">;</span>
             <span class="o">}</span>
 
             <span class="c">// Date</span>
@@ -313,7 +304,7 @@
                 <span class="c">// Check for cyclical references</span>
 <span class="c"></span>                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="nx">pstack</span><span class="o">.</span><span class="nx">length</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="o">--</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">pstack</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">return</span> <span class="s1">&#39;null&#39;</span><span class="o">;</span>
+                        <span class="k">return</span> <span class="s1">'null'</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
 
@@ -321,30 +312,30 @@
 <span class="c"></span>                <span class="nx">pstack</span><span class="o">[</span><span class="nx">pstack</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">o</span><span class="o">;</span>
 
                 <span class="nx">a</span> <span class="o">=</span> <span class="o">[];</span>
-                <span class="c">// Only recurse if we&#39;re above depth config</span>
+                <span class="c">// Only recurse if we're above depth config</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">d</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="nx">o</span><span class="o">.</span><span class="nx">length</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="o">--</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">_stringify</span><span class="o">(</span><span class="nx">o</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span><span class="nx">w</span><span class="o">,</span><span class="nx">d</span><span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">||</span> <span class="s1">&#39;null&#39;</span><span class="o">;</span>
+                        <span class="nx">a</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">_stringify</span><span class="o">(</span><span class="nx">o</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span><span class="nx">w</span><span class="o">,</span><span class="nx">d</span><span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">||</span> <span class="s1">'null'</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
 
                 <span class="c">// remove the array from the stack</span>
 <span class="c"></span>                <span class="nx">pstack</span><span class="o">.</span><span class="nx">pop</span><span class="o">();</span>
 
-                <span class="k">return</span> <span class="s1">&#39;[&#39;</span> <span class="o">+</span> <span class="nx">a</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s1">&#39;,&#39;</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;]&#39;</span><span class="o">;</span>
+                <span class="k">return</span> <span class="s1">'['</span> <span class="o">+</span> <span class="nx">a</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s1">','</span><span class="o">)</span> <span class="o">+</span> <span class="s1">']'</span><span class="o">;</span>
             <span class="o">}</span>
 
             <span class="c">// Object</span>
-<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">t</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c">// Test for null reporting as typeof &#39;object&#39;</span>
+<span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">t</span> <span class="o">===</span> <span class="s1">'object'</span><span class="o">)</span> <span class="o">{</span>
+                <span class="c">// Test for null reporting as typeof 'object'</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(!</span><span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="k">return</span> <span class="s1">&#39;null&#39;</span><span class="o">;</span>
+                    <span class="k">return</span> <span class="s1">'null'</span><span class="o">;</span>
                 <span class="o">}</span>
 
                 <span class="c">// Check for cyclical references</span>
 <span class="c"></span>                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="nx">pstack</span><span class="o">.</span><span class="nx">length</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="o">--</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">pstack</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">return</span> <span class="s1">&#39;null&#39;</span><span class="o">;</span>
+                        <span class="k">return</span> <span class="s1">'null'</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
 
@@ -352,16 +343,16 @@
 <span class="c"></span>                <span class="nx">pstack</span><span class="o">[</span><span class="nx">pstack</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">o</span><span class="o">;</span>
 
                 <span class="nx">a</span> <span class="o">=</span> <span class="o">[];</span>
-                <span class="c">// Only recurse if we&#39;re above depth config</span>
+                <span class="c">// Only recurse if we're above depth config</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">d</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
 
                     <span class="c">// If whitelist provided, take only those keys</span>
 <span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">w</span><span class="o">)</span> <span class="o">{</span>
                         <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">j</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="nx">w</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">w</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="o">)</span> <span class="o">{</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">w</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">===</span> <span class="s1">'string'</span><span class="o">)</span> <span class="o">{</span>
                                 <span class="nx">v</span> <span class="o">=</span> <span class="nx">_stringify</span><span class="o">(</span><span class="nx">o</span><span class="o">[</span><span class="nx">w</span><span class="o">[</span><span class="nx">i</span><span class="o">]],</span><span class="nx">w</span><span class="o">,</span><span class="nx">d</span><span class="o">-</span><span class="m">1</span><span class="o">);</span>
                                 <span class="k">if</span> <span class="o">(</span><span class="nx">v</span><span class="o">)</span> <span class="o">{</span>
-                                    <span class="nx">a</span><span class="o">[</span><span class="nx">j</span><span class="o">++]</span> <span class="o">=</span> <span class="nx">_string</span><span class="o">(</span><span class="nx">w</span><span class="o">[</span><span class="nx">i</span><span class="o">])</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nx">v</span><span class="o">;</span>
+                                    <span class="nx">a</span><span class="o">[</span><span class="nx">j</span><span class="o">++]</span> <span class="o">=</span> <span class="nx">_string</span><span class="o">(</span><span class="nx">w</span><span class="o">[</span><span class="nx">i</span><span class="o">])</span> <span class="o">+</span> <span class="s1">':'</span> <span class="o">+</span> <span class="nx">v</span><span class="o">;</span>
                                 <span class="o">}</span>
                             <span class="o">}</span>
                         <span class="o">}</span>
@@ -371,10 +362,10 @@
 <span class="c"></span>                    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                         <span class="nx">j</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
                         <span class="k">for</span> <span class="o">(</span><span class="nx">k</span> <span class="k">in</span> <span class="nx">o</span><span class="o">)</span> <span class="o">{</span>
-                            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">k</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">l</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span><span class="nx">k</span><span class="o">))</span> <span class="o">{</span>
+                            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">k</span> <span class="o">===</span> <span class="s1">'string'</span> <span class="o">&amp;&amp;</span> <span class="nx">l</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">o</span><span class="o">,</span><span class="nx">k</span><span class="o">))</span> <span class="o">{</span>
                                 <span class="nx">v</span> <span class="o">=</span> <span class="nx">_stringify</span><span class="o">(</span><span class="nx">o</span><span class="o">[</span><span class="nx">k</span><span class="o">],</span><span class="nx">w</span><span class="o">,</span><span class="nx">d</span><span class="o">-</span><span class="m">1</span><span class="o">);</span>
                                 <span class="k">if</span> <span class="o">(</span><span class="nx">v</span><span class="o">)</span> <span class="o">{</span>
-                                    <span class="nx">a</span><span class="o">[</span><span class="nx">j</span><span class="o">++]</span> <span class="o">=</span> <span class="nx">_string</span><span class="o">(</span><span class="nx">k</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nx">v</span><span class="o">;</span>
+                                    <span class="nx">a</span><span class="o">[</span><span class="nx">j</span><span class="o">++]</span> <span class="o">=</span> <span class="nx">_string</span><span class="o">(</span><span class="nx">k</span><span class="o">)</span> <span class="o">+</span> <span class="s1">':'</span> <span class="o">+</span> <span class="nx">v</span><span class="o">;</span>
                                 <span class="o">}</span>
                             <span class="o">}</span>
                         <span class="o">}</span>
@@ -384,7 +375,7 @@
                 <span class="c">// Remove the object from processing stack</span>
 <span class="c"></span>                <span class="nx">pstack</span><span class="o">.</span><span class="nx">pop</span><span class="o">();</span>
 
-                <span class="k">return</span> <span class="s1">&#39;{&#39;</span> <span class="o">+</span> <span class="nx">a</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s1">&#39;,&#39;</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;}&#39;</span><span class="o">;</span>
+                <span class="k">return</span> <span class="s1">'{'</span> <span class="o">+</span> <span class="nx">a</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s1">','</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'}'</span><span class="o">;</span>
             <span class="o">}</span>
 
             <span class="k">return</span> <span class="kc">undefined</span><span class="o">;</span> <span class="c">// invalid input</span>
@@ -406,9 +397,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -477,22 +466,17 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.lang.JSON.html">YAHOO.lang.JSON</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class=""><a href="YAHOO.lang.JSON.html">YAHOO.lang.JSON</a></li>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="JSON.js.html">JSON.js</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class="selected"><a href="JSON.js.html">JSON.js</a></li>
+                        </ul></div>
 
 
 
@@ -502,9 +486,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

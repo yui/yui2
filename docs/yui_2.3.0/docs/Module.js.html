@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: container   Module.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: container   Module.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>Container&nbsp; <span class="subtitle">2.3.0</span></h3>
+        <h3>Container  <span class="subtitle">2.3.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_container.html">container</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                        </style><div class="highlight"><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
     <span class="c">/**</span>
 <span class="c">    * The Container family of components is designed to enable developers to </span>
@@ -54,7 +45,7 @@
 <span class="c">    * Module is a JavaScript representation of the Standard Module Format. </span>
 <span class="c">    * Standard Module Format is a simple standard for markup containers where </span>
 <span class="c">    * child nodes representing the header, body, and footer of the content are </span>
-<span class="c">    * denoted using the CSS classes &quot;hd&quot;, &quot;bd&quot;, and &quot;ft&quot; respectively. </span>
+<span class="c">    * denoted using the CSS classes "hd", "bd", and "ft" respectively. </span>
 <span class="c">    * Module is the base class for all other classes in the YUI </span>
 <span class="c">    * Container package.</span>
 <span class="c">    * @namespace YAHOO.widget</span>
@@ -74,8 +65,8 @@
     
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
     
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;No element or element ID specified&quot;</span> <span class="o">+</span> 
-                <span class="s2">&quot; for Module instantiation&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"No element or element ID specified"</span> <span class="o">+</span> 
+                <span class="s2">" for Module instantiation"</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">);</span>
     
         <span class="o">}</span>
     
@@ -94,7 +85,7 @@
         <span class="nx">m_oFooterTemplate</span><span class="o">,</span>
 
         <span class="c">/**</span>
-<span class="c">        * Constant representing the name of the Module&#39;s events</span>
+<span class="c">        * Constant representing the name of the Module's events</span>
 <span class="c">        * @property EVENT_TYPES</span>
 <span class="c">        * @private</span>
 <span class="c">        * @final</span>
@@ -102,25 +93,25 @@
 <span class="c">        */</span>
         <span class="nx">EVENT_TYPES</span> <span class="o">=</span> <span class="o">{</span>
         
-            <span class="s2">&quot;BEFORE_INIT&quot;</span><span class="o">:</span> <span class="s2">&quot;beforeInit&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;INIT&quot;</span><span class="o">:</span> <span class="s2">&quot;init&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;APPEND&quot;</span><span class="o">:</span> <span class="s2">&quot;append&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;BEFORE_RENDER&quot;</span><span class="o">:</span> <span class="s2">&quot;beforeRender&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;RENDER&quot;</span><span class="o">:</span> <span class="s2">&quot;render&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;CHANGE_HEADER&quot;</span><span class="o">:</span> <span class="s2">&quot;changeHeader&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;CHANGE_BODY&quot;</span><span class="o">:</span> <span class="s2">&quot;changeBody&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;CHANGE_FOOTER&quot;</span><span class="o">:</span> <span class="s2">&quot;changeFooter&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;CHANGE_CONTENT&quot;</span><span class="o">:</span> <span class="s2">&quot;changeContent&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;DESTORY&quot;</span><span class="o">:</span> <span class="s2">&quot;destroy&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;BEFORE_SHOW&quot;</span><span class="o">:</span> <span class="s2">&quot;beforeShow&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;SHOW&quot;</span><span class="o">:</span> <span class="s2">&quot;show&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;BEFORE_HIDE&quot;</span><span class="o">:</span> <span class="s2">&quot;beforeHide&quot;</span><span class="o">,</span>
-            <span class="s2">&quot;HIDE&quot;</span><span class="o">:</span> <span class="s2">&quot;hide&quot;</span>
+            <span class="s2">"BEFORE_INIT"</span><span class="o">:</span> <span class="s2">"beforeInit"</span><span class="o">,</span>
+            <span class="s2">"INIT"</span><span class="o">:</span> <span class="s2">"init"</span><span class="o">,</span>
+            <span class="s2">"APPEND"</span><span class="o">:</span> <span class="s2">"append"</span><span class="o">,</span>
+            <span class="s2">"BEFORE_RENDER"</span><span class="o">:</span> <span class="s2">"beforeRender"</span><span class="o">,</span>
+            <span class="s2">"RENDER"</span><span class="o">:</span> <span class="s2">"render"</span><span class="o">,</span>
+            <span class="s2">"CHANGE_HEADER"</span><span class="o">:</span> <span class="s2">"changeHeader"</span><span class="o">,</span>
+            <span class="s2">"CHANGE_BODY"</span><span class="o">:</span> <span class="s2">"changeBody"</span><span class="o">,</span>
+            <span class="s2">"CHANGE_FOOTER"</span><span class="o">:</span> <span class="s2">"changeFooter"</span><span class="o">,</span>
+            <span class="s2">"CHANGE_CONTENT"</span><span class="o">:</span> <span class="s2">"changeContent"</span><span class="o">,</span>
+            <span class="s2">"DESTORY"</span><span class="o">:</span> <span class="s2">"destroy"</span><span class="o">,</span>
+            <span class="s2">"BEFORE_SHOW"</span><span class="o">:</span> <span class="s2">"beforeShow"</span><span class="o">,</span>
+            <span class="s2">"SHOW"</span><span class="o">:</span> <span class="s2">"show"</span><span class="o">,</span>
+            <span class="s2">"BEFORE_HIDE"</span><span class="o">:</span> <span class="s2">"beforeHide"</span><span class="o">,</span>
+            <span class="s2">"HIDE"</span><span class="o">:</span> <span class="s2">"hide"</span>
         
         <span class="o">},</span>
             
         <span class="c">/**</span>
-<span class="c">        * Constant representing the Module&#39;s configuration properties</span>
+<span class="c">        * Constant representing the Module's configuration properties</span>
 <span class="c">        * @property DEFAULT_CONFIG</span>
 <span class="c">        * @private</span>
 <span class="c">        * @final</span>
@@ -128,20 +119,20 @@
 <span class="c">        */</span>
         <span class="nx">DEFAULT_CONFIG</span> <span class="o">=</span> <span class="o">{</span>
         
-            <span class="s2">&quot;VISIBLE&quot;</span><span class="o">:</span> <span class="o">{</span> 
-                <span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;visible&quot;</span><span class="o">,</span> 
+            <span class="s2">"VISIBLE"</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="nx">key</span><span class="o">:</span> <span class="s2">"visible"</span><span class="o">,</span> 
                 <span class="nx">value</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isBoolean</span> 
             <span class="o">},</span>
         
-            <span class="s2">&quot;EFFECT&quot;</span><span class="o">:</span> <span class="o">{</span> 
-                <span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;effect&quot;</span><span class="o">,</span> 
+            <span class="s2">"EFFECT"</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="nx">key</span><span class="o">:</span> <span class="s2">"effect"</span><span class="o">,</span> 
                 <span class="nx">suppressEvent</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span> 
-                <span class="nx">supercedes</span><span class="o">:</span> <span class="o">[</span><span class="s2">&quot;visible&quot;</span><span class="o">]</span> 
+                <span class="nx">supercedes</span><span class="o">:</span> <span class="o">[</span><span class="s2">"visible"</span><span class="o">]</span> 
             <span class="o">},</span>
         
-            <span class="s2">&quot;MONITOR_RESIZE&quot;</span><span class="o">:</span> <span class="o">{</span> 
-                <span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;monitorresize&quot;</span><span class="o">,</span> 
+            <span class="s2">"MONITOR_RESIZE"</span><span class="o">:</span> <span class="o">{</span> 
+                <span class="nx">key</span><span class="o">:</span> <span class="s2">"monitorresize"</span><span class="o">,</span> 
                 <span class="nx">value</span><span class="o">:</span> <span class="kc">true</span>  
             <span class="o">}</span>
         
@@ -173,7 +164,7 @@
 <span class="c">    * @final</span>
 <span class="c">    * @type String</span>
 <span class="c">    */</span>
-    <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_MODULE</span> <span class="o">=</span> <span class="s2">&quot;yui-module&quot;</span><span class="o">;</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_MODULE</span> <span class="o">=</span> <span class="s2">"yui-module"</span><span class="o">;</span>
     
     <span class="c">/**</span>
 <span class="c">    * Constant representing the module header</span>
@@ -182,7 +173,7 @@
 <span class="c">    * @final</span>
 <span class="c">    * @type String</span>
 <span class="c">    */</span>
-    <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_HEADER</span> <span class="o">=</span> <span class="s2">&quot;hd&quot;</span><span class="o">;</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_HEADER</span> <span class="o">=</span> <span class="s2">"hd"</span><span class="o">;</span>
     
     <span class="c">/**</span>
 <span class="c">    * Constant representing the module body</span>
@@ -191,7 +182,7 @@
 <span class="c">    * @final</span>
 <span class="c">    * @type String</span>
 <span class="c">    */</span>
-    <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_BODY</span> <span class="o">=</span> <span class="s2">&quot;bd&quot;</span><span class="o">;</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_BODY</span> <span class="o">=</span> <span class="s2">"bd"</span><span class="o">;</span>
     
     <span class="c">/**</span>
 <span class="c">    * Constant representing the module footer</span>
@@ -200,37 +191,37 @@
 <span class="c">    * @final</span>
 <span class="c">    * @type String</span>
 <span class="c">    */</span>
-    <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_FOOTER</span> <span class="o">=</span> <span class="s2">&quot;ft&quot;</span><span class="o">;</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_FOOTER</span> <span class="o">=</span> <span class="s2">"ft"</span><span class="o">;</span>
     
     <span class="c">/**</span>
-<span class="c">    * Constant representing the url for the &quot;src&quot; attribute of the iframe </span>
-<span class="c">    * used to monitor changes to the browser&#39;s base font size</span>
+<span class="c">    * Constant representing the url for the "src" attribute of the iframe </span>
+<span class="c">    * used to monitor changes to the browser's base font size</span>
 <span class="c">    * @property YAHOO.widget.Module.RESIZE_MONITOR_SECURE_URL</span>
 <span class="c">    * @static</span>
 <span class="c">    * @final</span>
 <span class="c">    * @type String</span>
 <span class="c">    */</span>
-    <span class="nx">Module</span><span class="o">.</span><span class="nx">RESIZE_MONITOR_SECURE_URL</span> <span class="o">=</span> <span class="s2">&quot;javascript:false;&quot;</span><span class="o">;</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">RESIZE_MONITOR_SECURE_URL</span> <span class="o">=</span> <span class="s2">"javascript:false;"</span><span class="o">;</span>
     
     <span class="c">/**</span>
 <span class="c">    * Singleton CustomEvent fired when the font size is changed in the browser.</span>
-<span class="c">    * Opera&#39;s &quot;zoom&quot; functionality currently does not support text </span>
+<span class="c">    * Opera's "zoom" functionality currently does not support text </span>
 <span class="c">    * size detection.</span>
 <span class="c">    * @event YAHOO.widget.Module.textResizeEvent</span>
 <span class="c">    */</span>
-    <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">&quot;textResize&quot;</span><span class="o">);</span>
+    <span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeEvent</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">CustomEvent</span><span class="o">(</span><span class="s2">"textResize"</span><span class="o">);</span>
 
 
     <span class="k">function</span> <span class="nx">createModuleTemplate</span><span class="o">()</span> <span class="o">{</span>
 
         <span class="k">if</span> <span class="o">(!</span><span class="nx">m_oModuleTemplate</span><span class="o">)</span> <span class="o">{</span>
 
-            <span class="nx">m_oModuleTemplate</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">);</span>
+            <span class="nx">m_oModuleTemplate</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">"div"</span><span class="o">);</span>
             
-            <span class="nx">m_oModuleTemplate</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="o">(</span><span class="s2">&quot;&lt;div class=\&quot;&quot;</span> <span class="o">+</span> 
-                <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_HEADER</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&gt;&lt;/div&gt;&quot;</span> <span class="o">+</span> <span class="s2">&quot;&lt;div class=\&quot;&quot;</span> <span class="o">+</span> 
-                <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_BODY</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&gt;&lt;/div&gt;&lt;div class=\&quot;&quot;</span> <span class="o">+</span> 
-                <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_FOOTER</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&gt;&lt;/div&gt;&quot;</span><span class="o">);</span>
+            <span class="nx">m_oModuleTemplate</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="o">(</span><span class="s2">"&lt;div class=\""</span> <span class="o">+</span> 
+                <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_HEADER</span> <span class="o">+</span> <span class="s2">"\"&gt;&lt;/div&gt;"</span> <span class="o">+</span> <span class="s2">"&lt;div class=\""</span> <span class="o">+</span> 
+                <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_BODY</span> <span class="o">+</span> <span class="s2">"\"&gt;&lt;/div&gt;&lt;div class=\""</span> <span class="o">+</span> 
+                <span class="nx">Module</span><span class="o">.</span><span class="nx">CSS_FOOTER</span> <span class="o">+</span> <span class="s2">"\"&gt;&lt;/div&gt;"</span><span class="o">);</span>
 
             <span class="nx">m_oHeaderTemplate</span> <span class="o">=</span> <span class="nx">m_oModuleTemplate</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">;</span>
             <span class="nx">m_oBodyTemplate</span> <span class="o">=</span> <span class="nx">m_oHeaderTemplate</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">;</span>
@@ -285,7 +276,7 @@
     <span class="nx">Module</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
     
         <span class="c">/**</span>
-<span class="c">        * The class&#39;s constructor function</span>
+<span class="c">        * The class's constructor function</span>
 <span class="c">        * @property contructor</span>
 <span class="c">        * @type Function</span>
 <span class="c">        */</span>
@@ -299,21 +290,21 @@
         <span class="nx">element</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
         
         <span class="c">/**</span>
-<span class="c">        * The header element, denoted with CSS class &quot;hd&quot;</span>
+<span class="c">        * The header element, denoted with CSS class "hd"</span>
 <span class="c">        * @property header</span>
 <span class="c">        * @type HTMLElement</span>
 <span class="c">        */</span>
         <span class="nx">header</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
         
         <span class="c">/**</span>
-<span class="c">        * The body element, denoted with CSS class &quot;bd&quot;</span>
+<span class="c">        * The body element, denoted with CSS class "bd"</span>
 <span class="c">        * @property body</span>
 <span class="c">        * @type HTMLElement</span>
 <span class="c">        */</span>
         <span class="nx">body</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
         
         <span class="c">/**</span>
-<span class="c">        * The footer element, denoted with CSS class &quot;ft&quot;</span>
+<span class="c">        * The footer element, denoted with CSS class "ft"</span>
 <span class="c">        * @property footer</span>
 <span class="c">        * @type HTMLElement</span>
 <span class="c">        */</span>
@@ -330,7 +321,7 @@
 <span class="c">        * A string representing the root path for all images created by</span>
 <span class="c">        * a Module instance.</span>
 <span class="c">        * @deprecated It is recommend that any images for a Module be applied</span>
-<span class="c">        * via CSS using the &quot;background-image&quot; property.</span>
+<span class="c">        * via CSS using the "background-image" property.</span>
 <span class="c">        * @property imageRoot</span>
 <span class="c">        * @type String</span>
 <span class="c">        */</span>
@@ -469,13 +460,13 @@
         
             <span class="k">var</span> <span class="nx">ua</span> <span class="o">=</span> <span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
         
-            <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;windows&quot;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="o">||</span> <span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;win32&quot;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"windows"</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span> <span class="o">||</span> <span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"win32"</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
         
-                <span class="k">return</span> <span class="s2">&quot;windows&quot;</span><span class="o">;</span>
+                <span class="k">return</span> <span class="s2">"windows"</span><span class="o">;</span>
         
-            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;macintosh&quot;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"macintosh"</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
         
-                <span class="k">return</span> <span class="s2">&quot;mac&quot;</span><span class="o">;</span>
+                <span class="k">return</span> <span class="s2">"mac"</span><span class="o">;</span>
         
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
         
@@ -497,28 +488,28 @@
             
             <span class="c">/*</span>
 <span class="c">                 Check Opera first in case of spoof and check Safari before</span>
-<span class="c">                 Gecko since Safari&#39;s user agent string includes &quot;like Gecko&quot;</span>
+<span class="c">                 Gecko since Safari's user agent string includes "like Gecko"</span>
 <span class="c">            */</span>
 
-            <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;opera&#39;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> 
+            <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">'opera'</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> 
             
-                <span class="k">return</span> <span class="s1">&#39;opera&#39;</span><span class="o">;</span>
+                <span class="k">return</span> <span class="s1">'opera'</span><span class="o">;</span>
             
-            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;msie 7&#39;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">'msie 7'</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
             
-                <span class="k">return</span> <span class="s1">&#39;ie7&#39;</span><span class="o">;</span>
+                <span class="k">return</span> <span class="s1">'ie7'</span><span class="o">;</span>
             
-            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;msie&#39;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">'msie'</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
             
-                <span class="k">return</span> <span class="s1">&#39;ie&#39;</span><span class="o">;</span>
+                <span class="k">return</span> <span class="s1">'ie'</span><span class="o">;</span>
             
-            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;safari&#39;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> 
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">'safari'</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> 
             
-                <span class="k">return</span> <span class="s1">&#39;safari&#39;</span><span class="o">;</span>
+                <span class="k">return</span> <span class="s1">'safari'</span><span class="o">;</span>
             
-            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">&#39;gecko&#39;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">ua</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s1">'gecko'</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
             
-                <span class="k">return</span> <span class="s1">&#39;gecko&#39;</span><span class="o">;</span>
+                <span class="k">return</span> <span class="s1">'gecko'</span><span class="o">;</span>
             
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
             
@@ -536,7 +527,7 @@
 <span class="c">        */</span>
         <span class="nx">isSecure</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
         
-            <span class="k">if</span> <span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">href</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;https&quot;</span><span class="o">)</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nb">window</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">href</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"https"</span><span class="o">)</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
         
                 <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
         
@@ -595,7 +586,7 @@
         <span class="o">},</span>
         
         <span class="c">/**</span>
-<span class="c">        * The Module class&#39;s initialization method, which is executed for</span>
+<span class="c">        * The Module class's initialization method, which is executed for</span>
 <span class="c">        * Module and all of its subclasses. This method is automatically </span>
 <span class="c">        * called by the constructor, and  sets up all DOM references for </span>
 <span class="c">        * pre-existing markup, and creates required markup if it is not </span>
@@ -616,7 +607,7 @@
             <span class="k">this</span><span class="o">.</span><span class="nx">beforeInitEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">(</span><span class="nx">Module</span><span class="o">);</span>
         
             <span class="c">/**</span>
-<span class="c">            * The Module&#39;s Config object used for monitoring </span>
+<span class="c">            * The Module's Config object used for monitoring </span>
 <span class="c">            * configuration properties.</span>
 <span class="c">            * @property cfg</span>
 <span class="c">            * @type YAHOO.util.Config</span>
@@ -627,7 +618,7 @@
                 <span class="k">this</span><span class="o">.</span><span class="nx">imageRoot</span> <span class="o">=</span> <span class="nx">Module</span><span class="o">.</span><span class="nx">IMG_ROOT_SSL</span><span class="o">;</span>
             <span class="o">}</span>
         
-            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">el</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">el</span> <span class="o">==</span> <span class="s2">"string"</span><span class="o">)</span> <span class="o">{</span>
 
                 <span class="nx">elId</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span>
         
@@ -725,11 +716,11 @@
         
             <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">opera</span><span class="o">)</span> <span class="o">{</span>
         
-                <span class="nx">oIFrame</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;_yuiResizeMonitor&quot;</span><span class="o">);</span>
+                <span class="nx">oIFrame</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">"_yuiResizeMonitor"</span><span class="o">);</span>
         
                 <span class="k">if</span> <span class="o">(!</span><span class="nx">oIFrame</span><span class="o">)</span> <span class="o">{</span>
         
-                    <span class="nx">oIFrame</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;iframe&quot;</span><span class="o">);</span>
+                    <span class="nx">oIFrame</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">"iframe"</span><span class="o">);</span>
         
                     <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isSecure</span> <span class="o">&amp;&amp;</span> <span class="nx">Module</span><span class="o">.</span><span class="nx">RESIZE_MONITOR_SECURE_URL</span> <span class="o">&amp;&amp;</span> 
                         <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
@@ -740,46 +731,46 @@
 
 
                     <span class="c">/*</span>
-<span class="c">                        Need to set &quot;src&quot; attribute of the iframe to </span>
+<span class="c">                        Need to set "src" attribute of the iframe to </span>
 <span class="c">                        prevent the browser from reporting duplicate </span>
 <span class="c">                        cookies. (See SourceForge bug #1721755)</span>
 <span class="c">                    */</span>
         
                     <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">gecko</span><span class="o">)</span> <span class="o">{</span>
 
-                        <span class="nx">sHTML</span> <span class="o">=</span> <span class="s2">&quot;&lt;html&gt;&lt;head&gt;&lt;script &quot;</span> <span class="o">+</span>
-                                <span class="s2">&quot;type=\&quot;text/javascript\&quot;&gt;&quot;</span> <span class="o">+</span> 
-                                <span class="s2">&quot;window.onresize=function(){window.parent.&quot;</span> <span class="o">+</span>
-                                <span class="s2">&quot;YAHOO.widget.Module.textResizeEvent.&quot;</span> <span class="o">+</span>
-                                <span class="s2">&quot;fire();};window.parent.YAHOO.widget.Module.&quot;</span> <span class="o">+</span>
-                                <span class="s2">&quot;textResizeEvent.fire();&lt;/script&gt;&lt;/head&gt;&quot;</span> <span class="o">+</span> 
-                                <span class="s2">&quot;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;&quot;</span><span class="o">;</span>
+                        <span class="nx">sHTML</span> <span class="o">=</span> <span class="s2">"&lt;html&gt;&lt;head&gt;&lt;script "</span> <span class="o">+</span>
+                                <span class="s2">"type=\"text/javascript\"&gt;"</span> <span class="o">+</span> 
+                                <span class="s2">"window.onresize=function(){window.parent."</span> <span class="o">+</span>
+                                <span class="s2">"YAHOO.widget.Module.textResizeEvent."</span> <span class="o">+</span>
+                                <span class="s2">"fire();};window.parent.YAHOO.widget.Module."</span> <span class="o">+</span>
+                                <span class="s2">"textResizeEvent.fire();&lt;/script&gt;&lt;/head&gt;"</span> <span class="o">+</span> 
+                                <span class="s2">"&lt;body&gt;&lt;/body&gt;&lt;/html&gt;"</span><span class="o">;</span>
 
-                        <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&quot;data:text/html;charset=utf-8,&quot;</span> <span class="o">+</span> 
+                        <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">"data:text/html;charset=utf-8,"</span> <span class="o">+</span> 
                             <span class="nb">encodeURIComponent</span><span class="o">(</span><span class="nx">sHTML</span><span class="o">);</span>
 
                     <span class="o">}</span>
 
-                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s2">&quot;_yuiResizeMonitor&quot;</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s2">"_yuiResizeMonitor"</span><span class="o">;</span>
                     
                     <span class="c">/*</span>
-<span class="c">                        Need to set &quot;position&quot; property before inserting the </span>
-<span class="c">                        iframe into the document or Safari&#39;s status bar will </span>
+<span class="c">                        Need to set "position" property before inserting the </span>
+<span class="c">                        iframe into the document or Safari's status bar will </span>
 <span class="c">                        forever indicate the iframe is loading </span>
 <span class="c">                        (See SourceForge bug #1723064)</span>
 <span class="c">                    */</span>
                     
-                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">position</span> <span class="o">=</span> <span class="s2">&quot;absolute&quot;</span><span class="o">;</span>
-                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">position</span> <span class="o">=</span> <span class="s2">"absolute"</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">"hidden"</span><span class="o">;</span>
         
                     <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">oIFrame</span><span class="o">);</span>
         
-                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="s2">&quot;10em&quot;</span><span class="o">;</span>
-                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="s2">&quot;10em&quot;</span><span class="o">;</span>
-                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="o">(-</span><span class="m">1</span> <span class="o">*</span> <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
-                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="o">(-</span><span class="m">1</span> <span class="o">*</span> <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
-                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">borderWidth</span> <span class="o">=</span> <span class="s2">&quot;0&quot;</span><span class="o">;</span>
-                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">&quot;visible&quot;</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="s2">"10em"</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="s2">"10em"</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="o">(-</span><span class="m">1</span> <span class="o">*</span> <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">)</span> <span class="o">+</span> <span class="s2">"px"</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="o">(-</span><span class="m">1</span> <span class="o">*</span> <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">)</span> <span class="o">+</span> <span class="s2">"px"</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">borderWidth</span> <span class="o">=</span> <span class="s2">"0"</span><span class="o">;</span>
+                    <span class="nx">oIFrame</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">"visible"</span><span class="o">;</span>
         
                     <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">webkit</span><span class="o">)</span> <span class="o">{</span>
         
@@ -799,7 +790,7 @@
         
                     <span class="k">if</span> <span class="o">(!</span><span class="nx">Module</span><span class="o">.</span><span class="nx">textResizeInitialized</span><span class="o">)</span> <span class="o">{</span>
 
-                        <span class="k">if</span> <span class="o">(!</span><span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">oIFrame</span><span class="o">.</span><span class="nx">contentWindow</span><span class="o">,</span> <span class="s2">&quot;resize&quot;</span><span class="o">,</span> 
+                        <span class="k">if</span> <span class="o">(!</span><span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">oIFrame</span><span class="o">.</span><span class="nx">contentWindow</span><span class="o">,</span> <span class="s2">"resize"</span><span class="o">,</span> 
                             <span class="nx">fireTextResize</span><span class="o">))</span> <span class="o">{</span>
 
                             <span class="c">/*</span>
@@ -808,7 +799,7 @@
 <span class="c">                                 use the oIFrame element instead</span>
 <span class="c">                            */</span>
 
-                            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">oIFrame</span><span class="o">,</span> <span class="s2">&quot;resize&quot;</span><span class="o">,</span> <span class="nx">fireTextResize</span><span class="o">);</span>
+                            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nx">oIFrame</span><span class="o">,</span> <span class="s2">"resize"</span><span class="o">,</span> <span class="nx">fireTextResize</span><span class="o">);</span>
 
                         <span class="o">}</span>
 
@@ -835,13 +826,13 @@
             <span class="k">var</span> <span class="nx">nLeft</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span> <span class="o">*</span> <span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">,</span>
                 <span class="nx">nTop</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span> <span class="o">*</span> <span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">;</span>
         
-            <span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">nTop</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span>  <span class="nx">nLeft</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">nTop</span> <span class="o">+</span> <span class="s2">"px"</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">resizeMonitor</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span>  <span class="nx">nLeft</span> <span class="o">+</span> <span class="s2">"px"</span><span class="o">;</span>
         
         <span class="o">},</span>
         
         <span class="c">/**</span>
-<span class="c">        * Sets the Module&#39;s header content to the HTML specified, or appends </span>
+<span class="c">        * Sets the Module's header content to the HTML specified, or appends </span>
 <span class="c">        * the passed element to the header. If no header is present, one will </span>
 <span class="c">        * be automatically created.</span>
 <span class="c">        * @method setHeader</span>
@@ -854,13 +845,13 @@
 
             <span class="k">var</span> <span class="nx">oHeader</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">header</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">header</span> <span class="o">=</span> <span class="nx">createHeader</span><span class="o">());</span>
         
-            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">headerContent</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">headerContent</span> <span class="o">==</span> <span class="s2">"string"</span><span class="o">)</span> <span class="o">{</span>
 
                 <span class="nx">oHeader</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">headerContent</span><span class="o">;</span>
 
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
 
-                <span class="nx">oHeader</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+                <span class="nx">oHeader</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
                 <span class="nx">oHeader</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">headerContent</span><span class="o">);</span>
 
             <span class="o">}</span>
@@ -888,7 +879,7 @@
         <span class="o">},</span>
         
         <span class="c">/**</span>
-<span class="c">        * Sets the Module&#39;s body content to the HTML specified, or appends the</span>
+<span class="c">        * Sets the Module's body content to the HTML specified, or appends the</span>
 <span class="c">        * passed element to the body. If no body is present, one will be </span>
 <span class="c">        * automatically created.</span>
 <span class="c">        * @method setBody</span>
@@ -899,13 +890,13 @@
 
             <span class="k">var</span> <span class="nx">oBody</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">body</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">body</span> <span class="o">=</span> <span class="nx">createBody</span><span class="o">());</span>
         
-            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">bodyContent</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">bodyContent</span> <span class="o">==</span> <span class="s2">"string"</span><span class="o">)</span> <span class="o">{</span>
 
                 <span class="nx">oBody</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">bodyContent</span><span class="o">;</span>
 
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
 
-                <span class="nx">oBody</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+                <span class="nx">oBody</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
                 <span class="nx">oBody</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">bodyContent</span><span class="o">);</span>
 
             <span class="o">}</span>
@@ -933,7 +924,7 @@
         <span class="o">},</span>
         
         <span class="c">/**</span>
-<span class="c">        * Sets the Module&#39;s footer content to the HTML specified, or appends </span>
+<span class="c">        * Sets the Module's footer content to the HTML specified, or appends </span>
 <span class="c">        * the passed element to the footer. If no footer is present, one will </span>
 <span class="c">        * be automatically created.</span>
 <span class="c">        * @method setFooter</span>
@@ -946,13 +937,13 @@
 
             <span class="k">var</span> <span class="nx">oFooter</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">footer</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">footer</span> <span class="o">=</span> <span class="nx">createFooter</span><span class="o">());</span>
         
-            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">footerContent</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">footerContent</span> <span class="o">==</span> <span class="s2">"string"</span><span class="o">)</span> <span class="o">{</span>
 
                 <span class="nx">oFooter</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">footerContent</span><span class="o">;</span>
 
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
 
-                <span class="nx">oFooter</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+                <span class="nx">oFooter</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
                 <span class="nx">oFooter</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">footerContent</span><span class="o">);</span>
 
             <span class="o">}</span>
@@ -982,7 +973,7 @@
         <span class="c">/**</span>
 <span class="c">        * Renders the Module by inserting the elements that are not already </span>
 <span class="c">        * in the main Module into their correct places. Optionally appends </span>
-<span class="c">        * the Module to the specified node prior to the render&#39;s execution. </span>
+<span class="c">        * the Module to the specified node prior to the render's execution. </span>
 <span class="c">        * NOTE: For Modules without existing markup, the appendToNode argument </span>
 <span class="c">        * is REQUIRED. If this argument is ommitted and the current element is </span>
 <span class="c">        * not present in the document, the function will return false, </span>
@@ -1002,7 +993,7 @@
                 <span class="nx">firstChild</span><span class="o">;</span>
         
             <span class="k">function</span> <span class="nx">appendTo</span><span class="o">(</span><span class="nx">element</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">element</span> <span class="o">==</span> <span class="s2">&quot;string&quot;</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">element</span> <span class="o">==</span> <span class="s2">"string"</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">element</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">element</span><span class="o">);</span>
                 <span class="o">}</span>
         
@@ -1031,8 +1022,8 @@
 
                 <span class="k">if</span> <span class="o">(!</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">inDocument</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">))</span> <span class="o">{</span>
 
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Render failed. Must specify appendTo node if &quot;</span> <span class="o">+</span> 
-                        <span class="s2">&quot; Module isn&#39;t already in the DOM.&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Render failed. Must specify appendTo node if "</span> <span class="o">+</span> 
+                        <span class="s2">" Module isn't already in the DOM."</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">);</span>
 
                     <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
 
@@ -1040,12 +1031,12 @@
 
             <span class="o">}</span>
         
-            <span class="c">// Need to get everything into the DOM if it isn&#39;t already</span>
+            <span class="c">// Need to get everything into the DOM if it isn't already</span>
 <span class="c"></span>        
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">header</span> <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">inDocument</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">header</span><span class="o">))</span> <span class="o">{</span>
 
                 <span class="c">/*</span>
-<span class="c">                    There is a header, but it&#39;s not in the DOM yet... </span>
+<span class="c">                    There is a header, but it's not in the DOM yet... </span>
 <span class="c">                    need to add it</span>
 <span class="c">                */</span>
 
@@ -1066,7 +1057,7 @@
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">body</span> <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">inDocument</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">body</span><span class="o">))</span> <span class="o">{</span>
 
                 <span class="c">/*</span>
-<span class="c">                     There is a body, but it&#39;s not in the DOM yet... </span>
+<span class="c">                     There is a body, but it's not in the DOM yet... </span>
 <span class="c">                     need to add it</span>
 <span class="c">                */</span>
 
@@ -1089,7 +1080,7 @@
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">footer</span> <span class="o">&amp;&amp;</span> <span class="o">!</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">inDocument</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">footer</span><span class="o">))</span> <span class="o">{</span>
 
                 <span class="c">/*</span>
-<span class="c">                     There is a footer, but it&#39;s not in the DOM yet... </span>
+<span class="c">                     There is a footer, but it's not in the DOM yet... </span>
 <span class="c">                     need to add it</span>
 <span class="c">                */</span>
 
@@ -1147,7 +1138,7 @@
 <span class="c">        * @method show</span>
 <span class="c">        */</span>
         <span class="nx">show</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;visible&quot;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">"visible"</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
         <span class="o">},</span>
         
         <span class="c">/**</span>
@@ -1157,15 +1148,15 @@
 <span class="c">        * @method hide</span>
 <span class="c">        */</span>
         <span class="nx">hide</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">&quot;visible&quot;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">cfg</span><span class="o">.</span><span class="nx">setProperty</span><span class="o">(</span><span class="s2">"visible"</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
         <span class="o">},</span>
         
         <span class="c">// BUILT-IN EVENT HANDLERS FOR MODULE //</span>
 <span class="c"></span>        
         <span class="c">/**</span>
 <span class="c">        * Default event handler for changing the visibility property of a </span>
-<span class="c">        * Module. By default, this is achieved by switching the &quot;display&quot; style </span>
-<span class="c">        * between &quot;block&quot; and &quot;none&quot;.</span>
+<span class="c">        * Module. By default, this is achieved by switching the "display" style </span>
+<span class="c">        * between "block" and "none".</span>
 <span class="c">        * This method is responsible for firing showEvent and hideEvent.</span>
 <span class="c">        * @param {String} type The CustomEvent type (usually the property name)</span>
 <span class="c">        * @param {Object[]} args The CustomEvent arguments. For configuration </span>
@@ -1178,17 +1169,17 @@
             <span class="k">var</span> <span class="nx">visible</span> <span class="o">=</span> <span class="nx">args</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">visible</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">beforeShowEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="s2">&quot;block&quot;</span><span class="o">);</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">"display"</span><span class="o">,</span> <span class="s2">"block"</span><span class="o">);</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">showEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">beforeHideEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="s2">&quot;none&quot;</span><span class="o">);</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">element</span><span class="o">,</span> <span class="s2">"display"</span><span class="o">,</span> <span class="s2">"none"</span><span class="o">);</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">hideEvent</span><span class="o">.</span><span class="nx">fire</span><span class="o">();</span>
             <span class="o">}</span>
         <span class="o">},</span>
         
         <span class="c">/**</span>
-<span class="c">        * Default event handler for the &quot;monitorresize&quot; configuration property</span>
+<span class="c">        * Default event handler for the "monitorresize" configuration property</span>
 <span class="c">        * @param {String} type The CustomEvent type (usually the property name)</span>
 <span class="c">        * @param {Object[]} args The CustomEvent arguments. For configuration </span>
 <span class="c">        * handlers, args[0] will equal the newly applied value for the property.</span>
@@ -1220,7 +1211,7 @@
 <span class="c">        * @return {String} The string representation of the Module</span>
 <span class="c">        */</span>
         <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="s2">&quot;Module &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">;</span>
+            <span class="k">return</span> <span class="s2">"Module "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">;</span>
         <span class="o">}</span>
         
     <span class="o">};</span>
@@ -1237,9 +1228,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -1286,13 +1275,11 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.Config.html">YAHOO.util.Config</a></li>
                                 <li class=""><a href="YAHOO.widget.ContainerEffect.html">YAHOO.widget.ContainerEffect</a></li>
                                 <li class=""><a href="YAHOO.widget.Dialog.html">YAHOO.widget.Dialog</a></li>
                                 <li class=""><a href="YAHOO.widget.Module.html">YAHOO.widget.Module</a></li>
@@ -1301,13 +1288,11 @@
                                 <li class=""><a href="YAHOO.widget.Panel.html">YAHOO.widget.Panel</a></li>
                                 <li class=""><a href="YAHOO.widget.SimpleDialog.html">YAHOO.widget.SimpleDialog</a></li>
                                 <li class=""><a href="YAHOO.widget.Tooltip.html">YAHOO.widget.Tooltip</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Config.js.html">Config.js</a></li>
+                        <ul class="content"><li class=""><a href="Config.js.html">Config.js</a></li>
                                 <li class=""><a href="ContainerEffect.js.html">ContainerEffect.js</a></li>
                                 <li class=""><a href="Dialog.js.html">Dialog.js</a></li>
                                 <li class="selected"><a href="Module.js.html">Module.js</a></li>
@@ -1316,8 +1301,7 @@
                                 <li class=""><a href="Panel.js.html">Panel.js</a></li>
                                 <li class=""><a href="SimpleDialog.js.html">SimpleDialog.js</a></li>
                                 <li class=""><a href="Tooltip.js.html">Tooltip.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -1327,9 +1311,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Using Custom Events</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Using Custom Events</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,54 +8,30 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><!--begin custom header content for this example--><style type="text/css">
 #container {width:400px; height:100px; padding:10px; border:1px dotted black;background-color:#CCCCCC; cursor:pointer;}
 #resizer {width:200px; height:75px; background-color:#00CCFF;}
 #subscriberWidth {width:200px; height:75px; margin-top:10px;background-color:#CC9966;}
 #subscriberHeight {width:200px; height:75px;  margin-top:10px;background-color:#FF3333;}
-</style>
-
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Using Custom Events</h1>
-
-<div class="exampleIntro">
-	<p>Clicking in the grey box resizes the blue <code>&lt;div&gt;</code> within it. We consider this an "interesting moment" in our script, so we create a <a href="/yui/event/#customevent">Custom Event</a> called <code>onSizeChange</code> that fires whenever the blue box is resized. This Custom Event, when fired, publishes the blue box's new size. <strong>Note:</strong> <code>onSizeChange</code> isn't a DOM event &mdash; it's an arbitrary "custom" event that has meaning in the context of our script, and an event that we think other scripts on the page might be interested in knowing about.</p>
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Using Custom Events</h1><div class="exampleIntro">
+	<p>Clicking in the grey box resizes the blue <code>&lt;div&gt;</code> within it. We consider this an "interesting moment" in our script, so we create a <a href="/yui/event/#customevent">Custom Event</a> called <code>onSizeChange</code> that fires whenever the blue box is resized. This Custom Event, when fired, publishes the blue box's new size. <strong>Note:</strong> <code>onSizeChange</code> isn't a DOM event — it's an arbitrary "custom" event that has meaning in the context of our script, and an event that we think other scripts on the page might be interested in knowing about.</p>
 
 <p>One subscriber to our <code>onSizeChange</code> Custom Event looks at the new width and resizes the brown box to match. A second subscriber looks at the blue <code>&lt;div&gt;</code>'s new height and resizes the red box to match. </p>			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<div id="container">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><div id="container">
   <div id="resizer">
   	Click anywhere within the grey box 
 	to resize me.
   </div>
-</div>
-<div id="subscriberWidth">
+</div><div id="subscriberWidth">
   <strong>Width will resize to match blue 
   box.</strong>
-</div>
-<div id="subscriberHeight">
+</div><div id="subscriberHeight">
   <strong>Height will resize to match blue
   box.</strong>
-</div>
-
-<script>
+</div><script>
 (function() {
 	
 	//create a new custom event, to be fired
@@ -150,8 +118,4 @@ body {
 
 })();
 
-</script>
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

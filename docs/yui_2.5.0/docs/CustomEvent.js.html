@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: event   CustomEvent.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: event   CustomEvent.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Event Utility&nbsp; <span class="subtitle">2.5.0</span></h3>
+        <h3>Event Utility  <span class="subtitle">2.5.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_event.html">event</a>
@@ -27,21 +19,20 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * The CustomEvent class lets you define events for your application</span>
 <span class="c"> * that can be subscribed to by one or more independent component.</span>
 <span class="c"> *</span>
 <span class="c"> * @param {String}  type The type of event, which is passed to the callback</span>
 <span class="c"> *                  when the event fires</span>
-<span class="c"> * @param {Object}  oScope The context the event will fire from.  &quot;this&quot; will</span>
+<span class="c"> * @param {Object}  oScope The context the event will fire from.  "this" will</span>
 <span class="c"> *                  refer to this object in the callback.  Default value: </span>
 <span class="c"> *                  the window object.  The listener can override this.</span>
 <span class="c"> * @param {boolean} silent pass true to prevent the event from writing to</span>
@@ -111,10 +102,10 @@
     <span class="k">this</span><span class="o">.</span><span class="nx">subscribers</span> <span class="o">=</span> <span class="o">[];</span>
 
     <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span> <span class="s2">&quot;Creating &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;Event&quot;</span> <span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span> <span class="s2">"Creating "</span> <span class="o">+</span> <span class="k">this</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"Event"</span> <span class="o">);</span>
     <span class="o">}</span>
 
-    <span class="k">var</span> <span class="nx">onsubscribeType</span> <span class="o">=</span> <span class="s2">&quot;_YUICEOnSubscribe&quot;</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">onsubscribeType</span> <span class="o">=</span> <span class="s2">"_YUICEOnSubscribe"</span><span class="o">;</span>
 
     <span class="c">// Only add subscribe events for events that are not generated by </span>
 <span class="c"></span>    <span class="c">// CustomEvent</span>
@@ -188,7 +179,7 @@
     <span class="nx">subscribe</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">,</span> <span class="nx">override</span><span class="o">)</span> <span class="o">{</span>
 
         <span class="k">if</span> <span class="o">(!</span><span class="nx">fn</span><span class="o">)</span> <span class="o">{</span>
-<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">&quot;Invalid callback for subscriber to &#39;&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">type</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span><span class="o">);</span>
+<span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">"Invalid callback for subscriber to '"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">type</span> <span class="o">+</span> <span class="s2">"'"</span><span class="o">);</span>
         <span class="o">}</span>
 
         <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">subscribeEvent</span><span class="o">)</span> <span class="o">{</span>
@@ -257,10 +248,10 @@
         <span class="o">}</span>
 
         <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span> <span class="s2">&quot;Firing &quot;</span>       <span class="o">+</span> <span class="k">this</span>  <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> 
-                       <span class="s2">&quot;args: &quot;</span>        <span class="o">+</span> <span class="nx">args</span>  <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span>
-                       <span class="s2">&quot;subscribers: &quot;</span> <span class="o">+</span> <span class="nx">len</span><span class="o">,</span>                 
-                       <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;Event&quot;</span>                  <span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span> <span class="s2">"Firing "</span>       <span class="o">+</span> <span class="k">this</span>  <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> 
+                       <span class="s2">"args: "</span>        <span class="o">+</span> <span class="nx">args</span>  <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span>
+                       <span class="s2">"subscribers: "</span> <span class="o">+</span> <span class="nx">len</span><span class="o">,</span>                 
+                       <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"Event"</span>                  <span class="o">);</span>
         <span class="o">}</span>
 
         <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
@@ -269,8 +260,8 @@
                 <span class="nx">rebuild</span><span class="o">=</span><span class="kc">true</span><span class="o">;</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">type</span> <span class="o">+</span> <span class="s2">&quot;-&gt;&quot;</span> <span class="o">+</span> <span class="o">(</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span>  <span class="nx">s</span><span class="o">,</span> 
-                                <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;Event&quot;</span> <span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span> <span class="k">this</span><span class="o">.</span><span class="nx">type</span> <span class="o">+</span> <span class="s2">"-&gt;"</span> <span class="o">+</span> <span class="o">(</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">+</span> <span class="s2">": "</span> <span class="o">+</span>  <span class="nx">s</span><span class="o">,</span> 
+                                <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"Event"</span> <span class="o">);</span>
                 <span class="o">}</span>
 
                 <span class="k">var</span> <span class="nx">scope</span> <span class="o">=</span> <span class="nx">s</span><span class="o">.</span><span class="nx">getScope</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">scope</span><span class="o">);</span>
@@ -285,22 +276,22 @@
                         <span class="nx">ret</span> <span class="o">=</span> <span class="nx">s</span><span class="o">.</span><span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">scope</span><span class="o">,</span> <span class="nx">param</span><span class="o">,</span> <span class="nx">s</span><span class="o">.</span><span class="nx">obj</span><span class="o">);</span>
                     <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">lastError</span> <span class="o">=</span> <span class="nx">e</span><span class="o">;</span>
-                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span> <span class="o">+</span> <span class="s2">&quot; subscriber exception: &quot;</span> <span class="o">+</span> <span class="nx">e</span><span class="o">,</span>
-                                  <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;Event&quot;</span><span class="o">);</span>
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span> <span class="o">+</span> <span class="s2">" subscriber exception: "</span> <span class="o">+</span> <span class="nx">e</span><span class="o">,</span>
+                                  <span class="s2">"error"</span><span class="o">,</span> <span class="s2">"Event"</span><span class="o">);</span>
                     <span class="o">}</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                     <span class="k">try</span> <span class="o">{</span>
                         <span class="nx">ret</span> <span class="o">=</span> <span class="nx">s</span><span class="o">.</span><span class="nx">fn</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="nx">scope</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">type</span><span class="o">,</span> <span class="nx">args</span><span class="o">,</span> <span class="nx">s</span><span class="o">.</span><span class="nx">obj</span><span class="o">);</span>
                     <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">ex</span><span class="o">)</span> <span class="o">{</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">lastError</span> <span class="o">=</span> <span class="nx">ex</span><span class="o">;</span>
-                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span> <span class="o">+</span> <span class="s2">&quot; subscriber exception: &quot;</span> <span class="o">+</span> <span class="nx">ex</span><span class="o">,</span>
-                                  <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;Event&quot;</span><span class="o">);</span>
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span> <span class="o">+</span> <span class="s2">" subscriber exception: "</span> <span class="o">+</span> <span class="nx">ex</span><span class="o">,</span>
+                                  <span class="s2">"error"</span><span class="o">,</span> <span class="s2">"Event"</span><span class="o">);</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
                 <span class="k">if</span> <span class="o">(</span><span class="kc">false</span> <span class="o">===</span> <span class="nx">ret</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Event cancelled, subscriber &quot;</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> 
-                                  <span class="s2">&quot; of &quot;</span> <span class="o">+</span> <span class="nx">len</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;Event&quot;</span><span class="o">);</span>
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Event cancelled, subscriber "</span> <span class="o">+</span> <span class="nx">i</span> <span class="o">+</span> 
+                                  <span class="s2">" of "</span> <span class="o">+</span> <span class="nx">len</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"Event"</span><span class="o">);</span>
                     <span class="o">}</span>
 
                     <span class="c">//break;</span>
@@ -354,8 +345,8 @@
 <span class="c">     * @method toString</span>
 <span class="c">     */</span>
     <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-         <span class="k">return</span> <span class="s2">&quot;CustomEvent: &quot;</span> <span class="o">+</span> <span class="s2">&quot;&#39;&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">type</span>  <span class="o">+</span> <span class="s2">&quot;&#39;, &quot;</span> <span class="o">+</span> 
-             <span class="s2">&quot;scope: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">scope</span><span class="o">;</span>
+         <span class="k">return</span> <span class="s2">"CustomEvent: "</span> <span class="o">+</span> <span class="s2">"'"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">type</span>  <span class="o">+</span> <span class="s2">"', "</span> <span class="o">+</span> 
+             <span class="s2">"scope: "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">scope</span><span class="o">;</span>
 
     <span class="o">}</span>
 <span class="o">};</span>
@@ -428,7 +419,7 @@
 <span class="c"> * @param {Function} fn the function to execute</span>
 <span class="c"> * @param {Object} obj an object to be passed along when the event fires</span>
 <span class="c"> * @return {boolean} true if the supplied arguments match this </span>
-<span class="c"> *                   subscriber&#39;s signature.</span>
+<span class="c"> *                   subscriber's signature.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Subscriber</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">contains</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">fn</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">if</span> <span class="o">(</span><span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
@@ -442,8 +433,8 @@
 <span class="c"> * @method toString</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Subscriber</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="s2">&quot;Subscriber { obj: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">obj</span>  <span class="o">+</span> 
-           <span class="s2">&quot;, override: &quot;</span> <span class="o">+</span>  <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">override</span> <span class="o">||</span> <span class="s2">&quot;no&quot;</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot; }&quot;</span><span class="o">;</span>
+    <span class="k">return</span> <span class="s2">"Subscriber { obj: "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">obj</span>  <span class="o">+</span> 
+           <span class="s2">", override: "</span> <span class="o">+</span>  <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">override</span> <span class="o">||</span> <span class="s2">"no"</span><span class="o">)</span> <span class="o">+</span> <span class="s2">" }"</span><span class="o">;</span>
 <span class="o">};</span>
 </pre></div>
                     </div>
@@ -454,9 +445,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -525,29 +514,24 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.CustomEvent.html">YAHOO.util.CustomEvent</a></li>
                                 <li class=""><a href="YAHOO.util.Event.html">YAHOO.util.Event</a></li>
                                 <li class=""><a href="YAHOO.util.EventProvider.html">YAHOO.util.EventProvider</a></li>
                                 <li class=""><a href="YAHOO.util.KeyListener.html">YAHOO.util.KeyListener</a></li>
                                 <li class=""><a href="YAHOO.util.Subscriber.html">YAHOO.util.Subscriber</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="CustomEvent.js.html">CustomEvent.js</a></li>
+                        <ul class="content"><li class="selected"><a href="CustomEvent.js.html">CustomEvent.js</a></li>
                                 <li class=""><a href="Event.js.html">Event.js</a></li>
                                 <li class=""><a href="EventProvider.js.html">EventProvider.js</a></li>
                                 <li class=""><a href="KeyListener.js.html">KeyListener.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -557,9 +541,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

@@ -1,16 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: animation   Easing.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-</head>
-
-<body id="yahoo-com">
-<div id="doc3" class="yui-t2">
+<head><title>API: animation   Easing.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>animation&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <h3>animation  <span class="subtitle">2.2.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_animation.html">animation</a>
@@ -24,7 +19,7 @@
 			<div class="yui-b">
 
                     <div id="srcout">
-<div class="highlight" ><pre><span class="c">/*</span>
+<div class="highlight"><pre><span class="c">/*</span>
 <span class="c">TERMS OF USE - EASING EQUATIONS</span>
 <span class="c">Open source under the BSD License.</span>
 <span class="c">Copyright 2001 Robert Penner All rights reserved.</span>
@@ -35,7 +30,7 @@
 <span class="c"> * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</span>
 <span class="c"> * Neither the name of the author nor the names of contributors may be used to endorse or promote products derived from this software without specific prior written permission.</span>
 <span class="c"></span>
-<span class="c">THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="c">THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
 <span class="c">*/</span>
 
 <span class="c">/**</span>
@@ -264,7 +259,7 @@
 <span class="c">     * @return {Number} The computed value for the current animation frame</span>
 <span class="c">     */</span>
     <span class="nx">backIn</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">t</span><span class="o">,</span> <span class="nx">b</span><span class="o">,</span> <span class="nx">c</span><span class="o">,</span> <span class="nx">d</span><span class="o">,</span> <span class="nx">s</span><span class="o">)</span> <span class="o">{</span>
-    	<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">s</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="o">)</span> <span class="o">{</span>
+    	<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">s</span> <span class="o">==</span> <span class="s1">'undefined'</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">s</span> <span class="o">=</span> <span class="m">1</span><span class="o">.</span><span class="m">70158</span><span class="o">;</span>
         <span class="o">}</span>
     	<span class="k">return</span> <span class="nx">c</span><span class="o">*(</span><span class="nx">t</span><span class="o">/=</span><span class="nx">d</span><span class="o">)*</span><span class="nx">t</span><span class="o">*((</span><span class="nx">s</span><span class="o">+</span><span class="m">1</span><span class="o">)*</span><span class="nx">t</span> <span class="o">-</span> <span class="nx">s</span><span class="o">)</span> <span class="o">+</span> <span class="nx">b</span><span class="o">;</span>
@@ -281,7 +276,7 @@
 <span class="c">     * @return {Number} The computed value for the current animation frame</span>
 <span class="c">     */</span>
     <span class="nx">backOut</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">t</span><span class="o">,</span> <span class="nx">b</span><span class="o">,</span> <span class="nx">c</span><span class="o">,</span> <span class="nx">d</span><span class="o">,</span> <span class="nx">s</span><span class="o">)</span> <span class="o">{</span>
-    	<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">s</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="o">)</span> <span class="o">{</span>
+    	<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">s</span> <span class="o">==</span> <span class="s1">'undefined'</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">s</span> <span class="o">=</span> <span class="m">1</span><span class="o">.</span><span class="m">70158</span><span class="o">;</span>
         <span class="o">}</span>
     	<span class="k">return</span> <span class="nx">c</span><span class="o">*((</span><span class="nx">t</span><span class="o">=</span><span class="nx">t</span><span class="o">/</span><span class="nx">d</span><span class="o">-</span><span class="m">1</span><span class="o">)*</span><span class="nx">t</span><span class="o">*((</span><span class="nx">s</span><span class="o">+</span><span class="m">1</span><span class="o">)*</span><span class="nx">t</span> <span class="o">+</span> <span class="nx">s</span><span class="o">)</span> <span class="o">+</span> <span class="m">1</span><span class="o">)</span> <span class="o">+</span> <span class="nx">b</span><span class="o">;</span>
@@ -299,7 +294,7 @@
 <span class="c">     * @return {Number} The computed value for the current animation frame</span>
 <span class="c">     */</span>
     <span class="nx">backBoth</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">t</span><span class="o">,</span> <span class="nx">b</span><span class="o">,</span> <span class="nx">c</span><span class="o">,</span> <span class="nx">d</span><span class="o">,</span> <span class="nx">s</span><span class="o">)</span> <span class="o">{</span>
-    	<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">s</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="o">)</span> <span class="o">{</span>
+    	<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">s</span> <span class="o">==</span> <span class="s1">'undefined'</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">s</span> <span class="o">=</span> <span class="m">1</span><span class="o">.</span><span class="m">70158</span><span class="o">;</span> 
         <span class="o">}</span>
         
@@ -367,9 +362,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class="selected"><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class="selected"><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -406,34 +399,29 @@
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.Anim.html">YAHOO.util.Anim</a></li>
                                 <li class=""><a href="YAHOO.util.AnimMgr.html">YAHOO.util.AnimMgr</a></li>
                                 <li class=""><a href="YAHOO.util.Bezier.html">YAHOO.util.Bezier</a></li>
                                 <li class=""><a href="YAHOO.util.ColorAnim.html">YAHOO.util.ColorAnim</a></li>
                                 <li class=""><a href="YAHOO.util.Easing.html">YAHOO.util.Easing</a></li>
                                 <li class=""><a href="YAHOO.util.Motion.html">YAHOO.util.Motion</a></li>
                                 <li class=""><a href="YAHOO.util.Scroll.html">YAHOO.util.Scroll</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Anim.js.html">Anim.js</a></li>
+                        <ul class="content"><li class=""><a href="Anim.js.html">Anim.js</a></li>
                                 <li class=""><a href="AnimMgr.js.html">AnimMgr.js</a></li>
                                 <li class=""><a href="Bezier.js.html">Bezier.js</a></li>
                                 <li class=""><a href="ColorAnim.js.html">ColorAnim.js</a></li>
                                 <li class="selected"><a href="Easing.js.html">Easing.js</a></li>
                                 <li class=""><a href="Motion.js.html">Motion.js</a></li>
                                 <li class=""><a href="Scroll.js.html">Scroll.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -443,9 +431,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

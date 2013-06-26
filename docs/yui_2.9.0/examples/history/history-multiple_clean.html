@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Multiple Modules</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Multiple Modules</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,27 +8,10 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/calendar/assets/skins/sam/calendar.css" />
-<link rel="stylesheet" type="text/css" href="../../build/tabview/assets/skins/sam/tabview.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/element/element-min.js"></script>
-<script type="text/javascript" src="../../build/calendar/calendar-min.js"></script>
-<script type="text/javascript" src="../../build/tabview/tabview-min.js"></script>
-<script type="text/javascript" src="../../build/history/history-min.js"></script>
-
-<!--there is no custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Multiple Modules</h1>
-
-<div class="exampleIntro">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/calendar/assets/skins/sam/calendar.css"><link rel="stylesheet" type="text/css" href="../../build/tabview/assets/skins/sam/tabview.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/element/element-min.js"></script><script type="text/javascript" src="../../build/calendar/calendar-min.js"></script><script type="text/javascript" src="../../build/tabview/tabview-min.js"></script><script type="text/javascript" src="../../build/history/history-min.js"></script><!--there is no custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Multiple Modules</h1><div class="exampleIntro">
 	<p>
   This example demonstrates how to use the Browser History Manager
   with several different modules. Working with several modules
@@ -45,11 +20,7 @@ body {
   initial state and callback.
 </p>
 			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<style>
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><style>
 
 #yui-history-iframe {
   position:absolute;
@@ -60,34 +31,19 @@ body {
 
 #demo { margin-bottom:1em; }
 
-</style>
-
-<!-- Static markup required by the browser history utility. Note that the
+</style><!-- Static markup required by the browser history utility. Note that the
      iframe is only used on Internet Explorer. If this page is server
      generated (by a PHP script for example), it is a good idea to create
-     the IFrame ONLY for Internet Explorer (use server side user agent sniffing) -->
-
-<iframe id="yui-history-iframe" src="assets/blank.html"></iframe>
-<input id="yui-history-field" type="hidden">
-
-<!-- Static markup required for the TabView and calendar widgets. -->
-
-<div id="demo" class="yui-navset yui-navset-top">
-  <ul class="yui-nav">
-    <li><a href="#tab1"><em>Tab One Label</em></a></li>
+     the IFrame ONLY for Internet Explorer (use server side user agent sniffing) --><iframe id="yui-history-iframe" src="assets/blank.html"></iframe><input id="yui-history-field" type="hidden"><!-- Static markup required for the TabView and calendar widgets. --><div id="demo" class="yui-navset yui-navset-top">
+  <ul class="yui-nav"><li><a href="#tab1"><em>Tab One Label</em></a></li>
     <li title="active" class="selected"><a href="#tab2"><em>Tab Two Label</em></a></li>
     <li title="" class=""><a href="#tab3"><em>Tab Three Label</em></a></li>
-  </ul>
-  <div class="yui-content">
+  </ul><div class="yui-content">
     <div style="display: none;" id="tab1"><p>Tab One Content</p></div>
     <div style="display: block;" id="tab2"><p>Tab Two Content</p></div>
     <div style="display: none;" id="tab3"><p>Tab Three Content</p></div>
   </div>
-</div>
-
-<div id="calendarContainer"></div>
-
-<script>
+</div><div id="calendarContainer"></div><script>
 
 (function () {
 
@@ -222,9 +178,4 @@ body {
 
 })();
 
-</script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

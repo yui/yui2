@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: yuitest   UserAction.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: yuitest   UserAction.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>yuitest&nbsp; <span class="subtitle">2.4.1</span></h3>
+        <h3>yuitest  <span class="subtitle">2.4.1</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_yuitest.html">yuitest</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">&quot;util&quot;</span><span class="o">);</span>
+                        </style><div class="highlight"><pre><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">"util"</span><span class="o">);</span>
 
 <span class="c">/**</span>
 <span class="c"> * The UserAction object provides functions that simulate events occurring in</span>
@@ -97,26 +88,26 @@
         <span class="c">//check target</span>
 <span class="c"></span>        <span class="nx">target</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">target</span><span class="o">);</span>        
         <span class="k">if</span> <span class="o">(!</span><span class="nx">target</span><span class="o">){</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">&quot;simulateKeyEvent(): Invalid target.&quot;</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">"simulateKeyEvent(): Invalid target."</span><span class="o">);</span>
         <span class="o">}</span>
         
         <span class="c">//check event type</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">type</span><span class="o">)){</span>
             <span class="nx">type</span> <span class="o">=</span> <span class="nx">type</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
             <span class="nx">switch</span><span class="o">(</span><span class="nx">type</span><span class="o">){</span>
-                <span class="nx">case</span> <span class="s2">&quot;keyup&quot;</span><span class="o">:</span>
-                <span class="nx">case</span> <span class="s2">&quot;keydown&quot;</span><span class="o">:</span>
-                <span class="nx">case</span> <span class="s2">&quot;keypress&quot;</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s2">"keyup"</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s2">"keydown"</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s2">"keypress"</span><span class="o">:</span>
                     <span class="k">break</span><span class="o">;</span>
-                <span class="nx">case</span> <span class="s2">&quot;textevent&quot;</span><span class="o">:</span> <span class="c">//DOM Level 3</span>
-<span class="c"></span>                    <span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;keypress&quot;</span><span class="o">;</span>
+                <span class="nx">case</span> <span class="s2">"textevent"</span><span class="o">:</span> <span class="c">//DOM Level 3</span>
+<span class="c"></span>                    <span class="nx">type</span> <span class="o">=</span> <span class="s2">"keypress"</span><span class="o">;</span>
                     <span class="k">break</span><span class="o">;</span>
                     <span class="c">// @TODO was the fallthrough intentional, if so throw error</span>
 <span class="c"></span>                <span class="nx">default</span><span class="o">:</span>
-                    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">&quot;simulateKeyEvent(): Event type &#39;&quot;</span> <span class="o">+</span> <span class="nx">type</span> <span class="o">+</span> <span class="s2">&quot;&#39; not supported.&quot;</span><span class="o">);</span>
+                    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">"simulateKeyEvent(): Event type '"</span> <span class="o">+</span> <span class="nx">type</span> <span class="o">+</span> <span class="s2">"' not supported."</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">&quot;simulateKeyEvent(): Event type must be a string.&quot;</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">"simulateKeyEvent(): Event type must be a string."</span><span class="o">);</span>
         <span class="o">}</span>
         
         <span class="c">//setup default values</span>
@@ -157,7 +148,7 @@
             <span class="k">try</span> <span class="o">{</span>
                 
                 <span class="c">//try to create key event</span>
-<span class="c"></span>                <span class="nx">customEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;KeyEvents&quot;</span><span class="o">);</span>
+<span class="c"></span>                <span class="nx">customEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"KeyEvents"</span><span class="o">);</span>
                 
                 <span class="c">/*</span>
 <span class="c">                 * Interesting problem: Firefox implemented a non-standard</span>
@@ -165,17 +156,17 @@
 <span class="c">                 * Key event was removed from DOM Level 2 and re-introduced</span>
 <span class="c">                 * in DOM Level 3 with a different interface. Firefox is the</span>
 <span class="c">                 * only browser with any implementation of Key Events, so for</span>
-<span class="c">                 * now, assume it&#39;s Firefox if the above line doesn&#39;t error.</span>
+<span class="c">                 * now, assume it's Firefox if the above line doesn't error.</span>
 <span class="c">                 */</span>
-                <span class="c">//TODO: Decipher between Firefox&#39;s implementation and a correct one.</span>
+                <span class="c">//TODO: Decipher between Firefox's implementation and a correct one.</span>
 <span class="c"></span>                <span class="nx">customEvent</span><span class="o">.</span><span class="nx">initKeyEvent</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">bubbles</span><span class="o">,</span> <span class="nx">cancelable</span><span class="o">,</span> <span class="nx">view</span><span class="o">,</span> <span class="nx">ctrlKey</span><span class="o">,</span>
                     <span class="nx">altKey</span><span class="o">,</span> <span class="nx">shiftKey</span><span class="o">,</span> <span class="nx">metaKey</span><span class="o">,</span> <span class="nx">keyCode</span><span class="o">,</span> <span class="nx">charCode</span><span class="o">);</span>       
                 
             <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">ex</span> <span class="c">/*:Error*/</span><span class="o">){</span>
 
                 <span class="c">/*</span>
-<span class="c">                 * If it got here, that means key events aren&#39;t officially supported. </span>
-<span class="c">                 * Safari/WebKit is a real problem now. WebKit 522 won&#39;t let you</span>
+<span class="c">                 * If it got here, that means key events aren't officially supported. </span>
+<span class="c">                 * Safari/WebKit is a real problem now. WebKit 522 won't let you</span>
 <span class="c">                 * set keyCode, charCode, or other properties if you use a</span>
 <span class="c">                 * UIEvent, so we first must try to create a generic event. The</span>
 <span class="c">                 * fun part is that this will throw an error on Safari 2.x. The</span>
@@ -185,12 +176,12 @@
                 <span class="k">try</span> <span class="o">{</span>
 
                     <span class="c">//try to create generic event - will fail in Safari 2.x</span>
-<span class="c"></span>                    <span class="nx">customEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;Events&quot;</span><span class="o">);</span>
+<span class="c"></span>                    <span class="nx">customEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"Events"</span><span class="o">);</span>
 
                 <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">uierror</span> <span class="c">/*:Error*/</span><span class="o">){</span>
 
                     <span class="c">//the above failed, so create a UIEvent for Safari 2.x</span>
-<span class="c"></span>                    <span class="nx">customEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;UIEvents&quot;</span><span class="o">);</span>
+<span class="c"></span>                    <span class="nx">customEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"UIEvents"</span><span class="o">);</span>
 
                 <span class="o">}</span> <span class="nx">finally</span> <span class="o">{</span>
 
@@ -227,17 +218,17 @@
             <span class="nx">customEvent</span><span class="o">.</span><span class="nx">metaKey</span> <span class="o">=</span> <span class="nx">metaKey</span><span class="o">;</span>
             
             <span class="c">/*</span>
-<span class="c">             * IE doesn&#39;t support charCode explicitly. CharCode should</span>
+<span class="c">             * IE doesn't support charCode explicitly. CharCode should</span>
 <span class="c">             * take precedence over any keyCode value for accurate</span>
 <span class="c">             * representation.</span>
 <span class="c">             */</span>
             <span class="nx">customEvent</span><span class="o">.</span><span class="nx">keyCode</span> <span class="o">=</span> <span class="o">(</span><span class="nx">charCode</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span> <span class="nx">charCode</span> <span class="o">:</span> <span class="nx">keyCode</span><span class="o">;</span>
             
             <span class="c">//fire the event</span>
-<span class="c"></span>            <span class="nx">target</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">type</span><span class="o">,</span> <span class="nx">customEvent</span><span class="o">);</span>  
+<span class="c"></span>            <span class="nx">target</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"on"</span> <span class="o">+</span> <span class="nx">type</span><span class="o">,</span> <span class="nx">customEvent</span><span class="o">);</span>  
                     
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">&quot;simulateKeyEvent(): No event simulation framework present.&quot;</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">"simulateKeyEvent(): No event simulation framework present."</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span>
 
@@ -304,26 +295,26 @@
         <span class="c">//check target</span>
 <span class="c"></span>        <span class="nx">target</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">target</span><span class="o">);</span>        
         <span class="k">if</span> <span class="o">(!</span><span class="nx">target</span><span class="o">){</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">&quot;simulateMouseEvent(): Invalid target.&quot;</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">"simulateMouseEvent(): Invalid target."</span><span class="o">);</span>
         <span class="o">}</span>
         
         <span class="c">//check event type</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">type</span><span class="o">)){</span>
             <span class="nx">type</span> <span class="o">=</span> <span class="nx">type</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">();</span>
             <span class="nx">switch</span><span class="o">(</span><span class="nx">type</span><span class="o">){</span>
-                <span class="nx">case</span> <span class="s2">&quot;mouseover&quot;</span><span class="o">:</span>
-                <span class="nx">case</span> <span class="s2">&quot;mouseout&quot;</span><span class="o">:</span>
-                <span class="nx">case</span> <span class="s2">&quot;mousedown&quot;</span><span class="o">:</span>
-                <span class="nx">case</span> <span class="s2">&quot;mouseup&quot;</span><span class="o">:</span>
-                <span class="nx">case</span> <span class="s2">&quot;click&quot;</span><span class="o">:</span>
-                <span class="nx">case</span> <span class="s2">&quot;dblclick&quot;</span><span class="o">:</span>
-                <span class="nx">case</span> <span class="s2">&quot;mousemove&quot;</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s2">"mouseover"</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s2">"mouseout"</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s2">"mousedown"</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s2">"mouseup"</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s2">"click"</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s2">"dblclick"</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s2">"mousemove"</span><span class="o">:</span>
                     <span class="k">break</span><span class="o">;</span>
                 <span class="nx">default</span><span class="o">:</span>
-                    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">&quot;simulateMouseEvent(): Event type &#39;&quot;</span> <span class="o">+</span> <span class="nx">type</span> <span class="o">+</span> <span class="s2">&quot;&#39; not supported.&quot;</span><span class="o">);</span>
+                    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">"simulateMouseEvent(): Event type '"</span> <span class="o">+</span> <span class="nx">type</span> <span class="o">+</span> <span class="s2">"' not supported."</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">&quot;simulateMouseEvent(): Event type must be a string.&quot;</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">"simulateMouseEvent(): Event type must be a string."</span><span class="o">);</span>
         <span class="o">}</span>
         
         <span class="c">//setup default values</span>
@@ -331,7 +322,7 @@
             <span class="nx">bubbles</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span> <span class="c">//all mouse events bubble</span>
 <span class="c"></span>        <span class="o">}</span>
         <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isBoolean</span><span class="o">(</span><span class="nx">cancelable</span><span class="o">)){</span>
-            <span class="nx">cancelable</span> <span class="o">=</span> <span class="o">(</span><span class="nx">type</span> <span class="o">!=</span> <span class="s2">&quot;mousemove&quot;</span><span class="o">);</span> <span class="c">//mousemove is the only one that can&#39;t be cancelled</span>
+            <span class="nx">cancelable</span> <span class="o">=</span> <span class="o">(</span><span class="nx">type</span> <span class="o">!=</span> <span class="s2">"mousemove"</span><span class="o">);</span> <span class="c">//mousemove is the only one that can't be cancelled</span>
 <span class="c"></span>        <span class="o">}</span>
         <span class="k">if</span> <span class="o">(!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">view</span><span class="o">)){</span>
             <span class="nx">view</span> <span class="o">=</span> <span class="nb">window</span><span class="o">;</span> <span class="c">//view is typically window</span>
@@ -373,9 +364,9 @@
         <span class="c">//check for DOM-compliant browsers first</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isFunction</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">)){</span>
         
-            <span class="nx">customEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;MouseEvents&quot;</span><span class="o">);</span>
+            <span class="nx">customEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"MouseEvents"</span><span class="o">);</span>
         
-            <span class="c">//Safari 2.x (WebKit 418) still doesn&#39;t implement initMouseEvent()</span>
+            <span class="c">//Safari 2.x (WebKit 418) still doesn't implement initMouseEvent()</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">customEvent</span><span class="o">.</span><span class="nx">initMouseEvent</span><span class="o">){</span>
                 <span class="nx">customEvent</span><span class="o">.</span><span class="nx">initMouseEvent</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">bubbles</span><span class="o">,</span> <span class="nx">cancelable</span><span class="o">,</span> <span class="nx">view</span><span class="o">,</span> <span class="nx">detail</span><span class="o">,</span>
                                      <span class="nx">screenX</span><span class="o">,</span> <span class="nx">screenY</span><span class="o">,</span> <span class="nx">clientX</span><span class="o">,</span> <span class="nx">clientY</span><span class="o">,</span> 
@@ -384,7 +375,7 @@
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">//Safari</span>
 <span class="c"></span>            
                 <span class="c">//the closest thing available in Safari 2.x is UIEvents</span>
-<span class="c"></span>                <span class="nx">customEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;UIEvents&quot;</span><span class="o">);</span>
+<span class="c"></span>                <span class="nx">customEvent</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"UIEvents"</span><span class="o">);</span>
                 <span class="nx">customEvent</span><span class="o">.</span><span class="nx">initEvent</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">bubbles</span><span class="o">,</span> <span class="nx">cancelable</span><span class="o">);</span>
                 <span class="nx">customEvent</span><span class="o">.</span><span class="nx">view</span> <span class="o">=</span> <span class="nx">view</span><span class="o">;</span>
                 <span class="nx">customEvent</span><span class="o">.</span><span class="nx">detail</span> <span class="o">=</span> <span class="nx">detail</span><span class="o">;</span>
@@ -402,7 +393,7 @@
             
             <span class="c">/*</span>
 <span class="c">             * Check to see if relatedTarget has been assigned. Firefox</span>
-<span class="c">             * versions less than 2.0 don&#39;t allow it to be assigned via</span>
+<span class="c">             * versions less than 2.0 don't allow it to be assigned via</span>
 <span class="c">             * initMouseEvent() and the property is readonly after event</span>
 <span class="c">             * creation, so in order to keep YAHOO.util.getRelatedTarget()</span>
 <span class="c">             * working, assign to the IE proprietary toElement property</span>
@@ -410,9 +401,9 @@
 <span class="c">             * event.</span>
 <span class="c">             */</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">relatedTarget</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">customEvent</span><span class="o">.</span><span class="nx">relatedTarget</span><span class="o">){</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;mouseout&quot;</span><span class="o">){</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">"mouseout"</span><span class="o">){</span>
                     <span class="nx">customEvent</span><span class="o">.</span><span class="nx">toElement</span> <span class="o">=</span> <span class="nx">relatedTarget</span><span class="o">;</span>
-                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">&quot;mouseover&quot;</span><span class="o">){</span>
+                <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">type</span> <span class="o">==</span> <span class="s2">"mouseover"</span><span class="o">){</span>
                     <span class="nx">customEvent</span><span class="o">.</span><span class="nx">fromElement</span> <span class="o">=</span> <span class="nx">relatedTarget</span><span class="o">;</span>
                 <span class="o">}</span>
             <span class="o">}</span>
@@ -439,7 +430,7 @@
             <span class="nx">customEvent</span><span class="o">.</span><span class="nx">metaKey</span> <span class="o">=</span> <span class="nx">metaKey</span><span class="o">;</span>
             <span class="nx">customEvent</span><span class="o">.</span><span class="nx">shiftKey</span> <span class="o">=</span> <span class="nx">shiftKey</span><span class="o">;</span>
 
-            <span class="c">//fix button property for IE&#39;s wacky implementation</span>
+            <span class="c">//fix button property for IE's wacky implementation</span>
 <span class="c"></span>            <span class="nx">switch</span><span class="o">(</span><span class="nx">button</span><span class="o">){</span>
                 <span class="nx">case</span> <span class="m">0</span><span class="o">:</span>
                     <span class="nx">customEvent</span><span class="o">.</span><span class="nx">button</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span>
@@ -455,17 +446,17 @@
             <span class="o">}</span>    
 
             <span class="c">/*</span>
-<span class="c">             * Have to use relatedTarget because IE won&#39;t allow assignment</span>
+<span class="c">             * Have to use relatedTarget because IE won't allow assignment</span>
 <span class="c">             * to toElement or fromElement on generic events. This keeps</span>
 <span class="c">             * YAHOO.util.customEvent.getRelatedTarget() functional.</span>
 <span class="c">             */</span>
             <span class="nx">customEvent</span><span class="o">.</span><span class="nx">relatedTarget</span> <span class="o">=</span> <span class="nx">relatedTarget</span><span class="o">;</span>
             
             <span class="c">//fire the event</span>
-<span class="c"></span>            <span class="nx">target</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;on&quot;</span> <span class="o">+</span> <span class="nx">type</span><span class="o">,</span> <span class="nx">customEvent</span><span class="o">);</span>
+<span class="c"></span>            <span class="nx">target</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"on"</span> <span class="o">+</span> <span class="nx">type</span><span class="o">,</span> <span class="nx">customEvent</span><span class="o">);</span>
                     
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">&quot;simulateMouseEvent(): No event simulation framework present.&quot;</span><span class="o">);</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="o">(</span><span class="s2">"simulateMouseEvent(): No event simulation framework present."</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span>
    
@@ -502,7 +493,7 @@
 <span class="c">     * @static     </span>
 <span class="c">     */</span>
     <span class="nx">click</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">target</span> <span class="c">/*:HTMLElement*/</span><span class="o">,</span> <span class="nx">options</span> <span class="c">/*:Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span> <span class="s2">"click"</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -513,7 +504,7 @@
 <span class="c">     * @static</span>
 <span class="c">     */</span>
     <span class="nx">dblclick</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">target</span> <span class="c">/*:HTMLElement*/</span><span class="o">,</span> <span class="nx">options</span> <span class="c">/*:Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span> <span class="nx">target</span><span class="o">,</span> <span class="s2">&quot;dblclick&quot;</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span> <span class="nx">target</span><span class="o">,</span> <span class="s2">"dblclick"</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -524,7 +515,7 @@
 <span class="c">     * @static</span>
 <span class="c">     */</span>
     <span class="nx">mousedown</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">target</span> <span class="c">/*:HTMLElement*/</span><span class="o">,</span> <span class="nx">options</span> <span class="c">/*Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span> <span class="s2">&quot;mousedown&quot;</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span> <span class="s2">"mousedown"</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -535,14 +526,14 @@
 <span class="c">     * @static</span>
 <span class="c">     */</span>
     <span class="nx">mousemove</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">target</span> <span class="c">/*:HTMLElement*/</span><span class="o">,</span> <span class="nx">options</span> <span class="c">/*Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span> <span class="s2">&quot;mousemove&quot;</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span> <span class="s2">"mousemove"</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
-<span class="c">     * Simulates a mouseout event on a particular element. Use &quot;relatedTarget&quot;</span>
+<span class="c">     * Simulates a mouseout event on a particular element. Use "relatedTarget"</span>
 <span class="c">     * on the options object to specify where the mouse moved to.</span>
-<span class="c">     * Quirks: Firefox less than 2.0 doesn&#39;t set relatedTarget properly, so</span>
-<span class="c">     * toElement is assigned in its place. IE doesn&#39;t allow toElement to be</span>
+<span class="c">     * Quirks: Firefox less than 2.0 doesn't set relatedTarget properly, so</span>
+<span class="c">     * toElement is assigned in its place. IE doesn't allow toElement to be</span>
 <span class="c">     * be assigned, so relatedTarget is assigned in its place. Both of these</span>
 <span class="c">     * concessions allow YAHOO.util.Event.getRelatedTarget() to work correctly</span>
 <span class="c">     * in both browsers.</span>
@@ -552,14 +543,14 @@
 <span class="c">     * @static</span>
 <span class="c">     */</span>
     <span class="nx">mouseout</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">target</span> <span class="c">/*:HTMLElement*/</span><span class="o">,</span> <span class="nx">options</span> <span class="c">/*Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span> <span class="s2">&quot;mouseout&quot;</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span> <span class="s2">"mouseout"</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
-<span class="c">     * Simulates a mouseover event on a particular element. Use &quot;relatedTarget&quot;</span>
+<span class="c">     * Simulates a mouseover event on a particular element. Use "relatedTarget"</span>
 <span class="c">     * on the options object to specify where the mouse moved from.</span>
-<span class="c">     * Quirks: Firefox less than 2.0 doesn&#39;t set relatedTarget properly, so</span>
-<span class="c">     * fromElement is assigned in its place. IE doesn&#39;t allow fromElement to be</span>
+<span class="c">     * Quirks: Firefox less than 2.0 doesn't set relatedTarget properly, so</span>
+<span class="c">     * fromElement is assigned in its place. IE doesn't allow fromElement to be</span>
 <span class="c">     * be assigned, so relatedTarget is assigned in its place. Both of these</span>
 <span class="c">     * concessions allow YAHOO.util.Event.getRelatedTarget() to work correctly</span>
 <span class="c">     * in both browsers.</span>
@@ -569,7 +560,7 @@
 <span class="c">     * @static</span>
 <span class="c">     */</span>
     <span class="nx">mouseover</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">target</span> <span class="c">/*:HTMLElement*/</span><span class="o">,</span> <span class="nx">options</span> <span class="c">/*Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span> <span class="s2">&quot;mouseover&quot;</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span> <span class="s2">"mouseover"</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -580,7 +571,7 @@
 <span class="c">     * @static</span>
 <span class="c">     */</span>
     <span class="nx">mouseup</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">target</span> <span class="c">/*:HTMLElement*/</span><span class="o">,</span> <span class="nx">options</span> <span class="c">/*Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span> <span class="s2">&quot;mouseup&quot;</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireMouseEvent</span><span class="o">(</span><span class="nx">target</span><span class="o">,</span> <span class="s2">"mouseup"</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">//--------------------------------------------------------------------------</span>
@@ -592,7 +583,7 @@
 <span class="c">     * keydown, keypress). Make sure to specify either keyCode or charCode as</span>
 <span class="c">     * an option.</span>
 <span class="c">     * @private</span>
-<span class="c">     * @param {String} type The type of event (&quot;keyup&quot;, &quot;keydown&quot; or &quot;keypress&quot;).</span>
+<span class="c">     * @param {String} type The type of event ("keyup", "keydown" or "keypress").</span>
 <span class="c">     * @param {HTMLElement} target The target of the event.</span>
 <span class="c">     * @param {Object} options Options for the event. Either keyCode or charCode</span>
 <span class="c">     *                         are required.</span>
@@ -617,7 +608,7 @@
 <span class="c">     * @static</span>
 <span class="c">     */</span>
     <span class="nx">keydown</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">target</span> <span class="c">/*:HTMLElement*/</span><span class="o">,</span> <span class="nx">options</span> <span class="c">/*:Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireKeyEvent</span><span class="o">(</span><span class="s2">&quot;keydown&quot;</span><span class="o">,</span> <span class="nx">target</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireKeyEvent</span><span class="o">(</span><span class="s2">"keydown"</span><span class="o">,</span> <span class="nx">target</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -628,7 +619,7 @@
 <span class="c">     * @static</span>
 <span class="c">     */</span>
     <span class="nx">keypress</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">target</span> <span class="c">/*:HTMLElement*/</span><span class="o">,</span> <span class="nx">options</span> <span class="c">/*:Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireKeyEvent</span><span class="o">(</span><span class="s2">&quot;keypress&quot;</span><span class="o">,</span> <span class="nx">target</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireKeyEvent</span><span class="o">(</span><span class="s2">"keypress"</span><span class="o">,</span> <span class="nx">target</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
     <span class="o">},</span>
     
     <span class="c">/**</span>
@@ -639,7 +630,7 @@
 <span class="c">     * @static</span>
 <span class="c">     */</span>
     <span class="nx">keyup</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">target</span> <span class="c">/*:HTMLElement*/</span><span class="o">,</span> <span class="nx">options</span> <span class="c">/*Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireKeyEvent</span><span class="o">(</span><span class="s2">&quot;keyup&quot;</span><span class="o">,</span> <span class="nx">target</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireKeyEvent</span><span class="o">(</span><span class="s2">"keyup"</span><span class="o">,</span> <span class="nx">target</span><span class="o">,</span> <span class="nx">options</span><span class="o">);</span>
     <span class="o">}</span>
     
 
@@ -653,9 +644,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -716,13 +705,11 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class="selected"><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
                                 <li class=""><a href="YAHOO.tool.TestCase.Wait.html">YAHOO.tool.TestCase.Wait</a></li>
                                 <li class=""><a href="YAHOO.tool.TestLogger.html">YAHOO.tool.TestLogger</a></li>
                                 <li class=""><a href="YAHOO.tool.TestManager.html">YAHOO.tool.TestManager</a></li>
@@ -740,13 +727,11 @@
                                 <li class=""><a href="YAHOO.util.UnexpectedError.html">YAHOO.util.UnexpectedError</a></li>
                                 <li class=""><a href="YAHOO.util.UnexpectedValue.html">YAHOO.util.UnexpectedValue</a></li>
                                 <li class=""><a href="YAHOO.util.UserAction.html">YAHOO.util.UserAction</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
+                        <ul class="content"><li class=""><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
                                 <li class=""><a href="Assert.js.html">Assert.js</a></li>
                                 <li class=""><a href="DateAssert.js.html">DateAssert.js</a></li>
                                 <li class=""><a href="ObjectAssert.js.html">ObjectAssert.js</a></li>
@@ -756,8 +741,7 @@
                                 <li class=""><a href="TestRunner.js.html">TestRunner.js</a></li>
                                 <li class=""><a href="TestSuite.js.html">TestSuite.js</a></li>
                                 <li class="selected"><a href="UserAction.js.html">UserAction.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -767,9 +751,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Multi-tiered Menu From Markup</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Multi-tiered Menu From Markup</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,17 +8,7 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/menu/assets/skins/sam/menu.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/container/container_core-min.js"></script>
-<script type="text/javascript" src="../../build/menu/menu-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/menu/assets/skins/sam/menu.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/container/container_core-min.js"></script><script type="text/javascript" src="../../build/menu/menu-min.js"></script><!--begin custom header content for this example--><style type="text/css">
 
     /*
         Position and hide the Menu instance to prevent a flash of unstyled 
@@ -53,17 +35,10 @@ body {
     
     }
 
-</style>
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Multi-tiered Menu From Markup</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Multi-tiered Menu From Markup</h1><div class="exampleIntro">
 	<p>This example demonstrates how to create a multi-tiered menu using existing markup on the page.</p>
 <p id="clicknote">
 <em>Note:</em> By default clicking outside of a Menu instance will hide it.  
@@ -71,11 +46,7 @@ Additionally, MenuItem instances without a submenu or a URL to navigate to will
 hide their parent Menu instance when clicked.  Click the "Show Menu" button 
 below to make the Menu instance visible if it is hidden.
 </p>			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<script type="text/javascript">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><script type="text/javascript">
 
     // Instantiate and render the menu when it is available in the DOM
 
@@ -103,21 +74,15 @@ below to make the Menu instance visible if it is hidden.
     
     });
     
-</script>
-
-<button id="menutoggle" type="button">Show Menu</button>
-
-<div id="productsandservices" class="yuimenu">
+</script><button id="menutoggle" type="button">Show Menu</button><div id="productsandservices" class="yuimenu">
     <div class="bd">
-        <ul class="first-of-type">
-            <li class="yuimenuitem">
+        <ul class="first-of-type"><li class="yuimenuitem">
             
                 <a class="yuimenuitemlabel" href="#communication">Communication</a>
 
                 <div id="communication" class="yuimenu">
                     <div class="bd">
-                        <ul>
-                            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://360.yahoo.com">360&#176;</a></li>
+                        <ul><li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://360.yahoo.com">360°</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://alerts.yahoo.com">Alerts</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://avatars.yahoo.com">Avatars</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://groups.yahoo.com">Groups</a></li>
@@ -128,13 +93,11 @@ below to make the Menu instance visible if it is hidden.
                             
                                 <div id="pim" class="yuimenu">
                                     <div class="bd">
-                                        <ul class="first-of-type">
-                                            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://mail.yahoo.com">Yahoo! Mail</a></li>
+                                        <ul class="first-of-type"><li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://mail.yahoo.com">Yahoo! Mail</a></li>
                                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://addressbook.yahoo.com">Yahoo! Address Book</a></li>
                                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://calendar.yahoo.com">Yahoo! Calendar</a></li>
                                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://notepad.yahoo.com">Yahoo! Notepad</a></li>
-                                        </ul>            
-                                    </div>
+                                        </ul></div>
                                 </div>                    
                             
                             </li>
@@ -142,8 +105,7 @@ below to make the Menu instance visible if it is hidden.
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://messenger.yahoo.com">Messenger</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://mobile.yahoo.com">Mobile</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://www.flickr.com">Flickr Photo Sharing</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
                 </div>                    
             
             </li>
@@ -153,17 +115,15 @@ below to make the Menu instance visible if it is hidden.
 
                 <div id="shopping" class="yuimenu">
                     <div class="bd">                    
-                        <ul>
-                            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://auctions.shopping.yahoo.com">Auctions</a></li>
+                        <ul><li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://auctions.shopping.yahoo.com">Auctions</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://autos.yahoo.com">Autos</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://classifieds.yahoo.com">Classifieds</a></li>
-                            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://shopping.yahoo.com/b:Flowers%20%26%20Gifts:20146735">Flowers &#38; Gifts</a></li>
+                            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://shopping.yahoo.com/b:Flowers%20%26%20Gifts:20146735">Flowers &amp; Gifts</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://realestate.yahoo.com">Real Estate</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://travel.yahoo.com">Travel</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://wallet.yahoo.com">Wallet</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://yp.yahoo.com">Yellow Pages</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
                 </div>                    
             
             </li>
@@ -173,8 +133,7 @@ below to make the Menu instance visible if it is hidden.
 
                 <div id="entertainment" class="yuimenu">
                     <div class="bd">                    
-                        <ul>
-                            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://fantasysports.yahoo.com">Fantasy Sports</a></li>
+                        <ul><li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://fantasysports.yahoo.com">Fantasy Sports</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://games.yahoo.com">Games</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://www.yahooligans.com">Kids</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://music.yahoo.com">Music</a></li>
@@ -182,8 +141,7 @@ below to make the Menu instance visible if it is hidden.
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://music.yahoo.com/launchcast">Radio</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://travel.yahoo.com">Travel</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://tv.yahoo.com">TV</a></li>
-                        </ul>                    
-                    </div>
+                        </ul></div>
                 </div>                                        
             
             </li>
@@ -193,26 +151,19 @@ below to make the Menu instance visible if it is hidden.
 
                 <div id="information" class="yuimenu">
                     <div class="bd">                                        
-                        <ul>
-                            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://downloads.yahoo.com">Downloads</a></li>
+                        <ul><li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://downloads.yahoo.com">Downloads</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://finance.yahoo.com">Finance</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://health.yahoo.com">Health</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://local.yahoo.com">Local</a></li>
-                            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://maps.yahoo.com">Maps &#38; Directions</a></li>
+                            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://maps.yahoo.com">Maps &amp; Directions</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://my.yahoo.com">My Yahoo!</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://news.yahoo.com">News</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://search.yahoo.com">Search</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://smallbusiness.yahoo.com">Small Business</a></li>
                             <li class="yuimenuitem"><a class="yuimenuitemlabel" href="http://weather.yahoo.com">Weather</a></li>
-                        </ul>                    
-                    </div>
+                        </ul></div>
                 </div>                                        
             
             </li>
-        </ul>            
-    </div>
-</div>
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+        </ul></div>
+</div><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

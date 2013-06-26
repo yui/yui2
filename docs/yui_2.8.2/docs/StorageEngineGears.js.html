@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: Storage   StorageEngineGears.js  (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: Storage   StorageEngineGears.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>Storage&nbsp; <span class="subtitle">2.8.2r1</span></h3>
+        <h3>Storage  <span class="subtitle">2.8.2r1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_storage.html" title="Storage">Storage</a>
                 
                  &gt; StorageEngineGears.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,26 +22,23 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <div id="srcout">
                         <style>
                             #doc3 .classopts { display:none; }
-                        </style>
-                        <div class="highlight"><pre><span class="cm">/*</span>
+                        </style><div class="highlight"><pre><span class="cm">/*</span>
 <span class="cm"> * Gears limitation:</span>
 <span class="cm"> *  - SQLite limitations - http://www.sqlite.org/limits.html</span>
 <span class="cm"> *  - DB Best Practices - http://code.google.com/apis/gears/gears_faq.html#bestPracticeDB</span>
 <span class="cm"> * 	- the user must approve before gears can be used</span>
 <span class="cm"> *  - each SQL query has a limited number of characters (9948 bytes), data will need to be spread across rows</span>
 <span class="cm"> *  - no query should insert or update more than 9948 bytes of data in a single statement or GEARs will throw:</span>
-<span class="cm"> *  	[Exception... &quot;&#39;Error: SQL statement is too long.&#39; when calling method: [nsIDOMEventListener::handleEvent]&quot; nsresult: &quot;0x8057001c (NS_ERROR_XPC_JS_THREW_JS_OBJECT)&quot; location: &quot;&lt;unknown&gt;&quot; data: no]</span>
+<span class="cm"> *  	[Exception... "'Error: SQL statement is too long.' when calling method: [nsIDOMEventListener::handleEvent]" nsresult: "0x8057001c (NS_ERROR_XPC_JS_THREW_JS_OBJECT)" location: "&lt;unknown&gt;" data: no]</span>
 <span class="cm"> *</span>
 <span class="cm"> * Thoughts:</span>
 <span class="cm"> *  - we may want to implement additional functions for the gears only implementation</span>
@@ -65,7 +49,7 @@
 <span class="kd">var</span> <span class="nx">Y</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">,</span>
 	<span class="nx">YL</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">,</span>
 	<span class="nx">_SQL_STMT_LIMIT</span> <span class="o">=</span> <span class="mi">9948</span><span class="p">,</span>
-	<span class="nx">_TABLE_NAME</span> <span class="o">=</span> <span class="s1">&#39;YUIStorageEngine&#39;</span><span class="p">,</span>
+	<span class="nx">_TABLE_NAME</span> <span class="o">=</span> <span class="s1">'YUIStorageEngine'</span><span class="p">,</span>
 
 	<span class="c1">// local variables</span>
 	<span class="nx">_engine</span> <span class="o">=</span> <span class="kc">null</span><span class="p">,</span>
@@ -89,20 +73,20 @@
 		<span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nx">_engine</span><span class="p">)</span> <span class="p">{</span>
 			<span class="c1">// create the database</span>
 			<span class="nx">_engine</span> <span class="o">=</span> <span class="nx">google</span><span class="p">.</span><span class="nx">gears</span><span class="p">.</span><span class="nx">factory</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">GEARS</span><span class="p">);</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">host</span> <span class="o">+</span> <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">DATABASE</span><span class="p">);</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;CREATE TABLE IF NOT EXISTS &#39;</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">&#39; (key TEXT, location TEXT, value TEXT)&#39;</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">host</span> <span class="o">+</span> <span class="s1">'-'</span> <span class="o">+</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">DATABASE</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'CREATE TABLE IF NOT EXISTS '</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">' (key TEXT, location TEXT, value TEXT)'</span><span class="p">);</span>
 		<span class="p">}</span>
 
 		<span class="kd">var</span> <span class="nx">isSessionStorage</span> <span class="o">=</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">StorageManager</span><span class="p">.</span><span class="nx">LOCATION_SESSION</span> <span class="o">===</span> <span class="nx">_this</span><span class="p">.</span><span class="nx">_location</span><span class="p">,</span>
-			<span class="nx">sessionKey</span> <span class="o">=</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;sessionKey&#39;</span> <span class="o">+</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">ENGINE_NAME</span><span class="p">);</span>
+			<span class="nx">sessionKey</span> <span class="o">=</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'sessionKey'</span> <span class="o">+</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">ENGINE_NAME</span><span class="p">);</span>
 
 		<span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nx">sessionKey</span><span class="p">)</span> <span class="p">{</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;BEGIN&#39;</span><span class="p">);</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;DELETE FROM &#39;</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">&#39; WHERE location=&quot;&#39;</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="nx">Y</span><span class="p">.</span><span class="nx">StorageManager</span><span class="p">.</span><span class="nx">LOCATION_SESSION</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">);</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;COMMIT&#39;</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'BEGIN'</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'DELETE FROM '</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">' WHERE location="'</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="nx">Y</span><span class="p">.</span><span class="nx">StorageManager</span><span class="p">.</span><span class="nx">LOCATION_SESSION</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'COMMIT'</span><span class="p">);</span>
 		<span class="p">}</span>
 
-		<span class="kd">var</span> <span class="nx">rs</span> <span class="o">=</span> <span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;SELECT key FROM &#39;</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">&#39; WHERE location=&quot;&#39;</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="nx">_this</span><span class="p">.</span><span class="nx">_location</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">),</span>
+		<span class="kd">var</span> <span class="nx">rs</span> <span class="o">=</span> <span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'SELECT key FROM '</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">' WHERE location="'</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="nx">_this</span><span class="p">.</span><span class="nx">_location</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">),</span>
 			<span class="nx">keyMap</span> <span class="o">=</span> <span class="p">{};</span>
 	
 		<span class="k">try</span> <span class="p">{</span>
@@ -124,7 +108,7 @@
 
 		<span class="c1">// this is session storage, ensure that the session key is set</span>
 		<span class="k">if</span> <span class="p">(</span><span class="nx">isSessionStorage</span><span class="p">)</span> <span class="p">{</span>
-			<span class="nx">Y</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">&#39;sessionKey&#39;</span> <span class="o">+</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">ENGINE_NAME</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+			<span class="nx">Y</span><span class="p">.</span><span class="nx">Cookie</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'sessionKey'</span> <span class="o">+</span> <span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">ENGINE_NAME</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
 		<span class="p">}</span>
 
 		<span class="nx">_this</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="nx">_this</span><span class="p">.</span><span class="nx">_keys</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span>
@@ -140,9 +124,9 @@
 <span class="cm">		 * @see YAHOO.util.Storage._clear</span>
 <span class="cm">		 */</span>
 		<span class="nx">_clear</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;BEGIN&#39;</span><span class="p">);</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;DELETE FROM &#39;</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">&#39; WHERE location=&quot;&#39;</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_location</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">);</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;COMMIT&#39;</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'BEGIN'</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'DELETE FROM '</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">' WHERE location="'</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_location</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'COMMIT'</span><span class="p">);</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">_keys</span> <span class="o">=</span> <span class="p">[];</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 		<span class="p">},</span>
@@ -152,8 +136,8 @@
 <span class="cm">		 * @see YAHOO.util.Storage._getItem</span>
 <span class="cm">		 */</span>
 		<span class="nx">_getItem</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
-			<span class="kd">var</span> <span class="nx">rs</span> <span class="o">=</span> <span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;SELECT value FROM &#39;</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">&#39; WHERE key=&quot;&#39;</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; AND location=&quot;&#39;</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_location</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">),</span>
-				<span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+			<span class="kd">var</span> <span class="nx">rs</span> <span class="o">=</span> <span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'SELECT value FROM '</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">' WHERE key="'</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'" AND location="'</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_location</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">),</span>
+				<span class="nx">value</span> <span class="o">=</span> <span class="s1">''</span><span class="p">;</span>
 
 			<span class="k">try</span> <span class="p">{</span>
 				<span class="k">while</span> <span class="p">(</span><span class="nx">rs</span><span class="p">.</span><span class="nx">isValidRow</span><span class="p">())</span> <span class="p">{</span>
@@ -180,10 +164,10 @@
 <span class="cm">		 * @see YAHOO.util.Storage._removeItem</span>
 <span class="cm">		 */</span>
 		<span class="nx">_removeItem</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="p">{</span>
-			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;removing &quot;</span> <span class="o">+</span> <span class="nx">key</span><span class="p">);</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;BEGIN&#39;</span><span class="p">);</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;DELETE FROM &#39;</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">&#39; WHERE key=&quot;&#39;</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; AND location=&quot;&#39;</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_location</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">);</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;COMMIT&#39;</span><span class="p">);</span>
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"removing "</span> <span class="o">+</span> <span class="nx">key</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'BEGIN'</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'DELETE FROM '</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">' WHERE key="'</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'" AND location="'</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_location</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'COMMIT'</span><span class="p">);</span>
 			<span class="k">this</span><span class="p">.</span><span class="nx">_removeKey</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
 		<span class="p">},</span>
 
@@ -192,7 +176,7 @@
 <span class="cm">		 * @see YAHOO.util.Storage._setItem</span>
 <span class="cm">		 */</span>
 		<span class="nx">_setItem</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;SETTING &quot;</span> <span class="o">+</span> <span class="nx">data</span> <span class="o">+</span> <span class="s2">&quot; to &quot;</span> <span class="o">+</span> <span class="nx">key</span><span class="p">);</span>
+			<span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"SETTING "</span> <span class="o">+</span> <span class="nx">data</span> <span class="o">+</span> <span class="s2">" to "</span> <span class="o">+</span> <span class="nx">key</span><span class="p">);</span>
 
 			<span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="k">this</span><span class="p">.</span><span class="nx">hasKey</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span> <span class="p">{</span>
 				<span class="k">this</span><span class="p">.</span><span class="nx">_addKey</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
@@ -215,24 +199,24 @@
 			<span class="p">}</span>
 
 			<span class="c1">// Google recommends using INSERT instead of update, because it is faster</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;BEGIN&#39;</span><span class="p">);</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;DELETE FROM &#39;</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">&#39; WHERE key=&quot;&#39;</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot; AND location=&quot;&#39;</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_location</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'BEGIN'</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'DELETE FROM '</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">' WHERE key="'</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="nx">key</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'" AND location="'</span> <span class="o">+</span> <span class="nx">eURI</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_location</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">);</span>
 			<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">m</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">n</span> <span class="o">=</span> <span class="nx">_values</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">m</span> <span class="o">&lt;</span> <span class="nx">n</span><span class="p">;</span> <span class="nx">m</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-				<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;INSERT INTO &#39;</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">&#39; VALUES (&quot;&#39;</span> <span class="o">+</span> <span class="nx">_key</span> <span class="o">+</span> <span class="s1">&#39;&quot;, &quot;&#39;</span> <span class="o">+</span> <span class="nx">_location</span> <span class="o">+</span> <span class="s1">&#39;&quot;, &quot;&#39;</span> <span class="o">+</span> <span class="nx">_values</span><span class="p">[</span><span class="nx">m</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;&quot;)&#39;</span><span class="p">);</span>
+				<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'INSERT INTO '</span> <span class="o">+</span> <span class="nx">_TABLE_NAME</span> <span class="o">+</span> <span class="s1">' VALUES ("'</span> <span class="o">+</span> <span class="nx">_key</span> <span class="o">+</span> <span class="s1">'", "'</span> <span class="o">+</span> <span class="nx">_location</span> <span class="o">+</span> <span class="s1">'", "'</span> <span class="o">+</span> <span class="nx">_values</span><span class="p">[</span><span class="nx">m</span><span class="p">]</span> <span class="o">+</span> <span class="s1">'")'</span><span class="p">);</span>
 			<span class="p">}</span>
-			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">&#39;COMMIT&#39;</span><span class="p">);</span>
+			<span class="nx">_engine</span><span class="p">.</span><span class="nx">execute</span><span class="p">(</span><span class="s1">'COMMIT'</span><span class="p">);</span>
 			
 			<span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
 		<span class="p">}</span>
 	<span class="p">});</span>
 
 	<span class="c1">// releases the engine when the page unloads</span>
-	<span class="nx">Y</span><span class="p">.</span><span class="nx">Event</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;unload&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+	<span class="nx">Y</span><span class="p">.</span><span class="nx">Event</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'unload'</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 		<span class="k">if</span> <span class="p">(</span><span class="nx">_engine</span><span class="p">)</span> <span class="p">{</span><span class="nx">_engine</span><span class="p">.</span><span class="nx">close</span><span class="p">();}</span>
 	<span class="p">});</span>
-	<span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">ENGINE_NAME</span> <span class="o">=</span> <span class="s1">&#39;gears&#39;</span><span class="p">;</span>
-	<span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">GEARS</span> <span class="o">=</span> <span class="s1">&#39;beta.database&#39;</span><span class="p">;</span>
-	<span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">DATABASE</span> <span class="o">=</span> <span class="s1">&#39;yui.database&#39;</span><span class="p">;</span>
+	<span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">ENGINE_NAME</span> <span class="o">=</span> <span class="s1">'gears'</span><span class="p">;</span>
+	<span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">GEARS</span> <span class="o">=</span> <span class="s1">'beta.database'</span><span class="p">;</span>
+	<span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">DATABASE</span> <span class="o">=</span> <span class="s1">'yui.database'</span><span class="p">;</span>
 	<span class="nx">Y</span><span class="p">.</span><span class="nx">StorageEngineGears</span><span class="p">.</span><span class="nx">isAvailable</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 		<span class="k">if</span> <span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">google</span> <span class="o">&amp;&amp;</span> <span class="nb">window</span><span class="p">.</span><span class="nx">google</span><span class="p">.</span><span class="nx">gears</span><span class="p">)</span> <span class="p">{</span>
 			<span class="k">try</span> <span class="p">{</span>
@@ -259,8 +243,7 @@
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -308,26 +291,22 @@
                                 <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.Storage.html" title="YAHOO.util.Storage">YAHOO.util.Storage</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.Storage.html" title="YAHOO.util.Storage">YAHOO.util.Storage</a></li>
                                 <li class=""><a href="YAHOO.util.StorageEngineGears.html" title="YAHOO.util.StorageEngineGears">YAHOO.util.StorageEngineGears</a></li>
                                 <li class=""><a href="YAHOO.util.StorageEngineHTML5.html" title="YAHOO.util.StorageEngineHTML5">YAHOO.util.StorageEngineHTML5</a></li>
                                 <li class=""><a href="YAHOO.util.StorageEngineKeyed.html" title="YAHOO.util.StorageEngineKeyed">YAHOO.util.StorageEngineKeyed</a></li>
                                 <li class=""><a href="YAHOO.util.StorageEngineSWF.html" title="YAHOO.util.StorageEngineSWF">YAHOO.util.StorageEngineSWF</a></li>
                                 <li class=""><a href="YAHOO.util.StorageEvent.html" title="YAHOO.util.StorageEvent">YAHOO.util.StorageEvent</a></li>
                                 <li class=""><a href="YAHOO.util.StorageManager.html" title="YAHOO.util.StorageManager">YAHOO.util.StorageManager</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="gears_init.js.html" title="gears_init.js">gears_init.js</a></li>
+                        <ul class="content"><li class=""><a href="gears_init.js.html" title="gears_init.js">gears_init.js</a></li>
                                 <li class=""><a href="Storage.js.html" title="Storage.js">Storage.js</a></li>
                                 <li class="selected"><a href="StorageEngineGears.js.html" title="StorageEngineGears.js">StorageEngineGears.js</a></li>
                                 <li class=""><a href="StorageEngineHTML5.js.html" title="StorageEngineHTML5.js">StorageEngineHTML5.js</a></li>
@@ -335,8 +314,7 @@
                                 <li class=""><a href="StorageEngineSWF.js.html" title="StorageEngineSWF.js">StorageEngineSWF.js</a></li>
                                 <li class=""><a href="StorageEvent.js.html" title="StorageEvent.js">StorageEvent.js</a></li>
                                 <li class=""><a href="StorageManager.js.html" title="StorageManager.js">StorageManager.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -346,13 +324,10 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2010 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2010 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
 
     var ALL_YUI_PROPS = [{"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_addKey", "url": "YAHOO.util.StorageEngineKeyed.html#method__addKey", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "CE_CHANGE", "url": "YAHOO.util.Storage.html#property_CE_CHANGE", "type": "property"}, {"access": "", "host": "YAHOO.util.Storage", "name": "CE_READY", "url": "YAHOO.util.Storage.html#property_CE_READY", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_cfg", "url": "YAHOO.util.Storage.html#property__cfg", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_clear", "url": "YAHOO.util.Storage.html#method__clear", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "clear", "url": "YAHOO.util.Storage.html#method_clear", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_createValue", "url": "YAHOO.util.Storage.html#method__createValue", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "DELIMITER", "url": "YAHOO.util.Storage.html#property_DELIMITER", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageManager", "name": "get", "url": "YAHOO.util.StorageManager.html#method_get", "type": "method"}, {"access": "private", "host": "YAHOO.util.StorageManager", "name": "_getClass", "url": "YAHOO.util.StorageManager.html#method__getClass", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_getItem", "url": "YAHOO.util.Storage.html#method__getItem", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "getItem", "url": "YAHOO.util.Storage.html#method_getItem", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "getName", "url": "YAHOO.util.Storage.html#method_getName", "type": "method"}, {"access": "private", "host": "YAHOO.util.StorageManager", "name": "_getStorageEngine", "url": "YAHOO.util.StorageManager.html#method__getStorageEngine", "type": "method"}, {"access": "private", "host": "YAHOO.util.StorageManager", "name": "_getValidLocation", "url": "YAHOO.util.StorageManager.html#method__getValidLocation", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_getValue", "url": "YAHOO.util.Storage.html#method__getValue", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "hasKey", "url": "YAHOO.util.Storage.html#method_hasKey", "type": "method"}, {"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_indexOfKey", "url": "YAHOO.util.StorageEngineKeyed.html#method__indexOfKey", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "isReady", "url": "YAHOO.util.Storage.html#property_isReady", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_key", "url": "YAHOO.util.Storage.html#method__key", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "key", "url": "YAHOO.util.Storage.html#method_key", "type": "method"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "key", "url": "YAHOO.util.StorageEvent.html#property_key", "type": "property"}, {"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_keyMap", "url": "YAHOO.util.StorageEngineKeyed.html#property__keyMap", "type": "property"}, {"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_keys", "url": "YAHOO.util.StorageEngineKeyed.html#property__keys", "type": "property"}, {"access": "", "host": "YAHOO.util.Storage", "name": "length", "url": "YAHOO.util.Storage.html#property_length", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_location", "url": "YAHOO.util.Storage.html#property__location", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageManager", "name": "LOCATION_LOCAL", "url": "YAHOO.util.StorageManager.html#property_LOCATION_LOCAL", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageManager", "name": "LOCATION_SESSION", "url": "YAHOO.util.StorageManager.html#property_LOCATION_SESSION", "type": "property"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_name", "url": "YAHOO.util.Storage.html#property__name", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "newValue", "url": "YAHOO.util.StorageEvent.html#property_newValue", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "oldValue", "url": "YAHOO.util.StorageEvent.html#property_oldValue", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageManager", "name": "register", "url": "YAHOO.util.StorageManager.html#method_register", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_removeItem", "url": "YAHOO.util.Storage.html#method__removeItem", "type": "method"}, {"access": "protected", "host": "YAHOO.util.StorageEngineKeyed", "name": "_removeKey", "url": "YAHOO.util.StorageEngineKeyed.html#method__removeKey", "type": "method"}, {"access": "protected", "host": "YAHOO.util.Storage", "name": "_setItem", "url": "YAHOO.util.Storage.html#method__setItem", "type": "method"}, {"access": "", "host": "YAHOO.util.Storage", "name": "setItem", "url": "YAHOO.util.Storage.html#method_setItem", "type": "method"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "source", "url": "YAHOO.util.StorageEvent.html#property_source", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "storageArea", "url": "YAHOO.util.StorageEvent.html#property_storageArea", "type": "property"}, {"access": "protected", "host": "YAHOO.util.StorageEngineSWF", "name": "_swf", "url": "YAHOO.util.StorageEngineSWF.html#property__swf", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "type", "url": "YAHOO.util.StorageEvent.html#property_type", "type": "property"}, {"access": "", "host": "YAHOO.util.StorageEvent", "name": "url", "url": "YAHOO.util.StorageEvent.html#property_url", "type": "property"}];
-</script>
-</body>
-</html>
+</script></body>

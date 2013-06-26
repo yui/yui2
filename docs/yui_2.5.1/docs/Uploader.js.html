@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: uploader   Uploader.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: uploader   Uploader.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Uploader&nbsp; <span class="subtitle">2.5.1</span></h3>
+        <h3>Uploader  <span class="subtitle">2.5.1</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_uploader.html">uploader</a>
@@ -27,22 +19,21 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * The YUI Uploader Control</span>
 <span class="c"> * @module uploader</span>
 <span class="c"> * @description &lt;p&gt;YUI Uploader provides file upload functionality that goes beyond the basic browser-based methods. </span>
 <span class="c"> * Specifically, the YUI Uploader allows for:</span>
 <span class="c"> * &lt;ol&gt;</span>
-<span class="c"> * &lt;li&gt; Multiple file selection in a single &quot;Open File&quot; dialog.&lt;/li&gt;</span>
-<span class="c"> * &lt;li&gt; File extension filters to facilitate the user&#39;s selection.&lt;/li&gt;</span>
+<span class="c"> * &lt;li&gt; Multiple file selection in a single "Open File" dialog.&lt;/li&gt;</span>
+<span class="c"> * &lt;li&gt; File extension filters to facilitate the user's selection.&lt;/li&gt;</span>
 <span class="c"> * &lt;li&gt; Progress tracking for file uploads.&lt;/li&gt;</span>
 <span class="c"> * &lt;li&gt; A range of file metadata: filename, size, date created, date modified, and author.&lt;/li&gt;</span>
 <span class="c"> * &lt;li&gt; A set of events dispatched on various aspects of the file upload process: file selection, upload progress, upload completion, etc.&lt;/li&gt;</span>
@@ -62,40 +53,40 @@
 <span class="c"> * http://www.opensource.org/licenses/mit-license.php</span>
 <span class="c"> *</span>
 <span class="c"> */</span>
-<span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">deconcept</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span> <span class="k">var</span> <span class="nx">deconcept</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="o">();</span>
-<span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">util</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">util</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="o">();</span>
-<span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObjectUtil</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">)</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObjectUtil</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="o">();</span>
+<span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">deconcept</span> <span class="o">==</span> <span class="s2">"undefined"</span><span class="o">)</span> <span class="k">var</span> <span class="nx">deconcept</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="o">();</span>
+<span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">util</span> <span class="o">==</span> <span class="s2">"undefined"</span><span class="o">)</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">util</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="o">();</span>
+<span class="k">if</span><span class="o">(</span><span class="k">typeof</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObjectUtil</span> <span class="o">==</span> <span class="s2">"undefined"</span><span class="o">)</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObjectUtil</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="o">();</span>
 <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObject</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">swf</span><span class="o">,</span> <span class="nx">id</span><span class="o">,</span> <span class="nx">w</span><span class="o">,</span> <span class="nx">h</span><span class="o">,</span> <span class="nx">ver</span><span class="o">,</span> <span class="nx">c</span><span class="o">,</span> <span class="nx">quality</span><span class="o">,</span> <span class="nx">xiRedirectUrl</span><span class="o">,</span> <span class="nx">redirectUrl</span><span class="o">,</span> <span class="nx">detectKey</span><span class="o">)</span> <span class="o">{</span>
 	<span class="k">if</span> <span class="o">(!</span><span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">)</span> <span class="o">{</span> <span class="k">return</span><span class="o">;</span> <span class="o">}</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">DETECT_KEY</span> <span class="o">=</span> <span class="nx">detectKey</span> <span class="o">?</span> <span class="nx">detectKey</span> <span class="o">:</span> <span class="s1">&#39;detectflash&#39;</span><span class="o">;</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">DETECT_KEY</span> <span class="o">=</span> <span class="nx">detectKey</span> <span class="o">?</span> <span class="nx">detectKey</span> <span class="o">:</span> <span class="s1">'detectflash'</span><span class="o">;</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">skipDetect</span> <span class="o">=</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">getRequestParameter</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">DETECT_KEY</span><span class="o">);</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">params</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="o">();</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">variables</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Object</span><span class="o">();</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">attributes</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="o">();</span>
-	<span class="k">if</span><span class="o">(</span><span class="nx">swf</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;swf&#39;</span><span class="o">,</span> <span class="nx">swf</span><span class="o">);</span> <span class="o">}</span>
-	<span class="k">if</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">,</span> <span class="nx">id</span><span class="o">);</span> <span class="o">}</span>
-	<span class="k">if</span><span class="o">(</span><span class="nx">w</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">,</span> <span class="nx">w</span><span class="o">);</span> <span class="o">}</span>
-	<span class="k">if</span><span class="o">(</span><span class="nx">h</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;height&#39;</span><span class="o">,</span> <span class="nx">h</span><span class="o">);</span> <span class="o">}</span>
-	<span class="k">if</span><span class="o">(</span><span class="nx">ver</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;version&#39;</span><span class="o">,</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">PlayerVersion</span><span class="o">(</span><span class="nx">ver</span><span class="o">.</span><span class="nx">toString</span><span class="o">().</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;.&quot;</span><span class="o">)));</span> <span class="o">}</span>
+	<span class="k">if</span><span class="o">(</span><span class="nx">swf</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'swf'</span><span class="o">,</span> <span class="nx">swf</span><span class="o">);</span> <span class="o">}</span>
+	<span class="k">if</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'id'</span><span class="o">,</span> <span class="nx">id</span><span class="o">);</span> <span class="o">}</span>
+	<span class="k">if</span><span class="o">(</span><span class="nx">w</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'width'</span><span class="o">,</span> <span class="nx">w</span><span class="o">);</span> <span class="o">}</span>
+	<span class="k">if</span><span class="o">(</span><span class="nx">h</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'height'</span><span class="o">,</span> <span class="nx">h</span><span class="o">);</span> <span class="o">}</span>
+	<span class="k">if</span><span class="o">(</span><span class="nx">ver</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'version'</span><span class="o">,</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">PlayerVersion</span><span class="o">(</span><span class="nx">ver</span><span class="o">.</span><span class="nx">toString</span><span class="o">().</span><span class="nx">split</span><span class="o">(</span><span class="s2">"."</span><span class="o">)));</span> <span class="o">}</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">installedVer</span> <span class="o">=</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObjectUtil</span><span class="o">.</span><span class="nx">getPlayerVersion</span><span class="o">();</span>
 	<span class="k">if</span> <span class="o">(!</span><span class="nb">window</span><span class="o">.</span><span class="nx">opera</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="o">.</span><span class="nx">all</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">installedVer</span><span class="o">.</span><span class="nx">major</span> <span class="o">&gt;</span> <span class="m">7</span><span class="o">)</span> <span class="o">{</span>
 		<span class="c">// only add the onunload cleanup if the Flash Player version supports External Interface and we are in IE</span>
 <span class="c"></span>		<span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObject</span><span class="o">.</span><span class="nx">doPrepUnload</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 	<span class="o">}</span>
-	<span class="k">if</span><span class="o">(</span><span class="nx">c</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">addParam</span><span class="o">(</span><span class="s1">&#39;bgcolor&#39;</span><span class="o">,</span> <span class="nx">c</span><span class="o">);</span> <span class="o">}</span>
-	<span class="k">var</span> <span class="nx">q</span> <span class="o">=</span> <span class="nx">quality</span> <span class="o">?</span> <span class="nx">quality</span> <span class="o">:</span> <span class="s1">&#39;high&#39;</span><span class="o">;</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">addParam</span><span class="o">(</span><span class="s1">&#39;quality&#39;</span><span class="o">,</span> <span class="nx">q</span><span class="o">);</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;useExpressInstall&#39;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;doExpressInstall&#39;</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+	<span class="k">if</span><span class="o">(</span><span class="nx">c</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">addParam</span><span class="o">(</span><span class="s1">'bgcolor'</span><span class="o">,</span> <span class="nx">c</span><span class="o">);</span> <span class="o">}</span>
+	<span class="k">var</span> <span class="nx">q</span> <span class="o">=</span> <span class="nx">quality</span> <span class="o">?</span> <span class="nx">quality</span> <span class="o">:</span> <span class="s1">'high'</span><span class="o">;</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">addParam</span><span class="o">(</span><span class="s1">'quality'</span><span class="o">,</span> <span class="nx">q</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'useExpressInstall'</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'doExpressInstall'</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
 	<span class="k">var</span> <span class="nx">xir</span> <span class="o">=</span> <span class="o">(</span><span class="nx">xiRedirectUrl</span><span class="o">)</span> <span class="o">?</span> <span class="nx">xiRedirectUrl</span> <span class="o">:</span> <span class="nb">window</span><span class="o">.</span><span class="nx">location</span><span class="o">;</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;xiRedirectUrl&#39;</span><span class="o">,</span> <span class="nx">xir</span><span class="o">);</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;redirectUrl&#39;</span><span class="o">,</span> <span class="s1">&#39;&#39;</span><span class="o">);</span>
-	<span class="k">if</span><span class="o">(</span><span class="nx">redirectUrl</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;redirectUrl&#39;</span><span class="o">,</span> <span class="nx">redirectUrl</span><span class="o">);</span> <span class="o">}</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'xiRedirectUrl'</span><span class="o">,</span> <span class="nx">xir</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'redirectUrl'</span><span class="o">,</span> <span class="s1">''</span><span class="o">);</span>
+	<span class="k">if</span><span class="o">(</span><span class="nx">redirectUrl</span><span class="o">)</span> <span class="o">{</span> <span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'redirectUrl'</span><span class="o">,</span> <span class="nx">redirectUrl</span><span class="o">);</span> <span class="o">}</span>
 <span class="o">}</span>
 <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObject</span><span class="o">.</span><span class="nx">prototype</span> <span class="o">=</span> <span class="o">{</span>
 	<span class="nx">useExpressInstall</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">path</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">xiSWFPath</span> <span class="o">=</span> <span class="o">!</span><span class="nx">path</span> <span class="o">?</span> <span class="s2">&quot;expressinstall.swf&quot;</span> <span class="o">:</span> <span class="nx">path</span><span class="o">;</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;useExpressInstall&#39;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">xiSWFPath</span> <span class="o">=</span> <span class="o">!</span><span class="nx">path</span> <span class="o">?</span> <span class="s2">"expressinstall.swf"</span> <span class="o">:</span> <span class="nx">path</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'useExpressInstall'</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 	<span class="o">},</span>
 	<span class="nx">setAttribute</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">name</span><span class="o">,</span> <span class="nx">value</span><span class="o">){</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">attributes</span><span class="o">[</span><span class="nx">name</span><span class="o">]</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
@@ -123,59 +114,59 @@
 		<span class="k">var</span> <span class="nx">key</span><span class="o">;</span>
 		<span class="k">var</span> <span class="nx">variables</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getVariables</span><span class="o">();</span>
 		<span class="k">for</span><span class="o">(</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">variables</span><span class="o">){</span>
-			<span class="nx">variablePairs</span><span class="o">[</span><span class="nx">variablePairs</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">key</span> <span class="o">+</span><span class="s2">&quot;=&quot;</span><span class="o">+</span> <span class="nx">variables</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
+			<span class="nx">variablePairs</span><span class="o">[</span><span class="nx">variablePairs</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">key</span> <span class="o">+</span><span class="s2">"="</span><span class="o">+</span> <span class="nx">variables</span><span class="o">[</span><span class="nx">key</span><span class="o">];</span>
 		<span class="o">}</span>
 		<span class="k">return</span> <span class="nx">variablePairs</span><span class="o">;</span>
 	<span class="o">},</span>
 	<span class="nx">getSWFHTML</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">var</span> <span class="nx">swfNode</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+		<span class="k">var</span> <span class="nx">swfNode</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
 		<span class="k">if</span> <span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">plugins</span> <span class="o">&amp;&amp;</span> <span class="nx">navigator</span><span class="o">.</span><span class="nx">mimeTypes</span> <span class="o">&amp;&amp;</span> <span class="nx">navigator</span><span class="o">.</span><span class="nx">mimeTypes</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span> <span class="c">// netscape plugin architecture</span>
-<span class="c"></span>			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s2">&quot;doExpressInstall&quot;</span><span class="o">))</span> <span class="o">{</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">&quot;MMplayerType&quot;</span><span class="o">,</span> <span class="s2">&quot;PlugIn&quot;</span><span class="o">);</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;swf&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">xiSWFPath</span><span class="o">);</span>
+<span class="c"></span>			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s2">"doExpressInstall"</span><span class="o">))</span> <span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">"MMplayerType"</span><span class="o">,</span> <span class="s2">"PlugIn"</span><span class="o">);</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'swf'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">xiSWFPath</span><span class="o">);</span>
 			<span class="o">}</span>
-			<span class="nx">swfNode</span> <span class="o">=</span> <span class="s1">&#39;&lt;embed type=&quot;application/x-shockwave-flash&quot; src=&quot;&#39;</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;swf&#39;</span><span class="o">)</span> <span class="o">+</span><span class="s1">&#39;&quot; width=&quot;&#39;</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">)</span> <span class="o">+</span><span class="s1">&#39;&quot; height=&quot;&#39;</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;height&#39;</span><span class="o">)</span> <span class="o">+</span><span class="s1">&#39;&quot; style=&quot;&#39;</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;style&#39;</span><span class="o">)</span> <span class="o">+</span><span class="s1">&#39;&quot;&#39;</span><span class="o">;</span>
-			<span class="nx">swfNode</span> <span class="o">+=</span> <span class="s1">&#39; id=&quot;&#39;</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">+</span><span class="s1">&#39;&quot; name=&quot;&#39;</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">+</span><span class="s1">&#39;&quot; &#39;</span><span class="o">;</span>
+			<span class="nx">swfNode</span> <span class="o">=</span> <span class="s1">'&lt;embed type="application/x-shockwave-flash" src="'</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'swf'</span><span class="o">)</span> <span class="o">+</span><span class="s1">'" width="'</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'width'</span><span class="o">)</span> <span class="o">+</span><span class="s1">'" height="'</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'height'</span><span class="o">)</span> <span class="o">+</span><span class="s1">'" style="'</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'style'</span><span class="o">)</span> <span class="o">+</span><span class="s1">'"'</span><span class="o">;</span>
+			<span class="nx">swfNode</span> <span class="o">+=</span> <span class="s1">' id="'</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'id'</span><span class="o">)</span> <span class="o">+</span><span class="s1">'" name="'</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'id'</span><span class="o">)</span> <span class="o">+</span><span class="s1">'" '</span><span class="o">;</span>
 			<span class="k">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getParams</span><span class="o">();</span>
-			 <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">params</span><span class="o">){</span> <span class="nx">swfNode</span> <span class="o">+=</span> <span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">+</span><span class="s1">&#39;=&quot;&#39;</span><span class="o">+</span> <span class="nx">params</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">+</span><span class="s1">&#39;&quot; &#39;</span><span class="o">;</span> <span class="o">}</span>
-			<span class="k">var</span> <span class="nx">pairs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getVariablePairs</span><span class="o">().</span><span class="nx">join</span><span class="o">(</span><span class="s2">&quot;&amp;&quot;</span><span class="o">);</span>
-			 <span class="k">if</span> <span class="o">(</span><span class="nx">pairs</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">){</span> <span class="nx">swfNode</span> <span class="o">+=</span> <span class="s1">&#39;flashvars=&quot;&#39;</span><span class="o">+</span> <span class="nx">pairs</span> <span class="o">+</span><span class="s1">&#39;&quot;&#39;</span><span class="o">;</span> <span class="o">}</span>
-			<span class="nx">swfNode</span> <span class="o">+=</span> <span class="s1">&#39;/&gt;&#39;</span><span class="o">;</span>
+			 <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">params</span><span class="o">){</span> <span class="nx">swfNode</span> <span class="o">+=</span> <span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">+</span><span class="s1">'="'</span><span class="o">+</span> <span class="nx">params</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">+</span><span class="s1">'" '</span><span class="o">;</span> <span class="o">}</span>
+			<span class="k">var</span> <span class="nx">pairs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getVariablePairs</span><span class="o">().</span><span class="nx">join</span><span class="o">(</span><span class="s2">"&amp;"</span><span class="o">);</span>
+			 <span class="k">if</span> <span class="o">(</span><span class="nx">pairs</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">){</span> <span class="nx">swfNode</span> <span class="o">+=</span> <span class="s1">'flashvars="'</span><span class="o">+</span> <span class="nx">pairs</span> <span class="o">+</span><span class="s1">'"'</span><span class="o">;</span> <span class="o">}</span>
+			<span class="nx">swfNode</span> <span class="o">+=</span> <span class="s1">'/&gt;'</span><span class="o">;</span>
 		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">// PC IE</span>
-<span class="c"></span>			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s2">&quot;doExpressInstall&quot;</span><span class="o">))</span> <span class="o">{</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">&quot;MMplayerType&quot;</span><span class="o">,</span> <span class="s2">&quot;ActiveX&quot;</span><span class="o">);</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;swf&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">xiSWFPath</span><span class="o">);</span>
+<span class="c"></span>			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s2">"doExpressInstall"</span><span class="o">))</span> <span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">"MMplayerType"</span><span class="o">,</span> <span class="s2">"ActiveX"</span><span class="o">);</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'swf'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">xiSWFPath</span><span class="o">);</span>
 			<span class="o">}</span>
-			<span class="nx">swfNode</span> <span class="o">=</span> <span class="s1">&#39;&lt;object id=&quot;&#39;</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">+</span><span class="s1">&#39;&quot; classid=&quot;clsid:D27CDB6E-AE6D-11cf-96B8-444553540000&quot; width=&quot;&#39;</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">)</span> <span class="o">+</span><span class="s1">&#39;&quot; height=&quot;&#39;</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;height&#39;</span><span class="o">)</span> <span class="o">+</span><span class="s1">&#39;&quot; style=&quot;&#39;</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;style&#39;</span><span class="o">)</span> <span class="o">+</span><span class="s1">&#39;&quot;&gt;&#39;</span><span class="o">;</span>
-			<span class="nx">swfNode</span> <span class="o">+=</span> <span class="s1">&#39;&lt;param name=&quot;movie&quot; value=&quot;&#39;</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;swf&#39;</span><span class="o">)</span> <span class="o">+</span><span class="s1">&#39;&quot; /&gt;&#39;</span><span class="o">;</span>
+			<span class="nx">swfNode</span> <span class="o">=</span> <span class="s1">'&lt;object id="'</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'id'</span><span class="o">)</span> <span class="o">+</span><span class="s1">'" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="'</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'width'</span><span class="o">)</span> <span class="o">+</span><span class="s1">'" height="'</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'height'</span><span class="o">)</span> <span class="o">+</span><span class="s1">'" style="'</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'style'</span><span class="o">)</span> <span class="o">+</span><span class="s1">'"&gt;'</span><span class="o">;</span>
+			<span class="nx">swfNode</span> <span class="o">+=</span> <span class="s1">'&lt;param name="movie" value="'</span><span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'swf'</span><span class="o">)</span> <span class="o">+</span><span class="s1">'" /&gt;'</span><span class="o">;</span>
 			<span class="k">var</span> <span class="nx">params</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getParams</span><span class="o">();</span>
 			<span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">key</span> <span class="k">in</span> <span class="nx">params</span><span class="o">)</span> <span class="o">{</span>
-			 <span class="nx">swfNode</span> <span class="o">+=</span> <span class="s1">&#39;&lt;param name=&quot;&#39;</span><span class="o">+</span> <span class="nx">key</span> <span class="o">+</span><span class="s1">&#39;&quot; value=&quot;&#39;</span><span class="o">+</span> <span class="nx">params</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">+</span><span class="s1">&#39;&quot; /&gt;&#39;</span><span class="o">;</span>
+			 <span class="nx">swfNode</span> <span class="o">+=</span> <span class="s1">'&lt;param name="'</span><span class="o">+</span> <span class="nx">key</span> <span class="o">+</span><span class="s1">'" value="'</span><span class="o">+</span> <span class="nx">params</span><span class="o">[</span><span class="nx">key</span><span class="o">]</span> <span class="o">+</span><span class="s1">'" /&gt;'</span><span class="o">;</span>
 			<span class="o">}</span>
-			<span class="k">var</span> <span class="nx">pairs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getVariablePairs</span><span class="o">().</span><span class="nx">join</span><span class="o">(</span><span class="s2">&quot;&amp;&quot;</span><span class="o">);</span>
-			<span class="k">if</span><span class="o">(</span><span class="nx">pairs</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span><span class="nx">swfNode</span> <span class="o">+=</span> <span class="s1">&#39;&lt;param name=&quot;flashvars&quot; value=&quot;&#39;</span><span class="o">+</span> <span class="nx">pairs</span> <span class="o">+</span><span class="s1">&#39;&quot; /&gt;&#39;</span><span class="o">;}</span>
-			<span class="nx">swfNode</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/object&gt;&quot;</span><span class="o">;</span>
+			<span class="k">var</span> <span class="nx">pairs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getVariablePairs</span><span class="o">().</span><span class="nx">join</span><span class="o">(</span><span class="s2">"&amp;"</span><span class="o">);</span>
+			<span class="k">if</span><span class="o">(</span><span class="nx">pairs</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span><span class="nx">swfNode</span> <span class="o">+=</span> <span class="s1">'&lt;param name="flashvars" value="'</span><span class="o">+</span> <span class="nx">pairs</span> <span class="o">+</span><span class="s1">'" /&gt;'</span><span class="o">;}</span>
+			<span class="nx">swfNode</span> <span class="o">+=</span> <span class="s2">"&lt;/object&gt;"</span><span class="o">;</span>
 		<span class="o">}</span>
 		<span class="k">return</span> <span class="nx">swfNode</span><span class="o">;</span>
 	<span class="o">},</span>
 	<span class="nx">write</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">elementId</span><span class="o">){</span>
-		<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;useExpressInstall&#39;</span><span class="o">))</span> <span class="o">{</span>
+		<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'useExpressInstall'</span><span class="o">))</span> <span class="o">{</span>
 			<span class="c">// check to see if we need to do an express install</span>
 <span class="c"></span>			<span class="k">var</span> <span class="nx">expressInstallReqVer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">PlayerVersion</span><span class="o">([</span><span class="m">6</span><span class="o">,</span><span class="m">0</span><span class="o">,</span><span class="m">65</span><span class="o">]);</span>
-			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">installedVer</span><span class="o">.</span><span class="nx">versionIsValid</span><span class="o">(</span><span class="nx">expressInstallReqVer</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">installedVer</span><span class="o">.</span><span class="nx">versionIsValid</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;version&#39;</span><span class="o">)))</span> <span class="o">{</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;doExpressInstall&#39;</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">&quot;MMredirectURL&quot;</span><span class="o">,</span> <span class="nx">escape</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;xiRedirectUrl&#39;</span><span class="o">)));</span>
-				<span class="nb">document</span><span class="o">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">title</span><span class="o">.</span><span class="nx">slice</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="m">47</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot; - Flash Player Installation&quot;</span><span class="o">;</span>
-				<span class="k">this</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">&quot;MMdoctitle&quot;</span><span class="o">,</span> <span class="nb">document</span><span class="o">.</span><span class="nx">title</span><span class="o">);</span>
+			<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">installedVer</span><span class="o">.</span><span class="nx">versionIsValid</span><span class="o">(</span><span class="nx">expressInstallReqVer</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">installedVer</span><span class="o">.</span><span class="nx">versionIsValid</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'version'</span><span class="o">)))</span> <span class="o">{</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'doExpressInstall'</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">"MMredirectURL"</span><span class="o">,</span> <span class="nx">escape</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'xiRedirectUrl'</span><span class="o">)));</span>
+				<span class="nb">document</span><span class="o">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">title</span><span class="o">.</span><span class="nx">slice</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="m">47</span><span class="o">)</span> <span class="o">+</span> <span class="s2">" - Flash Player Installation"</span><span class="o">;</span>
+				<span class="k">this</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">"MMdoctitle"</span><span class="o">,</span> <span class="nb">document</span><span class="o">.</span><span class="nx">title</span><span class="o">);</span>
 			<span class="o">}</span>
 		<span class="o">}</span>
-		<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">skipDetect</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;doExpressInstall&#39;</span><span class="o">)</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">installedVer</span><span class="o">.</span><span class="nx">versionIsValid</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;version&#39;</span><span class="o">))){</span>
-			<span class="k">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">elementId</span> <span class="o">==</span> <span class="s1">&#39;string&#39;</span><span class="o">)</span> <span class="o">?</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">elementId</span><span class="o">)</span> <span class="o">:</span> <span class="nx">elementId</span><span class="o">;</span>
+		<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">skipDetect</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'doExpressInstall'</span><span class="o">)</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">installedVer</span><span class="o">.</span><span class="nx">versionIsValid</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'version'</span><span class="o">))){</span>
+			<span class="k">var</span> <span class="nx">n</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">elementId</span> <span class="o">==</span> <span class="s1">'string'</span><span class="o">)</span> <span class="o">?</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementById</span><span class="o">(</span><span class="nx">elementId</span><span class="o">)</span> <span class="o">:</span> <span class="nx">elementId</span><span class="o">;</span>
 			<span class="nx">n</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getSWFHTML</span><span class="o">();</span>
 			<span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
 		<span class="o">}</span><span class="k">else</span><span class="o">{</span>
-			<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;redirectUrl&#39;</span><span class="o">)</span> <span class="o">!=</span> <span class="s2">&quot;&quot;</span><span class="o">)</span> <span class="o">{</span>
-				<span class="nb">document</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;redirectUrl&#39;</span><span class="o">));</span>
+			<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'redirectUrl'</span><span class="o">)</span> <span class="o">!=</span> <span class="s2">""</span><span class="o">)</span> <span class="o">{</span>
+				<span class="nb">document</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'redirectUrl'</span><span class="o">));</span>
 			<span class="o">}</span>
 		<span class="o">}</span>
 		<span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
@@ -186,18 +177,18 @@
 <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObjectUtil</span><span class="o">.</span><span class="nx">getPlayerVersion</span> <span class="o">=</span> <span class="k">function</span><span class="o">(){</span>
 	<span class="k">var</span> <span class="nx">PlayerVersion</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">PlayerVersion</span><span class="o">([</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="o">]);</span>
 	<span class="k">if</span><span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">plugins</span> <span class="o">&amp;&amp;</span> <span class="nx">navigator</span><span class="o">.</span><span class="nx">mimeTypes</span><span class="o">.</span><span class="nx">length</span><span class="o">){</span>
-		<span class="k">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">navigator</span><span class="o">.</span><span class="nx">plugins</span><span class="o">[</span><span class="s2">&quot;Shockwave Flash&quot;</span><span class="o">];</span>
+		<span class="k">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="nx">navigator</span><span class="o">.</span><span class="nx">plugins</span><span class="o">[</span><span class="s2">"Shockwave Flash"</span><span class="o">];</span>
 		<span class="k">if</span><span class="o">(</span><span class="nx">x</span> <span class="o">&amp;&amp;</span> <span class="nx">x</span><span class="o">.</span><span class="nx">description</span><span class="o">)</span> <span class="o">{</span>
-			<span class="nx">PlayerVersion</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">PlayerVersion</span><span class="o">(</span><span class="nx">x</span><span class="o">.</span><span class="nx">description</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/([a-zA-Z]|\s)+/</span><span class="o">,</span> <span class="s2">&quot;&quot;</span><span class="o">).</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/(\s+r|\s+b[0-9]+)/</span><span class="o">,</span> <span class="s2">&quot;.&quot;</span><span class="o">).</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;.&quot;</span><span class="o">));</span>
+			<span class="nx">PlayerVersion</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">PlayerVersion</span><span class="o">(</span><span class="nx">x</span><span class="o">.</span><span class="nx">description</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/([a-zA-Z]|\s)+/</span><span class="o">,</span> <span class="s2">""</span><span class="o">).</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/(\s+r|\s+b[0-9]+)/</span><span class="o">,</span> <span class="s2">"."</span><span class="o">).</span><span class="nx">split</span><span class="o">(</span><span class="s2">"."</span><span class="o">));</span>
 		<span class="o">}</span>
-	<span class="o">}</span><span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span> <span class="o">&amp;&amp;</span> <span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;Windows CE&quot;</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">){</span> <span class="c">// if Windows CE</span>
+	<span class="o">}</span><span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span> <span class="o">&amp;&amp;</span> <span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"Windows CE"</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">){</span> <span class="c">// if Windows CE</span>
 <span class="c"></span>		<span class="k">var</span> <span class="nx">axo</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span>
 		<span class="k">var</span> <span class="nx">counter</span> <span class="o">=</span> <span class="m">3</span><span class="o">;</span>
 		<span class="k">while</span><span class="o">(</span><span class="nx">axo</span><span class="o">)</span> <span class="o">{</span>
 			<span class="k">try</span> <span class="o">{</span>
 				<span class="nx">counter</span><span class="o">++;</span>
-				<span class="nx">axo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="o">(</span><span class="s2">&quot;ShockwaveFlash.ShockwaveFlash.&quot;</span><span class="o">+</span> <span class="nx">counter</span><span class="o">);</span>
-<span class="c">//				document.write(&quot;player v: &quot;+ counter);</span>
+				<span class="nx">axo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="o">(</span><span class="s2">"ShockwaveFlash.ShockwaveFlash."</span><span class="o">+</span> <span class="nx">counter</span><span class="o">);</span>
+<span class="c">//				document.write("player v: "+ counter);</span>
 <span class="c"></span>				<span class="nx">PlayerVersion</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">PlayerVersion</span><span class="o">([</span><span class="nx">counter</span><span class="o">,</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="o">]);</span>
 			<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
 				<span class="nx">axo</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
@@ -207,23 +198,23 @@
 <span class="c"></span>		<span class="c">// do minor version lookup in IE, but avoid fp6 crashing issues</span>
 <span class="c"></span>		<span class="c">// see http://blog.deconcept.com/2006/01/11/getvariable-setvariable-crash-internet-explorer-flash-6/</span>
 <span class="c"></span>		<span class="k">try</span><span class="o">{</span>
-			<span class="k">var</span> <span class="nx">axo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="o">(</span><span class="s2">&quot;ShockwaveFlash.ShockwaveFlash.7&quot;</span><span class="o">);</span>
+			<span class="k">var</span> <span class="nx">axo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="o">(</span><span class="s2">"ShockwaveFlash.ShockwaveFlash.7"</span><span class="o">);</span>
 		<span class="o">}</span><span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">){</span>
 			<span class="k">try</span> <span class="o">{</span>
-				<span class="k">var</span> <span class="nx">axo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="o">(</span><span class="s2">&quot;ShockwaveFlash.ShockwaveFlash.6&quot;</span><span class="o">);</span>
+				<span class="k">var</span> <span class="nx">axo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="o">(</span><span class="s2">"ShockwaveFlash.ShockwaveFlash.6"</span><span class="o">);</span>
 				<span class="nx">PlayerVersion</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">PlayerVersion</span><span class="o">([</span><span class="m">6</span><span class="o">,</span><span class="m">0</span><span class="o">,</span><span class="m">21</span><span class="o">]);</span>
-				<span class="nx">axo</span><span class="o">.</span><span class="nx">AllowScriptAccess</span> <span class="o">=</span> <span class="s2">&quot;always&quot;</span><span class="o">;</span> <span class="c">// error if player version &lt; 6.0.47 (thanks to Michael Williams @ Adobe for this code)</span>
+				<span class="nx">axo</span><span class="o">.</span><span class="nx">AllowScriptAccess</span> <span class="o">=</span> <span class="s2">"always"</span><span class="o">;</span> <span class="c">// error if player version &lt; 6.0.47 (thanks to Michael Williams @ Adobe for this code)</span>
 <span class="c"></span>			<span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
 				<span class="k">if</span> <span class="o">(</span><span class="nx">PlayerVersion</span><span class="o">.</span><span class="nx">major</span> <span class="o">==</span> <span class="m">6</span><span class="o">)</span> <span class="o">{</span>
 					<span class="k">return</span> <span class="nx">PlayerVersion</span><span class="o">;</span>
 				<span class="o">}</span>
 			<span class="o">}</span>
 			<span class="k">try</span> <span class="o">{</span>
-				<span class="nx">axo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="o">(</span><span class="s2">&quot;ShockwaveFlash.ShockwaveFlash&quot;</span><span class="o">);</span>
+				<span class="nx">axo</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="o">(</span><span class="s2">"ShockwaveFlash.ShockwaveFlash"</span><span class="o">);</span>
 			<span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{}</span>
 		<span class="o">}</span>
 		<span class="k">if</span> <span class="o">(</span><span class="nx">axo</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-			<span class="nx">PlayerVersion</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">PlayerVersion</span><span class="o">(</span><span class="nx">axo</span><span class="o">.</span><span class="nx">GetVariable</span><span class="o">(</span><span class="s2">&quot;$version&quot;</span><span class="o">).</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot; &quot;</span><span class="o">)[</span><span class="m">1</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;,&quot;</span><span class="o">));</span>
+			<span class="nx">PlayerVersion</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">PlayerVersion</span><span class="o">(</span><span class="nx">axo</span><span class="o">.</span><span class="nx">GetVariable</span><span class="o">(</span><span class="s2">"$version"</span><span class="o">).</span><span class="nx">split</span><span class="o">(</span><span class="s2">" "</span><span class="o">)[</span><span class="m">1</span><span class="o">].</span><span class="nx">split</span><span class="o">(</span><span class="s2">","</span><span class="o">));</span>
 		<span class="o">}</span>
 	<span class="o">}</span>
 	<span class="k">return</span> <span class="nx">PlayerVersion</span><span class="o">;</span>
@@ -247,23 +238,23 @@
 		<span class="k">var</span> <span class="nx">q</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">search</span> <span class="o">||</span> <span class="nb">document</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">hash</span><span class="o">;</span>
 		<span class="k">if</span> <span class="o">(</span><span class="nx">param</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> <span class="k">return</span> <span class="nx">q</span><span class="o">;</span> <span class="o">}</span>
 		<span class="k">if</span><span class="o">(</span><span class="nx">q</span><span class="o">)</span> <span class="o">{</span>
-			<span class="k">var</span> <span class="nx">pairs</span> <span class="o">=</span> <span class="nx">q</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">1</span><span class="o">).</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;&amp;&quot;</span><span class="o">);</span>
+			<span class="k">var</span> <span class="nx">pairs</span> <span class="o">=</span> <span class="nx">q</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">1</span><span class="o">).</span><span class="nx">split</span><span class="o">(</span><span class="s2">"&amp;"</span><span class="o">);</span>
 			<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">pairs</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
-				<span class="k">if</span> <span class="o">(</span><span class="nx">pairs</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">pairs</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;=&quot;</span><span class="o">))</span> <span class="o">==</span> <span class="nx">param</span><span class="o">)</span> <span class="o">{</span>
-					<span class="k">return</span> <span class="nx">pairs</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">substring</span><span class="o">((</span><span class="nx">pairs</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;=&quot;</span><span class="o">)+</span><span class="m">1</span><span class="o">));</span>
+				<span class="k">if</span> <span class="o">(</span><span class="nx">pairs</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">pairs</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"="</span><span class="o">))</span> <span class="o">==</span> <span class="nx">param</span><span class="o">)</span> <span class="o">{</span>
+					<span class="k">return</span> <span class="nx">pairs</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">substring</span><span class="o">((</span><span class="nx">pairs</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"="</span><span class="o">)+</span><span class="m">1</span><span class="o">));</span>
 				<span class="o">}</span>
 			<span class="o">}</span>
 		<span class="o">}</span>
-		<span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+		<span class="k">return</span> <span class="s2">""</span><span class="o">;</span>
 	<span class="o">}</span>
 <span class="o">}</span>
 <span class="c">/* fix for video streaming bug */</span>
 <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObjectUtil</span><span class="o">.</span><span class="nx">cleanupSWFs</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-	<span class="k">var</span> <span class="nx">objects</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s2">&quot;OBJECT&quot;</span><span class="o">);</span>
+	<span class="k">var</span> <span class="nx">objects</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">getElementsByTagName</span><span class="o">(</span><span class="s2">"OBJECT"</span><span class="o">);</span>
 	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">objects</span><span class="o">.</span><span class="nx">length</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">--)</span> <span class="o">{</span>
-		<span class="nx">objects</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="o">;</span>
+		<span class="nx">objects</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">'none'</span><span class="o">;</span>
 		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">x</span> <span class="k">in</span> <span class="nx">objects</span><span class="o">[</span><span class="nx">i</span><span class="o">])</span> <span class="o">{</span>
-			<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">objects</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="nx">x</span><span class="o">]</span> <span class="o">==</span> <span class="s1">&#39;function&#39;</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">objects</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="nx">x</span><span class="o">]</span> <span class="o">==</span> <span class="s1">'function'</span><span class="o">)</span> <span class="o">{</span>
 				<span class="nx">objects</span><span class="o">[</span><span class="nx">i</span><span class="o">][</span><span class="nx">x</span><span class="o">]</span> <span class="o">=</span> <span class="k">function</span><span class="o">(){};</span>
 			<span class="o">}</span>
 		<span class="o">}</span>
@@ -275,9 +266,9 @@
 		<span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObjectUtil</span><span class="o">.</span><span class="nx">prepUnload</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 			<span class="nx">__flash_unloadHandler</span> <span class="o">=</span> <span class="k">function</span><span class="o">(){};</span>
 			<span class="nx">__flash_savedUnloadHandler</span> <span class="o">=</span> <span class="k">function</span><span class="o">(){};</span>
-			<span class="nb">window</span><span class="o">.</span><span class="nx">attachEvent</span><span class="o">(</span><span class="s2">&quot;onunload&quot;</span><span class="o">,</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObjectUtil</span><span class="o">.</span><span class="nx">cleanupSWFs</span><span class="o">);</span>
+			<span class="nb">window</span><span class="o">.</span><span class="nx">attachEvent</span><span class="o">(</span><span class="s2">"onunload"</span><span class="o">,</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObjectUtil</span><span class="o">.</span><span class="nx">cleanupSWFs</span><span class="o">);</span>
 		<span class="o">}</span>
-		<span class="nb">window</span><span class="o">.</span><span class="nx">attachEvent</span><span class="o">(</span><span class="s2">&quot;onbeforeunload&quot;</span><span class="o">,</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObjectUtil</span><span class="o">.</span><span class="nx">prepUnload</span><span class="o">);</span>
+		<span class="nb">window</span><span class="o">.</span><span class="nx">attachEvent</span><span class="o">(</span><span class="s2">"onbeforeunload"</span><span class="o">,</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObjectUtil</span><span class="o">.</span><span class="nx">prepUnload</span><span class="o">);</span>
 		<span class="nx">deconcept</span><span class="o">.</span><span class="nx">unloadSet</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 	<span class="o">}</span>
 <span class="o">}</span>
@@ -305,13 +296,13 @@
 	<span class="k">this</span><span class="o">.</span><span class="nx">_configs</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_configs</span> <span class="o">||</span> <span class="o">{};</span>
 	<span class="nx">attributes</span> <span class="o">=</span> <span class="nx">attributes</span> <span class="o">||</span> <span class="o">{};</span>
 	
-	<span class="c">//the Flash Player external interface code from Adobe doesn&#39;t play nicely</span>
+	<span class="c">//the Flash Player external interface code from Adobe doesn't play nicely</span>
 <span class="c"></span>	<span class="c">//with the default value, yui-gen, in IE</span>
-<span class="c"></span>	<span class="k">this</span><span class="o">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s2">&quot;yuigen&quot;</span><span class="o">);</span>
-	<span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">||</span> <span class="s2">&quot;9.0.45&quot;</span><span class="o">;</span>
-	<span class="nx">attributes</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">||</span> <span class="s2">&quot;#ffffff&quot;</span><span class="o">;</span>
+<span class="c"></span>	<span class="k">this</span><span class="o">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">id</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="s2">"yuigen"</span><span class="o">);</span>
+	<span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">version</span> <span class="o">||</span> <span class="s2">"9.0.45"</span><span class="o">;</span>
+	<span class="nx">attributes</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">.</span><span class="nx">backgroundColor</span> <span class="o">||</span> <span class="s2">"#ffffff"</span><span class="o">;</span>
 	
-	<span class="c">//we can&#39;t use the initial attributes right away</span>
+	<span class="c">//we can't use the initial attributes right away</span>
 <span class="c"></span>	<span class="c">//so save them for once the SWF finishes loading</span>
 <span class="c"></span>	<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span> <span class="o">=</span> <span class="nx">attributes</span><span class="o">;</span>
 	
@@ -324,7 +315,7 @@
 <span class="c">	 * Fires when the SWF is initialized and communication is possible.</span>
 <span class="c">	 * @event contentReady</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;contentReady&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"contentReady"</span><span class="o">);</span>
 <span class="o">};</span>
 
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">AttributeProvider</span><span class="o">,</span>
@@ -368,7 +359,7 @@
 <span class="c">	 */</span>
 	<span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
 	<span class="o">{</span>
-		<span class="k">return</span> <span class="s2">&quot;FlashAdapter &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
+		<span class="k">return</span> <span class="s2">"FlashAdapter "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
 	<span class="o">},</span>
 
 	<span class="c">/**</span>
@@ -380,26 +371,26 @@
 	<span class="nx">_embedSWF</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">swfURL</span><span class="o">,</span> <span class="nx">containerID</span><span class="o">,</span> <span class="nx">swfID</span><span class="o">,</span> <span class="nx">version</span><span class="o">,</span> <span class="nx">backgroundColor</span><span class="o">,</span> <span class="nx">expressInstall</span><span class="o">)</span>
 	<span class="o">{</span>
 		<span class="c">//standard SWFObject embed</span>
-<span class="c"></span>		<span class="k">var</span> <span class="nx">swfObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObject</span><span class="o">(</span><span class="nx">swfURL</span><span class="o">,</span> <span class="nx">swfID</span><span class="o">,</span> <span class="s2">&quot;100%&quot;</span><span class="o">,</span> <span class="s2">&quot;100%&quot;</span><span class="o">,</span> <span class="nx">version</span><span class="o">,</span> <span class="nx">backgroundColor</span><span class="o">,</span> <span class="nx">expressInstall</span><span class="o">);</span>
+<span class="c"></span>		<span class="k">var</span> <span class="nx">swfObj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">deconcept</span><span class="o">.</span><span class="nx">SWFObject</span><span class="o">(</span><span class="nx">swfURL</span><span class="o">,</span> <span class="nx">swfID</span><span class="o">,</span> <span class="s2">"100%"</span><span class="o">,</span> <span class="s2">"100%"</span><span class="o">,</span> <span class="nx">version</span><span class="o">,</span> <span class="nx">backgroundColor</span><span class="o">,</span> <span class="nx">expressInstall</span><span class="o">);</span>
 
 		<span class="c">//make sure we can communicate with ExternalInterface</span>
-<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addParam</span><span class="o">(</span><span class="s2">&quot;allowScriptAccess&quot;</span><span class="o">,</span> <span class="s2">&quot;always&quot;</span><span class="o">);</span>
+<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addParam</span><span class="o">(</span><span class="s2">"allowScriptAccess"</span><span class="o">,</span> <span class="s2">"always"</span><span class="o">);</span>
 		
 		<span class="c">//again, a useful ExternalInterface trick</span>
-<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">&quot;allowedDomain&quot;</span><span class="o">,</span> <span class="nb">document</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">hostname</span><span class="o">);</span>
+<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">"allowedDomain"</span><span class="o">,</span> <span class="nb">document</span><span class="o">.</span><span class="nx">location</span><span class="o">.</span><span class="nx">hostname</span><span class="o">);</span>
 
 		<span class="c">//tell the SWF which HTML element it is in</span>
-<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">&quot;elementID&quot;</span><span class="o">,</span> <span class="nx">swfID</span><span class="o">);</span>
+<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">"elementID"</span><span class="o">,</span> <span class="nx">swfID</span><span class="o">);</span>
 
 		<span class="c">// set the name of the function to call when the swf has an event</span>
-<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">&quot;eventHandler&quot;</span><span class="o">,</span> <span class="s2">&quot;YAHOO.widget.FlashAdapter.eventHandler&quot;</span><span class="o">);</span>
+<span class="c"></span>		<span class="nx">swfObj</span><span class="o">.</span><span class="nx">addVariable</span><span class="o">(</span><span class="s2">"eventHandler"</span><span class="o">,</span> <span class="s2">"YAHOO.widget.FlashAdapter.eventHandler"</span><span class="o">);</span>
 
 		<span class="k">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">containerID</span><span class="o">);</span>
 		<span class="k">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">swfObj</span><span class="o">.</span><span class="nx">write</span><span class="o">(</span><span class="nx">container</span><span class="o">);</span>
 		<span class="k">if</span><span class="o">(</span><span class="nx">result</span><span class="o">)</span>
 		<span class="o">{</span>
 			<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">swfID</span><span class="o">);</span>
-			<span class="c">//if successful, let&#39;s add an owner property to the SWF reference</span>
+			<span class="c">//if successful, let's add an owner property to the SWF reference</span>
 <span class="c"></span>			<span class="c">//this will allow the event handler to communicate with a YAHOO.widget.FlashAdapter</span>
 <span class="c"></span>			<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">owner</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
 		<span class="o">}</span>
@@ -416,12 +407,12 @@
 		<span class="k">var</span> <span class="nx">type</span> <span class="o">=</span> <span class="nx">event</span><span class="o">.</span><span class="nx">type</span><span class="o">;</span>
 		<span class="nx">switch</span><span class="o">(</span><span class="nx">type</span><span class="o">)</span>
 		<span class="o">{</span>
-			<span class="nx">case</span> <span class="s2">&quot;swfReady&quot;</span><span class="o">:</span>
+			<span class="nx">case</span> <span class="s2">"swfReady"</span><span class="o">:</span>
 			<span class="o">{</span>
    				<span class="k">this</span><span class="o">.</span><span class="nx">_loadHandler</span><span class="o">();</span>
 				<span class="k">return</span><span class="o">;</span>
 			<span class="o">}</span>
-			<span class="nx">case</span> <span class="s2">&quot;log&quot;</span><span class="o">:</span>
+			<span class="nx">case</span> <span class="s2">"log"</span><span class="o">:</span>
 			<span class="o">{</span>
 				<span class="k">return</span><span class="o">;</span>
 			<span class="o">}</span>
@@ -443,7 +434,7 @@
 		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributes</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">_attributes</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 		
-		<span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;contentReady&quot;</span><span class="o">);</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"contentReady"</span><span class="o">);</span>
 	<span class="o">},</span>
 	
 	<span class="c">/**</span>
@@ -461,7 +452,7 @@
 <span class="c">		 * @description Absolute or relative URL to the SWF displayed by the FlashAdapter.</span>
 <span class="c">		 * @type String</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;swfURL&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"swfURL"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getSWFURL</span>
 		<span class="o">});</span>
@@ -492,7 +483,7 @@
 	<span class="k">var</span> <span class="nx">loadedSWF</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">elementID</span><span class="o">);</span>
 	<span class="k">if</span><span class="o">(!</span><span class="nx">loadedSWF</span><span class="o">.</span><span class="nx">owner</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="c">//fix for ie: if owner doesn&#39;t exist yet, try again in a moment</span>
+		<span class="c">//fix for ie: if owner doesn't exist yet, try again in a moment</span>
 <span class="c"></span>		<span class="nx">setTimeout</span><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">.</span><span class="nx">eventHandler</span><span class="o">(</span> <span class="nx">elementID</span><span class="o">,</span> <span class="nx">event</span> <span class="o">);</span> <span class="o">},</span> <span class="m">0</span><span class="o">);</span>
 	<span class="o">}</span>
 	<span class="k">else</span> <span class="nx">loadedSWF</span><span class="o">.</span><span class="nx">owner</span><span class="o">.</span><span class="nx">_eventHandler</span><span class="o">(</span><span class="nx">event</span><span class="o">);</span>
@@ -511,7 +502,7 @@
 	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Uploader</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Uploader</span><span class="o">.</span><span class="nx">SWFURL</span><span class="o">,</span> <span class="nx">containerId</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
 	
 	<span class="c">/**</span>
-<span class="c">	 * Fires when the user has finished selecting files in the &quot;Open File&quot; dialog.</span>
+<span class="c">	 * Fires when the user has finished selecting files in the "Open File" dialog.</span>
 <span class="c">	 *</span>
 <span class="c">	 * @event fileSelect</span>
 <span class="c">	 * @param event.type {String} The event type</span>
@@ -522,16 +513,16 @@
 <span class="c">	 * @param event.fileList[].name {String} File name for a specific file in fileList</span>
 <span class="c">	 * @param event.fileList[].id {String} Unique file id of a specific file in fileList</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;fileSelect&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"fileSelect"</span><span class="o">);</span>
 
 	<span class="c">/**</span>
 <span class="c">	 * Fires when an upload of a specific file has started.</span>
 <span class="c">	 *</span>
 <span class="c">	 * @event uploadStart</span>
 <span class="c">	 * @param event.type {String} The event type</span>
-<span class="c">	 * @param event.id {String} The id of the file that&#39;s started to upload</span>
+<span class="c">	 * @param event.id {String} The id of the file that's started to upload</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;uploadStart&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"uploadStart"</span><span class="o">);</span>
 
 	<span class="c">/**</span>
 <span class="c">	 * Fires when new information about the upload progress for a specific file is available.</span>
@@ -542,7 +533,7 @@
 <span class="c">	 * @param bytesLoaded {Number} The number of bytes of the file uploaded so far</span>
 <span class="c">	 * @param bytesTotal {Number} The total size of the file</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;uploadProgress&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"uploadProgress"</span><span class="o">);</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Fires when an upload for a specific file is cancelled.</span>
@@ -551,7 +542,7 @@
 <span class="c">	 * @param event.type {String} The event type</span>
 <span class="c">	 * @param event.id {String} The id of the file with which the upload has been cancelled.</span>
 <span class="c">	 */</span>	
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;uploadCancel&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"uploadCancel"</span><span class="o">);</span>
 
 	<span class="c">/**</span>
 <span class="c">	 * Fires when an upload for a specific file is complete.</span>
@@ -560,7 +551,7 @@
 <span class="c">	 * @param event.type {String} The event type</span>
 <span class="c">	 * @param event.id {String} The id of the file for which the upload has been completed.</span>
 <span class="c">	 */</span>	
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;uploadComplete&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"uploadComplete"</span><span class="o">);</span>
 
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the server sends data in response to a completed upload.</span>
@@ -570,7 +561,7 @@
 <span class="c">	 * @param event.id {String} The id of the file for which the upload has been completed.</span>
 <span class="c">	 * @param event.data {String} The raw data returned by the server in response to the upload.</span>
 <span class="c">	 */</span>	
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;uploadCompleteData&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"uploadCompleteData"</span><span class="o">);</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Fires when an upload error occurs.</span>
@@ -580,7 +571,7 @@
 <span class="c">	 * @param event.id {String} The id of the file that was being uploaded when the error has occurred.</span>
 <span class="c">	 * @param event.status {String} The status message associated with the error.</span>
 <span class="c">	 */</span>	
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;uploadError&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"uploadError"</span><span class="o">);</span>
 <span class="o">}</span>
 
 <span class="c">/**</span>
@@ -590,18 +581,18 @@
 <span class="c"> * @private</span>
 <span class="c"> * @static</span>
 <span class="c"> * @final</span>
-<span class="c"> * @default &quot;assets/uploader.swf&quot;</span>
+<span class="c"> * @default "assets/uploader.swf"</span>
 <span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Uploader</span><span class="o">.</span><span class="nx">SWFURL</span> <span class="o">=</span> <span class="s2">&quot;assets/uploader.swf&quot;</span><span class="o">;</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Uploader</span><span class="o">.</span><span class="nx">SWFURL</span> <span class="o">=</span> <span class="s2">"assets/uploader.swf"</span><span class="o">;</span>
 
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Uploader</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">,</span>
 <span class="o">{</span>
 <span class="c">/**</span>
-<span class="c"> * Invokes the &quot;Open File&quot; dialog and allows the user to select the files for upload</span>
+<span class="c"> * Invokes the "Open File" dialog and allows the user to select the files for upload</span>
 <span class="c"> *</span>
 <span class="c"> * @param allowMultiple {Boolean} If true, allows for multiple file selection; if false, only a single file can be selected. False by default.</span>
 <span class="c"> * @param extensionFilterArray {Array} An array of key-value pairs for permissible file extensions. The array elements should </span>
-<span class="c"> * be of the form: {description: &quot;Images&quot;, extensions: &quot;*.jpg; *.gif; *.png&quot;}.</span>
+<span class="c"> * be of the form: {description: "Images", extensions: "*.jpg; *.gif; *.png"}.</span>
 <span class="c"> */</span>
 	<span class="nx">browse</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">allowMultiple</span><span class="o">,</span><span class="nx">extensionFilterArray</span><span class="o">)</span>
 	<span class="o">{</span>
@@ -613,9 +604,9 @@
 <span class="c"> *</span>
 <span class="c"> * @param fileID {String} The id of the file to start uploading.</span>
 <span class="c"> * @param uploadScriptPath {String} The URL of the upload location.</span>
-<span class="c"> * @param method {String} Either &quot;GET&quot; or &quot;POST&quot;, specifying how the variables accompanying the file upload POST request should be submitted. &quot;GET&quot; by default.</span>
+<span class="c"> * @param method {String} Either "GET" or "POST", specifying how the variables accompanying the file upload POST request should be submitted. "GET" by default.</span>
 <span class="c"> * @param vars {Object} The object containing variables to be sent in the same request as the file upload.</span>
-<span class="c"> * @param fieldName {String} The name of the variable in the POST request containing the file data. &quot;Filedata&quot; by default.</span>
+<span class="c"> * @param fieldName {String} The name of the variable in the POST request containing the file data. "Filedata" by default.</span>
 <span class="c"> */</span>
 	<span class="nx">upload</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">fileID</span><span class="o">,</span> <span class="nx">uploadScriptPath</span><span class="o">,</span> <span class="nx">method</span><span class="o">,</span> <span class="nx">vars</span><span class="o">,</span> <span class="nx">fieldName</span><span class="o">)</span>
 	<span class="o">{</span>
@@ -626,9 +617,9 @@
 <span class="c"> * Starts uploading all files in the queue. If this function is called, the upload queue is automatically managed.</span>
 <span class="c"> *</span>
 <span class="c"> * @param uploadScriptPath {String} The URL of the upload location.</span>
-<span class="c"> * @param method {String} Either &quot;GET&quot; or &quot;POST&quot;, specifying how the variables accompanying the file upload POST request should be submitted. &quot;GET&quot; by default.</span>
+<span class="c"> * @param method {String} Either "GET" or "POST", specifying how the variables accompanying the file upload POST request should be submitted. "GET" by default.</span>
 <span class="c"> * @param vars {Object} The object containing variables to be sent in the same request as the file upload.</span>
-<span class="c"> * @param fieldName {String} The name of the variable in the POST request containing the file data. &quot;Filedata&quot; by default.</span>
+<span class="c"> * @param fieldName {String} The name of the variable in the POST request containing the file data. "Filedata" by default.</span>
 <span class="c"> */</span>
 	<span class="nx">uploadAll</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">uploadScriptPath</span><span class="o">,</span> <span class="nx">method</span><span class="o">,</span> <span class="nx">vars</span><span class="o">,</span> <span class="nx">fieldName</span><span class="o">)</span>
 	<span class="o">{</span>
@@ -673,9 +664,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -744,23 +733,18 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.FlashAdapter.html">YAHOO.widget.FlashAdapter</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.FlashAdapter.html">YAHOO.widget.FlashAdapter</a></li>
                                 <li class=""><a href="YAHOO.widget.Uploader.html">YAHOO.widget.Uploader</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="Uploader.js.html">Uploader.js</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class="selected"><a href="Uploader.js.html">Uploader.js</a></li>
+                        </ul></div>
 
 
 
@@ -770,9 +754,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

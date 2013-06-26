@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: paginator   Paginator.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: paginator   Paginator.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>paginator&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <h3>paginator  <span class="subtitle">2.6.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_paginator.html">paginator</a>
@@ -28,16 +20,15 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
-    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"><label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"><label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated"><label for="showdeprecated">Show Deprecated</label></span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * The Paginator widget provides a set of controls to navigate through paged</span>
 <span class="c"> * data.</span>
 <span class="c"> *</span>
@@ -73,9 +64,9 @@
     <span class="k">this</span><span class="o">.</span><span class="nx">initEvents</span><span class="o">();</span>
 
     <span class="c">// Set the basic config keys first</span>
-<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">,</span><span class="nx">config</span><span class="o">.</span><span class="nx">rowsPerPage</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">,</span><span class="nx">config</span><span class="o">.</span><span class="nx">rowsPerPage</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
     <span class="k">if</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">config</span><span class="o">.</span><span class="nx">totalRecords</span><span class="o">))</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">,</span><span class="nx">config</span><span class="o">.</span><span class="nx">totalRecords</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">'totalRecords'</span><span class="o">,</span><span class="nx">config</span><span class="o">.</span><span class="nx">totalRecords</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
     <span class="o">}</span>
     
     <span class="k">this</span><span class="o">.</span><span class="nx">initUIComponents</span><span class="o">();</span>
@@ -88,13 +79,13 @@
     <span class="o">}</span>
 
     <span class="c">// Calculate the initial record offset</span>
-<span class="c"></span>    <span class="nx">initialPage</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;initialPage&#39;</span><span class="o">);</span>
-    <span class="nx">records</span>     <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">);</span>
-    <span class="nx">perPage</span>     <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">);</span>
+<span class="c"></span>    <span class="nx">initialPage</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'initialPage'</span><span class="o">);</span>
+    <span class="nx">records</span>     <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'totalRecords'</span><span class="o">);</span>
+    <span class="nx">perPage</span>     <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">);</span>
     <span class="k">if</span> <span class="o">(</span><span class="nx">initialPage</span> <span class="o">&gt;</span> <span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="nx">perPage</span> <span class="o">!==</span> <span class="nx">UNLIMITED</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">startIndex</span> <span class="o">=</span> <span class="o">(</span><span class="nx">initialPage</span> <span class="o">-</span> <span class="m">1</span><span class="o">)</span> <span class="o">*</span> <span class="nx">perPage</span><span class="o">;</span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">records</span> <span class="o">===</span> <span class="nx">UNLIMITED</span> <span class="o">||</span> <span class="nx">startIndex</span> <span class="o">&lt;</span> <span class="nx">records</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;recordOffset&#39;</span><span class="o">,</span><span class="nx">startIndex</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">'recordOffset'</span><span class="o">,</span><span class="nx">startIndex</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
         <span class="o">}</span>
     <span class="o">}</span>
 <span class="o">};</span>
@@ -118,7 +109,7 @@
 <span class="c">     * @type string</span>
 <span class="c">     * @private</span>
 <span class="c">     */</span>
-    <span class="nx">ID_BASE</span> <span class="o">:</span> <span class="s1">&#39;yui-pg&#39;</span><span class="o">,</span>
+    <span class="nx">ID_BASE</span> <span class="o">:</span> <span class="s1">'yui-pg'</span><span class="o">,</span>
 
     <span class="c">/**</span>
 <span class="c">     * Used to identify unset, optional configurations, or used explicitly in</span>
@@ -137,7 +128,7 @@
 <span class="c">     * @property TEMPLATE_DEFAULT</span>
 <span class="c">     * @type string</span>
 <span class="c">     */</span>
-    <span class="nx">TEMPLATE_DEFAULT</span> <span class="o">:</span> <span class="s2">&quot;{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}&quot;</span><span class="o">,</span>
+    <span class="nx">TEMPLATE_DEFAULT</span> <span class="o">:</span> <span class="s2">"{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"</span><span class="o">,</span>
 
     <span class="c">/**</span>
 <span class="c">     * Common alternate pagination format, including page links, links for</span>
@@ -147,7 +138,7 @@
 <span class="c">     * @property TEMPLATE_ROWS_PER_PAGE</span>
 <span class="c">     * @type string</span>
 <span class="c">     */</span>
-    <span class="nx">TEMPLATE_ROWS_PER_PAGE</span> <span class="o">:</span> <span class="s2">&quot;{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}&quot;</span><span class="o">,</span>
+    <span class="nx">TEMPLATE_ROWS_PER_PAGE</span> <span class="o">:</span> <span class="s2">"{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"</span><span class="o">,</span>
 
     <span class="c">/**</span>
 <span class="c">     * Storage object for UI Components</span>
@@ -202,7 +193,7 @@
     <span class="c">// Instance methods</span>
 <span class="c"></span>
     <span class="c">/**</span>
-<span class="c">     * Initialize the Paginator&#39;s attributes (see YAHOO.util.Element class</span>
+<span class="c">     * Initialize the Paginator's attributes (see YAHOO.util.Element class</span>
 <span class="c">     * AttributeProvider).</span>
 <span class="c">     * @method initConfig</span>
 <span class="c">     * @private</span>
@@ -217,7 +208,7 @@
 <span class="c">         * @attribute rowsPerPage</span>
 <span class="c">         * @type integer</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span>     <span class="o">:</span> <span class="m">0</span><span class="o">,</span>
             <span class="nx">validator</span> <span class="o">:</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isNumber</span>
         <span class="o">});</span>
@@ -228,7 +219,7 @@
 <span class="c">         * @attribute containers</span>
 <span class="c">         * @type {string|HTMLElement|Array(string|HTMLElement)}</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;containers&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'containers'</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span>     <span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
             <span class="nx">validator</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">val</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(!</span><span class="nx">l</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">val</span><span class="o">))</span> <span class="o">{</span>
@@ -258,23 +249,23 @@
 <span class="c">         * @type integer</span>
 <span class="c">         * @default 0</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'totalRecords'</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span>     <span class="o">:</span> <span class="m">0</span><span class="o">,</span>
             <span class="nx">validator</span> <span class="o">:</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isNumber</span>
         <span class="o">});</span>
 
         <span class="c">/**</span>
 <span class="c">         * Zero based index of the record considered first on the current page.</span>
-<span class="c">         * For page based interactions, don&#39;t modify this attribute directly;</span>
+<span class="c">         * For page based interactions, don't modify this attribute directly;</span>
 <span class="c">         * use setPage(n).</span>
 <span class="c">         * @attribute recordOffset</span>
 <span class="c">         * @type integer</span>
 <span class="c">         * @default 0</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;recordOffset&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'recordOffset'</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span>     <span class="o">:</span> <span class="m">0</span><span class="o">,</span>
             <span class="nx">validator</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">val</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">var</span> <span class="nx">total</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">);</span>
+                <span class="k">var</span> <span class="nx">total</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'totalRecords'</span><span class="o">);</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">l</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">val</span><span class="o">))</span> <span class="o">{</span>
                     <span class="k">return</span> <span class="nx">total</span> <span class="o">===</span> <span class="nx">UNLIMITED</span> <span class="o">||</span> <span class="nx">total</span> <span class="o">&gt;</span> <span class="nx">val</span> <span class="o">||</span>
                            <span class="o">(</span><span class="nx">total</span> <span class="o">===</span> <span class="m">0</span> <span class="o">&amp;&amp;</span> <span class="nx">val</span> <span class="o">===</span> <span class="m">0</span><span class="o">);</span>
@@ -290,7 +281,7 @@
 <span class="c">         * @type integer</span>
 <span class="c">         * @default 1</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;initialPage&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'initialPage'</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span>     <span class="o">:</span> <span class="m">1</span><span class="o">,</span>
             <span class="nx">validator</span> <span class="o">:</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isNumber</span>
         <span class="o">});</span>
@@ -305,7 +296,7 @@
 <span class="c">         * @attribute template</span>
 <span class="c">         * @type string</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;template&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'template'</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span> <span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Paginator</span><span class="o">.</span><span class="nx">TEMPLATE_DEFAULT</span><span class="o">,</span>
             <span class="nx">validator</span> <span class="o">:</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isString</span>
         <span class="o">});</span>
@@ -314,10 +305,10 @@
 <span class="c">         * Class assigned to the element(s) containing pagination controls.</span>
 <span class="c">         * @attribute containerClass</span>
 <span class="c">         * @type string</span>
-<span class="c">         * @default &#39;yui-pg-container&#39;</span>
+<span class="c">         * @default 'yui-pg-container'</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;containerClass&#39;</span><span class="o">,</span> <span class="o">{</span>
-            <span class="nx">value</span> <span class="o">:</span> <span class="s1">&#39;yui-pg-container&#39;</span><span class="o">,</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'containerClass'</span><span class="o">,</span> <span class="o">{</span>
+            <span class="nx">value</span> <span class="o">:</span> <span class="s1">'yui-pg-container'</span><span class="o">,</span>
             <span class="nx">validator</span> <span class="o">:</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isString</span>
         <span class="o">});</span>
 
@@ -331,7 +322,7 @@
 <span class="c">         * @type boolean</span>
 <span class="c">         * @default true</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;alwaysVisible&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'alwaysVisible'</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span> <span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
             <span class="nx">validator</span> <span class="o">:</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isBoolean</span>
         <span class="o">});</span>
@@ -344,7 +335,7 @@
 <span class="c">         * @type boolean</span>
 <span class="c">         * @default false</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;updateOnChange&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'updateOnChange'</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span>     <span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
             <span class="nx">validator</span> <span class="o">:</span> <span class="nx">l</span><span class="o">.</span><span class="nx">isBoolean</span>
         <span class="o">});</span>
@@ -359,7 +350,7 @@
 <span class="c">         * @type integer</span>
 <span class="c">         * @final</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'id'</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span>    <span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Paginator</span><span class="o">.</span><span class="nx">id</span><span class="o">++,</span>
             <span class="nx">readOnly</span> <span class="o">:</span> <span class="kc">true</span>
         <span class="o">});</span>
@@ -370,7 +361,7 @@
 <span class="c">         * @type boolean</span>
 <span class="c">         * @final</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;rendered&#39;</span><span class="o">,</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'rendered'</span><span class="o">,</span> <span class="o">{</span>
             <span class="nx">value</span>    <span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
             <span class="nx">readOnly</span> <span class="o">:</span> <span class="kc">true</span>
         <span class="o">});</span>
@@ -397,28 +388,28 @@
     <span class="o">},</span>
 
     <span class="c">/**</span>
-<span class="c">     * Initialize this instance&#39;s CustomEvents.</span>
+<span class="c">     * Initialize this instance's CustomEvents.</span>
 <span class="c">     * @method initEvents</span>
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="nx">initEvents</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;recordOffsetChange&#39;</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;totalRecordsChange&#39;</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;rowsPerPageChange&#39;</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;alwaysVisibleChange&#39;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">'recordOffsetChange'</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">'totalRecordsChange'</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">'rowsPerPageChange'</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">'alwaysVisibleChange'</span><span class="o">);</span>
 
         <span class="c">/**</span>
 <span class="c">         * Event fired when the Paginator is initially rendered</span>
 <span class="c">         * @event render</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;render&#39;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">'render'</span><span class="o">);</span>
 
         <span class="c">/**</span>
 <span class="c">         * Event fired when the Paginator is initially rendered</span>
 <span class="c">         * @event rendered</span>
 <span class="c">         * @deprecated use render event</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;rendered&#39;</span><span class="o">);</span> <span class="c">// backward compatibility</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">'rendered'</span><span class="o">);</span> <span class="c">// backward compatibility</span>
 <span class="c"></span>
         <span class="c">/**</span>
 <span class="c">         * Event fired when a change in pagination values is requested,</span>
@@ -437,26 +428,26 @@
 <span class="c">         * &lt;/ul&gt;</span>
 <span class="c">         * @event changeRequest</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;changeRequest&#39;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">'changeRequest'</span><span class="o">);</span>
 
         <span class="c">/**</span>
 <span class="c">         * Event fired when attribute changes have resulted in the calculated</span>
 <span class="c">         * current page changing.</span>
 <span class="c">         * @event pageChange</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;pageChange&#39;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">'pageChange'</span><span class="o">);</span>
 
         <span class="c">/**</span>
 <span class="c">         * Event that fires before the destroy event.</span>
 <span class="c">         * @event beforeDestroy</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;beforeDestroy&#39;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">'beforeDestroy'</span><span class="o">);</span>
 
         <span class="c">/**</span>
 <span class="c">         * Event used to trigger cleanup of ui components</span>
 <span class="c">         * @event destroy</span>
 <span class="c">         */</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">&#39;destroy&#39;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s1">'destroy'</span><span class="o">);</span>
 
         <span class="k">this</span><span class="o">.</span><span class="nx">_selfSubscribe</span><span class="o">();</span>
     <span class="o">},</span>
@@ -469,16 +460,16 @@
 <span class="c">     */</span>
     <span class="nx">_selfSubscribe</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
         <span class="c">// Listen for changes to totalRecords and alwaysVisible </span>
-<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;totalRecordsChange&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">updateVisibility</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;alwaysVisibleChange&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">updateVisibility</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">'totalRecordsChange'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">updateVisibility</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">'alwaysVisibleChange'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">updateVisibility</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
 
         <span class="c">// Fire the pageChange event when appropriate</span>
-<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;totalRecordsChange&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">_handleStateChange</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;recordOffsetChange&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">_handleStateChange</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;rowsPerPageChange&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">_handleStateChange</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">'totalRecordsChange'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">_handleStateChange</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">'recordOffsetChange'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">_handleStateChange</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">'rowsPerPageChange'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">_handleStateChange</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
 
         <span class="c">// Update recordOffset when totalRecords is reduced below</span>
-<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">&#39;totalRecordsChange&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">_syncRecordOffset</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s1">'totalRecordsChange'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">_syncRecordOffset</span><span class="o">,</span><span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -492,15 +483,15 @@
         <span class="k">var</span> <span class="nx">v</span> <span class="o">=</span> <span class="nx">e</span><span class="o">.</span><span class="nx">newValue</span><span class="o">,</span><span class="nx">rpp</span><span class="o">,</span><span class="nx">state</span><span class="o">;</span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">prevValue</span> <span class="o">!==</span> <span class="nx">v</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">v</span> <span class="o">!==</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Paginator</span><span class="o">.</span><span class="nx">VALUE_UNLIMITED</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">rpp</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">);</span>
+                <span class="nx">rpp</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">);</span>
 
-                <span class="k">if</span> <span class="o">(</span><span class="nx">rpp</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;recordOffset&#39;</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="nx">v</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">rpp</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'recordOffset'</span><span class="o">)</span> <span class="o">&gt;=</span> <span class="nx">v</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">state</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">({</span>
                         <span class="nx">totalRecords</span> <span class="o">:</span> <span class="nx">e</span><span class="o">.</span><span class="nx">prevValue</span><span class="o">,</span>
-                        <span class="nx">recordOffset</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;recordOffset&#39;</span><span class="o">)</span>
+                        <span class="nx">recordOffset</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'recordOffset'</span><span class="o">)</span>
                     <span class="o">});</span>
 
-                    <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;recordOffset&#39;</span><span class="o">,</span> <span class="nx">state</span><span class="o">.</span><span class="nx">before</span><span class="o">.</span><span class="nx">recordOffset</span><span class="o">);</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">'recordOffset'</span><span class="o">,</span> <span class="nx">state</span><span class="o">.</span><span class="nx">before</span><span class="o">.</span><span class="nx">recordOffset</span><span class="o">);</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">_firePageChange</span><span class="o">(</span><span class="nx">state</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span>
@@ -519,7 +510,7 @@
             <span class="k">var</span> <span class="nx">change</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_state</span> <span class="o">||</span> <span class="o">{},</span>
                 <span class="nx">state</span><span class="o">;</span>
 
-            <span class="nx">change</span><span class="o">[</span><span class="nx">e</span><span class="o">.</span><span class="nx">type</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/Change$/</span><span class="o">,</span><span class="s1">&#39;&#39;</span><span class="o">)]</span> <span class="o">=</span> <span class="nx">e</span><span class="o">.</span><span class="nx">prevValue</span><span class="o">;</span>
+            <span class="nx">change</span><span class="o">[</span><span class="nx">e</span><span class="o">.</span><span class="nx">type</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/Change$/</span><span class="o">,</span><span class="s1">''</span><span class="o">)]</span> <span class="o">=</span> <span class="nx">e</span><span class="o">.</span><span class="nx">prevValue</span><span class="o">;</span>
             <span class="nx">state</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">(</span><span class="nx">change</span><span class="o">);</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">state</span><span class="o">.</span><span class="nx">page</span> <span class="o">!==</span> <span class="nx">state</span><span class="o">.</span><span class="nx">before</span><span class="o">.</span><span class="nx">page</span><span class="o">)</span> <span class="o">{</span>
@@ -543,8 +534,8 @@
         <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">state</span><span class="o">))</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">current</span> <span class="o">=</span> <span class="nx">state</span><span class="o">.</span><span class="nx">before</span><span class="o">;</span>
             <span class="nx">delete</span> <span class="nx">state</span><span class="o">.</span><span class="nx">before</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;pageChange&#39;</span><span class="o">,{</span>
-                <span class="nx">type</span>      <span class="o">:</span> <span class="s1">&#39;pageChange&#39;</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'pageChange'</span><span class="o">,{</span>
+                <span class="nx">type</span>      <span class="o">:</span> <span class="s1">'pageChange'</span><span class="o">,</span>
                 <span class="nx">prevValue</span> <span class="o">:</span> <span class="nx">state</span><span class="o">.</span><span class="nx">page</span><span class="o">,</span>
                 <span class="nx">newValue</span>  <span class="o">:</span> <span class="nx">current</span><span class="o">.</span><span class="nx">page</span><span class="o">,</span>
                 <span class="nx">prevState</span> <span class="o">:</span> <span class="nx">state</span><span class="o">,</span>
@@ -559,50 +550,50 @@
 <span class="c">     * @method render</span>
 <span class="c">     */</span>
     <span class="nx">render</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rendered&#39;</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rendered'</span><span class="o">))</span> <span class="o">{</span>
             <span class="k">return</span><span class="o">;</span>
         <span class="o">}</span>
 
         <span class="c">// Forgo rendering if only one page and alwaysVisible is off</span>
-<span class="c"></span>        <span class="k">var</span> <span class="nx">totalRecords</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">var</span> <span class="nx">totalRecords</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'totalRecords'</span><span class="o">);</span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">totalRecords</span> <span class="o">!==</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Paginator</span><span class="o">.</span><span class="nx">VALUE_UNLIMITED</span> <span class="o">&amp;&amp;</span>
-            <span class="nx">totalRecords</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
-            <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;alwaysVisible&#39;</span><span class="o">))</span> <span class="o">{</span>
+            <span class="nx">totalRecords</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
+            <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'alwaysVisible'</span><span class="o">))</span> <span class="o">{</span>
             <span class="k">return</span><span class="o">;</span>
         <span class="o">}</span>
 
         <span class="k">var</span> <span class="nx">Dom</span>            <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">,</span>
-            <span class="nx">template</span>       <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;template&#39;</span><span class="o">),</span>
-            <span class="nx">containerClass</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;containerClass&#39;</span><span class="o">);</span>
+            <span class="nx">template</span>       <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'template'</span><span class="o">),</span>
+            <span class="nx">containerClass</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'containerClass'</span><span class="o">);</span>
 
         <span class="c">// add marker spans to the template html to indicate drop zones</span>
 <span class="c"></span>        <span class="c">// for ui components</span>
 <span class="c"></span>        <span class="nx">template</span> <span class="o">=</span> <span class="nx">template</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/\{([a-z0-9_ \-]+)\}/gi</span><span class="o">,</span>
-            <span class="s1">&#39;&lt;span class=&quot;yui-pg-ui $1&quot;&gt;&lt;/span&gt;&#39;</span><span class="o">);</span>
+            <span class="s1">'&lt;span class="yui-pg-ui $1"&gt;&lt;/span&gt;'</span><span class="o">);</span>
         <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_containers</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">c</span>       <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_containers</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span>
                 <span class="c">// ex. yui-pg0-1 (first paginator, second container)</span>
-<span class="c"></span>                <span class="nx">id_base</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Paginator</span><span class="o">.</span><span class="nx">ID_BASE</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">+</span>
-                          <span class="s1">&#39;-&#39;</span> <span class="o">+</span> <span class="nx">i</span><span class="o">;</span>
+<span class="c"></span>                <span class="nx">id_base</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Paginator</span><span class="o">.</span><span class="nx">ID_BASE</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'id'</span><span class="o">)</span> <span class="o">+</span>
+                          <span class="s1">'-'</span> <span class="o">+</span> <span class="nx">i</span><span class="o">;</span>
 
             <span class="k">if</span> <span class="o">(!</span><span class="nx">c</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">continue</span><span class="o">;</span>
             <span class="o">}</span>
             <span class="c">// Hide the container while its contents are rendered</span>
-<span class="c"></span>            <span class="nx">c</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span><span class="o">;</span>
+<span class="c"></span>            <span class="nx">c</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">'none'</span><span class="o">;</span>
 
             <span class="nx">Dom</span><span class="o">.</span><span class="nx">addClass</span><span class="o">(</span><span class="nx">c</span><span class="o">,</span><span class="nx">containerClass</span><span class="o">);</span>
 
             <span class="c">// Place the template innerHTML</span>
 <span class="c"></span>            <span class="nx">c</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">template</span><span class="o">;</span>
 
-            <span class="c">// Replace each marker with the ui component&#39;s render() output</span>
-<span class="c"></span>            <span class="k">var</span> <span class="nx">markers</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getElementsByClassName</span><span class="o">(</span><span class="s1">&#39;yui-pg-ui&#39;</span><span class="o">,</span><span class="s1">&#39;span&#39;</span><span class="o">,</span><span class="nx">c</span><span class="o">);</span>
+            <span class="c">// Replace each marker with the ui component's render() output</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">markers</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getElementsByClassName</span><span class="o">(</span><span class="s1">'yui-pg-ui'</span><span class="o">,</span><span class="s1">'span'</span><span class="o">,</span><span class="nx">c</span><span class="o">);</span>
 
             <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">jlen</span> <span class="o">=</span> <span class="nx">markers</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">jlen</span><span class="o">;</span> <span class="o">++</span><span class="nx">j</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">m</span>      <span class="o">=</span> <span class="nx">markers</span><span class="o">[</span><span class="nx">j</span><span class="o">],</span>
                     <span class="nx">mp</span>     <span class="o">=</span> <span class="nx">m</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">,</span>
-                    <span class="nx">name</span>   <span class="o">=</span> <span class="nx">m</span><span class="o">.</span><span class="nx">className</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/\s*yui-pg-ui\s+/g</span><span class="o">,</span><span class="s1">&#39;&#39;</span><span class="o">),</span>
+                    <span class="nx">name</span>   <span class="o">=</span> <span class="nx">m</span><span class="o">.</span><span class="nx">className</span><span class="o">.</span><span class="nx">replace</span><span class="o">(</span><span class="sr">/\s*yui-pg-ui\s+/g</span><span class="o">,</span><span class="s1">''</span><span class="o">),</span>
                     <span class="nx">UIComp</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Paginator</span><span class="o">.</span><span class="nx">ui</span><span class="o">[</span><span class="nx">name</span><span class="o">];</span>
 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isFunction</span><span class="o">(</span><span class="nx">UIComp</span><span class="o">))</span> <span class="o">{</span>
@@ -614,16 +605,16 @@
             <span class="o">}</span>
 
             <span class="c">// Show the container allowing page reflow</span>
-<span class="c"></span>            <span class="nx">c</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">;</span>
+<span class="c"></span>            <span class="nx">c</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s1">''</span><span class="o">;</span>
         <span class="o">}</span>
 
         <span class="c">// Set render attribute manually to support its readOnly contract</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_containers</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;rendered&#39;</span><span class="o">,{</span><span class="nx">value</span><span class="o">:</span><span class="kc">true</span><span class="o">});</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'rendered'</span><span class="o">,{</span><span class="nx">value</span><span class="o">:</span><span class="kc">true</span><span class="o">});</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;render&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">());</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'render'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">());</span>
             <span class="c">// For backward compatibility</span>
-<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;rendered&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">());</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'rendered'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">());</span>
         <span class="o">}</span>
     <span class="o">},</span>
 
@@ -632,10 +623,10 @@
 <span class="c">     * @method destroy</span>
 <span class="c">     */</span>
     <span class="nx">destroy</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;beforeDestroy&#39;</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;destroy&#39;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'beforeDestroy'</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'destroy'</span><span class="o">);</span>
 
-        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;rendered&#39;</span><span class="o">,{</span><span class="nx">value</span><span class="o">:</span><span class="kc">false</span><span class="o">});</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'rendered'</span><span class="o">,{</span><span class="nx">value</span><span class="o">:</span><span class="kc">false</span><span class="o">});</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -645,12 +636,12 @@
 <span class="c">     * @method updateVisibility</span>
 <span class="c">     */</span>
     <span class="nx">updateVisibility</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">alwaysVisible</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;alwaysVisible&#39;</span><span class="o">);</span>
-        <span class="k">if</span> <span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s1">&#39;alwaysVisibleChange&#39;</span> <span class="o">||</span> <span class="o">!</span><span class="nx">alwaysVisible</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">totalRecords</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">),</span>
+        <span class="k">var</span> <span class="nx">alwaysVisible</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'alwaysVisible'</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(</span><span class="nx">e</span><span class="o">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s1">'alwaysVisibleChange'</span> <span class="o">||</span> <span class="o">!</span><span class="nx">alwaysVisible</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">var</span> <span class="nx">totalRecords</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'totalRecords'</span><span class="o">),</span>
                 <span class="nx">visible</span> <span class="o">=</span> <span class="kc">true</span><span class="o">,</span>
-                <span class="nx">rpp</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">),</span>
-                <span class="nx">rppOptions</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPageOptions&#39;</span><span class="o">),</span>
+                <span class="nx">rpp</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">),</span>
+                <span class="nx">rppOptions</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rowsPerPageOptions'</span><span class="o">),</span>
                 <span class="nx">i</span><span class="o">,</span><span class="nx">len</span><span class="o">;</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">rppOptions</span><span class="o">))</span> <span class="o">{</span>
@@ -667,8 +658,8 @@
             <span class="nx">visible</span> <span class="o">=</span> <span class="nx">visible</span> <span class="o">||</span> <span class="nx">alwaysVisible</span><span class="o">;</span>
 
             <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">len</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_containers</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_containers</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span><span class="s1">&#39;display&#39;</span><span class="o">,</span>
-                    <span class="nx">visible</span> <span class="o">?</span> <span class="s1">&#39;&#39;</span> <span class="o">:</span> <span class="s1">&#39;none&#39;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_containers</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span><span class="s1">'display'</span><span class="o">,</span>
+                    <span class="nx">visible</span> <span class="o">?</span> <span class="s1">''</span> <span class="o">:</span> <span class="s1">'none'</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">},</span>
@@ -694,10 +685,10 @@
 <span class="c">     * @return {number}</span>
 <span class="c">     */</span>
     <span class="nx">getTotalPages</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">records</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">);</span>
-        <span class="k">var</span> <span class="nx">perPage</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">records</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'totalRecords'</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">perPage</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">);</span>
 
-        <span class="c">// rowsPerPage not set.  Can&#39;t calculate</span>
+        <span class="c">// rowsPerPage not set.  Can't calculate</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(!</span><span class="nx">perPage</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
         <span class="o">}</span>
@@ -731,11 +722,11 @@
 <span class="c">     * @return {number}</span>
 <span class="c">     */</span>
     <span class="nx">getCurrentPage</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">perPage</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">);</span>
-        <span class="k">if</span> <span class="o">(!</span><span class="nx">perPage</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">var</span> <span class="nx">perPage</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">);</span>
+        <span class="k">if</span> <span class="o">(!</span><span class="nx">perPage</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'totalRecords'</span><span class="o">))</span> <span class="o">{</span>
             <span class="k">return</span> <span class="m">0</span><span class="o">;</span>
         <span class="o">}</span>
-        <span class="k">return</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;recordOffset&#39;</span><span class="o">)</span> <span class="o">/</span> <span class="nx">perPage</span><span class="o">)</span> <span class="o">+</span> <span class="m">1</span><span class="o">;</span>
+        <span class="k">return</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'recordOffset'</span><span class="o">)</span> <span class="o">/</span> <span class="nx">perPage</span><span class="o">)</span> <span class="o">+</span> <span class="m">1</span><span class="o">;</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -790,8 +781,8 @@
             <span class="nx">page</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getCurrentPage</span><span class="o">();</span>
         <span class="o">}</span>
 
-        <span class="k">var</span> <span class="nx">perPage</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">),</span>
-            <span class="nx">records</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">),</span>
+        <span class="k">var</span> <span class="nx">perPage</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">),</span>
+            <span class="nx">records</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'totalRecords'</span><span class="o">),</span>
             <span class="nx">start</span><span class="o">,</span> <span class="nx">end</span><span class="o">;</span>
 
         <span class="k">if</span> <span class="o">(!</span><span class="nx">page</span> <span class="o">||</span> <span class="o">!</span><span class="nx">perPage</span><span class="o">)</span> <span class="o">{</span>
@@ -820,10 +811,10 @@
 <span class="c">     */</span>
     <span class="nx">setPage</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">page</span><span class="o">,</span><span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">hasPage</span><span class="o">(</span><span class="nx">page</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">page</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">getCurrentPage</span><span class="o">())</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;updateOnChange&#39;</span><span class="o">)</span> <span class="o">||</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;recordOffset&#39;</span><span class="o">,</span> <span class="o">(</span><span class="nx">page</span> <span class="o">-</span> <span class="m">1</span><span class="o">)</span> <span class="o">*</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">));</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'updateOnChange'</span><span class="o">)</span> <span class="o">||</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">'recordOffset'</span><span class="o">,</span> <span class="o">(</span><span class="nx">page</span> <span class="o">-</span> <span class="m">1</span><span class="o">)</span> <span class="o">*</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">));</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;changeRequest&#39;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">({</span><span class="s1">&#39;page&#39;</span><span class="o">:</span><span class="nx">page</span><span class="o">}));</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'changeRequest'</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">({</span><span class="s1">'page'</span><span class="o">:</span><span class="nx">page</span><span class="o">}));</span>
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">},</span>
@@ -834,7 +825,7 @@
 <span class="c">     * @return {number} the current setting of the rowsPerPage attribute</span>
 <span class="c">     */</span>
     <span class="nx">getRowsPerPage</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">);</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -846,12 +837,12 @@
 <span class="c">     */</span>
     <span class="nx">setRowsPerPage</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">rpp</span><span class="o">,</span><span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">rpp</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">rpp</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span>
-            <span class="nx">rpp</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;updateOnChange&#39;</span><span class="o">)</span> <span class="o">||</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">,</span><span class="nx">rpp</span><span class="o">);</span>
+            <span class="nx">rpp</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'updateOnChange'</span><span class="o">)</span> <span class="o">||</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">,</span><span class="nx">rpp</span><span class="o">);</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;changeRequest&#39;</span><span class="o">,</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">({</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">:</span><span class="nx">rpp</span><span class="o">}));</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'changeRequest'</span><span class="o">,</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">({</span><span class="s1">'rowsPerPage'</span><span class="o">:</span><span class="nx">rpp</span><span class="o">}));</span>
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">},</span>
@@ -862,7 +853,7 @@
 <span class="c">     * @return {number} the current setting of totalRecords attribute</span>
 <span class="c">     */</span>
     <span class="nx">getTotalRecords</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'totalRecords'</span><span class="o">);</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -873,12 +864,12 @@
 <span class="c">     */</span>
     <span class="nx">setTotalRecords</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">total</span><span class="o">,</span><span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">total</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">total</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span>
-            <span class="nx">total</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;updateOnChange&#39;</span><span class="o">)</span> <span class="o">||</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">,</span><span class="nx">total</span><span class="o">);</span>
+            <span class="nx">total</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'totalRecords'</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'updateOnChange'</span><span class="o">)</span> <span class="o">||</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">'totalRecords'</span><span class="o">,</span><span class="nx">total</span><span class="o">);</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;changeRequest&#39;</span><span class="o">,</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">({</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">:</span><span class="nx">total</span><span class="o">}));</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'changeRequest'</span><span class="o">,</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">({</span><span class="s1">'totalRecords'</span><span class="o">:</span><span class="nx">total</span><span class="o">}));</span>
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">},</span>
@@ -889,7 +880,7 @@
 <span class="c">     * @return {number} the index of the first record on the current page</span>
 <span class="c">     */</span>
     <span class="nx">getStartIndex</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;recordOffset&#39;</span><span class="o">);</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'recordOffset'</span><span class="o">);</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -901,12 +892,12 @@
 <span class="c">     */</span>
     <span class="nx">setStartIndex</span> <span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">offset</span><span class="o">,</span><span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">offset</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">offset</span> <span class="o">&gt;=</span> <span class="m">0</span> <span class="o">&amp;&amp;</span>
-            <span class="nx">offset</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;recordOffset&#39;</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;updateOnChange&#39;</span><span class="o">)</span> <span class="o">||</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;recordOffset&#39;</span><span class="o">,</span><span class="nx">offset</span><span class="o">);</span>
+            <span class="nx">offset</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'recordOffset'</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'updateOnChange'</span><span class="o">)</span> <span class="o">||</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">'recordOffset'</span><span class="o">,</span><span class="nx">offset</span><span class="o">);</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;changeRequest&#39;</span><span class="o">,</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">({</span><span class="s1">&#39;recordOffset&#39;</span><span class="o">:</span><span class="nx">offset</span><span class="o">}));</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'changeRequest'</span><span class="o">,</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">getState</span><span class="o">({</span><span class="s1">'recordOffset'</span><span class="o">:</span><span class="nx">offset</span><span class="o">}));</span>
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">},</span>
@@ -953,12 +944,12 @@
 
         <span class="nx">currentState</span> <span class="o">=</span> <span class="o">{</span>
             <span class="nx">paginator</span>    <span class="o">:</span> <span class="k">this</span><span class="o">,</span>
-            <span class="nx">totalRecords</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;totalRecords&#39;</span><span class="o">),</span>
-            <span class="nx">rowsPerPage</span>  <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">),</span>
+            <span class="nx">totalRecords</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'totalRecords'</span><span class="o">),</span>
+            <span class="nx">rowsPerPage</span>  <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">),</span>
             <span class="nx">records</span>      <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">getPageRecords</span><span class="o">()</span>
         <span class="o">};</span>
         <span class="nx">currentState</span><span class="o">.</span><span class="nx">recordOffset</span> <span class="o">=</span> <span class="nx">normalizeOffset</span><span class="o">(</span>
-                                        <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;recordOffset&#39;</span><span class="o">),</span>
+                                        <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'recordOffset'</span><span class="o">),</span>
                                         <span class="nx">currentState</span><span class="o">.</span><span class="nx">totalRecords</span><span class="o">,</span>
                                         <span class="nx">currentState</span><span class="o">.</span><span class="nx">rowsPerPage</span><span class="o">);</span>
         <span class="nx">currentState</span><span class="o">.</span><span class="nx">page</span> <span class="o">=</span> <span class="nx">ceil</span><span class="o">(</span><span class="nx">currentState</span><span class="o">.</span><span class="nx">recordOffset</span> <span class="o">/</span>
@@ -1034,7 +1025,7 @@
 <span class="c"></span>            <span class="c">// not using lang.isNumber for support of numeric strings</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">state</span><span class="o">.</span><span class="nx">page</span> <span class="o">&amp;&amp;</span> <span class="nx">state</span><span class="o">.</span><span class="nx">recordOffset</span> <span class="o">===</span> <span class="kc">undefined</span><span class="o">)</span> <span class="o">{</span>
                 <span class="nx">state</span><span class="o">.</span><span class="nx">recordOffset</span> <span class="o">=</span> <span class="o">(</span><span class="nx">state</span><span class="o">.</span><span class="nx">page</span> <span class="o">-</span> <span class="m">1</span><span class="o">)</span> <span class="o">*</span>
-                    <span class="o">(</span><span class="nx">state</span><span class="o">.</span><span class="nx">rowsPerPage</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;rowsPerPage&#39;</span><span class="o">));</span>
+                    <span class="o">(</span><span class="nx">state</span><span class="o">.</span><span class="nx">rowsPerPage</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'rowsPerPage'</span><span class="o">));</span>
             <span class="o">}</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">_batch</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
@@ -1067,9 +1058,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -1142,13 +1131,11 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.Paginator.html">YAHOO.widget.Paginator</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.Paginator.html">YAHOO.widget.Paginator</a></li>
                                 <li class=""><a href="YAHOO.widget.Paginator.ui.CurrentPageReport.html">YAHOO.widget.Paginator.ui.CurrentPageReport</a></li>
                                 <li class=""><a href="YAHOO.widget.Paginator.ui.FirstPageLink.html">YAHOO.widget.Paginator.ui.FirstPageLink</a></li>
                                 <li class=""><a href="YAHOO.widget.Paginator.ui.LastPageLink.html">YAHOO.widget.Paginator.ui.LastPageLink</a></li>
@@ -1156,13 +1143,11 @@
                                 <li class=""><a href="YAHOO.widget.Paginator.ui.PageLinks.html">YAHOO.widget.Paginator.ui.PageLinks</a></li>
                                 <li class=""><a href="YAHOO.widget.Paginator.ui.PreviousPageLink.html">YAHOO.widget.Paginator.ui.PreviousPageLink</a></li>
                                 <li class=""><a href="YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html">YAHOO.widget.Paginator.ui.RowsPerPageDropdown</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="CurrentPageReport.js.html">CurrentPageReport.js</a></li>
+                        <ul class="content"><li class=""><a href="CurrentPageReport.js.html">CurrentPageReport.js</a></li>
                                 <li class=""><a href="FirstPageLink.js.html">FirstPageLink.js</a></li>
                                 <li class=""><a href="LastPageLink.js.html">LastPageLink.js</a></li>
                                 <li class=""><a href="NextPageLink.js.html">NextPageLink.js</a></li>
@@ -1170,8 +1155,7 @@
                                 <li class="selected"><a href="Paginator.js.html">Paginator.js</a></li>
                                 <li class=""><a href="PreviousPageLink.js.html">PreviousPageLink.js</a></li>
                                 <li class=""><a href="RowsPerPageDropDown.js.html">RowsPerPageDropDown.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -1181,9 +1165,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2008 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

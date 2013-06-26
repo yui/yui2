@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: element   Attribute.js  (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: element   Attribute.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>element&nbsp; <span class="subtitle">2.8.1</span></h3>
+        <h3>element  <span class="subtitle">2.8.1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_element.html" title="element">element</a>
                 
                  &gt; Attribute.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,19 +22,16 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <div id="srcout">
                         <style>
                             #doc3 .classopts { display:none; }
-                        </style>
-                        <div class="highlight"><pre><span class="cm">/**</span>
+                        </style><div class="highlight"><pre><span class="cm">/**</span>
 <span class="cm"> * Provides Attribute configurations.</span>
 <span class="cm"> * @namespace YAHOO.util</span>
 <span class="cm"> * @class Attribute</span>
@@ -100,7 +84,7 @@
     <span class="nx">writeOnce</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * The attribute&#39;s initial configuration.</span>
+<span class="cm">     * The attribute's initial configuration.</span>
 <span class="cm">     * @private</span>
 <span class="cm">     * @property _initialConfig</span>
 <span class="cm">     * @type Object</span>
@@ -108,7 +92,7 @@
     <span class="nx">_initialConfig</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
     
     <span class="cm">/**</span>
-<span class="cm">     * Whether or not the attribute&#39;s value has been set.</span>
+<span class="cm">     * Whether or not the attribute's value has been set.</span>
 <span class="cm">     * @private</span>
 <span class="cm">     * @property _written</span>
 <span class="cm">     * @type Boolean</span>
@@ -116,7 +100,7 @@
     <span class="nx">_written</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
     
     <span class="cm">/**</span>
-<span class="cm">     * A function to call when setting the attribute&#39;s value.</span>
+<span class="cm">     * A function to call when setting the attribute's value.</span>
 <span class="cm">     * The method receives the new value as the first arg and the attribute name as the 2nd</span>
 <span class="cm">     * @property method</span>
 <span class="cm">     * @type Function</span>
@@ -124,7 +108,7 @@
     <span class="nx">method</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
     
     <span class="cm">/**</span>
-<span class="cm">     * The function to use when setting the attribute&#39;s value.</span>
+<span class="cm">     * The function to use when setting the attribute's value.</span>
 <span class="cm">     * The setter receives the new value as the first arg and the attribute name as the 2nd</span>
 <span class="cm">     * The return value of the setter replaces the value passed to set(). </span>
 <span class="cm">     * @property setter</span>
@@ -133,7 +117,7 @@
     <span class="nx">setter</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
     
     <span class="cm">/**</span>
-<span class="cm">     * The function to use when getting the attribute&#39;s value.</span>
+<span class="cm">     * The function to use when getting the attribute's value.</span>
 <span class="cm">     * The getter receives the new value as the first arg and the attribute name as the 2nd</span>
 <span class="cm">     * The return value of the getter will be used as the return from get().</span>
 <span class="cm">     * @property getter</span>
@@ -142,7 +126,7 @@
     <span class="nx">getter</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * The validator to use when setting the attribute&#39;s value.</span>
+<span class="cm">     * The validator to use when setting the attribute's value.</span>
 <span class="cm">     * @property validator</span>
 <span class="cm">     * @type Function</span>
 <span class="cm">     * @return Boolean</span>
@@ -183,22 +167,22 @@
         <span class="p">};</span>
         
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">readOnly</span> <span class="o">||</span> <span class="p">(</span> <span class="k">this</span><span class="p">.</span><span class="nx">writeOnce</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">_written</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">&#39;setValue &#39;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span>  <span class="nx">value</span> <span class="o">+</span>
-                    <span class="s1">&#39; failed: read only&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="s1">&#39;Attribute&#39;</span><span class="p">);</span>
+            <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">'setValue '</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">', '</span> <span class="o">+</span>  <span class="nx">value</span> <span class="o">+</span>
+                    <span class="s1">' failed: read only'</span><span class="p">,</span> <span class="s1">'error'</span><span class="p">,</span> <span class="s1">'Attribute'</span><span class="p">);</span>
             <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// write not allowed</span>
         <span class="p">}</span>
         
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">validator</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">validator</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">owner</span><span class="p">,</span> <span class="nx">value</span><span class="p">)</span> <span class="p">)</span> <span class="p">{</span>
-            <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">&#39;setValue &#39;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span>
-                    <span class="s1">&#39; validation failed&#39;</span><span class="p">,</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span> <span class="s1">&#39;Attribute&#39;</span><span class="p">);</span>
+            <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="s1">'setValue '</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> <span class="s1">', '</span> <span class="o">+</span> <span class="nx">value</span> <span class="o">+</span>
+                    <span class="s1">' validation failed'</span><span class="p">,</span> <span class="s1">'error'</span><span class="p">,</span> <span class="s1">'Attribute'</span><span class="p">);</span>
             <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// invalid value</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">silent</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">beforeRetVal</span> <span class="o">=</span> <span class="nx">owner</span><span class="p">.</span><span class="nx">fireBeforeChangeEvent</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">beforeRetVal</span> <span class="o">===</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;setValue &#39;</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> 
-                        <span class="s1">&#39; cancelled by beforeChange event&#39;</span><span class="p">,</span> <span class="s1">&#39;info&#39;</span><span class="p">,</span> <span class="s1">&#39;Attribute&#39;</span><span class="p">);</span>
+                <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'setValue '</span> <span class="o">+</span> <span class="nx">name</span> <span class="o">+</span> 
+                        <span class="s1">' cancelled by beforeChange event'</span><span class="p">,</span> <span class="s1">'info'</span><span class="p">,</span> <span class="s1">'Attribute'</span><span class="p">);</span>
                 <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
@@ -206,7 +190,7 @@
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">setter</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">setter</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">owner</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">value</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;setter for &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39; returned undefined&#39;</span><span class="p">,</span> <span class="s1">&#39;warn&#39;</span><span class="p">,</span> <span class="s1">&#39;Attribute&#39;</span><span class="p">);</span>
+                <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'setter for '</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">' returned undefined'</span><span class="p">,</span> <span class="s1">'warn'</span><span class="p">,</span> <span class="s1">'Attribute'</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
         
@@ -227,7 +211,7 @@
     <span class="p">},</span>
     
     <span class="cm">/**</span>
-<span class="cm">     * Allows for configuring the Attribute&#39;s properties.</span>
+<span class="cm">     * Allows for configuring the Attribute's properties.</span>
 <span class="cm">     * @method configure</span>
 <span class="cm">     * @param {Object} map A key-value map of Attribute properties.</span>
 <span class="cm">     * @param {Boolean} init Whether or not this should become the initial config.</span>
@@ -288,8 +272,7 @@
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -337,26 +320,21 @@
                                 <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.Attribute.html" title="YAHOO.util.Attribute">YAHOO.util.Attribute</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.Attribute.html" title="YAHOO.util.Attribute">YAHOO.util.Attribute</a></li>
                                 <li class=""><a href="YAHOO.util.AttributeProvider.html" title="YAHOO.util.AttributeProvider">YAHOO.util.AttributeProvider</a></li>
                                 <li class=""><a href="YAHOO.util.Element.html" title="YAHOO.util.Element">YAHOO.util.Element</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="Attribute.js.html" title="Attribute.js">Attribute.js</a></li>
+                        <ul class="content"><li class="selected"><a href="Attribute.js.html" title="Attribute.js">Attribute.js</a></li>
                                 <li class=""><a href="AttributeProvider.js.html" title="AttributeProvider.js">AttributeProvider.js</a></li>
                                 <li class=""><a href="Element.js.html" title="Element.js">Element.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -366,13 +344,10 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2010 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2010 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
 
     var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.util.Element", "name": "addClass", "url": "YAHOO.util.Element.html#method_addClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "addListener", "url": "YAHOO.util.Element.html#method_addListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendChild", "url": "YAHOO.util.Element.html#method_appendChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendTo", "url": "YAHOO.util.Element.html#method_appendTo", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "appendTo", "url": "YAHOO.util.Element.html#event_appendTo", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "available", "url": "YAHOO.util.Element.html#event_available", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "beforeAppendTo", "url": "YAHOO.util.Element.html#event_beforeAppendTo", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "beforeElementChange", "url": "YAHOO.util.Element.html#event_beforeElementChange", "type": "event"}, {"access": "private", "host": "YAHOO.util.AttributeProvider", "name": "_configs", "url": "YAHOO.util.AttributeProvider.html#property__configs", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "configure", "url": "YAHOO.util.Attribute.html#method_configure", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "configureAttribute", "url": "YAHOO.util.AttributeProvider.html#method_configureAttribute", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "contentReady", "url": "YAHOO.util.Element.html#event_contentReady", "type": "event"}, {"access": "", "host": "YAHOO.util.Element", "name": "delegate", "url": "YAHOO.util.Element.html#method_delegate", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "DOM_EVENTS", "url": "YAHOO.util.Element.html#property_DOM_EVENTS", "type": "property"}, {"access": "", "host": "YAHOO.util.Element", "name": "element", "url": "YAHOO.util.Element.html#config_element", "type": "config"}, {"access": "", "host": "YAHOO.util.Element", "name": "elementChange", "url": "YAHOO.util.Element.html#event_elementChange", "type": "event"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "fireBeforeChangeEvent", "url": "YAHOO.util.AttributeProvider.html#method_fireBeforeChangeEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "fireChangeEvent", "url": "YAHOO.util.AttributeProvider.html#method_fireChangeEvent", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "fireQueue", "url": "YAHOO.util.Element.html#method_fireQueue", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "get", "url": "YAHOO.util.AttributeProvider.html#method_get", "type": "method"}, {"access": "private", "host": "YAHOO.util.AttributeProvider", "name": "getAttributeConfig", "url": "YAHOO.util.AttributeProvider.html#method_getAttributeConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "getAttributeKeys", "url": "YAHOO.util.AttributeProvider.html#method_getAttributeKeys", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getElementsByClassName", "url": "YAHOO.util.Element.html#method_getElementsByClassName", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getElementsByTagName", "url": "YAHOO.util.Element.html#method_getElementsByTagName", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "getStyle", "url": "YAHOO.util.Element.html#method_getStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "getter", "url": "YAHOO.util.Attribute.html#property_getter", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "getValue", "url": "YAHOO.util.Attribute.html#method_getValue", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "hasChildNodes", "url": "YAHOO.util.Element.html#method_hasChildNodes", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "hasClass", "url": "YAHOO.util.Element.html#method_hasClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "initAttributes", "url": "YAHOO.util.Element.html#method_initAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.util.Attribute", "name": "_initialConfig", "url": "YAHOO.util.Attribute.html#property__initialConfig", "type": "property"}, {"access": "", "host": "YAHOO.util.Element", "name": "insertBefore", "url": "YAHOO.util.Element.html#method_insertBefore", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "method", "url": "YAHOO.util.Attribute.html#property_method", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "name", "url": "YAHOO.util.Attribute.html#property_name", "type": "property"}, {"access": "", "host": "YAHOO.util.Element", "name": "on", "url": "YAHOO.util.Element.html#method_on", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "owner", "url": "YAHOO.util.Attribute.html#property_owner", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "readOnly", "url": "YAHOO.util.Attribute.html#property_readOnly", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "refresh", "url": "YAHOO.util.Attribute.html#method_refresh", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "refresh", "url": "YAHOO.util.AttributeProvider.html#method_refresh", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "register", "url": "YAHOO.util.AttributeProvider.html#method_register", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeChild", "url": "YAHOO.util.Element.html#method_removeChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeClass", "url": "YAHOO.util.Element.html#method_removeClass", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeDelegate", "url": "YAHOO.util.Element.html#method_removeDelegate", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "removeListener", "url": "YAHOO.util.Element.html#method_removeListener", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "replaceChild", "url": "YAHOO.util.Element.html#method_replaceChild", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "replaceClass", "url": "YAHOO.util.Element.html#method_replaceClass", "type": "method"}, {"access": "private", "host": "YAHOO.util.AttributeProvider", "name": "resetAttributeConfig", "url": "YAHOO.util.AttributeProvider.html#method_resetAttributeConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "resetConfig", "url": "YAHOO.util.Attribute.html#method_resetConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "resetValue", "url": "YAHOO.util.Attribute.html#method_resetValue", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "resetValue", "url": "YAHOO.util.AttributeProvider.html#method_resetValue", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "set", "url": "YAHOO.util.AttributeProvider.html#method_set", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "setAttributeConfig", "url": "YAHOO.util.AttributeProvider.html#method_setAttributeConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.AttributeProvider", "name": "setAttributes", "url": "YAHOO.util.AttributeProvider.html#method_setAttributes", "type": "method"}, {"access": "private", "host": "YAHOO.util.Element", "name": "_setHTMLAttrConfig", "url": "YAHOO.util.Element.html#method__setHTMLAttrConfig", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "setStyle", "url": "YAHOO.util.Element.html#method_setStyle", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "setter", "url": "YAHOO.util.Attribute.html#property_setter", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "setValue", "url": "YAHOO.util.Attribute.html#method_setValue", "type": "method"}, {"access": "", "host": "YAHOO.util.Element", "name": "subscribe", "url": "YAHOO.util.Element.html#method_subscribe", "type": "method"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "validator", "url": "YAHOO.util.Attribute.html#property_validator", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "value", "url": "YAHOO.util.Attribute.html#property_value", "type": "property"}, {"access": "", "host": "YAHOO.util.Attribute", "name": "writeOnce", "url": "YAHOO.util.Attribute.html#property_writeOnce", "type": "property"}, {"access": "private", "host": "YAHOO.util.Attribute", "name": "_written", "url": "YAHOO.util.Attribute.html#property__written", "type": "property"}];
-</script>
-</body>
-</html>
+</script></body>

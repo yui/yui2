@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Using Interaction Groups</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Using Interaction Groups</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,15 +8,7 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script><!--begin custom header content for this example--><style type="text/css">
 .slot { border:2px solid #aaaaaa; background-color:#dddddd; color:#666666; text-align:center; position: absolute; width:60px; height:60px; }
 .player { border:2px solid #bbbbbb; color:#eeeeee; text-align:center; position: absolute; width:60px; height:60px; }
 .target { border:2px solid #574188; background-color:#cccccc; text-align:center; position: absolute; width:60px; height:60px; }
@@ -51,52 +35,33 @@ body {
     position: relative;
     height: 300px;
 }
-</style>
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Using Interaction Groups</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Using Interaction Groups</h1><div class="exampleIntro">
 	<p>Using interaction groups, this example demonstrates how to 
 tie into the <a href="http://developer.yahoo.com/yui/dragdrop/">Drag &amp; Drop Utility</a>'s interesting moments to provide visual 
 affordances for the current drag operation.</p>
 			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<div id="usercontrols">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><div id="usercontrols">
 Interaction Mode:
-<select id="ddmode" >
-  <option value="0" selected>Point</option>
-  <option value="1">Intersect</option>
-</select>
-</div>
-<div id="workarea">
+<select id="ddmode"><option value="0" selected>Point</option><option value="1">Intersect</option></select></div><div id="workarea">
 
-<div class="slot" id="t1" >1</div>
-<div class="slot" id="t2" >2</div>
-<div class="slot" id="b1" >3</div>
-<div class="slot" id="b2" >4</div>
-<div class="slot" id="b3" >5</div>
-<div class="slot" id="b4" >6</div>
+<div class="slot" id="t1">1</div>
+<div class="slot" id="t2">2</div>
+<div class="slot" id="b1">3</div>
+<div class="slot" id="b2">4</div>
+<div class="slot" id="b3">5</div>
+<div class="slot" id="b4">6</div>
 
-<div class="player" id="pt1" >1</div>
-<div class="player" id="pt2" >2</div>
-<div class="player" id="pb1" >3</div>
-<div class="player" id="pb2" >4</div>
-<div class="player" id="pboth1" >5</div>
-<div class="player" id="pboth2" >6</div>
+<div class="player" id="pt1">1</div>
+<div class="player" id="pt2">2</div>
+<div class="player" id="pb1">3</div>
+<div class="player" id="pb2">4</div>
+<div class="player" id="pboth1">5</div>
+<div class="player" id="pboth2">6</div>
 
-</div>
-
-<script type="text/javascript">
+</div><script type="text/javascript">
 (function() {
 
 YAHOO.example.DDPlayer = function(id, sGroup, config) {
@@ -283,9 +248,4 @@ Event.onDOMReady(function() {
 });
 
 })();
-</script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

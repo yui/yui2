@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: yuitest   TestReporter.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: yuitest   TestReporter.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>yuitest&nbsp; <span class="subtitle">2.5.2</span></h3>
+        <h3>yuitest  <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_yuitest.html">yuitest</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">&quot;tool&quot;</span><span class="o">);</span>
+                        </style><div class="highlight"><pre><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">namespace</span><span class="o">(</span><span class="s2">"tool"</span><span class="o">);</span>
 
 <span class="c">/**</span>
 <span class="c"> * An object capable of sending test results to a server.</span>
@@ -138,33 +129,33 @@
 <span class="c">     */</span>
     <span class="nx">report</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">results</span> <span class="c">/*:Object*/</span><span class="o">)</span> <span class="c">/*:Void*/</span><span class="o">{</span>
     
-        <span class="c">//if the form hasn&#39;t been created yet, create it</span>
+        <span class="c">//if the form hasn't been created yet, create it</span>
 <span class="c"></span>        <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_form</span><span class="o">){</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_form</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;form&quot;</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_form</span><span class="o">.</span><span class="nx">method</span> <span class="o">=</span> <span class="s2">&quot;post&quot;</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_form</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_form</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">position</span> <span class="o">=</span> <span class="s2">&quot;absolute&quot;</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_form</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">"form"</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_form</span><span class="o">.</span><span class="nx">method</span> <span class="o">=</span> <span class="s2">"post"</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_form</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">"hidden"</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_form</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">position</span> <span class="o">=</span> <span class="s2">"absolute"</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_form</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
             <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_form</span><span class="o">);</span>
         
-            <span class="c">//IE won&#39;t let you assign a name using the DOM, must do it the hacky way</span>
+            <span class="c">//IE won't let you assign a name using the DOM, must do it the hacky way</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">){</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;&lt;iframe name=\&quot;yuiTestTarget\&quot; /&gt;&quot;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">"&lt;iframe name=\"yuiTestTarget\" /&gt;"</span><span class="o">);</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;iframe&quot;</span><span class="o">);</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span><span class="o">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;yuiTestTarget&quot;</span><span class="o">;</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">"iframe"</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span><span class="o">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s2">"yuiTestTarget"</span><span class="o">;</span>
             <span class="o">}</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span><span class="o">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">&quot;javascript:false&quot;</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">position</span> <span class="o">=</span> <span class="s2">&quot;absolute&quot;</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span><span class="o">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">"javascript:false"</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">"hidden"</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">position</span> <span class="o">=</span> <span class="s2">"absolute"</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
             <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_iframe</span><span class="o">);</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">_form</span><span class="o">.</span><span class="nx">target</span> <span class="o">=</span> <span class="s2">&quot;yuiTestTarget&quot;</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_form</span><span class="o">.</span><span class="nx">target</span> <span class="o">=</span> <span class="s2">"yuiTestTarget"</span><span class="o">;</span>
         <span class="o">}</span>
 
-        <span class="c">//set the form&#39;s action</span>
+        <span class="c">//set the form's action</span>
 <span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">_form</span><span class="o">.</span><span class="nx">action</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">url</span><span class="o">;</span>
     
         <span class="c">//remove any existing fields</span>
@@ -179,14 +170,14 @@
 
         <span class="c">//add fields to the form</span>
 <span class="c"></span>        <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">prop</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">_fields</span><span class="o">){</span>
-            <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_fields</span><span class="o">,</span> <span class="nx">prop</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="k">this</span><span class="o">.</span><span class="nx">_fields</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">!=</span> <span class="s2">&quot;function&quot;</span><span class="o">){</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_fields</span><span class="o">,</span> <span class="nx">prop</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="k">this</span><span class="o">.</span><span class="nx">_fields</span><span class="o">[</span><span class="nx">prop</span><span class="o">]</span> <span class="o">!=</span> <span class="s2">"function"</span><span class="o">){</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">){</span>
-                    <span class="nx">input</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;&lt;input name=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">prop</span> <span class="o">+</span> <span class="s2">&quot;\&quot; &gt;&quot;</span><span class="o">);</span>
+                    <span class="nx">input</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">"&lt;input name=\""</span> <span class="o">+</span> <span class="nx">prop</span> <span class="o">+</span> <span class="s2">"\" &gt;"</span><span class="o">);</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="nx">input</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;input&quot;</span><span class="o">);</span>
+                    <span class="nx">input</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">"input"</span><span class="o">);</span>
                     <span class="nx">input</span><span class="o">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">prop</span><span class="o">;</span>
                 <span class="o">}</span>
-                <span class="nx">input</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">;</span>
+                <span class="nx">input</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">"hidden"</span><span class="o">;</span>
                 <span class="nx">input</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_fields</span><span class="o">[</span><span class="nx">prop</span><span class="o">];</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_form</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">input</span><span class="o">);</span>
             <span class="o">}</span>
@@ -213,9 +204,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -284,13 +273,11 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class="selected"><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.tool.TestCase.html">YAHOO.tool.TestCase</a></li>
                                 <li class=""><a href="YAHOO.tool.TestCase.Wait.html">YAHOO.tool.TestCase.Wait</a></li>
                                 <li class=""><a href="YAHOO.tool.TestLogger.html">YAHOO.tool.TestLogger</a></li>
                                 <li class=""><a href="YAHOO.tool.TestManager.html">YAHOO.tool.TestManager</a></li>
@@ -309,13 +296,11 @@
                                 <li class=""><a href="YAHOO.util.UnexpectedError.html">YAHOO.util.UnexpectedError</a></li>
                                 <li class=""><a href="YAHOO.util.UnexpectedValue.html">YAHOO.util.UnexpectedValue</a></li>
                                 <li class=""><a href="YAHOO.util.UserAction.html">YAHOO.util.UserAction</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
+                        <ul class="content"><li class=""><a href="ArrayAssert.js.html">ArrayAssert.js</a></li>
                                 <li class=""><a href="Assert.js.html">Assert.js</a></li>
                                 <li class=""><a href="DateAssert.js.html">DateAssert.js</a></li>
                                 <li class=""><a href="ObjectAssert.js.html">ObjectAssert.js</a></li>
@@ -327,8 +312,7 @@
                                 <li class=""><a href="TestRunner.js.html">TestRunner.js</a></li>
                                 <li class=""><a href="TestSuite.js.html">TestSuite.js</a></li>
                                 <li class=""><a href="UserAction.js.html">UserAction.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -338,9 +322,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

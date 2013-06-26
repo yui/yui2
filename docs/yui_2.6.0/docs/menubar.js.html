@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: menu   menubar.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: menu   menubar.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Menu&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <h3>Menu  <span class="subtitle">2.6.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_menu.html">menu</a>
@@ -28,31 +20,30 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
-    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"><label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"><label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated"><label for="showdeprecated">Show Deprecated</label></span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                        </style><div class="highlight"><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
 	<span class="k">var</span> <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
 
 		<span class="c">// String constants</span>
 <span class="c"></span>	
-		<span class="nx">_STATIC</span> <span class="o">=</span> <span class="s2">&quot;static&quot;</span><span class="o">,</span>
-		<span class="nx">_DYNAMIC_STATIC</span> <span class="o">=</span> <span class="s2">&quot;dynamic,&quot;</span> <span class="o">+</span> <span class="nx">_STATIC</span><span class="o">,</span>
-		<span class="nx">_DISABLED</span> <span class="o">=</span> <span class="s2">&quot;disabled&quot;</span><span class="o">,</span>
-		<span class="nx">_SELECTED</span> <span class="o">=</span> <span class="s2">&quot;selected&quot;</span><span class="o">,</span>
-		<span class="nx">_AUTO_SUBMENU_DISPLAY</span> <span class="o">=</span> <span class="s2">&quot;autosubmenudisplay&quot;</span><span class="o">,</span>
-		<span class="nx">_SUBMENU</span> <span class="o">=</span> <span class="s2">&quot;submenu&quot;</span><span class="o">,</span>
-		<span class="nx">_VISIBLE</span> <span class="o">=</span> <span class="s2">&quot;visible&quot;</span><span class="o">,</span>
-		<span class="nx">_SPACE</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">,</span>
-		<span class="nx">_SUBMENU_TOGGLE_REGION</span> <span class="o">=</span> <span class="s2">&quot;submenutoggleregion&quot;</span><span class="o">,</span>
-		<span class="nx">_MENUBAR</span> <span class="o">=</span> <span class="s2">&quot;MenuBar&quot;</span><span class="o">;</span>
+		<span class="nx">_STATIC</span> <span class="o">=</span> <span class="s2">"static"</span><span class="o">,</span>
+		<span class="nx">_DYNAMIC_STATIC</span> <span class="o">=</span> <span class="s2">"dynamic,"</span> <span class="o">+</span> <span class="nx">_STATIC</span><span class="o">,</span>
+		<span class="nx">_DISABLED</span> <span class="o">=</span> <span class="s2">"disabled"</span><span class="o">,</span>
+		<span class="nx">_SELECTED</span> <span class="o">=</span> <span class="s2">"selected"</span><span class="o">,</span>
+		<span class="nx">_AUTO_SUBMENU_DISPLAY</span> <span class="o">=</span> <span class="s2">"autosubmenudisplay"</span><span class="o">,</span>
+		<span class="nx">_SUBMENU</span> <span class="o">=</span> <span class="s2">"submenu"</span><span class="o">,</span>
+		<span class="nx">_VISIBLE</span> <span class="o">=</span> <span class="s2">"visible"</span><span class="o">,</span>
+		<span class="nx">_SPACE</span> <span class="o">=</span> <span class="s2">" "</span><span class="o">,</span>
+		<span class="nx">_SUBMENU_TOGGLE_REGION</span> <span class="o">=</span> <span class="s2">"submenutoggleregion"</span><span class="o">,</span>
+		<span class="nx">_MENUBAR</span> <span class="o">=</span> <span class="s2">"MenuBar"</span><span class="o">;</span>
 
 <span class="c">/**</span>
 <span class="c">* Horizontal collection of items, each of which can contain a submenu.</span>
@@ -62,11 +53,11 @@
 <span class="c">* @param {String} p_oElement String specifying the id attribute of the </span>
 <span class="c">* &lt;code&gt;&amp;#60;select&amp;#62;&lt;/code&gt; element to be used as the data source for the </span>
 <span class="c">* menu bar.</span>
-<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="c">* one-html.html#ID-22445964&quot;&gt;HTMLDivElement&lt;/a&gt;} p_oElement Object specifying </span>
+<span class="c">* @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-22445964"&gt;HTMLDivElement&lt;/a&gt;} p_oElement Object specifying </span>
 <span class="c">* the &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element of the menu bar.</span>
-<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="c">* one-html.html#ID-94282980&quot;&gt;HTMLSelectElement&lt;/a&gt;} p_oElement Object </span>
+<span class="c">* @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-94282980"&gt;HTMLSelectElement&lt;/a&gt;} p_oElement Object </span>
 <span class="c">* specifying the &lt;code&gt;&amp;#60;select&amp;#62;&lt;/code&gt; element to be used as the data </span>
 <span class="c">* source for the menu bar.</span>
 <span class="c">* @param {Object} p_oConfig Optional. Object literal specifying the </span>
@@ -86,7 +77,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method checkPosition</span>
-<span class="c">* @description Checks to make sure that the value of the &quot;position&quot; property </span>
+<span class="c">* @description Checks to make sure that the value of the "position" property </span>
 <span class="c">* is one of the supported strings. Returns true if the position is supported.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {Object} p_sPosition String specifying the position of the menu.</span>
@@ -111,15 +102,15 @@
     <span class="nx">MenuBar</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">MenuBar</span><span class="o">,</span>
 
     <span class="nx">POSITION_CONFIG</span> <span class="o">=</span>  <span class="o">{</span> 
-		<span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;position&quot;</span><span class="o">,</span> 
+		<span class="nx">key</span><span class="o">:</span> <span class="s2">"position"</span><span class="o">,</span> 
 		<span class="nx">value</span><span class="o">:</span> <span class="nx">_STATIC</span><span class="o">,</span> 
 		<span class="nx">validator</span><span class="o">:</span> <span class="nx">checkPosition</span><span class="o">,</span> 
 		<span class="nx">supercedes</span><span class="o">:</span> <span class="o">[</span><span class="nx">_VISIBLE</span><span class="o">]</span> 
 	<span class="o">},</span> 
 
 	<span class="nx">SUBMENU_ALIGNMENT_CONFIG</span> <span class="o">=</span>  <span class="o">{</span> 
-		<span class="nx">key</span><span class="o">:</span> <span class="s2">&quot;submenualignment&quot;</span><span class="o">,</span> 
-		<span class="nx">value</span><span class="o">:</span> <span class="o">[</span><span class="s2">&quot;tl&quot;</span><span class="o">,</span><span class="s2">&quot;bl&quot;</span><span class="o">]</span>
+		<span class="nx">key</span><span class="o">:</span> <span class="s2">"submenualignment"</span><span class="o">,</span> 
+		<span class="nx">value</span><span class="o">:</span> <span class="o">[</span><span class="s2">"tl"</span><span class="o">,</span><span class="s2">"bl"</span><span class="o">]</span>
 	<span class="o">},</span>
 
 	<span class="nx">AUTO_SUBMENU_DISPLAY_CONFIG</span> <span class="o">=</span>  <span class="o">{</span> 
@@ -141,7 +132,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method init</span>
-<span class="c">* @description The MenuBar class&#39;s initialization method. This method is </span>
+<span class="c">* @description The MenuBar class's initialization method. This method is </span>
 <span class="c">* automatically called by the constructor, and sets up all DOM references for </span>
 <span class="c">* pre-existing markup, and creates required markup if it is not already present.</span>
 <span class="c">* @param {String} p_oElement String specifying the id attribute of the </span>
@@ -149,11 +140,11 @@
 <span class="c">* @param {String} p_oElement String specifying the id attribute of the </span>
 <span class="c">* &lt;code&gt;&amp;#60;select&amp;#62;&lt;/code&gt; element to be used as the data source for the </span>
 <span class="c">* menu bar.</span>
-<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="c">* one-html.html#ID-22445964&quot;&gt;HTMLDivElement&lt;/a&gt;} p_oElement Object specifying </span>
+<span class="c">* @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-22445964"&gt;HTMLDivElement&lt;/a&gt;} p_oElement Object specifying </span>
 <span class="c">* the &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element of the menu bar.</span>
-<span class="c">* @param {&lt;a href=&quot;http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
-<span class="c">* one-html.html#ID-94282980&quot;&gt;HTMLSelectElement&lt;/a&gt;} p_oElement Object </span>
+<span class="c">* @param {&lt;a href="http://www.w3.org/TR/2000/WD-DOM-Level-1-20000929/level-</span>
+<span class="c">* one-html.html#ID-94282980"&gt;HTMLSelectElement&lt;/a&gt;} p_oElement Object </span>
 <span class="c">* specifying the &lt;code&gt;&amp;#60;select&amp;#62;&lt;/code&gt; element to be used as the data </span>
 <span class="c">* source for the menu bar.</span>
 <span class="c">* @param {Object} p_oConfig Optional. Object literal specifying the </span>
@@ -195,18 +186,18 @@
 <span class="c">/**</span>
 <span class="c">* @property CSS_CLASS_NAME</span>
 <span class="c">* @description String representing the CSS class(es) to be applied to the menu </span>
-<span class="c">* bar&#39;s &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element.</span>
-<span class="c">* @default &quot;yuimenubar&quot;</span>
+<span class="c">* bar's &lt;code&gt;&amp;#60;div&amp;#62;&lt;/code&gt; element.</span>
+<span class="c">* @default "yuimenubar"</span>
 <span class="c">* @final</span>
 <span class="c">* @type String</span>
 <span class="c">*/</span>
-<span class="nx">CSS_CLASS_NAME</span><span class="o">:</span> <span class="s2">&quot;yuimenubar&quot;</span><span class="o">,</span>
+<span class="nx">CSS_CLASS_NAME</span><span class="o">:</span> <span class="s2">"yuimenubar"</span><span class="o">,</span>
 
 
 <span class="c">/**</span>
 <span class="c">* @property SUBMENU_TOGGLE_REGION_WIDTH</span>
 <span class="c">* @description Width (in pixels) of the area of a MenuBarItem that, when pressed, will toggle the</span>
-<span class="c">* display of the MenuBarItem&#39;s submenu.</span>
+<span class="c">* display of the MenuBarItem's submenu.</span>
 <span class="c">* @default 20</span>
 <span class="c">* @final</span>
 <span class="c">* @type Number</span>
@@ -219,7 +210,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onKeyDown</span>
-<span class="c">* @description &quot;keydown&quot; Custom Event handler for the menu bar.</span>
+<span class="c">* @description "keydown" Custom Event handler for the menu bar.</span>
 <span class="c">* @private</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -347,7 +338,7 @@
 
 <span class="c">/**</span>
 <span class="c">* @method _onClick</span>
-<span class="c">* @description &quot;click&quot; event handler for the menu bar.</span>
+<span class="c">* @description "click" event handler for the menu bar.</span>
 <span class="c">* @protected</span>
 <span class="c">* @param {String} p_sType String representing the name of the event that </span>
 <span class="c">* was fired.</span>
@@ -456,7 +447,7 @@
 <span class="c"></span>
 <span class="c">/**</span>
 <span class="c">* @method configSubmenuToggle</span>
-<span class="c">* @description Event handler for when the &quot;submenutoggleregion&quot; configuration property of </span>
+<span class="c">* @description Event handler for when the "submenutoggleregion" configuration property of </span>
 <span class="c">* a MenuBar changes.</span>
 <span class="c">* @param {String} p_sType The name of the event that was fired.</span>
 <span class="c">* @param {Array} p_aArgs Collection of arguments sent when the event was fired.</span>
@@ -496,8 +487,8 @@
 
 
 <span class="c">/**</span>
-<span class="c">* @description Initializes the class&#39;s configurable properties which can be</span>
-<span class="c">* changed using the menu bar&#39;s Config object (&quot;cfg&quot;).</span>
+<span class="c">* @description Initializes the class's configurable properties which can be</span>
+<span class="c">* changed using the menu bar's Config object ("cfg").</span>
 <span class="c">* @method initDefaultConfig</span>
 <span class="c">*/</span>
 <span class="nx">initDefaultConfig</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
@@ -510,15 +501,15 @@
 <span class="c"></span>
 
     <span class="c">/*</span>
-<span class="c">        Set the default value for the &quot;position&quot; configuration property</span>
-<span class="c">        to &quot;static&quot; by re-adding the property.</span>
+<span class="c">        Set the default value for the "position" configuration property</span>
+<span class="c">        to "static" by re-adding the property.</span>
 <span class="c">    */</span>
 
 
     <span class="c">/**</span>
 <span class="c">    * @config position</span>
 <span class="c">    * @description String indicating how a menu bar should be positioned on the </span>
-<span class="c">    * screen.  Possible values are &quot;static&quot; and &quot;dynamic.&quot;  Static menu bars </span>
+<span class="c">    * screen.  Possible values are "static" and "dynamic."  Static menu bars </span>
 <span class="c">    * are visible by default and reside in the normal flow of the document </span>
 <span class="c">    * (CSS position: static).  Dynamic menu bars are hidden by default, reside</span>
 <span class="c">    * out of the normal flow of the document (CSS position: absolute), and can </span>
@@ -538,15 +529,15 @@
 
 
     <span class="c">/*</span>
-<span class="c">        Set the default value for the &quot;submenualignment&quot; configuration property</span>
-<span class="c">        to [&quot;tl&quot;,&quot;bl&quot;] by re-adding the property.</span>
+<span class="c">        Set the default value for the "submenualignment" configuration property</span>
+<span class="c">        to ["tl","bl"] by re-adding the property.</span>
 <span class="c">    */</span>
 
     <span class="c">/**</span>
 <span class="c">    * @config submenualignment</span>
 <span class="c">    * @description Array defining how submenus should be aligned to their </span>
 <span class="c">    * parent menu bar item. The format is: [itemCorner, submenuCorner].</span>
-<span class="c">    * @default [&quot;tl&quot;,&quot;bl&quot;]</span>
+<span class="c">    * @default ["tl","bl"]</span>
 <span class="c">    * @type Array</span>
 <span class="c">    */</span>
     <span class="nx">oConfig</span><span class="o">.</span><span class="nx">addProperty</span><span class="o">(</span>
@@ -559,14 +550,14 @@
 
 
     <span class="c">/*</span>
-<span class="c">        Change the default value for the &quot;autosubmenudisplay&quot; configuration </span>
-<span class="c">        property to &quot;false&quot; by re-adding the property.</span>
+<span class="c">        Change the default value for the "autosubmenudisplay" configuration </span>
+<span class="c">        property to "false" by re-adding the property.</span>
 <span class="c">    */</span>
 
     <span class="c">/**</span>
 <span class="c">    * @config autosubmenudisplay</span>
 <span class="c">    * @description Boolean indicating if submenus are automatically made </span>
-<span class="c">    * visible when the user mouses over the menu bar&#39;s items.</span>
+<span class="c">    * visible when the user mouses over the menu bar's items.</span>
 <span class="c">    * @default false</span>
 <span class="c">    * @type Boolean</span>
 <span class="c">    */</span>
@@ -615,9 +606,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -690,34 +679,29 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.ContextMenu.html">YAHOO.widget.ContextMenu</a></li>
                                 <li class=""><a href="YAHOO.widget.ContextMenuItem.html">YAHOO.widget.ContextMenuItem</a></li>
                                 <li class=""><a href="YAHOO.widget.Menu.html">YAHOO.widget.Menu</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuBar.html">YAHOO.widget.MenuBar</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuBarItem.html">YAHOO.widget.MenuBarItem</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuItem.html">YAHOO.widget.MenuItem</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuManager.html">YAHOO.widget.MenuManager</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="contextmenu.js.html">contextmenu.js</a></li>
+                        <ul class="content"><li class=""><a href="contextmenu.js.html">contextmenu.js</a></li>
                                 <li class=""><a href="contextmenuitem.js.html">contextmenuitem.js</a></li>
                                 <li class=""><a href="menu.js.html">menu.js</a></li>
                                 <li class="selected"><a href="menubar.js.html">menubar.js</a></li>
                                 <li class=""><a href="menubaritem.js.html">menubaritem.js</a></li>
                                 <li class=""><a href="menuitem.js.html">menuitem.js</a></li>
                                 <li class=""><a href="menumanager.js.html">menumanager.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -727,9 +711,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2008 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: yahoo   YAHOO.js  (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: yahoo   YAHOO.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>YAHOO Global&nbsp; <span class="subtitle">2.8.2r1</span></h3>
+        <h3>YAHOO Global  <span class="subtitle">2.8.2r1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_yahoo.html" title="yahoo">yahoo</a>
                 
                  &gt; YAHOO.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,19 +22,16 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <div id="srcout">
                         <style>
                             #doc3 .classopts { display:none; }
-                        </style>
-                        <div class="highlight"><pre><span class="cm">/**</span>
+                        </style><div class="highlight"><pre><span class="cm">/**</span>
 <span class="cm"> * The YAHOO object is the single global object used by YUI Library.  It</span>
 <span class="cm"> * contains utility function for setting up namespaces, inheritance, and</span>
 <span class="cm"> * logging.  YAHOO.util, YAHOO.widget, and YAHOO.example are namespaces</span>
@@ -69,7 +53,7 @@
 <span class="cm">/**</span>
 <span class="cm"> * A reference to a function that will be executed every time a YAHOO module</span>
 <span class="cm"> * is loaded.  As parameter, this function will receive the version</span>
-<span class="cm"> * information for the module. See &lt;a href=&quot;YAHOO.env.html#getVersion&quot;&gt;</span>
+<span class="cm"> * information for the module. See &lt;a href="YAHOO.env.html#getVersion"&gt;</span>
 <span class="cm"> * YAHOO.env.getVersion&lt;/a&gt; for the description of the version data structure.</span>
 <span class="cm"> * @property listener</span>
 <span class="cm"> * @type Function</span>
@@ -104,7 +88,7 @@
 <span class="cm"> * @default undefined</span>
 <span class="cm"> */</span>
 
-<span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span> <span class="o">||</span> <span class="o">!</span><span class="nx">YAHOO</span><span class="p">)</span> <span class="p">{</span>
+<span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">YAHOO</span> <span class="o">==</span> <span class="s2">"undefined"</span> <span class="o">||</span> <span class="o">!</span><span class="nx">YAHOO</span><span class="p">)</span> <span class="p">{</span>
     <span class="cm">/**</span>
 <span class="cm">     * The YAHOO global namespace object.  If YAHOO is already defined, the</span>
 <span class="cm">     * existing YAHOO object will not be overwritten so that defined</span>
@@ -116,10 +100,10 @@
 <span class="p">}</span>
 
 <span class="cm">/**</span>
-<span class="cm"> * Returns the namespace specified and creates it if it doesn&#39;t exist</span>
+<span class="cm"> * Returns the namespace specified and creates it if it doesn't exist</span>
 <span class="cm"> * &lt;pre&gt;</span>
-<span class="cm"> * YAHOO.namespace(&quot;property.package&quot;);</span>
-<span class="cm"> * YAHOO.namespace(&quot;YAHOO.property.package&quot;);</span>
+<span class="cm"> * YAHOO.namespace("property.package");</span>
+<span class="cm"> * YAHOO.namespace("YAHOO.property.package");</span>
 <span class="cm"> * &lt;/pre&gt;</span>
 <span class="cm"> * Either of the above would create YAHOO.property, then</span>
 <span class="cm"> * YAHOO.property.package</span>
@@ -127,9 +111,9 @@
 <span class="cm"> * Be careful when naming packages. Reserved words may work in some browsers</span>
 <span class="cm"> * and not others. For instance, the following will fail in Safari:</span>
 <span class="cm"> * &lt;pre&gt;</span>
-<span class="cm"> * YAHOO.namespace(&quot;really.long.nested.namespace&quot;);</span>
+<span class="cm"> * YAHOO.namespace("really.long.nested.namespace");</span>
 <span class="cm"> * &lt;/pre&gt;</span>
-<span class="cm"> * This fails because &quot;long&quot; is a future reserved word in ECMAScript</span>
+<span class="cm"> * This fails because "long" is a future reserved word in ECMAScript</span>
 <span class="cm"> *</span>
 <span class="cm"> * For implementation code that uses YUI, do not create your components</span>
 <span class="cm"> * in the namespaces defined by YUI (</span>
@@ -138,7 +122,7 @@
 <span class="cm"> * &lt;code&gt;YAHOO.lang&lt;/code&gt;, </span>
 <span class="cm"> * &lt;code&gt;YAHOO.tool&lt;/code&gt;, </span>
 <span class="cm"> * &lt;code&gt;YAHOO.example&lt;/code&gt;, </span>
-<span class="cm"> * &lt;code&gt;YAHOO.env&lt;/code&gt;) -- create your own namespace (e.g., &#39;companyname&#39;).</span>
+<span class="cm"> * &lt;code&gt;YAHOO.env&lt;/code&gt;) -- create your own namespace (e.g., 'companyname').</span>
 <span class="cm"> *</span>
 <span class="cm"> * @method namespace</span>
 <span class="cm"> * @static</span>
@@ -148,11 +132,11 @@
 <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">namespace</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">a</span><span class="o">=</span><span class="nx">arguments</span><span class="p">,</span> <span class="nx">o</span><span class="o">=</span><span class="kc">null</span><span class="p">,</span> <span class="nx">i</span><span class="p">,</span> <span class="nx">j</span><span class="p">,</span> <span class="nx">d</span><span class="p">;</span>
     <span class="k">for</span> <span class="p">(</span><span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">a</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">d</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="o">+</span><span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">]).</span><span class="nx">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">);</span>
+        <span class="nx">d</span><span class="o">=</span><span class="p">(</span><span class="s2">""</span><span class="o">+</span><span class="nx">a</span><span class="p">[</span><span class="nx">i</span><span class="p">]).</span><span class="nx">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">);</span>
         <span class="nx">o</span><span class="o">=</span><span class="nx">YAHOO</span><span class="p">;</span>
 
         <span class="c1">// YAHOO is implied, so it is ignored if it is included</span>
-        <span class="k">for</span> <span class="p">(</span><span class="nx">j</span><span class="o">=</span><span class="p">(</span><span class="nx">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;YAHOO&quot;</span><span class="p">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span><span class="o">&lt;</span><span class="nx">d</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">=</span><span class="nx">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">for</span> <span class="p">(</span><span class="nx">j</span><span class="o">=</span><span class="p">(</span><span class="nx">d</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"YAHOO"</span><span class="p">)</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span><span class="o">&lt;</span><span class="nx">d</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">=</span><span class="nx">j</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
             <span class="nx">o</span><span class="p">[</span><span class="nx">d</span><span class="p">[</span><span class="nx">j</span><span class="p">]]</span><span class="o">=</span><span class="nx">o</span><span class="p">[</span><span class="nx">d</span><span class="p">[</span><span class="nx">j</span><span class="p">]]</span> <span class="o">||</span> <span class="p">{};</span>
             <span class="nx">o</span><span class="o">=</span><span class="nx">o</span><span class="p">[</span><span class="nx">d</span><span class="p">[</span><span class="nx">j</span><span class="p">]];</span>
         <span class="p">}</span>
@@ -169,7 +153,7 @@
 <span class="cm"> * @static</span>
 <span class="cm"> * @param  {String}  msg  The message to log.</span>
 <span class="cm"> * @param  {String}  cat  The log category for the message.  Default</span>
-<span class="cm"> *                        categories are &quot;info&quot;, &quot;warn&quot;, &quot;error&quot;, time&quot;.</span>
+<span class="cm"> *                        categories are "info", "warn", "error", time".</span>
 <span class="cm"> *                        Custom categories can be used as well. (opt)</span>
 <span class="cm"> * @param  {String}  src  The source of the the message (opt)</span>
 <span class="cm"> * @return {Boolean}      True if the log operation was successful.</span>
@@ -194,8 +178,8 @@
 <span class="cm"> *                             version that is in use when multiple versions</span>
 <span class="cm"> *                             have loaded</span>
 <span class="cm"> * @param {Object}   data      metadata object for the module.  Currently it</span>
-<span class="cm"> *                             is expected to contain a &quot;version&quot; property</span>
-<span class="cm"> *                             and a &quot;build&quot; property at minimum.</span>
+<span class="cm"> *                             is expected to contain a "version" property</span>
+<span class="cm"> *                             and a "build" property at minimum.</span>
 <span class="cm"> */</span>
 <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">register</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">mainClass</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">mods</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">modules</span><span class="p">,</span> <span class="nx">m</span><span class="p">,</span> <span class="nx">v</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">ls</span><span class="p">,</span> <span class="nx">i</span><span class="p">;</span>
@@ -228,7 +212,7 @@
         <span class="nx">mainClass</span><span class="p">.</span><span class="nx">VERSION</span> <span class="o">=</span> <span class="nx">v</span><span class="p">;</span>
         <span class="nx">mainClass</span><span class="p">.</span><span class="nx">BUILD</span> <span class="o">=</span> <span class="nx">b</span><span class="p">;</span>
     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;mainClass is undefined for module &quot;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">,</span> <span class="s2">&quot;warn&quot;</span><span class="p">);</span>
+        <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"mainClass is undefined for module "</span> <span class="o">+</span> <span class="nx">name</span><span class="p">,</span> <span class="s2">"warn"</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">};</span>
 </pre></div>
@@ -241,8 +225,7 @@
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -290,28 +273,23 @@
                                 <li class="selected"><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.html" title="YAHOO">YAHOO</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.html" title="YAHOO">YAHOO</a></li>
                                 <li class=""><a href="YAHOO.env.html" title="YAHOO.env">YAHOO.env</a></li>
                                 <li class=""><a href="YAHOO.env.ua.html" title="YAHOO.env.ua">YAHOO.env.ua</a></li>
                                 <li class=""><a href="YAHOO.lang.html" title="YAHOO.lang">YAHOO.lang</a></li>
                                 <li class=""><a href="YAHOO_config.html" title="YAHOO_config">YAHOO_config</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Env.js.html" title="Env.js">Env.js</a></li>
+                        <ul class="content"><li class=""><a href="Env.js.html" title="Env.js">Env.js</a></li>
                                 <li class=""><a href="Lang.js.html" title="Lang.js">Lang.js</a></li>
                                 <li class="selected"><a href="YAHOO.js.html" title="YAHOO.js">YAHOO.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -321,13 +299,10 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2010 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2010 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
 
     var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.env.ua", "name": "air", "url": "YAHOO.env.ua.html#property_air", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "augment", "url": "YAHOO.lang.html#method_augment", "type": "method"}, {"access": "", "host": "YAHOO", "name": "augment", "url": "YAHOO.html#method_augment", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "augmentObject", "url": "YAHOO.lang.html#method_augmentObject", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "augmentProto", "url": "YAHOO.lang.html#method_augmentProto", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "caja", "url": "YAHOO.env.ua.html#property_caja", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "dump", "url": "YAHOO.lang.html#method_dump", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "extend", "url": "YAHOO.lang.html#method_extend", "type": "method"}, {"access": "", "host": "YAHOO", "name": "extend", "url": "YAHOO.html#method_extend", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "gecko", "url": "YAHOO.env.ua.html#property_gecko", "type": "property"}, {"access": "", "host": "YAHOO.env", "name": "getVersion", "url": "YAHOO.env.html#method_getVersion", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "hasOwnProperty", "url": "YAHOO.lang.html#method_hasOwnProperty", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "ie", "url": "YAHOO.env.ua.html#property_ie", "type": "property"}, {"access": "private", "host": "YAHOO.lang", "name": "_IEEnumFix", "url": "YAHOO.lang.html#property__IEEnumFix", "type": "property"}, {"access": "", "host": "YAHOO_config", "name": "injecting", "url": "YAHOO_config.html#property_injecting", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "isArray", "url": "YAHOO.lang.html#method_isArray", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isBoolean", "url": "YAHOO.lang.html#method_isBoolean", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isFunction", "url": "YAHOO.lang.html#method_isFunction", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isNull", "url": "YAHOO.lang.html#method_isNull", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isNumber", "url": "YAHOO.lang.html#method_isNumber", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isObject", "url": "YAHOO.lang.html#method_isObject", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isString", "url": "YAHOO.lang.html#method_isString", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isUndefined", "url": "YAHOO.lang.html#method_isUndefined", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "isValue", "url": "YAHOO.lang.html#method_isValue", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "later", "url": "YAHOO.lang.html#method_later", "type": "method"}, {"access": "", "host": "YAHOO_config", "name": "listener", "url": "YAHOO_config.html#property_listener", "type": "property"}, {"access": "", "host": "YAHOO.env", "name": "listeners", "url": "YAHOO.env.html#property_listeners", "type": "property"}, {"access": "", "host": "YAHOO_config", "name": "load", "url": "YAHOO_config.html#property_load", "type": "property"}, {"access": "", "host": "YAHOO_config", "name": "locale", "url": "YAHOO_config.html#property_locale", "type": "property"}, {"access": "", "host": "YAHOO", "name": "log", "url": "YAHOO.html#method_log", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "merge", "url": "YAHOO.lang.html#method_merge", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "mobile", "url": "YAHOO.env.ua.html#property_mobile", "type": "property"}, {"access": "", "host": "YAHOO.env", "name": "modules", "url": "YAHOO.env.html#property_modules", "type": "property"}, {"access": "", "host": "YAHOO", "name": "namespace", "url": "YAHOO.html#method_namespace", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "opera", "url": "YAHOO.env.ua.html#property_opera", "type": "property"}, {"access": "", "host": "YAHOO.env.ua", "name": "os", "url": "YAHOO.env.ua.html#property_os", "type": "property"}, {"access": "", "host": "YAHOO", "name": "register", "url": "YAHOO.html#method_register", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "secure", "url": "YAHOO.env.ua.html#property_secure", "type": "property"}, {"access": "", "host": "YAHOO.lang", "name": "substitute", "url": "YAHOO.lang.html#method_substitute", "type": "method"}, {"access": "", "host": "YAHOO.lang", "name": "trim", "url": "YAHOO.lang.html#method_trim", "type": "method"}, {"access": "", "host": "YAHOO.env.ua", "name": "webkit", "url": "YAHOO.env.ua.html#property_webkit", "type": "property"}];
-</script>
-</body>
-</html>
+</script></body>

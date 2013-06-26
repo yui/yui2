@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: dragdrop   DDProxy.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: dragdrop   DDProxy.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Drag and Drop&nbsp; <span class="subtitle">2.5.1</span></h3>
+        <h3>Drag and Drop  <span class="subtitle">2.5.1</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_dragdrop.html">dragdrop</a>
@@ -27,21 +19,20 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * A DragDrop implementation that inserts an empty, bordered div into</span>
 <span class="c"> * the document that follows the cursor during drag operations.  At the time of</span>
 <span class="c"> * the click, the frame div is resized to the dimensions of the linked html</span>
 <span class="c"> * element, and moved to the exact location of the linked element.</span>
 <span class="c"> *</span>
-<span class="c"> * References to the &quot;frame&quot; element refer to the single proxy element that</span>
+<span class="c"> * References to the "frame" element refer to the single proxy element that</span>
 <span class="c"> * was created to be dragged in place of all DDProxy elements on the</span>
 <span class="c"> * page.</span>
 <span class="c"> *</span>
@@ -67,7 +58,7 @@
 <span class="c"> * @type String</span>
 <span class="c"> * @static</span>
 <span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDProxy</span><span class="o">.</span><span class="nx">dragElId</span> <span class="o">=</span> <span class="s2">&quot;ygddfdiv&quot;</span><span class="o">;</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDProxy</span><span class="o">.</span><span class="nx">dragElId</span> <span class="o">=</span> <span class="s2">"ygddfdiv"</span><span class="o">;</span>
 
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDProxy</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DD</span><span class="o">,</span> <span class="o">{</span>
 
@@ -105,29 +96,29 @@
         <span class="k">var</span> <span class="nx">div</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">(),</span> <span class="nx">Dom</span><span class="o">=</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">;</span>
 
         <span class="k">if</span> <span class="o">(!</span><span class="nx">div</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">div</span>    <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">);</span>
+            <span class="nx">div</span>    <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">"div"</span><span class="o">);</span>
             <span class="nx">div</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">dragElId</span><span class="o">;</span>
             <span class="k">var</span> <span class="nx">s</span>  <span class="o">=</span> <span class="nx">div</span><span class="o">.</span><span class="nx">style</span><span class="o">;</span>
 
-            <span class="nx">s</span><span class="o">.</span><span class="nx">position</span>   <span class="o">=</span> <span class="s2">&quot;absolute&quot;</span><span class="o">;</span>
-            <span class="nx">s</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">&quot;hidden&quot;</span><span class="o">;</span>
-            <span class="nx">s</span><span class="o">.</span><span class="nx">cursor</span>     <span class="o">=</span> <span class="s2">&quot;move&quot;</span><span class="o">;</span>
-            <span class="nx">s</span><span class="o">.</span><span class="nx">border</span>     <span class="o">=</span> <span class="s2">&quot;2px solid #aaa&quot;</span><span class="o">;</span>
+            <span class="nx">s</span><span class="o">.</span><span class="nx">position</span>   <span class="o">=</span> <span class="s2">"absolute"</span><span class="o">;</span>
+            <span class="nx">s</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s2">"hidden"</span><span class="o">;</span>
+            <span class="nx">s</span><span class="o">.</span><span class="nx">cursor</span>     <span class="o">=</span> <span class="s2">"move"</span><span class="o">;</span>
+            <span class="nx">s</span><span class="o">.</span><span class="nx">border</span>     <span class="o">=</span> <span class="s2">"2px solid #aaa"</span><span class="o">;</span>
             <span class="nx">s</span><span class="o">.</span><span class="nx">zIndex</span>     <span class="o">=</span> <span class="m">999</span><span class="o">;</span>
-            <span class="nx">s</span><span class="o">.</span><span class="nx">height</span>     <span class="o">=</span> <span class="s2">&quot;25px&quot;</span><span class="o">;</span>
-            <span class="nx">s</span><span class="o">.</span><span class="nx">width</span>      <span class="o">=</span> <span class="s2">&quot;25px&quot;</span><span class="o">;</span>
+            <span class="nx">s</span><span class="o">.</span><span class="nx">height</span>     <span class="o">=</span> <span class="s2">"25px"</span><span class="o">;</span>
+            <span class="nx">s</span><span class="o">.</span><span class="nx">width</span>      <span class="o">=</span> <span class="s2">"25px"</span><span class="o">;</span>
 
-            <span class="k">var</span> <span class="nx">_data</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">);</span>
-            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">_data</span><span class="o">,</span> <span class="s1">&#39;height&#39;</span><span class="o">,</span> <span class="s1">&#39;100%&#39;</span><span class="o">);</span>
-            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">_data</span><span class="o">,</span> <span class="s1">&#39;width&#39;</span><span class="o">,</span> <span class="s1">&#39;100%&#39;</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">_data</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'div'</span><span class="o">);</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">_data</span><span class="o">,</span> <span class="s1">'height'</span><span class="o">,</span> <span class="s1">'100%'</span><span class="o">);</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">_data</span><span class="o">,</span> <span class="s1">'width'</span><span class="o">,</span> <span class="s1">'100%'</span><span class="o">);</span>
             <span class="c">/**</span>
-<span class="c">            * If the proxy element has no background-color, then it is considered to the &quot;transparent&quot; by Internet Explorer.</span>
-<span class="c">            * Since it is &quot;transparent&quot; then the events pass through it to the iframe below.</span>
-<span class="c">            * So creating a &quot;fake&quot; div inside the proxy element and giving it a background-color, then setting it to an</span>
+<span class="c">            * If the proxy element has no background-color, then it is considered to the "transparent" by Internet Explorer.</span>
+<span class="c">            * Since it is "transparent" then the events pass through it to the iframe below.</span>
+<span class="c">            * So creating a "fake" div inside the proxy element and giving it a background-color, then setting it to an</span>
 <span class="c">            * opacity of 0, it appears to not be there, however IE still thinks that it is so the events never pass through.</span>
 <span class="c">            */</span>
-            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">_data</span><span class="o">,</span> <span class="s1">&#39;background-color&#39;</span><span class="o">,</span> <span class="s1">&#39;#ccc&#39;</span><span class="o">);</span>
-            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">_data</span><span class="o">,</span> <span class="s1">&#39;opacity&#39;</span><span class="o">,</span> <span class="s1">&#39;0&#39;</span><span class="o">);</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">_data</span><span class="o">,</span> <span class="s1">'background-color'</span><span class="o">,</span> <span class="s1">'#ccc'</span><span class="o">);</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">_data</span><span class="o">,</span> <span class="s1">'opacity'</span><span class="o">,</span> <span class="s1">'0'</span><span class="o">);</span>
             <span class="nx">div</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">_data</span><span class="o">);</span>
 
             <span class="c">/**</span>
@@ -136,19 +127,19 @@
 <span class="c">            */</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span><span class="o">)</span> <span class="o">{</span>
                 <span class="c">//Only needed for Internet Explorer</span>
-<span class="c"></span>                <span class="k">var</span> <span class="nx">ifr</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;iframe&#39;</span><span class="o">);</span>
-                <span class="nx">ifr</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;src&#39;</span><span class="o">,</span> <span class="s1">&#39;about:blank&#39;</span><span class="o">);</span>
-                <span class="nx">ifr</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;scrolling&#39;</span><span class="o">,</span> <span class="s1">&#39;no&#39;</span><span class="o">);</span>
-                <span class="nx">ifr</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">&#39;frameborder&#39;</span><span class="o">,</span> <span class="s1">&#39;0&#39;</span><span class="o">);</span>
+<span class="c"></span>                <span class="k">var</span> <span class="nx">ifr</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'iframe'</span><span class="o">);</span>
+                <span class="nx">ifr</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'src'</span><span class="o">,</span> <span class="s1">'about:blank'</span><span class="o">);</span>
+                <span class="nx">ifr</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'scrolling'</span><span class="o">,</span> <span class="s1">'no'</span><span class="o">);</span>
+                <span class="nx">ifr</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s1">'frameborder'</span><span class="o">,</span> <span class="s1">'0'</span><span class="o">);</span>
                 <span class="nx">div</span><span class="o">.</span><span class="nx">insertBefore</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="nx">div</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">);</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">&#39;height&#39;</span><span class="o">,</span> <span class="s1">&#39;100%&#39;</span><span class="o">);</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">&#39;width&#39;</span><span class="o">,</span> <span class="s1">&#39;100%&#39;</span><span class="o">);</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">&#39;position&#39;</span><span class="o">,</span> <span class="s1">&#39;absolute&#39;</span><span class="o">);</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">&#39;top&#39;</span><span class="o">,</span> <span class="s1">&#39;0&#39;</span><span class="o">);</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">&#39;left&#39;</span><span class="o">,</span> <span class="s1">&#39;0&#39;</span><span class="o">);</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">&#39;opacity&#39;</span><span class="o">,</span> <span class="s1">&#39;0&#39;</span><span class="o">);</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">&#39;zIndex&#39;</span><span class="o">,</span> <span class="s1">&#39;-1&#39;</span><span class="o">);</span>
-                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">,</span> <span class="s1">&#39;zIndex&#39;</span><span class="o">,</span> <span class="s1">&#39;2&#39;</span><span class="o">);</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">'height'</span><span class="o">,</span> <span class="s1">'100%'</span><span class="o">);</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">'width'</span><span class="o">,</span> <span class="s1">'100%'</span><span class="o">);</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">'position'</span><span class="o">,</span> <span class="s1">'absolute'</span><span class="o">);</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">'top'</span><span class="o">,</span> <span class="s1">'0'</span><span class="o">);</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">'left'</span><span class="o">,</span> <span class="s1">'0'</span><span class="o">);</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">'opacity'</span><span class="o">,</span> <span class="s1">'0'</span><span class="o">);</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">,</span> <span class="s1">'zIndex'</span><span class="o">,</span> <span class="s1">'-1'</span><span class="o">);</span>
+                <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">ifr</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">,</span> <span class="s1">'zIndex'</span><span class="o">,</span> <span class="s1">'2'</span><span class="o">);</span>
             <span class="o">}</span>
 
             <span class="c">// appendChild can blow up IE if invoked prior to the window load event</span>
@@ -168,7 +159,7 @@
     <span class="o">},</span>
 
     <span class="nx">applyConfig</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-        <span class="c">//this.logger.log(&quot;DDProxy applyConfig&quot;);</span>
+        <span class="c">//this.logger.log("DDProxy applyConfig");</span>
 <span class="c"></span>        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDProxy</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">applyConfig</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
 
         <span class="k">this</span><span class="o">.</span><span class="nx">resizeFrame</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">config</span><span class="o">.</span><span class="nx">resizeFrame</span> <span class="o">!==</span> <span class="kc">false</span><span class="o">);</span>
@@ -198,7 +189,7 @@
 
         <span class="k">this</span><span class="o">.</span><span class="nx">setDragElPos</span><span class="o">(</span><span class="nx">iPageX</span><span class="o">,</span> <span class="nx">iPageY</span><span class="o">);</span>
 
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;visibility&quot;</span><span class="o">,</span> <span class="s2">&quot;visible&quot;</span><span class="o">);</span> 
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">"visibility"</span><span class="o">,</span> <span class="s2">"visible"</span><span class="o">);</span> 
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -213,25 +204,25 @@
             <span class="k">var</span> <span class="nx">el</span>     <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
             <span class="k">var</span> <span class="nx">dragEl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">();</span>
 
-            <span class="k">var</span> <span class="nx">bt</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">DOM</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;borderTopWidth&quot;</span>    <span class="o">),</span> <span class="m">10</span><span class="o">);</span>
-            <span class="k">var</span> <span class="nx">br</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">DOM</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;borderRightWidth&quot;</span>  <span class="o">),</span> <span class="m">10</span><span class="o">);</span>
-            <span class="k">var</span> <span class="nx">bb</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">DOM</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;borderBottomWidth&quot;</span> <span class="o">),</span> <span class="m">10</span><span class="o">);</span>
-            <span class="k">var</span> <span class="nx">bl</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">DOM</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;borderLeftWidth&quot;</span>   <span class="o">),</span> <span class="m">10</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">bt</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">DOM</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">"borderTopWidth"</span>    <span class="o">),</span> <span class="m">10</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">br</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">DOM</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">"borderRightWidth"</span>  <span class="o">),</span> <span class="m">10</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">bb</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">DOM</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">"borderBottomWidth"</span> <span class="o">),</span> <span class="m">10</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">bl</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">DOM</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">dragEl</span><span class="o">,</span> <span class="s2">"borderLeftWidth"</span>   <span class="o">),</span> <span class="m">10</span><span class="o">);</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">bt</span><span class="o">))</span> <span class="o">{</span> <span class="nx">bt</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="o">}</span>
             <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">br</span><span class="o">))</span> <span class="o">{</span> <span class="nx">br</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="o">}</span>
             <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">bb</span><span class="o">))</span> <span class="o">{</span> <span class="nx">bb</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="o">}</span>
             <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">bl</span><span class="o">))</span> <span class="o">{</span> <span class="nx">bl</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="o">}</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;proxy size: &quot;</span> <span class="o">+</span> <span class="nx">bt</span> <span class="o">+</span> <span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nx">br</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">bb</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">bl</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"proxy size: "</span> <span class="o">+</span> <span class="nx">bt</span> <span class="o">+</span> <span class="s2">"  "</span> <span class="o">+</span> <span class="nx">br</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="nx">bb</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="nx">bl</span><span class="o">);</span>
 
             <span class="k">var</span> <span class="nx">newWidth</span>  <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetWidth</span>  <span class="o">-</span> <span class="nx">br</span> <span class="o">-</span> <span class="nx">bl</span><span class="o">);</span>                                                                                           
             <span class="k">var</span> <span class="nx">newHeight</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="m">0</span><span class="o">,</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetHeight</span> <span class="o">-</span> <span class="nx">bt</span> <span class="o">-</span> <span class="nx">bb</span><span class="o">);</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Resizing proxy element&quot;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Resizing proxy element"</span><span class="o">);</span>
 
-            <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span> <span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;width&quot;</span><span class="o">,</span>  <span class="nx">newWidth</span>  <span class="o">+</span> <span class="s2">&quot;px&quot;</span> <span class="o">);</span>
-            <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span> <span class="nx">dragEl</span><span class="o">,</span> <span class="s2">&quot;height&quot;</span><span class="o">,</span> <span class="nx">newHeight</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span> <span class="o">);</span>
+            <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span> <span class="nx">dragEl</span><span class="o">,</span> <span class="s2">"width"</span><span class="o">,</span>  <span class="nx">newWidth</span>  <span class="o">+</span> <span class="s2">"px"</span> <span class="o">);</span>
+            <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span> <span class="nx">dragEl</span><span class="o">,</span> <span class="s2">"height"</span><span class="o">,</span> <span class="nx">newHeight</span> <span class="o">+</span> <span class="s2">"px"</span> <span class="o">);</span>
         <span class="o">}</span>
     <span class="o">},</span>
 
@@ -250,14 +241,14 @@
     <span class="c">// overrides YAHOO.util.DragDrop</span>
 <span class="c"></span>    <span class="nx">b4StartDrag</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">)</span> <span class="o">{</span>
         <span class="c">// show the drag frame</span>
-<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;start drag show frame, x: &quot;</span> <span class="o">+</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot;, y: &quot;</span> <span class="o">+</span> <span class="nx">y</span><span class="o">);</span>
+<span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"start drag show frame, x: "</span> <span class="o">+</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">", y: "</span> <span class="o">+</span> <span class="nx">y</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">showFrame</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">);</span>
     <span class="o">},</span>
 
     <span class="c">// overrides YAHOO.util.DragDrop</span>
 <span class="c"></span>    <span class="nx">b4EndDrag</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; b4EndDrag&quot;</span><span class="o">);</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">(),</span> <span class="s2">&quot;visibility&quot;</span><span class="o">,</span> <span class="s2">&quot;hidden&quot;</span><span class="o">);</span> 
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">" b4EndDrag"</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">(),</span> <span class="s2">"visibility"</span><span class="o">,</span> <span class="s2">"hidden"</span><span class="o">);</span> 
     <span class="o">},</span>
 
     <span class="c">// overrides YAHOO.util.DragDrop</span>
@@ -265,119 +256,119 @@
 <span class="c"></span>    <span class="c">// This is so that the default behavior mirrors that of YAHOO.util.DD.  </span>
 <span class="c"></span>    <span class="nx">endDrag</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">DOM</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; endDrag&quot;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">" endDrag"</span><span class="o">);</span>
         <span class="k">var</span> <span class="nx">lel</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getEl</span><span class="o">();</span>
         <span class="k">var</span> <span class="nx">del</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">();</span>
 
         <span class="c">// Show the drag frame briefly so we can get its position</span>
-<span class="c"></span>        <span class="c">// del.style.visibility = &quot;&quot;;</span>
-<span class="c"></span>        <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">del</span><span class="o">,</span> <span class="s2">&quot;visibility&quot;</span><span class="o">,</span> <span class="s2">&quot;&quot;</span><span class="o">);</span> 
+<span class="c"></span>        <span class="c">// del.style.visibility = "";</span>
+<span class="c"></span>        <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">del</span><span class="o">,</span> <span class="s2">"visibility"</span><span class="o">,</span> <span class="s2">""</span><span class="o">);</span> 
 
         <span class="c">// Hide the linked element before the move to get around a Safari </span>
 <span class="c"></span>        <span class="c">// rendering bug.</span>
-<span class="c"></span>        <span class="c">//lel.style.visibility = &quot;hidden&quot;;</span>
-<span class="c"></span>        <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">lel</span><span class="o">,</span> <span class="s2">&quot;visibility&quot;</span><span class="o">,</span> <span class="s2">&quot;hidden&quot;</span><span class="o">);</span> 
+<span class="c"></span>        <span class="c">//lel.style.visibility = "hidden";</span>
+<span class="c"></span>        <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">lel</span><span class="o">,</span> <span class="s2">"visibility"</span><span class="o">,</span> <span class="s2">"hidden"</span><span class="o">);</span> 
         <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">moveToEl</span><span class="o">(</span><span class="nx">lel</span><span class="o">,</span> <span class="nx">del</span><span class="o">);</span>
-        <span class="c">//del.style.visibility = &quot;hidden&quot;;</span>
-<span class="c"></span>        <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">del</span><span class="o">,</span> <span class="s2">&quot;visibility&quot;</span><span class="o">,</span> <span class="s2">&quot;hidden&quot;</span><span class="o">);</span> 
-        <span class="c">//lel.style.visibility = &quot;&quot;;</span>
-<span class="c"></span>        <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">lel</span><span class="o">,</span> <span class="s2">&quot;visibility&quot;</span><span class="o">,</span> <span class="s2">&quot;&quot;</span><span class="o">);</span> 
+        <span class="c">//del.style.visibility = "hidden";</span>
+<span class="c"></span>        <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">del</span><span class="o">,</span> <span class="s2">"visibility"</span><span class="o">,</span> <span class="s2">"hidden"</span><span class="o">);</span> 
+        <span class="c">//lel.style.visibility = "";</span>
+<span class="c"></span>        <span class="nx">DOM</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">lel</span><span class="o">,</span> <span class="s2">"visibility"</span><span class="o">,</span> <span class="s2">""</span><span class="o">);</span> 
     <span class="o">},</span>
 
     <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="o">(</span><span class="s2">&quot;DDProxy &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
+        <span class="k">return</span> <span class="o">(</span><span class="s2">"DDProxy "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="c">/**</span>
 <span class="c">* @event mouseDownEvent</span>
 <span class="c">* @description Provides access to the mousedown event. The mousedown does not always result in a drag operation.</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 
 <span class="c">/**</span>
 <span class="c">* @event b4MouseDownEvent</span>
 <span class="c">* @description Provides access to the mousedown event, before the mouseDownEvent gets fired. Returning false will cancel the drag.</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 
 <span class="c">/**</span>
 <span class="c">* @event mouseUpEvent</span>
 <span class="c">* @description Fired from inside DragDropMgr when the drag operation is finished.</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 
 <span class="c">/**</span>
 <span class="c">* @event b4StartDragEvent</span>
 <span class="c">* @description Fires before the startDragEvent, returning false will cancel the startDrag Event.</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 
 <span class="c">/**</span>
 <span class="c">* @event startDragEvent</span>
 <span class="c">* @description Occurs after a mouse down and the drag threshold has been met. The drag threshold default is either 3 pixels of mouse movement or 1 full second of holding the mousedown. </span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 
 <span class="c">/**</span>
 <span class="c">* @event b4EndDragEvent</span>
 <span class="c">* @description Fires before the endDragEvent. Returning false will cancel.</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 
 <span class="c">/**</span>
 <span class="c">* @event endDragEvent</span>
 <span class="c">* @description Fires on the mouseup event after a drag has been initiated (startDrag fired).</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 
 <span class="c">/**</span>
 <span class="c">* @event dragEvent</span>
 <span class="c">* @description Occurs every mousemove event while dragging.</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 <span class="c">/**</span>
 <span class="c">* @event b4DragEvent</span>
 <span class="c">* @description Fires before the dragEvent.</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 <span class="c">/**</span>
 <span class="c">* @event invalidDropEvent</span>
 <span class="c">* @description Fires when the dragged objects is dropped in a location that contains no drop targets.</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 <span class="c">/**</span>
 <span class="c">* @event b4DragOutEvent</span>
 <span class="c">* @description Fires before the dragOutEvent</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 <span class="c">/**</span>
 <span class="c">* @event dragOutEvent</span>
 <span class="c">* @description Fires when a dragged object is no longer over an object that had the onDragEnter fire. </span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 <span class="c">/**</span>
 <span class="c">* @event dragEnterEvent</span>
 <span class="c">* @description Occurs when the dragged object first interacts with another targettable drag and drop object.</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 <span class="c">/**</span>
 <span class="c">* @event b4DragOverEvent</span>
 <span class="c">* @description Fires before the dragOverEvent.</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 <span class="c">/**</span>
 <span class="c">* @event dragOverEvent</span>
 <span class="c">* @description Fires every mousemove event while over a drag and drop object.</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 <span class="c">/**</span>
 <span class="c">* @event b4DragDropEvent </span>
 <span class="c">* @description Fires before the dragDropEvent</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 <span class="c">/**</span>
 <span class="c">* @event dragDropEvent</span>
 <span class="c">* @description Fires when the dragged objects is dropped on another.</span>
-<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href=&quot;YAHOO.util.Element.html#addListener&quot;&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
+<span class="c">* @type YAHOO.util.CustomEvent See &lt;a href="YAHOO.util.Element.html#addListener"&gt;Element.addListener&lt;/a&gt; for more information on listening for this event.</span>
 <span class="c">*/</span>
 
 <span class="o">});</span>
@@ -390,9 +381,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -461,31 +450,26 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
                                 <li class=""><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
                                 <li class=""><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
                                 <li class=""><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
                                 <li class=""><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
                                 <li class=""><a href="YAHOO.util.DragDropMgr.ElementWrapper.html">YAHOO.util.DragDropMgr.ElementWrapper</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="DD.js.html">DD.js</a></li>
+                        <ul class="content"><li class=""><a href="DD.js.html">DD.js</a></li>
                                 <li class="selected"><a href="DDProxy.js.html">DDProxy.js</a></li>
                                 <li class=""><a href="DDTarget.js.html">DDTarget.js</a></li>
                                 <li class=""><a href="DragDrop.js.html">DragDrop.js</a></li>
                                 <li class=""><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -495,9 +479,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

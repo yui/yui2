@@ -1,16 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: datatable   ColumnSet.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-</head>
-
-<body id="yahoo-com">
-<div id="doc3" class="yui-t2">
+<head><title>API: datatable   ColumnSet.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>DataTable Widget&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <h3>DataTable Widget  <span class="subtitle">2.2.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_datatable.html">datatable</a>
@@ -24,12 +19,12 @@
 			<div class="yui-b">
 
                     <div id="srcout">
-<div class="highlight" ><pre><span class="c">/****************************************************************************/</span>
+<div class="highlight"><pre><span class="c">/****************************************************************************/</span>
 <span class="c">/****************************************************************************/</span>
 <span class="c">/****************************************************************************/</span>
 
 <span class="c">/**</span>
-<span class="c"> * The ColumnSet class defines and manages a DataTable&#39;s Columns,</span>
+<span class="c"> * The ColumnSet class defines and manages a DataTable's Columns,</span>
 <span class="c"> * including nested hierarchies and access to individual Column instances.</span>
 <span class="c"> *</span>
 <span class="c"> * @class ColumnSet</span>
@@ -39,7 +34,7 @@
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnSet</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">aHeaders</span><span class="o">)</span> <span class="o">{</span>
 <span class="c">//TODO: break out nested functions into private methods</span>
-<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_sName</span> <span class="o">=</span> <span class="s2">&quot;instance&quot;</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnSet</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">;</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_sName</span> <span class="o">=</span> <span class="s2">"instance"</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnSet</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">;</span>
 
     <span class="c">// Top-down tree representation of all Columns</span>
 <span class="c"></span>    <span class="k">var</span> <span class="nx">tree</span> <span class="o">=</span> <span class="o">[];</span>
@@ -60,7 +55,7 @@
             <span class="nx">tree</span><span class="o">[</span><span class="nx">nodelevel</span><span class="o">]</span> <span class="o">=</span> <span class="o">[];</span>
         <span class="o">}</span>
 
-        <span class="c">// Determine depth of descendants at this level for node&#39;s rowspan</span>
+        <span class="c">// Determine depth of descendants at this level for node's rowspan</span>
 <span class="c"></span>        <span class="k">var</span> <span class="nx">nodeLevelMaxChildren</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
         <span class="k">var</span> <span class="nx">recurseChildren</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">nodeList</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">tmpMax</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
@@ -125,7 +120,7 @@
                 <span class="c">// Children increase colspan of the Column</span>
 <span class="c"></span>                <span class="nx">oColumn</span><span class="o">.</span><span class="nx">_colspan</span> <span class="o">=</span> <span class="nx">length</span><span class="o">;</span>
 
-                <span class="c">// Children increase colspan of the Column&#39;s parent</span>
+                <span class="c">// Children increase colspan of the Column's parent</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">parent</span> <span class="o">&amp;&amp;</span> <span class="nx">parent</span><span class="o">.</span><span class="nx">_colspan</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">parent</span><span class="o">.</span><span class="nx">_colspan</span> <span class="o">+=</span> <span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span>
                     <span class="nx">parent</span><span class="o">.</span><span class="nx">_children</span> <span class="o">=</span> <span class="o">[];</span>
@@ -179,7 +174,7 @@
         <span class="nx">headers</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">[];</span>
         <span class="nx">recurseAncestors</span><span class="o">(</span><span class="nx">i</span><span class="o">,</span> <span class="nx">keys</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
         <span class="nx">headers</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">headers</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">reverse</span><span class="o">();</span>
-        <span class="nx">headers</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">headers</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">join</span><span class="o">(</span><span class="s2">&quot; &quot;</span><span class="o">);</span>
+        <span class="nx">headers</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">headers</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">join</span><span class="o">(</span><span class="s2">" "</span><span class="o">);</span>
     <span class="o">}</span>
 
     <span class="k">this</span><span class="o">.</span><span class="nx">tree</span> <span class="o">=</span> <span class="nx">tree</span><span class="o">;</span>
@@ -188,7 +183,7 @@
     <span class="k">this</span><span class="o">.</span><span class="nx">headers</span> <span class="o">=</span> <span class="nx">headers</span><span class="o">;</span>
     
     <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnSet</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">++;</span>
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;ColumnSet initialized&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"ColumnSet initialized"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 <span class="o">};</span>
 
 <span class="c">/////////////////////////////////////////////////////////////////////////////</span>
@@ -271,7 +266,7 @@
 <span class="c"> */</span>
 
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnSet</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">toString</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="s2">&quot;ColumnSet &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sName</span><span class="o">;</span>
+    <span class="k">return</span> <span class="s2">"ColumnSet "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_sName</span><span class="o">;</span>
 <span class="o">};</span>
 
 <span class="c">/****************************************************************************/</span>
@@ -288,7 +283,7 @@
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
     <span class="c">// Internal variables</span>
-<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="s2">&quot;yui-dtcol&quot;</span><span class="o">+</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">;</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="s2">"yui-dtcol"</span><span class="o">+</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">;</span>
     
     <span class="c">// Object literal defines Column attributes</span>
 <span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">oConfigs</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">oConfigs</span><span class="o">.</span><span class="nx">constructor</span> <span class="o">==</span> <span class="nb">Object</span><span class="o">))</span> <span class="o">{</span>
@@ -329,7 +324,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_id</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
 <span class="c">/**</span>
-<span class="c"> * Reference to Column&#39;s index within its ColumnSet&#39;s key array, or null if not applicable.</span>
+<span class="c"> * Reference to Column's index within its ColumnSet's key array, or null if not applicable.</span>
 <span class="c"> *</span>
 <span class="c"> * @property _index</span>
 <span class="c"> * @type Number</span>
@@ -356,7 +351,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_rowspan</span> <span class="o">=</span> <span class="m">1</span><span class="o">;</span>
 
 <span class="c">/**</span>
-<span class="c"> * Column&#39;s parent, or null.</span>
+<span class="c"> * Column's parent, or null.</span>
 <span class="c"> *</span>
 <span class="c"> * @property _parent</span>
 <span class="c"> * @type YAHOO.widget.Column</span>
@@ -365,7 +360,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_parent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
 <span class="c">/**</span>
-<span class="c"> * Array of Column&#39;s chilren, or null.</span>
+<span class="c"> * Array of Column's chilren, or null.</span>
 <span class="c"> *</span>
 <span class="c"> * @property _children</span>
 <span class="c"> * @type YAHOO.widget.Column[]</span>
@@ -409,7 +404,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">key</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
 <span class="c">/**</span>
-<span class="c"> * Text or HTML for display in Column&#39;s assocated TH element.</span>
+<span class="c"> * Text or HTML for display in Column's assocated TH element.</span>
 <span class="c"> *</span>
 <span class="c"> * @property text</span>
 <span class="c"> * @type String</span>
@@ -417,14 +412,14 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">text</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
 <span class="c">/**</span>
-<span class="c"> * Data types: &quot;string&quot;, &quot;number&quot;, &quot;date&quot;, &quot;currency&quot;, &quot;checkbox&quot;, &quot;select&quot;,</span>
-<span class="c"> * &quot;email&quot;, &quot;link&quot;.</span>
+<span class="c"> * Data types: "string", "number", "date", "currency", "checkbox", "select",</span>
+<span class="c"> * "email", "link".</span>
 <span class="c"> *</span>
 <span class="c"> * @property type</span>
 <span class="c"> * @type String</span>
-<span class="c"> * @default &quot;string&quot;</span>
+<span class="c"> * @default "string"</span>
 <span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;string&quot;</span><span class="o">;</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s2">"string"</span><span class="o">;</span>
 
 <span class="c">/**</span>
 <span class="c"> * Column head cell ABBR for accessibility.</span>
@@ -541,41 +536,41 @@
 <span class="c">/////////////////////////////////////////////////////////////////////////////</span>
 <span class="c"></span>
 <span class="c">/**</span>
-<span class="c"> * Public accessor returns Column&#39;s ID string.</span>
+<span class="c"> * Public accessor returns Column's ID string.</span>
 <span class="c"> *</span>
 <span class="c"> * @method getId</span>
-<span class="c"> * @return {String} Column&#39;s ID string.</span>
+<span class="c"> * @return {String} Column's ID string.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getId</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Public accessor returns Column&#39;s index within its ColumnSet&#39;s key array, or</span>
+<span class="c"> * Public accessor returns Column's index within its ColumnSet's key array, or</span>
 <span class="c"> * null if not applicable.</span>
 <span class="c"> *</span>
 <span class="c"> * @property getIndex</span>
-<span class="c"> * @return {Number} Column&#39;s index within its ColumnSet key array, if applicable.</span>
+<span class="c"> * @return {Number} Column's index within its ColumnSet key array, if applicable.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getIndex</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_index</span><span class="o">;</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Public accessor returns Column&#39;s colspan number.</span>
+<span class="c"> * Public accessor returns Column's colspan number.</span>
 <span class="c"> *</span>
 <span class="c"> * @method getColSpan</span>
-<span class="c"> * @return {Number} Column&#39;s colspan number.</span>
+<span class="c"> * @return {Number} Column's colspan number.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getColSpan</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_colspan</span><span class="o">;</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Public accessor returns Column&#39;s rowspan number.</span>
+<span class="c"> * Public accessor returns Column's rowspan number.</span>
 <span class="c"> *</span>
 <span class="c"> * @method getRowSpan</span>
-<span class="c"> * @return {Number} Column&#39;s rowspan number.</span>
+<span class="c"> * @return {Number} Column's rowspan number.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getRowSpan</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_rowspan</span><span class="o">;</span>
@@ -597,40 +592,40 @@
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">type</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">type</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">markup</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">classname</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">markup</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">classname</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
         <span class="nx">switch</span><span class="o">(</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">case</span> <span class="s2">&quot;checkbox&quot;</span><span class="o">:</span>
+            <span class="nx">case</span> <span class="s2">"checkbox"</span><span class="o">:</span>
                 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">formatCheckbox</span><span class="o">(</span><span class="nx">elCell</span><span class="o">,</span> <span class="nx">oRecord</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">oData</span><span class="o">);</span>
                 <span class="nx">classname</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_CHECKBOX</span><span class="o">;</span>
                 <span class="k">break</span><span class="o">;</span>
-            <span class="nx">case</span> <span class="s2">&quot;currency&quot;</span><span class="o">:</span>
+            <span class="nx">case</span> <span class="s2">"currency"</span><span class="o">:</span>
                 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">formatCurrency</span><span class="o">(</span><span class="nx">elCell</span><span class="o">,</span> <span class="nx">oRecord</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">oData</span><span class="o">);</span>
                 <span class="nx">classname</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_CURRENCY</span><span class="o">;</span>
                 <span class="k">break</span><span class="o">;</span>
-            <span class="nx">case</span> <span class="s2">&quot;date&quot;</span><span class="o">:</span>
+            <span class="nx">case</span> <span class="s2">"date"</span><span class="o">:</span>
                 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">formatDate</span><span class="o">(</span><span class="nx">elCell</span><span class="o">,</span> <span class="nx">oRecord</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">oData</span><span class="o">);</span>
                 <span class="nx">classname</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_DATE</span><span class="o">;</span>
                 <span class="k">break</span><span class="o">;</span>
-            <span class="nx">case</span> <span class="s2">&quot;email&quot;</span><span class="o">:</span>
+            <span class="nx">case</span> <span class="s2">"email"</span><span class="o">:</span>
                 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">formatEmail</span><span class="o">(</span><span class="nx">elCell</span><span class="o">,</span> <span class="nx">oRecord</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">oData</span><span class="o">);</span>
                 <span class="nx">classname</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_EMAIL</span><span class="o">;</span>
                 <span class="k">break</span><span class="o">;</span>
-            <span class="nx">case</span> <span class="s2">&quot;link&quot;</span><span class="o">:</span>
+            <span class="nx">case</span> <span class="s2">"link"</span><span class="o">:</span>
                 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">formatLink</span><span class="o">(</span><span class="nx">elCell</span><span class="o">,</span> <span class="nx">oRecord</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">oData</span><span class="o">);</span>
                 <span class="nx">classname</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_LINK</span><span class="o">;</span>
                 <span class="k">break</span><span class="o">;</span>
-            <span class="nx">case</span> <span class="s2">&quot;number&quot;</span><span class="o">:</span>
+            <span class="nx">case</span> <span class="s2">"number"</span><span class="o">:</span>
                 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">formatNumber</span><span class="o">(</span><span class="nx">elCell</span><span class="o">,</span> <span class="nx">oRecord</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">oData</span><span class="o">);</span>
                 <span class="nx">classname</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_NUMBER</span><span class="o">;</span>
                 <span class="k">break</span><span class="o">;</span>
-            <span class="nx">case</span> <span class="s2">&quot;select&quot;</span><span class="o">:</span>
+            <span class="nx">case</span> <span class="s2">"select"</span><span class="o">:</span>
                 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">formatSelect</span><span class="o">(</span><span class="nx">elCell</span><span class="o">,</span> <span class="nx">oRecord</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">oData</span><span class="o">);</span>
                 <span class="nx">classname</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_SELECT</span><span class="o">;</span>
                 <span class="k">break</span><span class="o">;</span>
            <span class="nx">default</span><span class="o">:</span>
-                <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">?</span> <span class="nx">oData</span><span class="o">.</span><span class="nx">toString</span><span class="o">()</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
-                <span class="c">//elCell.innerHTML = (oData) ? &quot;&lt;a href=\&quot;#\&quot;&gt;&quot;+oData.toString()+&quot;&lt;/a&gt;&quot; : &quot;&quot;;</span>
+                <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">?</span> <span class="nx">oData</span><span class="o">.</span><span class="nx">toString</span><span class="o">()</span> <span class="o">:</span> <span class="s2">""</span><span class="o">;</span>
+                <span class="c">//elCell.innerHTML = (oData) ? "&lt;a href=\"#\"&gt;"+oData.toString()+"&lt;/a&gt;" : "";</span>
 <span class="c"></span>                <span class="nx">classname</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_STRING</span><span class="o">;</span>
                 <span class="k">break</span><span class="o">;</span>
         <span class="o">}</span>
@@ -648,7 +643,7 @@
 
 
 <span class="c">/**</span>
-<span class="c"> * Formats cells in Columns of type &quot;checkbox&quot;.</span>
+<span class="c"> * Formats cells in Columns of type "checkbox".</span>
 <span class="c"> *</span>
 <span class="c"> * @method formatCheckbox</span>
 <span class="c"> * @param elCell {HTMLElement} Table cell element.</span>
@@ -659,13 +654,13 @@
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">formatCheckbox</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">elCell</span><span class="o">,</span> <span class="nx">oRecord</span><span class="o">,</span> <span class="nx">oColumn</span><span class="o">,</span> <span class="nx">oData</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">bChecked</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">;</span>
-    <span class="nx">bChecked</span> <span class="o">=</span> <span class="o">(</span><span class="nx">bChecked</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot; checked&quot;</span> <span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
-    <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&lt;input type=\&quot;checkbox\&quot;&quot;</span> <span class="o">+</span> <span class="nx">bChecked</span> <span class="o">+</span>
-            <span class="s2">&quot; class=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_CHECKBOX</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&gt;&quot;</span><span class="o">;</span>
+    <span class="nx">bChecked</span> <span class="o">=</span> <span class="o">(</span><span class="nx">bChecked</span><span class="o">)</span> <span class="o">?</span> <span class="s2">" checked"</span> <span class="o">:</span> <span class="s2">""</span><span class="o">;</span>
+    <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">"&lt;input type=\"checkbox\""</span> <span class="o">+</span> <span class="nx">bChecked</span> <span class="o">+</span>
+            <span class="s2">" class=\""</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_CHECKBOX</span> <span class="o">+</span> <span class="s2">"\"&gt;"</span><span class="o">;</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Formats cells in Columns of type &quot;currency&quot;. Can be overridden for custom formatting.</span>
+<span class="c"> * Formats cells in Columns of type "currency". Can be overridden for custom formatting.</span>
 <span class="c"> *</span>
 <span class="c"> * @method formatCurrency</span>
 <span class="c"> * @param elCell {HTMLElement} Table cell element.</span>
@@ -681,27 +676,27 @@
         <span class="k">if</span><span class="o">((</span><span class="nx">nAmount</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">nAmount</span> <span class="o">!==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nb">isNaN</span><span class="o">(</span><span class="nb">parseFloat</span><span class="o">(</span><span class="nx">nAmount</span><span class="o">)))</span> <span class="o">{</span>
              <span class="c">// Round to the penny</span>
 <span class="c"></span>             <span class="nx">nAmount</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="nx">nAmount</span><span class="o">*</span><span class="m">100</span><span class="o">)/</span><span class="m">100</span><span class="o">;</span>
-             <span class="nx">markup</span> <span class="o">=</span> <span class="s2">&quot;$&quot;</span><span class="o">+</span><span class="nx">nAmount</span><span class="o">;</span>
+             <span class="nx">markup</span> <span class="o">=</span> <span class="s2">"$"</span><span class="o">+</span><span class="nx">nAmount</span><span class="o">;</span>
 
             <span class="c">// Normalize digits</span>
-<span class="c"></span>            <span class="k">var</span> <span class="nx">dotIndex</span> <span class="o">=</span> <span class="nx">markup</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;.&quot;</span><span class="o">);</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">dotIndex</span> <span class="o">=</span> <span class="nx">markup</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"."</span><span class="o">);</span>
             <span class="k">if</span><span class="o">(</span><span class="nx">dotIndex</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">&quot;.00&quot;</span><span class="o">;</span>
+                <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">".00"</span><span class="o">;</span>
             <span class="o">}</span>
             <span class="k">else</span> <span class="o">{</span>
                 <span class="k">while</span><span class="o">(</span><span class="nx">dotIndex</span> <span class="o">&gt;</span> <span class="nx">markup</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">3</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">&quot;0&quot;</span><span class="o">;</span>
+                    <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">"0"</span><span class="o">;</span>
                 <span class="o">}</span>
             <span class="o">}</span>
         <span class="o">}</span>
         <span class="k">else</span> <span class="o">{</span>
-            <span class="nx">markup</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+            <span class="nx">markup</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
         <span class="o">}</span>
         <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">markup</span><span class="o">;</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Formats cells in Columns of type &quot;date&quot;.</span>
+<span class="c"> * Formats cells in Columns of type "date".</span>
 <span class="c"> *</span>
 <span class="c"> * @method formatDate</span>
 <span class="c"> * @param elCell {HTMLElement} Table cell element.</span>
@@ -713,16 +708,16 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">formatDate</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">elCell</span><span class="o">,</span> <span class="nx">oRecord</span><span class="o">,</span> <span class="nx">oColumn</span><span class="o">,</span> <span class="nx">oData</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">oDate</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">;</span>
     <span class="k">if</span><span class="o">(</span><span class="nx">oDate</span> <span class="k">instanceof</span> <span class="nb">Date</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oDate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()+</span><span class="m">1</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nx">oDate</span><span class="o">.</span><span class="nx">getDate</span><span class="o">()</span>  <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="nx">oDate</span><span class="o">.</span><span class="nx">getFullYear</span><span class="o">();</span>
+        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oDate</span><span class="o">.</span><span class="nx">getMonth</span><span class="o">()+</span><span class="m">1</span><span class="o">)</span> <span class="o">+</span> <span class="s2">"/"</span> <span class="o">+</span> <span class="nx">oDate</span><span class="o">.</span><span class="nx">getDate</span><span class="o">()</span>  <span class="o">+</span> <span class="s2">"/"</span> <span class="o">+</span> <span class="nx">oDate</span><span class="o">.</span><span class="nx">getFullYear</span><span class="o">();</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not format date&quot;</span><span class="o">,</span><span class="s2">&quot;warn&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Could not format date"</span><span class="o">,</span><span class="s2">"warn"</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="o">}</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Formats cells in Columns of type &quot;email&quot;.</span>
+<span class="c"> * Formats cells in Columns of type "email".</span>
 <span class="c"> *</span>
 <span class="c"> * @method formatEmail</span>
 <span class="c"> * @param elCell {HTMLElement} Table cell element.</span>
@@ -734,15 +729,15 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">formatEmail</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">elCell</span><span class="o">,</span> <span class="nx">oRecord</span><span class="o">,</span> <span class="nx">oColumn</span><span class="o">,</span> <span class="nx">oData</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">sEmail</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">;</span>
     <span class="k">if</span><span class="o">(</span><span class="nx">sEmail</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&lt;a href=\&quot;mailto:&quot;</span> <span class="o">+</span> <span class="nx">sEmail</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&gt;&quot;</span> <span class="o">+</span> <span class="nx">sEmail</span> <span class="o">+</span> <span class="s2">&quot;&lt;/a&gt;&quot;</span><span class="o">;</span>
+        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">"&lt;a href=\"mailto:"</span> <span class="o">+</span> <span class="nx">sEmail</span> <span class="o">+</span> <span class="s2">"\"&gt;"</span> <span class="o">+</span> <span class="nx">sEmail</span> <span class="o">+</span> <span class="s2">"&lt;/a&gt;"</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Formats cells in Columns of type &quot;link&quot;.</span>
+<span class="c"> * Formats cells in Columns of type "link".</span>
 <span class="c"> *</span>
 <span class="c"> * @method formatLink</span>
 <span class="c"> * @param elCell {HTMLElement} Table cell element.</span>
@@ -754,15 +749,15 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">formatLink</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">elCell</span><span class="o">,</span> <span class="nx">oRecord</span><span class="o">,</span> <span class="nx">oColumn</span><span class="o">,</span> <span class="nx">oData</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">sLink</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">;</span>
     <span class="k">if</span><span class="o">(</span><span class="nx">sLink</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&lt;a href=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">sLink</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&gt;&quot;</span> <span class="o">+</span> <span class="nx">sLink</span> <span class="o">+</span> <span class="s2">&quot;&lt;/a&gt;&quot;</span><span class="o">;</span>
+        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">"&lt;a href=\""</span> <span class="o">+</span> <span class="nx">sLink</span> <span class="o">+</span> <span class="s2">"\"&gt;"</span> <span class="o">+</span> <span class="nx">sLink</span> <span class="o">+</span> <span class="s2">"&lt;/a&gt;"</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Formats cells in Columns of type &quot;number&quot;.</span>
+<span class="c"> * Formats cells in Columns of type "number".</span>
 <span class="c"> *</span>
 <span class="c"> * @method formatNumber</span>
 <span class="c"> * @param elCell {HTMLElement} Table cell element.</span>
@@ -777,12 +772,12 @@
         <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">nNumber</span><span class="o">.</span><span class="nx">toString</span><span class="o">();</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+        <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Formats cells in Columns of type &quot;select&quot;.</span>
+<span class="c"> * Formats cells in Columns of type "select".</span>
 <span class="c"> *</span>
 <span class="c"> * @method formatSelect</span>
 <span class="c"> * @param elCell {HTMLElement} Table cell element.</span>
@@ -795,23 +790,23 @@
     <span class="k">var</span> <span class="nx">selectedValue</span> <span class="o">=</span> <span class="nx">oData</span><span class="o">;</span>
     <span class="k">var</span> <span class="nx">options</span> <span class="o">=</span> <span class="nx">oColumn</span><span class="o">.</span><span class="nx">selectOptions</span><span class="o">;</span>
 
-    <span class="k">var</span> <span class="nx">markup</span> <span class="o">=</span> <span class="s2">&quot;&lt;select&gt;&quot;</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">markup</span> <span class="o">=</span> <span class="s2">"&lt;select&gt;"</span><span class="o">;</span>
     <span class="k">if</span><span class="o">(</span><span class="nx">options</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">options</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">option</span> <span class="o">=</span> <span class="nx">options</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
-            <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">&quot;&lt;option value=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">option</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&quot;</span><span class="o">;</span>
+            <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">"&lt;option value=\""</span> <span class="o">+</span> <span class="nx">option</span> <span class="o">+</span> <span class="s2">"\""</span><span class="o">;</span>
             <span class="k">if</span><span class="o">(</span><span class="nx">selectedValue</span> <span class="o">===</span> <span class="nx">option</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">&quot; selected&quot;</span><span class="o">;</span>
+                <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">" selected"</span><span class="o">;</span>
             <span class="o">}</span>
-            <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> <span class="nx">option</span> <span class="o">+</span> <span class="s2">&quot;&lt;/option&gt;&quot;</span><span class="o">;</span>
+            <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">"&gt;"</span> <span class="o">+</span> <span class="nx">option</span> <span class="o">+</span> <span class="s2">"&lt;/option&gt;"</span><span class="o">;</span>
         <span class="o">}</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
         <span class="k">if</span><span class="o">(</span><span class="nx">selectedValue</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">&quot;&lt;option value=\&quot;&quot;</span> <span class="o">+</span> <span class="nx">selectedValue</span> <span class="o">+</span> <span class="s2">&quot;\&quot; selected&gt;&quot;</span> <span class="o">+</span> <span class="nx">selectedValue</span> <span class="o">+</span> <span class="s2">&quot;&lt;/option&gt;&quot;</span><span class="o">;</span>
+            <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">"&lt;option value=\""</span> <span class="o">+</span> <span class="nx">selectedValue</span> <span class="o">+</span> <span class="s2">"\" selected&gt;"</span> <span class="o">+</span> <span class="nx">selectedValue</span> <span class="o">+</span> <span class="s2">"&lt;/option&gt;"</span><span class="o">;</span>
         <span class="o">}</span>
     <span class="o">}</span>
-    <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">&quot;&lt;/select&gt;&quot;</span><span class="o">;</span>
+    <span class="nx">markup</span> <span class="o">+=</span> <span class="s2">"&lt;/select&gt;"</span><span class="o">;</span>
     <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">markup</span><span class="o">;</span>
 <span class="o">};</span>
 
@@ -819,7 +814,7 @@
 <span class="c"> * Takes innerHTML from TD and parses out data for storage in RecordSet.</span>
 <span class="c"> *</span>
 <span class="c"> * @method parse</span>
-<span class="c"> * @param sMarkup {String} The TD&#39;s innerHTML value.</span>
+<span class="c"> * @param sMarkup {String} The TD's innerHTML value.</span>
 <span class="c"> * @return {Object} Data.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">parse</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sMarkup</span><span class="o">)</span> <span class="o">{</span>
@@ -829,19 +824,19 @@
     <span class="k">else</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
         <span class="nx">switch</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">case</span> <span class="s2">&quot;checkbox&quot;</span><span class="o">:</span>
+            <span class="nx">case</span> <span class="s2">"checkbox"</span><span class="o">:</span>
                 <span class="nx">data</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">parseCheckbox</span><span class="o">(</span><span class="nx">sMarkup</span><span class="o">);</span>
                 <span class="k">break</span><span class="o">;</span>
-            <span class="nx">case</span> <span class="s2">&quot;currency&quot;</span><span class="o">:</span>
+            <span class="nx">case</span> <span class="s2">"currency"</span><span class="o">:</span>
                 <span class="nx">data</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">parseCurrency</span><span class="o">(</span><span class="nx">sMarkup</span><span class="o">);</span>
                 <span class="k">break</span><span class="o">;</span>
-            <span class="nx">case</span> <span class="s2">&quot;date&quot;</span><span class="o">:</span>
+            <span class="nx">case</span> <span class="s2">"date"</span><span class="o">:</span>
                 <span class="nx">data</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">parseDate</span><span class="o">(</span><span class="nx">sMarkup</span><span class="o">);</span>
                 <span class="k">break</span><span class="o">;</span>
-            <span class="nx">case</span> <span class="s2">&quot;number&quot;</span><span class="o">:</span>
+            <span class="nx">case</span> <span class="s2">"number"</span><span class="o">:</span>
                 <span class="nx">data</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">parseNumber</span><span class="o">(</span><span class="nx">sMarkup</span><span class="o">);</span>
                 <span class="k">break</span><span class="o">;</span>
-            <span class="nx">case</span> <span class="s2">&quot;select&quot;</span><span class="o">:</span>
+            <span class="nx">case</span> <span class="s2">"select"</span><span class="o">:</span>
                 <span class="nx">data</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">parseSelect</span><span class="o">(</span><span class="nx">sMarkup</span><span class="o">);</span>
                 <span class="k">break</span><span class="o">;</span>
            <span class="nx">default</span><span class="o">:</span>
@@ -855,7 +850,7 @@
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Default parse function for Columns of type &quot;checkbox&quot; takes markup and</span>
+<span class="c"> * Default parse function for Columns of type "checkbox" takes markup and</span>
 <span class="c"> * extracts data. Can be overridden for custom parsing.</span>
 <span class="c"> *</span>
 <span class="c"> * @method parseCheckbox</span>
@@ -863,11 +858,11 @@
 <span class="c"> * @return {bChecked} True if checkbox is checked.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">parseCheckbox</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sMarkup</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="o">(</span><span class="nx">sMarkup</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;checked&quot;</span><span class="o">)</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="kc">true</span><span class="o">;</span>
+    <span class="k">return</span> <span class="o">(</span><span class="nx">sMarkup</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"checked"</span><span class="o">)</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="kc">true</span><span class="o">;</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Default parse function for Columns of type &quot;currency&quot; takes markup and</span>
+<span class="c"> * Default parse function for Columns of type "currency" takes markup and</span>
 <span class="c"> * extracts data. Can be overridden for custom parsing.</span>
 <span class="c"> *</span>
 <span class="c"> * @method parseCurrency</span>
@@ -879,7 +874,7 @@
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Default parse function for Columns of type &quot;date&quot; takes markup and extracts</span>
+<span class="c"> * Default parse function for Columns of type "date" takes markup and extracts</span>
 <span class="c"> * data. Can be overridden for custom parsing.</span>
 <span class="c"> *</span>
 <span class="c"> * @method parseDate</span>
@@ -887,15 +882,15 @@
 <span class="c"> * @return {oDate} Date instance.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">parseDate</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sMarkup</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">var</span> <span class="nx">mm</span> <span class="o">=</span> <span class="nx">sMarkup</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="nx">sMarkup</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;/&quot;</span><span class="o">));</span>
-    <span class="nx">sMarkup</span> <span class="o">=</span> <span class="nx">sMarkup</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="nx">sMarkup</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;/&quot;</span><span class="o">)+</span><span class="m">1</span><span class="o">);</span>
-    <span class="k">var</span> <span class="nx">dd</span> <span class="o">=</span> <span class="nx">sMarkup</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="nx">sMarkup</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;/&quot;</span><span class="o">));</span>
-    <span class="k">var</span> <span class="nx">yy</span> <span class="o">=</span> <span class="nx">sMarkup</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="nx">sMarkup</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;/&quot;</span><span class="o">)+</span><span class="m">1</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">mm</span> <span class="o">=</span> <span class="nx">sMarkup</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="nx">sMarkup</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"/"</span><span class="o">));</span>
+    <span class="nx">sMarkup</span> <span class="o">=</span> <span class="nx">sMarkup</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="nx">sMarkup</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"/"</span><span class="o">)+</span><span class="m">1</span><span class="o">);</span>
+    <span class="k">var</span> <span class="nx">dd</span> <span class="o">=</span> <span class="nx">sMarkup</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="nx">sMarkup</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"/"</span><span class="o">));</span>
+    <span class="k">var</span> <span class="nx">yy</span> <span class="o">=</span> <span class="nx">sMarkup</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="nx">sMarkup</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"/"</span><span class="o">)+</span><span class="m">1</span><span class="o">);</span>
     <span class="k">return</span> <span class="k">new</span> <span class="nb">Date</span><span class="o">(</span><span class="nx">yy</span><span class="o">,</span> <span class="nx">mm</span><span class="o">,</span> <span class="nx">dd</span><span class="o">);</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Default parse function for Columns of type &quot;number&quot; takes markup and extracts</span>
+<span class="c"> * Default parse function for Columns of type "number" takes markup and extracts</span>
 <span class="c"> * data. Can be overridden for custom parsing.</span>
 <span class="c"> *</span>
 <span class="c"> * @method parseNumber</span>
@@ -907,7 +902,7 @@
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Default parse function for Columns of type &quot;select&quot; takes markup and extracts</span>
+<span class="c"> * Default parse function for Columns of type "select" takes markup and extracts</span>
 <span class="c"> * data. Can be overridden for custom parsing.</span>
 <span class="c"> *</span>
 <span class="c"> * @method parseSelect</span>
@@ -915,7 +910,7 @@
 <span class="c"> * @return {sValue} Value of selected option.</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Column</span><span class="o">.</span><span class="nx">parseSelect</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">sMarkup</span><span class="o">)</span> <span class="o">{</span>
-    <span class="c">//return (sMarkup.indexOf(&quot;checked&quot;) &lt; 0) ? false : true;</span>
+    <span class="c">//return (sMarkup.indexOf("checked") &lt; 0) ? false : true;</span>
 <span class="c"></span><span class="o">};</span>
 
 <span class="c">/**</span>
@@ -964,23 +959,23 @@
 <span class="c"></span>    <span class="c">// rather than the DataTable container</span>
 <span class="c"></span>    <span class="c">// elTable comes in as a cell. Traverse up DOM to find the table.</span>
 <span class="c"></span>    <span class="c">// TODO: safety net in case table is never found.</span>
-<span class="c"></span>    <span class="c">//while(elCell.nodeName.toLowerCase() != &quot;table&quot;) {</span>
+<span class="c"></span>    <span class="c">//while(elCell.nodeName.toLowerCase() != "table") {</span>
 <span class="c"></span>    <span class="c">//    elCell = elCell.parentNode;</span>
 <span class="c"></span>    <span class="c">//}</span>
 <span class="c"></span>    <span class="c">//this.tableContainer = elCell.parentNode;</span>
 <span class="c"></span>    
-    <span class="k">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">));</span><span class="c">//this.tableContainer.appendChild(document.createElement(&quot;div&quot;));</span>
-<span class="c"></span>    <span class="nx">container</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">position</span> <span class="o">=</span> <span class="s2">&quot;absolute&quot;</span><span class="o">;</span>
+    <span class="k">var</span> <span class="nx">container</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">"div"</span><span class="o">));</span><span class="c">//this.tableContainer.appendChild(document.createElement("div"));</span>
+<span class="c"></span>    <span class="nx">container</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">position</span> <span class="o">=</span> <span class="s2">"absolute"</span><span class="o">;</span>
     <span class="nx">container</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">zIndex</span> <span class="o">=</span> <span class="m">9000</span><span class="o">;</span>
-    <span class="nx">container</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s2">&quot;yui-dt-editor&quot;</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnEditor</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">;</span>
+    <span class="nx">container</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="s2">"yui-dt-editor"</span> <span class="o">+</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnEditor</span><span class="o">.</span><span class="nx">_nCount</span><span class="o">;</span>
     <span class="nx">container</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_EDITOR</span><span class="o">;</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">container</span> <span class="o">=</span> <span class="nx">container</span><span class="o">;</span>
 
     <span class="nx">switch</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">case</span> <span class="s2">&quot;textbox&quot;</span><span class="o">:</span>
+        <span class="nx">case</span> <span class="s2">"textbox"</span><span class="o">:</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">createTextboxEditor</span><span class="o">();</span>
             <span class="k">break</span><span class="o">;</span>
-        <span class="nx">case</span> <span class="s2">&quot;textarea&quot;</span><span class="o">:</span>
+        <span class="nx">case</span> <span class="s2">"textarea"</span><span class="o">:</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">createTextareaEditor</span><span class="o">();</span>
             <span class="k">break</span><span class="o">;</span>
         <span class="nx">default</span><span class="o">:</span>
@@ -1023,7 +1018,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnEditor</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">container</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
 <span class="c">/**</span>
-<span class="c"> * Reference to the ColumnEditor&#39;s Column instance.</span>
+<span class="c"> * Reference to the ColumnEditor's Column instance.</span>
 <span class="c"> *</span>
 <span class="c"> * @property column</span>
 <span class="c"> * @type YAHOO.widget.Column</span>
@@ -1031,7 +1026,7 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnEditor</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">column</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
 <span class="c">/**</span>
-<span class="c"> * Type of editor: &quot;textbox&quot;, etc.</span>
+<span class="c"> * Type of editor: "textbox", etc.</span>
 <span class="c"> *</span>
 <span class="c"> * @property type</span>
 <span class="c"> * @type String</span>
@@ -1067,10 +1062,10 @@
     <span class="k">this</span><span class="o">.</span><span class="nx">record</span> <span class="o">=</span> <span class="nx">oRecord</span><span class="o">;</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">column</span> <span class="o">=</span> <span class="nx">oColumn</span><span class="o">;</span>
     <span class="nx">switch</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">case</span> <span class="s2">&quot;textbox&quot;</span><span class="o">:</span>
+        <span class="nx">case</span> <span class="s2">"textbox"</span><span class="o">:</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">showTextboxEditor</span><span class="o">(</span><span class="nx">elCell</span><span class="o">,</span> <span class="nx">oRecord</span><span class="o">,</span> <span class="nx">oColumn</span><span class="o">);</span>
             <span class="k">break</span><span class="o">;</span>
-        <span class="nx">case</span> <span class="s2">&quot;textarea&quot;</span><span class="o">:</span>
+        <span class="nx">case</span> <span class="s2">"textarea"</span><span class="o">:</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">showTextareaEditor</span><span class="o">(</span><span class="nx">elCell</span><span class="o">,</span> <span class="nx">oRecord</span><span class="o">,</span> <span class="nx">oColumn</span><span class="o">);</span>
             <span class="k">break</span><span class="o">;</span>
         <span class="nx">default</span><span class="o">:</span>
@@ -1087,8 +1082,8 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnEditor</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">moveContainerTo</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">x</span><span class="o">,</span><span class="nx">y</span><span class="o">;</span>
 
-    <span class="c">// Don&#39;t use getXY for Opera</span>
-<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;opera&quot;</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+    <span class="c">// Don't use getXY for Opera</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">navigator</span><span class="o">.</span><span class="nx">userAgent</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">().</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"opera"</span><span class="o">)</span> <span class="o">!=</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
         <span class="nx">x</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetLeft</span><span class="o">;</span>
         <span class="nx">y</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">offsetTop</span><span class="o">;</span>
         <span class="k">while</span><span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">offsetParent</span><span class="o">)</span> <span class="o">{</span>
@@ -1108,8 +1103,8 @@
                 <span class="nx">y</span> <span class="o">+=</span> <span class="nb">window</span><span class="o">.</span><span class="nx">scrollY</span><span class="o">;</span>
             <span class="o">}</span>
     <span class="o">}</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">y</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">x</span> <span class="o">+</span> <span class="s2">"px"</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">y</span> <span class="o">+</span> <span class="s2">"px"</span><span class="o">;</span>
 <span class="o">};</span>
 
 
@@ -1122,10 +1117,10 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnEditor</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">getValue</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">value</span><span class="o">;</span>
     <span class="nx">switch</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">type</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">case</span> <span class="s2">&quot;textbox&quot;</span><span class="o">:</span>
+        <span class="nx">case</span> <span class="s2">"textbox"</span><span class="o">:</span>
             <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTextboxEditorValue</span><span class="o">();</span>
             <span class="k">break</span><span class="o">;</span>
-        <span class="nx">case</span> <span class="s2">&quot;textarea&quot;</span><span class="o">:</span>
+        <span class="nx">case</span> <span class="s2">"textarea"</span><span class="o">:</span>
             <span class="nx">value</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getTextareaEditorValue</span><span class="o">();</span>
             <span class="k">break</span><span class="o">;</span>
         <span class="nx">default</span><span class="o">:</span>
@@ -1141,9 +1136,9 @@
 <span class="c"> * @return {HTML} ???</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnEditor</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">createTextboxEditor</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">var</span> <span class="nx">elTextbox</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;input&quot;</span><span class="o">));</span>
+    <span class="k">var</span> <span class="nx">elTextbox</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">"input"</span><span class="o">));</span>
     <span class="c">// For FF bug 236791</span>
-<span class="c"></span>    <span class="nx">elTextbox</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s2">&quot;autocomplete&quot;</span><span class="o">,</span><span class="s2">&quot;off&quot;</span><span class="o">);</span>
+<span class="c"></span>    <span class="nx">elTextbox</span><span class="o">.</span><span class="nx">setAttribute</span><span class="o">(</span><span class="s2">"autocomplete"</span><span class="o">,</span><span class="s2">"off"</span><span class="o">);</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">input</span> <span class="o">=</span> <span class="nx">elTextbox</span><span class="o">;</span>
 <span class="o">};</span>
 
@@ -1154,7 +1149,7 @@
 <span class="c"> * @return {HTML} ???</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnEditor</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">createTextareaEditor</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">var</span> <span class="nx">elTextarea</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">&quot;textarea&quot;</span><span class="o">));</span>
+    <span class="k">var</span> <span class="nx">elTextarea</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s2">"textarea"</span><span class="o">));</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">input</span> <span class="o">=</span> <span class="nx">elTextarea</span><span class="o">;</span>
 <span class="o">};</span>
 
@@ -1171,13 +1166,13 @@
 <span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">moveContainerTo</span><span class="o">(</span><span class="nx">elCell</span><span class="o">);</span>
 
     <span class="c">// Update form field</span>
-<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">elCell</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">,</span><span class="m">10</span><span class="o">))</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">elCell</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">,</span><span class="m">10</span><span class="o">))</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">elCell</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">,</span><span class="m">10</span><span class="o">))</span> <span class="o">+</span> <span class="s2">"px"</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">elCell</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">,</span><span class="m">10</span><span class="o">))</span> <span class="o">+</span> <span class="s2">"px"</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">||</span> <span class="s2">""</span><span class="o">;</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">tabIndex</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
 
     <span class="c">// Display container</span>
-<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;block&quot;</span><span class="o">;</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">"block"</span><span class="o">;</span>
 
     <span class="c">// Highlight input</span>
 <span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
@@ -1197,13 +1192,13 @@
 <span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">moveContainerTo</span><span class="o">(</span><span class="nx">elCell</span><span class="o">);</span>
     
     <span class="c">// Update form field</span>
-<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">elCell</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">,</span><span class="m">10</span><span class="o">))</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="m">4</span><span class="o">*(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">elCell</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">,</span><span class="m">10</span><span class="o">))</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">elCell</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">,</span><span class="m">10</span><span class="o">))</span> <span class="o">+</span> <span class="s2">"px"</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="m">4</span><span class="o">*(</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">elCell</span><span class="o">.</span><span class="nx">offsetHeight</span><span class="o">,</span><span class="m">10</span><span class="o">))</span> <span class="o">+</span> <span class="s2">"px"</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nx">elCell</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">||</span> <span class="s2">""</span><span class="o">;</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">tabIndex</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
 
     <span class="c">// Display container</span>
-<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;block&quot;</span><span class="o">;</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">"block"</span><span class="o">;</span>
     
     <span class="c">// Highlight input</span>
 <span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">focus</span><span class="o">();</span>
@@ -1217,7 +1212,7 @@
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">ColumnEditor</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">hide</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">input</span><span class="o">.</span><span class="nx">tabIndex</span> <span class="o">=</span> <span class="o">-</span><span class="m">1</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">container</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">"none"</span><span class="o">;</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
@@ -1265,15 +1260,15 @@
 <span class="c">     * @param b {object} Second sort argument.</span>
 <span class="c">     */</span>
     <span class="nx">compareAsc</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">a</span><span class="o">,</span> <span class="nx">b</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span><span class="o">((</span><span class="nx">a</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">a</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">if</span><span class="o">((</span><span class="nx">b</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">((</span><span class="nx">a</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">a</span> <span class="o">==</span> <span class="s2">"undefined"</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">((</span><span class="nx">b</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s2">"undefined"</span><span class="o">))</span> <span class="o">{</span>
                 <span class="k">return</span> <span class="m">0</span><span class="o">;</span>
             <span class="o">}</span>
             <span class="k">else</span> <span class="o">{</span>
                 <span class="k">return</span> <span class="m">1</span><span class="o">;</span>
             <span class="o">}</span>
         <span class="o">}</span>
-        <span class="k">else</span> <span class="k">if</span><span class="o">((</span><span class="nx">b</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">else</span> <span class="k">if</span><span class="o">((</span><span class="nx">b</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s2">"undefined"</span><span class="o">))</span> <span class="o">{</span>
             <span class="k">return</span> <span class="o">-</span><span class="m">1</span><span class="o">;</span>
         <span class="o">}</span>
     
@@ -1302,15 +1297,15 @@
 <span class="c">     * @param b {object} Second sort argument.</span>
 <span class="c">     */</span>
     <span class="nx">compareDesc</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">a</span><span class="o">,</span> <span class="nx">b</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span><span class="o">((</span><span class="nx">a</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">a</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">))</span> <span class="o">{</span>
-            <span class="k">if</span><span class="o">((</span><span class="nx">b</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span><span class="o">((</span><span class="nx">a</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">a</span> <span class="o">==</span> <span class="s2">"undefined"</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">if</span><span class="o">((</span><span class="nx">b</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s2">"undefined"</span><span class="o">))</span> <span class="o">{</span>
                 <span class="k">return</span> <span class="m">0</span><span class="o">;</span>
             <span class="o">}</span>
             <span class="k">else</span> <span class="o">{</span>
                 <span class="k">return</span> <span class="o">-</span><span class="m">1</span><span class="o">;</span>
             <span class="o">}</span>
         <span class="o">}</span>
-        <span class="k">else</span> <span class="k">if</span><span class="o">((</span><span class="nx">b</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s2">&quot;undefined&quot;</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">else</span> <span class="k">if</span><span class="o">((</span><span class="nx">b</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">||</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">b</span> <span class="o">==</span> <span class="s2">"undefined"</span><span class="o">))</span> <span class="o">{</span>
             <span class="k">return</span> <span class="m">1</span><span class="o">;</span>
         <span class="o">}</span>
 
@@ -1342,7 +1337,7 @@
 <span class="c"> * @class WidthResizer</span>
 <span class="c"> * @extends YAHOO.util.DragDrop</span>
 <span class="c"> * @constructor</span>
-<span class="c"> * @param colElId {string} ID of the Column&#39;s TH element being resized</span>
+<span class="c"> * @param colElId {string} ID of the Column's TH element being resized</span>
 <span class="c"> * @param handleElId {string} ID of the handle element that causes the resize</span>
 <span class="c"> * @param sGroup {string} Group name of related DragDrop items</span>
 <span class="c"> */</span>
@@ -1355,7 +1350,7 @@
         <span class="k">this</span><span class="o">.</span><span class="nx">setYConstraint</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="m">0</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Column resizer could not be created due to invalid colElId&quot;</span><span class="o">,</span><span class="s2">&quot;warn&quot;</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Column resizer could not be created due to invalid colElId"</span><span class="o">,</span><span class="s2">"warn"</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">};</span>
 
@@ -1380,20 +1375,20 @@
     <span class="k">this</span><span class="o">.</span><span class="nx">startPos</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getX</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">());</span>
 
     <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">datatable</span><span class="o">.</span><span class="nx">fixedWidth</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">cellText</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getElementsByClassName</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_HEADTEXT</span><span class="o">,</span><span class="s2">&quot;span&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">cell</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
+        <span class="k">var</span> <span class="nx">cellText</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getElementsByClassName</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_HEADTEXT</span><span class="o">,</span><span class="s2">"span"</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">cell</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">minWidth</span> <span class="o">=</span> <span class="nx">cellText</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">+</span> <span class="m">6</span><span class="o">;</span>
         <span class="k">var</span> <span class="nx">sib</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cell</span><span class="o">.</span><span class="nx">nextSibling</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">sibCellText</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getElementsByClassName</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_HEADTEXT</span><span class="o">,</span><span class="s2">&quot;span&quot;</span><span class="o">,</span><span class="nx">sib</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
+        <span class="k">var</span> <span class="nx">sibCellText</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getElementsByClassName</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">DataTable</span><span class="o">.</span><span class="nx">CLASS_HEADTEXT</span><span class="o">,</span><span class="s2">"span"</span><span class="o">,</span><span class="nx">sib</span><span class="o">)[</span><span class="m">0</span><span class="o">];</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">sibMinWidth</span> <span class="o">=</span> <span class="nx">sibCellText</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">+</span> <span class="m">6</span><span class="o">;</span>
 <span class="c">//!!</span>
 <span class="c"></span>        <span class="k">var</span> <span class="nx">left</span> <span class="o">=</span> <span class="o">((</span><span class="k">this</span><span class="o">.</span><span class="nx">startWidth</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">minWidth</span><span class="o">)</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span> <span class="m">0</span> <span class="o">:</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">startWidth</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">minWidth</span><span class="o">);</span>
         <span class="k">var</span> <span class="nx">right</span> <span class="o">=</span> <span class="o">((</span><span class="nx">sib</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">sibMinWidth</span><span class="o">)</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">?</span> <span class="m">0</span> <span class="o">:</span> <span class="o">(</span><span class="nx">sib</span><span class="o">.</span><span class="nx">offsetWidth</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">sibMinWidth</span><span class="o">);</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">setXConstraint</span><span class="o">(</span><span class="nx">left</span><span class="o">,</span> <span class="nx">right</span><span class="o">);</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;cellstartwidth:&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">startWidth</span><span class="o">,</span><span class="s2">&quot;time&quot;</span><span class="o">);</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;cellminwidth:&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">minWidth</span><span class="o">,</span><span class="s2">&quot;time&quot;</span><span class="o">);</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;sibstartwidth:&quot;</span> <span class="o">+</span> <span class="nx">sib</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">,</span><span class="s2">&quot;time&quot;</span><span class="o">);</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;sibminwidth:&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">sibMinWidth</span><span class="o">,</span><span class="s2">&quot;time&quot;</span><span class="o">);</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;l:&quot;</span> <span class="o">+</span> <span class="nx">left</span> <span class="o">+</span> <span class="s2">&quot; AND r:&quot;</span> <span class="o">+</span> <span class="nx">right</span><span class="o">,</span><span class="s2">&quot;time&quot;</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"cellstartwidth:"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">startWidth</span><span class="o">,</span><span class="s2">"time"</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"cellminwidth:"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">minWidth</span><span class="o">,</span><span class="s2">"time"</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"sibstartwidth:"</span> <span class="o">+</span> <span class="nx">sib</span><span class="o">.</span><span class="nx">offsetWidth</span><span class="o">,</span><span class="s2">"time"</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"sibminwidth:"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">sibMinWidth</span><span class="o">,</span><span class="s2">"time"</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"l:"</span> <span class="o">+</span> <span class="nx">left</span> <span class="o">+</span> <span class="s2">" AND r:"</span> <span class="o">+</span> <span class="nx">right</span><span class="o">,</span><span class="s2">"time"</span><span class="o">);</span>
     <span class="o">}</span>
 
 <span class="o">};</span>
@@ -1407,20 +1402,20 @@
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">WidthResizer</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">onMouseUp</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
     <span class="c">//TODO: replace the resizer where it belongs:</span>
 <span class="c"></span>    <span class="k">var</span> <span class="nx">resizeStyle</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">handleElId</span><span class="o">).</span><span class="nx">style</span><span class="o">;</span>
-    <span class="nx">resizeStyle</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="s2">&quot;auto&quot;</span><span class="o">;</span>
+    <span class="nx">resizeStyle</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="s2">"auto"</span><span class="o">;</span>
     <span class="nx">resizeStyle</span><span class="o">.</span><span class="nx">right</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
-    <span class="nx">resizeStyle</span><span class="o">.</span><span class="nx">marginRight</span> <span class="o">=</span> <span class="s2">&quot;-6px&quot;</span><span class="o">;</span>
-    <span class="nx">resizeStyle</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="s2">&quot;6px&quot;</span><span class="o">;</span>
+    <span class="nx">resizeStyle</span><span class="o">.</span><span class="nx">marginRight</span> <span class="o">=</span> <span class="s2">"-6px"</span><span class="o">;</span>
+    <span class="nx">resizeStyle</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="s2">"6px"</span><span class="o">;</span>
     <span class="c">//.yui-dt-headresizer {position:absolute;margin-right:-6px;right:0;bottom:0;width:6px;height:100%;cursor:w-resize;cursor:col-resize;}</span>
 <span class="c"></span>
 
     <span class="c">//var cells = this.datatable._elTable.tHead.rows[this.datatable._elTable.tHead.rows.length-1].cells;</span>
 <span class="c"></span>    <span class="c">//for(var i=0; i&lt;cells.length; i++) {</span>
-<span class="c"></span>        <span class="c">//cells[i].style.width = &quot;5px&quot;;</span>
+<span class="c"></span>        <span class="c">//cells[i].style.width = "5px";</span>
 <span class="c"></span>    <span class="c">//}</span>
 <span class="c"></span>
     <span class="c">//TODO: set new ColumnSet width values</span>
-<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">datatable</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;columnResizeEvent&quot;</span><span class="o">,{</span><span class="nx">datatable</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">datatable</span><span class="o">,</span><span class="nx">target</span><span class="o">:</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">)});</span>
+<span class="c"></span>    <span class="k">this</span><span class="o">.</span><span class="nx">datatable</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"columnResizeEvent"</span><span class="o">,{</span><span class="nx">datatable</span><span class="o">:</span><span class="k">this</span><span class="o">.</span><span class="nx">datatable</span><span class="o">,</span><span class="nx">target</span><span class="o">:</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">)});</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
@@ -1431,12 +1426,12 @@
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">WidthResizer</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">onDrag</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">newPos</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getX</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getDragEl</span><span class="o">());</span>
-    <span class="c">//YAHOO.log(&quot;newpos:&quot;+newPos,&quot;warn&quot;);//YAHOO.util.Event.getPageX(e);</span>
+    <span class="c">//YAHOO.log("newpos:"+newPos,"warn");//YAHOO.util.Event.getPageX(e);</span>
 <span class="c"></span>    <span class="k">var</span> <span class="nx">offsetX</span> <span class="o">=</span> <span class="nx">newPos</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">startPos</span><span class="o">;</span>
-    <span class="c">//YAHOO.log(&quot;offset:&quot;+offsetX,&quot;warn&quot;);</span>
-<span class="c"></span>    <span class="c">//YAHOO.log(&quot;startwidth:&quot;+this.startWidth + &quot; and offset:&quot;+offsetX,&quot;warn&quot;);</span>
+    <span class="c">//YAHOO.log("offset:"+offsetX,"warn");</span>
+<span class="c"></span>    <span class="c">//YAHOO.log("startwidth:"+this.startWidth + " and offset:"+offsetX,"warn");</span>
 <span class="c"></span>    <span class="k">var</span> <span class="nx">newWidth</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">startWidth</span> <span class="o">+</span> <span class="nx">offsetX</span><span class="o">;</span>
-    <span class="c">//YAHOO.log(&quot;newwidth:&quot;+newWidth,&quot;warn&quot;);</span>
+    <span class="c">//YAHOO.log("newwidth:"+newWidth,"warn");</span>
 <span class="c"></span>
     <span class="k">if</span><span class="o">(</span><span class="nx">newWidth</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">minWidth</span><span class="o">)</span> <span class="o">{</span>
         <span class="nx">newWidth</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">minWidth</span><span class="o">;</span>
@@ -1446,8 +1441,8 @@
 <span class="c"></span>    <span class="k">var</span> <span class="nx">oDataTable</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">datatable</span><span class="o">;</span>
     <span class="k">var</span> <span class="nx">elCell</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">cell</span><span class="o">;</span>
 
-    <span class="c">//YAHOO.log(&quot;newwidth&quot; + newWidth,&quot;warn&quot;);</span>
-<span class="c"></span>    <span class="c">//YAHOO.log(newWidth + &quot; AND &quot;+ elColumn.offsetWidth + &quot; AND &quot; + elColumn.id,&quot;warn&quot;);</span>
+    <span class="c">//YAHOO.log("newwidth" + newWidth,"warn");</span>
+<span class="c"></span>    <span class="c">//YAHOO.log(newWidth + " AND "+ elColumn.offsetWidth + " AND " + elColumn.id,"warn");</span>
 <span class="c"></span>
     <span class="c">// Resize the other Columns</span>
 <span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">oDataTable</span><span class="o">.</span><span class="nx">fixedWidth</span><span class="o">)</span> <span class="o">{</span>
@@ -1462,17 +1457,17 @@
         <span class="c">//TODO: how else to cycle through all the Columns without having to use an index property?</span>
 <span class="c"></span>        <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">oDataTable</span><span class="o">.</span><span class="nx">_oColumnSet</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
             <span class="k">if</span><span class="o">((</span><span class="nx">i</span> <span class="o">!=</span> <span class="nx">elCell</span><span class="o">.</span><span class="nx">index</span><span class="o">)</span> <span class="o">&amp;&amp;</span>  <span class="o">(</span><span class="nx">i</span><span class="o">!=</span><span class="nx">sibIndex</span><span class="o">))</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">oDataTable</span><span class="o">.</span><span class="nx">_oColumnSet</span><span class="o">.</span><span class="nx">keys</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">).</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">oDataTable</span><span class="o">.</span><span class="nx">_oColumnSet</span><span class="o">.</span><span class="nx">keys</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">width</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">oDataTable</span><span class="o">.</span><span class="nx">_oColumnSet</span><span class="o">.</span><span class="nx">keys</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">).</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">oDataTable</span><span class="o">.</span><span class="nx">_oColumnSet</span><span class="o">.</span><span class="nx">keys</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">width</span> <span class="o">+</span> <span class="s2">"px"</span><span class="o">;</span>
             <span class="o">}</span>
         <span class="o">}</span>
         <span class="nx">sib</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">sibnewwidth</span><span class="o">;</span>
-        <span class="nx">elCell</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">newWidth</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+        <span class="nx">elCell</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">newWidth</span> <span class="o">+</span> <span class="s2">"px"</span><span class="o">;</span>
         <span class="c">//oDataTable._oColumnSet.flat[sibIndex].width = sibnewwidth;</span>
 <span class="c"></span>        <span class="c">//oDataTable._oColumnSet.flat[elCell.index].width = newWidth;</span>
 <span class="c"></span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">elCell</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">newWidth</span> <span class="o">+</span> <span class="s2">&quot;px&quot;</span><span class="o">;</span>
+        <span class="nx">elCell</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">newWidth</span> <span class="o">+</span> <span class="s2">"px"</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">};</span>
 </pre></div>
@@ -1484,9 +1479,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -1523,13 +1516,11 @@
                                 <li class=""><a href="module_treeview.html">treeview</a></li>
 
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="Column.html">Column</a></li>
+                        <ul class="content"><li class=""><a href="Column.html">Column</a></li>
                                 <li class=""><a href="ColumnEditor.html">ColumnEditor</a></li>
                                 <li class=""><a href="ColumnSet.html">ColumnSet</a></li>
                                 <li class=""><a href="DataTable.html">DataTable</a></li>
@@ -1537,17 +1528,14 @@
                                 <li class=""><a href="RecordSet.html">RecordSet</a></li>
                                 <li class=""><a href="Sort.html">Sort</a></li>
                                 <li class=""><a href="WidthResizer.html">WidthResizer</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="ColumnSet.js.html">ColumnSet.js</a></li>
+                        <ul class="content"><li class="selected"><a href="ColumnSet.js.html">ColumnSet.js</a></li>
                                 <li class=""><a href="DataTable.js.html">DataTable.js</a></li>
                                 <li class=""><a href="RecordSet.js.html">RecordSet.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -1557,9 +1545,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

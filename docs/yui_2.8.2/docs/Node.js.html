@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: treeview   Node.js  (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: treeview   Node.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>TreeView Widget&nbsp; <span class="subtitle">2.8.2r1</span></h3>
+        <h3>TreeView Widget  <span class="subtitle">2.8.2r1</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_treeview.html" title="treeview">treeview</a>
                 
                  &gt; Node.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,24 +22,21 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <div id="srcout">
                         <style>
                             #doc3 .classopts { display:none; }
-                        </style>
-                        <div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                        </style><div class="highlight"><pre><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
     <span class="kd">var</span> <span class="nx">Dom</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Dom</span><span class="p">,</span>
         <span class="nx">Lang</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">lang</span><span class="p">,</span>
         <span class="nx">Event</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">Event</span><span class="p">;</span>
 <span class="cm">/**</span>
-<span class="cm"> * The base class for all tree nodes.  The node&#39;s presentation and behavior in</span>
+<span class="cm"> * The base class for all tree nodes.  The node's presentation and behavior in</span>
 <span class="cm"> * response to mouse events is handled in Node subclasses.</span>
 <span class="cm"> * @namespace YAHOO.widget</span>
 <span class="cm"> * @class Node</span>
@@ -63,7 +47,7 @@
 <span class="cm"> * All values in oData will be used to set equally named properties in the node</span>
 <span class="cm"> * as long as the node does have such properties, they are not undefined, private or functions,</span>
 <span class="cm"> * the rest of the values will be stored in noderef.data</span>
-<span class="cm"> * @param oParent {Node} this node&#39;s parent node</span>
+<span class="cm"> * @param oParent {Node} this node's parent node</span>
 <span class="cm"> * @param expanded {boolean} the initial expanded/collapsed state (deprecated, use oData.expanded)</span>
 <span class="cm"> * @constructor</span>
 <span class="cm"> */</span>
@@ -81,7 +65,7 @@
     <span class="nx">index</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * This node&#39;s child node collection.</span>
+<span class="cm">     * This node's child node collection.</span>
 <span class="cm">     * @property children</span>
 <span class="cm">     * @type Node[] </span>
 <span class="cm">     */</span>
@@ -117,7 +101,7 @@
     <span class="nx">depth</span><span class="o">:</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * The node&#39;s expanded/collapsed state</span>
+<span class="cm">     * The node's expanded/collapsed state</span>
 <span class="cm">     * @property expanded</span>
 <span class="cm">     * @type boolean</span>
 <span class="cm">     */</span>
@@ -140,7 +124,7 @@
     <span class="nx">renderHidden</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * This flag is set to true when the html is generated for this node&#39;s</span>
+<span class="cm">     * This flag is set to true when the html is generated for this node's</span>
 <span class="cm">     * children, and set to false when new children are added.</span>
 <span class="cm">     * @property childrenRendered</span>
 <span class="cm">     * @type boolean</span>
@@ -156,14 +140,14 @@
     <span class="nx">dynamicLoadComplete</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * This node&#39;s previous sibling</span>
+<span class="cm">     * This node's previous sibling</span>
 <span class="cm">     * @property previousSibling</span>
 <span class="cm">     * @type Node</span>
 <span class="cm">     */</span>
     <span class="nx">previousSibling</span><span class="o">:</span> <span class="kc">null</span><span class="p">,</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * This node&#39;s next sibling</span>
+<span class="cm">     * This node's next sibling</span>
 <span class="cm">     * @property nextSibling</span>
 <span class="cm">     * @type Node</span>
 <span class="cm">     */</span>
@@ -179,7 +163,7 @@
     <span class="nx">_dynLoad</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Function to execute when we need to get this node&#39;s child data.</span>
+<span class="cm">     * Function to execute when we need to get this node's child data.</span>
 <span class="cm">     * @property dataLoader</span>
 <span class="cm">     * @type function</span>
 <span class="cm">     */</span>
@@ -238,7 +222,7 @@
 <span class="cm">     * @property contentStyle</span>
 <span class="cm">     * @type string</span>
 <span class="cm">     */</span>
-    <span class="nx">contentStyle</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="nx">contentStyle</span><span class="o">:</span> <span class="s2">""</span><span class="p">,</span>
 
 
     <span class="cm">/**</span>
@@ -302,15 +286,15 @@
 <span class="cm">     * @property _type</span>
 <span class="cm">     * @private</span>
 <span class="cm">     * @type string</span>
-<span class="cm">     * @default &quot;Node&quot;</span>
+<span class="cm">     * @default "Node"</span>
 <span class="cm">*/</span>
-    <span class="nx">_type</span><span class="o">:</span> <span class="s2">&quot;Node&quot;</span><span class="p">,</span>
+    <span class="nx">_type</span><span class="o">:</span> <span class="s2">"Node"</span><span class="p">,</span>
 
     <span class="cm">/*</span>
-<span class="cm">    spacerPath: &quot;http://l.yimg.com/a/i/space.gif&quot;,</span>
-<span class="cm">    expandedText: &quot;Expanded&quot;,</span>
-<span class="cm">    collapsedText: &quot;Collapsed&quot;,</span>
-<span class="cm">    loadingText: &quot;Loading&quot;,</span>
+<span class="cm">    spacerPath: "http://l.yimg.com/a/i/space.gif",</span>
+<span class="cm">    expandedText: "Expanded",</span>
+<span class="cm">    collapsedText: "Collapsed",</span>
+<span class="cm">    loadingText: "Loading",</span>
 <span class="cm">    */</span>
 
     <span class="cm">/**</span>
@@ -318,7 +302,7 @@
 <span class="cm">     * @method init</span>
 <span class="cm">     * @param oData {object} a string or object containing the data that will</span>
 <span class="cm">     * be used to render this node</span>
-<span class="cm">     * @param oParent {Node} this node&#39;s parent node</span>
+<span class="cm">     * @param oParent {Node} this node's parent node</span>
 <span class="cm">     * @param expanded {boolean} the initial expanded/collapsed state</span>
 <span class="cm">     */</span>
     <span class="nx">init</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">oData</span><span class="p">,</span> <span class="nx">oParent</span><span class="p">,</span> <span class="nx">expanded</span><span class="p">)</span> <span class="p">{</span>
@@ -327,12 +311,12 @@
         <span class="k">this</span><span class="p">.</span><span class="nx">children</span>   <span class="o">=</span> <span class="p">[];</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">index</span>      <span class="o">=</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">TreeView</span><span class="p">.</span><span class="nx">nodeCount</span><span class="p">;</span>
         <span class="o">++</span><span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">TreeView</span><span class="p">.</span><span class="nx">nodeCount</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">contentElId</span> <span class="o">=</span> <span class="s2">&quot;ygtvcontentel&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">contentElId</span> <span class="o">=</span> <span class="s2">"ygtvcontentel"</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">;</span>
         
         <span class="k">if</span> <span class="p">(</span><span class="nx">Lang</span><span class="p">.</span><span class="nx">isObject</span><span class="p">(</span><span class="nx">oData</span><span class="p">))</span> <span class="p">{</span>
             <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">property</span> <span class="k">in</span> <span class="nx">oData</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">if</span> <span class="p">(</span><span class="nx">oData</span><span class="p">.</span><span class="nx">hasOwnProperty</span><span class="p">(</span><span class="nx">property</span><span class="p">))</span> <span class="p">{</span>
-                    <span class="k">if</span> <span class="p">(</span><span class="nx">property</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;_&#39;</span>  <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="p">.</span><span class="nx">isUndefined</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">property</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">property</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="nx">property</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">'_'</span>  <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="p">.</span><span class="nx">isUndefined</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">property</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">property</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
                         <span class="k">this</span><span class="p">[</span><span class="nx">property</span><span class="p">]</span> <span class="o">=</span> <span class="nx">oData</span><span class="p">[</span><span class="nx">property</span><span class="p">];</span>
                     <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                         <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">property</span><span class="p">]</span> <span class="o">=</span> <span class="nx">oData</span><span class="p">[</span><span class="nx">property</span><span class="p">];</span>
@@ -353,7 +337,7 @@
 <span class="cm">         * @event parentChange</span>
 <span class="cm">         * @type CustomEvent</span>
 <span class="cm">         */</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">&quot;parentChange&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">createEvent</span><span class="p">(</span><span class="s2">"parentChange"</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
 
         <span class="c1">// oParent should never be null except when we create the root node.</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">oParent</span><span class="p">)</span> <span class="p">{</span>
@@ -364,10 +348,10 @@
     <span class="cm">/**</span>
 <span class="cm">     * Certain properties for the node cannot be set until the parent</span>
 <span class="cm">     * is known. This is called after the node is inserted into a tree.</span>
-<span class="cm">     * the parent is also applied to this node&#39;s children in order to</span>
+<span class="cm">     * the parent is also applied to this node's children in order to</span>
 <span class="cm">     * make it possible to move a branch from one tree to another.</span>
 <span class="cm">     * @method applyParent</span>
-<span class="cm">     * @param {Node} parentNode this node&#39;s parent node</span>
+<span class="cm">     * @param {Node} parentNode this node's parent node</span>
 <span class="cm">     * @return {boolean} true if the application was successful</span>
 <span class="cm">     */</span>
     <span class="nx">applyParent</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">parentNode</span><span class="p">)</span> <span class="p">{</span>
@@ -393,7 +377,7 @@
             <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">i</span><span class="p">].</span><span class="nx">applyParent</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
         <span class="p">}</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;parentChange&quot;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">"parentChange"</span><span class="p">);</span>
 
         <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
     <span class="p">},</span>
@@ -419,14 +403,14 @@
         <span class="c1">// instantiated with expanded = true, we need to show the</span>
         <span class="c1">// children div now that the node has a child.</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">childrenRendered</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">expanded</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">getChildrenEl</span><span class="p">().</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">getChildrenEl</span><span class="p">().</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="k">return</span> <span class="nx">childNode</span><span class="p">;</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Appends this node to the supplied node&#39;s child collection</span>
+<span class="cm">     * Appends this node to the supplied node's child collection</span>
 <span class="cm">     * @method appendTo</span>
 <span class="cm">     * @param parentNode {Node} the node to append to.</span>
 <span class="cm">     * @return {Node} The appended node</span>
@@ -442,7 +426,7 @@
 <span class="cm">    * @return {Node} the inserted node</span>
 <span class="cm">    */</span>
     <span class="nx">insertBefore</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;insertBefore: &quot;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"insertBefore: "</span> <span class="o">+</span> <span class="nx">node</span><span class="p">);</span>
         <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">parent</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
 
@@ -473,7 +457,7 @@
 <span class="cm">    * @return {Node} the inserted node</span>
 <span class="cm">    */</span>
     <span class="nx">insertAfter</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">node</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;insertAfter: &quot;</span> <span class="o">+</span> <span class="nx">node</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"insertAfter: "</span> <span class="o">+</span> <span class="nx">node</span><span class="p">);</span>
         <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">node</span><span class="p">.</span><span class="nx">parent</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">p</span><span class="p">)</span> <span class="p">{</span>
 
@@ -523,7 +507,7 @@
     <span class="p">},</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Returns a node array of this node&#39;s siblings, null if none.</span>
+<span class="cm">     * Returns a node array of this node's siblings, null if none.</span>
 <span class="cm">     * @method getSiblings</span>
 <span class="cm">     * @return Node[]</span>
 <span class="cm">     */</span>
@@ -536,71 +520,71 @@
     <span class="p">},</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Shows this node&#39;s children</span>
+<span class="cm">     * Shows this node's children</span>
 <span class="cm">     * @method showChildren</span>
 <span class="cm">     */</span>
     <span class="nx">showChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">animateExpand</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getChildrenEl</span><span class="p">(),</span> <span class="k">this</span><span class="p">))</span> <span class="p">{</span>
             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasChildren</span><span class="p">())</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">getChildrenEl</span><span class="p">().</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">getChildrenEl</span><span class="p">().</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">""</span><span class="p">;</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Hides this node&#39;s children</span>
+<span class="cm">     * Hides this node's children</span>
 <span class="cm">     * @method hideChildren</span>
 <span class="cm">     */</span>
     <span class="nx">hideChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;hiding &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"hiding "</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">animateCollapse</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getChildrenEl</span><span class="p">(),</span> <span class="k">this</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">getChildrenEl</span><span class="p">().</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">getChildrenEl</span><span class="p">().</span><span class="nx">style</span><span class="p">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">"none"</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Returns the id for this node&#39;s container div</span>
+<span class="cm">     * Returns the id for this node's container div</span>
 <span class="cm">     * @method getElId</span>
 <span class="cm">     * @return {string} the element id</span>
 <span class="cm">     */</span>
     <span class="nx">getElId</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="s2">&quot;ygtv&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">;</span>
+        <span class="k">return</span> <span class="s2">"ygtv"</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">;</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Returns the id for this node&#39;s children div</span>
+<span class="cm">     * Returns the id for this node's children div</span>
 <span class="cm">     * @method getChildrenElId</span>
-<span class="cm">     * @return {string} the element id for this node&#39;s children div</span>
+<span class="cm">     * @return {string} the element id for this node's children div</span>
 <span class="cm">     */</span>
     <span class="nx">getChildrenElId</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="s2">&quot;ygtvc&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">;</span>
+        <span class="k">return</span> <span class="s2">"ygtvc"</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">;</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Returns the id for this node&#39;s toggle element</span>
+<span class="cm">     * Returns the id for this node's toggle element</span>
 <span class="cm">     * @method getToggleElId</span>
 <span class="cm">     * @return {string} the toggel element id</span>
 <span class="cm">     */</span>
     <span class="nx">getToggleElId</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="s2">&quot;ygtvt&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">;</span>
+        <span class="k">return</span> <span class="s2">"ygtvt"</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">;</span>
     <span class="p">},</span>
 
 
     <span class="cm">/*</span>
-<span class="cm">     * Returns the id for this node&#39;s spacer image.  The spacer is positioned</span>
+<span class="cm">     * Returns the id for this node's spacer image.  The spacer is positioned</span>
 <span class="cm">     * over the toggle and provides feedback for screen readers.</span>
 <span class="cm">     * @method getSpacerId</span>
 <span class="cm">     * @return {string} the id for the spacer image</span>
 <span class="cm">     */</span>
     <span class="cm">/*</span>
 <span class="cm">    getSpacerId: function() {</span>
-<span class="cm">        return &quot;ygtvspacer&quot; + this.index;</span>
+<span class="cm">        return "ygtvspacer" + this.index;</span>
 <span class="cm">    }, </span>
 <span class="cm">    */</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Returns this node&#39;s container html element</span>
+<span class="cm">     * Returns this node's container html element</span>
 <span class="cm">     * @method getEl</span>
 <span class="cm">     * @return {HTMLElement} the container html element</span>
 <span class="cm">     */</span>
@@ -609,24 +593,24 @@
     <span class="p">},</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Returns the div that was generated for this node&#39;s children</span>
+<span class="cm">     * Returns the div that was generated for this node's children</span>
 <span class="cm">     * @method getChildrenEl</span>
-<span class="cm">     * @return {HTMLElement} this node&#39;s children div</span>
+<span class="cm">     * @return {HTMLElement} this node's children div</span>
 <span class="cm">     */</span>
     <span class="nx">getChildrenEl</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">return</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getChildrenElId</span><span class="p">());</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Returns the element that is being used for this node&#39;s toggle.</span>
+<span class="cm">     * Returns the element that is being used for this node's toggle.</span>
 <span class="cm">     * @method getToggleEl</span>
-<span class="cm">     * @return {HTMLElement} this node&#39;s toggle html element</span>
+<span class="cm">     * @return {HTMLElement} this node's toggle html element</span>
 <span class="cm">     */</span>
     <span class="nx">getToggleEl</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
         <span class="k">return</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getToggleElId</span><span class="p">());</span>
     <span class="p">},</span>
     <span class="cm">/**</span>
-<span class="cm">    * Returns the outer html element for this node&#39;s content</span>
+<span class="cm">    * Returns the outer html element for this node's content</span>
 <span class="cm">    * @method getContentEl</span>
 <span class="cm">    * @return {HTMLElement} the element</span>
 <span class="cm">    */</span>
@@ -636,9 +620,9 @@
 
 
     <span class="cm">/*</span>
-<span class="cm">     * Returns the element that is being used for this node&#39;s spacer.</span>
+<span class="cm">     * Returns the element that is being used for this node's spacer.</span>
 <span class="cm">     * @method getSpacer</span>
-<span class="cm">     * @return {HTMLElement} this node&#39;s spacer html element</span>
+<span class="cm">     * @return {HTMLElement} this node's spacer html element</span>
 <span class="cm">     */</span>
     <span class="cm">/*</span>
 <span class="cm">    getSpacer: function() {</span>
@@ -657,7 +641,7 @@
 <span class="cm">                return this.collapsedText;</span>
 <span class="cm">            }</span>
 <span class="cm">        } else {</span>
-<span class="cm">            return &quot;&quot;;</span>
+<span class="cm">            return "";</span>
 <span class="cm">        }</span>
 <span class="cm">    },</span>
 <span class="cm">    */</span>
@@ -674,14 +658,14 @@
         <span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">onCollapse</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="kc">false</span> <span class="o">===</span> <span class="nx">ret</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Collapse was stopped by the abstract onCollapse&quot;</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Collapse was stopped by the abstract onCollapse"</span><span class="p">);</span>
             <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;collapse&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+        <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">"collapse"</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="kc">false</span> <span class="o">===</span> <span class="nx">ret</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Collapse was stopped by a custom event handler&quot;</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Collapse was stopped by a custom event handler"</span><span class="p">);</span>
             <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
 
@@ -698,7 +682,7 @@
 
         <span class="c1">// this.getSpacer().title = this.getStateText();</span>
 
-        <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;collapseComplete&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+        <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">"collapseComplete"</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
 
     <span class="p">},</span>
 
@@ -716,22 +700,22 @@
         <span class="kd">var</span> <span class="nx">ret</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
 
         <span class="c1">// When returning from the lazy load handler, expand is called again</span>
-        <span class="c1">// in order to render the new children.  The &quot;expand&quot; event already</span>
+        <span class="c1">// in order to render the new children.  The "expand" event already</span>
         <span class="c1">// fired before fething the new data, so we need to skip it now.</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">lazySource</span><span class="p">)</span> <span class="p">{</span>
             <span class="c1">// fire the expand event handler</span>
             <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">onExpand</span><span class="p">(</span><span class="k">this</span><span class="p">);</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="kc">false</span> <span class="o">===</span> <span class="nx">ret</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Expand was stopped by the abstract onExpand&quot;</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Expand was stopped by the abstract onExpand"</span><span class="p">);</span>
                 <span class="k">return</span><span class="p">;</span>
             <span class="p">}</span>
             
-            <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;expand&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+            <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">"expand"</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="kc">false</span> <span class="o">===</span> <span class="nx">ret</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Expand was stopped by the custom event handler&quot;</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Expand was stopped by the custom event handler"</span><span class="p">);</span>
             <span class="k">return</span><span class="p">;</span>
         <span class="p">}</span>
 
@@ -741,10 +725,10 @@
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">childrenRendered</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;children not rendered yet&quot;</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"children not rendered yet"</span><span class="p">);</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">getChildrenEl</span><span class="p">().</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">renderChildren</span><span class="p">();</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;children already rendered&quot;</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"children already rendered"</span><span class="p">);</span>
         <span class="p">}</span>
 
         <span class="k">this</span><span class="p">.</span><span class="nx">expanded</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
@@ -773,7 +757,7 @@
 
         <span class="k">this</span><span class="p">.</span><span class="nx">showChildren</span><span class="p">();</span>
 
-        <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">&quot;expandComplete&quot;</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
+        <span class="nx">ret</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s2">"expandComplete"</span><span class="p">,</span> <span class="k">this</span><span class="p">);</span>
     <span class="p">},</span>
 
     <span class="nx">updateIcon</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -788,26 +772,26 @@
     <span class="cm">/**</span>
 <span class="cm">     * Returns the css style name for the toggle</span>
 <span class="cm">     * @method getStyle</span>
-<span class="cm">     * @return {string} the css class for this node&#39;s toggle</span>
+<span class="cm">     * @return {string} the css class for this node's toggle</span>
 <span class="cm">     */</span>
     <span class="nx">getStyle</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="c1">// this.logger.log(&quot;No children, &quot; + &quot; isDyanmic: &quot; + this.isDynamic() + &quot; expanded: &quot; + this.expanded);</span>
+        <span class="c1">// this.logger.log("No children, " + " isDyanmic: " + this.isDynamic() + " expanded: " + this.expanded);</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isLoading</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;returning the loading icon&quot;</span><span class="p">);</span>
-            <span class="k">return</span> <span class="s2">&quot;ygtvloading&quot;</span><span class="p">;</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"returning the loading icon"</span><span class="p">);</span>
+            <span class="k">return</span> <span class="s2">"ygtvloading"</span><span class="p">;</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
             <span class="c1">// location top or bottom, middle nodes also get the top style</span>
-            <span class="kd">var</span> <span class="nx">loc</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">nextSibling</span><span class="p">)</span> <span class="o">?</span> <span class="s2">&quot;t&quot;</span> <span class="o">:</span> <span class="s2">&quot;l&quot;</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">loc</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">nextSibling</span><span class="p">)</span> <span class="o">?</span> <span class="s2">"t"</span> <span class="o">:</span> <span class="s2">"l"</span><span class="p">;</span>
 
             <span class="c1">// type p=plus(expand), m=minus(collapase), n=none(no children)</span>
-            <span class="kd">var</span> <span class="nx">type</span> <span class="o">=</span> <span class="s2">&quot;n&quot;</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">type</span> <span class="o">=</span> <span class="s2">"n"</span><span class="p">;</span>
             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasChildren</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="o">||</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isDynamic</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">getIconMode</span><span class="p">()))</span> <span class="p">{</span>
             <span class="c1">// if (this.hasChildren(true)) {</span>
-                <span class="nx">type</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">expanded</span><span class="p">)</span> <span class="o">?</span> <span class="s2">&quot;m&quot;</span> <span class="o">:</span> <span class="s2">&quot;p&quot;</span><span class="p">;</span>
+                <span class="nx">type</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">expanded</span><span class="p">)</span> <span class="o">?</span> <span class="s2">"m"</span> <span class="o">:</span> <span class="s2">"p"</span><span class="p">;</span>
             <span class="p">}</span>
 
-            <span class="c1">// this.logger.log(&quot;ygtv&quot; + loc + type);</span>
-            <span class="k">return</span> <span class="s2">&quot;ygtv&quot;</span> <span class="o">+</span> <span class="nx">loc</span> <span class="o">+</span> <span class="nx">type</span><span class="p">;</span>
+            <span class="c1">// this.logger.log("ygtv" + loc + type);</span>
+            <span class="k">return</span> <span class="s2">"ygtv"</span> <span class="o">+</span> <span class="nx">loc</span> <span class="o">+</span> <span class="nx">type</span><span class="p">;</span>
         <span class="p">}</span>
     <span class="p">},</span>
 
@@ -819,13 +803,13 @@
     <span class="nx">getHoverStyle</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
         <span class="kd">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">();</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasChildren</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isLoading</span><span class="p">)</span> <span class="p">{</span> 
-            <span class="nx">s</span> <span class="o">+=</span> <span class="s2">&quot;h&quot;</span><span class="p">;</span> 
+            <span class="nx">s</span> <span class="o">+=</span> <span class="s2">"h"</span><span class="p">;</span> 
         <span class="p">}</span>
         <span class="k">return</span> <span class="nx">s</span><span class="p">;</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Recursively expands all of this node&#39;s children.</span>
+<span class="cm">     * Recursively expands all of this node's children.</span>
 <span class="cm">     * @method expandAll</span>
 <span class="cm">     */</span>
     <span class="nx">expandAll</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
@@ -833,10 +817,10 @@
         <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="p">;</span><span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
             <span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
             <span class="k">if</span> <span class="p">(</span><span class="nx">c</span><span class="p">.</span><span class="nx">isDynamic</span><span class="p">())</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Not supported (lazy load + expand all)&quot;</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Not supported (lazy load + expand all)"</span><span class="p">);</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="o">!</span> <span class="nx">c</span><span class="p">.</span><span class="nx">multiExpand</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Not supported (no multi-expand + expand all)&quot;</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Not supported (no multi-expand + expand all)"</span><span class="p">);</span>
                 <span class="k">break</span><span class="p">;</span>
             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
                 <span class="nx">c</span><span class="p">.</span><span class="nx">expand</span><span class="p">();</span>
@@ -846,7 +830,7 @@
     <span class="p">},</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Recursively collapses all of this node&#39;s children.</span>
+<span class="cm">     * Recursively collapses all of this node's children.</span>
 <span class="cm">     * @method collapseAll</span>
 <span class="cm">     */</span>
     <span class="nx">collapseAll</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
@@ -864,7 +848,7 @@
 <span class="cm">     * @param fmDataLoader {function} the function that will be used to get the data.</span>
 <span class="cm">     * @param iconMode {int} configures the icon that is displayed when a dynamic</span>
 <span class="cm">     * load node is expanded the first time without children.  By default, the </span>
-<span class="cm">     * &quot;collapse&quot; icon will be used.  If set to 1, the leaf node icon will be</span>
+<span class="cm">     * "collapse" icon will be used.  If set to 1, the leaf node icon will be</span>
 <span class="cm">     * displayed.</span>
 <span class="cm">     */</span>
     <span class="nx">setDynamicLoad</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fnDataLoader</span><span class="p">,</span> <span class="nx">iconMode</span><span class="p">)</span> <span class="p">{</span> 
@@ -891,19 +875,19 @@
     <span class="p">},</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Evaluates if this node&#39;s children should be loaded dynamically.  Looks for</span>
+<span class="cm">     * Evaluates if this node's children should be loaded dynamically.  Looks for</span>
 <span class="cm">     * the property both in this instance and the root node.  If the tree is</span>
 <span class="cm">     * defined to load all children dynamically, the data callback function is</span>
 <span class="cm">     * defined in the root node</span>
 <span class="cm">     * @method isDynamic</span>
-<span class="cm">     * @return {boolean} true if this node&#39;s children are to be loaded dynamically</span>
+<span class="cm">     * @return {boolean} true if this node's children are to be loaded dynamically</span>
 <span class="cm">     */</span>
     <span class="nx">isDynamic</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">isLeaf</span><span class="p">)</span> <span class="p">{</span>
             <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
             <span class="k">return</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isRoot</span><span class="p">()</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_dynLoad</span> <span class="o">||</span> <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">root</span><span class="p">.</span><span class="nx">_dynLoad</span><span class="p">));</span>
-            <span class="c1">// this.logger.log(&quot;isDynamic: &quot; + lazy);</span>
+            <span class="c1">// this.logger.log("isDynamic: " + lazy);</span>
             <span class="c1">// return lazy;</span>
         <span class="p">}</span>
     <span class="p">},</span>
@@ -925,7 +909,7 @@
 <span class="cm">     * are actual children.  In most cases, we need to assume that there are</span>
 <span class="cm">     * children (for instance, the toggle needs to show the expandable </span>
 <span class="cm">     * presentation state).  In other times we want to know if there are rendered</span>
-<span class="cm">     * children.  For the latter, &quot;checkForLazyLoad&quot; should be false.</span>
+<span class="cm">     * children.  For the latter, "checkForLazyLoad" should be false.</span>
 <span class="cm">     * @method hasChildren</span>
 <span class="cm">     * @param checkForLazyLoad {boolean} should we check for unloaded children?</span>
 <span class="cm">     * @return {boolean} true if this has children or if it might and we are</span>
@@ -960,12 +944,12 @@
 
         <span class="k">this</span><span class="p">.</span><span class="nx">childrenRendered</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
 
-        <span class="k">return</span> <span class="p">[</span><span class="s1">&#39;&lt;div class=&quot;ygtvitem&quot; id=&quot;&#39;</span> <span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getElId</span><span class="p">()</span> <span class="p">,</span> <span class="s1">&#39;&quot;&gt;&#39;</span> <span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">getNodeHtml</span><span class="p">()</span> <span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getChildrenHtml</span><span class="p">()</span> <span class="p">,</span><span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="p">[</span><span class="s1">'&lt;div class="ygtvitem" id="'</span> <span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getElId</span><span class="p">()</span> <span class="p">,</span> <span class="s1">'"&gt;'</span> <span class="p">,</span><span class="k">this</span><span class="p">.</span><span class="nx">getNodeHtml</span><span class="p">()</span> <span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getChildrenHtml</span><span class="p">()</span> <span class="p">,</span><span class="s1">'&lt;/div&gt;'</span><span class="p">].</span><span class="nx">join</span><span class="p">(</span><span class="s2">""</span><span class="p">);</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
 <span class="cm">     * Called when first rendering the tree.  We always build the div that will</span>
-<span class="cm">     * contain this nodes children, but we don&#39;t render the children themselves</span>
+<span class="cm">     * contain this nodes children, but we don't render the children themselves</span>
 <span class="cm">     * unless this node is expanded.</span>
 <span class="cm">     * @method getChildrenHtml</span>
 <span class="cm">     * @return {string} the children container div html and any expanded children</span>
@@ -975,43 +959,43 @@
 
 
         <span class="kd">var</span> <span class="nx">sb</span> <span class="o">=</span> <span class="p">[];</span>
-        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;div class=&quot;ygtvchildren&quot; id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">getChildrenElId</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">;</span>
+        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'&lt;div class="ygtvchildren" id="'</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">getChildrenElId</span><span class="p">()</span> <span class="o">+</span> <span class="s1">'"'</span><span class="p">;</span>
 
         <span class="c1">// This is a workaround for an IE rendering issue, the child div has layout</span>
         <span class="c1">// in IE, creating extra space if a leaf node is created with the expanded</span>
         <span class="c1">// property set to true.</span>
         <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">expanded</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">hasChildren</span><span class="p">())</span> <span class="p">{</span>
-            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39; style=&quot;display:none;&quot;&#39;</span><span class="p">;</span>
+            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">' style="display:none;"'</span><span class="p">;</span>
         <span class="p">}</span>
-        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">;</span>
+        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'&gt;'</span><span class="p">;</span>
 
-        <span class="c1">// this.logger.log([&quot;index&quot;, this.index, </span>
-                         <span class="c1">// &quot;hasChildren&quot;, this.hasChildren(true), </span>
-                         <span class="c1">// &quot;expanded&quot;, this.expanded, </span>
-                         <span class="c1">// &quot;renderHidden&quot;, this.renderHidden, </span>
-                         <span class="c1">// &quot;isDynamic&quot;, this.isDynamic()]);</span>
+        <span class="c1">// this.logger.log(["index", this.index, </span>
+                         <span class="c1">// "hasChildren", this.hasChildren(true), </span>
+                         <span class="c1">// "expanded", this.expanded, </span>
+                         <span class="c1">// "renderHidden", this.renderHidden, </span>
+                         <span class="c1">// "isDynamic", this.isDynamic()]);</span>
 
-        <span class="c1">// Don&#39;t render the actual child node HTML unless this node is expanded.</span>
+        <span class="c1">// Don't render the actual child node HTML unless this node is expanded.</span>
         <span class="k">if</span> <span class="p">(</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasChildren</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">expanded</span><span class="p">)</span> <span class="o">||</span>
                 <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">renderHidden</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">isDynamic</span><span class="p">())</span> <span class="p">)</span> <span class="p">{</span>
             <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">renderChildren</span><span class="p">();</span>
         <span class="p">}</span>
 
-        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/div&gt;&#39;</span><span class="p">;</span>
+        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'&lt;/div&gt;'</span><span class="p">;</span>
 
-        <span class="k">return</span> <span class="nx">sb</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">sb</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">""</span><span class="p">);</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
 <span class="cm">     * Generates the markup for the child nodes.  This is not done until the node</span>
 <span class="cm">     * is expanded.</span>
 <span class="cm">     * @method renderChildren</span>
-<span class="cm">     * @return {string} the html for this node&#39;s children</span>
+<span class="cm">     * @return {string} the html for this node's children</span>
 <span class="cm">     * @private</span>
 <span class="cm">     */</span>
     <span class="nx">renderChildren</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
 
-        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;rendering children for &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"rendering children for "</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
 
         <span class="kd">var</span> <span class="nx">node</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
 
@@ -1020,7 +1004,7 @@
             <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">locked</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
 
             <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">dataLoader</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Using dynamic loader defined for this node&quot;</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Using dynamic loader defined for this node"</span><span class="p">);</span>
 
                 <span class="nx">setTimeout</span><span class="p">(</span> 
                     <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -1031,7 +1015,7 @@
                     <span class="p">},</span> <span class="mi">10</span><span class="p">);</span>
                 
             <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">root</span><span class="p">.</span><span class="nx">dataLoader</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Using the tree-level dynamic loader&quot;</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Using the tree-level dynamic loader"</span><span class="p">);</span>
 
                 <span class="nx">setTimeout</span><span class="p">(</span> 
                     <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
@@ -1042,11 +1026,11 @@
                     <span class="p">},</span> <span class="mi">10</span><span class="p">);</span>
 
             <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;no loader found&quot;</span><span class="p">);</span>
-                <span class="k">return</span> <span class="s2">&quot;Error: data loader not found or not specified.&quot;</span><span class="p">;</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"no loader found"</span><span class="p">);</span>
+                <span class="k">return</span> <span class="s2">"Error: data loader not found or not specified."</span><span class="p">;</span>
             <span class="p">}</span>
 
-            <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+            <span class="k">return</span> <span class="s2">""</span><span class="p">;</span>
 
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
             <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">completeRender</span><span class="p">();</span>
@@ -1059,7 +1043,7 @@
 <span class="cm">     * @return {string} children html</span>
 <span class="cm">     */</span>
     <span class="nx">completeRender</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;completeRender: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot;, # of children: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"completeRender: "</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">", # of children: "</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
         <span class="kd">var</span> <span class="nx">sb</span> <span class="o">=</span> <span class="p">[];</span>
 
         <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
@@ -1069,7 +1053,7 @@
         
         <span class="k">this</span><span class="p">.</span><span class="nx">childrenRendered</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
 
-        <span class="k">return</span> <span class="nx">sb</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">sb</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">""</span><span class="p">);</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
@@ -1078,7 +1062,7 @@
 <span class="cm">     * @method loadComplete</span>
 <span class="cm">     */</span>
     <span class="nx">loadComplete</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot; loadComplete, children: &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">" loadComplete, children: "</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">children</span><span class="p">.</span><span class="nx">length</span><span class="p">);</span>
         <span class="k">this</span><span class="p">.</span><span class="nx">getChildrenEl</span><span class="p">().</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">completeRender</span><span class="p">();</span>
 		<span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">propagateHighlightDown</span><span class="p">)</span> <span class="p">{</span>
 			<span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">highlightState</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">singleNodeHighlight</span><span class="p">)</span> <span class="p">{</span>
@@ -1099,14 +1083,14 @@
     <span class="p">},</span>
 
     <span class="cm">/**</span>
-<span class="cm">     * Returns this node&#39;s ancestor at the specified depth.</span>
+<span class="cm">     * Returns this node's ancestor at the specified depth.</span>
 <span class="cm">     * @method getAncestor</span>
 <span class="cm">     * @param {int} depth the depth of the ancestor.</span>
 <span class="cm">     * @return {Node} the ancestor</span>
 <span class="cm">     */</span>
     <span class="nx">getAncestor</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">depth</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">depth</span> <span class="o">&gt;=</span> <span class="k">this</span><span class="p">.</span><span class="nx">depth</span> <span class="o">||</span> <span class="nx">depth</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>  <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;illegal getAncestor depth: &quot;</span> <span class="o">+</span> <span class="nx">depth</span><span class="p">);</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"illegal getAncestor depth: "</span> <span class="o">+</span> <span class="nx">depth</span><span class="p">);</span>
             <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
         <span class="p">}</span>
 
@@ -1121,7 +1105,7 @@
 
     <span class="cm">/**</span>
 <span class="cm">     * Returns the css class for the spacer at the specified depth for</span>
-<span class="cm">     * this node.  If this node&#39;s ancestor at the specified depth</span>
+<span class="cm">     * this node.  If this node's ancestor at the specified depth</span>
 <span class="cm">     * has a next sibling the presentation is different than if it</span>
 <span class="cm">     * does not have a next sibling</span>
 <span class="cm">     * @method getDepthStyle</span>
@@ -1130,7 +1114,7 @@
 <span class="cm">     */</span>
     <span class="nx">getDepthStyle</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">depth</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">return</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getAncestor</span><span class="p">(</span><span class="nx">depth</span><span class="p">).</span><span class="nx">nextSibling</span><span class="p">)</span> <span class="o">?</span> 
-            <span class="s2">&quot;ygtvdepthcell&quot;</span> <span class="o">:</span> <span class="s2">&quot;ygtvblankdepthcell&quot;</span><span class="p">;</span>
+            <span class="s2">"ygtvdepthcell"</span> <span class="o">:</span> <span class="s2">"ygtvblankdepthcell"</span><span class="p">;</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
@@ -1140,38 +1124,38 @@
 <span class="cm">     * @return {string} The HTML that will render this node.</span>
 <span class="cm">     */</span>
     <span class="nx">getNodeHtml</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> 
-        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Generating html&quot;</span><span class="p">);</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">logger</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Generating html"</span><span class="p">);</span>
         <span class="kd">var</span> <span class="nx">sb</span> <span class="o">=</span> <span class="p">[];</span>
 
-        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;table id=&quot;ygtvtableel&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s1">&#39;&quot; border=&quot;0&quot; cellpadding=&quot;0&quot; cellspacing=&quot;0&quot; class=&quot;ygtvtable ygtvdepth&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">depth</span><span class="p">;</span>
+        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'&lt;table id="ygtvtableel'</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s1">'" border="0" cellpadding="0" cellspacing="0" class="ygtvtable ygtvdepth'</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">depth</span><span class="p">;</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">enableHighlight</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39; ygtv-highlight&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">highlightState</span><span class="p">;</span>
+            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">' ygtv-highlight'</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">highlightState</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">className</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
+            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">' '</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">className</span><span class="p">;</span>
         <span class="p">}</span>           
-        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&quot;&gt;&lt;tr class=&quot;ygtvrow&quot;&gt;&#39;</span><span class="p">;</span>
+        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'"&gt;&lt;tr class="ygtvrow"&gt;'</span><span class="p">;</span>
         
         <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="nx">i</span><span class="o">&lt;</span><span class="k">this</span><span class="p">.</span><span class="nx">depth</span><span class="p">;</span><span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;td class=&quot;ygtvcell &#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDepthStyle</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;div class=&quot;ygtvspacer&quot;&gt;&lt;/div&gt;&lt;/td&gt;&#39;</span><span class="p">;</span>
+            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'&lt;td class="ygtvcell '</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDepthStyle</span><span class="p">(</span><span class="nx">i</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'"&gt;&lt;div class="ygtvspacer"&gt;&lt;/div&gt;&lt;/td&gt;'</span><span class="p">;</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">hasIcon</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;td id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">getToggleElId</span><span class="p">();</span>
-            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&quot; class=&quot;ygtvcell &#39;</span><span class="p">;</span>
+            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'&lt;td id="'</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">getToggleElId</span><span class="p">();</span>
+            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'" class="ygtvcell '</span><span class="p">;</span>
             <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getStyle</span><span class="p">()</span> <span class="p">;</span>
-            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&quot;&gt;&lt;a href=&quot;#&quot; class=&quot;ygtvspacer&quot;&gt;&amp;#160;&lt;/a&gt;&lt;/td&gt;&#39;</span><span class="p">;</span>
+            <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'"&gt;&lt;a href="#" class="ygtvspacer"&gt;&amp;#160;&lt;/a&gt;&lt;/td&gt;'</span><span class="p">;</span>
         <span class="p">}</span>
 
-        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;td id=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">contentElId</span><span class="p">;</span> 
-        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&quot; class=&quot;ygtvcell &#39;</span><span class="p">;</span>
-        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">contentStyle</span>  <span class="o">+</span> <span class="s1">&#39; ygtvcontent&quot; &#39;</span><span class="p">;</span>
-        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">nowrap</span><span class="p">)</span> <span class="o">?</span> <span class="s1">&#39; nowrap=&quot;nowrap&quot; &#39;</span> <span class="o">:</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39; &gt;&#39;</span><span class="p">;</span>
+        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'&lt;td id="'</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">contentElId</span><span class="p">;</span> 
+        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'" class="ygtvcell '</span><span class="p">;</span>
+        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">contentStyle</span>  <span class="o">+</span> <span class="s1">' ygtvcontent" '</span><span class="p">;</span>
+        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">nowrap</span><span class="p">)</span> <span class="o">?</span> <span class="s1">' nowrap="nowrap" '</span> <span class="o">:</span> <span class="s1">''</span><span class="p">;</span>
+        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">' &gt;'</span><span class="p">;</span>
         <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">getContentHtml</span><span class="p">();</span>
-        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&#39;</span><span class="p">;</span>
+        <span class="nx">sb</span><span class="p">[</span><span class="nx">sb</span><span class="p">.</span><span class="nx">length</span><span class="p">]</span> <span class="o">=</span> <span class="s1">'&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;'</span><span class="p">;</span>
 
-        <span class="k">return</span> <span class="nx">sb</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">);</span>
+        <span class="k">return</span> <span class="nx">sb</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="s2">""</span><span class="p">);</span>
 
     <span class="p">},</span>
     <span class="cm">/**</span>
@@ -1181,7 +1165,7 @@
 <span class="cm">     * @return {string} The HTML that will render the content of this node.</span>
 <span class="cm">     */</span>
     <span class="nx">getContentHtml</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+        <span class="k">return</span> <span class="s2">""</span><span class="p">;</span>
     <span class="p">},</span>
 
     <span class="cm">/**</span>
@@ -1207,7 +1191,7 @@
 <span class="cm">     * @return {string} string representation of the node</span>
 <span class="cm">     */</span>
     <span class="nx">toString</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_type</span> <span class="o">+</span> <span class="s2">&quot; (&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">_type</span> <span class="o">+</span> <span class="s2">" ("</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span> <span class="o">+</span> <span class="s2">")"</span><span class="p">;</span>
     <span class="p">},</span>
     <span class="cm">/**</span>
 <span class="cm">    * array of items that had the focus set on them</span>
@@ -1233,7 +1217,7 @@
 <span class="cm">    * @private</span>
 <span class="cm">    */</span>
     <span class="nx">_canHaveFocus</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">getEl</span><span class="p">().</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">).</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">getEl</span><span class="p">().</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">'a'</span><span class="p">).</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">;</span>
     <span class="p">},</span>
     <span class="cm">/**</span>
 <span class="cm">    * Removes the focus of previously selected Node</span>
@@ -1242,7 +1226,7 @@
 <span class="cm">    */</span>
     <span class="nx">_removeFocus</span><span class="o">:</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_focusedItem</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">Event</span><span class="p">.</span><span class="nx">removeListener</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_focusedItem</span><span class="p">,</span><span class="s1">&#39;blur&#39;</span><span class="p">);</span>
+            <span class="nx">Event</span><span class="p">.</span><span class="nx">removeListener</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_focusedItem</span><span class="p">,</span><span class="s1">'blur'</span><span class="p">);</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">_focusedItem</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
         <span class="p">}</span>
         <span class="kd">var</span> <span class="nx">el</span><span class="p">;</span>
@@ -1277,18 +1261,18 @@
             <span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
                 <span class="k">return</span> <span class="p">(</span><span class="sr">/ygtv(([tl][pmn]h?)|(content))/</span><span class="p">).</span><span class="nx">test</span><span class="p">(</span><span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="p">);</span>
             <span class="p">}</span> <span class="p">,</span>
-            <span class="s1">&#39;td&#39;</span> <span class="p">,</span> 
+            <span class="s1">'td'</span> <span class="p">,</span> 
             <span class="nx">self</span><span class="p">.</span><span class="nx">getEl</span><span class="p">().</span><span class="nx">firstChild</span> <span class="p">,</span> 
             <span class="kd">function</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
                 <span class="nx">Dom</span><span class="p">.</span><span class="nx">addClass</span><span class="p">(</span><span class="nx">el</span><span class="p">,</span> <span class="nx">YAHOO</span><span class="p">.</span><span class="nx">widget</span><span class="p">.</span><span class="nx">TreeView</span><span class="p">.</span><span class="nx">FOCUS_CLASS_NAME</span> <span class="p">);</span>
                 <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">focused</span><span class="p">)</span> <span class="p">{</span> 
-                    <span class="kd">var</span> <span class="nx">aEl</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;a&#39;</span><span class="p">);</span>
+                    <span class="kd">var</span> <span class="nx">aEl</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">'a'</span><span class="p">);</span>
                     <span class="k">if</span> <span class="p">(</span><span class="nx">aEl</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
                         <span class="nx">aEl</span> <span class="o">=</span> <span class="nx">aEl</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
                         <span class="nx">aEl</span><span class="p">.</span><span class="nx">focus</span><span class="p">();</span>
                         <span class="nx">self</span><span class="p">.</span><span class="nx">_focusedItem</span> <span class="o">=</span> <span class="nx">aEl</span><span class="p">;</span>
-                        <span class="nx">Event</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="nx">aEl</span><span class="p">,</span><span class="s1">&#39;blur&#39;</span><span class="p">,</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-                            <span class="nx">self</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">&#39;focusChanged&#39;</span><span class="p">,{</span><span class="nx">oldNode</span><span class="o">:</span><span class="nx">self</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">currentFocus</span><span class="p">,</span><span class="nx">newNode</span><span class="o">:</span><span class="kc">null</span><span class="p">});</span>
+                        <span class="nx">Event</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="nx">aEl</span><span class="p">,</span><span class="s1">'blur'</span><span class="p">,</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+                            <span class="nx">self</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">'focusChanged'</span><span class="p">,{</span><span class="nx">oldNode</span><span class="o">:</span><span class="nx">self</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">currentFocus</span><span class="p">,</span><span class="nx">newNode</span><span class="o">:</span><span class="kc">null</span><span class="p">});</span>
                             <span class="nx">self</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">currentFocus</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
                             <span class="nx">self</span><span class="p">.</span><span class="nx">_removeFocus</span><span class="p">();</span>
                         <span class="p">});</span>
@@ -1299,10 +1283,10 @@
             <span class="p">}</span>
         <span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">focused</span><span class="p">)</span> <span class="p">{</span> 
-            <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">&#39;focusChanged&#39;</span><span class="p">,{</span><span class="nx">oldNode</span><span class="o">:</span><span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">currentFocus</span><span class="p">,</span><span class="nx">newNode</span><span class="o">:</span><span class="k">this</span><span class="p">});</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">'focusChanged'</span><span class="p">,{</span><span class="nx">oldNode</span><span class="o">:</span><span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">currentFocus</span><span class="p">,</span><span class="nx">newNode</span><span class="o">:</span><span class="k">this</span><span class="p">});</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">currentFocus</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">&#39;focusChanged&#39;</span><span class="p">,{</span><span class="nx">oldNode</span><span class="o">:</span><span class="nx">self</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">currentFocus</span><span class="p">,</span><span class="nx">newNode</span><span class="o">:</span><span class="kc">null</span><span class="p">});</span>
+            <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">'focusChanged'</span><span class="p">,{</span><span class="nx">oldNode</span><span class="o">:</span><span class="nx">self</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">currentFocus</span><span class="p">,</span><span class="nx">newNode</span><span class="o">:</span><span class="kc">null</span><span class="p">});</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">currentFocus</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">_removeFocus</span><span class="p">();</span> 
         <span class="p">}</span>
@@ -1362,12 +1346,12 @@
 
 
     <span class="cm">/**</span>
-<span class="cm">     * Generates the link that will invoke this node&#39;s toggle method</span>
+<span class="cm">     * Generates the link that will invoke this node's toggle method</span>
 <span class="cm">     * @method getToggleLink</span>
 <span class="cm">     * @return {string} the javascript url for toggling this node</span>
 <span class="cm">     */</span>
     <span class="nx">getToggleLink</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="s1">&#39;return false;&#39;</span><span class="p">;</span>
+        <span class="k">return</span> <span class="s1">'return false;'</span><span class="p">;</span>
     <span class="p">},</span>
     
     <span class="cm">/**</span>
@@ -1380,7 +1364,7 @@
 <span class="cm">    * @param refresh {boolean} if present and true, it does a refresh</span>
 <span class="cm">    */</span>
     <span class="nx">setNodesProperty</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">,</span> <span class="nx">refresh</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">name</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">&#39;_&#39;</span>  <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="p">.</span><span class="nx">isUndefined</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">name</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">!=</span> <span class="s1">'_'</span>  <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="p">.</span><span class="nx">isUndefined</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">Lang</span><span class="p">.</span><span class="nx">isFunction</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">name</span><span class="p">])</span> <span class="p">)</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
         <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">data</span><span class="p">[</span><span class="nx">name</span><span class="p">]</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span>
@@ -1410,7 +1394,7 @@
     <span class="cm">/**</span>
 <span class="cm">    * Turns highlighting on node.  </span>
 <span class="cm">    * @method highlight</span>
-<span class="cm">    * @param _silent {boolean} optional, don&#39;t fire the highlightEvent</span>
+<span class="cm">    * @param _silent {boolean} optional, don't fire the highlightEvent</span>
 <span class="cm">    */</span>
     <span class="nx">highlight</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">_silent</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">enableHighlight</span><span class="p">)</span> <span class="p">{</span>
@@ -1435,18 +1419,18 @@
 				<span class="p">}</span>
 			<span class="p">}</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_silent</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">&#39;highlightEvent&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">'highlightEvent'</span><span class="p">,</span><span class="k">this</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">},</span>
     <span class="cm">/**</span>
 <span class="cm">    * Turns highlighting off a node.  </span>
 <span class="cm">    * @method unhighlight</span>
-<span class="cm">    * @param _silent {boolean} optional, don&#39;t fire the highlightEvent</span>
+<span class="cm">    * @param _silent {boolean} optional, don't fire the highlightEvent</span>
 <span class="cm">    */</span>
     <span class="nx">unhighlight</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">_silent</span><span class="p">)</span> <span class="p">{</span>
         <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">enableHighlight</span><span class="p">)</span> <span class="p">{</span>
-			<span class="c1">// might have checked singleNodeHighlight but it wouldn&#39;t really matter either way</span>
+			<span class="c1">// might have checked singleNodeHighlight but it wouldn't really matter either way</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">_currentlyHighlighted</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">highlightState</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
             <span class="k">this</span><span class="p">.</span><span class="nx">_setHighlightClassName</span><span class="p">();</span>
@@ -1463,7 +1447,7 @@
 				<span class="p">}</span>
 			<span class="p">}</span>
             <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">_silent</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">&#39;highlightEvent&#39;</span><span class="p">,</span><span class="k">this</span><span class="p">);</span>
+                <span class="k">this</span><span class="p">.</span><span class="nx">tree</span><span class="p">.</span><span class="nx">fireEvent</span><span class="p">(</span><span class="s1">'highlightEvent'</span><span class="p">,</span><span class="k">this</span><span class="p">);</span>
             <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">},</span>
@@ -1512,9 +1496,9 @@
 <span class="cm">    * @private</span>
 <span class="cm">    */</span>
     <span class="nx">_setHighlightClassName</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;ygtvtableel&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
+        <span class="kd">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">Dom</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'ygtvtableel'</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">index</span><span class="p">);</span>
         <span class="k">if</span> <span class="p">(</span><span class="nx">el</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">el</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\bygtv-highlight\d\b/gi</span><span class="p">,</span><span class="s1">&#39;ygtv-highlight&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">highlightState</span><span class="p">);</span>
+            <span class="nx">el</span><span class="p">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">el</span><span class="p">.</span><span class="nx">className</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/\bygtv-highlight\d\b/gi</span><span class="p">,</span><span class="s1">'ygtv-highlight'</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">highlightState</span><span class="p">);</span>
         <span class="p">}</span>
     <span class="p">}</span>
     
@@ -1532,8 +1516,7 @@
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -1581,13 +1564,11 @@
                                 <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.DateNode.html" title="YAHOO.widget.DateNode">YAHOO.widget.DateNode</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.DateNode.html" title="YAHOO.widget.DateNode">YAHOO.widget.DateNode</a></li>
                                 <li class=""><a href="YAHOO.widget.HTMLNode.html" title="YAHOO.widget.HTMLNode">YAHOO.widget.HTMLNode</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuNode.html" title="YAHOO.widget.MenuNode">YAHOO.widget.MenuNode</a></li>
                                 <li class=""><a href="YAHOO.widget.Node.html" title="YAHOO.widget.Node">YAHOO.widget.Node</a></li>
@@ -1597,13 +1578,11 @@
                                 <li class=""><a href="YAHOO.widget.TVAnim.html" title="YAHOO.widget.TVAnim">YAHOO.widget.TVAnim</a></li>
                                 <li class=""><a href="YAHOO.widget.TVFadeIn.html" title="YAHOO.widget.TVFadeIn">YAHOO.widget.TVFadeIn</a></li>
                                 <li class=""><a href="YAHOO.widget.TVFadeOut.html" title="YAHOO.widget.TVFadeOut">YAHOO.widget.TVFadeOut</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="DateNode.js.html" title="DateNode.js">DateNode.js</a></li>
+                        <ul class="content"><li class=""><a href="DateNode.js.html" title="DateNode.js">DateNode.js</a></li>
                                 <li class=""><a href="HTMLNode.js.html" title="HTMLNode.js">HTMLNode.js</a></li>
                                 <li class=""><a href="MenuNode.js.html" title="MenuNode.js">MenuNode.js</a></li>
                                 <li class="selected"><a href="Node.js.html" title="Node.js">Node.js</a></li>
@@ -1614,8 +1593,7 @@
                                 <li class=""><a href="TVAnim.js.html" title="TVAnim.js">TVAnim.js</a></li>
                                 <li class=""><a href="TVFadeIn.js.html" title="TVFadeIn.js">TVFadeIn.js</a></li>
                                 <li class=""><a href="TVFadeOut.js.html" title="TVFadeOut.js">TVFadeOut.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -1625,13 +1603,10 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2010 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2010 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
 
     var ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.TVFadeIn", "name": "animate", "url": "YAHOO.widget.TVFadeIn.html#method_animate", "type": "method"}, {"access": "", "host": "YAHOO.widget.TVFadeOut", "name": "animate", "url": "YAHOO.widget.TVFadeOut.html#method_animate", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "animateCollapse", "url": "YAHOO.widget.TreeView.html#method_animateCollapse", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "animateExpand", "url": "YAHOO.widget.TreeView.html#method_animateExpand", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "animComplete", "url": "YAHOO.widget.TreeView.html#event_animComplete", "type": "event"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_animCount", "url": "YAHOO.widget.TreeView.html#property__animCount", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "animStart", "url": "YAHOO.widget.TreeView.html#event_animStart", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "appendChild", "url": "YAHOO.widget.Node.html#method_appendChild", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "appendTo", "url": "YAHOO.widget.Node.html#method_appendTo", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "applyParent", "url": "YAHOO.widget.Node.html#method_applyParent", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "buildTreeFromMarkup", "url": "YAHOO.widget.TreeView.html#method_buildTreeFromMarkup", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "buildTreeFromObject", "url": "YAHOO.widget.TreeView.html#method_buildTreeFromObject", "type": "method"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "calendarConfig", "url": "YAHOO.widget.DateNode.html#property_calendarConfig", "type": "property"}, {"access": "", "host": "YAHOO.widget.TVFadeIn", "name": "callback", "url": "YAHOO.widget.TVFadeIn.html#property_callback", "type": "property"}, {"access": "", "host": "YAHOO.widget.TVFadeOut", "name": "callback", "url": "YAHOO.widget.TVFadeOut.html#property_callback", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_canHaveFocus", "url": "YAHOO.widget.Node.html#method__canHaveFocus", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "children", "url": "YAHOO.widget.Node.html#property_children", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_childrenHighlighted", "url": "YAHOO.widget.Node.html#method__childrenHighlighted", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "childrenRendered", "url": "YAHOO.widget.Node.html#property_childrenRendered", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "className", "url": "YAHOO.widget.Node.html#property_className", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "clickEvent", "url": "YAHOO.widget.TreeView.html#event_clickEvent", "type": "event"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_closeEditor", "url": "YAHOO.widget.TreeView.html#method__closeEditor", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "collapse", "url": "YAHOO.widget.Node.html#method_collapse", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "collapse", "url": "YAHOO.widget.TreeView.html#event_collapse", "type": "event"}, {"access": "", "host": "YAHOO.widget.Node", "name": "collapseAll", "url": "YAHOO.widget.Node.html#method_collapseAll", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "collapseAll", "url": "YAHOO.widget.TreeView.html#method_collapseAll", "type": "method"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_collapseAnim", "url": "YAHOO.widget.TreeView.html#property__collapseAnim", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "collapseComplete", "url": "YAHOO.widget.TreeView.html#method_collapseComplete", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "collapseComplete", "url": "YAHOO.widget.TreeView.html#event_collapseComplete", "type": "event"}, {"access": "", "host": "YAHOO.widget.Node", "name": "completeRender", "url": "YAHOO.widget.Node.html#method_completeRender", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "contentElId", "url": "YAHOO.widget.Node.html#property_contentElId", "type": "property"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "contentStyle", "url": "YAHOO.widget.HTMLNode.html#property_contentStyle", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "contentStyle", "url": "YAHOO.widget.Node.html#property_contentStyle", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "currentFocus", "url": "YAHOO.widget.TreeView.html#property_currentFocus", "type": "property"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_currentlyHighlighted", "url": "YAHOO.widget.TreeView.html#property__currentlyHighlighted", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "data", "url": "YAHOO.widget.Node.html#property_data", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "dataLoader", "url": "YAHOO.widget.Node.html#property_dataLoader", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "dblClickEvent", "url": "YAHOO.widget.TreeView.html#event_dblClickEvent", "type": "event"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_dblClickTimer", "url": "YAHOO.widget.TreeView.html#property__dblClickTimer", "type": "property"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_deleteNode", "url": "YAHOO.widget.TreeView.html#method__deleteNode", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "depth", "url": "YAHOO.widget.Node.html#property_depth", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "destroy", "url": "YAHOO.widget.TreeView.html#method_destroy", "type": "method"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_destroyEditor", "url": "YAHOO.widget.TreeView.html#method__destroyEditor", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "destroyEditorContents", "url": "YAHOO.widget.Node.html#method_destroyEditorContents", "type": "method"}, {"access": "", "host": "YAHOO.widget.TextNode", "name": "destroyEditorContents", "url": "YAHOO.widget.TextNode.html#method_destroyEditorContents", "type": "method"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "displayEditedValue", "url": "YAHOO.widget.DateNode.html#method_displayEditedValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "displayEditedValue", "url": "YAHOO.widget.Node.html#method_displayEditedValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.TextNode", "name": "displayEditedValue", "url": "YAHOO.widget.TextNode.html#method_displayEditedValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "draw", "url": "YAHOO.widget.TreeView.html#method_draw", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "dynamicLoadComplete", "url": "YAHOO.widget.Node.html#property_dynamicLoadComplete", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_dynLoad", "url": "YAHOO.widget.Node.html#property__dynLoad", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "editable", "url": "YAHOO.widget.Node.html#property_editable", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "editNode", "url": "YAHOO.widget.Node.html#method_editNode", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "editorCancelEvent", "url": "YAHOO.widget.TreeView.html#event_editorCancelEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "editorData", "url": "YAHOO.widget.TreeView.html#property_editorData", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "editorSaveEvent", "url": "YAHOO.widget.TreeView.html#event_editorSaveEvent", "type": "event"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_el", "url": "YAHOO.widget.TreeView.html#property__el", "type": "property"}, {"access": "", "host": "YAHOO.widget.TVFadeIn", "name": "el", "url": "YAHOO.widget.TVFadeIn.html#property_el", "type": "property"}, {"access": "", "host": "YAHOO.widget.TVFadeOut", "name": "el", "url": "YAHOO.widget.TVFadeOut.html#property_el", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "enableHighlight", "url": "YAHOO.widget.Node.html#property_enableHighlight", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "enterKeyPressed", "url": "YAHOO.widget.TreeView.html#event_enterKeyPressed", "type": "event"}, {"access": "", "host": "YAHOO.widget.Node", "name": "expand", "url": "YAHOO.widget.Node.html#method_expand", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "expand", "url": "YAHOO.widget.TreeView.html#event_expand", "type": "event"}, {"access": "", "host": "YAHOO.widget.Node", "name": "expandAll", "url": "YAHOO.widget.Node.html#method_expandAll", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "expandAll", "url": "YAHOO.widget.TreeView.html#method_expandAll", "type": "method"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_expandAnim", "url": "YAHOO.widget.TreeView.html#property__expandAnim", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "expandComplete", "url": "YAHOO.widget.TreeView.html#method_expandComplete", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "expandComplete", "url": "YAHOO.widget.TreeView.html#event_expandComplete", "type": "event"}, {"access": "", "host": "YAHOO.widget.Node", "name": "expanded", "url": "YAHOO.widget.Node.html#property_expanded", "type": "property"}, {"access": "", "host": "YAHOO.widget.TVAnim", "name": "FADE_IN", "url": "YAHOO.widget.TVAnim.html#property_FADE_IN", "type": "property"}, {"access": "", "host": "YAHOO.widget.TVAnim", "name": "FADE_OUT", "url": "YAHOO.widget.TVAnim.html#property_FADE_OUT", "type": "property"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "fillEditorContainer", "url": "YAHOO.widget.DateNode.html#method_fillEditorContainer", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "fillEditorContainer", "url": "YAHOO.widget.Node.html#method_fillEditorContainer", "type": "method"}, {"access": "", "host": "YAHOO.widget.TextNode", "name": "fillEditorContainer", "url": "YAHOO.widget.TextNode.html#method_fillEditorContainer", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "focus", "url": "YAHOO.widget.Node.html#method_focus", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "focusChanged", "url": "YAHOO.widget.TreeView.html#event_focusChanged", "type": "event"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_focusedItem", "url": "YAHOO.widget.Node.html#property__focusedItem", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_focusHighlightedItems", "url": "YAHOO.widget.Node.html#property__focusHighlightedItems", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getAncestor", "url": "YAHOO.widget.Node.html#method_getAncestor", "type": "method"}, {"access": "", "host": "YAHOO.widget.TVAnim", "name": "getAnim", "url": "YAHOO.widget.TVAnim.html#method_getAnim", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getChildrenEl", "url": "YAHOO.widget.Node.html#method_getChildrenEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getChildrenElId", "url": "YAHOO.widget.Node.html#method_getChildrenElId", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "getChildrenHtml", "url": "YAHOO.widget.Node.html#method_getChildrenHtml", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getContentEl", "url": "YAHOO.widget.Node.html#method_getContentEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getContentHtml", "url": "YAHOO.widget.Node.html#method_getContentHtml", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getDepthStyle", "url": "YAHOO.widget.Node.html#method_getDepthStyle", "type": "method"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "getEditorValue", "url": "YAHOO.widget.DateNode.html#method_getEditorValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getEditorValue", "url": "YAHOO.widget.Node.html#method_getEditorValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.TextNode", "name": "getEditorValue", "url": "YAHOO.widget.TextNode.html#method_getEditorValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getEl", "url": "YAHOO.widget.Node.html#method_getEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "getEl", "url": "YAHOO.widget.TreeView.html#method_getEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getElId", "url": "YAHOO.widget.Node.html#method_getElId", "type": "method"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_getEventTargetTdEl", "url": "YAHOO.widget.TreeView.html#method__getEventTargetTdEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "getHighlightedNode", "url": "YAHOO.widget.TreeView.html#method_getHighlightedNode", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getHoverStyle", "url": "YAHOO.widget.Node.html#method_getHoverStyle", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getHtml", "url": "YAHOO.widget.Node.html#method_getHtml", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getIconMode", "url": "YAHOO.widget.Node.html#method_getIconMode", "type": "method"}, {"access": "", "host": "YAHOO.widget.TextNode", "name": "getLabelEl", "url": "YAHOO.widget.TextNode.html#method_getLabelEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "getNodeByElement", "url": "YAHOO.widget.TreeView.html#method_getNodeByElement", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "getNodeByIndex", "url": "YAHOO.widget.TreeView.html#method_getNodeByIndex", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "getNodeByProperty", "url": "YAHOO.widget.TreeView.html#method_getNodeByProperty", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getNodeCount", "url": "YAHOO.widget.Node.html#method_getNodeCount", "type": "method"}, {"access": "", "host": "YAHOO.widget.RootNode", "name": "getNodeCount", "url": "YAHOO.widget.RootNode.html#method_getNodeCount", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "getNodeCount", "url": "YAHOO.widget.TreeView.html#method_getNodeCount", "type": "method"}, {"access": "", "host": "YAHOO.widget.DateNode", "name": "getNodeDefinition", "url": "YAHOO.widget.DateNode.html#method_getNodeDefinition", "type": "method"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "getNodeDefinition", "url": "YAHOO.widget.HTMLNode.html#method_getNodeDefinition", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getNodeDefinition", "url": "YAHOO.widget.Node.html#method_getNodeDefinition", "type": "method"}, {"access": "", "host": "YAHOO.widget.RootNode", "name": "getNodeDefinition", "url": "YAHOO.widget.RootNode.html#method_getNodeDefinition", "type": "method"}, {"access": "", "host": "YAHOO.widget.TextNode", "name": "getNodeDefinition", "url": "YAHOO.widget.TextNode.html#method_getNodeDefinition", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getNodeHtml", "url": "YAHOO.widget.Node.html#method_getNodeHtml", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "getNodesBy", "url": "YAHOO.widget.TreeView.html#method_getNodesBy", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "getNodesByProperty", "url": "YAHOO.widget.TreeView.html#method_getNodesByProperty", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "getRoot", "url": "YAHOO.widget.TreeView.html#method_getRoot", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getSiblings", "url": "YAHOO.widget.Node.html#method_getSiblings", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getStyle", "url": "YAHOO.widget.Node.html#method_getStyle", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getToggleEl", "url": "YAHOO.widget.Node.html#method_getToggleEl", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getToggleElId", "url": "YAHOO.widget.Node.html#method_getToggleElId", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "getToggleLink", "url": "YAHOO.widget.Node.html#method_getToggleLink", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "getTreeDefinition", "url": "YAHOO.widget.TreeView.html#method_getTreeDefinition", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "hasChildren", "url": "YAHOO.widget.Node.html#method_hasChildren", "type": "method"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_hasDblClickSubscriber", "url": "YAHOO.widget.TreeView.html#property__hasDblClickSubscriber", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "hasIcon", "url": "YAHOO.widget.Node.html#property_hasIcon", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "hideChildren", "url": "YAHOO.widget.Node.html#method_hideChildren", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "highlight", "url": "YAHOO.widget.Node.html#method_highlight", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "highlightEvent", "url": "YAHOO.widget.TreeView.html#event_highlightEvent", "type": "event"}, {"access": "", "host": "YAHOO.widget.Node", "name": "highlightState", "url": "YAHOO.widget.Node.html#property_highlightState", "type": "property"}, {"access": "", "host": "YAHOO.widget.TextNode", "name": "href", "url": "YAHOO.widget.TextNode.html#property_href", "type": "property"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "html", "url": "YAHOO.widget.HTMLNode.html#property_html", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "iconMode", "url": "YAHOO.widget.Node.html#property_iconMode", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "id", "url": "YAHOO.widget.TreeView.html#property_id", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "index", "url": "YAHOO.widget.Node.html#property_index", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "init", "url": "YAHOO.widget.Node.html#method_init", "type": "method"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "init", "url": "YAHOO.widget.TreeView.html#method_init", "type": "method"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "initContent", "url": "YAHOO.widget.HTMLNode.html#property_initContent", "type": "property"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_initEditor", "url": "YAHOO.widget.TreeView.html#method__initEditor", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "insertAfter", "url": "YAHOO.widget.Node.html#method_insertAfter", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "insertBefore", "url": "YAHOO.widget.Node.html#method_insertBefore", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "isChildOf", "url": "YAHOO.widget.Node.html#method_isChildOf", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "isDynamic", "url": "YAHOO.widget.Node.html#method_isDynamic", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "isLeaf", "url": "YAHOO.widget.Node.html#property_isLeaf", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "isLoading", "url": "YAHOO.widget.Node.html#property_isLoading", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "isRoot", "url": "YAHOO.widget.Node.html#method_isRoot", "type": "method"}, {"access": "", "host": "YAHOO.widget.TVAnim", "name": "isValid", "url": "YAHOO.widget.TVAnim.html#method_isValid", "type": "method"}, {"access": "", "host": "YAHOO.widget.TextNode", "name": "label", "url": "YAHOO.widget.TextNode.html#property_label", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "labelClick", "url": "YAHOO.widget.TreeView.html#event_labelClick", "type": "event"}, {"access": "", "host": "YAHOO.widget.TextNode", "name": "labelElId", "url": "YAHOO.widget.TextNode.html#property_labelElId", "type": "property"}, {"access": "", "host": "YAHOO.widget.TextNode", "name": "labelStyle", "url": "YAHOO.widget.TextNode.html#property_labelStyle", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "loadComplete", "url": "YAHOO.widget.Node.html#method_loadComplete", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "locked", "url": "YAHOO.widget.TreeView.html#property_locked", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "maxAnim", "url": "YAHOO.widget.TreeView.html#property_maxAnim", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "multiExpand", "url": "YAHOO.widget.Node.html#property_multiExpand", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "nextSibling", "url": "YAHOO.widget.Node.html#property_nextSibling", "type": "property"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_nodeEditing", "url": "YAHOO.widget.TreeView.html#method__nodeEditing", "type": "method"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_nodes", "url": "YAHOO.widget.TreeView.html#property__nodes", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "nowrap", "url": "YAHOO.widget.Node.html#property_nowrap", "type": "property"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_onClickEvent", "url": "YAHOO.widget.TreeView.html#method__onClickEvent", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "onCollapse", "url": "YAHOO.widget.TreeView.html#method_onCollapse", "type": "method"}, {"access": "", "host": "YAHOO.widget.TVFadeIn", "name": "onComplete", "url": "YAHOO.widget.TVFadeIn.html#method_onComplete", "type": "method"}, {"access": "", "host": "YAHOO.widget.TVFadeOut", "name": "onComplete", "url": "YAHOO.widget.TVFadeOut.html#method_onComplete", "type": "method"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_onDblClickEvent", "url": "YAHOO.widget.TreeView.html#method__onDblClickEvent", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "onEventEditNode", "url": "YAHOO.widget.TreeView.html#method_onEventEditNode", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "onEventToggleHighlight", "url": "YAHOO.widget.TreeView.html#method_onEventToggleHighlight", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "onExpand", "url": "YAHOO.widget.TreeView.html#method_onExpand", "type": "method"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_onKeyDownEvent", "url": "YAHOO.widget.TreeView.html#method__onKeyDownEvent", "type": "method"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_onMouseOutEvent", "url": "YAHOO.widget.TreeView.html#method__onMouseOutEvent", "type": "method"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_onMouseOverEvent", "url": "YAHOO.widget.TreeView.html#method__onMouseOverEvent", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "parent", "url": "YAHOO.widget.Node.html#property_parent", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "parentChange", "url": "YAHOO.widget.Node.html#event_parentChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "popNode", "url": "YAHOO.widget.TreeView.html#method_popNode", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "previousSibling", "url": "YAHOO.widget.Node.html#property_previousSibling", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "propagateHighlightDown", "url": "YAHOO.widget.Node.html#property_propagateHighlightDown", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "propagateHighlightUp", "url": "YAHOO.widget.Node.html#property_propagateHighlightUp", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "refresh", "url": "YAHOO.widget.Node.html#method_refresh", "type": "method"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "regNode", "url": "YAHOO.widget.TreeView.html#method_regNode", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "removeChildren", "url": "YAHOO.widget.TreeView.html#method_removeChildren", "type": "method"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "_removeChildren_animComplete", "url": "YAHOO.widget.TreeView.html#method__removeChildren_animComplete", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_removeFocus", "url": "YAHOO.widget.Node.html#method__removeFocus", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "removeNode", "url": "YAHOO.widget.TreeView.html#method_removeNode", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "render", "url": "YAHOO.widget.TreeView.html#method_render", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "renderChildren", "url": "YAHOO.widget.Node.html#method_renderChildren", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "renderHidden", "url": "YAHOO.widget.Node.html#property_renderHidden", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "saveEditorValue", "url": "YAHOO.widget.Node.html#method_saveEditorValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "setCollapseAnim", "url": "YAHOO.widget.TreeView.html#method_setCollapseAnim", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "setDynamicLoad", "url": "YAHOO.widget.Node.html#method_setDynamicLoad", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "setDynamicLoad", "url": "YAHOO.widget.TreeView.html#method_setDynamicLoad", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "setExpandAnim", "url": "YAHOO.widget.TreeView.html#method_setExpandAnim", "type": "method"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_setHighlightClassName", "url": "YAHOO.widget.Node.html#method__setHighlightClassName", "type": "method"}, {"access": "", "host": "YAHOO.widget.HTMLNode", "name": "setHtml", "url": "YAHOO.widget.HTMLNode.html#property_setHtml", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "setNodesProperty", "url": "YAHOO.widget.Node.html#method_setNodesProperty", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "setNodesProperty", "url": "YAHOO.widget.TreeView.html#method_setNodesProperty", "type": "method"}, {"access": "", "host": "YAHOO.widget.TextNode", "name": "setUpLabel", "url": "YAHOO.widget.TextNode.html#method_setUpLabel", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "showChildren", "url": "YAHOO.widget.Node.html#method_showChildren", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "singleNodeHighlight", "url": "YAHOO.widget.TreeView.html#property_singleNodeHighlight", "type": "property"}, {"access": "", "host": "YAHOO.widget.TextNode", "name": "target", "url": "YAHOO.widget.TextNode.html#property_target", "type": "property"}, {"access": "", "host": "YAHOO.widget.TextNode", "name": "title", "url": "YAHOO.widget.TextNode.html#property_title", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "toggle", "url": "YAHOO.widget.Node.html#method_toggle", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "toggleHighlight", "url": "YAHOO.widget.Node.html#method_toggleHighlight", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "toString", "url": "YAHOO.widget.Node.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "toString", "url": "YAHOO.widget.TreeView.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.TVFadeIn", "name": "toString", "url": "YAHOO.widget.TVFadeIn.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.TVFadeOut", "name": "toString", "url": "YAHOO.widget.TVFadeOut.html#method_toString", "type": "method"}, {"access": "", "host": "YAHOO.widget.Node", "name": "tree", "url": "YAHOO.widget.Node.html#property_tree", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "TreeView.FOCUS_CLASS_NAME", "url": "YAHOO.widget.TreeView.html#property_TreeView.FOCUS_CLASS_NAME", "type": "property"}, {"access": "private", "host": "YAHOO.widget.DateNode", "name": "_type", "url": "YAHOO.widget.DateNode.html#property__type", "type": "property"}, {"access": "private", "host": "YAHOO.widget.HTMLNode", "name": "_type", "url": "YAHOO.widget.HTMLNode.html#property__type", "type": "property"}, {"access": "private", "host": "YAHOO.widget.MenuNode", "name": "_type", "url": "YAHOO.widget.MenuNode.html#property__type", "type": "property"}, {"access": "private", "host": "YAHOO.widget.Node", "name": "_type", "url": "YAHOO.widget.Node.html#property__type", "type": "property"}, {"access": "private", "host": "YAHOO.widget.RootNode", "name": "_type", "url": "YAHOO.widget.RootNode.html#property__type", "type": "property"}, {"access": "private", "host": "YAHOO.widget.TextNode", "name": "_type", "url": "YAHOO.widget.TextNode.html#property__type", "type": "property"}, {"access": "", "host": "YAHOO.widget.Node", "name": "unhighlight", "url": "YAHOO.widget.Node.html#method_unhighlight", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "validator", "url": "YAHOO.widget.TreeView.html#property_validator", "type": "property"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "YAHOO.widget.TreeView.getNode", "url": "YAHOO.widget.TreeView.html#method_YAHOO.widget.TreeView.getNode", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "YAHOO.widget.TreeView.getTree", "url": "YAHOO.widget.TreeView.html#method_YAHOO.widget.TreeView.getTree", "type": "method"}, {"access": "", "host": "YAHOO.widget.TreeView", "name": "YAHOO.widget.TreeView.nodeCount", "url": "YAHOO.widget.TreeView.html#property_YAHOO.widget.TreeView.nodeCount", "type": "property"}, {"access": "private", "host": "YAHOO.widget.TreeView", "name": "YAHOO.widget.TreeView.trees", "url": "YAHOO.widget.TreeView.html#property_YAHOO.widget.TreeView.trees", "type": "property"}];
-</script>
-</body>
-</html>
+</script></body>

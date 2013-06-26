@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: charts   Chart.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: charts   Chart.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Charts Widget&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <h3>Charts Widget  <span class="subtitle">2.6.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_charts.html">charts</a>
@@ -28,16 +20,15 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
-    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"><label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"><label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated"><label for="showdeprecated">Show Deprecated</label></span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * The Charts widget provides a Flash control for displaying data</span>
 <span class="c"> * graphically by series across A-grade browsers with Flash Player installed.</span>
 <span class="c"> *</span>
@@ -58,7 +49,7 @@
 <span class="c"> * @class Chart</span>
 <span class="c"> * @uses YAHOO.widget.FlashAdapter</span>
 <span class="c"> * @constructor</span>
-<span class="c"> * @param type {String} The char type. May be &quot;line&quot;, &quot;column&quot;, &quot;bar&quot;, or &quot;pie&quot;</span>
+<span class="c"> * @param type {String} The char type. May be "line", "column", "bar", or "pie"</span>
 <span class="c"> * @param containerId {HTMLElement} Container element for the Flash Player instance.</span>
 <span class="c"> * @param dataSource {YAHOO.util.DataSource} DataSource instance.</span>
 <span class="c"> * @param attributes {object} (optional) Object literal of configuration values.</span>
@@ -81,7 +72,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemMouseOverEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemMouseOverEvent"</span><span class="o">);</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the user moves the mouse out of the bounds of an item renderer in the chart.</span>
@@ -94,7 +85,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemMouseOutEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemMouseOutEvent"</span><span class="o">);</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the user clicks an item renderer in the chart with the mouse.</span>
@@ -107,7 +98,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemClickEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemClickEvent"</span><span class="o">);</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the user double-clicks an item renderer in the chart with the mouse.</span>
@@ -120,7 +111,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemDoubleClickEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemDoubleClickEvent"</span><span class="o">);</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the user presses the mouse down on an item to initiate a drag action.</span>
@@ -133,7 +124,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemDragStartEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemDragStartEvent"</span><span class="o">);</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the user moves the mouse during a drag action.</span>
@@ -146,7 +137,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemDragEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemDragEvent"</span><span class="o">);</span>
 
 	<span class="c">/**</span>
 <span class="c">	 * Fires when the user releases the mouse during a drag action.</span>
@@ -159,7 +150,7 @@
 <span class="c">	 * @param event.x {Number} The horizontal position of the mouse, relative to the SWF.</span>
 <span class="c">	 * @param event.y {Number} The vertical position of the mouse, relative to the SWF.</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;itemDragEndEvent&quot;</span><span class="o">);</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"itemDragEndEvent"</span><span class="o">);</span>
 <span class="o">};</span>
 
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">extend</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">,</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">,</span>
@@ -173,7 +164,7 @@
 	<span class="nx">_type</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
 
 	<span class="c">/**</span>
-<span class="c">	 * The id returned from the DataSource&#39;s setInterval function.</span>
+<span class="c">	 * The id returned from the DataSource's setInterval function.</span>
 <span class="c">	 * @property _pollingID</span>
 <span class="c">	 * @type Number</span>
 <span class="c">	 * @private</span>
@@ -214,7 +205,7 @@
 <span class="c">	 */</span>
 	<span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span>
 	<span class="o">{</span>
-		<span class="k">return</span> <span class="s2">&quot;Chart &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
+		<span class="k">return</span> <span class="s2">"Chart "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_id</span><span class="o">;</span>
 	<span class="o">},</span>
 	
 	<span class="c">/**</span>
@@ -226,7 +217,7 @@
 <span class="c">	 */</span>
 	<span class="nx">setStyle</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">name</span><span class="o">,</span> <span class="nx">value</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="c">//we must jsonify this because Flash Player versions below 9.0.60 don&#39;t handle</span>
+		<span class="c">//we must jsonify this because Flash Player versions below 9.0.60 don't handle</span>
 <span class="c"></span>		<span class="c">//complex ExternalInterface parsing correctly</span>
 <span class="c"></span>		<span class="nx">value</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">JSON</span><span class="o">.</span><span class="nx">stringify</span><span class="o">(</span><span class="nx">value</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">name</span><span class="o">,</span> <span class="nx">value</span><span class="o">);</span>
@@ -240,7 +231,7 @@
 <span class="c">	 */</span>
 	<span class="nx">setStyles</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">styles</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="c">//we must jsonify this because Flash Player versions below 9.0.60 don&#39;t handle</span>
+		<span class="c">//we must jsonify this because Flash Player versions below 9.0.60 don't handle</span>
 <span class="c"></span>		<span class="c">//complex ExternalInterface parsing correctly</span>
 <span class="c"></span>		<span class="nx">styles</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">JSON</span><span class="o">.</span><span class="nx">stringify</span><span class="o">(</span><span class="nx">styles</span><span class="o">);</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">_swf</span><span class="o">.</span><span class="nx">setStyles</span><span class="o">(</span><span class="nx">styles</span><span class="o">);</span>
@@ -254,7 +245,7 @@
 <span class="c">	 */</span>
 	<span class="nx">setSeriesStyles</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">styles</span><span class="o">)</span>
 	<span class="o">{</span>
-		<span class="c">//we must jsonify this because Flash Player versions below 9.0.60 don&#39;t handle</span>
+		<span class="c">//we must jsonify this because Flash Player versions below 9.0.60 don't handle</span>
 <span class="c"></span>		<span class="c">//complex ExternalInterface parsing correctly</span>
 <span class="c"></span>		<span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">styles</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span>
 		<span class="o">{</span>
@@ -297,15 +288,15 @@
 
 		<span class="c">/**</span>
 <span class="c">		 * @attribute request</span>
-<span class="c">		 * @description Request to be sent to the Chart&#39;s DataSource.</span>
+<span class="c">		 * @description Request to be sent to the Chart's DataSource.</span>
 <span class="c">		 * @type String</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;request&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"request"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getRequest</span>
 		<span class="o">});</span>
 		
-		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;request&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">"request"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setRequest</span>
 		<span class="o">});</span>
@@ -315,12 +306,12 @@
 <span class="c">		 * @description The DataSource instance to display in the Chart.</span>
 <span class="c">		 * @type DataSource</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataSource&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"dataSource"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDataSource</span>
 		<span class="o">});</span>
 		
-		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataSource&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">"dataSource"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setDataSource</span>
 		<span class="o">});</span>
@@ -330,12 +321,12 @@
 <span class="c">		 * @description Defines the series to be displayed by the Chart.</span>
 <span class="c">		 * @type Array</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;series&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"series"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getSeriesDefs</span>
 		<span class="o">});</span>
 		
-		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;series&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">"series"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setSeriesDefs</span>
 		<span class="o">});</span>
@@ -345,12 +336,12 @@
 <span class="c">		 * @description Defines the names of the categories to be displayed in the Chart..</span>
 <span class="c">		 * @type Array</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;categoryNames&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"categoryNames"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getCategoryNames</span>
 		<span class="o">});</span>
 		
-		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;categoryNames&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">"categoryNames"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">,</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setCategoryNames</span>
@@ -359,15 +350,15 @@
 		<span class="c">/**</span>
 <span class="c">		 * @attribute dataTipFunction</span>
 <span class="c">		 * @description The string representation of a globally-accessible function</span>
-<span class="c">		 * that may be called by the SWF to generate the datatip text for a Chart&#39;s item.</span>
+<span class="c">		 * that may be called by the SWF to generate the datatip text for a Chart's item.</span>
 <span class="c">		 * @type String</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataTipFunction&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"dataTipFunction"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getDataTipFunction</span>
 		<span class="o">});</span>
 		
-		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;dataTipFunction&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">"dataTipFunction"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setDataTipFunction</span>
 		<span class="o">});</span>
@@ -378,12 +369,12 @@
 <span class="c">		 * polling requests to the DataSource.</span>
 <span class="c">		 * @type Number</span>
 <span class="c">		 */</span>
-		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">&quot;polling&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">getAttributeConfig</span><span class="o">(</span><span class="s2">"polling"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getPolling</span>
 		<span class="o">});</span>
 
-		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">&quot;polling&quot;</span><span class="o">,</span>
+		<span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s2">"polling"</span><span class="o">,</span>
 		<span class="o">{</span>
 			<span class="nx">method</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setPolling</span>
 		<span class="o">});</span>
@@ -412,7 +403,7 @@
 		
 		<span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span><span class="o">)</span>
 		<span class="o">{</span>
-			<span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">&quot;dataSource&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span><span class="o">);</span>
+			<span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s2">"dataSource"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_dataSource</span><span class="o">);</span>
 		<span class="o">}</span>
 	<span class="o">},</span>
 
@@ -457,7 +448,7 @@
 		<span class="o">{</span>
 			<span class="k">if</span><span class="o">(</span><span class="nx">error</span><span class="o">)</span>
 			<span class="o">{</span>
-				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Unable to load data.&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">);</span>
+				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Unable to load data."</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">);</span>
 			<span class="o">}</span>
 			<span class="k">else</span>
 			<span class="o">{</span>
@@ -473,7 +464,7 @@
 				<span class="o">}</span>
 				<span class="k">this</span><span class="o">.</span><span class="nx">_seriesLabelFunctions</span> <span class="o">=</span> <span class="o">[];</span>
 
-				<span class="c">//make a copy of the series definitions so that we aren&#39;t</span>
+				<span class="c">//make a copy of the series definitions so that we aren't</span>
 <span class="c"></span>				<span class="c">//editing them directly.</span>
 <span class="c"></span>				<span class="k">var</span> <span class="nx">dataProvider</span> <span class="o">=</span> <span class="o">[];</span>	
 				<span class="k">var</span> <span class="nx">seriesCount</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
@@ -489,7 +480,7 @@
 						<span class="o">{</span>
 							<span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="nx">currentSeries</span><span class="o">,</span> <span class="nx">prop</span><span class="o">))</span>
 							<span class="o">{</span>
-								<span class="k">if</span><span class="o">(</span><span class="nx">prop</span> <span class="o">==</span> <span class="s2">&quot;style&quot;</span><span class="o">)</span>
+								<span class="k">if</span><span class="o">(</span><span class="nx">prop</span> <span class="o">==</span> <span class="s2">"style"</span><span class="o">)</span>
 								<span class="o">{</span>
 									<span class="k">if</span><span class="o">(</span><span class="nx">currentSeries</span><span class="o">.</span><span class="nx">style</span> <span class="o">!==</span> <span class="kc">null</span><span class="o">)</span>
 									<span class="o">{</span>
@@ -497,10 +488,10 @@
 									<span class="o">}</span>
 								<span class="o">}</span>
 
-								<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">prop</span> <span class="o">==</span> <span class="s2">&quot;labelFunction&quot;</span><span class="o">)</span>
+								<span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">prop</span> <span class="o">==</span> <span class="s2">"labelFunction"</span><span class="o">)</span>
 								<span class="o">{</span>
 									<span class="k">if</span><span class="o">(</span><span class="nx">currentSeries</span><span class="o">.</span><span class="nx">labelFunction</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span>
-										<span class="k">typeof</span> <span class="nx">currentSeries</span><span class="o">.</span><span class="nx">labelFunction</span> <span class="o">==</span> <span class="s2">&quot;function&quot;</span><span class="o">)</span>
+										<span class="k">typeof</span> <span class="nx">currentSeries</span><span class="o">.</span><span class="nx">labelFunction</span> <span class="o">==</span> <span class="s2">"function"</span><span class="o">)</span>
 									<span class="o">{</span>
 										<span class="nx">clonedSeries</span><span class="o">.</span><span class="nx">labelFunction</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">.</span><span class="nx">createProxyFunction</span><span class="o">(</span><span class="nx">currentSeries</span><span class="o">.</span><span class="nx">labelFunction</span><span class="o">);</span>
 										<span class="k">this</span><span class="o">.</span><span class="nx">_seriesLabelFunctions</span><span class="o">.</span><span class="nx">push</span><span class="o">(</span><span class="nx">clonedSeries</span><span class="o">.</span><span class="nx">labelFunction</span><span class="o">);</span>
@@ -545,7 +536,7 @@
 <span class="c">	 * @property _request</span>
 <span class="c">	 * @private</span>
 <span class="c">	 */</span>
-	<span class="nx">_request</span><span class="o">:</span> <span class="s2">&quot;&quot;</span><span class="o">,</span>
+	<span class="nx">_request</span><span class="o">:</span> <span class="s2">""</span><span class="o">,</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Getter for the request attribute.</span>
@@ -667,7 +658,7 @@
 			<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">.</span><span class="nx">removeProxyFunction</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_dataTipFunction</span><span class="o">);</span>
 		<span class="o">}</span>
 		
-		<span class="k">if</span><span class="o">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">==</span> <span class="s2">&quot;function&quot;</span><span class="o">)</span>
+		<span class="k">if</span><span class="o">(</span><span class="nx">value</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span> <span class="nx">value</span> <span class="o">==</span> <span class="s2">"function"</span><span class="o">)</span>
 		<span class="o">{</span>
 			<span class="nx">value</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">FlashAdapter</span><span class="o">.</span><span class="nx">createProxyFunction</span><span class="o">(</span><span class="nx">value</span><span class="o">);</span>
 			<span class="k">this</span><span class="o">.</span><span class="nx">_dataTipFunction</span> <span class="o">=</span> <span class="nx">value</span><span class="o">;</span>
@@ -706,9 +697,9 @@
 <span class="c"> * @private</span>
 <span class="c"> * @static</span>
 <span class="c"> * @final</span>
-<span class="c"> * @default &quot;assets/charts.swf&quot;</span>
+<span class="c"> * @default "assets/charts.swf"</span>
 <span class="c"> */</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">SWFURL</span> <span class="o">=</span> <span class="s2">&quot;assets/charts.swf&quot;</span><span class="o">;</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">Chart</span><span class="o">.</span><span class="nx">SWFURL</span> <span class="o">=</span> <span class="s2">"assets/charts.swf"</span><span class="o">;</span>
 </pre></div>
                     </div>
 			</div>
@@ -718,9 +709,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -793,13 +782,11 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.Axis.html">YAHOO.widget.Axis</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.Axis.html">YAHOO.widget.Axis</a></li>
                                 <li class=""><a href="YAHOO.widget.BarChart.html">YAHOO.widget.BarChart</a></li>
                                 <li class=""><a href="YAHOO.widget.BarSeries.html">YAHOO.widget.BarSeries</a></li>
                                 <li class=""><a href="YAHOO.widget.CartesianChart.html">YAHOO.widget.CartesianChart</a></li>
@@ -820,13 +807,11 @@
                                 <li class=""><a href="YAHOO.widget.StackedColumnChart.html">YAHOO.widget.StackedColumnChart</a></li>
                                 <li class=""><a href="YAHOO.widget.StackedColumnSeries.html">YAHOO.widget.StackedColumnSeries</a></li>
                                 <li class=""><a href="YAHOO.widget.TimeAxis.html">YAHOO.widget.TimeAxis</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Axis.js.html">Axis.js</a></li>
+                        <ul class="content"><li class=""><a href="Axis.js.html">Axis.js</a></li>
                                 <li class=""><a href="CartesianChart.js.html">CartesianChart.js</a></li>
                                 <li class=""><a href="CategoryAxis.js.html">CategoryAxis.js</a></li>
                                 <li class="selected"><a href="Chart.js.html">Chart.js</a></li>
@@ -837,8 +822,7 @@
                                 <li class=""><a href="Series.js.html">Series.js</a></li>
                                 <li class=""><a href="swfobject.js.html">swfobject.js</a></li>
                                 <li class=""><a href="TimeAxis.js.html">TimeAxis.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -848,9 +832,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2008 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

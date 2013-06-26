@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: dragdrop   DragDropMgr.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: dragdrop   DragDropMgr.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Drag and Drop&nbsp; <span class="subtitle">2.4.0</span></h3>
+        <h3>Drag and Drop  <span class="subtitle">2.4.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_dragdrop.html">dragdrop</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * The drag and drop utility provides a framework for building drag and drop</span>
 <span class="c"> * applications.  In addition to enabling drag and drop for specific elements,</span>
 <span class="c"> * the drag and drop elements are tracked by the manager class, and the</span>
@@ -259,13 +250,13 @@
 
             <span class="k">this</span><span class="o">.</span><span class="nx">init</span><span class="o">();</span>
 
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;DragDropMgr onload&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"DragDropMgr onload"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
 
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="s2">&quot;mouseup&quot;</span><span class="o">,</span>   <span class="k">this</span><span class="o">.</span><span class="nx">handleMouseUp</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="s2">&quot;mousemove&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">handleMouseMove</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span>   <span class="s2">&quot;unload&quot;</span><span class="o">,</span>    <span class="k">this</span><span class="o">.</span><span class="nx">_onUnload</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span>   <span class="s2">&quot;resize&quot;</span><span class="o">,</span>    <span class="k">this</span><span class="o">.</span><span class="nx">_onResize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="c">// Event.on(window,   &quot;mouseout&quot;,    this._test);</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="s2">"mouseup"</span><span class="o">,</span>   <span class="k">this</span><span class="o">.</span><span class="nx">handleMouseUp</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="s2">"mousemove"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">handleMouseMove</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span>   <span class="s2">"unload"</span><span class="o">,</span>    <span class="k">this</span><span class="o">.</span><span class="nx">_onUnload</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span>   <span class="s2">"resize"</span><span class="o">,</span>    <span class="k">this</span><span class="o">.</span><span class="nx">_onResize</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="c">// Event.on(window,   "mouseout",    this._test);</span>
 <span class="c"></span>
         <span class="o">},</span>
 
@@ -276,8 +267,8 @@
 <span class="c">         * @static</span>
 <span class="c">         */</span>
         <span class="nx">_onResize</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;window resize&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_execOnAll</span><span class="o">(</span><span class="s2">&quot;resetConstraints&quot;</span><span class="o">,</span> <span class="o">[]);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"window resize"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_execOnAll</span><span class="o">(</span><span class="s2">"resetConstraints"</span><span class="o">,</span> <span class="o">[]);</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>
@@ -331,7 +322,7 @@
 
         <span class="c">/**</span>
 <span class="c">         * The number of milliseconds after the mousedown event to initiate the</span>
-<span class="c">         * drag if we don&#39;t get a mouseup event. Default=1000</span>
+<span class="c">         * drag if we don't get a mouseup event. Default=1000</span>
 <span class="c">         * @property clickTimeThresh</span>
 <span class="c">         * @type int</span>
 <span class="c">         * @static</span>
@@ -406,7 +397,7 @@
 
         <span class="c">/**</span>
 <span class="c">         * Removes the supplied dd instance from the supplied group. Executed</span>
-<span class="c">         * by DragDrop.removeFromGroup, so don&#39;t call this function directly.</span>
+<span class="c">         * by DragDrop.removeFromGroup, so don't call this function directly.</span>
 <span class="c">         * @method removeDDFromGroup</span>
 <span class="c">         * @private</span>
 <span class="c">         * @static</span>
@@ -433,7 +424,7 @@
             <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">g</span> <span class="k">in</span> <span class="nx">oDD</span><span class="o">.</span><span class="nx">groups</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">g</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">g</span><span class="o">][</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">])</span> <span class="o">{</span>
                     <span class="nx">delete</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">g</span><span class="o">][</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">];</span>
-                    <span class="c">//YAHOO.log(&quot;NEW LEN &quot; + this.ids.length, &quot;warn&quot;);</span>
+                    <span class="c">//YAHOO.log("NEW LEN " + this.ids.length, "warn");</span>
 <span class="c"></span>                <span class="o">}</span>
             <span class="o">}</span>
             <span class="nx">delete</span> <span class="k">this</span><span class="o">.</span><span class="nx">handleIds</span><span class="o">[</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">];</span>
@@ -518,8 +509,8 @@
         <span class="c">/**</span>
 <span class="c">         * My goal is to be able to transparently determine if an object is</span>
 <span class="c">         * typeof DragDrop, and the exact subclass of DragDrop.  typeof </span>
-<span class="c">         * returns &quot;object&quot;, oDD.constructor.toString() always returns</span>
-<span class="c">         * &quot;DragDrop&quot; and not the name of the subclass.  So for now it just</span>
+<span class="c">         * returns "object", oDD.constructor.toString() always returns</span>
+<span class="c">         * "DragDrop" and not the name of the subclass.  So for now it just</span>
 <span class="c">         * evaluates a well-known variable in DragDrop.</span>
 <span class="c">         * @method isTypeOfDD</span>
 <span class="c">         * @param {Object} the object to evaluate</span>
@@ -604,7 +595,7 @@
 <span class="c">         * @static</span>
 <span class="c">         */</span>
         <span class="nx">startDrag</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">x</span><span class="o">,</span> <span class="nx">y</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;firing drag start events&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"firing drag start events"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
             <span class="nx">clearTimeout</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">clickTimeout</span><span class="o">);</span>
             <span class="k">var</span> <span class="nx">dc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">;</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
@@ -629,15 +620,15 @@
                 <span class="nx">clearTimeout</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">clickTimeout</span><span class="o">);</span>
 
                 <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dragThreshMet</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;mouseup detected - completing drag&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"mouseup detected - completing drag"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                     <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">fromTimeout</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;fromTimeout is true (mouse didn\&#39;t move), call handleMouseDown so we can get the dragOver event&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;DragDropMgr&#39;</span><span class="o">);</span>
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'fromTimeout is true (mouse didn\'t move), call handleMouseDown so we can get the dragOver event'</span><span class="o">,</span> <span class="s1">'info'</span><span class="o">,</span> <span class="s1">'DragDropMgr'</span><span class="o">);</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">handleMouseMove</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
                     <span class="o">}</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">fromTimeout</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">fireEvents</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;drag threshold not met&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"drag threshold not met"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                 <span class="o">}</span>
 
                 <span class="k">this</span><span class="o">.</span><span class="nx">stopDrag</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
@@ -681,17 +672,17 @@
 <span class="c">         * @static</span>
 <span class="c">         */</span>
         <span class="nx">stopDrag</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c">// YAHOO.log(&quot;mouseup - removing event handlers&quot;);</span>
+            <span class="c">// YAHOO.log("mouseup - removing event handlers");</span>
 <span class="c"></span>
             <span class="c">// Fire the drag end event for the item that was dragged</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">silent</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dragThreshMet</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;firing endDrag events&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"firing endDrag events"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">.</span><span class="nx">b4EndDrag</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">.</span><span class="nx">endDrag</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
                 <span class="o">}</span>
 
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;firing dragdrop onMouseUp event&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"firing dragdrop onMouseUp event"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">.</span><span class="nx">onMouseUp</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
             <span class="o">}</span>
 
@@ -706,7 +697,7 @@
 <span class="c">         * @TODO figure out what we can do about mouse events lost when the </span>
 <span class="c">         * user drags objects beyond the window boundary.  Currently we can </span>
 <span class="c">         * detect this in internet explorer by verifying that the mouse is </span>
-<span class="c">         * down during the mousemove event.  Firefox doesn&#39;t give us the </span>
+<span class="c">         * down during the mousemove event.  Firefox doesn't give us the </span>
 <span class="c">         * button state on the mousemove event.</span>
 <span class="c">         * @method handleMouseMove</span>
 <span class="c">         * @param {Event} e the event</span>
@@ -714,18 +705,18 @@
 <span class="c">         * @static</span>
 <span class="c">         */</span>
         <span class="nx">handleMouseMove</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c">//YAHOO.log(&quot;handlemousemove&quot;);</span>
+            <span class="c">//YAHOO.log("handlemousemove");</span>
 <span class="c"></span>            
             <span class="k">var</span> <span class="nx">dc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">;</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c">// YAHOO.log(&quot;no current drag obj&quot;);</span>
+                <span class="c">// YAHOO.log("no current drag obj");</span>
 <span class="c"></span>
                 <span class="c">// var button = e.which || e.button;</span>
-<span class="c"></span>                <span class="c">// YAHOO.log(&quot;which: &quot; + e.which + &quot;, button: &quot;+ e.button);</span>
+<span class="c"></span>                <span class="c">// YAHOO.log("which: " + e.which + ", button: "+ e.button);</span>
 <span class="c"></span>
                 <span class="c">// check for IE mouseup outside of page boundary</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">isIE</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">e</span><span class="o">.</span><span class="nx">button</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;button failure&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"button failure"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">stopEvent</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
                     <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">handleMouseUp</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
                 <span class="o">}</span>
@@ -733,10 +724,10 @@
                 <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">dragThreshMet</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">var</span> <span class="nx">diffX</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">abs</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">startX</span> <span class="o">-</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageX</span><span class="o">(</span><span class="nx">e</span><span class="o">));</span>
                     <span class="k">var</span> <span class="nx">diffY</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">abs</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">startY</span> <span class="o">-</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">getPageY</span><span class="o">(</span><span class="nx">e</span><span class="o">));</span>
-                    <span class="c">// YAHOO.log(&quot;diffX: &quot; + diffX + &quot;diffY: &quot; + diffY);</span>
+                    <span class="c">// YAHOO.log("diffX: " + diffX + "diffY: " + diffY);</span>
 <span class="c"></span>                    <span class="k">if</span> <span class="o">(</span><span class="nx">diffX</span> <span class="o">&gt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">clickPixelThresh</span> <span class="o">||</span> 
                                 <span class="nx">diffY</span> <span class="o">&gt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">clickPixelThresh</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;pixel threshold met&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"pixel threshold met"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">startDrag</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">startX</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">startY</span><span class="o">);</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
@@ -769,7 +760,7 @@
 
             <span class="c">// If the user did the mouse up outside of the window, we could </span>
 <span class="c"></span>            <span class="c">// get here even though we have ended the drag.</span>
-<span class="c"></span>            <span class="c">// If the config option dragOnly is true, bail out and don&#39;t fire the events</span>
+<span class="c"></span>            <span class="c">// If the config option dragOnly is true, bail out and don't fire the events</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(!</span><span class="nx">dc</span> <span class="o">||</span> <span class="nx">dc</span><span class="o">.</span><span class="nx">isLocked</span><span class="o">()</span> <span class="o">||</span> <span class="nx">dc</span><span class="o">.</span><span class="nx">dragOnly</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">return</span><span class="o">;</span>
             <span class="o">}</span>
@@ -811,9 +802,9 @@
             <span class="o">}</span>
 
             <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">sGroup</span> <span class="k">in</span> <span class="nx">dc</span><span class="o">.</span><span class="nx">groups</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c">// YAHOO.log(&quot;Processing group &quot; + sGroup);</span>
+                <span class="c">// YAHOO.log("Processing group " + sGroup);</span>
 <span class="c"></span>                
-                <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;string&quot;</span> <span class="o">!=</span> <span class="k">typeof</span> <span class="nx">sGroup</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="s2">"string"</span> <span class="o">!=</span> <span class="k">typeof</span> <span class="nx">sGroup</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">continue</span><span class="o">;</span>
                 <span class="o">}</span>
 
@@ -865,7 +856,7 @@
 
             <span class="c">// notify about a drop that did not find a target</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">isDrop</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">dropEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; dropped, but not on a target&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">" dropped, but not on a target"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">interactionInfo</span><span class="o">.</span><span class="nx">validDrop</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
                 <span class="nx">dc</span><span class="o">.</span><span class="nx">onInvalidDrop</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
             <span class="o">}</span>
@@ -873,7 +864,7 @@
 
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">mode</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">outEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot; onDragOut: &quot;</span> <span class="o">+</span> <span class="nx">outEvts</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">" onDragOut: "</span> <span class="o">+</span> <span class="nx">outEvts</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                     <span class="nx">dc</span><span class="o">.</span><span class="nx">b4DragOut</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">outEvts</span><span class="o">);</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">dc</span><span class="o">.</span><span class="nx">onDragOut</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">outEvts</span><span class="o">);</span>
@@ -881,14 +872,14 @@
                 <span class="o">}</span>
 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">enterEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot; onDragEnter: &quot;</span> <span class="o">+</span> <span class="nx">enterEvts</span> <span class="o">+</span> <span class="s2">&quot; (group: &quot;</span> <span class="o">+</span> <span class="nx">inGroups</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">" onDragEnter: "</span> <span class="o">+</span> <span class="nx">enterEvts</span> <span class="o">+</span> <span class="s2">" (group: "</span> <span class="o">+</span> <span class="nx">inGroups</span> <span class="o">+</span> <span class="s2">")"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">dc</span><span class="o">.</span><span class="nx">onDragEnter</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">enterEvts</span><span class="o">,</span> <span class="nx">inGroups</span><span class="o">);</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">overEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot; onDragOver: &quot;</span> <span class="o">+</span> <span class="nx">overEvts</span> <span class="o">+</span> <span class="s2">&quot; (group: &quot;</span> <span class="o">+</span> <span class="nx">inGroups</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">" onDragOver: "</span> <span class="o">+</span> <span class="nx">overEvts</span> <span class="o">+</span> <span class="s2">" (group: "</span> <span class="o">+</span> <span class="nx">inGroups</span> <span class="o">+</span> <span class="s2">")"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">dc</span><span class="o">.</span><span class="nx">b4DragOver</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">overEvts</span><span class="o">,</span> <span class="nx">inGroups</span><span class="o">);</span>
                     <span class="o">}</span>
@@ -899,7 +890,7 @@
                 <span class="o">}</span>
 
                 <span class="k">if</span> <span class="o">(</span><span class="nx">dropEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot; onDragDrop: &quot;</span> <span class="o">+</span> <span class="nx">dropEvts</span> <span class="o">+</span> <span class="s2">&quot; (group: &quot;</span> <span class="o">+</span> <span class="nx">inGroups</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">" onDragDrop: "</span> <span class="o">+</span> <span class="nx">dropEvts</span> <span class="o">+</span> <span class="s2">" (group: "</span> <span class="o">+</span> <span class="nx">inGroups</span> <span class="o">+</span> <span class="s2">")"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">dc</span><span class="o">.</span><span class="nx">b4DragDrop</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">dropEvts</span><span class="o">,</span> <span class="nx">inGroups</span><span class="o">);</span>
                     <span class="o">}</span>
@@ -912,7 +903,7 @@
                 <span class="c">// fire dragout events</span>
 <span class="c"></span>                <span class="k">var</span> <span class="nx">len</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
                 <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">outEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot; onDragOut: &quot;</span> <span class="o">+</span> <span class="nx">outEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span><span class="o">+</span><span class="s2">" onDragOut: "</span> <span class="o">+</span> <span class="nx">outEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">dc</span><span class="o">.</span><span class="nx">b4DragOut</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">outEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">,</span> <span class="nx">inGroups</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
                     <span class="o">}</span>
@@ -923,7 +914,7 @@
                  
                 <span class="c">// fire enter events</span>
 <span class="c"></span>                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">enterEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; onDragEnter &quot;</span> <span class="o">+</span> <span class="nx">enterEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; (group: &quot;</span> <span class="o">+</span> <span class="nx">inGroups</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">" onDragEnter "</span> <span class="o">+</span> <span class="nx">enterEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">" (group: "</span> <span class="o">+</span> <span class="nx">inGroups</span> <span class="o">+</span> <span class="s2">")"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                     <span class="c">// dc.b4DragEnter(e, oDD.id);</span>
 <span class="c"></span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
@@ -933,7 +924,7 @@
          
                 <span class="c">// fire over events</span>
 <span class="c"></span>                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span><span class="nx">len</span><span class="o">=</span><span class="nx">overEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; onDragOver &quot;</span> <span class="o">+</span> <span class="nx">overEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; (group: &quot;</span> <span class="o">+</span> <span class="nx">inGroups</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">" onDragOver "</span> <span class="o">+</span> <span class="nx">overEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">" (group: "</span> <span class="o">+</span> <span class="nx">inGroups</span> <span class="o">+</span> <span class="s2">")"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">dc</span><span class="o">.</span><span class="nx">b4DragOver</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">overEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">,</span> <span class="nx">inGroups</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
                     <span class="o">}</span>
@@ -944,7 +935,7 @@
 
                 <span class="c">// fire drop events</span>
 <span class="c"></span>                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">dropEvts</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="o">++</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; dropped on &quot;</span> <span class="o">+</span> <span class="nx">dropEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; (group: &quot;</span> <span class="o">+</span> <span class="nx">inGroups</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">dc</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">" dropped on "</span> <span class="o">+</span> <span class="nx">dropEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">" (group: "</span> <span class="o">+</span> <span class="nx">inGroups</span> <span class="o">+</span> <span class="s2">")"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nx">dc</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">dc</span><span class="o">.</span><span class="nx">b4DragDrop</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">dropEvts</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span><span class="o">,</span> <span class="nx">inGroups</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
                     <span class="o">}</span>
@@ -1017,13 +1008,13 @@
 <span class="c">         * @static</span>
 <span class="c">         */</span>
         <span class="nx">refreshCache</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">groups</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;refreshing element location cache&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"refreshing element location cache"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
 
             <span class="c">// refresh everything if group array is not provided</span>
 <span class="c"></span>            <span class="k">var</span> <span class="nx">g</span> <span class="o">=</span> <span class="nx">groups</span> <span class="o">||</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">;</span>
 
             <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">sGroup</span> <span class="k">in</span> <span class="nx">g</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;string&quot;</span> <span class="o">!=</span> <span class="k">typeof</span> <span class="nx">sGroup</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="s2">"string"</span> <span class="o">!=</span> <span class="k">typeof</span> <span class="nx">sGroup</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">continue</span><span class="o">;</span>
                 <span class="o">}</span>
                 <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">ids</span><span class="o">[</span><span class="nx">sGroup</span><span class="o">])</span> <span class="o">{</span>
@@ -1035,7 +1026,7 @@
                             <span class="k">this</span><span class="o">.</span><span class="nx">locationCache</span><span class="o">[</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">]</span> <span class="o">=</span> <span class="nx">loc</span><span class="o">;</span>
                         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                             <span class="nx">delete</span> <span class="k">this</span><span class="o">.</span><span class="nx">locationCache</span><span class="o">[</span><span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">];</span>
-<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not get the loc for &quot;</span> <span class="o">+</span> <span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Could not get the loc for "</span> <span class="o">+</span> <span class="nx">oDD</span><span class="o">.</span><span class="nx">id</span><span class="o">,</span> <span class="s2">"warn"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                         <span class="o">}</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
@@ -1045,8 +1036,8 @@
         <span class="c">/**</span>
 <span class="c">         * This checks to make sure an element exists and is in the DOM.  The</span>
 <span class="c">         * main purpose is to handle cases where innerHTML is used to remove</span>
-<span class="c">         * drag and drop objects from the DOM.  IE provides an &#39;unspecified</span>
-<span class="c">         * error&#39; when trying to access the offsetParent of such an element</span>
+<span class="c">         * drag and drop objects from the DOM.  IE provides an 'unspecified</span>
+<span class="c">         * error' when trying to access the offsetParent of such an element</span>
 <span class="c">         * @method verifyEl</span>
 <span class="c">         * @param {HTMLElement} el the element to check</span>
 <span class="c">         * @return {boolean} true if the element looks usable</span>
@@ -1061,14 +1052,14 @@
                     <span class="o">}</span>
                 <span class="o">}</span>
             <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;detected problem with an element&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"detected problem with an element"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
             <span class="o">}</span>
 
             <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
         <span class="o">},</span>
         
         <span class="c">/**</span>
-<span class="c">         * Returns a Region object containing the drag and drop element&#39;s position</span>
+<span class="c">         * Returns a Region object containing the drag and drop element's position</span>
 <span class="c">         * and size, including the padding configured for it</span>
 <span class="c">         * @method getLocation</span>
 <span class="c">         * @param {DragDrop} oDD the drag and drop object to get the </span>
@@ -1080,7 +1071,7 @@
 <span class="c">         */</span>
         <span class="nx">getLocation</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oDD</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">if</span> <span class="o">(!</span> <span class="k">this</span><span class="o">.</span><span class="nx">isTypeOfDD</span><span class="o">(</span><span class="nx">oDD</span><span class="o">))</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">oDD</span> <span class="o">+</span> <span class="s2">&quot; is not a DD obj&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">oDD</span> <span class="o">+</span> <span class="s2">" is not a DD obj"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                 <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
             <span class="o">}</span>
 
@@ -1091,7 +1082,7 @@
             <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
 
             <span class="k">if</span> <span class="o">(!</span><span class="nx">pos</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;getXY failed&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"getXY failed"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                 <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
             <span class="o">}</span>
 
@@ -1123,19 +1114,19 @@
             <span class="c">// use cache if available</span>
 <span class="c"></span>            <span class="k">var</span> <span class="nx">loc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">locationCache</span><span class="o">[</span><span class="nx">oTarget</span><span class="o">.</span><span class="nx">id</span><span class="o">];</span>
             <span class="k">if</span> <span class="o">(!</span><span class="nx">loc</span> <span class="o">||</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">useCache</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;cache not populated&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"cache not populated"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                 <span class="nx">loc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getLocation</span><span class="o">(</span><span class="nx">oTarget</span><span class="o">);</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">locationCache</span><span class="o">[</span><span class="nx">oTarget</span><span class="o">.</span><span class="nx">id</span><span class="o">]</span> <span class="o">=</span> <span class="nx">loc</span><span class="o">;</span>
 
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;cache: &quot;</span> <span class="o">+</span> <span class="nx">loc</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"cache: "</span> <span class="o">+</span> <span class="nx">loc</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
             <span class="o">}</span>
 
             <span class="k">if</span> <span class="o">(!</span><span class="nx">loc</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;could not get the location of the element&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"could not get the location of the element"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                 <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
             <span class="o">}</span>
 
-            <span class="c">//YAHOO.log(&quot;loc: &quot; + loc + &quot;, pt: &quot; + pt);</span>
+            <span class="c">//YAHOO.log("loc: " + loc + ", pt: " + pt);</span>
 <span class="c"></span>            <span class="nx">oTarget</span><span class="o">.</span><span class="nx">cursorIsOver</span> <span class="o">=</span> <span class="nx">loc</span><span class="o">.</span><span class="nx">contains</span><span class="o">(</span> <span class="nx">pt</span> <span class="o">);</span>
 
             <span class="c">// DragDrop is using this as a sanity check for the initial mousedown</span>
@@ -1148,7 +1139,7 @@
             <span class="k">if</span> <span class="o">(!</span><span class="nx">dc</span> <span class="o">||</span> <span class="o">(!</span><span class="nx">intersect</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">dc</span><span class="o">.</span><span class="nx">constrainX</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">dc</span><span class="o">.</span><span class="nx">constrainY</span><span class="o">))</span> <span class="o">{</span>
 
                 <span class="c">//if (oTarget.cursorIsOver) {</span>
-<span class="c"></span>                    <span class="c">//YAHOO.log(&quot;over &quot; + oTarget + &quot;, &quot; + loc + &quot;, &quot; + pt, &quot;warn&quot;);</span>
+<span class="c"></span>                    <span class="c">//YAHOO.log("over " + oTarget + ", " + loc + ", " + pt, "warn");</span>
 <span class="c"></span>                <span class="c">//}</span>
 <span class="c"></span>                <span class="k">return</span> <span class="nx">oTarget</span><span class="o">.</span><span class="nx">cursorIsOver</span><span class="o">;</span>
             <span class="o">}</span>
@@ -1196,14 +1187,14 @@
 <span class="c">         * @static</span>
 <span class="c">         */</span>
         <span class="nx">unregAll</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;unregister all&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"unregister all"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">stopDrag</span><span class="o">();</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">dragCurrent</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
             <span class="o">}</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">_execOnAll</span><span class="o">(</span><span class="s2">&quot;unreg&quot;</span><span class="o">,</span> <span class="o">[]);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_execOnAll</span><span class="o">(</span><span class="s2">"unreg"</span><span class="o">,</span> <span class="o">[]);</span>
 
             <span class="c">//for (var i in this.elementCache) {</span>
 <span class="c"></span>                <span class="c">//delete this.elementCache[i];</span>
@@ -1228,7 +1219,7 @@
 <span class="c">         * @param {String} id the id of the element to get</span>
 <span class="c">         * @return {YAHOO.util.DDM.ElementWrapper} the wrapped element</span>
 <span class="c">         * @private</span>
-<span class="c">         * @deprecated This wrapper isn&#39;t that useful</span>
+<span class="c">         * @deprecated This wrapper isn't that useful</span>
 <span class="c">         * @static</span>
 <span class="c">         */</span>
         <span class="nx">getElWrapper</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
@@ -1357,7 +1348,7 @@
                 <span class="nx">t</span> <span class="o">=</span> <span class="nx">db</span><span class="o">.</span><span class="nx">scrollTop</span><span class="o">;</span>
                 <span class="nx">l</span> <span class="o">=</span> <span class="nx">db</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;could not get scroll property&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"could not get scroll property"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
             <span class="o">}</span>
             <span class="k">return</span> <span class="o">{</span> <span class="nx">top</span><span class="o">:</span> <span class="nx">t</span><span class="o">,</span> <span class="nx">left</span><span class="o">:</span> <span class="nx">l</span> <span class="o">};</span>
         <span class="o">},</span>
@@ -1378,7 +1369,7 @@
         <span class="c">/**</span>
 <span class="c">         * Gets the scrollTop</span>
 <span class="c">         * @method getScrollTop</span>
-<span class="c">         * @return {int} the document&#39;s scrollTop</span>
+<span class="c">         * @return {int} the document's scrollTop</span>
 <span class="c">         * @static</span>
 <span class="c">         */</span>
         <span class="nx">getScrollTop</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">getScroll</span><span class="o">().</span><span class="nx">top</span><span class="o">;</span> <span class="o">},</span>
@@ -1386,7 +1377,7 @@
         <span class="c">/**</span>
 <span class="c">         * Gets the scrollLeft</span>
 <span class="c">         * @method getScrollLeft</span>
-<span class="c">         * @return {int} the document&#39;s scrollTop</span>
+<span class="c">         * @return {int} the document's scrollTop</span>
 <span class="c">         * @static</span>
 <span class="c">         */</span>
         <span class="nx">getScrollLeft</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">getScroll</span><span class="o">().</span><span class="nx">left</span><span class="o">;</span> <span class="o">},</span>
@@ -1401,7 +1392,7 @@
 <span class="c">         */</span>
         <span class="nx">moveToEl</span><span class="o">:</span> <span class="k">function</span> <span class="o">(</span><span class="nx">moveEl</span><span class="o">,</span> <span class="nx">targetEl</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">aCoord</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="nx">targetEl</span><span class="o">);</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;moveToEl: &quot;</span> <span class="o">+</span> <span class="nx">aCoord</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"moveToEl: "</span> <span class="o">+</span> <span class="nx">aCoord</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
             <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">setXY</span><span class="o">(</span><span class="nx">moveEl</span><span class="o">,</span> <span class="nx">aCoord</span><span class="o">);</span>
         <span class="o">},</span>
 
@@ -1455,7 +1446,7 @@
                 <span class="nx">DDM</span><span class="o">.</span><span class="nx">_onLoad</span><span class="o">();</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">_timeoutCount</span> <span class="o">&gt;</span> <span class="m">2000</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;DragDrop requires the Event Utility&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"DragDrop requires the Event Utility"</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                     <span class="nx">setTimeout</span><span class="o">(</span><span class="nx">DDM</span><span class="o">.</span><span class="nx">_addListeners</span><span class="o">,</span> <span class="m">10</span><span class="o">);</span>
                     <span class="k">if</span> <span class="o">(</span><span class="nb">document</span> <span class="o">&amp;&amp;</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">)</span> <span class="o">{</span>
@@ -1475,18 +1466,18 @@
 <span class="c">         */</span>
         <span class="nx">handleWasClicked</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">node</span><span class="o">,</span> <span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isHandle</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">node</span><span class="o">.</span><span class="nx">id</span><span class="o">))</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;clicked node is a handle&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"clicked node is a handle"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                 <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                 <span class="c">// check to see if this is a text node child of the one we want</span>
 <span class="c"></span>                <span class="k">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nx">node</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
-                <span class="c">// YAHOO.log(&quot;p: &quot; + p);</span>
+                <span class="c">// YAHOO.log("p: " + p);</span>
 <span class="c"></span>
                 <span class="k">while</span> <span class="o">(</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">isHandle</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">p</span><span class="o">.</span><span class="nx">id</span><span class="o">))</span> <span class="o">{</span>
                         <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
                     <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">p</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">&quot; is not a handle&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="s2">&quot;DragDropMgr&quot;</span><span class="o">);</span>
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">p</span><span class="o">.</span><span class="nx">id</span> <span class="o">+</span> <span class="s2">" is not a handle"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="s2">"DragDropMgr"</span><span class="o">);</span>
                         <span class="nx">p</span> <span class="o">=</span> <span class="nx">p</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
@@ -1513,9 +1504,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -1576,31 +1565,26 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.DD.html">YAHOO.util.DD</a></li>
                                 <li class=""><a href="YAHOO.util.DDProxy.html">YAHOO.util.DDProxy</a></li>
                                 <li class=""><a href="YAHOO.util.DDTarget.html">YAHOO.util.DDTarget</a></li>
                                 <li class=""><a href="YAHOO.util.DragDrop.html">YAHOO.util.DragDrop</a></li>
                                 <li class=""><a href="YAHOO.util.DragDropMgr.html">YAHOO.util.DragDropMgr</a></li>
                                 <li class=""><a href="YAHOO.util.DragDropMgr.ElementWrapper.html">YAHOO.util.DragDropMgr.ElementWrapper</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="DD.js.html">DD.js</a></li>
+                        <ul class="content"><li class=""><a href="DD.js.html">DD.js</a></li>
                                 <li class=""><a href="DDProxy.js.html">DDProxy.js</a></li>
                                 <li class=""><a href="DDTarget.js.html">DDTarget.js</a></li>
                                 <li class=""><a href="DragDrop.js.html">DragDrop.js</a></li>
                                 <li class="selected"><a href="DragDropMgr.js.html">DragDropMgr.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -1610,9 +1594,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

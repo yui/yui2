@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: slider   SliderThumb.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: slider   SliderThumb.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>Slider Widget&nbsp; <span class="subtitle">2.5.0</span></h3>
+        <h3>Slider Widget  <span class="subtitle">2.5.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_slider.html">slider</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * A drag and drop implementation to be used as the thumb of a slider.</span>
 <span class="c"> * @class SliderThumb</span>
 <span class="c"> * @extends YAHOO.util.DD</span>
@@ -65,7 +56,7 @@
     <span class="o">}</span>
 
 
-    <span class="c">//this.removeInvalidHandleType(&quot;A&quot;);</span>
+    <span class="c">//this.removeInvalidHandleType("A");</span>
 <span class="c"></span>
     <span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 
@@ -172,21 +163,21 @@
 
             <span class="nx">newOffset</span> <span class="o">=</span> <span class="o">[</span> <span class="o">(</span><span class="nx">myPos</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="o">[</span><span class="m">0</span><span class="o">]),</span> <span class="o">(</span><span class="nx">myPos</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">-</span> <span class="nx">ppos</span><span class="o">[</span><span class="m">1</span><span class="o">])</span> <span class="o">];</span>
 
-            <span class="k">var</span> <span class="nx">l</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;left&quot;</span><span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
-            <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;top&quot;</span> <span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
+            <span class="k">var</span> <span class="nx">l</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">"left"</span><span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
+            <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">"top"</span> <span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
 
             <span class="k">var</span> <span class="nx">deltaX</span> <span class="o">=</span> <span class="nx">l</span> <span class="o">-</span> <span class="nx">newOffset</span><span class="o">[</span><span class="m">0</span><span class="o">];</span>
             <span class="k">var</span> <span class="nx">deltaY</span> <span class="o">=</span> <span class="nx">t</span> <span class="o">-</span> <span class="nx">newOffset</span><span class="o">[</span><span class="m">1</span><span class="o">];</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nb">isNaN</span><span class="o">(</span><span class="nx">deltaX</span><span class="o">)</span> <span class="o">||</span> <span class="nb">isNaN</span><span class="o">(</span><span class="nx">deltaY</span><span class="o">))</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;element does not have a position style def yet&quot;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"element does not have a position style def yet"</span><span class="o">);</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">deltaOffset</span> <span class="o">=</span> <span class="o">[</span><span class="nx">deltaX</span><span class="o">,</span> <span class="nx">deltaY</span><span class="o">];</span>
             <span class="o">}</span>
 
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">newLeft</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;left&quot;</span><span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
-            <span class="k">var</span> <span class="nx">newTop</span>  <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;top&quot;</span> <span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
+            <span class="k">var</span> <span class="nx">newLeft</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">"left"</span><span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
+            <span class="k">var</span> <span class="nx">newTop</span>  <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">"top"</span> <span class="o">),</span> <span class="m">10</span> <span class="o">);</span>
 
             <span class="nx">newOffset</span>  <span class="o">=</span> <span class="o">[</span><span class="nx">newLeft</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaOffset</span><span class="o">[</span><span class="m">0</span><span class="o">],</span> <span class="nx">newTop</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">deltaOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]];</span>
         <span class="o">}</span>
@@ -228,7 +219,7 @@
     <span class="o">},</span>
 
     <span class="c">/**</span>
-<span class="c">     * Clear&#39;s the slider&#39;s ticks</span>
+<span class="c">     * Clear's the slider's ticks</span>
 <span class="c">     * @method clearTicks</span>
 <span class="c">     */</span>
     <span class="nx">clearTicks</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
@@ -239,7 +230,7 @@
 
 
     <span class="c">/**</span>
-<span class="c">     * Gets the current offset from the element&#39;s start position in</span>
+<span class="c">     * Gets the current offset from the element's start position in</span>
 <span class="c">     * pixels.</span>
 <span class="c">     * @method getValue</span>
 <span class="c">     * @return {int} the number of pixels (positive or negative) the</span>
@@ -247,11 +238,11 @@
 <span class="c">     */</span>
     <span class="nx">getValue</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
         <span class="k">return</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_isHoriz</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">getXValue</span><span class="o">()</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">getYValue</span><span class="o">();</span>
-        <span class="c">//this.logger.log(&quot;getVal: &quot; + val);</span>
+        <span class="c">//this.logger.log("getVal: " + val);</span>
 <span class="c"></span>    <span class="o">},</span>
 
     <span class="c">/**</span>
-<span class="c">     * Gets the current X offset from the element&#39;s start position in</span>
+<span class="c">     * Gets the current X offset from the element's start position in</span>
 <span class="c">     * pixels.</span>
 <span class="c">     * @method getXValue</span>
 <span class="c">     * @return {int} the number of pixels (positive or negative) the</span>
@@ -266,14 +257,14 @@
             <span class="k">this</span><span class="o">.</span><span class="nx">lastOffset</span> <span class="o">=</span> <span class="nx">newOffset</span><span class="o">;</span>
             <span class="k">return</span> <span class="o">(</span><span class="nx">newOffset</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">startOffset</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;can&#39;t get offset, using old value: &quot;</span> <span class="o">+</span> 
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"can't get offset, using old value: "</span> <span class="o">+</span> 
                 <span class="k">this</span><span class="o">.</span><span class="nx">lastOffset</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
             <span class="k">return</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">lastOffset</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">startOffset</span><span class="o">[</span><span class="m">0</span><span class="o">]);</span>
         <span class="o">}</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
-<span class="c">     * Gets the current Y offset from the element&#39;s start position in</span>
+<span class="c">     * Gets the current Y offset from the element's start position in</span>
 <span class="c">     * pixels.</span>
 <span class="c">     * @method getYValue</span>
 <span class="c">     * @return {int} the number of pixels (positive or negative) the</span>
@@ -288,7 +279,7 @@
             <span class="k">this</span><span class="o">.</span><span class="nx">lastOffset</span> <span class="o">=</span> <span class="nx">newOffset</span><span class="o">;</span>
             <span class="k">return</span> <span class="o">(</span><span class="nx">newOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">startOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]);</span>
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;can&#39;t get offset, using old value: &quot;</span> <span class="o">+</span> 
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"can't get offset, using old value: "</span> <span class="o">+</span> 
                 <span class="k">this</span><span class="o">.</span><span class="nx">lastOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]);</span>
             <span class="k">return</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">lastOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">-</span> <span class="k">this</span><span class="o">.</span><span class="nx">startOffset</span><span class="o">[</span><span class="m">1</span><span class="o">]);</span>
         <span class="o">}</span>
@@ -300,7 +291,7 @@
 <span class="c">     * @return {string} string representation of the instance</span>
 <span class="c">     */</span>
     <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span> 
-        <span class="k">return</span> <span class="s2">&quot;SliderThumb &quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">;</span>
+        <span class="k">return</span> <span class="s2">"SliderThumb "</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">id</span><span class="o">;</span>
     <span class="o">},</span>
 
     <span class="c">/**</span>
@@ -322,9 +313,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -393,26 +382,21 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.DualSlider.html">YAHOO.widget.DualSlider</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.DualSlider.html">YAHOO.widget.DualSlider</a></li>
                                 <li class=""><a href="YAHOO.widget.Slider.html">YAHOO.widget.Slider</a></li>
                                 <li class=""><a href="YAHOO.widget.SliderThumb.html">YAHOO.widget.SliderThumb</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="DualSlider.js.html">DualSlider.js</a></li>
+                        <ul class="content"><li class=""><a href="DualSlider.js.html">DualSlider.js</a></li>
                                 <li class=""><a href="Slider.js.html">Slider.js</a></li>
                                 <li class="selected"><a href="SliderThumb.js.html">SliderThumb.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -422,9 +406,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

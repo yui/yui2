@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: dom  YAHOO.util.Dom   (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: dom  YAHOO.util.Dom   (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>dom&nbsp; <span class="subtitle">2.5.2</span></h3>
+        <h3>dom  <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_dom.html">dom</a>
@@ -27,8 +19,8 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <h2>
@@ -43,7 +35,7 @@
                         <span class="extends">
                         </span>
                         
-                        </code>
+                        
                     </h2>
                     <!-- class tree goes here -->
                     
@@ -89,8 +81,7 @@
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              The element or collection to add the class to
@@ -99,21 +90,15 @@
                                                             <code>className &lt;String&gt;</code>
                                                              the class name to add to the class attribute
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Boolean | Array
                                                     </code></dt>
                                                     <dd>A pass/fail boolean or array of booleans</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_batch">batch</a></h4>
@@ -152,8 +137,7 @@ The method is called with the element(s) as the first arg, and the optional para
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              (optional) An element or array of elements to apply the method to
@@ -170,21 +154,15 @@ The method is called with the element(s) as the first arg, and the optional para
                                                             <code>override &lt;Boolean&gt;</code>
                                                              (optional) Whether or not to override the scope of "method" with "o"
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Any | Array
                                                     </code></dt>
                                                     <dd>The return value(s) from the supplied method</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_generateId">generateId</a></h4>
@@ -214,8 +192,7 @@ The method is called with the element(s) as the first arg, and the optional para
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              (optional) An optional element array of elements to add an ID to (no ID is added if one is already present).
@@ -224,21 +201,15 @@ The method is called with the element(s) as the first arg, and the optional para
                                                             <code>prefix &lt;String&gt;</code>
                                                              (optional) an optional prefix to use (defaults to "yui-gen").
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         String | Array
                                                     </code></dt>
                                                     <dd>The generated ID, or array of generated IDs (or original ID if already present on an element)</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_get">get</a></h4>
@@ -264,27 +235,20 @@ The method is called with the element(s) as the first arg, and the optional para
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement |Array&gt;</code>
                                                              Accepts a string to use as an ID for getting a DOM reference, an actual DOM reference, or an Array of IDs and/or HTMLElements.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         HTMLElement | Array
                                                     </code></dt>
                                                     <dd>A DOM reference to an HTML element or an array of HTMLElements.</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getAncestorBy">getAncestorBy</a></h4>
@@ -315,8 +279,7 @@ For performance reasons, IDs are not accepted and argument validation omitted.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;HTMLElement&gt;</code>
                                                              The HTMLElement to use as the starting point
@@ -325,21 +288,15 @@ For performance reasons, IDs are not accepted and argument validation omitted.
                                                             <code>method &lt;Function&gt;</code>
                                                              - A boolean method for testing elements which receives the element as its only argument.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Object
                                                     </code></dt>
                                                     <dd>HTMLElement or null if not found</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getAncestorByClassName">getAncestorByClassName</a></h4>
@@ -369,8 +326,7 @@ For performance reasons, IDs are not accepted and argument validation omitted.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;String | HTMLElement&gt;</code>
                                                              The HTMLElement or an ID to use as the starting point
@@ -379,21 +335,15 @@ For performance reasons, IDs are not accepted and argument validation omitted.
                                                             <code>className &lt;String&gt;</code>
                                                             
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Object
                                                     </code></dt>
                                                     <dd>HTMLElement</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getAncestorByTagName">getAncestorByTagName</a></h4>
@@ -423,8 +373,7 @@ For performance reasons, IDs are not accepted and argument validation omitted.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;String | HTMLElement&gt;</code>
                                                              The HTMLElement or an ID to use as the starting point
@@ -433,21 +382,15 @@ For performance reasons, IDs are not accepted and argument validation omitted.
                                                             <code>tagName &lt;String&gt;</code>
                                                             
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Object
                                                     </code></dt>
                                                     <dd>HTMLElement</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getChildren">getChildren</a></h4>
@@ -473,27 +416,20 @@ For performance reasons, IDs are not accepted and argument validation omitted.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;String | HTMLElement&gt;</code>
                                                              The HTMLElement or an ID to use as the starting point
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Array
                                                     </code></dt>
                                                     <dd>A static array of HTMLElements</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getChildrenBy">getChildrenBy</a></h4>
@@ -523,8 +459,7 @@ For performance reasons, IDs are not accepted and argument validation omitted.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;HTMLElement&gt;</code>
                                                              The HTMLElement to start from
@@ -534,21 +469,15 @@ For performance reasons, IDs are not accepted and argument validation omitted.
                                                              A boolean function used to test children
 that receives the node being tested as its only argument
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Array
                                                     </code></dt>
                                                     <dd>A static array of HTMLElements</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getClientHeight">getClientHeight</a></h4>
@@ -570,22 +499,18 @@ that receives the node being tested as its only argument
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         Int
                                                     </code></dt>
                                                     <dd>The height of the viewable area of the page.</dd>
-                                                </dl>
-             
-                                            <div class="deprecated">
+                                                </dl><div class="deprecated">
                                                 <strong>Deprecated</strong> Now using getViewportHeight.  This interface left intact for back compat.
                                             </div>        
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getClientRegion">getClientRegion</a></h4>
@@ -607,19 +532,15 @@ that receives the node being tested as its only argument
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         Region
                                                     </code></dt>
                                                     <dd>A Region object representing the viewport which accounts for document scroll</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getClientWidth">getClientWidth</a></h4>
@@ -641,22 +562,18 @@ that receives the node being tested as its only argument
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         Int
                                                     </code></dt>
                                                     <dd>The width of the viewable area of the page.</dd>
-                                                </dl>
-             
-                                            <div class="deprecated">
+                                                </dl><div class="deprecated">
                                                 <strong>Deprecated</strong> Now using getViewportWidth.  This interface left intact for back compat.
                                             </div>        
                                         </div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getDocumentHeight">getDocumentHeight</a></h4>
@@ -678,19 +595,15 @@ that receives the node being tested as its only argument
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         Int
                                                     </code></dt>
                                                     <dd>The height of the actual document (which includes the body and its margin).</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getDocumentScrollLeft">getDocumentScrollLeft</a></h4>
@@ -716,27 +629,20 @@ that receives the node being tested as its only argument
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>document &lt;HTMLDocument&gt;</code>
                                                              (optional) The document to get the scroll value of
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Int
                                                     </code></dt>
                                                     <dd>The amount that the document is scrolled to the left</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getDocumentScrollTop">getDocumentScrollTop</a></h4>
@@ -762,27 +668,20 @@ that receives the node being tested as its only argument
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>document &lt;HTMLDocument&gt;</code>
                                                              (optional) The document to get the scroll value of
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Int
                                                     </code></dt>
                                                     <dd>The amount that the document is scrolled to the top</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getDocumentWidth">getDocumentWidth</a></h4>
@@ -804,19 +703,15 @@ that receives the node being tested as its only argument
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         Int
                                                     </code></dt>
                                                     <dd>The width of the actual document (which includes the body and its margin).</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getElementsBy">getElementsBy</a></h4>
@@ -855,8 +750,7 @@ For optimized performance, include a tag and/or root node when possible.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>method &lt;Function&gt;</code>
                                                              - A boolean method for testing elements which receives the element as its only argument.
@@ -873,21 +767,15 @@ For optimized performance, include a tag and/or root node when possible.
                                                             <code>apply &lt;Function&gt;</code>
                                                              (optional) A function to apply to each element when found
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Array
                                                     </code></dt>
                                                     <dd>Array of HTMLElements</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getElementsByClassName">getElementsByClassName</a></h4>
@@ -926,8 +814,7 @@ For optimized performance, include a tag and/or root node when possible.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>className &lt;String&gt;</code>
                                                              The class name to match against
@@ -944,21 +831,15 @@ For optimized performance, include a tag and/or root node when possible.
                                                             <code>apply &lt;Function&gt;</code>
                                                              (optional) A function to apply to each element when found
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Array
                                                     </code></dt>
                                                     <dd>An array of elements that have the given class name</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getFirstChild">getFirstChild</a></h4>
@@ -984,27 +865,20 @@ For optimized performance, include a tag and/or root node when possible.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;String | HTMLElement&gt;</code>
                                                              The HTMLElement or an ID to use as the starting point
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Object
                                                     </code></dt>
                                                     <dd>HTMLElement or null if not found</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getFirstChildBy">getFirstChildBy</a></h4>
@@ -1034,8 +908,7 @@ For optimized performance, include a tag and/or root node when possible.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;HTMLElement&gt;</code>
                                                              The HTMLElement to use as the starting point
@@ -1045,21 +918,15 @@ For optimized performance, include a tag and/or root node when possible.
                                                              A boolean function used to test children
 that receives the node being tested as its only argument
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Object
                                                     </code></dt>
                                                     <dd>HTMLElement or null if not found</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getLastChild">getLastChild</a></h4>
@@ -1085,27 +952,20 @@ that receives the node being tested as its only argument
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;String | HTMLElement&gt;</code>
                                                              The HTMLElement or an ID to use as the starting point
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Object
                                                     </code></dt>
                                                     <dd>HTMLElement or null if not found</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getLastChildBy">getLastChildBy</a></h4>
@@ -1135,8 +995,7 @@ that receives the node being tested as its only argument
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;HTMLElement&gt;</code>
                                                              The HTMLElement to use as the starting point
@@ -1146,21 +1005,15 @@ that receives the node being tested as its only argument
                                                              A boolean function used to test children
 that receives the node being tested as its only argument
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Object
                                                     </code></dt>
                                                     <dd>HTMLElement or null if not found</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getNextSibling">getNextSibling</a></h4>
@@ -1186,27 +1039,20 @@ that receives the node being tested as its only argument
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;String | HTMLElement&gt;</code>
                                                              The HTMLElement or an ID to use as the starting point
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Object
                                                     </code></dt>
                                                     <dd>HTMLElement or null if not found</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getNextSiblingBy">getNextSiblingBy</a></h4>
@@ -1238,8 +1084,7 @@ Returns the nearest HTMLElement sibling if no method provided.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;HTMLElement&gt;</code>
                                                              The HTMLElement to use as the starting point
@@ -1249,21 +1094,15 @@ Returns the nearest HTMLElement sibling if no method provided.
                                                              A boolean function used to test siblings
 that receives the sibling node being tested as its only argument
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Object
                                                     </code></dt>
                                                     <dd>HTMLElement or null if not found</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getPreviousSibling">getPreviousSibling</a></h4>
@@ -1289,27 +1128,20 @@ that receives the sibling node being tested as its only argument
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;String | HTMLElement&gt;</code>
                                                              The HTMLElement or an ID to use as the starting point
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Object
                                                     </code></dt>
                                                     <dd>HTMLElement or null if not found</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getPreviousSiblingBy">getPreviousSiblingBy</a></h4>
@@ -1341,8 +1173,7 @@ Returns the nearest HTMLElement sibling if no method provided.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>node &lt;HTMLElement&gt;</code>
                                                              The HTMLElement to use as the starting point
@@ -1352,21 +1183,15 @@ Returns the nearest HTMLElement sibling if no method provided.
                                                              A boolean function used to test siblings
 that receives the sibling node being tested as its only argument
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Object
                                                     </code></dt>
                                                     <dd>HTMLElement or null if not found</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getRegion">getRegion</a></h4>
@@ -1393,27 +1218,20 @@ The element must be part of the DOM tree to have a region (display:none or eleme
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Region | Array
                                                     </code></dt>
                                                     <dd>A Region or array of Region instances containing "top, left, bottom, right" member data.</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getStyle">getStyle</a></h4>
@@ -1443,8 +1261,7 @@ The element must be part of the DOM tree to have a region (display:none or eleme
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement |Array&gt;</code>
                                                              Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
@@ -1453,21 +1270,15 @@ The element must be part of the DOM tree to have a region (display:none or eleme
                                                             <code>property &lt;String&gt;</code>
                                                              The style property whose value is returned.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         String | Array
                                                     </code></dt>
                                                     <dd>The current value of the style property for the element(s).</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getViewportHeight">getViewportHeight</a></h4>
@@ -1489,19 +1300,15 @@ The element must be part of the DOM tree to have a region (display:none or eleme
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         Int
                                                     </code></dt>
                                                     <dd>The height of the viewable area of the page (excludes scrollbars).</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getViewportWidth">getViewportWidth</a></h4>
@@ -1523,19 +1330,15 @@ The element must be part of the DOM tree to have a region (display:none or eleme
                                         <div class="description">
 
 
-                                                <dl>
-                                                    <dt>Returns:
+                                                <dl><dt>Returns:
                                                     <code>
                                                         Int
                                                     </code></dt>
                                                     <dd>The width of the viewable area of the page (excludes scrollbars).</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getX">getX</a></h4>
@@ -1561,27 +1364,20 @@ The element must be part of the DOM tree to have a region (display:none or eleme
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Number | Array
                                                     </code></dt>
                                                     <dd>The X position of the element(s)</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getXY">getXY</a></h4>
@@ -1607,27 +1403,20 @@ The element must be part of the DOM tree to have a region (display:none or eleme
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Array
                                                     </code></dt>
                                                     <dd>The XY position of the element(s)</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_getY">getY</a></h4>
@@ -1653,27 +1442,20 @@ The element must be part of the DOM tree to have a region (display:none or eleme
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Number | Array
                                                     </code></dt>
                                                     <dd>The Y position of the element(s)</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_hasClass">hasClass</a></h4>
@@ -1703,8 +1485,7 @@ The element must be part of the DOM tree to have a region (display:none or eleme
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              The element or collection to test
@@ -1713,21 +1494,15 @@ The element must be part of the DOM tree to have a region (display:none or eleme
                                                             <code>className &lt;String&gt;</code>
                                                              the class name to search for
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Boolean | Array
                                                     </code></dt>
                                                     <dd>A boolean value or array of boolean values</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_inDocument">inDocument</a></h4>
@@ -1753,27 +1528,20 @@ The element must be part of the DOM tree to have a region (display:none or eleme
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement&gt;</code>
                                                              The element to search for
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Boolean
                                                     </code></dt>
                                                     <dd>Whether or not the element is present in the current document</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_insertAfter">insertAfter</a></h4>
@@ -1803,8 +1571,7 @@ The element must be part of the DOM tree to have a region (display:none or eleme
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>newNode &lt;String | HTMLElement&gt;</code>
                                                              The node to be inserted
@@ -1813,21 +1580,15 @@ The element must be part of the DOM tree to have a region (display:none or eleme
                                                             <code>referenceNode &lt;String | HTMLElement&gt;</code>
                                                              The node to insert the new node after
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         HTMLElement
                                                     </code></dt>
                                                     <dd>The node that was inserted (or null if insert fails)</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_insertBefore">insertBefore</a></h4>
@@ -1857,8 +1618,7 @@ The element must be part of the DOM tree to have a region (display:none or eleme
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>newNode &lt;String | HTMLElement&gt;</code>
                                                              The node to be inserted
@@ -1867,21 +1627,15 @@ The element must be part of the DOM tree to have a region (display:none or eleme
                                                             <code>referenceNode &lt;String | HTMLElement&gt;</code>
                                                              The node to insert the new node before
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         HTMLElement
                                                     </code></dt>
                                                     <dd>The node that was inserted (or null if insert fails)</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_isAncestor">isAncestor</a></h4>
@@ -1911,8 +1665,7 @@ The element must be part of the DOM tree to have a region (display:none or eleme
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>haystack &lt;String | HTMLElement&gt;</code>
                                                              The possible ancestor
@@ -1921,21 +1674,15 @@ The element must be part of the DOM tree to have a region (display:none or eleme
                                                             <code>needle &lt;String | HTMLElement&gt;</code>
                                                              The possible descendent
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Boolean
                                                     </code></dt>
                                                     <dd>Whether or not the haystack is an ancestor of needle</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_removeClass">removeClass</a></h4>
@@ -1965,8 +1712,7 @@ The element must be part of the DOM tree to have a region (display:none or eleme
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              The element or collection to remove the class from
@@ -1975,21 +1721,15 @@ The element must be part of the DOM tree to have a region (display:none or eleme
                                                             <code>className &lt;String&gt;</code>
                                                              the class name to remove from the class attribute
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Boolean | Array
                                                     </code></dt>
                                                     <dd>A pass/fail boolean or array of booleans</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_replaceClass">replaceClass</a></h4>
@@ -2024,8 +1764,7 @@ If no oldClassName is present, the newClassName is simply added.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              The element or collection to remove the class from
@@ -2038,21 +1777,15 @@ If no oldClassName is present, the newClassName is simply added.
                                                             <code>newClassName &lt;String&gt;</code>
                                                              the class name that will be replacing the old class name
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         Boolean | Array
                                                     </code></dt>
                                                     <dd>A pass/fail boolean or array of booleans</dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_setStyle">setStyle</a></h4>
@@ -2086,8 +1819,7 @@ If no oldClassName is present, the newClassName is simply added.
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
@@ -2100,21 +1832,15 @@ If no oldClassName is present, the newClassName is simply added.
                                                             <code>val &lt;String&gt;</code>
                                                              The value to apply to the given property.
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_setX">setX</a></h4>
@@ -2145,8 +1871,7 @@ The element must be part of the DOM tree to have page coordinates (display:none 
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
@@ -2155,21 +1880,15 @@ The element must be part of the DOM tree to have page coordinates (display:none 
                                                             <code>x &lt;Int&gt;</code>
                                                              The value to use as the X coordinate for the element(s).
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_setXY">setXY</a></h4>
@@ -2204,35 +1923,28 @@ The element(s) must be part of the DOM tree to have page coordinates (display:no
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements
                                                         </dd>
                                                         <dd>
                                                             <code>pos &lt;Array&gt;</code>
-                                                             Contains X & Y values for new position (coordinates are page-based)
+                                                             Contains X &amp; Y values for new position (coordinates are page-based)
                                                         </dd>
                                                         <dd>
                                                             <code>noRetry &lt;Boolean&gt;</code>
                                                              By default we try and set the position a second time if the first fails
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                                     <div class="">
                                     <h4>
                                         <a name="method_setY">setY</a></h4>
@@ -2263,8 +1975,7 @@ The element must be part of the DOM tree to have page coordinates (display:none 
 
                                         <div class="description">
 
-                                                <dl>
-                                                    <dt>Parameters:</dt>
+                                                <dl><dt>Parameters:</dt>
                                                         <dd>
                                                             <code>el &lt;String | HTMLElement | Array&gt;</code>
                                                              Accepts a string to use as an ID, an actual DOM reference, or an Array of IDs and/or HTMLElements.
@@ -2273,21 +1984,15 @@ The element must be part of the DOM tree to have page coordinates (display:none 
                                                             <code>x &lt;Int&gt;</code>
                                                              To use as the Y coordinate for the element(s).
                                                         </dd>
-                                                </dl>
-
-                                                <dl>
-                                                    <dt>Returns:
+                                                </dl><dl><dt>Returns:
                                                     <code>
                                                         void
                                                     </code></dt>
                                                     <dd></dd>
-                                                </dl>
-             
-                                        </div>
+                                                </dl></div>
 
                                     </div>
-                                    <hr />
-                                    </div>
+                                    <hr></div>
                             </div>
                         </div>
 
@@ -2304,9 +2009,7 @@ The element must be part of the DOM tree to have page coordinates (display:none 
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -2375,31 +2078,25 @@ The element must be part of the DOM tree to have page coordinates (display:none 
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class="selected"><a href="YAHOO.util.Dom.html">YAHOO.util.Dom</a></li>
+                        <ul class="content"><li class="selected"><a href="YAHOO.util.Dom.html">YAHOO.util.Dom</a></li>
                                 <li class=""><a href="YAHOO.util.Point.html">YAHOO.util.Point</a></li>
                                 <li class=""><a href="YAHOO.util.Region.html">YAHOO.util.Region</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Dom.js.html">Dom.js</a></li>
+                        <ul class="content"><li class=""><a href="Dom.js.html">Dom.js</a></li>
                                 <li class=""><a href="Region.js.html">Region.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
                     <div class="module">
                         <h4>Methods</h4>
-                        <ul class="content">        
-                                <li class=""><!--<code>Boolean | Array</code>-->
+                        <ul class="content"><li class=""><!--<code>Boolean | Array</code>-->
                                 <a href="#method_addClass">addClass</a>
                                 </li>
                                 <li class=""><!--<code>Any | Array</code>-->
@@ -2531,8 +2228,7 @@ The element must be part of the DOM tree to have page coordinates (display:none 
                                 <li class=""><!--<code>void</code>-->
                                 <a href="#method_setY">setY</a>
                                 </li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -2540,9 +2236,7 @@ The element must be part of the DOM tree to have page coordinates (display:none 
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

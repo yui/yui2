@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Skinning via Progressive Enhancement using the Event Utility and the YUILoader</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Skinning via Progressive Enhancement using the Event Utility and the YUILoader</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,76 +8,51 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<script type="text/javascript" src="../../build/yuiloader/yuiloader-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><script type="text/javascript" src="../../build/yuiloader/yuiloader-min.js"></script><!--begin custom header content for this example--><style type="text/css">
 
 	.yui-checkboxes-loading #checkboxes {
 		display: none;
 	}
 
-</style>
-
-<script type="text/javascript">
+</style><script type="text/javascript">
 
 	//	Hide the checkboxes if JavaScript is enabled to prevent 
 	//	the user from seeing a flash of unstyled content while
 	//	the JavaScript for the checkboxes is being loaded.
 	document.documentElement.className = "yui-checkboxes-loading";
 
-</script>
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Skinning via Progressive Enhancement using the Event Utility and the YUILoader</h1>
-
-<div class="exampleIntro">
+</script><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Skinning via Progressive Enhancement using the Event Utility and the YUILoader</h1><div class="exampleIntro">
 	<p>
 Using Progressive Enhancement to skin checkboxes with the help of the YUILoader 
 and the Event Utility's <code>focus</code> and <code>blur</code> events and the 
 <code>delegate</code> method.
 </p>			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<div id="checkboxes">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><div id="checkboxes">
 	<div>
 		<label for="field-1">Field 1: </label>
 		<span>
 			<span>
-				<input type="checkbox" id="field-1" name="field-1" value="1">
-			</span>
+				<input type="checkbox" id="field-1" name="field-1" value="1"></span>
 		</span>
 	</div>
 	<div>
 		<label for="field-2">Field 2: </label>
 		<span>
 			<span>
-				<input type="checkbox" id="field-2" name="field-2" value="2">
-			</span>
+				<input type="checkbox" id="field-2" name="field-2" value="2"></span>
 		</span>
 	</div>
 	<div>
 		<label for="field-3">Field 3: </label>
 		<span>
 			<span>
-				<input type="checkbox" id="field-3" name="field-3" value="3">
-			</span>
+				<input type="checkbox" id="field-3" name="field-3" value="3"></span>
 		</span>
 	</div>			
-</div>
-
-<script type="text/javascript">
+</div><script type="text/javascript">
 
 	(function () {
 
@@ -130,11 +97,4 @@ and the Event Utility's <code>focus</code> and <code>blur</code> events and the
 		
 	}());
 
-</script>
-
-
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

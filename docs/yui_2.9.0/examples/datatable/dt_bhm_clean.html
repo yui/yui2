@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Integrating Browser History Manager with Server-side Pagination and Sorting</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Integrating Browser History Manager with Server-side Pagination and Sorting</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,24 +8,7 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/paginator/assets/skins/sam/paginator.css" />
-<link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
-<script type="text/javascript" src="../../build/json/json-min.js"></script>
-<script type="text/javascript" src="../../build/history/history-min.js"></script>
-<script type="text/javascript" src="../../build/element/element-min.js"></script>
-<script type="text/javascript" src="../../build/paginator/paginator-min.js"></script>
-<script type="text/javascript" src="../../build/datasource/datasource-min.js"></script>
-<script type="text/javascript" src="../../build/event-delegate/event-delegate-min.js"></script>
-<script type="text/javascript" src="../../build/datatable/datatable-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/paginator/assets/skins/sam/paginator.css"><link rel="stylesheet" type="text/css" href="../../build/datatable/assets/skins/sam/datatable.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/connection/connection-min.js"></script><script type="text/javascript" src="../../build/json/json-min.js"></script><script type="text/javascript" src="../../build/history/history-min.js"></script><script type="text/javascript" src="../../build/element/element-min.js"></script><script type="text/javascript" src="../../build/paginator/paginator-min.js"></script><script type="text/javascript" src="../../build/datasource/datasource-min.js"></script><script type="text/javascript" src="../../build/event-delegate/event-delegate-min.js"></script><script type="text/javascript" src="../../build/datatable/datatable-min.js"></script><!--begin custom header content for this example--><style type="text/css">
 /* custom styles for this example */
 #yui-history-iframe {
   position:absolute;
@@ -41,32 +16,14 @@ body {
   width:1px; height:1px; /* avoid scrollbars */
   visibility:hidden;
 }
-</style>
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Integrating Browser History Manager with Server-side Pagination and Sorting</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Integrating Browser History Manager with Server-side Pagination and Sorting</h1><div class="exampleIntro">
 	<p>This example combines server-side pagination and sorting with the Browser
 History Manager for the ability to bookmark states.</p>
 			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<iframe id="yui-history-iframe" src="assets/html/blank.html"></iframe>
-<input id="yui-history-field" type="hidden">
-
-<div id="dt-pag-nav"></div>
-<div id="bhmintegration"></div>
-
-<script type="text/javascript">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><iframe id="yui-history-iframe" src="assets/html/blank.html"></iframe><input id="yui-history-field" type="hidden"><div id="dt-pag-nav"></div><div id="bhmintegration"></div><script type="text/javascript">
 (function () {
     // Create the DataSource
     var myDataSource = new YAHOO.util.DataSource("assets/php/json_proxy.php?");
@@ -209,9 +166,4 @@ History Manager for the ability to bookmark states.</p>
     // Initialize the Browser History Manager.
     YAHOO.util.History.initialize("yui-history-field", "yui-history-iframe");
 })();
-</script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

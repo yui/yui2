@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Editor in a Dialog Control</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Editor in a Dialog Control</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,25 +8,7 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/menu/assets/skins/sam/menu.css" />
-<link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css" />
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/container/assets/skins/sam/container.css" />
-<link rel="stylesheet" type="text/css" href="../../build/editor/assets/skins/sam/editor.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/json/json-min.js"></script>
-<script type="text/javascript" src="../../build/element/element-min.js"></script>
-<script type="text/javascript" src="../../build/button/button-min.js"></script>
-<script type="text/javascript" src="../../build/container/container-min.js"></script>
-<script type="text/javascript" src="../../build/connection/connection-min.js"></script>
-<script type="text/javascript" src="../../build/menu/menu-min.js"></script>
-<script type="text/javascript" src="../../build/editor/editor-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css">
+</style><link rel="stylesheet" type="text/css" href="../../build/menu/assets/skins/sam/menu.css"><link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css"><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/container/assets/skins/sam/container.css"><link rel="stylesheet" type="text/css" href="../../build/editor/assets/skins/sam/editor.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/json/json-min.js"></script><script type="text/javascript" src="../../build/element/element-min.js"></script><script type="text/javascript" src="../../build/button/button-min.js"></script><script type="text/javascript" src="../../build/container/container-min.js"></script><script type="text/javascript" src="../../build/connection/connection-min.js"></script><script type="text/javascript" src="../../build/menu/menu-min.js"></script><script type="text/javascript" src="../../build/editor/editor-min.js"></script><!--begin custom header content for this example--><style type="text/css">
   	#responseContainer {	
 		margin:1em;
 	  	border: 1px solid black;
@@ -42,52 +16,33 @@ body {
 	    height: 4em;
 		padding: 1em;
 	}
-</style>
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Editor in a Dialog Control</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Editor in a Dialog Control</h1><div class="exampleIntro">
 	<p>In YUI-based applications, it's common for forms to appear as part of <a href="http://developer.yahoo.com/yui/container/dialog/">Dialogs</a>.  In this example, a form enhanced with the <a href="http://developer.yahoo.com/yui/editor">Rich Text Editor</a> appears in a Dialog.  Read the tutorial below to learn how to integrate the RTE seamlessly with your Dialog's form contents.</p>
 	
 			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<div id="dialogContainer">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><div id="dialogContainer">
 	<div class="hd">Enter Title and Description:</div>
 	<div class="bd">
 		<form id="dialogForm" name="dialogForm" method="post" action="../editor/assets/post.php">
 			
-			<p><label for="title">Title:</label> <input name="title" id="title" /></p>
+			<p><label for="title">Title:</label> <input name="title" id="title"></p>
 			
 			<p><label for="description">Description:</label></p>
 			
-				<textarea name="description" id="description"></textarea>
-			
-			<div id="descriptionContainer"></div>
+				<textarea name="description" id="description"></textarea><div id="descriptionContainer"></div>
 			
 			<!--This element is here only for purposes of Progressive Enhancement; we will disable and
 			hide it as we render the Dialog so that doesn't interfere with the Dialog's operation.-->
-			<p><input id="submitButton" type="submit" /></p>
+			<p><input id="submitButton" type="submit"></p>
 			
 		</form>
 	</div>
-</div>
-
-<button id="showDlg">Show Dialog</button>
-
-<div id="responseContainer">
+</div><button id="showDlg">Show Dialog</button><div id="responseContainer">
 	<p>Dialog's post response will appear here after you submit the Dialog.</p>
-</div>
-
-<script language="JavaScript">
+</div><script language="JavaScript">
 (function() {
 
 	//hide and disable the non-dialog submit button:
@@ -179,9 +134,4 @@ body {
 	btn.on("click", dlg.show, dlg, true);
 	
 })();
-</script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

@@ -1,16 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: treeview   TVFadeOut.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-</head>
-
-<body id="yahoo-com">
-<div id="doc3" class="yui-t2">
+<head><title>API: treeview   TVFadeOut.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <h1>Yahoo! UI Library</h1>
-        <h3>TreeView Widget&nbsp; <span class="subtitle">2.2.2</span></h3>
+        <h3>TreeView Widget  <span class="subtitle">2.2.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_treeview.html">treeview</a>
@@ -24,7 +19,7 @@
 			<div class="yui-b">
 
                     <div id="srcout">
-<div class="highlight" ><pre><span class="c">/**</span>
+<div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * A 1/2 second fade out animation.</span>
 <span class="c"> * @class TVFadeOut</span>
 <span class="c"> * @constructor</span>
@@ -57,7 +52,7 @@
     <span class="nx">animate</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">tvanim</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
         <span class="k">var</span> <span class="nx">dur</span> <span class="o">=</span> <span class="m">0</span><span class="o">.</span><span class="m">4</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Anim</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">el</span><span class="o">,</span> <span class="o">{</span><span class="nx">opacity</span><span class="o">:</span> <span class="o">{</span><span class="nx">from</span><span class="o">:</span> <span class="m">1</span><span class="o">,</span> <span class="nx">to</span><span class="o">:</span> <span class="m">0</span><span class="o">.</span><span class="m">1</span><span class="o">,</span> <span class="nx">unit</span><span class="o">:</span><span class="s2">&quot;&quot;</span><span class="o">}},</span> <span class="nx">dur</span><span class="o">);</span>
+        <span class="k">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Anim</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">el</span><span class="o">,</span> <span class="o">{</span><span class="nx">opacity</span><span class="o">:</span> <span class="o">{</span><span class="nx">from</span><span class="o">:</span> <span class="m">1</span><span class="o">,</span> <span class="nx">to</span><span class="o">:</span> <span class="m">0</span><span class="o">.</span><span class="m">1</span><span class="o">,</span> <span class="nx">unit</span><span class="o">:</span><span class="s2">""</span><span class="o">}},</span> <span class="nx">dur</span><span class="o">);</span>
         <span class="nx">a</span><span class="o">.</span><span class="nx">onComplete</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span> <span class="nx">tvanim</span><span class="o">.</span><span class="nx">onComplete</span><span class="o">();</span> <span class="o">}</span> <span class="o">);</span>
         <span class="nx">a</span><span class="o">.</span><span class="nx">animate</span><span class="o">();</span>
     <span class="o">},</span>
@@ -68,9 +63,9 @@
 <span class="c">     */</span>
     <span class="nx">onComplete</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">s</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">;</span>
-        <span class="nx">s</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span><span class="o">;</span>
+        <span class="nx">s</span><span class="o">.</span><span class="nx">display</span> <span class="o">=</span> <span class="s2">"none"</span><span class="o">;</span>
         <span class="c">// s.opacity = 1;</span>
-<span class="c"></span>        <span class="nx">s</span><span class="o">.</span><span class="nx">filter</span> <span class="o">=</span> <span class="s2">&quot;alpha(opacity=100)&quot;</span><span class="o">;</span>
+<span class="c"></span>        <span class="nx">s</span><span class="o">.</span><span class="nx">filter</span> <span class="o">=</span> <span class="s2">"alpha(opacity=100)"</span><span class="o">;</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">callback</span><span class="o">();</span>
     <span class="o">},</span>
 
@@ -80,7 +75,7 @@
 <span class="c">     * @return {string} the string representation of the instance</span>
 <span class="c">     */</span>
     <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="s2">&quot;TVFadeOut&quot;</span><span class="o">;</span>
+        <span class="k">return</span> <span class="s2">"TVFadeOut"</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">};</span>
 </pre></div>
@@ -92,9 +87,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -131,13 +124,11 @@
                                 <li class="selected"><a href="module_treeview.html">treeview</a></li>
 
                                 <li class=""><a href="module_yahoo.html">yahoo</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.HTMLNode.html">YAHOO.widget.HTMLNode</a></li>
                                 <li class=""><a href="YAHOO.widget.MenuNode.html">YAHOO.widget.MenuNode</a></li>
                                 <li class=""><a href="YAHOO.widget.Node.html">YAHOO.widget.Node</a></li>
                                 <li class=""><a href="YAHOO.widget.RootNode.html">YAHOO.widget.RootNode</a></li>
@@ -146,13 +137,11 @@
                                 <li class=""><a href="YAHOO.widget.TVAnim.html">YAHOO.widget.TVAnim</a></li>
                                 <li class=""><a href="YAHOO.widget.TVFadeIn.html">YAHOO.widget.TVFadeIn</a></li>
                                 <li class=""><a href="YAHOO.widget.TVFadeOut.html">YAHOO.widget.TVFadeOut</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="HTMLNode.js.html">HTMLNode.js</a></li>
+                        <ul class="content"><li class=""><a href="HTMLNode.js.html">HTMLNode.js</a></li>
                                 <li class=""><a href="MenuNode.js.html">MenuNode.js</a></li>
                                 <li class=""><a href="Node.js.html">Node.js</a></li>
                                 <li class=""><a href="RootNode.js.html">RootNode.js</a></li>
@@ -161,8 +150,7 @@
                                 <li class=""><a href="TVAnim.js.html">TVAnim.js</a></li>
                                 <li class=""><a href="TVFadeIn.js.html">TVFadeIn.js</a></li>
                                 <li class="selected"><a href="TVFadeOut.js.html">TVFadeOut.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -172,9 +160,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

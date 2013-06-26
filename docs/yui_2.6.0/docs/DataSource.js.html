@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: datasource   DataSource.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: datasource   DataSource.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>DataSource Utility&nbsp; <span class="subtitle">2.6.0</span></h3>
+        <h3>DataSource Utility  <span class="subtitle">2.6.0</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_datasource.html">datasource</a>
@@ -28,16 +20,15 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> <label for="showprivate">Show Private</label></span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> <label for="showprotected">Show Protected</label></span>
-    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated" /> <label for="showdeprecated">Show Deprecated</label></span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"><label for="showprivate">Show Private</label></span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"><label for="showprotected">Show Protected</label></span>
+    <span id="classopts"><input type="checkbox" name="showdeprecated" id="showdeprecated"><label for="showdeprecated">Show Deprecated</label></span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
+                        </style><div class="highlight"><pre><span class="o">(</span><span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
 
 <span class="k">var</span> <span class="nx">lang</span>   <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">,</span>
     <span class="nx">util</span>   <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">,</span>
@@ -68,8 +59,8 @@
 <span class="c"> */</span>
 <span class="nx">util</span><span class="o">.</span><span class="nx">DataSourceBase</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oLiveData</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">if</span><span class="o">(</span><span class="nx">oLiveData</span> <span class="o">===</span> <span class="kc">null</span> <span class="o">||</span> <span class="nx">oLiveData</span> <span class="o">===</span> <span class="kc">undefined</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not instantiate DataSource due to invalid live database&quot;</span><span class="o">,</span>
-                <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Could not instantiate DataSource due to invalid live database"</span><span class="o">,</span>
+                <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="k">return</span><span class="o">;</span>
     <span class="o">}</span>
     
@@ -109,7 +100,7 @@
 <span class="c">     * @param oArgs.callback {Object} The callback object.</span>
 <span class="c">     * @param oArgs.caller {Object} (deprecated) Use callback.scope.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;cacheRequestEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"cacheRequestEvent"</span><span class="o">);</span>
 
     <span class="c">/**</span>
 <span class="c">     * Fired when data is retrieved from the local cache.</span>
@@ -120,7 +111,7 @@
 <span class="c">     * @param oArgs.callback {Object} The callback object.</span>
 <span class="c">     * @param oArgs.caller {Object} (deprecated) Use callback.scope.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;cacheResponseEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"cacheResponseEvent"</span><span class="o">);</span>
 
     <span class="c">/**</span>
 <span class="c">     * Fired when a request is sent to the live data source.</span>
@@ -131,7 +122,7 @@
 <span class="c">     * @param oArgs.tId {Number} Transaction ID.     </span>
 <span class="c">     * @param oArgs.caller {Object} (deprecated) Use callback.scope.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;requestEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"requestEvent"</span><span class="o">);</span>
 
     <span class="c">/**</span>
 <span class="c">     * Fired when live data source sends response.</span>
@@ -143,7 +134,7 @@
 <span class="c">     * @param oArgs.tId {Number} Transaction ID.     </span>
 <span class="c">     * @param oArgs.caller {Object} (deprecated) Use callback.scope.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;responseEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"responseEvent"</span><span class="o">);</span>
 
     <span class="c">/**</span>
 <span class="c">     * Fired when response is parsed.</span>
@@ -154,7 +145,7 @@
 <span class="c">     * @param oArgs.callback {Object} The callback object.</span>
 <span class="c">     * @param oArgs.caller {Object} (deprecated) Use callback.scope.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;responseParseEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"responseParseEvent"</span><span class="o">);</span>
 
     <span class="c">/**</span>
 <span class="c">     * Fired when response is cached.</span>
@@ -165,7 +156,7 @@
 <span class="c">     * @param oArgs.callback {Object} The callback object.</span>
 <span class="c">     * @param oArgs.caller {Object} (deprecated) Use callback.scope.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;responseCacheEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"responseCacheEvent"</span><span class="o">);</span>
     <span class="c">/**</span>
 <span class="c">     * Fired when an error is encountered with the live data source.</span>
 <span class="c">     *</span>
@@ -175,19 +166,19 @@
 <span class="c">     * @param oArgs.caller {Object} (deprecated) Use callback.scope.</span>
 <span class="c">     * @param oArgs.message {String} The error message.</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;dataErrorEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"dataErrorEvent"</span><span class="o">);</span>
 
     <span class="c">/**</span>
 <span class="c">     * Fired when the local cache is flushed.</span>
 <span class="c">     *</span>
 <span class="c">     * @event cacheFlushEvent</span>
 <span class="c">     */</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">&quot;cacheFlushEvent&quot;</span><span class="o">);</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">createEvent</span><span class="o">(</span><span class="s2">"cacheFlushEvent"</span><span class="o">);</span>
 
     <span class="k">var</span> <span class="nx">DS</span> <span class="o">=</span> <span class="nx">util</span><span class="o">.</span><span class="nx">DataSourceBase</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">_sName</span> <span class="o">=</span> <span class="s2">&quot;DataSource instance&quot;</span> <span class="o">+</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">_nIndex</span><span class="o">;</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">_sName</span> <span class="o">=</span> <span class="s2">"DataSource instance"</span> <span class="o">+</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">_nIndex</span><span class="o">;</span>
     <span class="nx">DS</span><span class="o">.</span><span class="nx">_nIndex</span><span class="o">++;</span>
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;DataSource initialized&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"DataSource initialized"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 <span class="o">};</span>
 
 <span class="k">var</span> <span class="nx">DS</span> <span class="o">=</span> <span class="nx">util</span><span class="o">.</span><span class="nx">DataSourceBase</span><span class="o">;</span>
@@ -306,9 +297,9 @@
 <span class="c"> * @property ERROR_DATAINVALID</span>
 <span class="c"> * @type String</span>
 <span class="c"> * @final</span>
-<span class="c"> * @default &quot;Invalid data&quot;</span>
+<span class="c"> * @default "Invalid data"</span>
 <span class="c"> */</span>
-<span class="nx">ERROR_DATAINVALID</span> <span class="o">:</span> <span class="s2">&quot;Invalid data&quot;</span><span class="o">,</span>
+<span class="nx">ERROR_DATAINVALID</span> <span class="o">:</span> <span class="s2">"Invalid data"</span><span class="o">,</span>
 
 <span class="c">/**</span>
 <span class="c"> * Error message for null data responses.</span>
@@ -316,9 +307,9 @@
 <span class="c"> * @property ERROR_DATANULL</span>
 <span class="c"> * @type String</span>
 <span class="c"> * @final</span>
-<span class="c"> * @default &quot;Null data&quot;</span>
+<span class="c"> * @default "Null data"</span>
 <span class="c"> */</span>
-<span class="nx">ERROR_DATANULL</span> <span class="o">:</span> <span class="s2">&quot;Null data&quot;</span><span class="o">,</span>
+<span class="nx">ERROR_DATANULL</span> <span class="o">:</span> <span class="s2">"Null data"</span><span class="o">,</span>
 
 <span class="c">/////////////////////////////////////////////////////////////////////////////</span>
 <span class="c">//</span>
@@ -395,14 +386,14 @@
     <span class="o">}</span>
     
     <span class="c">//Convert to string</span>
-<span class="c"></span>    <span class="k">var</span> <span class="nx">string</span> <span class="o">=</span> <span class="nx">oData</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+<span class="c"></span>    <span class="k">var</span> <span class="nx">string</span> <span class="o">=</span> <span class="nx">oData</span> <span class="o">+</span> <span class="s2">""</span><span class="o">;</span>
 
     <span class="c">// Validate</span>
 <span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">string</span><span class="o">))</span> <span class="o">{</span>
         <span class="k">return</span> <span class="nx">string</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not convert data &quot;</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot; to type String&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Could not convert data "</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">+</span> <span class="s2">" to type String"</span><span class="o">,</span> <span class="s2">"warn"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">},</span>
@@ -425,14 +416,14 @@
         <span class="k">return</span> <span class="nx">number</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not convert data &quot;</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot; to type Number&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Could not convert data "</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">+</span> <span class="s2">" to type Number"</span><span class="o">,</span> <span class="s2">"warn"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">},</span>
 <span class="c">// Backward compatibility</span>
 <span class="c"></span><span class="nx">convertNumber</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">{</span>
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;The method YAHOO.util.DataSourceBase.convertNumber() has been&quot;</span> <span class="o">+</span>
-    <span class="s2">&quot; deprecated in favor of YAHOO.util.DataSourceBase.parseNumber()&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"The method YAHOO.util.DataSourceBase.convertNumber() has been"</span> <span class="o">+</span>
+    <span class="s2">" deprecated in favor of YAHOO.util.DataSourceBase.parseNumber()"</span><span class="o">,</span> <span class="s2">"warn"</span><span class="o">,</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="k">return</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">parseNumber</span><span class="o">(</span><span class="nx">oData</span><span class="o">);</span>
 <span class="o">},</span>
@@ -461,14 +452,14 @@
         <span class="k">return</span> <span class="nx">date</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not convert data &quot;</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot; to type Date&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Could not convert data "</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">+</span> <span class="s2">" to type Date"</span><span class="o">,</span> <span class="s2">"warn"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
     <span class="o">}</span>
 <span class="o">},</span>
 <span class="c">// Backward compatibility</span>
 <span class="c"></span><span class="nx">convertDate</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oData</span><span class="o">)</span> <span class="o">{</span>
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;The method YAHOO.util.DataSourceBase.convertDate() has been&quot;</span> <span class="o">+</span>
-    <span class="s2">&quot; deprecated in favor of YAHOO.util.DataSourceBase.parseDate()&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"The method YAHOO.util.DataSourceBase.convertDate() has been"</span> <span class="o">+</span>
+    <span class="s2">" deprecated in favor of YAHOO.util.DataSourceBase.parseDate()"</span><span class="o">,</span> <span class="s2">"warn"</span><span class="o">,</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="k">return</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">parseDate</span><span class="o">(</span><span class="nx">oData</span><span class="o">);</span>
 <span class="o">}</span>
@@ -604,7 +595,7 @@
 <span class="c"> * &lt;dt&gt;recordDelim&lt;/dt&gt; &lt;dd&gt;Record delimiter (text data only)&lt;/dd&gt;</span>
 <span class="c"> * &lt;dt&gt;fieldDelim&lt;/dt&gt; &lt;dd&gt;Field delimiter (text data only)&lt;/dd&gt;</span>
 <span class="c"> * &lt;dt&gt;fields&lt;/dt&gt; &lt;dd&gt;Array of field names (aka keys), or array of object literals</span>
-<span class="c"> * such as: {key:&quot;fieldname&quot;,parser:YAHOO.util.DataSourceBase.parseDate}&lt;/dd&gt;</span>
+<span class="c"> * such as: {key:"fieldname",parser:YAHOO.util.DataSourceBase.parseDate}&lt;/dd&gt;</span>
 <span class="c"> * &lt;dt&gt;metaFields&lt;/dt&gt; &lt;dd&gt;Object literal of keys to include in the oParsedResponse.meta collection&lt;/dd&gt;</span>
 <span class="c"> * &lt;dt&gt;metaNode&lt;/dt&gt; &lt;dd&gt;Name of the node under which to search for meta information in XML response data&lt;/dd&gt;</span>
 <span class="c"> * &lt;/dl&gt;</span>
@@ -649,14 +640,14 @@
         <span class="c">// Initialize local cache</span>
 <span class="c"></span>        <span class="k">if</span><span class="o">(!</span><span class="nx">aCache</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span> <span class="o">=</span> <span class="o">[];</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Cache initialized&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Cache initialized"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="o">}</span>
         <span class="c">// Look in local cache</span>
 <span class="c"></span>        <span class="k">else</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">nCacheLength</span> <span class="o">=</span> <span class="nx">aCache</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span>
             <span class="k">if</span><span class="o">(</span><span class="nx">nCacheLength</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">oResponse</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;cacheRequestEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"cacheRequestEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
         
                 <span class="c">// Loop through each cached element</span>
 <span class="c"></span>                <span class="k">for</span><span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">nCacheLength</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">--)</span> <span class="o">{</span>
@@ -667,7 +658,7 @@
                         <span class="c">// The cache returned a hit!</span>
 <span class="c"></span>                        <span class="c">// Grab the cached response</span>
 <span class="c"></span>                        <span class="nx">oResponse</span> <span class="o">=</span> <span class="nx">oCacheElem</span><span class="o">.</span><span class="nx">response</span><span class="o">;</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;cacheResponseEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oResponse</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"cacheResponseEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oResponse</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
                         
                         <span class="c">// Refresh the position of the cache hit</span>
 <span class="c"></span>                        <span class="k">if</span><span class="o">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">nCacheLength</span><span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
@@ -675,7 +666,7 @@
 <span class="c"></span>                            <span class="nx">aCache</span><span class="o">.</span><span class="nx">splice</span><span class="o">(</span><span class="nx">i</span><span class="o">,</span><span class="m">1</span><span class="o">);</span>
                             <span class="c">// Add as newest</span>
 <span class="c"></span>                            <span class="k">this</span><span class="o">.</span><span class="nx">addToCache</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oResponse</span><span class="o">);</span>
-                            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Refreshed cache position of the response for \&quot;&quot;</span> <span class="o">+</span>  <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Refreshed cache position of the response for \""</span> <span class="o">+</span>  <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">"\""</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
                         <span class="o">}</span>
                         
                         <span class="c">// Add a cache flag</span>
@@ -683,15 +674,15 @@
                         <span class="k">break</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;The cached response for \&quot;&quot;</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">)</span> <span class="o">+</span>
-                        <span class="s2">&quot;\&quot; is &quot;</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oResponse</span><span class="o">),</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"The cached response for \""</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">)</span> <span class="o">+</span>
+                        <span class="s2">"\" is "</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oResponse</span><span class="o">),</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
                 <span class="k">return</span> <span class="nx">oResponse</span><span class="o">;</span>
             <span class="o">}</span>
         <span class="o">}</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">aCache</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Cache destroyed&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Cache destroyed"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="o">}</span>
     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
 <span class="o">},</span>
@@ -732,8 +723,8 @@
     <span class="c">// Add to cache in the newest position, at the end of the array</span>
 <span class="c"></span>    <span class="k">var</span> <span class="nx">oCacheElem</span> <span class="o">=</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oResponse</span><span class="o">};</span>
     <span class="nx">aCache</span><span class="o">[</span><span class="nx">aCache</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="nx">oCacheElem</span><span class="o">;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;responseCacheEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oResponse</span><span class="o">});</span>
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Cached the response for \&quot;&quot;</span> <span class="o">+</span>  <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"responseCacheEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">response</span><span class="o">:</span><span class="nx">oResponse</span><span class="o">});</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Cached the response for \""</span> <span class="o">+</span>  <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">"\""</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 <span class="o">},</span>
 
 <span class="c">/**</span>
@@ -744,8 +735,8 @@
 <span class="nx">flushCache</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
     <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">this</span><span class="o">.</span><span class="nx">_aCache</span> <span class="o">=</span> <span class="o">[];</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;cacheFlushEvent&quot;</span><span class="o">);</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Flushed the cache&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"cacheFlushEvent"</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Flushed the cache"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="o">}</span>
 <span class="o">},</span>
 
@@ -762,7 +753,7 @@
 <span class="c"> */</span>
 <span class="nx">setInterval</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">nMsec</span><span class="o">,</span> <span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oCallback</span><span class="o">,</span> <span class="nx">oCaller</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">(</span><span class="nx">nMsec</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">nMsec</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">))</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Enabling polling to live data for \&quot;&quot;</span> <span class="o">+</span> <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">&quot;\&quot; at interval &quot;</span> <span class="o">+</span> <span class="nx">nMsec</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Enabling polling to live data for \""</span> <span class="o">+</span> <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">"\" at interval "</span> <span class="o">+</span> <span class="nx">nMsec</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="k">var</span> <span class="nx">oSelf</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
         <span class="k">var</span> <span class="nx">nId</span> <span class="o">=</span> <span class="nx">setInterval</span><span class="o">(</span><span class="k">function</span><span class="o">()</span> <span class="o">{</span>
             <span class="nx">oSelf</span><span class="o">.</span><span class="nx">makeConnection</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oCallback</span><span class="o">,</span> <span class="nx">oCaller</span><span class="o">);</span>
@@ -771,7 +762,7 @@
         <span class="k">return</span> <span class="nx">nId</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not enable polling to live data for \&quot;&quot;</span> <span class="o">+</span> <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">&quot;\&quot; at interval &quot;</span> <span class="o">+</span> <span class="nx">nMsec</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Could not enable polling to live data for \""</span> <span class="o">+</span> <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">"\" at interval "</span> <span class="o">+</span> <span class="nx">nMsec</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="o">}</span>
 <span class="o">},</span>
 
@@ -834,7 +825,7 @@
 
 
     <span class="c">// Not in cache, so forward request to live data</span>
-<span class="c"></span>    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Making connection to live data for \&quot;&quot;</span> <span class="o">+</span> <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+<span class="c"></span>    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Making connection to live data for \""</span> <span class="o">+</span> <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">"\""</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">makeConnection</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oCallback</span><span class="o">,</span> <span class="nx">oCaller</span><span class="o">);</span>
 <span class="o">},</span>
 
@@ -852,7 +843,7 @@
 <span class="c"> */</span>
 <span class="nx">makeConnection</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oCallback</span><span class="o">,</span> <span class="nx">oCaller</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">tId</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">_nTransactionId</span><span class="o">++;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;requestEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">tId</span><span class="o">:</span><span class="nx">tId</span><span class="o">,</span> <span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"requestEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">tId</span><span class="o">:</span><span class="nx">tId</span><span class="o">,</span> <span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
 
     <span class="c">/* accounts for the following cases:</span>
 <span class="c">    YAHOO.util.DataSourceBase.TYPE_UNKNOWN</span>
@@ -891,25 +882,25 @@
 <span class="c"> * @param tId {Number} Transaction ID.</span>
 <span class="c"> */</span>
 <span class="nx">handleResponse</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oRawResponse</span><span class="o">,</span> <span class="nx">oCallback</span><span class="o">,</span> <span class="nx">oCaller</span><span class="o">,</span> <span class="nx">tId</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;responseEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">tId</span><span class="o">:</span><span class="nx">tId</span><span class="o">,</span> <span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">response</span><span class="o">:</span><span class="nx">oRawResponse</span><span class="o">,</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"responseEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">tId</span><span class="o">:</span><span class="nx">tId</span><span class="o">,</span> <span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">response</span><span class="o">:</span><span class="nx">oRawResponse</span><span class="o">,</span>
             <span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span> <span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Received live data response for \&quot;&quot;</span> <span class="o">+</span> <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">&quot;\&quot;&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Received live data response for \""</span> <span class="o">+</span> <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">"\""</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="k">var</span> <span class="nx">xhr</span> <span class="o">=</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">dataType</span> <span class="o">==</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_XHR</span><span class="o">)</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="o">;</span>
     <span class="k">var</span> <span class="nx">oParsedResponse</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
     <span class="k">var</span> <span class="nx">oFullResponse</span> <span class="o">=</span> <span class="nx">oRawResponse</span><span class="o">;</span>
     
     <span class="c">// Try to sniff data type if it has not been defined</span>
 <span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">===</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_UNKNOWN</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">var</span> <span class="nx">ctype</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oRawResponse</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">getResponseHeader</span><span class="o">)</span> <span class="o">?</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">getResponseHeader</span><span class="o">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">]</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">ctype</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oRawResponse</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">getResponseHeader</span><span class="o">)</span> <span class="o">?</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">getResponseHeader</span><span class="o">[</span><span class="s2">"Content-Type"</span><span class="o">]</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
         <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">)</span> <span class="o">{</span>
              <span class="c">// xml</span>
-<span class="c"></span>            <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;text/xml&quot;</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>            <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"text/xml"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_XML</span><span class="o">;</span>
             <span class="o">}</span>
-            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;application/json&quot;</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> <span class="c">// json</span>
+            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"application/json"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> <span class="c">// json</span>
 <span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_JSON</span><span class="o">;</span>
             <span class="o">}</span>
-            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;text/plain&quot;</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> <span class="c">// text</span>
+            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"text/plain"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> <span class="c">// text</span>
 <span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_TEXT</span><span class="o">;</span>
             <span class="o">}</span>
         <span class="o">}</span>
@@ -921,7 +912,7 @@
 <span class="c"></span>            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">==</span> <span class="m">9</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_XML</span><span class="o">;</span>
             <span class="o">}</span>
-            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">&quot;table&quot;</span><span class="o">))</span> <span class="o">{</span> <span class="c">// table</span>
+            <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">"table"</span><span class="o">))</span> <span class="o">{</span> <span class="c">// table</span>
 <span class="c"></span>                <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_HTMLTABLE</span><span class="o">;</span>
             <span class="o">}</span>    
             <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">))</span> <span class="o">{</span> <span class="c">// json</span>
@@ -946,7 +937,7 @@
                 <span class="nx">oFullResponse</span> <span class="o">=</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">responseText</span><span class="o">;</span>
             <span class="o">}</span>
             <span class="k">try</span> <span class="o">{</span>
-                <span class="c">// Convert to JSON object if it&#39;s a string</span>
+                <span class="c">// Convert to JSON object if it's a string</span>
 <span class="c"></span>                <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">))</span> <span class="o">{</span>
                     <span class="c">// Check for YUI JSON Util</span>
 <span class="c"></span>                    <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">JSON</span><span class="o">)</span> <span class="o">{</span>
@@ -964,19 +955,19 @@
 <span class="c"></span>                    <span class="k">else</span> <span class="o">{</span>
                         <span class="c">// Trim leading spaces</span>
 <span class="c"></span>                        <span class="k">while</span> <span class="o">(</span><span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span> <span class="o">&amp;&amp;</span>
-                                <span class="o">(</span><span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">!=</span> <span class="s2">&quot;{&quot;</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
-                                <span class="o">(</span><span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">!=</span> <span class="s2">&quot;[&quot;</span><span class="o">))</span> <span class="o">{</span>
+                                <span class="o">(</span><span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">!=</span> <span class="s2">"{"</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
+                                <span class="o">(</span><span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">!=</span> <span class="s2">"["</span><span class="o">))</span> <span class="o">{</span>
                             <span class="nx">oFullResponse</span> <span class="o">=</span> <span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">1</span><span class="o">,</span> <span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">length</span><span class="o">);</span>
                         <span class="o">}</span>
     
                         <span class="k">if</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
                             <span class="c">// Strip extraneous stuff at the end</span>
-<span class="c"></span>                            <span class="k">var</span> <span class="nx">objEnd</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="s2">&quot;]&quot;</span><span class="o">),</span><span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="s2">&quot;}&quot;</span><span class="o">));</span>
+<span class="c"></span>                            <span class="k">var</span> <span class="nx">objEnd</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">max</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="s2">"]"</span><span class="o">),</span><span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="s2">"}"</span><span class="o">));</span>
                             <span class="nx">oFullResponse</span> <span class="o">=</span> <span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">substring</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="nx">objEnd</span><span class="o">+</span><span class="m">1</span><span class="o">);</span>
     
                             <span class="c">// Turn the string into an object literal...</span>
 <span class="c"></span>                            <span class="c">// ...eval is necessary here</span>
-<span class="c"></span>                            <span class="nx">oFullResponse</span> <span class="o">=</span> <span class="nb">eval</span><span class="o">(</span><span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="nx">oFullResponse</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">);</span>
+<span class="c"></span>                            <span class="nx">oFullResponse</span> <span class="o">=</span> <span class="nb">eval</span><span class="o">(</span><span class="s2">"("</span> <span class="o">+</span> <span class="nx">oFullResponse</span> <span class="o">+</span> <span class="s2">")"</span><span class="o">);</span>
     
                         <span class="o">}</span>
                     <span class="o">}</span>
@@ -1029,7 +1020,7 @@
 <span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">oParsedResponse</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">oParsedResponse</span><span class="o">.</span><span class="nx">error</span><span class="o">)</span> <span class="o">{</span>
         <span class="c">// Last chance to touch the raw response or the parsed response</span>
 <span class="c"></span>        <span class="nx">oParsedResponse</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">doBeforeCallback</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oFullResponse</span><span class="o">,</span> <span class="nx">oParsedResponse</span><span class="o">,</span> <span class="nx">oCallback</span><span class="o">);</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;responseParseEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"responseParseEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span>
                 <span class="nx">response</span><span class="o">:</span><span class="nx">oParsedResponse</span><span class="o">,</span> <span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span> <span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
         <span class="c">// Cache the response</span>
 <span class="c"></span>        <span class="k">this</span><span class="o">.</span><span class="nx">addToCache</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oParsedResponse</span><span class="o">);</span>
@@ -1038,9 +1029,9 @@
 <span class="c"></span>    <span class="k">else</span> <span class="o">{</span>
         <span class="c">// Be sure the error flag is on</span>
 <span class="c"></span>        <span class="nx">oParsedResponse</span><span class="o">.</span><span class="nx">error</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;dataErrorEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">response</span><span class="o">:</span> <span class="nx">oRawResponse</span><span class="o">,</span> <span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span> 
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"dataErrorEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">response</span><span class="o">:</span> <span class="nx">oRawResponse</span><span class="o">,</span> <span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span> 
                 <span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">,</span> <span class="nx">message</span><span class="o">:</span><span class="nx">DS</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">});</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">DS</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">DS</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="o">}</span>
 
     <span class="c">// Send the response back to the caller</span>
@@ -1096,13 +1087,13 @@
 <span class="nx">parseData</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oFullResponse</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isValue</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">))</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">oParsedResponse</span> <span class="o">=</span> <span class="o">{</span><span class="nx">results</span><span class="o">:</span><span class="nx">oFullResponse</span><span class="o">,</span><span class="nx">meta</span><span class="o">:{}};</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Parsed generic data is &quot;</span> <span class="o">+</span>
-                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oParsedResponse</span><span class="o">),</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Parsed generic data is "</span> <span class="o">+</span>
+                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oParsedResponse</span><span class="o">),</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="k">return</span> <span class="nx">oParsedResponse</span><span class="o">;</span>
 
     <span class="o">}</span>
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Generic data could not be parsed: &quot;</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> 
-            <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Generic data could not be parsed: "</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> 
+            <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
 <span class="o">},</span>
 
@@ -1126,16 +1117,16 @@
 <span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">responseSchema</span><span class="o">.</span><span class="nx">fields</span><span class="o">))</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">fields</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">responseSchema</span><span class="o">.</span><span class="nx">fields</span><span class="o">;</span>
             <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="nx">fields</span><span class="o">.</span><span class="nx">length</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="o">--</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">fields</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">!==</span> <span class="s1">&#39;object&#39;</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">fields</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">!==</span> <span class="s1">'object'</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">fields</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="o">{</span> <span class="nx">key</span> <span class="o">:</span> <span class="nx">fields</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">};</span>
                 <span class="o">}</span>
             <span class="o">}</span>
 
             <span class="k">var</span> <span class="nx">parsers</span> <span class="o">=</span> <span class="o">{},</span> <span class="nx">p</span><span class="o">;</span>
             <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="o">=</span> <span class="nx">fields</span><span class="o">.</span><span class="nx">length</span> <span class="o">-</span> <span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="o">--</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">p</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">fields</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">parser</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span> <span class="o">?</span>
+                <span class="nx">p</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">fields</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">parser</span> <span class="o">===</span> <span class="s1">'function'</span> <span class="o">?</span>
                           <span class="nx">fields</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">parser</span> <span class="o">:</span>
-                          <span class="nx">DS</span><span class="o">.</span><span class="nx">Parser</span><span class="o">[</span><span class="nx">fields</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">parser</span><span class="o">+</span><span class="s1">&#39;&#39;</span><span class="o">])</span> <span class="o">||</span> <span class="nx">fields</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">converter</span><span class="o">;</span>
+                          <span class="nx">DS</span><span class="o">.</span><span class="nx">Parser</span><span class="o">[</span><span class="nx">fields</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">parser</span><span class="o">+</span><span class="s1">''</span><span class="o">])</span> <span class="o">||</span> <span class="nx">fields</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">converter</span><span class="o">;</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">p</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">parsers</span><span class="o">[</span><span class="nx">fields</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">key</span><span class="o">]</span> <span class="o">=</span> <span class="nx">p</span><span class="o">;</span>
                 <span class="o">}</span>
@@ -1145,7 +1136,7 @@
             <span class="k">for</span><span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="nx">oFullResponse</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span><span class="o">&gt;-</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span><span class="o">--)</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">oResult</span> <span class="o">=</span> <span class="o">{};</span>
                 <span class="nx">rec</span> <span class="o">=</span> <span class="nx">oFullResponse</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
-                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">rec</span> <span class="o">===</span> <span class="s1">&#39;object&#39;</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">rec</span> <span class="o">===</span> <span class="s1">'object'</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">for</span><span class="o">(</span><span class="nx">j</span><span class="o">=</span><span class="nx">fields</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">j</span><span class="o">&gt;-</span><span class="m">1</span><span class="o">;</span> <span class="nx">j</span><span class="o">--)</span> <span class="o">{</span>
                         <span class="nx">field</span> <span class="o">=</span> <span class="nx">fields</span><span class="o">[</span><span class="nx">j</span><span class="o">];</span>
                         <span class="nx">data</span> <span class="o">=</span> <span class="nx">arrType</span> <span class="o">?</span> <span class="nx">rec</span><span class="o">[</span><span class="nx">j</span><span class="o">]</span> <span class="o">:</span> <span class="nx">rec</span><span class="o">[</span><span class="nx">field</span><span class="o">.</span><span class="nx">key</span><span class="o">];</span>
@@ -1187,13 +1178,13 @@
             <span class="nx">results</span> <span class="o">=</span> <span class="nx">oFullResponse</span><span class="o">;</span>
         <span class="o">}</span>
         <span class="k">var</span> <span class="nx">oParsedResponse</span> <span class="o">=</span> <span class="o">{</span><span class="nx">results</span><span class="o">:</span><span class="nx">results</span><span class="o">};</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Parsed array data is &quot;</span> <span class="o">+</span>
-                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oParsedResponse</span><span class="o">),</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Parsed array data is "</span> <span class="o">+</span>
+                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oParsedResponse</span><span class="o">),</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="k">return</span> <span class="nx">oParsedResponse</span><span class="o">;</span>
 
     <span class="o">}</span>
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Array data could not be parsed: &quot;</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> 
-            <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Array data could not be parsed: "</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> 
+            <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
 <span class="o">},</span>
 
@@ -1240,10 +1231,10 @@
                                         <span class="c">// Remove quotation marks from edges, if applicable</span>
 <span class="c"></span>                                        <span class="k">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">fielddataarray</span><span class="o">[</span><span class="nx">j</span><span class="o">];</span>
                                         <span class="k">if</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">data</span><span class="o">))</span> <span class="o">{</span>
-                                            <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">==</span> <span class="s2">&quot;\&quot;&quot;</span><span class="o">)</span> <span class="o">{</span>
+                                            <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">==</span> <span class="s2">"\""</span><span class="o">)</span> <span class="o">{</span>
                                                 <span class="nx">data</span> <span class="o">=</span> <span class="nx">data</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span><span class="m">1</span><span class="o">);</span>
                                             <span class="o">}</span>
-                                            <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">==</span> <span class="s2">&quot;\&quot;&quot;</span><span class="o">)</span> <span class="o">{</span>
+                                            <span class="k">if</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">charAt</span><span class="o">(</span><span class="nx">data</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">==</span> <span class="s2">"\""</span><span class="o">)</span> <span class="o">{</span>
                                                 <span class="nx">data</span> <span class="o">=</span> <span class="nx">data</span><span class="o">.</span><span class="nx">substr</span><span class="o">(</span><span class="m">0</span><span class="o">,</span><span class="nx">data</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">);</span>
                                             <span class="o">}</span>
                                             <span class="k">var</span> <span class="nx">field</span> <span class="o">=</span> <span class="nx">fields</span><span class="o">[</span><span class="nx">j</span><span class="o">];</span>
@@ -1251,12 +1242,12 @@
                                             <span class="c">// Backward compatibility</span>
 <span class="c"></span>                                            <span class="k">if</span><span class="o">(!</span><span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">&amp;&amp;</span> <span class="nx">field</span><span class="o">.</span><span class="nx">converter</span><span class="o">)</span> <span class="o">{</span>
                                                 <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">=</span> <span class="nx">field</span><span class="o">.</span><span class="nx">converter</span><span class="o">;</span>
-                                                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;The field property converter has been deprecated&quot;</span> <span class="o">+</span>
-                                                        <span class="s2">&quot; in favor of parser&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                                                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"The field property converter has been deprecated"</span> <span class="o">+</span>
+                                                        <span class="s2">" in favor of parser"</span><span class="o">,</span> <span class="s2">"warn"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
                                             <span class="o">}</span>
-                                            <span class="k">var</span> <span class="nx">parser</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="o">)</span> <span class="o">?</span>
+                                            <span class="k">var</span> <span class="nx">parser</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">===</span> <span class="s1">'function'</span><span class="o">)</span> <span class="o">?</span>
                                                 <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">:</span>
-                                                <span class="nx">DS</span><span class="o">.</span><span class="nx">Parser</span><span class="o">[</span><span class="nx">field</span><span class="o">.</span><span class="nx">parser</span><span class="o">+</span><span class="s1">&#39;&#39;</span><span class="o">];</span>
+                                                <span class="nx">DS</span><span class="o">.</span><span class="nx">Parser</span><span class="o">[</span><span class="nx">field</span><span class="o">.</span><span class="nx">parser</span><span class="o">+</span><span class="s1">''</span><span class="o">];</span>
                                             <span class="k">if</span><span class="o">(</span><span class="nx">parser</span><span class="o">)</span> <span class="o">{</span>
                                                 <span class="nx">data</span> <span class="o">=</span> <span class="nx">parser</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">data</span><span class="o">);</span>
                                             <span class="o">}</span>
@@ -1286,13 +1277,13 @@
                     <span class="o">}</span>
                 <span class="o">}</span>
             <span class="o">}</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Parsed text data is &quot;</span> <span class="o">+</span>
-                    <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oParsedResponse</span><span class="o">),</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Parsed text data is "</span> <span class="o">+</span>
+                    <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oParsedResponse</span><span class="o">),</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
             <span class="k">return</span> <span class="nx">oParsedResponse</span><span class="o">;</span>
         <span class="o">}</span>
     <span class="o">}</span>
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Text data could not be parsed: &quot;</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> 
-            <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Text data could not be parsed: "</span> <span class="o">+</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> 
+            <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
             
 <span class="o">},</span>
@@ -1337,24 +1328,24 @@
                             <span class="o">}</span>
                         <span class="o">}</span>
                         <span class="k">if</span><span class="o">(</span><span class="nx">datapieces</span><span class="o">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
-                            <span class="nx">data</span> <span class="o">=</span> <span class="nx">datapieces</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">&quot;&quot;</span><span class="o">);</span>
+                            <span class="nx">data</span> <span class="o">=</span> <span class="nx">datapieces</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">""</span><span class="o">);</span>
                         <span class="o">}</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
             <span class="o">}</span>
             <span class="c">// Safety net</span>
 <span class="c"></span>            <span class="k">if</span><span class="o">(</span><span class="nx">data</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                   <span class="nx">data</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+                   <span class="nx">data</span> <span class="o">=</span> <span class="s2">""</span><span class="o">;</span>
             <span class="o">}</span>
             <span class="c">// Backward compatibility</span>
 <span class="c"></span>            <span class="k">if</span><span class="o">(!</span><span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">&amp;&amp;</span> <span class="nx">field</span><span class="o">.</span><span class="nx">converter</span><span class="o">)</span> <span class="o">{</span>
                 <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">=</span> <span class="nx">field</span><span class="o">.</span><span class="nx">converter</span><span class="o">;</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;The field property converter has been deprecated&quot;</span> <span class="o">+</span>
-                        <span class="s2">&quot; in favor of parser&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"The field property converter has been deprecated"</span> <span class="o">+</span>
+                        <span class="s2">" in favor of parser"</span><span class="o">,</span> <span class="s2">"warn"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
             <span class="o">}</span>
-            <span class="k">var</span> <span class="nx">parser</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="o">)</span> <span class="o">?</span>
+            <span class="k">var</span> <span class="nx">parser</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">===</span> <span class="s1">'function'</span><span class="o">)</span> <span class="o">?</span>
                 <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">:</span>
-                <span class="nx">DS</span><span class="o">.</span><span class="nx">Parser</span><span class="o">[</span><span class="nx">field</span><span class="o">.</span><span class="nx">parser</span><span class="o">+</span><span class="s1">&#39;&#39;</span><span class="o">];</span>
+                <span class="nx">DS</span><span class="o">.</span><span class="nx">Parser</span><span class="o">[</span><span class="nx">field</span><span class="o">.</span><span class="nx">parser</span><span class="o">+</span><span class="s1">''</span><span class="o">];</span>
             <span class="k">if</span><span class="o">(</span><span class="nx">parser</span><span class="o">)</span> <span class="o">{</span>
                 <span class="nx">data</span> <span class="o">=</span> <span class="nx">parser</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">data</span><span class="o">);</span>
             <span class="o">}</span>
@@ -1366,7 +1357,7 @@
         <span class="o">}</span>
     <span class="o">}</span>
     <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Error while parsing XML result: &quot;</span> <span class="o">+</span> <span class="nx">e</span><span class="o">.</span><span class="nx">message</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Error while parsing XML result: "</span> <span class="o">+</span> <span class="nx">e</span><span class="o">.</span><span class="nx">message</span><span class="o">);</span>
     <span class="o">}</span>
 
     <span class="k">return</span> <span class="nx">oResult</span><span class="o">;</span>
@@ -1429,7 +1420,7 @@
         <span class="o">}</span>
     <span class="o">}</span>
     <span class="k">catch</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Error while parsing XML data: &quot;</span> <span class="o">+</span> <span class="nx">e</span><span class="o">.</span><span class="nx">message</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Error while parsing XML data: "</span> <span class="o">+</span> <span class="nx">e</span><span class="o">.</span><span class="nx">message</span><span class="o">);</span>
     <span class="o">}</span>
     <span class="k">if</span><span class="o">(!</span><span class="nx">xmlList</span> <span class="o">||</span> <span class="o">!</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">(</span><span class="nx">schema</span><span class="o">.</span><span class="nx">fields</span><span class="o">))</span> <span class="o">{</span>
         <span class="nx">bError</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
@@ -1444,13 +1435,13 @@
         <span class="o">}</span>
     <span class="o">}</span>
     <span class="k">if</span><span class="o">(</span><span class="nx">bError</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;XML data could not be parsed: &quot;</span> <span class="o">+</span>
-                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"XML data could not be parsed: "</span> <span class="o">+</span>
+                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="nx">oParsedResponse</span><span class="o">.</span><span class="nx">error</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Parsed XML data is &quot;</span> <span class="o">+</span>
-                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oParsedResponse</span><span class="o">),</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Parsed XML data is "</span> <span class="o">+</span>
+                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oParsedResponse</span><span class="o">),</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="o">}</span>
     <span class="k">return</span> <span class="nx">oParsedResponse</span><span class="o">;</span>
 <span class="o">},</span>
@@ -1480,30 +1471,30 @@
             <span class="nx">bError</span>          <span class="o">=</span> <span class="kc">false</span><span class="o">,</span>
             <span class="nx">i</span><span class="o">,</span><span class="nx">len</span><span class="o">,</span><span class="nx">j</span><span class="o">,</span><span class="nx">v</span><span class="o">,</span><span class="nx">key</span><span class="o">,</span><span class="nx">parser</span><span class="o">,</span><span class="nx">path</span><span class="o">;</span>
 
-        <span class="c">// Function to convert the schema&#39;s fields into walk paths</span>
+        <span class="c">// Function to convert the schema's fields into walk paths</span>
 <span class="c"></span>        <span class="k">var</span> <span class="nx">buildPath</span> <span class="o">=</span> <span class="k">function</span> <span class="o">(</span><span class="nx">needle</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="kc">null</span><span class="o">,</span> <span class="nx">keys</span> <span class="o">=</span> <span class="o">[],</span> <span class="nx">i</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">needle</span><span class="o">)</span> <span class="o">{</span>
-                <span class="c">// Strip the [&quot;string keys&quot;] and [1] array indexes</span>
+                <span class="c">// Strip the ["string keys"] and [1] array indexes</span>
 <span class="c"></span>                <span class="nx">needle</span> <span class="o">=</span> <span class="nx">needle</span><span class="o">.</span>
-                    <span class="nx">replace</span><span class="o">(</span><span class="sr">/\[([&#39;&quot;])(.*?)\1\]/g</span><span class="o">,</span>
-                    <span class="k">function</span> <span class="o">(</span><span class="nx">x</span><span class="o">,</span><span class="nx">$1</span><span class="o">,</span><span class="nx">$2</span><span class="o">)</span> <span class="o">{</span><span class="nx">keys</span><span class="o">[</span><span class="nx">i</span><span class="o">]=</span><span class="nx">$2</span><span class="o">;</span><span class="k">return</span> <span class="s1">&#39;.@&#39;</span><span class="o">+(</span><span class="nx">i</span><span class="o">++);}).</span>
+                    <span class="nx">replace</span><span class="o">(</span><span class="sr">/\[(['"])(.*?)\1\]/g</span><span class="o">,</span>
+                    <span class="k">function</span> <span class="o">(</span><span class="nx">x</span><span class="o">,</span><span class="nx">$1</span><span class="o">,</span><span class="nx">$2</span><span class="o">)</span> <span class="o">{</span><span class="nx">keys</span><span class="o">[</span><span class="nx">i</span><span class="o">]=</span><span class="nx">$2</span><span class="o">;</span><span class="k">return</span> <span class="s1">'.@'</span><span class="o">+(</span><span class="nx">i</span><span class="o">++);}).</span>
                     <span class="nx">replace</span><span class="o">(</span><span class="sr">/\[(\d+)\]/g</span><span class="o">,</span>
-                    <span class="k">function</span> <span class="o">(</span><span class="nx">x</span><span class="o">,</span><span class="nx">$1</span><span class="o">)</span> <span class="o">{</span><span class="nx">keys</span><span class="o">[</span><span class="nx">i</span><span class="o">]=</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">$1</span><span class="o">,</span><span class="m">10</span><span class="o">)|</span><span class="m">0</span><span class="o">;</span><span class="k">return</span> <span class="s1">&#39;.@&#39;</span><span class="o">+(</span><span class="nx">i</span><span class="o">++);}).</span>
-                    <span class="nx">replace</span><span class="o">(</span><span class="sr">/^\./</span><span class="o">,</span><span class="s1">&#39;&#39;</span><span class="o">);</span> <span class="c">// remove leading dot</span>
+                    <span class="k">function</span> <span class="o">(</span><span class="nx">x</span><span class="o">,</span><span class="nx">$1</span><span class="o">)</span> <span class="o">{</span><span class="nx">keys</span><span class="o">[</span><span class="nx">i</span><span class="o">]=</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">$1</span><span class="o">,</span><span class="m">10</span><span class="o">)|</span><span class="m">0</span><span class="o">;</span><span class="k">return</span> <span class="s1">'.@'</span><span class="o">+(</span><span class="nx">i</span><span class="o">++);}).</span>
+                    <span class="nx">replace</span><span class="o">(</span><span class="sr">/^\./</span><span class="o">,</span><span class="s1">''</span><span class="o">);</span> <span class="c">// remove leading dot</span>
 <span class="c"></span>
                 <span class="c">// If the cleaned needle contains invalid characters, the</span>
 <span class="c"></span>                <span class="c">// path is invalid</span>
 <span class="c"></span>                <span class="k">if</span> <span class="o">(!</span><span class="sr">/[^\w\.\$@]/</span><span class="o">.</span><span class="nx">test</span><span class="o">(</span><span class="nx">needle</span><span class="o">))</span> <span class="o">{</span>
-                    <span class="nx">path</span> <span class="o">=</span> <span class="nx">needle</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s1">&#39;.&#39;</span><span class="o">);</span>
+                    <span class="nx">path</span> <span class="o">=</span> <span class="nx">needle</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s1">'.'</span><span class="o">);</span>
                     <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="nx">path</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&gt;=</span> <span class="m">0</span><span class="o">;</span> <span class="o">--</span><span class="nx">i</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">if</span> <span class="o">(</span><span class="nx">path</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">===</span> <span class="s1">&#39;@&#39;</span><span class="o">)</span> <span class="o">{</span>
+                        <span class="k">if</span> <span class="o">(</span><span class="nx">path</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">charAt</span><span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">===</span> <span class="s1">'@'</span><span class="o">)</span> <span class="o">{</span>
                             <span class="nx">path</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">keys</span><span class="o">[</span><span class="nb">parseInt</span><span class="o">(</span><span class="nx">path</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">substr</span><span class="o">(</span><span class="m">1</span><span class="o">),</span><span class="m">10</span><span class="o">)];</span>
                         <span class="o">}</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
                 <span class="k">else</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Invalid locator: &quot;</span> <span class="o">+</span> <span class="nx">needle</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Invalid locator: "</span> <span class="o">+</span> <span class="nx">needle</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
                 <span class="o">}</span>
             <span class="o">}</span>
             <span class="k">return</span> <span class="nx">path</span><span class="o">;</span>
@@ -1548,9 +1539,9 @@
 <span class="c"></span>                <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">,</span> <span class="nx">len</span><span class="o">=</span><span class="nx">fields</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">len</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
                     <span class="nx">field</span> <span class="o">=</span> <span class="nx">fields</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
                     <span class="nx">key</span>    <span class="o">=</span> <span class="nx">field</span><span class="o">.</span><span class="nx">key</span> <span class="o">||</span> <span class="nx">field</span><span class="o">;</span>
-                    <span class="nx">parser</span> <span class="o">=</span> <span class="o">((</span><span class="k">typeof</span> <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="o">)</span> <span class="o">?</span>
+                    <span class="nx">parser</span> <span class="o">=</span> <span class="o">((</span><span class="k">typeof</span> <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">===</span> <span class="s1">'function'</span><span class="o">)</span> <span class="o">?</span>
                         <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">:</span>
-                        <span class="nx">DS</span><span class="o">.</span><span class="nx">Parser</span><span class="o">[</span><span class="nx">field</span><span class="o">.</span><span class="nx">parser</span><span class="o">+</span><span class="s1">&#39;&#39;</span><span class="o">])</span> <span class="o">||</span> <span class="nx">field</span><span class="o">.</span><span class="nx">converter</span><span class="o">;</span>
+                        <span class="nx">DS</span><span class="o">.</span><span class="nx">Parser</span><span class="o">[</span><span class="nx">field</span><span class="o">.</span><span class="nx">parser</span><span class="o">+</span><span class="s1">''</span><span class="o">])</span> <span class="o">||</span> <span class="nx">field</span><span class="o">.</span><span class="nx">converter</span><span class="o">;</span>
                     <span class="nx">path</span>   <span class="o">=</span> <span class="nx">buildPath</span><span class="o">(</span><span class="nx">key</span><span class="o">);</span>
     
                     <span class="k">if</span> <span class="o">(</span><span class="nx">parser</span><span class="o">)</span> <span class="o">{</span>
@@ -1564,7 +1555,7 @@
                             <span class="nx">simpleFields</span><span class="o">[</span><span class="nx">simpleFields</span><span class="o">.</span><span class="nx">length</span><span class="o">]</span> <span class="o">=</span> <span class="o">{</span><span class="nx">key</span><span class="o">:</span><span class="nx">key</span><span class="o">,</span><span class="nx">path</span><span class="o">:</span><span class="nx">path</span><span class="o">[</span><span class="m">0</span><span class="o">]};</span>
                         <span class="o">}</span>
                     <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Invalid key syntax: &quot;</span> <span class="o">+</span> <span class="nx">key</span><span class="o">,</span><span class="s2">&quot;warn&quot;</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Invalid key syntax: "</span> <span class="o">+</span> <span class="nx">key</span><span class="o">,</span><span class="s2">"warn"</span><span class="o">,</span><span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
 
@@ -1609,8 +1600,8 @@
             <span class="o">}</span>
 
         <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;JSON data could not be parsed: &quot;</span> <span class="o">+</span>
-                    <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"JSON data could not be parsed: "</span> <span class="o">+</span>
+                    <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 
             <span class="nx">oParsedResponse</span><span class="o">.</span><span class="nx">error</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
         <span class="o">}</span>
@@ -1618,8 +1609,8 @@
         <span class="nx">oParsedResponse</span><span class="o">.</span><span class="nx">results</span> <span class="o">=</span> <span class="nx">results</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;JSON data could not be parsed: &quot;</span> <span class="o">+</span>
-                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"JSON data could not be parsed: "</span> <span class="o">+</span>
+                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="nx">oParsedResponse</span><span class="o">.</span><span class="nx">error</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
     <span class="o">}</span>
 
@@ -1660,12 +1651,12 @@
                 <span class="c">// Backward compatibility</span>
 <span class="c"></span>                <span class="k">if</span><span class="o">(!</span><span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">&amp;&amp;</span> <span class="nx">field</span><span class="o">.</span><span class="nx">converter</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">=</span> <span class="nx">field</span><span class="o">.</span><span class="nx">converter</span><span class="o">;</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;The field property converter has been deprecated&quot;</span> <span class="o">+</span>
-                            <span class="s2">&quot; in favor of parser&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"The field property converter has been deprecated"</span> <span class="o">+</span>
+                            <span class="s2">" in favor of parser"</span><span class="o">,</span> <span class="s2">"warn"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
                 <span class="o">}</span>
-                <span class="k">var</span> <span class="nx">parser</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">===</span> <span class="s1">&#39;function&#39;</span><span class="o">)</span> <span class="o">?</span>
+                <span class="k">var</span> <span class="nx">parser</span> <span class="o">=</span> <span class="o">(</span><span class="k">typeof</span> <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">===</span> <span class="s1">'function'</span><span class="o">)</span> <span class="o">?</span>
                     <span class="nx">field</span><span class="o">.</span><span class="nx">parser</span> <span class="o">:</span>
-                    <span class="nx">DS</span><span class="o">.</span><span class="nx">Parser</span><span class="o">[</span><span class="nx">field</span><span class="o">.</span><span class="nx">parser</span><span class="o">+</span><span class="s1">&#39;&#39;</span><span class="o">];</span>
+                    <span class="nx">DS</span><span class="o">.</span><span class="nx">Parser</span><span class="o">[</span><span class="nx">field</span><span class="o">.</span><span class="nx">parser</span><span class="o">+</span><span class="s1">''</span><span class="o">];</span>
                 <span class="k">if</span><span class="o">(</span><span class="nx">parser</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">data</span> <span class="o">=</span> <span class="nx">parser</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">data</span><span class="o">);</span>
                 <span class="o">}</span>
@@ -1680,13 +1671,13 @@
     <span class="o">}</span>
 
     <span class="k">if</span><span class="o">(</span><span class="nx">bError</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;HTML TABLE data could not be parsed: &quot;</span> <span class="o">+</span>
-                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"HTML TABLE data could not be parsed: "</span> <span class="o">+</span>
+                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oFullResponse</span><span class="o">),</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="nx">oParsedResponse</span><span class="o">.</span><span class="nx">error</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Parsed HTML TABLE data is &quot;</span> <span class="o">+</span>
-                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oParsedResponse</span><span class="o">),</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Parsed HTML TABLE data is "</span> <span class="o">+</span>
+                <span class="nx">lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">oParsedResponse</span><span class="o">),</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="o">}</span>
     <span class="k">return</span> <span class="nx">oParsedResponse</span><span class="o">;</span>
 <span class="o">}</span>
@@ -1724,7 +1715,7 @@
 <span class="c"></span>        <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oLiveData</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">&amp;&amp;</span> <span class="nx">oLiveData</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">==</span> <span class="m">9</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_XML</span><span class="o">;</span>
         <span class="o">}</span>
-        <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oLiveData</span><span class="o">.</span><span class="nx">nodeName</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">oLiveData</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">&quot;table&quot;</span><span class="o">))</span> <span class="o">{</span> <span class="c">// table</span>
+        <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oLiveData</span><span class="o">.</span><span class="nx">nodeName</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">oLiveData</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">"table"</span><span class="o">))</span> <span class="o">{</span> <span class="c">// table</span>
 <span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_HTMLTABLE</span><span class="o">;</span>
             <span class="nx">oLiveData</span> <span class="o">=</span> <span class="nx">oLiveData</span><span class="o">.</span><span class="nx">cloneNode</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
         <span class="o">}</span>    
@@ -1803,7 +1794,7 @@
 <span class="c"> */</span>
 <span class="nx">makeConnection</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oCallback</span><span class="o">,</span> <span class="nx">oCaller</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">tId</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">_nTransactionId</span><span class="o">++;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;requestEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">tId</span><span class="o">:</span><span class="nx">tId</span><span class="o">,</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"requestEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">tId</span><span class="o">:</span><span class="nx">tId</span><span class="o">,</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
 
     <span class="c">// Pass the request in as a parameter and</span>
 <span class="c"></span>    <span class="c">// forward the return value to the handler</span>
@@ -1818,7 +1809,7 @@
 <span class="c"></span>        <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">==</span> <span class="m">9</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_XML</span><span class="o">;</span>
         <span class="o">}</span>
-        <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">&quot;table&quot;</span><span class="o">))</span> <span class="o">{</span> <span class="c">// table</span>
+        <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">"table"</span><span class="o">))</span> <span class="o">{</span> <span class="c">// table</span>
 <span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_HTMLTABLE</span><span class="o">;</span>
         <span class="o">}</span>    
         <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">))</span> <span class="o">{</span> <span class="c">// json</span>
@@ -1866,7 +1857,7 @@
 <span class="c"> */</span>
 <span class="nx">util</span><span class="o">.</span><span class="nx">ScriptNodeDataSource</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oLiveData</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">dataType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_SCRIPTNODE</span><span class="o">;</span>
-    <span class="nx">oLiveData</span> <span class="o">=</span> <span class="nx">oLiveData</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+    <span class="nx">oLiveData</span> <span class="o">=</span> <span class="nx">oLiveData</span> <span class="o">||</span> <span class="s2">""</span><span class="o">;</span>
     
     <span class="k">this</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oLiveData</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">);</span> 
 <span class="o">};</span>
@@ -1904,9 +1895,9 @@
 <span class="c"> *</span>
 <span class="c"> * @property asyncMode</span>
 <span class="c"> * @type String</span>
-<span class="c"> * @default &quot;allowAll&quot;</span>
+<span class="c"> * @default "allowAll"</span>
 <span class="c"> */</span>
-<span class="nx">asyncMode</span> <span class="o">:</span> <span class="s2">&quot;allowAll&quot;</span><span class="o">,</span>
+<span class="nx">asyncMode</span> <span class="o">:</span> <span class="s2">"allowAll"</span><span class="o">,</span>
 
 <span class="c">/**</span>
 <span class="c"> * Callback string parameter name sent to the remote script. By default,</span>
@@ -1915,9 +1906,9 @@
 <span class="c"> *</span>
 <span class="c"> * @property scriptCallbackParam</span>
 <span class="c"> * @type String</span>
-<span class="c"> * @default &quot;callback&quot;</span>
+<span class="c"> * @default "callback"</span>
 <span class="c"> */</span>
-<span class="nx">scriptCallbackParam</span> <span class="o">:</span> <span class="s2">&quot;callback&quot;</span><span class="o">,</span>
+<span class="nx">scriptCallbackParam</span> <span class="o">:</span> <span class="s2">"callback"</span><span class="o">,</span>
 
 
 <span class="c">/////////////////////////////////////////////////////////////////////////////</span>
@@ -1928,14 +1919,14 @@
 <span class="c"></span>
 <span class="c">/**</span>
 <span class="c"> * Creates a request callback that gets appended to the script URI. Implementers</span>
-<span class="c"> * can customize this string to match their server&#39;s query syntax.</span>
+<span class="c"> * can customize this string to match their server's query syntax.</span>
 <span class="c"> *</span>
 <span class="c"> * @method generateRequestCallback</span>
 <span class="c"> * @return {String} String fragment that gets appended to script URI that </span>
 <span class="c"> * specifies the callback function </span>
 <span class="c"> */</span>
 <span class="nx">generateRequestCallback</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="s2">&quot;&amp;&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">scriptCallbackParam</span> <span class="o">+</span> <span class="s2">&quot;=YAHOO.util.ScriptNodeDataSource.callbacks[&quot;</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">&quot;]&quot;</span> <span class="o">;</span>
+    <span class="k">return</span> <span class="s2">"&amp;"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">scriptCallbackParam</span> <span class="o">+</span> <span class="s2">"=YAHOO.util.ScriptNodeDataSource.callbacks["</span><span class="o">+</span><span class="nx">id</span><span class="o">+</span><span class="s2">"]"</span> <span class="o">;</span>
 <span class="o">},</span>
 
 <span class="c">/**</span>
@@ -1950,7 +1941,7 @@
 <span class="c"> */</span>
 <span class="nx">makeConnection</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oCallback</span><span class="o">,</span> <span class="nx">oCaller</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">var</span> <span class="nx">tId</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">_nTransactionId</span><span class="o">++;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;requestEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">tId</span><span class="o">:</span><span class="nx">tId</span><span class="o">,</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"requestEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">tId</span><span class="o">:</span><span class="nx">tId</span><span class="o">,</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
     
     <span class="c">// If there are no global pending requests, it is safe to purge global callback stack and global counter</span>
 <span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">util</span><span class="o">.</span><span class="nx">ScriptNodeDataSource</span><span class="o">.</span><span class="nx">_nPending</span> <span class="o">===</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
@@ -1965,7 +1956,7 @@
     <span class="c">// Dynamically add handler function with a closure to the callback stack</span>
 <span class="c"></span>    <span class="k">var</span> <span class="nx">oSelf</span> <span class="o">=</span> <span class="k">this</span><span class="o">;</span>
     <span class="nx">util</span><span class="o">.</span><span class="nx">ScriptNodeDataSource</span><span class="o">.</span><span class="nx">callbacks</span><span class="o">[</span><span class="nx">id</span><span class="o">]</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">if</span><span class="o">((</span><span class="nx">oSelf</span><span class="o">.</span><span class="nx">asyncMode</span> <span class="o">!==</span> <span class="s2">&quot;ignoreStaleResponses&quot;</span><span class="o">)||</span>
+        <span class="k">if</span><span class="o">((</span><span class="nx">oSelf</span><span class="o">.</span><span class="nx">asyncMode</span> <span class="o">!==</span> <span class="s2">"ignoreStaleResponses"</span><span class="o">)||</span>
                 <span class="o">(</span><span class="nx">id</span> <span class="o">===</span> <span class="nx">util</span><span class="o">.</span><span class="nx">ScriptNodeDataSource</span><span class="o">.</span><span class="nx">callbacks</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">))</span> <span class="o">{</span> <span class="c">// Must ignore stale responses</span>
 <span class="c"></span>                
             <span class="c">// Try to sniff data type if it has not been defined</span>
@@ -1977,7 +1968,7 @@
 <span class="c"></span>                <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">&amp;&amp;</span> <span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeType</span> <span class="o">==</span> <span class="m">9</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">oSelf</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_XML</span><span class="o">;</span>
                 <span class="o">}</span>
-                <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">&quot;table&quot;</span><span class="o">))</span> <span class="o">{</span> <span class="c">// table</span>
+                <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">oRawResponse</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s2">"table"</span><span class="o">))</span> <span class="o">{</span> <span class="c">// table</span>
 <span class="c"></span>                    <span class="nx">oSelf</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_HTMLTABLE</span><span class="o">;</span>
                 <span class="o">}</span>    
                 <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isObject</span><span class="o">(</span><span class="nx">oRawResponse</span><span class="o">))</span> <span class="o">{</span> <span class="c">// json</span>
@@ -1991,7 +1982,7 @@
             <span class="nx">oSelf</span><span class="o">.</span><span class="nx">handleResponse</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">,</span> <span class="nx">oRawResponse</span><span class="o">,</span> <span class="nx">oCallback</span><span class="o">,</span> <span class="nx">oCaller</span><span class="o">,</span> <span class="nx">tId</span><span class="o">);</span>
         <span class="o">}</span>
         <span class="k">else</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;DataSource ignored stale response for tId &quot;</span> <span class="o">+</span> <span class="nx">tId</span> <span class="o">+</span> <span class="s2">&quot;(&quot;</span> <span class="o">+</span> <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"DataSource ignored stale response for tId "</span> <span class="o">+</span> <span class="nx">tId</span> <span class="o">+</span> <span class="s2">"("</span> <span class="o">+</span> <span class="nx">oRequest</span> <span class="o">+</span> <span class="s2">")"</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="nx">oSelf</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="o">}</span>
     
         <span class="nx">delete</span> <span class="nx">util</span><span class="o">.</span><span class="nx">ScriptNodeDataSource</span><span class="o">.</span><span class="nx">callbacks</span><span class="o">[</span><span class="nx">id</span><span class="o">];</span>
@@ -2000,7 +1991,7 @@
     <span class="c">// We are now creating a request</span>
 <span class="c"></span>    <span class="nx">util</span><span class="o">.</span><span class="nx">ScriptNodeDataSource</span><span class="o">.</span><span class="nx">_nPending</span><span class="o">++;</span>
     <span class="k">var</span> <span class="nx">sUri</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">liveData</span> <span class="o">+</span> <span class="nx">oRequest</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">generateRequestCallback</span><span class="o">(</span><span class="nx">id</span><span class="o">);</span>
-    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;DataSource is querying URL &quot;</span> <span class="o">+</span> <span class="nx">sUri</span><span class="o">,</span> <span class="s2">&quot;info&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"DataSource is querying URL "</span> <span class="o">+</span> <span class="nx">sUri</span><span class="o">,</span> <span class="s2">"info"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">getUtility</span><span class="o">.</span><span class="nx">script</span><span class="o">(</span><span class="nx">sUri</span><span class="o">,</span>
             <span class="o">{</span><span class="nx">autopurge</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
             <span class="nx">onsuccess</span><span class="o">:</span> <span class="nx">util</span><span class="o">.</span><span class="nx">ScriptNodeDataSource</span><span class="o">.</span><span class="nx">_bumpPendingDown</span><span class="o">,</span>
@@ -2086,7 +2077,7 @@
 <span class="nx">util</span><span class="o">.</span><span class="nx">XHRDataSource</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oLiveData</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">)</span> <span class="o">{</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">dataType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_XHR</span><span class="o">;</span>
     <span class="k">this</span><span class="o">.</span><span class="nx">connMgr</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">connMgr</span> <span class="o">||</span> <span class="nx">util</span><span class="o">.</span><span class="nx">Connect</span><span class="o">;</span>
-    <span class="nx">oLiveData</span> <span class="o">=</span> <span class="nx">oLiveData</span> <span class="o">||</span> <span class="s2">&quot;&quot;</span><span class="o">;</span>
+    <span class="nx">oLiveData</span> <span class="o">=</span> <span class="nx">oLiveData</span> <span class="o">||</span> <span class="s2">""</span><span class="o">;</span>
     
     <span class="k">this</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">oLiveData</span><span class="o">,</span> <span class="nx">oConfigs</span><span class="o">);</span> 
 <span class="o">};</span>
@@ -2131,9 +2122,9 @@
 <span class="c"> *</span>
 <span class="c"> * @property connXhrMode</span>
 <span class="c"> * @type String</span>
-<span class="c"> * @default &quot;allowAll&quot;</span>
+<span class="c"> * @default "allowAll"</span>
 <span class="c"> */</span>
-<span class="nx">connXhrMode</span><span class="o">:</span> <span class="s2">&quot;allowAll&quot;</span><span class="o">,</span>
+<span class="nx">connXhrMode</span><span class="o">:</span> <span class="s2">"allowAll"</span><span class="o">,</span>
 
  <span class="c">/**</span>
 <span class="c"> * True if data is to be sent via POST. By default, data will be sent via GET.</span>
@@ -2146,7 +2137,7 @@
 
  <span class="c">/**</span>
 <span class="c"> * The connection timeout defines how many  milliseconds the XHR connection will</span>
-<span class="c"> * wait for a server response. Any non-zero value will enable the Connection Manager&#39;s</span>
+<span class="c"> * wait for a server response. Any non-zero value will enable the Connection Manager's</span>
 <span class="c"> * Auto-Abort feature.</span>
 <span class="c"> *</span>
 <span class="c"> * @property connTimeout</span>
@@ -2175,7 +2166,7 @@
 
     <span class="k">var</span> <span class="nx">oRawResponse</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
     <span class="k">var</span> <span class="nx">tId</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">_nTransactionId</span><span class="o">++;</span>
-    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;requestEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">tId</span><span class="o">:</span><span class="nx">tId</span><span class="o">,</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
+    <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"requestEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">tId</span><span class="o">:</span><span class="nx">tId</span><span class="o">,</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span><span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span><span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">});</span>
 
     <span class="c">// Set up the callback object and</span>
 <span class="c"></span>    <span class="c">// pass the request in as a URL query and</span>
@@ -2194,17 +2185,17 @@
     <span class="k">var</span> <span class="nx">_xhrSuccess</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oResponse</span><span class="o">)</span> <span class="o">{</span>
         <span class="c">// If response ID does not match last made request ID,</span>
 <span class="c"></span>        <span class="c">// silently fail and wait for the next response</span>
-<span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">oResponse</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">asyncMode</span> <span class="o">==</span> <span class="s2">&quot;ignoreStaleResponses&quot;</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
+<span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">oResponse</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">asyncMode</span> <span class="o">==</span> <span class="s2">"ignoreStaleResponses"</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
                 <span class="o">(</span><span class="nx">oResponse</span><span class="o">.</span><span class="nx">tId</span> <span class="o">!=</span> <span class="nx">oQueue</span><span class="o">.</span><span class="nx">conn</span><span class="o">.</span><span class="nx">tId</span><span class="o">))</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Ignored stale response&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Ignored stale response"</span><span class="o">,</span> <span class="s2">"warn"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
             <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
         <span class="o">}</span>
         <span class="c">// Error if no response</span>
 <span class="c"></span>        <span class="k">else</span> <span class="k">if</span><span class="o">(!</span><span class="nx">oResponse</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;dataErrorEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"dataErrorEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span>
                     <span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span> <span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">,</span>
                     <span class="nx">message</span><span class="o">:</span><span class="nx">DS</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">});</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">DS</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">DS</span><span class="o">.</span><span class="nx">ERROR_DATANULL</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 
             <span class="c">// Send error response back to the caller with the error flag on</span>
 <span class="c"></span>            <span class="nx">DS</span><span class="o">.</span><span class="nx">issueCallback</span><span class="o">(</span><span class="nx">oCallback</span><span class="o">,[</span><span class="nx">oRequest</span><span class="o">,</span> <span class="o">{</span><span class="nx">error</span><span class="o">:</span><span class="kc">true</span><span class="o">}],</span> <span class="kc">true</span><span class="o">,</span> <span class="nx">oCaller</span><span class="o">);</span>
@@ -2215,16 +2206,16 @@
 <span class="c"></span>        <span class="k">else</span> <span class="o">{</span>
             <span class="c">// Try to sniff data type if it has not been defined</span>
 <span class="c"></span>            <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">===</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_UNKNOWN</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">var</span> <span class="nx">ctype</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oResponse</span><span class="o">.</span><span class="nx">getResponseHeader</span><span class="o">)</span> <span class="o">?</span> <span class="nx">oResponse</span><span class="o">.</span><span class="nx">getResponseHeader</span><span class="o">[</span><span class="s2">&quot;Content-Type&quot;</span><span class="o">]</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
+                <span class="k">var</span> <span class="nx">ctype</span> <span class="o">=</span> <span class="o">(</span><span class="nx">oResponse</span><span class="o">.</span><span class="nx">getResponseHeader</span><span class="o">)</span> <span class="o">?</span> <span class="nx">oResponse</span><span class="o">.</span><span class="nx">getResponseHeader</span><span class="o">[</span><span class="s2">"Content-Type"</span><span class="o">]</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
                 <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">)</span> <span class="o">{</span>
                     <span class="c">// xml</span>
-<span class="c"></span>                    <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;text/xml&quot;</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>                    <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"text/xml"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_XML</span><span class="o">;</span>
                     <span class="o">}</span>
-                    <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;application/json&quot;</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> <span class="c">// json</span>
+                    <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"application/json"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> <span class="c">// json</span>
 <span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_JSON</span><span class="o">;</span>
                     <span class="o">}</span>
-                    <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;text/plain&quot;</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> <span class="c">// text</span>
+                    <span class="k">else</span> <span class="k">if</span><span class="o">(</span><span class="nx">ctype</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"text/plain"</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span> <span class="c">// text</span>
 <span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">responseType</span> <span class="o">=</span> <span class="nx">DS</span><span class="o">.</span><span class="nx">TYPE_TEXT</span><span class="o">;</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
@@ -2241,19 +2232,19 @@
 <span class="c">     * @private</span>
 <span class="c">     */</span>
     <span class="k">var</span> <span class="nx">_xhrFailure</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">oResponse</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">&quot;dataErrorEvent&quot;</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s2">"dataErrorEvent"</span><span class="o">,</span> <span class="o">{</span><span class="nx">request</span><span class="o">:</span><span class="nx">oRequest</span><span class="o">,</span>
                 <span class="nx">callback</span><span class="o">:</span><span class="nx">oCallback</span><span class="o">,</span> <span class="nx">caller</span><span class="o">:</span><span class="nx">oCaller</span><span class="o">,</span>
                 <span class="nx">message</span><span class="o">:</span><span class="nx">DS</span><span class="o">.</span><span class="nx">ERROR_DATAINVALID</span><span class="o">});</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">DS</span><span class="o">.</span><span class="nx">ERROR_DATAINVALID</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span>
-                <span class="nx">oResponse</span><span class="o">.</span><span class="nx">statusText</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">DS</span><span class="o">.</span><span class="nx">ERROR_DATAINVALID</span> <span class="o">+</span> <span class="s2">": "</span> <span class="o">+</span>
+                <span class="nx">oResponse</span><span class="o">.</span><span class="nx">statusText</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
 
         <span class="c">// Backward compatibility</span>
 <span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">liveData</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
-            <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">liveData</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="s2">&quot;?&quot;</span><span class="o">)</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">liveData</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
-            <span class="o">(</span><span class="nx">oRequest</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">&quot;?&quot;</span><span class="o">)</span> <span class="o">!==</span> <span class="m">0</span><span class="o">)){</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;DataSources using XHR no longer automatically supply &quot;</span> <span class="o">+</span> 
-                <span class="s2">&quot;a \&quot;?\&quot; between the host and query parameters&quot;</span> <span class="o">+</span>
-                <span class="s2">&quot; -- please check that the request URL is correct&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+            <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">liveData</span><span class="o">.</span><span class="nx">lastIndexOf</span><span class="o">(</span><span class="s2">"?"</span><span class="o">)</span> <span class="o">!==</span> <span class="k">this</span><span class="o">.</span><span class="nx">liveData</span><span class="o">.</span><span class="nx">length</span><span class="o">-</span><span class="m">1</span><span class="o">)</span> <span class="o">&amp;&amp;</span>
+            <span class="o">(</span><span class="nx">oRequest</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="s2">"?"</span><span class="o">)</span> <span class="o">!==</span> <span class="m">0</span><span class="o">)){</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"DataSources using XHR no longer automatically supply "</span> <span class="o">+</span> 
+                <span class="s2">"a \"?\" between the host and query parameters"</span> <span class="o">+</span>
+                <span class="s2">" -- please check that the request URL is correct"</span><span class="o">,</span> <span class="s2">"warn"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="o">}</span>
 
         <span class="c">// Send failure response back to the caller with the error flag on</span>
@@ -2283,16 +2274,16 @@
     <span class="o">}</span>
 
     <span class="c">// Cancel stale requests</span>
-<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">connXhrMode</span> <span class="o">==</span> <span class="s2">&quot;cancelStaleRequests&quot;</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">connXhrMode</span> <span class="o">==</span> <span class="s2">"cancelStaleRequests"</span><span class="o">)</span> <span class="o">{</span>
             <span class="c">// Look in queue for stale requests</span>
 <span class="c"></span>            <span class="k">if</span><span class="o">(</span><span class="nx">oQueue</span><span class="o">.</span><span class="nx">conn</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span><span class="o">(</span><span class="nx">oConnMgr</span><span class="o">.</span><span class="nx">abort</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">oConnMgr</span><span class="o">.</span><span class="nx">abort</span><span class="o">(</span><span class="nx">oQueue</span><span class="o">.</span><span class="nx">conn</span><span class="o">);</span>
                     <span class="nx">oQueue</span><span class="o">.</span><span class="nx">conn</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Canceled stale request&quot;</span><span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Canceled stale request"</span><span class="o">,</span> <span class="s2">"warn"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
                 <span class="o">}</span>
                 <span class="k">else</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not find Connection Manager abort() function&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Could not find Connection Manager abort() function"</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
                 <span class="o">}</span>
             <span class="o">}</span>
     <span class="o">}</span>
@@ -2301,13 +2292,13 @@
 <span class="c"></span>    <span class="k">if</span><span class="o">(</span><span class="nx">oConnMgr</span> <span class="o">&amp;&amp;</span> <span class="nx">oConnMgr</span><span class="o">.</span><span class="nx">asyncRequest</span><span class="o">)</span> <span class="o">{</span>
         <span class="k">var</span> <span class="nx">sLiveData</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">liveData</span><span class="o">;</span>
         <span class="k">var</span> <span class="nx">isPost</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">connMethodPost</span><span class="o">;</span>
-        <span class="k">var</span> <span class="nx">sMethod</span> <span class="o">=</span> <span class="o">(</span><span class="nx">isPost</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot;POST&quot;</span> <span class="o">:</span> <span class="s2">&quot;GET&quot;</span><span class="o">;</span>
+        <span class="k">var</span> <span class="nx">sMethod</span> <span class="o">=</span> <span class="o">(</span><span class="nx">isPost</span><span class="o">)</span> <span class="o">?</span> <span class="s2">"POST"</span> <span class="o">:</span> <span class="s2">"GET"</span><span class="o">;</span>
         <span class="c">// Validate request</span>
 <span class="c"></span>        <span class="k">var</span> <span class="nx">sUri</span> <span class="o">=</span> <span class="o">(</span><span class="nx">isPost</span> <span class="o">||</span> <span class="o">!</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isValue</span><span class="o">(</span><span class="nx">oRequest</span><span class="o">))</span> <span class="o">?</span> <span class="nx">sLiveData</span> <span class="o">:</span> <span class="nx">sLiveData</span><span class="o">+</span><span class="nx">oRequest</span><span class="o">;</span>
         <span class="k">var</span> <span class="nx">sRequest</span> <span class="o">=</span> <span class="o">(</span><span class="nx">isPost</span><span class="o">)</span> <span class="o">?</span> <span class="nx">oRequest</span> <span class="o">:</span> <span class="kc">null</span><span class="o">;</span>
 
         <span class="c">// Send the request right away</span>
-<span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">connXhrMode</span> <span class="o">!=</span> <span class="s2">&quot;queueRequests&quot;</span><span class="o">)</span> <span class="o">{</span>
+<span class="c"></span>        <span class="k">if</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">connXhrMode</span> <span class="o">!=</span> <span class="s2">"queueRequests"</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">oQueue</span><span class="o">.</span><span class="nx">conn</span> <span class="o">=</span> <span class="nx">oConnMgr</span><span class="o">.</span><span class="nx">asyncRequest</span><span class="o">(</span><span class="nx">sMethod</span><span class="o">,</span> <span class="nx">sUri</span><span class="o">,</span> <span class="nx">_xhrCallback</span><span class="o">,</span> <span class="nx">sRequest</span><span class="o">);</span>
         <span class="o">}</span>
         <span class="c">// Queue up then send the request</span>
@@ -2352,7 +2343,7 @@
         <span class="o">}</span>
     <span class="o">}</span>
     <span class="k">else</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Could not find Connection Manager asyncRequest() function&quot;</span><span class="o">,</span> <span class="s2">&quot;error&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Could not find Connection Manager asyncRequest() function"</span><span class="o">,</span> <span class="s2">"error"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">toString</span><span class="o">());</span>
         <span class="c">// Send null response back to the caller with the error flag on</span>
 <span class="c"></span>        <span class="nx">DS</span><span class="o">.</span><span class="nx">issueCallback</span><span class="o">(</span><span class="nx">oCallback</span><span class="o">,[</span><span class="nx">oRequest</span><span class="o">,{</span><span class="nx">error</span><span class="o">:</span><span class="kc">true</span><span class="o">}],</span><span class="kc">true</span><span class="o">,</span><span class="nx">oCaller</span><span class="o">);</span>
     <span class="o">}</span>
@@ -2383,7 +2374,7 @@
 
 <span class="c">/**</span>
 <span class="c"> * Factory class for creating a BaseDataSource subclass instance. The sublcass is</span>
-<span class="c"> * determined by oLiveData&#39;s type, unless the dataType config is explicitly passed in.  </span>
+<span class="c"> * determined by oLiveData's type, unless the dataType config is explicitly passed in.  </span>
 <span class="c"> *</span>
 <span class="c"> * @namespace YAHOO.util</span>
 <span class="c"> * @class YAHOO.util.DataSource</span>
@@ -2442,9 +2433,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -2517,13 +2506,11 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.DataSource.html">YAHOO.util.DataSource</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.DataSource.html">YAHOO.util.DataSource</a></li>
                                 <li class=""><a href="YAHOO.util.DataSourceBase.html">YAHOO.util.DataSourceBase</a></li>
                                 <li class=""><a href="YAHOO.util.Date.html">YAHOO.util.Date</a></li>
                                 <li class=""><a href="YAHOO.util.DateLocale.html">YAHOO.util.DateLocale</a></li>
@@ -2532,16 +2519,13 @@
                                 <li class=""><a href="YAHOO.util.Number.html">YAHOO.util.Number</a></li>
                                 <li class=""><a href="YAHOO.util.ScriptNodeDataSource.html">YAHOO.util.ScriptNodeDataSource</a></li>
                                 <li class=""><a href="YAHOO.util.XHRDataSource.html">YAHOO.util.XHRDataSource</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="DataSource.js.html">DataSource.js</a></li>
+                        <ul class="content"><li class="selected"><a href="DataSource.js.html">DataSource.js</a></li>
                                 <li class=""><a href="Type.js.html">Type.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -2551,9 +2535,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2008 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2008 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

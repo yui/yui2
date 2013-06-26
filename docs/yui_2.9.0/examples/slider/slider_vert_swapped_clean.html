@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Bottom to top Vertical Slider</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Bottom to top Vertical Slider</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,18 +8,7 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/slider/assets/skins/sam/slider.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/animation/animation-min.js"></script>
-<script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script>
-<script type="text/javascript" src="../../build/slider/slider-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/slider/assets/skins/sam/slider.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/animation/animation-min.js"></script><script type="text/javascript" src="../../build/dragdrop/dragdrop-min.js"></script><script type="text/javascript" src="../../build/slider/slider-min.js"></script><!--begin custom header content for this example--><style type="text/css">
     #slide_bg {
         position: relative;
         background: url(../slider/assets/bg-v.gif) 12px 0 no-repeat;
@@ -39,41 +20,25 @@ body {
         position: absolute;
         top: 200px;
     }
-</style>
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Bottom to top Vertical Slider</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Bottom to top Vertical Slider</h1><div class="exampleIntro">
 	<p>This example demonstrates a vertical implementation of the <a href="http://developer.yahoo.com/yui/slider/">YUI Slider Control</a>.  Some characteristics of this implementation include the following:</p>
-<ul>
-    <li>The slider range is 200 pixels.</li>
+<ul><li>The slider range is 200 pixels.</li>
     <li>CSS is used to place the slide thumb at the bottom of the slider.</li>
     <li>Custom logic is added to the slider instance to convert the offset value to a "real" value calculated from a provided min/max range.</li>
     <li>The custom min value is set to 10; the max 110.</li>
     <li>Once the slider has focus, the up and down keys will move
 the thumb 20 pixels (changing the "real" value by 10).</li>
     <li>When the slider value changes, the pixel offset and calculated value are reported below the slider.</li>
-</ul>
-			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<div id="demo">
+</ul></div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><div id="demo">
     <div id="slide_bg" tabindex="-1">
         <div id="slide_thumb"><img src="assets/thumb-bar.gif"></div>
     </div>
     <p>Pixel offset from start: <span id="d_offset">0</span></p>
     <p>Calculated Value: <span id="d_val">0</span></p>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
 YAHOO.util.Event.onDOMReady(function () {
 
     // the slider can move up 200 pixels
@@ -117,9 +82,4 @@ YAHOO.util.Event.onDOMReady(function () {
         calc_span.innerHTML   = this.getCalculatedValue();
     });
 });
-</script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

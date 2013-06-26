@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: imagecropper   crop.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: imagecropper   crop.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>imagecropper&nbsp; <span class="subtitle">2.5.2</span></h3>
+        <h3>imagecropper  <span class="subtitle">2.5.2</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_imagecropper.html">imagecropper</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * @description &lt;p&gt;Creates a Image Cropper control.&lt;/p&gt;</span>
 <span class="c"> * @namespace YAHOO.widget</span>
 <span class="c"> * @requires yahoo, dom, dragdrop, element, event, resize</span>
@@ -56,7 +47,7 @@
 <span class="c">     * @param {Object} attrs Object liternal containing configuration parameters.</span>
 <span class="c">    */</span>
     <span class="k">var</span> <span class="nx">Crop</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
-        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Initializing&#39;</span><span class="o">,</span> <span class="s1">&#39;log&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
+        <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Initializing'</span><span class="o">,</span> <span class="s1">'log'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
         <span class="k">var</span> <span class="nx">oConfig</span> <span class="o">=</span> <span class="o">{</span>
             <span class="nx">element</span><span class="o">:</span> <span class="nx">el</span><span class="o">,</span>
             <span class="nx">attributes</span><span class="o">:</span> <span class="nx">config</span> <span class="o">||</span> <span class="o">{}</span>
@@ -76,7 +67,7 @@
     <span class="c">/**</span>
 <span class="c">    * @static</span>
 <span class="c">    * @method getCropperById </span>
-<span class="c">    * @description Get&#39;s an ImageCropper object by the HTML id of the image associated with the ImageCropper object.</span>
+<span class="c">    * @description Get's an ImageCropper object by the HTML id of the image associated with the ImageCropper object.</span>
 <span class="c">    * @return {Object} The ImageCropper Object</span>
 <span class="c">    */</span> 
     <span class="nx">Crop</span><span class="o">.</span><span class="nx">getCropperById</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">{</span>
@@ -93,21 +84,21 @@
 <span class="c">        * @description The CSS class used to wrap the element </span>
 <span class="c">        * @type String</span>
 <span class="c">        */</span>
-        <span class="nx">CSS_MAIN</span><span class="o">:</span> <span class="s1">&#39;yui-crop&#39;</span><span class="o">,</span>
+        <span class="nx">CSS_MAIN</span><span class="o">:</span> <span class="s1">'yui-crop'</span><span class="o">,</span>
         <span class="c">/**</span>
 <span class="c">        * @private</span>
 <span class="c">        * @property CSS_MASK</span>
 <span class="c">        * @description The CSS class for the mask element</span>
 <span class="c">        * @type String</span>
 <span class="c">        */</span>
-        <span class="nx">CSS_MASK</span><span class="o">:</span> <span class="s1">&#39;yui-crop-mask&#39;</span><span class="o">,</span>
+        <span class="nx">CSS_MASK</span><span class="o">:</span> <span class="s1">'yui-crop-mask'</span><span class="o">,</span>
         <span class="c">/**</span>
 <span class="c">        * @private</span>
 <span class="c">        * @property CSS_RESIZE_MASK</span>
 <span class="c">        * @description The CSS class for the mask inside the resize element</span>
 <span class="c">        * @type String</span>
 <span class="c">        */</span>
-        <span class="nx">CSS_RESIZE_MASK</span><span class="o">:</span> <span class="s1">&#39;yui-crop-resize-mask&#39;</span><span class="o">,</span>
+        <span class="nx">CSS_RESIZE_MASK</span><span class="o">:</span> <span class="s1">'yui-crop-resize-mask'</span><span class="o">,</span>
 
         <span class="c">/**</span>
 <span class="c">        * @private</span>
@@ -154,7 +145,7 @@
         <span class="c">/**</span>
 <span class="c">        * @private</span>
 <span class="c">        * @property _mask</span>
-<span class="c">        * @description The HTML Element created to &quot;mask&quot; the image being cropped</span>
+<span class="c">        * @description The HTML Element created to "mask" the image being cropped</span>
 <span class="c">        * @type HTMLElement</span>
 <span class="c">        */</span>
         <span class="nx">_mask</span><span class="o">:</span> <span class="kc">null</span><span class="o">,</span>
@@ -164,22 +155,22 @@
 <span class="c">        * @description Creates the wrapper element used to wrap the image</span>
 <span class="c">        */</span>
         <span class="nx">_createWrap</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Creating the wrap element&#39;</span><span class="o">,</span> <span class="s1">&#39;log&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;_wrap&#39;</span><span class="o">;</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Creating the wrap element'</span><span class="o">,</span> <span class="s1">'log'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'div'</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">.</span><span class="nx">id</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">).</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">'_wrap'</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">CSS_MAIN</span><span class="o">;</span>
-            <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">width</span> <span class="o">?</span> <span class="nx">el</span><span class="o">.</span><span class="nx">width</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span> <span class="o">:</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s1">&#39;width&#39;</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">height</span> <span class="o">?</span> <span class="nx">el</span><span class="o">.</span><span class="nx">height</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span> <span class="o">:</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s1">&#39;height&#39;</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">width</span> <span class="o">?</span> <span class="nx">el</span><span class="o">.</span><span class="nx">width</span> <span class="o">+</span> <span class="s1">'px'</span> <span class="o">:</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s1">'width'</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">el</span><span class="o">.</span><span class="nx">height</span> <span class="o">?</span> <span class="nx">el</span><span class="o">.</span><span class="nx">height</span> <span class="o">+</span> <span class="s1">'px'</span> <span class="o">:</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s1">'height'</span><span class="o">);</span>
             
-            <span class="k">var</span> <span class="nx">par</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">parentNode</span><span class="o">;</span>
-            <span class="nx">par</span><span class="o">.</span><span class="nx">replaceChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">));</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">));</span>
+            <span class="k">var</span> <span class="nx">par</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">).</span><span class="nx">parentNode</span><span class="o">;</span>
+            <span class="nx">par</span><span class="o">.</span><span class="nx">replaceChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">));</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">));</span>
 
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">,</span> <span class="s1">&#39;mouseover&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleMouseOver</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">,</span> <span class="s1">&#39;mouseout&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleMouseOut</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">,</span> <span class="s1">'mouseover'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleMouseOver</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">,</span> <span class="s1">'mouseout'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleMouseOut</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">,</span> <span class="s1">&#39;click&#39;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">stopEvent</span><span class="o">(</span><span class="nx">ev</span><span class="o">);</span> <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">,</span> <span class="s1">'click'</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">stopEvent</span><span class="o">(</span><span class="nx">ev</span><span class="o">);</span> <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>
@@ -188,8 +179,8 @@
 <span class="c">        * @description Creates the mask element used to mask the image</span>
 <span class="c">        */</span>
         <span class="nx">_createMask</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Creating the Mask&#39;</span><span class="o">,</span> <span class="s1">&#39;log&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_mask</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Creating the Mask'</span><span class="o">,</span> <span class="s1">'log'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_mask</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'div'</span><span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_mask</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">CSS_MASK</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_mask</span><span class="o">);</span>
         <span class="o">},</span>
@@ -200,41 +191,41 @@
 <span class="c">        * @description Creates the resize element and the instance of the Resize Utility</span>
 <span class="c">        */</span>
         <span class="nx">_createResize</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Creating the Resize element&#39;</span><span class="o">,</span> <span class="s1">&#39;log&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Creating the Resize element'</span><span class="o">,</span> <span class="s1">'log'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'div'</span><span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Resize</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">CSS_RESIZE</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">position</span> <span class="o">=</span> <span class="s1">&#39;absolute&#39;</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">position</span> <span class="o">=</span> <span class="s1">'absolute'</span><span class="o">;</span>
             
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&lt;div class=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">CSS_RESIZE_MASK</span> <span class="o">+</span> <span class="s1">&#39;&quot;&gt;&lt;/div&gt;&#39;</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">'&lt;div class="'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">CSS_RESIZE_MASK</span> <span class="o">+</span> <span class="s1">'"&gt;&lt;/div&gt;'</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_resizeMaskEl</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">firstChild</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;initialXY&#39;</span><span class="o">)[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;initialXY&#39;</span><span class="o">)[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeMaskEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;initHeight&#39;</span><span class="o">))</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeMaskEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;initWidth&#39;</span><span class="o">))</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'initialXY'</span><span class="o">)[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'initialXY'</span><span class="o">)[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeMaskEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'initHeight'</span><span class="o">))</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeMaskEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'initWidth'</span><span class="o">))</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Resize</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">knobHandles</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-                <span class="nx">handles</span><span class="o">:</span> <span class="s1">&#39;all&#39;</span><span class="o">,</span>
+                <span class="nx">handles</span><span class="o">:</span> <span class="s1">'all'</span><span class="o">,</span>
                 <span class="nx">draggable</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-                <span class="nx">status</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;status&#39;</span><span class="o">),</span>
-                <span class="nx">minWidth</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;minWidth&#39;</span><span class="o">),</span>
-                <span class="nx">minHeight</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;minHeight&#39;</span><span class="o">),</span>
-                <span class="nx">ratio</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;ratio&#39;</span><span class="o">),</span>
-                <span class="nx">autoRatio</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;autoRatio&#39;</span><span class="o">),</span>
-                <span class="nx">height</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;initHeight&#39;</span><span class="o">),</span>
-                <span class="nx">width</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;initWidth&#39;</span><span class="o">)</span>
+                <span class="nx">status</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'status'</span><span class="o">),</span>
+                <span class="nx">minWidth</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'minWidth'</span><span class="o">),</span>
+                <span class="nx">minHeight</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'minHeight'</span><span class="o">),</span>
+                <span class="nx">ratio</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'ratio'</span><span class="o">),</span>
+                <span class="nx">autoRatio</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'autoRatio'</span><span class="o">),</span>
+                <span class="nx">height</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'initHeight'</span><span class="o">),</span>
+                <span class="nx">width</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'initWidth'</span><span class="o">)</span>
             <span class="o">});</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">_setBackgroundImage</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">&#39;src&#39;</span><span class="o">,</span> <span class="m">2</span><span class="o">));</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_setBackgroundPosition</span><span class="o">(-(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;initialXY&#39;</span><span class="o">)[</span><span class="m">0</span><span class="o">]),</span>  <span class="o">-(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;initialXY&#39;</span><span class="o">)[</span><span class="m">1</span><span class="o">]));</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_setBackgroundImage</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">).</span><span class="nx">getAttribute</span><span class="o">(</span><span class="s1">'src'</span><span class="o">,</span> <span class="m">2</span><span class="o">));</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_setBackgroundPosition</span><span class="o">(-(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'initialXY'</span><span class="o">)[</span><span class="m">0</span><span class="o">]),</span>  <span class="o">-(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'initialXY'</span><span class="o">)[</span><span class="m">1</span><span class="o">]));</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;startResize&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleStartResizeEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;endResize&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleEndResizeEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;dragEvent&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleDragEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;beforeResize&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleBeforeResizeEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;resize&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleResizeEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">dd</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">&#39;b4StartDragEvent&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleB4DragEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">'startResize'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleStartResizeEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">'endResize'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleEndResizeEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">'dragEvent'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleDragEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">'beforeResize'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleBeforeResizeEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">'resize'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleResizeEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">dd</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="s1">'b4StartDragEvent'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleB4DragEvent</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>
@@ -243,13 +234,13 @@
 <span class="c">        * @description Handles the mouseover event</span>
 <span class="c">        */</span>
         <span class="nx">_handleMouseOver</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">evType</span> <span class="o">=</span> <span class="s1">&#39;keydown&#39;</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">evType</span> <span class="o">=</span> <span class="s1">'keydown'</span><span class="o">;</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">opera</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">evType</span> <span class="o">=</span> <span class="s1">&#39;keypress&#39;</span><span class="o">;</span>
+                <span class="nx">evType</span> <span class="o">=</span> <span class="s1">'keypress'</span><span class="o">;</span>
             <span class="o">}</span>
             <span class="k">if</span> <span class="o">(!</span><span class="k">this</span><span class="o">.</span><span class="nx">_active</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_active</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;useKeys&#39;</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'useKeys'</span><span class="o">))</span> <span class="o">{</span>
                     <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="nx">evType</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleKeyPress</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
                 <span class="o">}</span>
             <span class="o">}</span>
@@ -260,12 +251,12 @@
 <span class="c">        * @description Handles the mouseout event</span>
 <span class="c">        */</span>
         <span class="nx">_handleMouseOut</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">evType</span> <span class="o">=</span> <span class="s1">&#39;keydown&#39;</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">evType</span> <span class="o">=</span> <span class="s1">'keydown'</span><span class="o">;</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">gecko</span> <span class="o">||</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">opera</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">evType</span> <span class="o">=</span> <span class="s1">&#39;keypress&#39;</span><span class="o">;</span>
+                <span class="nx">evType</span> <span class="o">=</span> <span class="s1">'keypress'</span><span class="o">;</span>
             <span class="o">}</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_active</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;useKeys&#39;</span><span class="o">))</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'useKeys'</span><span class="o">))</span> <span class="o">{</span>
                 <span class="nx">Event</span><span class="o">.</span><span class="nx">removeListener</span><span class="o">(</span><span class="nb">document</span><span class="o">,</span> <span class="nx">evType</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_handleKeyPress</span><span class="o">);</span>
             <span class="o">}</span>
         <span class="o">},</span>
@@ -276,47 +267,47 @@
 <span class="c">        * @description Moves the resize element based on the arrow keys</span>
 <span class="c">        */</span>
         <span class="nx">_moveEl</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">dir</span><span class="o">,</span> <span class="nx">inc</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Moving the element&#39;</span><span class="o">,</span> <span class="s1">&#39;log&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Moving the element'</span><span class="o">,</span> <span class="s1">'log'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
             <span class="k">var</span> <span class="nx">t</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">l</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span>
                 <span class="nx">region</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_setConstraints</span><span class="o">(),</span>
                 <span class="nx">resize</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
 
             <span class="nx">switch</span> <span class="o">(</span><span class="nx">dir</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">case</span> <span class="s1">&#39;down&#39;</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s1">'down'</span><span class="o">:</span>
                     <span class="nx">t</span> <span class="o">=</span> <span class="o">-(</span><span class="nx">inc</span><span class="o">);</span>
                     <span class="k">if</span> <span class="o">((</span><span class="nx">region</span><span class="o">.</span><span class="nx">bottom</span> <span class="o">-</span> <span class="nx">inc</span><span class="o">)</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">resize</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="o">(</span><span class="nx">region</span><span class="o">.</span><span class="nx">top</span> <span class="o">+</span> <span class="nx">region</span><span class="o">.</span><span class="nx">bottom</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="o">(</span><span class="nx">region</span><span class="o">.</span><span class="nx">top</span> <span class="o">+</span> <span class="nx">region</span><span class="o">.</span><span class="nx">bottom</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
                     <span class="o">}</span>
                     <span class="k">break</span><span class="o">;</span>
-                <span class="nx">case</span> <span class="s1">&#39;up&#39;</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s1">'up'</span><span class="o">:</span>
                     <span class="nx">t</span> <span class="o">=</span> <span class="o">(</span><span class="nx">inc</span><span class="o">);</span>
                     <span class="k">if</span> <span class="o">((</span><span class="nx">region</span><span class="o">.</span><span class="nx">top</span> <span class="o">-</span> <span class="nx">inc</span><span class="o">)</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">resize</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="s1">&#39;0px&#39;</span><span class="o">;</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="s1">'0px'</span><span class="o">;</span>
                     <span class="o">}</span>
                     <span class="k">break</span><span class="o">;</span>
-                <span class="nx">case</span> <span class="s1">&#39;right&#39;</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s1">'right'</span><span class="o">:</span>
                     <span class="nx">l</span> <span class="o">=</span> <span class="o">-(</span><span class="nx">inc</span><span class="o">);</span>
                     <span class="k">if</span> <span class="o">((</span><span class="nx">region</span><span class="o">.</span><span class="nx">right</span> <span class="o">-</span> <span class="nx">inc</span><span class="o">)</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">resize</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="o">(</span><span class="nx">region</span><span class="o">.</span><span class="nx">left</span> <span class="o">+</span> <span class="nx">region</span><span class="o">.</span><span class="nx">right</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="o">(</span><span class="nx">region</span><span class="o">.</span><span class="nx">left</span> <span class="o">+</span> <span class="nx">region</span><span class="o">.</span><span class="nx">right</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
                     <span class="o">}</span>
                     <span class="k">break</span><span class="o">;</span>
-                <span class="nx">case</span> <span class="s1">&#39;left&#39;</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s1">'left'</span><span class="o">:</span>
                     <span class="nx">l</span> <span class="o">=</span> <span class="nx">inc</span><span class="o">;</span>
                     <span class="k">if</span> <span class="o">((</span><span class="nx">region</span><span class="o">.</span><span class="nx">left</span> <span class="o">-</span> <span class="nx">inc</span><span class="o">)</span> <span class="o">&lt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
                         <span class="nx">resize</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="s1">&#39;0px&#39;</span><span class="o">;</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="s1">'0px'</span><span class="o">;</span>
                     <span class="o">}</span>
                     <span class="k">break</span><span class="o">;</span>
             <span class="o">}</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">resize</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Moving via Key Listener: &#39;</span> <span class="o">+</span> <span class="nx">dir</span><span class="o">,</span> <span class="s1">&#39;log&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span><span class="o">,</span> <span class="m">10</span><span class="o">)</span> <span class="o">-</span> <span class="nx">l</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span><span class="o">,</span> <span class="m">10</span><span class="o">)</span> <span class="o">-</span> <span class="nx">t</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;moveEvent&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">target</span><span class="o">:</span> <span class="s1">&#39;keypress&#39;</span> <span class="o">});</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Moving via Key Listener: '</span> <span class="o">+</span> <span class="nx">dir</span><span class="o">,</span> <span class="s1">'log'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span><span class="o">,</span> <span class="m">10</span><span class="o">)</span> <span class="o">-</span> <span class="nx">l</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="o">(</span><span class="nb">parseInt</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span><span class="o">,</span> <span class="m">10</span><span class="o">)</span> <span class="o">-</span> <span class="nx">t</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'moveEvent'</span><span class="o">,</span> <span class="o">{</span> <span class="nx">target</span><span class="o">:</span> <span class="s1">'keypress'</span> <span class="o">});</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_setConstraints</span><span class="o">();</span>
             <span class="o">}</span>
@@ -331,23 +322,23 @@
         <span class="nx">_handleKeyPress</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">kc</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getCharCode</span><span class="o">(</span><span class="nx">ev</span><span class="o">),</span>
                 <span class="nx">stopEvent</span> <span class="o">=</span> <span class="kc">false</span><span class="o">,</span>
-                <span class="nx">inc</span> <span class="o">=</span> <span class="o">((</span><span class="nx">ev</span><span class="o">.</span><span class="nx">shiftKey</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;shiftKeyTick&#39;</span><span class="o">)</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;keyTick&#39;</span><span class="o">));</span>
+                <span class="nx">inc</span> <span class="o">=</span> <span class="o">((</span><span class="nx">ev</span><span class="o">.</span><span class="nx">shiftKey</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'shiftKeyTick'</span><span class="o">)</span> <span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'keyTick'</span><span class="o">));</span>
 
             <span class="nx">switch</span> <span class="o">(</span><span class="nx">kc</span><span class="o">)</span> <span class="o">{</span>
                 <span class="nx">case</span> <span class="m">0</span><span class="nx">x25</span><span class="o">:</span> <span class="c">// left</span>
-<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">_moveEl</span><span class="o">(</span><span class="s1">&#39;left&#39;</span><span class="o">,</span> <span class="nx">inc</span><span class="o">);</span>
+<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">_moveEl</span><span class="o">(</span><span class="s1">'left'</span><span class="o">,</span> <span class="nx">inc</span><span class="o">);</span>
                     <span class="nx">stopEvent</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
                     <span class="k">break</span><span class="o">;</span>
                 <span class="nx">case</span> <span class="m">0</span><span class="nx">x26</span><span class="o">:</span> <span class="c">// up</span>
-<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">_moveEl</span><span class="o">(</span><span class="s1">&#39;up&#39;</span><span class="o">,</span> <span class="nx">inc</span><span class="o">);</span>
+<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">_moveEl</span><span class="o">(</span><span class="s1">'up'</span><span class="o">,</span> <span class="nx">inc</span><span class="o">);</span>
                     <span class="nx">stopEvent</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
                     <span class="k">break</span><span class="o">;</span>
                 <span class="nx">case</span> <span class="m">0</span><span class="nx">x27</span><span class="o">:</span> <span class="c">// right</span>
-<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">_moveEl</span><span class="o">(</span><span class="s1">&#39;right&#39;</span><span class="o">,</span> <span class="nx">inc</span><span class="o">);</span>
+<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">_moveEl</span><span class="o">(</span><span class="s1">'right'</span><span class="o">,</span> <span class="nx">inc</span><span class="o">);</span>
                     <span class="nx">stopEvent</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
                     <span class="k">break</span><span class="o">;</span>
                 <span class="nx">case</span> <span class="m">0</span><span class="nx">x28</span><span class="o">:</span> <span class="c">// down</span>
-<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">_moveEl</span><span class="o">(</span><span class="s1">&#39;down&#39;</span><span class="o">,</span> <span class="nx">inc</span><span class="o">);</span>
+<span class="c"></span>                    <span class="k">this</span><span class="o">.</span><span class="nx">_moveEl</span><span class="o">(</span><span class="s1">'down'</span><span class="o">,</span> <span class="nx">inc</span><span class="o">);</span>
                     <span class="nx">stopEvent</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
                     <span class="k">break</span><span class="o">;</span>
                 <span class="nx">default</span><span class="o">:</span>
@@ -373,8 +364,8 @@
 <span class="c">        */</span>
         <span class="nx">_handleDragEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_syncBackgroundPosition</span><span class="o">();</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;dragEvent&#39;</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;moveEvent&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">target</span><span class="o">:</span> <span class="s1">&#39;dragevent&#39;</span> <span class="o">});</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'dragEvent'</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'moveEvent'</span><span class="o">,</span> <span class="o">{</span> <span class="nx">target</span><span class="o">:</span> <span class="s1">'dragevent'</span> <span class="o">});</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>
@@ -383,14 +374,14 @@
 <span class="c">        * @description Handles the Resize Utilitys beforeResize event</span>
 <span class="c">        */</span>
         <span class="nx">_handleBeforeResizeEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">args</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">region</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getRegion</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">)),</span>
+            <span class="k">var</span> <span class="nx">region</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getRegion</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">)),</span>
                 <span class="nx">c</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">_cache</span><span class="o">,</span>
                 <span class="nx">ch</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">_currentHandle</span><span class="o">,</span> <span class="nx">h</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">w</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">args</span><span class="o">.</span><span class="nx">top</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">args</span><span class="o">.</span><span class="nx">top</span> <span class="o">&lt;</span> <span class="nx">region</span><span class="o">.</span><span class="nx">top</span><span class="o">))</span> <span class="o">{</span>
                 <span class="nx">h</span> <span class="o">=</span> <span class="o">(</span><span class="nx">c</span><span class="o">.</span><span class="nx">height</span> <span class="o">+</span> <span class="nx">c</span><span class="o">.</span><span class="nx">top</span><span class="o">)</span> <span class="o">-</span> <span class="nx">region</span><span class="o">.</span><span class="nx">top</span><span class="o">;</span>
                 <span class="nx">Dom</span><span class="o">.</span><span class="nx">setY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">(),</span> <span class="nx">region</span><span class="o">.</span><span class="nx">top</span><span class="o">);</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">().</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">h</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">().</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">h</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">_cache</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">h</span><span class="o">;</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">_cache</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="nx">region</span><span class="o">.</span><span class="nx">top</span><span class="o">;</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_syncBackgroundPosition</span><span class="o">();</span>
@@ -400,27 +391,27 @@
                 <span class="nx">w</span> <span class="o">=</span> <span class="o">(</span><span class="nx">c</span><span class="o">.</span><span class="nx">width</span> <span class="o">+</span> <span class="nx">c</span><span class="o">.</span><span class="nx">left</span><span class="o">)</span> <span class="o">-</span> <span class="nx">region</span><span class="o">.</span><span class="nx">left</span><span class="o">;</span>
                 <span class="nx">Dom</span><span class="o">.</span><span class="nx">setX</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">(),</span> <span class="nx">region</span><span class="o">.</span><span class="nx">left</span><span class="o">);</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">_cache</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="nx">region</span><span class="o">.</span><span class="nx">left</span><span class="o">;</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">().</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">w</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">().</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">w</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">_cache</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">w</span><span class="o">;</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_syncBackgroundPosition</span><span class="o">();</span>
                 <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
             <span class="o">}</span>
-            <span class="k">if</span> <span class="o">(</span><span class="nx">ch</span> <span class="o">!=</span> <span class="s1">&#39;tl&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">ch</span> <span class="o">!=</span> <span class="s1">&#39;l&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">ch</span> <span class="o">!=</span> <span class="s1">&#39;bl&#39;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">ch</span> <span class="o">!=</span> <span class="s1">'tl'</span> <span class="o">&amp;&amp;</span> <span class="nx">ch</span> <span class="o">!=</span> <span class="s1">'l'</span> <span class="o">&amp;&amp;</span> <span class="nx">ch</span> <span class="o">!=</span> <span class="s1">'bl'</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">c</span><span class="o">.</span><span class="nx">left</span> <span class="o">&amp;&amp;</span> <span class="nx">args</span><span class="o">.</span><span class="nx">width</span> <span class="o">&amp;&amp;</span> <span class="o">((</span><span class="nx">c</span><span class="o">.</span><span class="nx">left</span> <span class="o">+</span> <span class="nx">args</span><span class="o">.</span><span class="nx">width</span><span class="o">)</span> <span class="o">&gt;</span> <span class="nx">region</span><span class="o">.</span><span class="nx">right</span><span class="o">))</span> <span class="o">{</span>
                     <span class="nx">w</span> <span class="o">=</span> <span class="o">(</span><span class="nx">region</span><span class="o">.</span><span class="nx">right</span> <span class="o">-</span> <span class="nx">c</span><span class="o">.</span><span class="nx">left</span><span class="o">);</span>
                     <span class="nx">Dom</span><span class="o">.</span><span class="nx">setX</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">(),</span> <span class="o">(</span><span class="nx">region</span><span class="o">.</span><span class="nx">right</span> <span class="o">-</span> <span class="nx">w</span><span class="o">));</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">().</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">w</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">().</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">w</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">_cache</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="o">(</span><span class="nx">region</span><span class="o">.</span><span class="nx">right</span> <span class="o">-</span> <span class="nx">w</span><span class="o">);</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">_cache</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">w</span><span class="o">;</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">_syncBackgroundPosition</span><span class="o">();</span>
                     <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
                 <span class="o">}</span>
             <span class="o">}</span>
-            <span class="k">if</span> <span class="o">(</span><span class="nx">ch</span> <span class="o">!=</span> <span class="s1">&#39;t&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">ch</span> <span class="o">!=</span> <span class="s1">&#39;tr&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">ch</span> <span class="o">!=</span> <span class="s1">&#39;tl&#39;</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="nx">ch</span> <span class="o">!=</span> <span class="s1">'t'</span> <span class="o">&amp;&amp;</span> <span class="nx">ch</span> <span class="o">!=</span> <span class="s1">'tr'</span> <span class="o">&amp;&amp;</span> <span class="nx">ch</span> <span class="o">!=</span> <span class="s1">'tl'</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">if</span> <span class="o">(</span><span class="nx">c</span><span class="o">.</span><span class="nx">top</span> <span class="o">&amp;&amp;</span> <span class="nx">args</span><span class="o">.</span><span class="nx">height</span> <span class="o">&amp;&amp;</span> <span class="o">((</span><span class="nx">c</span><span class="o">.</span><span class="nx">top</span> <span class="o">+</span> <span class="nx">args</span><span class="o">.</span><span class="nx">height</span><span class="o">)</span> <span class="o">&gt;</span> <span class="nx">region</span><span class="o">.</span><span class="nx">bottom</span><span class="o">))</span> <span class="o">{</span>
                     <span class="nx">h</span> <span class="o">=</span> <span class="o">(</span><span class="nx">region</span><span class="o">.</span><span class="nx">bottom</span> <span class="o">-</span> <span class="nx">c</span><span class="o">.</span><span class="nx">top</span><span class="o">);</span>
                     <span class="nx">Dom</span><span class="o">.</span><span class="nx">setY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">(),</span> <span class="o">(</span><span class="nx">region</span><span class="o">.</span><span class="nx">bottom</span> <span class="o">-</span> <span class="nx">h</span><span class="o">));</span>
-                    <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">().</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">h</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
+                    <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">().</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">h</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">_cache</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">h</span><span class="o">;</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">_cache</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="o">(</span><span class="nx">region</span><span class="o">.</span><span class="nx">bottom</span> <span class="o">-</span> <span class="nx">h</span><span class="o">);</span>
                     <span class="k">this</span><span class="o">.</span><span class="nx">_syncBackgroundPosition</span><span class="o">();</span>
@@ -435,8 +426,8 @@
 <span class="c">        */</span>
         <span class="nx">_handleResizeMaskEl</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">_cache</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeMaskEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="nx">a</span><span class="o">.</span><span class="nx">height</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeMaskEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="nx">a</span><span class="o">.</span><span class="nx">width</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeMaskEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="nx">a</span><span class="o">.</span><span class="nx">height</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeMaskEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">floor</span><span class="o">(</span><span class="nx">a</span><span class="o">.</span><span class="nx">width</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
         <span class="o">},</span>
         <span class="c">/**</span>
 <span class="c">        * @private</span>
@@ -447,8 +438,8 @@
         <span class="nx">_handleResizeEvent</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">ev</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_setConstraints</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_syncBackgroundPosition</span><span class="o">();</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;resizeEvent&#39;</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;moveEvent&#39;</span><span class="o">,</span> <span class="o">{</span> <span class="nx">target</span><span class="o">:</span> <span class="s1">&#39;resizeevent&#39;</span> <span class="o">});</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'resizeEvent'</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'moveEvent'</span><span class="o">,</span> <span class="o">{</span> <span class="nx">target</span><span class="o">:</span> <span class="s1">'resizeevent'</span> <span class="o">});</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>
@@ -469,11 +460,11 @@
 <span class="c">        * @description Sets the background image position to the top and left position</span>
 <span class="c">        */</span>
         <span class="nx">_setBackgroundPosition</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">l</span><span class="o">,</span> <span class="nx">t</span><span class="o">)</span> <span class="o">{</span>
-            <span class="c">//YAHOO.log(&#39;Setting the image background position of the mask to: (&#39; + l + &#39;, &#39; + t + &#39;)&#39;, &#39;log&#39;, &#39;ImageCropper&#39;);</span>
-<span class="c"></span>            <span class="k">var</span> <span class="nx">bl</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">),</span> <span class="s1">&#39;borderLeftWidth&#39;</span><span class="o">),</span> <span class="m">10</span><span class="o">);</span>
-            <span class="k">var</span> <span class="nx">bt</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">),</span> <span class="s1">&#39;borderTopWidth&#39;</span><span class="o">),</span> <span class="m">10</span><span class="o">);</span>
+            <span class="c">//YAHOO.log('Setting the image background position of the mask to: (' + l + ', ' + t + ')', 'log', 'ImageCropper');</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">bl</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">),</span> <span class="s1">'borderLeftWidth'</span><span class="o">),</span> <span class="m">10</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">bt</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">),</span> <span class="s1">'borderTopWidth'</span><span class="o">),</span> <span class="m">10</span><span class="o">);</span>
             <span class="k">var</span> <span class="nx">mask</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">().</span><span class="nx">firstChild</span><span class="o">;</span>
-            <span class="k">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="o">(</span><span class="nx">l</span> <span class="o">-</span> <span class="nx">bl</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;px &#39;</span> <span class="o">+</span> <span class="o">(</span><span class="nx">t</span> <span class="o">-</span> <span class="nx">bt</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
+            <span class="k">var</span> <span class="nx">pos</span> <span class="o">=</span> <span class="o">(</span><span class="nx">l</span> <span class="o">-</span> <span class="nx">bl</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'px '</span> <span class="o">+</span> <span class="o">(</span><span class="nx">t</span> <span class="o">-</span> <span class="nx">bt</span><span class="o">)</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_resizeMaskEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">backgroundPosition</span> <span class="o">=</span> <span class="nx">pos</span><span class="o">;</span>
         <span class="o">},</span>
 
@@ -484,10 +475,10 @@
 <span class="c">        * @description Sets the background image of the resize element</span>
 <span class="c">        */</span>
         <span class="nx">_setBackgroundImage</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">url</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Setting the background image&#39;</span><span class="o">,</span> <span class="s1">&#39;log&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Setting the background image'</span><span class="o">,</span> <span class="s1">'log'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
             <span class="k">var</span> <span class="nx">mask</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">().</span><span class="nx">firstChild</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_image</span> <span class="o">=</span> <span class="nx">url</span><span class="o">;</span>
-            <span class="nx">mask</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">backgroundImage</span> <span class="o">=</span> <span class="s1">&#39;url(&#39;</span> <span class="o">+</span> <span class="nx">url</span> <span class="o">+</span> <span class="s1">&#39;#)&#39;</span><span class="o">;</span>
+            <span class="nx">mask</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">backgroundImage</span> <span class="o">=</span> <span class="s1">'url('</span> <span class="o">+</span> <span class="nx">url</span> <span class="o">+</span> <span class="s1">'#)'</span><span class="o">;</span>
         <span class="o">},</span>
         
         <span class="c">/**</span>
@@ -513,21 +504,21 @@
                  <span class="nx">maxH</span> <span class="o">=</span> <span class="m">0</span><span class="o">,</span> <span class="nx">maxW</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
  
             <span class="nx">switch</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">_currentHandle</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">case</span> <span class="s1">&#39;b&#39;</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s1">'b'</span><span class="o">:</span>
                     <span class="nx">maxH</span> <span class="o">=</span> <span class="o">(</span><span class="nx">h</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">dd</span><span class="o">.</span><span class="nx">bottomConstraint</span><span class="o">);</span>
                     <span class="k">break</span><span class="o">;</span>
-                <span class="nx">case</span> <span class="s1">&#39;l&#39;</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s1">'l'</span><span class="o">:</span>
                     <span class="nx">maxW</span> <span class="o">=</span> <span class="o">(</span><span class="nx">w</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">dd</span><span class="o">.</span><span class="nx">leftConstraint</span><span class="o">);</span>
                     <span class="k">break</span><span class="o">;</span>
-                <span class="nx">case</span> <span class="s1">&#39;r&#39;</span><span class="o">:</span>
+                <span class="nx">case</span> <span class="s1">'r'</span><span class="o">:</span>
                     <span class="nx">maxH</span> <span class="o">=</span> <span class="o">(</span><span class="nx">h</span> <span class="o">+</span> <span class="nx">t</span><span class="o">);</span>
                     <span class="nx">maxW</span> <span class="o">=</span> <span class="o">(</span><span class="nx">w</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">dd</span><span class="o">.</span><span class="nx">rightConstraint</span><span class="o">);</span>
                     <span class="k">break</span><span class="o">;</span>
-                 <span class="nx">case</span> <span class="s1">&#39;br&#39;</span><span class="o">:</span>
+                 <span class="nx">case</span> <span class="s1">'br'</span><span class="o">:</span>
                      <span class="nx">maxH</span> <span class="o">=</span> <span class="o">(</span><span class="nx">h</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">dd</span><span class="o">.</span><span class="nx">bottomConstraint</span><span class="o">);</span>
                      <span class="nx">maxW</span> <span class="o">=</span> <span class="o">(</span><span class="nx">w</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">dd</span><span class="o">.</span><span class="nx">rightConstraint</span><span class="o">);</span>
                      <span class="k">break</span><span class="o">;</span>
-                 <span class="nx">case</span> <span class="s1">&#39;tr&#39;</span><span class="o">:</span>
+                 <span class="nx">case</span> <span class="s1">'tr'</span><span class="o">:</span>
                      <span class="nx">maxH</span> <span class="o">=</span> <span class="o">(</span><span class="nx">h</span> <span class="o">+</span> <span class="nx">t</span><span class="o">);</span>
                      <span class="nx">maxW</span> <span class="o">=</span> <span class="o">(</span><span class="nx">w</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">dd</span><span class="o">.</span><span class="nx">rightConstraint</span><span class="o">);</span>
                      <span class="k">break</span><span class="o">;</span>
@@ -535,15 +526,15 @@
              <span class="o">}</span>
             
              <span class="k">if</span> <span class="o">(</span><span class="nx">maxH</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Setting the maxHeight on the resize object to: &#39;</span> <span class="o">+</span> <span class="nx">maxH</span><span class="o">,</span> <span class="s1">&#39;log&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
-                 <span class="c">//this._resize.set(&#39;maxHeight&#39;, maxH);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Setting the maxHeight on the resize object to: '</span> <span class="o">+</span> <span class="nx">maxH</span><span class="o">,</span> <span class="s1">'log'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
+                 <span class="c">//this._resize.set('maxHeight', maxH);</span>
 <span class="c"></span>             <span class="o">}</span>
              <span class="k">if</span> <span class="o">(</span><span class="nx">maxW</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Setting the maxWidth on the resize object to: &#39;</span> <span class="o">+</span> <span class="nx">maxW</span><span class="o">,</span> <span class="s1">&#39;log&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
-                 <span class="c">//this._resize.set(&#39;maxWidth&#39;, maxW);</span>
+                <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Setting the maxWidth on the resize object to: '</span> <span class="o">+</span> <span class="nx">maxW</span><span class="o">,</span> <span class="s1">'log'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
+                 <span class="c">//this._resize.set('maxWidth', maxW);</span>
 <span class="c"></span>             <span class="o">}</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">&#39;startResizeEvent&#39;</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">fireEvent</span><span class="o">(</span><span class="s1">'startResizeEvent'</span><span class="o">,</span> <span class="nx">arguments</span><span class="o">);</span>
         <span class="o">},</span>
         
         <span class="c">/**</span>
@@ -554,11 +545,11 @@
 <span class="c">        * @return {Object} Object containing Top, Right, Bottom and Left constraints</span>
 <span class="c">        */</span>
         <span class="nx">_setConstraints</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">inside</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Setting Contraints&#39;</span><span class="o">,</span> <span class="s1">&#39;log&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Setting Contraints'</span><span class="o">,</span> <span class="s1">'log'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
             <span class="k">var</span> <span class="nx">resize</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">;</span>
             <span class="nx">resize</span><span class="o">.</span><span class="nx">dd</span><span class="o">.</span><span class="nx">resetConstraints</span><span class="o">();</span>
-            <span class="k">var</span> <span class="nx">height</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">resize</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;height&#39;</span><span class="o">),</span> <span class="m">10</span><span class="o">),</span>
-                <span class="nx">width</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">resize</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;width&#39;</span><span class="o">),</span> <span class="m">10</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">height</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">resize</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'height'</span><span class="o">),</span> <span class="m">10</span><span class="o">),</span>
+                <span class="nx">width</span> <span class="o">=</span> <span class="nb">parseInt</span><span class="o">(</span><span class="nx">resize</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'width'</span><span class="o">),</span> <span class="m">10</span><span class="o">);</span>
             <span class="k">if</span> <span class="o">(</span><span class="nx">inside</span><span class="o">)</span> <span class="o">{</span>
                 <span class="c">//Called from inside the resize callback</span>
 <span class="c"></span>                <span class="nx">height</span> <span class="o">=</span> <span class="nx">resize</span><span class="o">.</span><span class="nx">_cache</span><span class="o">.</span><span class="nx">height</span><span class="o">;</span>
@@ -566,7 +557,7 @@
             <span class="o">}</span>
 
             <span class="c">//Get the top, right, bottom and left positions</span>
-<span class="c"></span>            <span class="k">var</span> <span class="nx">region</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getRegion</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">));</span>
+<span class="c"></span>            <span class="k">var</span> <span class="nx">region</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getRegion</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">));</span>
             <span class="c">//Get the element we are working on</span>
 <span class="c"></span>            <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">resize</span><span class="o">.</span><span class="nx">getWrapEl</span><span class="o">();</span>
 
@@ -591,7 +582,7 @@
             
             <span class="nx">resize</span><span class="o">.</span><span class="nx">dd</span><span class="o">.</span><span class="nx">setXConstraint</span><span class="o">(</span><span class="nx">left</span><span class="o">,</span> <span class="nx">right</span><span class="o">);</span> 
             <span class="nx">resize</span><span class="o">.</span><span class="nx">dd</span><span class="o">.</span><span class="nx">setYConstraint</span><span class="o">(</span><span class="nx">top</span><span class="o">,</span> <span class="nx">bottom</span><span class="o">);</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Constraints: &#39;</span> <span class="o">+</span> <span class="nx">top</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="nx">right</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="nx">bottom</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span> <span class="o">+</span> <span class="nx">left</span><span class="o">,</span> <span class="s1">&#39;log&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Constraints: '</span> <span class="o">+</span> <span class="nx">top</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">right</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">bottom</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">left</span><span class="o">,</span> <span class="s1">'log'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
 
             <span class="k">return</span> <span class="o">{</span>
                 <span class="nx">top</span><span class="o">:</span> <span class="nx">top</span><span class="o">,</span>
@@ -616,19 +607,19 @@
                 <span class="nx">width</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">_cache</span><span class="o">.</span><span class="nx">width</span><span class="o">,</span>
                 <span class="nx">image</span><span class="o">:</span> <span class="k">this</span><span class="o">.</span><span class="nx">_image</span>
             <span class="o">};</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Getting the crop coordinates: &#39;</span> <span class="o">+</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">coords</span><span class="o">),</span> <span class="s1">&#39;log&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Getting the crop coordinates: '</span> <span class="o">+</span> <span class="nx">Lang</span><span class="o">.</span><span class="nx">dump</span><span class="o">(</span><span class="nx">coords</span><span class="o">),</span> <span class="s1">'log'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
             <span class="k">return</span> <span class="nx">coords</span><span class="o">;</span>
         <span class="o">},</span>
         <span class="c">/**</span>
 <span class="c">        * @method reset</span>
-<span class="c">        * @description Resets the crop element back to it&#39;s original position</span>
-<span class="c">        * @return {&lt;a href=&quot;YAHOO.widget.ImageCropper.html&quot;&gt;YAHOO.widget.ImageCropper&lt;/a&gt;} The ImageCropper instance</span>
+<span class="c">        * @description Resets the crop element back to it's original position</span>
+<span class="c">        * @return {&lt;a href="YAHOO.widget.ImageCropper.html"&gt;YAHOO.widget.ImageCropper&lt;/a&gt;} The ImageCropper instance</span>
 <span class="c">        */</span>
         <span class="nx">reset</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Resetting the control&#39;</span><span class="o">,</span> <span class="s1">&#39;log&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">resize</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;initHeight&#39;</span><span class="o">),</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;initWidth&#39;</span><span class="o">),</span> <span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;initialXY&#39;</span><span class="o">)[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;initialXY&#39;</span><span class="o">)[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="s1">&#39;px&#39;</span><span class="o">;</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Resetting the control'</span><span class="o">,</span> <span class="s1">'log'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">resize</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'initHeight'</span><span class="o">),</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'initWidth'</span><span class="o">),</span> <span class="m">0</span><span class="o">,</span> <span class="m">0</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">top</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'initialXY'</span><span class="o">)[</span><span class="m">1</span><span class="o">]</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">left</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'initialXY'</span><span class="o">)[</span><span class="m">0</span><span class="o">]</span> <span class="o">+</span> <span class="s1">'px'</span><span class="o">;</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_syncBackgroundPosition</span><span class="o">();</span>
             <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
         <span class="o">},</span>
@@ -639,7 +630,7 @@
 <span class="c">        * @return {HTMLElement} The image element</span>
 <span class="c">        */</span>      
         <span class="nx">getEl</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">);</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">);</span>
         <span class="o">},</span>
         <span class="c">/**</span>
 <span class="c">        * @method getResizeEl</span>
@@ -669,7 +660,7 @@
 
         <span class="c">/**</span>
 <span class="c">        * @method getResizeMaskEl</span>
-<span class="c">        * @description Get the HTML reference for the resizable object&#39;s mask element.</span>
+<span class="c">        * @description Get the HTML reference for the resizable object's mask element.</span>
 <span class="c">        * @return {HTMLElement} The resize objects mask element.</span>
 <span class="c">        */</span>      
         <span class="nx">getResizeMaskEl</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
@@ -679,7 +670,7 @@
         <span class="c">/**</span>
 <span class="c">        * @method getResizeObject</span>
 <span class="c">        * @description Get the Resize Utility object.</span>
-<span class="c">        * @return {&lt;a href=&quot;YAHOO.util.Resize.html&quot;&gt;YAHOO.util.Resize&lt;/a&gt;} The Resize instance</span>
+<span class="c">        * @return {&lt;a href="YAHOO.util.Resize.html"&gt;YAHOO.util.Resize&lt;/a&gt;} The Resize instance</span>
 <span class="c">        */</span>      
         <span class="nx">getResizeObject</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
             <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">;</span>
@@ -688,27 +679,27 @@
         <span class="c">/** </span>
 <span class="c">        * @private</span>
 <span class="c">        * @method init</span>
-<span class="c">        * @description The ImageCropper class&#39;s initialization method</span>
+<span class="c">        * @description The ImageCropper class's initialization method</span>
 <span class="c">        */</span>        
         <span class="nx">init</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">p_oElement</span><span class="o">,</span> <span class="nx">p_oAttributes</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;init&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'init'</span><span class="o">,</span> <span class="s1">'info'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
             <span class="nx">Crop</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">init</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">p_oElement</span><span class="o">,</span> <span class="nx">p_oAttributes</span><span class="o">);</span>
 
             <span class="k">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nx">p_oElement</span><span class="o">;</span>
 
             <span class="k">if</span> <span class="o">(!</span><span class="nx">Lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">id</span><span class="o">))</span> <span class="o">{</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">id</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">id</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;img&#39;</span><span class="o">))</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">id</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">&amp;&amp;</span> <span class="o">(</span><span class="nx">id</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s1">'img'</span><span class="o">))</span> <span class="o">{</span>
                     <span class="nx">id</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">generateId</span><span class="o">(</span><span class="nx">id</span><span class="o">);</span>                    
                 <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Element is not an image.&#39;</span><span class="o">,</span> <span class="s1">&#39;error&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Element is not an image.'</span><span class="o">,</span> <span class="s1">'error'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
                     <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
                 <span class="o">}</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
                 <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">id</span><span class="o">);</span>
-                <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s1">&#39;img&#39;</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="nx">el</span><span class="o">.</span><span class="nx">tagName</span> <span class="o">&amp;&amp;</span> <span class="nx">el</span><span class="o">.</span><span class="nx">tagName</span><span class="o">.</span><span class="nx">toLowerCase</span><span class="o">()</span> <span class="o">==</span> <span class="s1">'img'</span><span class="o">)</span> <span class="o">{</span>
                     <span class="c">//All good</span>
 <span class="c"></span>                <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Element is not an image.&#39;</span><span class="o">,</span> <span class="s1">&#39;error&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
+                    <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Element is not an image.'</span><span class="o">,</span> <span class="s1">'error'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
                     <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
                 <span class="o">}</span>
             <span class="o">}</span>
@@ -738,7 +729,7 @@
 <span class="c">            * @description Array of the XY position that we need to set the crop element to when we build it. Defaults to [10, 10]</span>
 <span class="c">            * @type Array</span>
 <span class="c">            */</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;initialXY&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'initialXY'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">writeOnce</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isArray</span><span class="o">,</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">initialXY</span> <span class="o">||</span> <span class="o">[</span><span class="m">10</span><span class="o">,</span> <span class="m">10</span><span class="o">]</span>
@@ -748,7 +739,7 @@
 <span class="c">            * @description The pixel tick for the arrow keys, defaults to 1</span>
 <span class="c">            * @type Number</span>
 <span class="c">            */</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;keyTick&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'keyTick'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">,</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">keyTick</span> <span class="o">||</span> <span class="m">1</span>
             <span class="o">});</span>
@@ -758,7 +749,7 @@
 <span class="c">            * @description The pixel tick for shift + the arrow keys, defaults to 10</span>
 <span class="c">            * @type Number</span>
 <span class="c">            */</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;shiftKeyTick&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'shiftKeyTick'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">,</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">shiftKeyTick</span> <span class="o">||</span> <span class="m">10</span>
             <span class="o">});</span>
@@ -768,7 +759,7 @@
 <span class="c">            * @description Should we use the Arrow keys to position the crop element, defaults to true</span>
 <span class="c">            * @type Boolean</span>
 <span class="c">            */</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;useKeys&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'useKeys'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isBoolean</span><span class="o">,</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="o">((</span><span class="nx">attr</span><span class="o">.</span><span class="nx">useKeys</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="kc">true</span><span class="o">)</span>
             <span class="o">});</span>
@@ -778,12 +769,12 @@
 <span class="c">            * @description Show the Resize Utility status, defaults to true</span>
 <span class="c">            * @type Boolean</span>
 <span class="c">            */</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;status&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'status'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isBoolean</span><span class="o">,</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="o">((</span><span class="nx">attr</span><span class="o">.</span><span class="nx">status</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="kc">true</span><span class="o">),</span>
                 <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">status</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;status&#39;</span><span class="o">,</span> <span class="nx">status</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">'status'</span><span class="o">,</span> <span class="nx">status</span><span class="o">);</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
             <span class="o">});</span>
@@ -793,12 +784,12 @@
 <span class="c">            * @description MinHeight of the crop area, default 50</span>
 <span class="c">            * @type Number</span>
 <span class="c">            */</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;minHeight&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'minHeight'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">,</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">minHeight</span> <span class="o">||</span> <span class="m">50</span><span class="o">,</span>
                 <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">h</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;minHeight&#39;</span><span class="o">,</span> <span class="nx">h</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">'minHeight'</span><span class="o">,</span> <span class="nx">h</span><span class="o">);</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
             <span class="o">});</span>
@@ -808,12 +799,12 @@
 <span class="c">            * @description MinWidth of the crop area, default 50.</span>
 <span class="c">            * @type Number</span>
 <span class="c">            */</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;minWidth&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'minWidth'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">,</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">minWidth</span> <span class="o">||</span> <span class="m">50</span><span class="o">,</span>
                 <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">w</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;minWidth&#39;</span><span class="o">,</span> <span class="nx">w</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">'minWidth'</span><span class="o">,</span> <span class="nx">w</span><span class="o">);</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
             <span class="o">});</span>
@@ -823,12 +814,12 @@
 <span class="c">            * @description Set the ratio config option of the Resize Utlility, default false</span>
 <span class="c">            * @type Boolean</span>
 <span class="c">            */</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;ratio&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'ratio'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isBoolean</span><span class="o">,</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">ratio</span> <span class="o">||</span> <span class="kc">false</span><span class="o">,</span>
                 <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">r</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;ratio&#39;</span><span class="o">,</span> <span class="nx">r</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">'ratio'</span><span class="o">,</span> <span class="nx">r</span><span class="o">);</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
             <span class="o">});</span>
@@ -838,12 +829,12 @@
 <span class="c">            * @description Set the autoRatio config option of the Resize Utlility, default true</span>
 <span class="c">            * @type Boolean</span>
 <span class="c">            */</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;autoRatio&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'autoRatio'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isBoolean</span><span class="o">,</span>
                 <span class="nx">value</span><span class="o">:</span> <span class="o">((</span><span class="nx">attr</span><span class="o">.</span><span class="nx">autoRatio</span> <span class="o">===</span> <span class="kc">false</span><span class="o">)</span> <span class="o">?</span> <span class="kc">false</span> <span class="o">:</span> <span class="kc">true</span><span class="o">),</span>
                 <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">a</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">&#39;autoRatio&#39;</span><span class="o">,</span> <span class="nx">a</span><span class="o">);</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="s1">'autoRatio'</span><span class="o">,</span> <span class="nx">a</span><span class="o">);</span>
                     <span class="o">}</span>
                 <span class="o">}</span>
             <span class="o">});</span>
@@ -853,10 +844,10 @@
 <span class="c">            * @description Set the initlal height of the crop area, defaults to 1/4 of the image height</span>
 <span class="c">            * @type Number</span>
 <span class="c">            */</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;initHeight&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'initHeight'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">writeOnce</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">,</span>
-                <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">initHeight</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">height</span> <span class="o">/</span> <span class="m">4</span><span class="o">)</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">initHeight</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">).</span><span class="nx">height</span> <span class="o">/</span> <span class="m">4</span><span class="o">)</span>
             <span class="o">});</span>
 
             <span class="c">/**</span>
@@ -864,24 +855,24 @@
 <span class="c">            * @description Set the initlal width of the crop area, defaults to 1/4 of the image width</span>
 <span class="c">            * @type Number</span>
 <span class="c">            */</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">&#39;initWidth&#39;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="s1">'initWidth'</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">validator</span><span class="o">:</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isNumber</span><span class="o">,</span>
                 <span class="nx">writeOnce</span><span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
-                <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">initWidth</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">).</span><span class="nx">width</span> <span class="o">/</span> <span class="m">4</span><span class="o">)</span>
+                <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">initWidth</span> <span class="o">||</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">).</span><span class="nx">width</span> <span class="o">/</span> <span class="m">4</span><span class="o">)</span>
             <span class="o">});</span>
 
         <span class="o">},</span>
         <span class="c">/**</span>
 <span class="c">        * @method destroy</span>
-<span class="c">        * @description Destroys the ImageCropper object and all of it&#39;s elements &amp; listeners.</span>
+<span class="c">        * @description Destroys the ImageCropper object and all of it's elements &amp; listeners.</span>
 <span class="c">        */</span>        
         <span class="nx">destroy</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Destroying the ImageCropper&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;ImageCropper&#39;</span><span class="o">);</span>
+            <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Destroying the ImageCropper'</span><span class="o">,</span> <span class="s1">'info'</span><span class="o">,</span> <span class="s1">'ImageCropper'</span><span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_resize</span><span class="o">.</span><span class="nx">destroy</span><span class="o">();</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_resizeEl</span><span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">_mask</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">removeChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_mask</span><span class="o">);</span>
             <span class="nx">Event</span><span class="o">.</span><span class="nx">purgeElement</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">replaceChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;element&#39;</span><span class="o">),</span> <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">.</span><span class="nx">parentNode</span><span class="o">.</span><span class="nx">replaceChild</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'element'</span><span class="o">),</span> <span class="k">this</span><span class="o">.</span><span class="nx">_wrap</span><span class="o">);</span>
             
             <span class="c">//Brutal Object Destroy</span>
 <span class="c"></span>            <span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span> <span class="k">in</span> <span class="k">this</span><span class="o">)</span> <span class="o">{</span>
@@ -898,9 +889,9 @@
 <span class="c">        */</span>        
         <span class="nx">toString</span><span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">return</span> <span class="s1">&#39;ImageCropper (#&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">&#39;id&#39;</span><span class="o">)</span> <span class="o">+</span> <span class="s1">&#39;)&#39;</span><span class="o">;</span>
+                <span class="k">return</span> <span class="s1">'ImageCropper (#'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s1">'id'</span><span class="o">)</span> <span class="o">+</span> <span class="s1">')'</span><span class="o">;</span>
             <span class="o">}</span>
-            <span class="k">return</span> <span class="s1">&#39;Image Cropper&#39;</span><span class="o">;</span>
+            <span class="k">return</span> <span class="s1">'Image Cropper'</span><span class="o">;</span>
         <span class="o">}</span>
     <span class="o">});</span>
 
@@ -937,9 +928,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -1008,22 +997,17 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.widget.ImageCropper.html">YAHOO.widget.ImageCropper</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class=""><a href="YAHOO.widget.ImageCropper.html">YAHOO.widget.ImageCropper</a></li>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="crop.js.html">crop.js</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class="selected"><a href="crop.js.html">crop.js</a></li>
+                        </ul></div>
 
 
 
@@ -1033,9 +1017,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

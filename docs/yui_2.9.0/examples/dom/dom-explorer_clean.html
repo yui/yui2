@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Exploring the Dom Collection's API</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Exploring the Dom Collection's API</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,14 +8,7 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css" media="screen">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><!--begin custom header content for this example--><style type="text/css" media="screen">
 
 div.contentContainer {
 	border: 1px solid #333;
@@ -49,35 +34,16 @@ li.even {
 
 
 
-</style>
-
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-    <cite class="byline">This example was contributed by <a href='http://www.wait-till-i.com/'>Christian Heilmann</a> and members of his <a href='http://yuiblog.com/blog/2007/12/06/juku/'>Juku</a> training class at Yahoo.</cite>
-
-<h1>Exploring the Dom Collection's API</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><cite class="byline">This example was contributed by <a href="http://www.wait-till-i.com/">Christian Heilmann</a> and members of his <a href="http://yuiblog.com/blog/2007/12/06/juku/">Juku</a> training class at Yahoo.</cite><h1>Exploring the Dom Collection's API</h1><div class="exampleIntro">
 	<p>In this example, the use of several key Dom Collection methods is explored.  Given the markup in the source section, you can invoke any of the methods by clicking on them; the Source is updated, as is its in-browser appearance (Render).  In the Outupt section, you can review the elements that are selected or affected (or, in a few cases, the JavaScript <code>return</code> value) of the function you invoked.</p>			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<h3>Source</h3>
-
-<div id="source" class="contentContainer">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><h3>Source</h3><div id="source" class="contentContainer">
     <pre>
     </pre>
-</div>
-        
-<h3>Functions</h3>
-<div id="functions" class="contentContainer">
-    <ul id="functionList">
-        <li id="get1"><a href="foo.html">get('demo')</a></li>
+</div><h3>Functions</h3><div id="functions" class="contentContainer">
+    <ul id="functionList"><li id="get1"><a href="foo.html">get('demo')</a></li>
         <li id="get2"><a href="foo.html">get(['demo', 'demoList'])</a></li>
         <li id="getAncestorByTagName"><a href="foo.html">getAncestorByTagName('one', 'div')</a></li>
         <li id="getAncestorByClassName"><a href="foo.html">getAncestorByClassName('one', 'parent')</a></li>
@@ -92,20 +58,9 @@ li.even {
         <li id="isAncestor"><a href="foo.html">isAncestor('demo', 'one')</a></li>
         <li id="insertBefore"><a href="foo.html">insertBefore(<em>li</em>, 'one')</a></li>
         <li id="insertAfter"><a href="foo.html">insertAfter(<em>li</em>, 'one')</a></li>
-    </ul>
-</div>
-
-<h3>Render</h3>
-<div id="render" class="contentContainer">    				
-</div>
-
-<h3>Output</h3>
-<div id="output" class="contentContainer">
-</div>
-
-
-
-<script type="text/javascript" charset="utf-8">
+    </ul></div><h3>Render</h3><div id="render" class="contentContainer">    				
+</div><h3>Output</h3><div id="output" class="contentContainer">
+</div><script type="text/javascript" charset="utf-8">
 
 (function() {
 YAHOO.util.Event.addListener("functionList", "click", function(evt) {
@@ -300,9 +255,4 @@ function encode(str){
   return str;
 }
 })();   
-</script>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+</script><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

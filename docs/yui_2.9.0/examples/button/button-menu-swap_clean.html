@@ -1,12 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-
-
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-<title>Replacing the content of a Button's Menu</title>
-
-<style type="text/css">
+<head><meta http-equiv="content-type" content="text/html; charset=utf-8"><title>Replacing the content of a Button's Menu</title><style type="text/css">
 /*margin and padding on body element
   can introduce errors in determining
   element position and are not recommended;
@@ -16,20 +8,7 @@ body {
 	margin:0;
 	padding:0;
 }
-</style>
-
-<link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css" />
-<link rel="stylesheet" type="text/css" href="../../build/menu/assets/skins/sam/menu.css" />
-<link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css" />
-<script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script>
-<script type="text/javascript" src="../../build/container/container_core-min.js"></script>
-<script type="text/javascript" src="../../build/menu/menu-min.js"></script>
-<script type="text/javascript" src="../../build/element/element-min.js"></script>
-<script type="text/javascript" src="../../build/button/button-min.js"></script>
-
-
-<!--begin custom header content for this example-->
-<style type="text/css">
+</style><link rel="stylesheet" type="text/css" href="../../build/fonts/fonts-min.css"><link rel="stylesheet" type="text/css" href="../../build/menu/assets/skins/sam/menu.css"><link rel="stylesheet" type="text/css" href="../../build/button/assets/skins/sam/button.css"><script type="text/javascript" src="../../build/yahoo-dom-event/yahoo-dom-event.js"></script><script type="text/javascript" src="../../build/container/container_core-min.js"></script><script type="text/javascript" src="../../build/menu/menu-min.js"></script><script type="text/javascript" src="../../build/element/element-min.js"></script><script type="text/javascript" src="../../build/button/button-min.js"></script><!--begin custom header content for this example--><style type="text/css">
 
 	/*	Style the <fieldset> since the Reset CSS removes the default style. */
     #pizza-order-form fieldset {
@@ -51,26 +30,15 @@ body {
 		background: url(../button/assets/checkbox.png) left center no-repeat;
 	}
 
-</style>
-<!--end custom header content for this example-->
-
-</head>
-
-<body class="yui-skin-sam">
-
-
-<h1>Replacing the content of a Button's Menu</h1>
-
-<div class="exampleIntro">
+</style><!--end custom header content for this example--></head><body class="yui-skin-sam"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><h1>Replacing the content of a Button's Menu</h1><div class="exampleIntro">
 	<p>
 This example illustrates how to replace the content of a Button's Menu on 
 the fly.
 </p>			
-</div>
-
-<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
-
-<script type="text/javascript">
+</div><!--BEGIN SOURCE CODE FOR EXAMPLE =============================== --><script type="text/javascript">
 
 	YAHOO.util.Event.onContentReady("pizza-order-form", function () {
 		
@@ -339,46 +307,15 @@ the fly.
 		
 	});
 
-</script>
+</script><form id="pizza-order-form" method="post">
 
+	<fieldset><legend>Pizza Order Form</legend>
 
-<form id="pizza-order-form" method="post">
-
-	<fieldset>
-		<legend>Pizza Order Form</legend>
-
-		<fieldset id="pizza-types-fields">
-			<legend>Pizza Type</legend>
+		<fieldset id="pizza-types-fields"><legend>Pizza Type</legend>
 			<label id="type1-label" for="type1">Thin Crust</label>
-			<input type="radio" name="pizza-type" id="type1" value="1" checked>
-			<label id="type2-label" for="type2">Deep Dish</label>
-			<input type="radio" name="pizza-type" id="type2" value="2">
-		</fieldset>
-
- 		<div id="pizza-size-fields">
+			<input type="radio" name="pizza-type" id="type1" value="1" checked><label id="type2-label" for="type2">Deep Dish</label>
+			<input type="radio" name="pizza-type" id="type2" value="2"></fieldset><div id="pizza-size-fields">
 			<label for="pizza-size">Size: </label>
-			<select name="pizza-size" id="pizza-size">
-				<option selected label="none" value="none">Select a size</option>
-				<optgroup label="Thin Crust" id="thin-crust-sizes">
-					<option value="1.1">Small</option>
-					<option value="1.2">Medium</option>
-					<option value="1.3">Large</option>
-					<option value="1.4">Extra Large</option>
-				</optgroup>
-				<optgroup label="Deep Dish" id="deep-dish-sizes">
-					<option value="2.1">Regular</option>
-					<option value="2.2">Large</option>
-				</optgroup>
-			</select>
-		</div>
+			<select name="pizza-size" id="pizza-size"><option selected label="none" value="none">Select a size</option><optgroup label="Thin Crust" id="thin-crust-sizes"><option value="1.1">Small</option><option value="1.2">Medium</option><option value="1.3">Large</option><option value="1.4">Extra Large</option></optgroup><optgroup label="Deep Dish" id="deep-dish-sizes"><option value="2.1">Regular</option><option value="2.2">Large</option></optgroup></select></div>
 
-	</fieldset>
-	
-	<input type="submit" id="place-order" name="place-order" value="Place Order">
-
-</form>
-
-<!--END SOURCE CODE FOR EXAMPLE =============================== -->
-
-</body>
-</html>
+	</fieldset><input type="submit" id="place-order" name="place-order" value="Place Order"></form><!--END SOURCE CODE FOR EXAMPLE =============================== --></body>

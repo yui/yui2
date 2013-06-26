@@ -1,19 +1,11 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-	<title>API: imageloader   ImageLoader.js  (YUI Library)</title>
-	<link rel="stylesheet" type="text/css" href="assets/api.css">
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><title>API: imageloader   ImageLoader.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 
 	<div id="hd">
         <a href="http://developer.yahoo.com/yui/"><h1>Yahoo! UI Library</h1></a>
-        <h3>imageloader&nbsp; <span class="subtitle">2.3.1</span></h3>
+        <h3>imageloader  <span class="subtitle">2.3.1</span></h3>
         <p>
         <a href="./index.html">Yahoo! UI Library</a> 
             &gt; <a href="./module_imageloader.html">imageloader</a>
@@ -27,15 +19,14 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form name="yui-classopts-form">
-    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate" /> Show Private</span>
-    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected" /> Show Protected</span>
+    <span id="classopts"><input type="checkbox" name="showprivate" id="showprivate"> Show Private</span>
+    <span id="classopts"><input type="checkbox" name="showprotected" id="showprotected"> Show Protected</span>
             </form>
 
                     <div id="srcout">
                         <style>
                             #doc3 #classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * The image loader is a framework to dynamically load images</span>
 <span class="c"> * according to certain triggers, enabling faster load times</span>
 <span class="c"> * and a more responsive UI.</span>
@@ -45,7 +36,7 @@
 <span class="c"> * @experimental</span>
 <span class="c"> */</span>
 
-<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ImageLoader</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;undefined&#39;</span><span class="o">)</span> <span class="o">{</span>
+<span class="k">if</span> <span class="o">(</span><span class="k">typeof</span><span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ImageLoader</span><span class="o">)</span> <span class="o">==</span> <span class="s1">'undefined'</span><span class="o">)</span> <span class="o">{</span>
 	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ImageLoader</span> <span class="o">=</span> <span class="o">{};</span>
 <span class="o">}</span>
 
@@ -65,7 +56,7 @@
 <span class="c">	 * @property name</span>
 <span class="c">	 * @type String</span>
 <span class="c">	 */</span>
-	<span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">&#39;unnamed&#39;</span><span class="o">;</span>
+	<span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s1">'unnamed'</span><span class="o">;</span>
 	
 	<span class="c">/**</span>
 <span class="c">	 * Collection of images registered with this group</span>
@@ -92,7 +83,7 @@
 	
 	<span class="c">/**</span>
 <span class="c">	 * Collection of triggers for this group.</span>
-<span class="c">	 * Keeps track of each trigger&#39;s element, event, and event-listener-callback &quot;fetch&quot; function</span>
+<span class="c">	 * Keeps track of each trigger's element, event, and event-listener-callback "fetch" function</span>
 <span class="c">	 * @property _triggers</span>
 <span class="c">	 * @private</span>
 <span class="c">	 * @type Array</span>
@@ -108,7 +99,7 @@
 
 	<span class="c">/**</span>
 <span class="c">	 * Class name that will identify images belonging to the group. This class name will be removed from each element in order to fetch images.</span>
-<span class="c">	 * This class should have, in its CSS style definition, &quot;background:none !important;&quot;</span>
+<span class="c">	 * This class should have, in its CSS style definition, "background:none !important;"</span>
 <span class="c">	 * @property className</span>
 <span class="c">	 * @type String</span>
 <span class="c">	 */</span>
@@ -124,7 +115,7 @@
 	<span class="k">this</span><span class="o">.</span><span class="nx">_classImageEls</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
 	<span class="c">// add a listener to set the time limit in the onload</span>
-<span class="c"></span>	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s1">&#39;load&#39;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_onloadTasks</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+<span class="c"></span>	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">.</span><span class="nx">addListener</span><span class="o">(</span><span class="nb">window</span><span class="o">,</span> <span class="s1">'load'</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_onloadTasks</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 	<span class="c">// add the trigger</span>
 <span class="c"></span>	<span class="k">this</span><span class="o">.</span><span class="nx">addTrigger</span><span class="o">(</span><span class="nx">trigEl</span><span class="o">,</span> <span class="nx">trigAct</span><span class="o">);</span>
 
@@ -140,10 +131,10 @@
 	<span class="k">if</span> <span class="o">(!</span> <span class="nx">trigEl</span> <span class="o">||</span> <span class="o">!</span> <span class="nx">trigAct</span><span class="o">)</span> <span class="o">{</span>
 		<span class="k">return</span><span class="o">;</span>
 	<span class="o">}</span>
-	<span class="c">/* Need to wrap the fetch function. Event Util can&#39;t distinguish prototyped functions of different instantiations</span>
+	<span class="c">/* Need to wrap the fetch function. Event Util can't distinguish prototyped functions of different instantiations</span>
 <span class="c">	 *   Leads to this scenario: groupA and groupZ both have window-scroll triggers. groupZ also has a 2-sec timeout (groupA has no timeout).</span>
-<span class="c">	 *   groupZ&#39;s timeout fires; we remove the triggers. The removeListener call finds the first window-scroll event with Y.u.IL.p.fetch, which is groupA&#39;s. </span>
-<span class="c">	 *   groupA&#39;s trigger is removed and never fires, leaving images unfetched</span>
+<span class="c">	 *   groupZ's timeout fires; we remove the triggers. The removeListener call finds the first window-scroll event with Y.u.IL.p.fetch, which is groupA's. </span>
+<span class="c">	 *   groupA's trigger is removed and never fires, leaving images unfetched</span>
 <span class="c">	 */</span>
 	<span class="k">var</span> <span class="nx">wrappedFetch</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">fetch</span><span class="o">();</span>
@@ -153,13 +144,13 @@
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Setup to do in the window&#39;s onload</span>
+<span class="c"> * Setup to do in the window's onload</span>
 <span class="c"> * Initiates time limit for group; executes the fold check for the images</span>
 <span class="c"> * @method _onloadTasks</span>
 <span class="c"> * @private</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ImageLoader</span><span class="o">.</span><span class="nx">group</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_onloadTasks</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-	<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">timeoutLen</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">timeoutLen</span><span class="o">)</span> <span class="o">==</span> <span class="s1">&#39;number&#39;</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">timeoutLen</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
+	<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">timeoutLen</span> <span class="o">&amp;&amp;</span> <span class="k">typeof</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">timeoutLen</span><span class="o">)</span> <span class="o">==</span> <span class="s1">'number'</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">timeoutLen</span> <span class="o">&gt;</span> <span class="m">0</span><span class="o">)</span> <span class="o">{</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">_timeout</span> <span class="o">=</span> <span class="nx">setTimeout</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_getFetchTimeout</span><span class="o">(),</span> <span class="k">this</span><span class="o">.</span><span class="nx">timeoutLen</span> <span class="o">*</span> <span class="m">1000</span><span class="o">);</span>
 	<span class="o">}</span>
 
@@ -169,9 +160,9 @@
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Returns the group&#39;s fetch method, with the proper closure, for use with setTimeout</span>
+<span class="c"> * Returns the group's fetch method, with the proper closure, for use with setTimeout</span>
 <span class="c"> * @method _getFetchTimeout</span>
-<span class="c"> * @return {Function}  group&#39;s fetch method</span>
+<span class="c"> * @return {Function}  group's fetch method</span>
 <span class="c"> * @private</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ImageLoader</span><span class="o">.</span><span class="nx">group</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_getFetchTimeout</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
@@ -195,8 +186,8 @@
 <span class="c"> * @method registerSrcImage</span>
 <span class="c"> * @param {String}	domId	HTML DOM id of the image element</span>
 <span class="c"> * @param {String}	url	URL for the image</span>
-<span class="c"> * @param {Int}	width	pixel width of the image - defaults to image&#39;s natural size</span>
-<span class="c"> * @param {Int}	height	pixel height of the image - defaults to image&#39;s natural size</span>
+<span class="c"> * @param {Int}	width	pixel width of the image - defaults to image's natural size</span>
+<span class="c"> * @param {Int}	height	pixel height of the image - defaults to image's natural size</span>
 <span class="c"> * @return {Object}	srcImgObj that was registered, for modifying any attributes in the object</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ImageLoader</span><span class="o">.</span><span class="nx">group</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">registerSrcImage</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">domId</span><span class="o">,</span> <span class="nx">url</span><span class="o">,</span> <span class="nx">width</span><span class="o">,</span> <span class="nx">height</span><span class="o">)</span> <span class="o">{</span>
@@ -220,7 +211,7 @@
 <span class="c"> * @method fetch</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ImageLoader</span><span class="o">.</span><span class="nx">group</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">fetch</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Fetching images in group: &quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;&quot;.&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;imageloader&#39;</span><span class="o">);</span>
+	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Fetching images in group: "'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">'".'</span><span class="o">,</span> <span class="s1">'info'</span><span class="o">,</span> <span class="s1">'imageloader'</span><span class="o">);</span>
 
 	<span class="nx">clearTimeout</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_timeout</span><span class="o">);</span>
 	<span class="c">// remove all listeners</span>
@@ -245,18 +236,18 @@
 <span class="c"> * @private</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ImageLoader</span><span class="o">.</span><span class="nx">group</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_foldCheck</span> <span class="o">=</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Checking for images above the fold in group: &quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;&quot;&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;imageloader&#39;</span><span class="o">);</span>
-	<span class="k">var</span> <span class="nx">scrollTop</span> <span class="o">=</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">!=</span> <span class="s1">&#39;CSS1Compat&#39;</span><span class="o">)</span> <span class="o">?</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">scrollTop</span> <span class="o">:</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">.</span><span class="nx">scrollTop</span><span class="o">;</span>
+	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Checking for images above the fold in group: "'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">'"'</span><span class="o">,</span> <span class="s1">'info'</span><span class="o">,</span> <span class="s1">'imageloader'</span><span class="o">);</span>
+	<span class="k">var</span> <span class="nx">scrollTop</span> <span class="o">=</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">!=</span> <span class="s1">'CSS1Compat'</span><span class="o">)</span> <span class="o">?</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">scrollTop</span> <span class="o">:</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">.</span><span class="nx">scrollTop</span><span class="o">;</span>
 	<span class="k">var</span> <span class="nx">viewHeight</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getViewportHeight</span><span class="o">();</span>
 	<span class="k">var</span> <span class="nx">hLimit</span> <span class="o">=</span> <span class="nx">scrollTop</span> <span class="o">+</span> <span class="nx">viewHeight</span><span class="o">;</span>
-	<span class="k">var</span> <span class="nx">scrollLeft</span> <span class="o">=</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">!=</span> <span class="s1">&#39;CSS1Compat&#39;</span><span class="o">)</span> <span class="o">?</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">scrollLeft</span> <span class="o">:</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
+	<span class="k">var</span> <span class="nx">scrollLeft</span> <span class="o">=</span> <span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">compatMode</span> <span class="o">!=</span> <span class="s1">'CSS1Compat'</span><span class="o">)</span> <span class="o">?</span> <span class="nb">document</span><span class="o">.</span><span class="nx">body</span><span class="o">.</span><span class="nx">scrollLeft</span> <span class="o">:</span> <span class="nb">document</span><span class="o">.</span><span class="nx">documentElement</span><span class="o">.</span><span class="nx">scrollLeft</span><span class="o">;</span>
 	<span class="k">var</span> <span class="nx">viewWidth</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getViewportWidth</span><span class="o">();</span>
 	<span class="k">var</span> <span class="nx">wLimit</span> <span class="o">=</span> <span class="nx">scrollLeft</span> <span class="o">+</span> <span class="nx">viewWidth</span><span class="o">;</span>
 	<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">id</span> <span class="k">in</span> <span class="k">this</span><span class="o">.</span><span class="nx">_imgObjs</span><span class="o">)</span> <span class="o">{</span>
 		<span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">hasOwnProperty</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_imgObjs</span><span class="o">,</span> <span class="nx">id</span><span class="o">))</span> <span class="o">{</span>
 			<span class="k">var</span> <span class="nx">elPos</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_imgObjs</span><span class="o">[</span><span class="nx">id</span><span class="o">].</span><span class="nx">domId</span><span class="o">);</span>
 			<span class="k">if</span> <span class="o">(</span><span class="nx">elPos</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">&lt;</span> <span class="nx">hLimit</span> <span class="o">&amp;&amp;</span> <span class="nx">elPos</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">&lt;</span> <span class="nx">wLimit</span><span class="o">)</span> <span class="o">{</span>
-				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Image with id &quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_imgObjs</span><span class="o">[</span><span class="nx">id</span><span class="o">].</span><span class="nx">domId</span> <span class="o">+</span> <span class="s1">&#39;&quot; is above the fold. Fetching image.&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;imageloader&#39;</span><span class="o">);</span>
+				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Image with id "'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_imgObjs</span><span class="o">[</span><span class="nx">id</span><span class="o">].</span><span class="nx">domId</span> <span class="o">+</span> <span class="s1">'" is above the fold. Fetching image.'</span><span class="o">,</span> <span class="s1">'info'</span><span class="o">,</span> <span class="s1">'imageloader'</span><span class="o">);</span>
 				<span class="k">this</span><span class="o">.</span><span class="nx">_imgObjs</span><span class="o">[</span><span class="nx">id</span><span class="o">].</span><span class="nx">fetch</span><span class="o">();</span>
 			<span class="o">}</span>
 		<span class="o">}</span>
@@ -267,7 +258,7 @@
 		<span class="k">for</span> <span class="o">(</span><span class="k">var</span> <span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="k">this</span><span class="o">.</span><span class="nx">_classImageEls</span><span class="o">.</span><span class="nx">length</span><span class="o">;</span> <span class="nx">i</span><span class="o">++)</span> <span class="o">{</span>
 			<span class="k">var</span> <span class="nx">elPos</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getXY</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_classImageEls</span><span class="o">[</span><span class="nx">i</span><span class="o">]);</span>
 			<span class="k">if</span> <span class="o">(</span><span class="nx">elPos</span><span class="o">[</span><span class="m">1</span><span class="o">]</span> <span class="o">&lt;</span> <span class="nx">hLimit</span> <span class="o">&amp;&amp;</span> <span class="nx">elPos</span><span class="o">[</span><span class="m">0</span><span class="o">]</span> <span class="o">&lt;</span> <span class="nx">wLimit</span><span class="o">)</span> <span class="o">{</span>
-				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Image with id &quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_classImageEls</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">&#39;&quot; is above the fold. Fetching image. (Image registered by class name with the group - may not have an id.)&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;imageloader&#39;</span><span class="o">);</span>
+				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Image with id "'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">_classImageEls</span><span class="o">[</span><span class="nx">i</span><span class="o">].</span><span class="nx">id</span> <span class="o">+</span> <span class="s1">'" is above the fold. Fetching image. (Image registered by class name with the group - may not have an id.)'</span><span class="o">,</span> <span class="s1">'info'</span><span class="o">,</span> <span class="s1">'imageloader'</span><span class="o">);</span>
 				<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">removeClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_classImageEls</span><span class="o">[</span><span class="nx">i</span><span class="o">],</span> <span class="k">this</span><span class="o">.</span><span class="nx">className</span><span class="o">);</span>
 			<span class="o">}</span>
 		<span class="o">}</span>
@@ -284,7 +275,7 @@
 		<span class="k">return</span><span class="o">;</span>
 	<span class="o">}</span>
 
-	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Fetching all images with class &quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">className</span> <span class="o">+</span> <span class="s1">&#39;&quot; in group &quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;&quot;.&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;imageloader&#39;</span><span class="o">);</span>
+	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Fetching all images with class "'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">className</span> <span class="o">+</span> <span class="s1">'" in group "'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">'".'</span><span class="o">,</span> <span class="s1">'info'</span><span class="o">,</span> <span class="s1">'imageloader'</span><span class="o">);</span>
 	<span class="c">// this._classImageEls may have been set during _foldCheck</span>
 <span class="c"></span>	<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_classImageEls</span> <span class="o">===</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
 		<span class="k">this</span><span class="o">.</span><span class="nx">_classImageEls</span> <span class="o">=</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">Dom</span><span class="o">.</span><span class="nx">getElementsByClassName</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">className</span><span class="o">);</span>
@@ -316,7 +307,7 @@
 	<span class="k">this</span><span class="o">.</span><span class="nx">url</span> <span class="o">=</span> <span class="nx">url</span><span class="o">;</span>
 
 	<span class="c">/**</span>
-<span class="c">	 * Pixel width of the image. Will be set as a &quot;width&quot; attribute after the image is fetched.</span>
+<span class="c">	 * Pixel width of the image. Will be set as a "width" attribute after the image is fetched.</span>
 <span class="c">	 * Detaults to the natural width of the image.</span>
 <span class="c">	 * Only appropriate with src images</span>
 <span class="c">	 * @property width</span>
@@ -325,7 +316,7 @@
 	<span class="k">this</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
 	<span class="c">/**</span>
-<span class="c">	 * Pixel height of the image. Will be set as a &quot;height&quot; attribute after the image is fetched.</span>
+<span class="c">	 * Pixel height of the image. Will be set as a "height" attribute after the image is fetched.</span>
 <span class="c">	 * Detaults to the natural height of the image.</span>
 <span class="c">	 * Only appropriate with src images</span>
 <span class="c">	 * @property height</span>
@@ -334,7 +325,7 @@
 	<span class="k">this</span><span class="o">.</span><span class="nx">height</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
 
 	<span class="c">/**</span>
-<span class="c">	 * Whether the style.visibility should be set to &quot;visible&quot; after the image is fetched.</span>
+<span class="c">	 * Whether the style.visibility should be set to "visible" after the image is fetched.</span>
 <span class="c">	 * Used when setting src images as visibility:hidden prior to image fetching</span>
 <span class="c">	 * @property setVisible</span>
 <span class="c">	 * @type Boolean</span>
@@ -342,7 +333,7 @@
 	<span class="k">this</span><span class="o">.</span><span class="nx">setVisible</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
 
 	<span class="c">/**</span>
-<span class="c">	 * Whether the image has already been fetched. In the case of a foldCondional group, keeps track for when the trigger is fired so images aren&#39;t fetched twice</span>
+<span class="c">	 * Whether the image has already been fetched. In the case of a foldCondional group, keeps track for when the trigger is fired so images aren't fetched twice</span>
 <span class="c">	 * @property _fetched</span>
 <span class="c">	 * @type Boolean</span>
 <span class="c">	 * @private</span>
@@ -362,11 +353,11 @@
 	<span class="k">if</span> <span class="o">(!</span> <span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
 		<span class="k">return</span><span class="o">;</span>
 	<span class="o">}</span>
-	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">&#39;Fetching image with id &quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">domId</span> <span class="o">+</span> <span class="s1">&#39;&quot;.&#39;</span><span class="o">,</span> <span class="s1">&#39;info&#39;</span><span class="o">,</span> <span class="s1">&#39;imageloader&#39;</span><span class="o">);</span>
+	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s1">'Fetching image with id "'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">domId</span> <span class="o">+</span> <span class="s1">'".'</span><span class="o">,</span> <span class="s1">'info'</span><span class="o">,</span> <span class="s1">'imageloader'</span><span class="o">);</span>
 	<span class="k">this</span><span class="o">.</span><span class="nx">_applyUrl</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
 
 	<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">setVisible</span><span class="o">)</span> <span class="o">{</span>
-		<span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s1">&#39;visible&#39;</span><span class="o">;</span>
+		<span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">visibility</span> <span class="o">=</span> <span class="s1">'visible'</span><span class="o">;</span>
 	<span class="o">}</span>
 	<span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">width</span><span class="o">)</span> <span class="o">{</span>
 		<span class="nx">el</span><span class="o">.</span><span class="nx">width</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">width</span><span class="o">;</span>
@@ -388,7 +379,7 @@
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * Background image object. A background image is one whose URL is specified by &quot;background-image&quot; in the element&#39;s style</span>
+<span class="c"> * Background image object. A background image is one whose URL is specified by "background-image" in the element's style</span>
 <span class="c"> * @class YAHOO.util.ImageLoader.bgImgObj</span>
 <span class="c"> * @constructor</span>
 <span class="c"> * @extends YAHOO.util.ImageLoader.imgObj</span>
@@ -409,7 +400,7 @@
 <span class="c"> * @private</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ImageLoader</span><span class="o">.</span><span class="nx">bgImgObj</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_applyUrl</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
-	<span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">backgroundImage</span> <span class="o">=</span> <span class="s2">&quot;url(&#39;&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">url</span> <span class="o">+</span> <span class="s2">&quot;&#39;)&quot;</span><span class="o">;</span>
+	<span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">backgroundImage</span> <span class="o">=</span> <span class="s2">"url('"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">url</span> <span class="o">+</span> <span class="s2">"')"</span><span class="o">;</span>
 <span class="o">};</span>
 
 <span class="c">/**</span>
@@ -419,8 +410,8 @@
 <span class="c"> * @extends YAHOO.util.ImageLoader.imgObj</span>
 <span class="c"> * @param {String}	domId	HTML DOM id of the image element</span>
 <span class="c"> * @param {String}	url	URL for the image</span>
-<span class="c"> * @param {Int}	width	pixel width of the image - defaults to image&#39;s natural size</span>
-<span class="c"> * @param {Int}	height	pixel height of the image - defaults to image&#39;s natural size</span>
+<span class="c"> * @param {Int}	width	pixel width of the image - defaults to image's natural size</span>
+<span class="c"> * @param {Int}	height	pixel height of the image - defaults to image's natural size</span>
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ImageLoader</span><span class="o">.</span><span class="nx">srcImgObj</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">domId</span><span class="o">,</span> <span class="nx">url</span><span class="o">,</span> <span class="nx">width</span><span class="o">,</span> <span class="nx">height</span><span class="o">)</span> <span class="o">{</span>
 	<span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ImageLoader</span><span class="o">.</span><span class="nx">srcImgObj</span><span class="o">.</span><span class="nx">superclass</span><span class="o">.</span><span class="nx">constructor</span><span class="o">.</span><span class="nx">call</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="nx">domId</span><span class="o">,</span> <span class="nx">url</span><span class="o">);</span>
@@ -442,7 +433,7 @@
 <span class="o">};</span>
 
 <span class="c">/**</span>
-<span class="c"> * PNG background image object. A PNG background image is one whose URL is specified through AlphaImageLoader or by &quot;background-image&quot; in the element&#39;s style</span>
+<span class="c"> * PNG background image object. A PNG background image is one whose URL is specified through AlphaImageLoader or by "background-image" in the element's style</span>
 <span class="c"> * @class YAHOO.util.ImageLoader.pngBgImgObj</span>
 <span class="c"> * @constructor</span>
 <span class="c"> * @extends YAHOO.util.ImageLoader.imgObj</span>
@@ -464,10 +455,10 @@
 <span class="c"> */</span>
 <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">util</span><span class="o">.</span><span class="nx">ImageLoader</span><span class="o">.</span><span class="nx">pngBgImgObj</span><span class="o">.</span><span class="nx">prototype</span><span class="o">.</span><span class="nx">_applyUrl</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
 	<span class="k">if</span> <span class="o">(</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">&amp;&amp;</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">env</span><span class="o">.</span><span class="nx">ua</span><span class="o">.</span><span class="nx">ie</span> <span class="o">&lt;=</span> <span class="m">6</span><span class="o">)</span> <span class="o">{</span>
-		<span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">filter</span> <span class="o">=</span> <span class="s1">&#39;progid:DXImageTransform.Microsoft.AlphaImageLoader(src=&quot;&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">url</span> <span class="o">+</span> <span class="s1">&#39;&quot;, sizingMethod=&quot;scale&quot;)&#39;</span><span class="o">;</span>
+		<span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">filter</span> <span class="o">=</span> <span class="s1">'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="'</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">url</span> <span class="o">+</span> <span class="s1">'", sizingMethod="scale")'</span><span class="o">;</span>
 	<span class="o">}</span>
 	<span class="k">else</span> <span class="o">{</span>
-		<span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">backgroundImage</span> <span class="o">=</span> <span class="s2">&quot;url(&#39;&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">url</span> <span class="o">+</span> <span class="s2">&quot;&#39;)&quot;</span><span class="o">;</span>
+		<span class="nx">el</span><span class="o">.</span><span class="nx">style</span><span class="o">.</span><span class="nx">backgroundImage</span> <span class="o">=</span> <span class="s2">"url('"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">url</span> <span class="o">+</span> <span class="s2">"')"</span><span class="o">;</span>
 	<span class="o">}</span>
 <span class="o">};</span>
 </pre></div>
@@ -479,9 +470,7 @@
 
                     <div class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-
-                                <li class=""><a href="module_animation.html">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html">animation</a></li>
 
                                 <li class=""><a href="module_autocomplete.html">autocomplete</a></li>
 
@@ -528,26 +517,21 @@
                                 <li class=""><a href="module_yuiloader.html">yuiloader</a></li>
 
                                 <li class=""><a href="module_yuitest.html">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.ImageLoader.bgImgObj.html">YAHOO.util.ImageLoader.bgImgObj</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.ImageLoader.bgImgObj.html">YAHOO.util.ImageLoader.bgImgObj</a></li>
                                 <li class=""><a href="YAHOO.util.ImageLoader.group.html">YAHOO.util.ImageLoader.group</a></li>
                                 <li class=""><a href="YAHOO.util.ImageLoader.imgObj.html">YAHOO.util.ImageLoader.imgObj</a></li>
                                 <li class=""><a href="YAHOO.util.ImageLoader.pngBgImgObj.html">YAHOO.util.ImageLoader.pngBgImgObj</a></li>
                                 <li class=""><a href="YAHOO.util.ImageLoader.srcImgObj.html">YAHOO.util.ImageLoader.srcImgObj</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class="selected"><a href="ImageLoader.js.html">ImageLoader.js</a></li>
-                        </ul>
-                    </div>
+                        <ul class="content"><li class="selected"><a href="ImageLoader.js.html">ImageLoader.js</a></li>
+                        </ul></div>
 
 
 
@@ -557,9 +541,7 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2007 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2007 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-</body>
-</html>
+</div></body>

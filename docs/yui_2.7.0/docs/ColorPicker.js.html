@@ -1,31 +1,18 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html xmlns:yui="http://yuilibrary.com/rdf/1.0/yui.rdf#">
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-	<title>API: colorpicker   ColorPicker.js  (YUI Library)</title>
-
-	<link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css" />
-	<link rel="stylesheet" type="text/css" href="assets/api.css" />
-
-    <script type="text/javascript" src="assets/api-js"></script>
-    <script type="text/javascript" src="assets/ac-js"></script>
-</head>
-
-<body id="yahoo-com">
-
-<div id="doc3" class="yui-t2">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8"><title>API: colorpicker   ColorPicker.js  (YUI Library)</title><link rel="stylesheet" type="text/css" href="assets/reset-fonts-grids-min.css"><link rel="stylesheet" type="text/css" href="assets/api.css"><script type="text/javascript" src="assets/api-js"></script><script type="text/javascript" src="assets/ac-js"></script></head><body id="yahoo-com"><div style="background: none repeat scroll 0 0 #355E95; border: 1px solid #B6CDE1; box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); color: #FFF; font: 177% Helvetica,Arial,sans-serif; margin: 0; padding: 0; text-align: center; white-space: nowrap; line-height: 1.2em;">
+<p style="margin: 1em;">YUI recommends <a style="text-decoration: none; color: #F29752;" href="http://yuilibrary.com/">YUI 3.</a></p>
+<p style="margin: 1em;">YUI 2 has been <a style="text-decoration: none; color: #F29752;" href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+</div><div id="doc3" class="yui-t2">
 	<div id="hd">
         <h1><a href="http://developer.yahoo.com/yui/" title="Yahoo! UI Library">Yahoo! UI Library</a></h1>
-        <h3>colorpicker&nbsp; <span class="subtitle">2.7.0</span></h3>
+        <h3>colorpicker  <span class="subtitle">2.7.0</span></h3>
         <a href="./index.html" title="Yahoo! UI Library">Yahoo! UI Library</a> 
             &gt; <a href="./module_colorpicker.html" title="colorpicker">colorpicker</a>
                 
                  &gt; ColorPicker.js (source view) 
         <form onsubmit="return false">
             <div id="propertysearch">
-                Search: <input autocomplete="off" id="searchinput" />
-                <div id="searchresults">
-                    &nbsp;
+                Search: <input autocomplete="off" id="searchinput"><div id="searchresults">
+                     
                 </div>
             </div>
         </form>
@@ -35,19 +22,16 @@
 		<div id="yui-main">
 			<div class="yui-b">
             <form action="#" name="yui-classopts-form" method="get" id="yui-classopts-form">
-                <fieldset>
-                    <legend>Filters</legend>
-                <span class="classopts"><input type="checkbox" name="show_private" id="show_private" /> <label for="show_private">Show Private</label></span>
-                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected" /> <label for="show_protected">Show Protected</label></span>
-                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated" /> <label for="show_deprecated">Show Deprecated</label></span>
-                </fieldset>
-            </form>
+                <fieldset><legend>Filters</legend>
+                <span class="classopts"><input type="checkbox" name="show_private" id="show_private"><label for="show_private">Show Private</label></span>
+                <span class="classopts"><input type="checkbox" name="show_protected" id="show_protected"><label for="show_protected">Show Protected</label></span>
+                <span class="classopts"><input type="checkbox" name="show_deprecated" id="show_deprecated"><label for="show_deprecated">Show Deprecated</label></span>
+                </fieldset></form>
 
                     <div id="srcout">
                         <style>
                             #doc3 .classopts { display:none; }
-                        </style>
-<div class="highlight" ><pre><span class="c">/**</span>
+                        </style><div class="highlight"><pre><span class="c">/**</span>
 <span class="c"> * The colorpicker module provides a widget for selecting colors</span>
 <span class="c"> * @module colorpicker</span>
 <span class="c"> * @requires yahoo, dom, event, element, slider</span>
@@ -63,7 +47,7 @@
         <span class="nx">Event</span>  <span class="o">=</span> <span class="nx">util</span><span class="o">.</span><span class="nx">Event</span><span class="o">,</span>
         <span class="nx">sub</span>    <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">substitute</span><span class="o">,</span>
         
-        <span class="nx">b</span> <span class="o">=</span> <span class="s2">&quot;yui-picker&quot;</span><span class="o">;</span>
+        <span class="nx">b</span> <span class="o">=</span> <span class="s2">"yui-picker"</span><span class="o">;</span>
     
 
     <span class="c">/**</span>
@@ -75,12 +59,12 @@
 <span class="c">     * @param {HTMLElement | String | Object} el(optional) The html </span>
 <span class="c">     * element that represents the colorpicker, or the attribute object to use. </span>
 <span class="c">     * An element will be created if none provided.</span>
-<span class="c">     * @param {Object} attr (optional) A key map of the colorpicker&#39;s </span>
+<span class="c">     * @param {Object} attr (optional) A key map of the colorpicker's </span>
 <span class="c">     * initial attributes.  Ignored if first arg is attributes object.</span>
 <span class="c">     */</span>
     <span class="k">function</span> <span class="nx">ColorPicker</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">attr</span><span class="o">)</span> <span class="o">{</span>
         <span class="nx">_pickercount</span> <span class="o">=</span> <span class="nx">_pickercount</span> <span class="o">+</span> <span class="m">1</span><span class="o">;</span>
-        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="s2">&quot;ColorPicker&quot;</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">YAHOO</span><span class="o">.</span><span class="nx">widget</span><span class="o">.</span><span class="nx">LogWriter</span><span class="o">(</span><span class="s2">"ColorPicker"</span><span class="o">);</span>
         <span class="nx">attr</span> <span class="o">=</span> <span class="nx">attr</span> <span class="o">||</span> <span class="o">{};</span>
         <span class="k">if</span> <span class="o">(</span><span class="nx">arguments</span><span class="o">.</span><span class="nx">length</span> <span class="o">===</span> <span class="m">1</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">YAHOO</span><span class="o">.</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">el</span><span class="o">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">el</span><span class="o">.</span><span class="nx">nodeName</span><span class="o">)</span> <span class="o">{</span>
             <span class="nx">attr</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span> <span class="c">// treat first arg as attr object</span>
@@ -88,7 +72,7 @@
         <span class="o">}</span>
         
         <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="nx">attr</span><span class="o">.</span><span class="nx">element</span><span class="o">)</span> <span class="o">{</span> <span class="c">// create if we dont have one</span>
-<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;creating host element&quot;</span><span class="o">);</span>
+<span class="c"></span>            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"creating host element"</span><span class="o">);</span>
             <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_createHostElement</span><span class="o">(</span><span class="nx">attr</span><span class="o">);</span>
         <span class="o">}</span>
 
@@ -107,86 +91,86 @@
         <span class="nx">ID</span> <span class="o">:</span> <span class="o">{</span>
 
             <span class="c">/**</span>
-<span class="c">             * The id for the &quot;red&quot; form field</span>
+<span class="c">             * The id for the "red" form field</span>
 <span class="c">             * @property ID.R</span>
 <span class="c">             * @type String</span>
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-r</span>
 <span class="c">             */</span>
-            <span class="nx">R</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-r&quot;</span><span class="o">,</span>
+            <span class="nx">R</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-r"</span><span class="o">,</span>
 
             <span class="c">/**</span>
-<span class="c">             * The id for the &quot;red&quot; hex pair output</span>
+<span class="c">             * The id for the "red" hex pair output</span>
 <span class="c">             * @property ID.R_HEX</span>
 <span class="c">             * @type String</span>
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-rhex</span>
 <span class="c">             */</span>
-            <span class="nx">R_HEX</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-rhex&quot;</span><span class="o">,</span>
+            <span class="nx">R_HEX</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-rhex"</span><span class="o">,</span>
 
             <span class="c">/**</span>
-<span class="c">             * The id for the &quot;green&quot; form field</span>
+<span class="c">             * The id for the "green" form field</span>
 <span class="c">             * @property ID.G</span>
 <span class="c">             * @type String</span>
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-g</span>
 <span class="c">             */</span>
-            <span class="nx">G</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-g&quot;</span><span class="o">,</span>
+            <span class="nx">G</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-g"</span><span class="o">,</span>
 
             <span class="c">/**</span>
-<span class="c">             * The id for the &quot;green&quot; hex pair output</span>
+<span class="c">             * The id for the "green" hex pair output</span>
 <span class="c">             * @property ID.G_HEX</span>
 <span class="c">             * @type String</span>
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-ghex</span>
 <span class="c">             */</span>
-            <span class="nx">G_HEX</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-ghex&quot;</span><span class="o">,</span>
+            <span class="nx">G_HEX</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-ghex"</span><span class="o">,</span>
 
 
             <span class="c">/**</span>
-<span class="c">             * The id for the &quot;blue&quot; form field</span>
+<span class="c">             * The id for the "blue" form field</span>
 <span class="c">             * @property ID.B</span>
 <span class="c">             * @type String</span>
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-b</span>
 <span class="c">             */</span>
-            <span class="nx">B</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-b&quot;</span><span class="o">,</span>
+            <span class="nx">B</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-b"</span><span class="o">,</span>
 
             <span class="c">/**</span>
-<span class="c">             * The id for the &quot;blue&quot; hex pair output</span>
+<span class="c">             * The id for the "blue" hex pair output</span>
 <span class="c">             * @property ID.B_HEX</span>
 <span class="c">             * @type String</span>
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-bhex</span>
 <span class="c">             */</span>
-            <span class="nx">B_HEX</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-bhex&quot;</span><span class="o">,</span>
+            <span class="nx">B_HEX</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-bhex"</span><span class="o">,</span>
 
             <span class="c">/**</span>
-<span class="c">             * The id for the &quot;hue&quot; form field</span>
+<span class="c">             * The id for the "hue" form field</span>
 <span class="c">             * @property ID.H</span>
 <span class="c">             * @type String</span>
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-h</span>
 <span class="c">             */</span>
-            <span class="nx">H</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-h&quot;</span><span class="o">,</span>
+            <span class="nx">H</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-h"</span><span class="o">,</span>
 
             <span class="c">/**</span>
-<span class="c">             * The id for the &quot;saturation&quot; form field</span>
+<span class="c">             * The id for the "saturation" form field</span>
 <span class="c">             * @property ID.S</span>
 <span class="c">             * @type String</span>
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-s</span>
 <span class="c">             */</span>
-            <span class="nx">S</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-s&quot;</span><span class="o">,</span>
+            <span class="nx">S</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-s"</span><span class="o">,</span>
 
             <span class="c">/**</span>
-<span class="c">             * The id for the &quot;value&quot; form field</span>
+<span class="c">             * The id for the "value" form field</span>
 <span class="c">             * @property ID.V</span>
 <span class="c">             * @type String</span>
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-v</span>
 <span class="c">             */</span>
-            <span class="nx">V</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-v&quot;</span><span class="o">,</span>
+            <span class="nx">V</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-v"</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The id for the picker region slider</span>
@@ -195,7 +179,7 @@
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-bg</span>
 <span class="c">             */</span>
-            <span class="nx">PICKER_BG</span><span class="o">:</span>      <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-bg&quot;</span><span class="o">,</span>
+            <span class="nx">PICKER_BG</span><span class="o">:</span>      <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-bg"</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The id for the picker region thumb</span>
@@ -204,7 +188,7 @@
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-thumb</span>
 <span class="c">             */</span>
-            <span class="nx">PICKER_THUMB</span><span class="o">:</span>   <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-thumb&quot;</span><span class="o">,</span>
+            <span class="nx">PICKER_THUMB</span><span class="o">:</span>   <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-thumb"</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The id for the hue slider</span>
@@ -213,7 +197,7 @@
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-hue-bg</span>
 <span class="c">             */</span>
-            <span class="nx">HUE_BG</span><span class="o">:</span>         <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-hue-bg&quot;</span><span class="o">,</span>
+            <span class="nx">HUE_BG</span><span class="o">:</span>         <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-hue-bg"</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The id for the hue thumb</span>
@@ -222,7 +206,7 @@
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-hue-thumb</span>
 <span class="c">             */</span>
-            <span class="nx">HUE_THUMB</span><span class="o">:</span>      <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-hue-thumb&quot;</span><span class="o">,</span>
+            <span class="nx">HUE_THUMB</span><span class="o">:</span>      <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-hue-thumb"</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The id for the hex value form field</span>
@@ -231,7 +215,7 @@
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-hex</span>
 <span class="c">             */</span>
-            <span class="nx">HEX</span><span class="o">:</span>            <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-hex&quot;</span><span class="o">,</span>
+            <span class="nx">HEX</span><span class="o">:</span>            <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-hex"</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The id for the color swatch</span>
@@ -240,7 +224,7 @@
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-swatch</span>
 <span class="c">             */</span>
-            <span class="nx">SWATCH</span><span class="o">:</span>         <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-swatch&quot;</span><span class="o">,</span>
+            <span class="nx">SWATCH</span><span class="o">:</span>         <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-swatch"</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The id for the websafe color swatch</span>
@@ -249,7 +233,7 @@
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-websafe-swatch</span>
 <span class="c">             */</span>
-            <span class="nx">WEBSAFE_SWATCH</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-websafe-swatch&quot;</span><span class="o">,</span>
+            <span class="nx">WEBSAFE_SWATCH</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-websafe-swatch"</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The id for the control details</span>
@@ -257,7 +241,7 @@
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-controls</span>
 <span class="c">             */</span>
-            <span class="nx">CONTROLS</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-controls&quot;</span><span class="o">,</span>
+            <span class="nx">CONTROLS</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-controls"</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The id for the rgb controls</span>
@@ -265,7 +249,7 @@
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-rgb-controls</span>
 <span class="c">             */</span>
-            <span class="nx">RGB_CONTROLS</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-rgb-controls&quot;</span><span class="o">,</span>
+            <span class="nx">RGB_CONTROLS</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-rgb-controls"</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The id for the hsv controls</span>
@@ -273,7 +257,7 @@
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-hsv-controls</span>
 <span class="c">             */</span>
-            <span class="nx">HSV_CONTROLS</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-hsv-controls&quot;</span><span class="o">,</span>
+            <span class="nx">HSV_CONTROLS</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-hsv-controls"</span><span class="o">,</span>
             
             <span class="c">/**</span>
 <span class="c">             * The id for the hsv controls</span>
@@ -281,7 +265,7 @@
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-hex-controls</span>
 <span class="c">             */</span>
-            <span class="nx">HEX_CONTROLS</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-hex-controls&quot;</span><span class="o">,</span>
+            <span class="nx">HEX_CONTROLS</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-hex-controls"</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The id for the hex summary</span>
@@ -289,7 +273,7 @@
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-hex-summary</span>
 <span class="c">             */</span>
-            <span class="nx">HEX_SUMMARY</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-hex-summary&quot;</span><span class="o">,</span>
+            <span class="nx">HEX_SUMMARY</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-hex-summary"</span><span class="o">,</span>
 
             <span class="c">/**</span>
 <span class="c">             * The id for the controls section header</span>
@@ -297,47 +281,47 @@
 <span class="c">             * @final</span>
 <span class="c">             * @default yui-picker-controls-label</span>
 <span class="c">             */</span>
-            <span class="nx">CONTROLS_LABEL</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">&quot;-controls-label&quot;</span>
+            <span class="nx">CONTROLS_LABEL</span><span class="o">:</span> <span class="nx">b</span> <span class="o">+</span> <span class="s2">"-controls-label"</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>
 <span class="c">         * Constants for any script-generated messages.  The values here</span>
 <span class="c">         * are the default messages.  They can be updated by providing</span>
-<span class="c">         * the complete list to the constructor for the &quot;txt&quot; attribute.</span>
+<span class="c">         * the complete list to the constructor for the "txt" attribute.</span>
 <span class="c">         * @property TXT</span>
 <span class="c">         * @final</span>
 <span class="c">         */</span>
         <span class="nx">TXT</span> <span class="o">:</span> <span class="o">{</span>
-            <span class="nx">ILLEGAL_HEX</span><span class="o">:</span> <span class="s2">&quot;Illegal hex value entered&quot;</span><span class="o">,</span>
-            <span class="nx">SHOW_CONTROLS</span><span class="o">:</span> <span class="s2">&quot;Show color details&quot;</span><span class="o">,</span>
-            <span class="nx">HIDE_CONTROLS</span><span class="o">:</span> <span class="s2">&quot;Hide color details&quot;</span><span class="o">,</span>
-            <span class="nx">CURRENT_COLOR</span><span class="o">:</span> <span class="s2">&quot;Currently selected color: {rgb}&quot;</span><span class="o">,</span>
-            <span class="nx">CLOSEST_WEBSAFE</span><span class="o">:</span> <span class="s2">&quot;Closest websafe color: {rgb}. Click to select.&quot;</span><span class="o">,</span>
-            <span class="nx">R</span><span class="o">:</span> <span class="s2">&quot;R&quot;</span><span class="o">,</span>
-            <span class="nx">G</span><span class="o">:</span> <span class="s2">&quot;G&quot;</span><span class="o">,</span>
-            <span class="nx">B</span><span class="o">:</span> <span class="s2">&quot;B&quot;</span><span class="o">,</span>
-            <span class="nx">H</span><span class="o">:</span> <span class="s2">&quot;H&quot;</span><span class="o">,</span>
-            <span class="nx">S</span><span class="o">:</span> <span class="s2">&quot;S&quot;</span><span class="o">,</span>
-            <span class="nx">V</span><span class="o">:</span> <span class="s2">&quot;V&quot;</span><span class="o">,</span>
-            <span class="nx">HEX</span><span class="o">:</span> <span class="s2">&quot;#&quot;</span><span class="o">,</span>
-            <span class="nx">DEG</span><span class="o">:</span> <span class="s2">&quot;\u00B0&quot;</span><span class="o">,</span>
-            <span class="nx">PERCENT</span><span class="o">:</span> <span class="s2">&quot;%&quot;</span>
+            <span class="nx">ILLEGAL_HEX</span><span class="o">:</span> <span class="s2">"Illegal hex value entered"</span><span class="o">,</span>
+            <span class="nx">SHOW_CONTROLS</span><span class="o">:</span> <span class="s2">"Show color details"</span><span class="o">,</span>
+            <span class="nx">HIDE_CONTROLS</span><span class="o">:</span> <span class="s2">"Hide color details"</span><span class="o">,</span>
+            <span class="nx">CURRENT_COLOR</span><span class="o">:</span> <span class="s2">"Currently selected color: {rgb}"</span><span class="o">,</span>
+            <span class="nx">CLOSEST_WEBSAFE</span><span class="o">:</span> <span class="s2">"Closest websafe color: {rgb}. Click to select."</span><span class="o">,</span>
+            <span class="nx">R</span><span class="o">:</span> <span class="s2">"R"</span><span class="o">,</span>
+            <span class="nx">G</span><span class="o">:</span> <span class="s2">"G"</span><span class="o">,</span>
+            <span class="nx">B</span><span class="o">:</span> <span class="s2">"B"</span><span class="o">,</span>
+            <span class="nx">H</span><span class="o">:</span> <span class="s2">"H"</span><span class="o">,</span>
+            <span class="nx">S</span><span class="o">:</span> <span class="s2">"S"</span><span class="o">,</span>
+            <span class="nx">V</span><span class="o">:</span> <span class="s2">"V"</span><span class="o">,</span>
+            <span class="nx">HEX</span><span class="o">:</span> <span class="s2">"#"</span><span class="o">,</span>
+            <span class="nx">DEG</span><span class="o">:</span> <span class="s2">"\u00B0"</span><span class="o">,</span>
+            <span class="nx">PERCENT</span><span class="o">:</span> <span class="s2">"%"</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>
 <span class="c">         * Constants for the default image locations for img tags that are</span>
 <span class="c">         * generated by the control.  They can be modified by passing the</span>
-<span class="c">         * complete list to the contructor for the &quot;images&quot; attribute</span>
+<span class="c">         * complete list to the contructor for the "images" attribute</span>
 <span class="c">         * @property IMAGE</span>
 <span class="c">         * @final</span>
 <span class="c">         */</span>
         <span class="nx">IMAGE</span> <span class="o">:</span> <span class="o">{</span>
-            <span class="nx">PICKER_THUMB</span><span class="o">:</span> <span class="s2">&quot;../../build/colorpicker/assets/picker_thumb.png&quot;</span><span class="o">,</span>
-            <span class="nx">HUE_THUMB</span><span class="o">:</span> <span class="s2">&quot;../../build/colorpicker/assets/hue_thumb.png&quot;</span>
+            <span class="nx">PICKER_THUMB</span><span class="o">:</span> <span class="s2">"../../build/colorpicker/assets/picker_thumb.png"</span><span class="o">,</span>
+            <span class="nx">HUE_THUMB</span><span class="o">:</span> <span class="s2">"../../build/colorpicker/assets/hue_thumb.png"</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>
-<span class="c">         * Constants for the control&#39;s default default values</span>
+<span class="c">         * Constants for the control's default default values</span>
 <span class="c">         * @property DEFAULT</span>
 <span class="c">         * @final</span>
 <span class="c">         */</span>
@@ -346,34 +330,34 @@
         <span class="o">},</span>
 
         <span class="c">/**</span>
-<span class="c">         * Constants for the control&#39;s configuration attributes</span>
+<span class="c">         * Constants for the control's configuration attributes</span>
 <span class="c">         * @property OPT</span>
 <span class="c">         * @final</span>
 <span class="c">         */</span>
         <span class="nx">OPT</span> <span class="o">:</span> <span class="o">{</span>
-            <span class="nx">HUE</span>         <span class="o">:</span> <span class="s2">&quot;hue&quot;</span><span class="o">,</span>
-            <span class="nx">SATURATION</span>  <span class="o">:</span> <span class="s2">&quot;saturation&quot;</span><span class="o">,</span>
-            <span class="nx">VALUE</span>       <span class="o">:</span> <span class="s2">&quot;value&quot;</span><span class="o">,</span>
-            <span class="nx">RED</span>     <span class="o">:</span> <span class="s2">&quot;red&quot;</span><span class="o">,</span>
-            <span class="nx">GREEN</span>   <span class="o">:</span> <span class="s2">&quot;green&quot;</span><span class="o">,</span>
-            <span class="nx">BLUE</span>    <span class="o">:</span> <span class="s2">&quot;blue&quot;</span><span class="o">,</span>
-            <span class="nx">HSV</span>     <span class="o">:</span> <span class="s2">&quot;hsv&quot;</span><span class="o">,</span>
-            <span class="nx">RGB</span>     <span class="o">:</span> <span class="s2">&quot;rgb&quot;</span><span class="o">,</span>
-            <span class="nx">WEBSAFE</span> <span class="o">:</span> <span class="s2">&quot;websafe&quot;</span><span class="o">,</span>
-            <span class="nx">HEX</span>     <span class="o">:</span> <span class="s2">&quot;hex&quot;</span><span class="o">,</span>
-            <span class="nx">PICKER_SIZE</span>       <span class="o">:</span> <span class="s2">&quot;pickersize&quot;</span><span class="o">,</span>
-            <span class="nx">SHOW_CONTROLS</span>     <span class="o">:</span> <span class="s2">&quot;showcontrols&quot;</span><span class="o">,</span>
-            <span class="nx">SHOW_RGB_CONTROLS</span> <span class="o">:</span> <span class="s2">&quot;showrgbcontrols&quot;</span><span class="o">,</span>
-            <span class="nx">SHOW_HSV_CONTROLS</span> <span class="o">:</span> <span class="s2">&quot;showhsvcontrols&quot;</span><span class="o">,</span>
-            <span class="nx">SHOW_HEX_CONTROLS</span> <span class="o">:</span> <span class="s2">&quot;showhexcontrols&quot;</span><span class="o">,</span>
-            <span class="nx">SHOW_HEX_SUMMARY</span>  <span class="o">:</span> <span class="s2">&quot;showhexsummary&quot;</span><span class="o">,</span>
-            <span class="nx">SHOW_WEBSAFE</span>      <span class="o">:</span> <span class="s2">&quot;showwebsafe&quot;</span><span class="o">,</span>
-            <span class="nx">CONTAINER</span>         <span class="o">:</span> <span class="s2">&quot;container&quot;</span><span class="o">,</span>
-            <span class="nx">IDS</span>      <span class="o">:</span> <span class="s2">&quot;ids&quot;</span><span class="o">,</span>
-            <span class="nx">ELEMENTS</span> <span class="o">:</span> <span class="s2">&quot;elements&quot;</span><span class="o">,</span>
-            <span class="nx">TXT</span>      <span class="o">:</span> <span class="s2">&quot;txt&quot;</span><span class="o">,</span>
-            <span class="nx">IMAGES</span>   <span class="o">:</span> <span class="s2">&quot;images&quot;</span><span class="o">,</span>
-            <span class="nx">ANIMATE</span>  <span class="o">:</span> <span class="s2">&quot;animate&quot;</span>
+            <span class="nx">HUE</span>         <span class="o">:</span> <span class="s2">"hue"</span><span class="o">,</span>
+            <span class="nx">SATURATION</span>  <span class="o">:</span> <span class="s2">"saturation"</span><span class="o">,</span>
+            <span class="nx">VALUE</span>       <span class="o">:</span> <span class="s2">"value"</span><span class="o">,</span>
+            <span class="nx">RED</span>     <span class="o">:</span> <span class="s2">"red"</span><span class="o">,</span>
+            <span class="nx">GREEN</span>   <span class="o">:</span> <span class="s2">"green"</span><span class="o">,</span>
+            <span class="nx">BLUE</span>    <span class="o">:</span> <span class="s2">"blue"</span><span class="o">,</span>
+            <span class="nx">HSV</span>     <span class="o">:</span> <span class="s2">"hsv"</span><span class="o">,</span>
+            <span class="nx">RGB</span>     <span class="o">:</span> <span class="s2">"rgb"</span><span class="o">,</span>
+            <span class="nx">WEBSAFE</span> <span class="o">:</span> <span class="s2">"websafe"</span><span class="o">,</span>
+            <span class="nx">HEX</span>     <span class="o">:</span> <span class="s2">"hex"</span><span class="o">,</span>
+            <span class="nx">PICKER_SIZE</span>       <span class="o">:</span> <span class="s2">"pickersize"</span><span class="o">,</span>
+            <span class="nx">SHOW_CONTROLS</span>     <span class="o">:</span> <span class="s2">"showcontrols"</span><span class="o">,</span>
+            <span class="nx">SHOW_RGB_CONTROLS</span> <span class="o">:</span> <span class="s2">"showrgbcontrols"</span><span class="o">,</span>
+            <span class="nx">SHOW_HSV_CONTROLS</span> <span class="o">:</span> <span class="s2">"showhsvcontrols"</span><span class="o">,</span>
+            <span class="nx">SHOW_HEX_CONTROLS</span> <span class="o">:</span> <span class="s2">"showhexcontrols"</span><span class="o">,</span>
+            <span class="nx">SHOW_HEX_SUMMARY</span>  <span class="o">:</span> <span class="s2">"showhexsummary"</span><span class="o">,</span>
+            <span class="nx">SHOW_WEBSAFE</span>      <span class="o">:</span> <span class="s2">"showwebsafe"</span><span class="o">,</span>
+            <span class="nx">CONTAINER</span>         <span class="o">:</span> <span class="s2">"container"</span><span class="o">,</span>
+            <span class="nx">IDS</span>      <span class="o">:</span> <span class="s2">"ids"</span><span class="o">,</span>
+            <span class="nx">ELEMENTS</span> <span class="o">:</span> <span class="s2">"elements"</span><span class="o">,</span>
+            <span class="nx">TXT</span>      <span class="o">:</span> <span class="s2">"txt"</span><span class="o">,</span>
+            <span class="nx">IMAGES</span>   <span class="o">:</span> <span class="s2">"images"</span><span class="o">,</span>
+            <span class="nx">ANIMATE</span>  <span class="o">:</span> <span class="s2">"animate"</span>
         <span class="o">},</span>
 
         <span class="c">/**</span>
@@ -388,12 +372,12 @@
         <span class="nx">skipAnim</span> <span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
 
         <span class="c">/**</span>
-<span class="c">         * Creates the host element if it doesn&#39;t exist</span>
+<span class="c">         * Creates the host element if it doesn't exist</span>
 <span class="c">         * @method _createHostElement</span>
 <span class="c">         * @protected</span>
 <span class="c">         */</span>
         <span class="nx">_createHostElement</span> <span class="o">:</span> <span class="k">function</span> <span class="o">()</span> <span class="o">{</span>
-            <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">&#39;div&#39;</span><span class="o">);</span>
+            <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nb">document</span><span class="o">.</span><span class="nx">createElement</span><span class="o">(</span><span class="s1">'div'</span><span class="o">);</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">CSS</span><span class="o">.</span><span class="nx">BASE</span><span class="o">)</span> <span class="o">{</span>
                 <span class="nx">el</span><span class="o">.</span><span class="nx">className</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">CSS</span><span class="o">.</span><span class="nx">BASE</span><span class="o">;</span>
@@ -415,13 +399,13 @@
             <span class="nx">h</span> <span class="o">=</span> <span class="nx">size</span> <span class="o">-</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="nx">h</span> <span class="o">/</span> <span class="m">360</span> <span class="o">*</span> <span class="nx">size</span><span class="o">);</span>
             
             <span class="c">// 0 is at the top and bottom of the hue slider.  Always go to</span>
-<span class="c"></span>            <span class="c">// the top so we don&#39;t end up sending the thumb to the bottom</span>
-<span class="c"></span>            <span class="c">// when the value didn&#39;t actually change (e.g., a conversion</span>
+<span class="c"></span>            <span class="c">// the top so we don't end up sending the thumb to the bottom</span>
+<span class="c"></span>            <span class="c">// when the value didn't actually change (e.g., a conversion</span>
 <span class="c"></span>            <span class="c">// produced 360 instead of 0 and the value was already 0).</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">h</span> <span class="o">===</span> <span class="nx">size</span><span class="o">)</span> <span class="o">{</span>
                 <span class="nx">h</span> <span class="o">=</span> <span class="m">0</span><span class="o">;</span>
             <span class="o">}</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Hue slider is being set to &quot;</span> <span class="o">+</span> <span class="nx">h</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Hue slider is being set to "</span> <span class="o">+</span> <span class="nx">h</span><span class="o">);</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">hueSlider</span><span class="o">.</span><span class="nx">setValue</span><span class="o">(</span><span class="nx">h</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">skipAnim</span><span class="o">);</span>
         <span class="o">},</span>
@@ -440,7 +424,7 @@
             <span class="nx">s</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="nx">s</span> <span class="o">*</span> <span class="nx">size</span> <span class="o">/</span> <span class="m">100</span><span class="o">);</span>
             <span class="nx">v</span> <span class="o">=</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="nx">size</span> <span class="o">-</span> <span class="o">(</span><span class="nx">v</span> <span class="o">*</span> <span class="nx">size</span> <span class="o">/</span> <span class="m">100</span><span class="o">));</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Setting picker slider to &quot;</span> <span class="o">+</span> <span class="o">[</span><span class="nx">s</span><span class="o">,</span> <span class="nx">v</span><span class="o">]);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Setting picker slider to "</span> <span class="o">+</span> <span class="o">[</span><span class="nx">s</span><span class="o">,</span> <span class="nx">v</span><span class="o">]);</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">pickerSlider</span><span class="o">.</span><span class="nx">setRegionValue</span><span class="o">(</span><span class="nx">s</span><span class="o">,</span> <span class="nx">v</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">skipAnim</span><span class="o">);</span>
         <span class="o">},</span>
@@ -528,21 +512,21 @@
             <span class="k">var</span> <span class="nx">rgb</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">RGB</span><span class="o">),</span>
                 <span class="nx">websafe</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">WEBSAFE</span><span class="o">),</span>
                 <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">SWATCH</span><span class="o">),</span>
-                <span class="nx">color</span> <span class="o">=</span> <span class="nx">rgb</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">&quot;,&quot;</span><span class="o">),</span>
+                <span class="nx">color</span> <span class="o">=</span> <span class="nx">rgb</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">","</span><span class="o">),</span>
                 <span class="nx">txt</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">TXT</span><span class="o">);</span>
 
-            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;background-color&quot;</span><span class="o">,</span> <span class="s2">&quot;rgb(&quot;</span> <span class="o">+</span> <span class="nx">color</span>  <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">);</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">"background-color"</span><span class="o">,</span> <span class="s2">"rgb("</span> <span class="o">+</span> <span class="nx">color</span>  <span class="o">+</span> <span class="s2">")"</span><span class="o">);</span>
             <span class="nx">el</span><span class="o">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">CURRENT_COLOR</span><span class="o">,</span> <span class="o">{</span>
-                    <span class="s2">&quot;rgb&quot;</span><span class="o">:</span> <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">HEX</span><span class="o">)</span>
+                    <span class="s2">"rgb"</span><span class="o">:</span> <span class="s2">"#"</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">HEX</span><span class="o">)</span>
                 <span class="o">});</span>
 
 
             <span class="nx">el</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">WEBSAFE_SWATCH</span><span class="o">);</span>
-            <span class="nx">color</span> <span class="o">=</span> <span class="nx">websafe</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">&quot;,&quot;</span><span class="o">);</span>
+            <span class="nx">color</span> <span class="o">=</span> <span class="nx">websafe</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">","</span><span class="o">);</span>
 
-            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;background-color&quot;</span><span class="o">,</span> <span class="s2">&quot;rgb(&quot;</span> <span class="o">+</span> <span class="nx">color</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">);</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">"background-color"</span><span class="o">,</span> <span class="s2">"rgb("</span> <span class="o">+</span> <span class="nx">color</span> <span class="o">+</span> <span class="s2">")"</span><span class="o">);</span>
             <span class="nx">el</span><span class="o">.</span><span class="nx">title</span> <span class="o">=</span> <span class="nx">sub</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">CLOSEST_WEBSAFE</span><span class="o">,</span> <span class="o">{</span>
-                    <span class="s2">&quot;rgb&quot;</span><span class="o">:</span> <span class="s2">&quot;#&quot;</span> <span class="o">+</span> <span class="nx">Color</span><span class="o">.</span><span class="nx">rgb2hex</span><span class="o">(</span><span class="nx">websafe</span><span class="o">)</span>
+                    <span class="s2">"rgb"</span><span class="o">:</span> <span class="s2">"#"</span> <span class="o">+</span> <span class="nx">Color</span><span class="o">.</span><span class="nx">rgb2hex</span><span class="o">(</span><span class="nx">websafe</span><span class="o">)</span>
                 <span class="o">});</span>
 
         <span class="o">},</span>
@@ -554,7 +538,7 @@
 <span class="c">         * @protected</span>
 <span class="c">         */</span>
         <span class="nx">_getValuesFromSliders</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;hsv &quot;</span> <span class="o">+</span> <span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">_getH</span><span class="o">(),</span><span class="k">this</span><span class="o">.</span><span class="nx">_getS</span><span class="o">(),</span><span class="k">this</span><span class="o">.</span><span class="nx">_getV</span><span class="o">()]);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"hsv "</span> <span class="o">+</span> <span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">_getH</span><span class="o">(),</span><span class="k">this</span><span class="o">.</span><span class="nx">_getS</span><span class="o">(),</span><span class="k">this</span><span class="o">.</span><span class="nx">_getV</span><span class="o">()]);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">RGB</span><span class="o">,</span> <span class="nx">Color</span><span class="o">.</span><span class="nx">hsv2rgb</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">_getH</span><span class="o">(),</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getS</span><span class="o">(),</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getV</span><span class="o">()));</span>
         <span class="o">},</span>
 
@@ -584,16 +568,16 @@
 <span class="c">         * @protected</span>
 <span class="c">         */</span>
         <span class="nx">_onHueSliderChange</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">newOffset</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;hue update: &quot;</span> <span class="o">+</span> <span class="nx">newOffset</span> <span class="o">,</span> <span class="s2">&quot;warn&quot;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"hue update: "</span> <span class="o">+</span> <span class="nx">newOffset</span> <span class="o">,</span> <span class="s2">"warn"</span><span class="o">);</span>
 
             <span class="k">var</span> <span class="nx">h</span>        <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">_getH</span><span class="o">(),</span>
                 <span class="nx">rgb</span>      <span class="o">=</span> <span class="nx">Color</span><span class="o">.</span><span class="nx">hsv2rgb</span><span class="o">(</span><span class="nx">h</span><span class="o">,</span> <span class="m">1</span><span class="o">,</span> <span class="m">1</span><span class="o">),</span>
-                <span class="nx">styleDef</span> <span class="o">=</span> <span class="s2">&quot;rgb(&quot;</span> <span class="o">+</span> <span class="nx">rgb</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">&quot;,&quot;</span><span class="o">)</span> <span class="o">+</span> <span class="s2">&quot;)&quot;</span><span class="o">;</span>
+                <span class="nx">styleDef</span> <span class="o">=</span> <span class="s2">"rgb("</span> <span class="o">+</span> <span class="nx">rgb</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">","</span><span class="o">)</span> <span class="o">+</span> <span class="s2">")"</span><span class="o">;</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">HUE</span><span class="o">,</span> <span class="nx">h</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
             <span class="c">// set picker background to the hue</span>
-<span class="c"></span>            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">PICKER_BG</span><span class="o">),</span> <span class="s2">&quot;background-color&quot;</span><span class="o">,</span> <span class="nx">styleDef</span><span class="o">);</span>
+<span class="c"></span>            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">PICKER_BG</span><span class="o">),</span> <span class="s2">"background-color"</span><span class="o">,</span> <span class="nx">styleDef</span><span class="o">);</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">hueSlider</span><span class="o">.</span><span class="nx">valueChangeSource</span> <span class="o">!==</span> <span class="nx">Slider</span><span class="o">.</span><span class="nx">SOURCE_SET_VALUE</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_getValuesFromSliders</span><span class="o">();</span>
@@ -611,7 +595,7 @@
 <span class="c">         * @protected</span>
 <span class="c">         */</span>
         <span class="nx">_onPickerSliderChange</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">newOffset</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">sub</span><span class="o">(</span><span class="s2">&quot;picker update [{x}, {y}]&quot;</span><span class="o">,</span> <span class="nx">newOffset</span><span class="o">));</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">sub</span><span class="o">(</span><span class="s2">"picker update [{x}, {y}]"</span><span class="o">,</span> <span class="nx">newOffset</span><span class="o">));</span>
 
             <span class="k">var</span> <span class="nx">s</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">_getS</span><span class="o">(),</span> <span class="nx">v</span><span class="o">=</span><span class="k">this</span><span class="o">.</span><span class="nx">_getV</span><span class="o">();</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">SATURATION</span><span class="o">,</span> <span class="nb">Math</span><span class="o">.</span><span class="nx">round</span><span class="o">(</span><span class="nx">s</span><span class="o">*</span><span class="m">100</span><span class="o">),</span> <span class="kc">true</span><span class="o">);</span>
@@ -645,7 +629,7 @@
         <span class="nx">_getCommand</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">Event</span><span class="o">.</span><span class="nx">getCharCode</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
 
-            <span class="c">//alert(Event.getCharCode(e) + &quot;, &quot; + e.keyCode + &quot;, &quot; + e.charCode);</span>
+            <span class="c">//alert(Event.getCharCode(e) + ", " + e.keyCode + ", " + e.charCode);</span>
 <span class="c"></span>
             <span class="c">// special keys</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">c</span> <span class="o">===</span> <span class="m">38</span><span class="o">)</span> <span class="o">{</span> <span class="c">// up arrow</span>
@@ -660,13 +644,13 @@
 <span class="c"></span>                <span class="k">return</span> <span class="m">2</span><span class="o">;</span>
             <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="nx">c</span> <span class="o">&gt;=</span> <span class="m">65</span> <span class="o">&amp;&amp;</span> <span class="nx">c</span><span class="o">&lt;=</span><span class="m">70</span><span class="o">)</span> <span class="o">{</span> <span class="c">// A-F</span>
 <span class="c"></span>                <span class="k">return</span> <span class="m">2</span><span class="o">;</span>
-            <span class="c">//} else if (&quot;8, 9, 13, 27, 37, 39&quot;.indexOf(c) &gt; -1 || </span>
+            <span class="c">//} else if ("8, 9, 13, 27, 37, 39".indexOf(c) &gt; -1 || </span>
 <span class="c"></span>            <span class="c">//              (c &gt;= 112 &amp;&amp; c &lt;=123)) { // including F-keys</span>
 <span class="c"></span>            <span class="c">// tab, delete, return, escape, left, right or ctrl/meta sequences</span>
-<span class="c"></span>            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s2">&quot;8, 9, 13, 27, 37, 39&quot;</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="nx">c</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span> <span class="o">||</span>
+<span class="c"></span>            <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s2">"8, 9, 13, 27, 37, 39"</span><span class="o">.</span><span class="nx">indexOf</span><span class="o">(</span><span class="nx">c</span><span class="o">)</span> <span class="o">&gt;</span> <span class="o">-</span><span class="m">1</span> <span class="o">||</span>
                        <span class="nx">e</span><span class="o">.</span><span class="nx">ctrlKey</span> <span class="o">||</span> <span class="nx">e</span><span class="o">.</span><span class="nx">metaKey</span><span class="o">)</span> <span class="o">{</span> <span class="c">// special chars</span>
 <span class="c"></span>                <span class="k">return</span> <span class="m">5</span><span class="o">;</span>
-            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">// something we probably don&#39;t want</span>
+            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span> <span class="c">// something we probably don't want</span>
 <span class="c"></span>                <span class="k">return</span> <span class="m">0</span><span class="o">;</span>
             <span class="o">}</span>
         <span class="o">},</span>
@@ -781,9 +765,9 @@
 
         <span class="c">/**</span>
 <span class="c">         * Returns the element reference that is saved.  The id can be either</span>
-<span class="c">         * the element id, or the key for this id in the &quot;id&quot; config attribute.</span>
+<span class="c">         * the element id, or the key for this id in the "id" config attribute.</span>
 <span class="c">         * For instance, the host element id can be obtained by passing its</span>
-<span class="c">         * id (default: &quot;yui_picker&quot;) or by its key &quot;YUI_PICKER&quot;.</span>
+<span class="c">         * id (default: "yui_picker") or by its key "YUI_PICKER".</span>
 <span class="c">         * @param id {string} the element id, or key </span>
 <span class="c">         * @return {HTMLElement} a reference to the element</span>
 <span class="c">         */</span>
@@ -792,7 +776,7 @@
         <span class="o">},</span>
 
         <span class="nx">_createElements</span> <span class="o">:</span> <span class="k">function</span><span class="o">()</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Building markup&quot;</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Building markup"</span><span class="o">);</span>
             <span class="k">var</span> <span class="nx">el</span><span class="o">,</span> <span class="nx">child</span><span class="o">,</span> <span class="nx">img</span><span class="o">,</span> <span class="nx">fld</span><span class="o">,</span> <span class="nx">p</span><span class="o">,</span>
                 <span class="nx">ids</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">IDS</span><span class="o">),</span>
                 <span class="nx">txt</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">TXT</span><span class="o">),</span>
@@ -806,9 +790,9 @@
                 <span class="o">},</span>
                 <span class="nx">RGBElem</span> <span class="o">=</span> <span class="k">function</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">obj</span><span class="o">)</span> <span class="o">{</span>
                     <span class="k">var</span> <span class="nx">o</span> <span class="o">=</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">merge</span><span class="o">({</span>
-                            <span class="c">//type: &quot;txt&quot;,</span>
-<span class="c"></span>                            <span class="nx">autocomplete</span><span class="o">:</span> <span class="s2">&quot;off&quot;</span><span class="o">,</span>
-                            <span class="nx">value</span><span class="o">:</span> <span class="s2">&quot;0&quot;</span><span class="o">,</span>
+                            <span class="c">//type: "txt",</span>
+<span class="c"></span>                            <span class="nx">autocomplete</span><span class="o">:</span> <span class="s2">"off"</span><span class="o">,</span>
+                            <span class="nx">value</span><span class="o">:</span> <span class="s2">"0"</span><span class="o">,</span>
                             <span class="nx">size</span><span class="o">:</span> <span class="m">3</span><span class="o">,</span>
                             <span class="nx">maxlength</span><span class="o">:</span> <span class="m">3</span>
                         <span class="o">},</span> <span class="nx">obj</span><span class="o">);</span>
@@ -817,23 +801,23 @@
                     <span class="k">return</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="nx">type</span><span class="o">,</span> <span class="nx">o</span><span class="o">);</span>
                 <span class="o">};</span>
 
-            <span class="nx">p</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;element&quot;</span><span class="o">);</span>
+            <span class="nx">p</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">"element"</span><span class="o">);</span>
 
             <span class="c">// Picker slider (S and V) ---------------------------------------------</span>
 <span class="c"></span>
-            <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"div"</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">PICKER_BG</span><span class="o">],</span>
-                <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-bg&quot;</span><span class="o">,</span>
+                <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-bg"</span><span class="o">,</span>
                 <span class="nx">tabIndex</span><span class="o">:</span> <span class="o">-</span><span class="m">1</span><span class="o">,</span>
                 <span class="nx">hideFocus</span><span class="o">:</span> <span class="kc">true</span>
             <span class="o">});</span>
 
-            <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"div"</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">PICKER_THUMB</span><span class="o">],</span>
-                <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-thumb&quot;</span>
+                <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-thumb"</span>
             <span class="o">});</span>
 
-            <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;img&quot;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"img"</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">src</span><span class="o">:</span> <span class="nx">images</span><span class="o">.</span><span class="nx">PICKER_THUMB</span>
             <span class="o">});</span>
 
@@ -842,19 +826,19 @@
             <span class="nx">p</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
             
             <span class="c">// Hue slider ---------------------------------------------</span>
-<span class="c"></span>            <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">,</span> <span class="o">{</span>
+<span class="c"></span>            <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"div"</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HUE_BG</span><span class="o">],</span>
-                <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-hue-bg&quot;</span><span class="o">,</span>
+                <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-hue-bg"</span><span class="o">,</span>
                 <span class="nx">tabIndex</span><span class="o">:</span> <span class="o">-</span><span class="m">1</span><span class="o">,</span>
                 <span class="nx">hideFocus</span><span class="o">:</span> <span class="kc">true</span>
             <span class="o">});</span>
 
-            <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"div"</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HUE_THUMB</span><span class="o">],</span>
-                <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-hue-thumb&quot;</span>
+                <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-hue-thumb"</span>
             <span class="o">});</span>
 
-            <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;img&quot;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"img"</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">src</span><span class="o">:</span> <span class="nx">images</span><span class="o">.</span><span class="nx">HUE_THUMB</span>
             <span class="o">});</span>
 
@@ -865,69 +849,69 @@
 
             <span class="c">// controls ---------------------------------------------</span>
 <span class="c"></span>
-            <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"div"</span><span class="o">,</span> <span class="o">{</span>
                 <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">CONTROLS</span><span class="o">],</span>
-                <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-controls&quot;</span>
+                <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-controls"</span>
             <span class="o">});</span>
 
             <span class="nx">p</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
             <span class="nx">p</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span>
 
                 <span class="c">// controls header</span>
-<span class="c"></span>                <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">,</span> <span class="o">{</span>
-                    <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;hd&quot;</span>
+<span class="c"></span>                <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"div"</span><span class="o">,</span> <span class="o">{</span>
+                    <span class="nx">className</span><span class="o">:</span> <span class="s2">"hd"</span>
                 <span class="o">});</span>
 
-                <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;a&quot;</span><span class="o">,</span> <span class="o">{</span>
+                <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"a"</span><span class="o">,</span> <span class="o">{</span>
                     <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">CONTROLS_LABEL</span><span class="o">],</span>
-                    <span class="c">//className: &quot;yui-picker-controls-label&quot;,</span>
-<span class="c"></span>                    <span class="nx">href</span><span class="o">:</span> <span class="s2">&quot;#&quot;</span>
+                    <span class="c">//className: "yui-picker-controls-label",</span>
+<span class="c"></span>                    <span class="nx">href</span><span class="o">:</span> <span class="s2">"#"</span>
                 <span class="o">});</span>
                 <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
                 <span class="nx">p</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
 
                 <span class="c">// bd</span>
-<span class="c"></span>                <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">,</span> <span class="o">{</span>
-                    <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;bd&quot;</span>
+<span class="c"></span>                <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"div"</span><span class="o">,</span> <span class="o">{</span>
+                    <span class="nx">className</span><span class="o">:</span> <span class="s2">"bd"</span>
                 <span class="o">});</span>
 
                 <span class="nx">p</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
                 <span class="nx">p</span> <span class="o">=</span> <span class="nx">el</span><span class="o">;</span>
 
                     <span class="c">// rgb</span>
-<span class="c"></span>                    <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;ul&quot;</span><span class="o">,</span> <span class="o">{</span>
+<span class="c"></span>                    <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"ul"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">RGB_CONTROLS</span><span class="o">],</span>
-                        <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-rgb-controls&quot;</span>
+                        <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-rgb-controls"</span>
                     <span class="o">});</span>
 
-                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;li&quot;</span><span class="o">);</span>
-                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">R</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">));</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"li"</span><span class="o">);</span>
+                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">R</span> <span class="o">+</span> <span class="s2">" "</span><span class="o">));</span>
 
-                    <span class="nx">fld</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">&quot;input&quot;</span><span class="o">,</span> <span class="o">{</span>
+                    <span class="nx">fld</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">"input"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">R</span><span class="o">],</span>
-                        <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-r&quot;</span>
+                        <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-r"</span>
                     <span class="o">});</span>
 
                     <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">fld</span><span class="o">);</span>
                     <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
 
-                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;li&quot;</span><span class="o">);</span>
-                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">G</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">));</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"li"</span><span class="o">);</span>
+                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">G</span> <span class="o">+</span> <span class="s2">" "</span><span class="o">));</span>
 
-                    <span class="nx">fld</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">&quot;input&quot;</span><span class="o">,</span> <span class="o">{</span>
+                    <span class="nx">fld</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">"input"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">G</span><span class="o">],</span>
-                        <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-g&quot;</span>
+                        <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-g"</span>
                     <span class="o">});</span>
 
                     <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">fld</span><span class="o">);</span>
                     <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
 
-                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;li&quot;</span><span class="o">);</span>
-                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">B</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">));</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"li"</span><span class="o">);</span>
+                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">B</span> <span class="o">+</span> <span class="s2">" "</span><span class="o">));</span>
 
-                    <span class="nx">fld</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">&quot;input&quot;</span><span class="o">,</span> <span class="o">{</span>
+                    <span class="nx">fld</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">"input"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">B</span><span class="o">],</span>
-                        <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-b&quot;</span>
+                        <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-b"</span>
                     <span class="o">});</span>
 
                     <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">fld</span><span class="o">);</span>
@@ -936,47 +920,47 @@
                     <span class="nx">p</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
 
                     <span class="c">// hsv</span>
-<span class="c"></span>                    <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;ul&quot;</span><span class="o">,</span> <span class="o">{</span>
+<span class="c"></span>                    <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"ul"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HSV_CONTROLS</span><span class="o">],</span>
-                        <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-hsv-controls&quot;</span>
+                        <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-hsv-controls"</span>
                     <span class="o">});</span>
 
-                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;li&quot;</span><span class="o">);</span>
-                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">H</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">));</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"li"</span><span class="o">);</span>
+                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">H</span> <span class="o">+</span> <span class="s2">" "</span><span class="o">));</span>
 
-                    <span class="nx">fld</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">&quot;input&quot;</span><span class="o">,</span> <span class="o">{</span>
+                    <span class="nx">fld</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">"input"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">H</span><span class="o">],</span>
-                        <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-h&quot;</span>
+                        <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-h"</span>
                     <span class="o">});</span>
 
                     <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">fld</span><span class="o">);</span>
-                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">txt</span><span class="o">.</span><span class="nx">DEG</span><span class="o">));</span>
+                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="s2">" "</span> <span class="o">+</span> <span class="nx">txt</span><span class="o">.</span><span class="nx">DEG</span><span class="o">));</span>
 
                     <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
 
-                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;li&quot;</span><span class="o">);</span>
-                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">S</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">));</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"li"</span><span class="o">);</span>
+                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">S</span> <span class="o">+</span> <span class="s2">" "</span><span class="o">));</span>
 
-                    <span class="nx">fld</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">&quot;input&quot;</span><span class="o">,</span> <span class="o">{</span>
+                    <span class="nx">fld</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">"input"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">S</span><span class="o">],</span>
-                        <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-s&quot;</span>
+                        <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-s"</span>
                     <span class="o">});</span>
 
                     <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">fld</span><span class="o">);</span>
-                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">txt</span><span class="o">.</span><span class="nx">PERCENT</span><span class="o">));</span>
+                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="s2">" "</span> <span class="o">+</span> <span class="nx">txt</span><span class="o">.</span><span class="nx">PERCENT</span><span class="o">));</span>
 
                     <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
 
-                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;li&quot;</span><span class="o">);</span>
-                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">V</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">));</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"li"</span><span class="o">);</span>
+                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">V</span> <span class="o">+</span> <span class="s2">" "</span><span class="o">));</span>
 
-                    <span class="nx">fld</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">&quot;input&quot;</span><span class="o">,</span> <span class="o">{</span>
+                    <span class="nx">fld</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">"input"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">V</span><span class="o">],</span>
-                        <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-v&quot;</span>
+                        <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-v"</span>
                     <span class="o">});</span>
 
                     <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">fld</span><span class="o">);</span>
-                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="nx">txt</span><span class="o">.</span><span class="nx">PERCENT</span><span class="o">));</span>
+                    <span class="nx">child</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="s2">" "</span> <span class="o">+</span> <span class="nx">txt</span><span class="o">.</span><span class="nx">PERCENT</span><span class="o">));</span>
 
                     <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
                     <span class="nx">p</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
@@ -984,37 +968,37 @@
 
                     <span class="c">// hex summary</span>
 <span class="c"></span>
-                    <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;ul&quot;</span><span class="o">,</span> <span class="o">{</span>
+                    <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"ul"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HEX_SUMMARY</span><span class="o">],</span>
-                        <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-hex_summary&quot;</span>
+                        <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-hex_summary"</span>
                     <span class="o">});</span>
 
-                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;li&quot;</span><span class="o">,</span> <span class="o">{</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"li"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">R_HEX</span><span class="o">]</span>
                     <span class="o">});</span>
                     <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
 
-                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;li&quot;</span><span class="o">,</span> <span class="o">{</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"li"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">G_HEX</span><span class="o">]</span>
                     <span class="o">});</span>
                     <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
 
-                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;li&quot;</span><span class="o">,</span> <span class="o">{</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"li"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">B_HEX</span><span class="o">]</span>
                     <span class="o">});</span>
                     <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
                     <span class="nx">p</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
 
                     <span class="c">// hex field</span>
-<span class="c"></span>                    <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">,</span> <span class="o">{</span>
+<span class="c"></span>                    <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"div"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HEX_CONTROLS</span><span class="o">],</span>
-                        <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-hex-controls&quot;</span>
+                        <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-hex-controls"</span>
                     <span class="o">});</span>
-                    <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">HEX</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span><span class="o">));</span>
+                    <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nb">document</span><span class="o">.</span><span class="nx">createTextNode</span><span class="o">(</span><span class="nx">txt</span><span class="o">.</span><span class="nx">HEX</span> <span class="o">+</span> <span class="s2">" "</span><span class="o">));</span>
 
-                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">&quot;input&quot;</span><span class="o">,</span> <span class="o">{</span>
+                    <span class="nx">child</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">RGBElem</span><span class="o">(</span><span class="s2">"input"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HEX</span><span class="o">],</span>
-                        <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-hex&quot;</span><span class="o">,</span>
+                        <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-hex"</span><span class="o">,</span>
                         <span class="nx">size</span><span class="o">:</span> <span class="m">6</span><span class="o">,</span>
                         <span class="nx">maxlength</span><span class="o">:</span> <span class="m">6</span>
                     <span class="o">});</span>
@@ -1022,20 +1006,20 @@
                     <span class="nx">el</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">child</span><span class="o">);</span>
                     <span class="nx">p</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
 
-                    <span class="nx">p</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">&quot;element&quot;</span><span class="o">);</span>
+                    <span class="nx">p</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="s2">"element"</span><span class="o">);</span>
 
                     <span class="c">// swatch</span>
-<span class="c"></span>                    <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">,</span> <span class="o">{</span>
+<span class="c"></span>                    <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"div"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">SWATCH</span><span class="o">],</span>
-                        <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-swatch&quot;</span>
+                        <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-swatch"</span>
                     <span class="o">});</span>
 
                     <span class="nx">p</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
 
                     <span class="c">// websafe swatch</span>
-<span class="c"></span>                    <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">&quot;div&quot;</span><span class="o">,</span> <span class="o">{</span>
+<span class="c"></span>                    <span class="nx">el</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Elem</span><span class="o">(</span><span class="s2">"div"</span><span class="o">,</span> <span class="o">{</span>
                         <span class="nx">id</span><span class="o">:</span> <span class="nx">ids</span><span class="o">[</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">WEBSAFE_SWATCH</span><span class="o">],</span>
-                        <span class="nx">className</span><span class="o">:</span> <span class="s2">&quot;yui-picker-websafe-swatch&quot;</span>
+                        <span class="nx">className</span><span class="o">:</span> <span class="s2">"yui-picker-websafe-swatch"</span>
                     <span class="o">});</span>
 
                     <span class="nx">p</span><span class="o">.</span><span class="nx">appendChild</span><span class="o">(</span><span class="nx">el</span><span class="o">);</span>
@@ -1043,11 +1027,11 @@
         <span class="o">},</span>
 
         <span class="nx">_attachRGBHSV</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">config</span><span class="o">)</span> <span class="o">{</span>
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">id</span><span class="o">),</span> <span class="s2">&quot;keydown&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">me</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">id</span><span class="o">),</span> <span class="s2">"keydown"</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">me</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">me</span><span class="o">.</span><span class="nx">_rgbFieldKeypress</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">config</span><span class="o">);</span>
                 <span class="o">},</span> <span class="k">this</span><span class="o">);</span>
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">id</span><span class="o">),</span> <span class="s2">&quot;keypress&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_numbersOnly</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">id</span><span class="o">),</span> <span class="s2">&quot;blur&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">me</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">id</span><span class="o">),</span> <span class="s2">"keypress"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_numbersOnly</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">id</span><span class="o">),</span> <span class="s2">"blur"</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">me</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">me</span><span class="o">.</span><span class="nx">_useFieldValue</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">config</span><span class="o">);</span>
                 <span class="o">},</span> <span class="k">this</span><span class="o">);</span>
         <span class="o">},</span>
@@ -1066,7 +1050,7 @@
                        <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">GREEN</span><span class="o">),</span>
                        <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">BLUE</span><span class="o">)];</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;RGB value set to &quot;</span> <span class="o">+</span> <span class="nx">rgb</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"RGB value set to "</span> <span class="o">+</span> <span class="nx">rgb</span><span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">RGB</span><span class="o">,</span> <span class="nx">rgb</span><span class="o">);</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">_updateSliders</span><span class="o">();</span>
@@ -1097,7 +1081,7 @@
             <span class="k">if</span> <span class="o">(!</span><span class="nx">el</span><span class="o">)</span> <span class="o">{</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_createElements</span><span class="o">();</span>
             <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;Using pre-existing markup&quot;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"Using pre-existing markup"</span><span class="o">);</span>
             <span class="o">}</span>
 
             <span class="k">for</span> <span class="o">(</span><span class="nx">i</span> <span class="k">in</span> <span class="nx">ids</span><span class="o">)</span> <span class="o">{</span>
@@ -1140,7 +1124,7 @@
             <span class="k">var</span> <span class="nx">ID</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">,</span>
                 <span class="nx">size</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">PICKER_SIZE</span><span class="o">);</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;picker size&quot;</span> <span class="o">+</span> <span class="nx">size</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"picker size"</span> <span class="o">+</span> <span class="nx">size</span><span class="o">);</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">hueSlider</span> <span class="o">=</span> <span class="nx">Slider</span><span class="o">.</span><span class="nx">getVertSlider</span><span class="o">(</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HUE_BG</span><span class="o">),</span> 
@@ -1165,16 +1149,16 @@
             <span class="k">var</span> <span class="nx">ID</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">,</span>
                 <span class="nx">O</span>  <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">;</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">hueSlider</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;change&quot;</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">hueSlider</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">"change"</span><span class="o">,</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_onHueSliderChange</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">pickerSlider</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">&quot;change&quot;</span><span class="o">,</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">pickerSlider</span><span class="o">.</span><span class="nx">subscribe</span><span class="o">(</span><span class="s2">"change"</span><span class="o">,</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_onPickerSliderChange</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">ID</span><span class="o">.</span><span class="nx">WEBSAFE_SWATCH</span><span class="o">),</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">ID</span><span class="o">.</span><span class="nx">WEBSAFE_SWATCH</span><span class="o">),</span> <span class="s2">"click"</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
                    <span class="k">this</span><span class="o">.</span><span class="nx">setValue</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">O</span><span class="o">.</span><span class="nx">WEBSAFE</span><span class="o">));</span>
                <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">ID</span><span class="o">.</span><span class="nx">CONTROLS_LABEL</span><span class="o">),</span> <span class="s2">&quot;click&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">ID</span><span class="o">.</span><span class="nx">CONTROLS_LABEL</span><span class="o">),</span> <span class="s2">"click"</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">)</span> <span class="o">{</span>
                    <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="nx">O</span><span class="o">.</span><span class="nx">SHOW_CONTROLS</span><span class="o">,</span> <span class="o">!</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="nx">O</span><span class="o">.</span><span class="nx">SHOW_CONTROLS</span><span class="o">));</span>
                    <span class="nx">Event</span><span class="o">.</span><span class="nx">preventDefault</span><span class="o">(</span><span class="nx">e</span><span class="o">);</span>
                <span class="o">},</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
@@ -1186,13 +1170,13 @@
             <span class="k">this</span><span class="o">.</span><span class="nx">_attachRGBHSV</span><span class="o">(</span><span class="nx">ID</span><span class="o">.</span><span class="nx">S</span><span class="o">,</span> <span class="nx">O</span><span class="o">.</span><span class="nx">SATURATION</span><span class="o">);</span> 
             <span class="k">this</span><span class="o">.</span><span class="nx">_attachRGBHSV</span><span class="o">(</span><span class="nx">ID</span><span class="o">.</span><span class="nx">V</span><span class="o">,</span> <span class="nx">O</span><span class="o">.</span><span class="nx">VALUE</span><span class="o">);</span> 
 
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HEX</span><span class="o">),</span> <span class="s2">&quot;keydown&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">me</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HEX</span><span class="o">),</span> <span class="s2">"keydown"</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">me</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">me</span><span class="o">.</span><span class="nx">_hexFieldKeypress</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">O</span><span class="o">.</span><span class="nx">HEX</span><span class="o">);</span>
                 <span class="o">},</span> <span class="k">this</span><span class="o">);</span>
 
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HEX</span><span class="o">),</span> <span class="s2">&quot;keypress&quot;</span><span class="o">,</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HEX</span><span class="o">),</span> <span class="s2">"keypress"</span><span class="o">,</span>
                 <span class="k">this</span><span class="o">.</span><span class="nx">_hexOnly</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span><span class="kc">true</span><span class="o">);</span>
-            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HEX</span><span class="o">),</span> <span class="s2">&quot;blur&quot;</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">me</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nx">Event</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HEX</span><span class="o">),</span> <span class="s2">"blur"</span><span class="o">,</span> <span class="k">function</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="nx">me</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">me</span><span class="o">.</span><span class="nx">_useFieldValue</span><span class="o">(</span><span class="nx">e</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="nx">O</span><span class="o">.</span><span class="nx">HEX</span><span class="o">);</span>
                 <span class="o">},</span> <span class="k">this</span><span class="o">);</span>
         <span class="o">},</span>
@@ -1223,7 +1207,7 @@
                        <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">VALUE</span><span class="o">)/</span><span class="m">100</span><span class="o">],</span>
                 <span class="nx">rgb</span> <span class="o">=</span> <span class="nx">Color</span><span class="o">.</span><span class="nx">hsv2rgb</span><span class="o">(</span><span class="nx">hsv</span><span class="o">);</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">&quot;HSV converted to RGB &quot;</span> <span class="o">+</span> <span class="nx">hsv</span> <span class="o">+</span> <span class="s2">&quot; : &quot;</span> <span class="o">+</span> <span class="nx">rgb</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="s2">"HSV converted to RGB "</span> <span class="o">+</span> <span class="nx">hsv</span> <span class="o">+</span> <span class="s2">" : "</span> <span class="o">+</span> <span class="nx">rgb</span><span class="o">);</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">RGB</span><span class="o">,</span> <span class="nx">rgb</span><span class="o">);</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">_updateSliders</span><span class="o">();</span>
@@ -1244,22 +1228,22 @@
 
             <span class="c">// support #369 -&gt; #336699 shorthand</span>
 <span class="c"></span>            <span class="k">if</span> <span class="o">(</span><span class="nx">l</span> <span class="o">===</span> <span class="m">3</span><span class="o">)</span> <span class="o">{</span>
-                <span class="nx">c</span> <span class="o">=</span> <span class="nx">hex</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s2">&quot;&quot;</span><span class="o">);</span>
+                <span class="nx">c</span> <span class="o">=</span> <span class="nx">hex</span><span class="o">.</span><span class="nx">split</span><span class="o">(</span><span class="s2">""</span><span class="o">);</span>
                 <span class="k">for</span> <span class="o">(</span><span class="nx">i</span><span class="o">=</span><span class="m">0</span><span class="o">;</span> <span class="nx">i</span><span class="o">&lt;</span><span class="nx">l</span><span class="o">;</span> <span class="nx">i</span><span class="o">=</span><span class="nx">i</span><span class="o">+</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span>
                     <span class="nx">c</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">=</span> <span class="nx">c</span><span class="o">[</span><span class="nx">i</span><span class="o">]</span> <span class="o">+</span> <span class="nx">c</span><span class="o">[</span><span class="nx">i</span><span class="o">];</span>
                 <span class="o">}</span>
 
-                <span class="nx">hex</span> <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">&quot;&quot;</span><span class="o">);</span>
+                <span class="nx">hex</span> <span class="o">=</span> <span class="nx">c</span><span class="o">.</span><span class="nx">join</span><span class="o">(</span><span class="s2">""</span><span class="o">);</span>
             <span class="o">}</span>
 
             <span class="k">if</span> <span class="o">(</span><span class="nx">hex</span><span class="o">.</span><span class="nx">length</span> <span class="o">!==</span> <span class="m">6</span><span class="o">)</span> <span class="o">{</span>
-                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">TXT</span><span class="o">.</span><span class="nx">ILLEGAL_HEX</span><span class="o">),</span> <span class="s2">&quot;error&quot;</span><span class="o">);</span>
+                <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">TXT</span><span class="o">.</span><span class="nx">ILLEGAL_HEX</span><span class="o">),</span> <span class="s2">"error"</span><span class="o">);</span>
                 <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>
             <span class="o">}</span>
 
             <span class="nx">rgb</span> <span class="o">=</span> <span class="nx">Color</span><span class="o">.</span><span class="nx">hex2rgb</span><span class="o">(</span><span class="nx">hex</span><span class="o">);</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">sub</span><span class="o">(</span><span class="s2">&quot;Hex value set to {hex} ({rgb})&quot;</span><span class="o">,</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">sub</span><span class="o">(</span><span class="s2">"Hex value set to {hex} ({rgb})"</span><span class="o">,</span> <span class="o">{</span>
                     <span class="nx">hex</span><span class="o">:</span> <span class="nx">hex</span><span class="o">,</span> <span class="nx">rgb</span><span class="o">:</span> <span class="nx">rgb</span>
                 <span class="o">}));</span>
 
@@ -1276,7 +1260,7 @@
 <span class="c">         */</span>
         <span class="nx">_hideShowEl</span> <span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">id</span><span class="o">,</span> <span class="nx">on</span><span class="o">)</span> <span class="o">{</span>
             <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="o">(</span><span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">?</span> <span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="nx">id</span><span class="o">)</span> <span class="o">:</span> <span class="nx">id</span><span class="o">);</span>
-            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">&quot;display&quot;</span><span class="o">,</span> <span class="o">(</span><span class="nx">on</span><span class="o">)</span> <span class="o">?</span> <span class="s2">&quot;&quot;</span> <span class="o">:</span> <span class="s2">&quot;none&quot;</span><span class="o">);</span>
+            <span class="nx">Dom</span><span class="o">.</span><span class="nx">setStyle</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="s2">"display"</span><span class="o">,</span> <span class="o">(</span><span class="nx">on</span><span class="o">)</span> <span class="o">?</span> <span class="s2">""</span> <span class="o">:</span> <span class="s2">"none"</span><span class="o">);</span>
         <span class="o">},</span>
 
 
@@ -1367,7 +1351,7 @@
 <span class="c">             * @type string</span>
 <span class="c">             */</span>
             <span class="k">this</span><span class="o">.</span><span class="nx">setAttributeConfig</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">HEX</span><span class="o">,</span> <span class="o">{</span>
-                    <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">hex</span> <span class="o">||</span> <span class="s2">&quot;FFFFFF&quot;</span><span class="o">,</span>
+                    <span class="nx">value</span><span class="o">:</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">hex</span> <span class="o">||</span> <span class="s2">"FFFFFF"</span><span class="o">,</span>
                     <span class="nx">validator</span><span class="o">:</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isString</span>
                 <span class="o">});</span>
 
@@ -1395,8 +1379,8 @@
                         <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">HEX</span><span class="o">,</span> <span class="nx">hex</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
 
-                        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">sub</span><span class="o">(</span><span class="s2">&quot;RGB value set to {rgb} (hsv: {hsv})&quot;</span><span class="o">,</span> <span class="o">{</span>
-                                <span class="s2">&quot;hsv&quot;</span><span class="o">:</span> <span class="nx">hsv</span><span class="o">,</span> <span class="s2">&quot;rgb&quot;</span><span class="o">:</span> <span class="nx">rgb</span>
+                        <span class="k">this</span><span class="o">.</span><span class="nx">logger</span><span class="o">.</span><span class="nx">log</span><span class="o">(</span><span class="nx">sub</span><span class="o">(</span><span class="s2">"RGB value set to {rgb} (hsv: {hsv})"</span><span class="o">,</span> <span class="o">{</span>
+                                <span class="s2">"hsv"</span><span class="o">:</span> <span class="nx">hsv</span><span class="o">,</span> <span class="s2">"rgb"</span><span class="o">:</span> <span class="nx">rgb</span>
                             <span class="o">}));</span>
 
                         <span class="c">// fix bug #1754338 - when saturation is 0, hue is</span>
@@ -1413,7 +1397,7 @@
             <span class="c">/**</span>
 <span class="c">             * If the color picker will live inside of a container object,</span>
 <span class="c">             * set, provide a reference to it so the control can use the</span>
-<span class="c">             * container&#39;s events.</span>
+<span class="c">             * container's events.</span>
 <span class="c">             * @attribute container</span>
 <span class="c">             * @type YAHOO.widget.Panel</span>
 <span class="c">             */</span>
@@ -1512,7 +1496,7 @@
                     <span class="nx">value</span><span class="o">:</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isBoolean</span><span class="o">(</span><span class="nx">attr</span><span class="o">.</span><span class="nx">showcontrols</span><span class="o">)</span> <span class="o">?</span> <span class="nx">attr</span><span class="o">.</span><span class="nx">showcontrols</span> <span class="o">:</span> <span class="kc">true</span><span class="o">,</span>
                     <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">on</span><span class="o">)</span> <span class="o">{</span>
 
-                        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getElementsByClassName</span><span class="o">(</span><span class="s2">&quot;bd&quot;</span><span class="o">,</span> <span class="s2">&quot;div&quot;</span><span class="o">,</span> 
+                        <span class="k">var</span> <span class="nx">el</span> <span class="o">=</span> <span class="nx">Dom</span><span class="o">.</span><span class="nx">getElementsByClassName</span><span class="o">(</span><span class="s2">"bd"</span><span class="o">,</span> <span class="s2">"div"</span><span class="o">,</span> 
                                 <span class="k">this</span><span class="o">.</span><span class="nx">getElement</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">CONTROLS</span><span class="o">))[</span><span class="m">0</span><span class="o">];</span>
 
                         <span class="k">this</span><span class="o">.</span><span class="nx">_hideShowEl</span><span class="o">(</span><span class="nx">el</span><span class="o">,</span> <span class="nx">on</span><span class="o">);</span>
@@ -1547,10 +1531,10 @@
                     <span class="nx">value</span><span class="o">:</span> <span class="nx">lang</span><span class="o">.</span><span class="nx">isBoolean</span><span class="o">(</span><span class="nx">attr</span><span class="o">.</span><span class="nx">showhsvcontrols</span><span class="o">)</span> <span class="o">?</span>
                                           <span class="nx">attr</span><span class="o">.</span><span class="nx">showhsvcontrols</span> <span class="o">:</span> <span class="kc">false</span><span class="o">,</span>
                     <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">on</span><span class="o">)</span> <span class="o">{</span>
-                        <span class="c">//Dom.setStyle(this.getElement(this.ID.HSV_CONTROLS), &quot;visibility&quot;, (on) ? &quot;&quot; : &quot;hidden&quot;);</span>
+                        <span class="c">//Dom.setStyle(this.getElement(this.ID.HSV_CONTROLS), "visibility", (on) ? "" : "hidden");</span>
 <span class="c"></span>                        <span class="k">this</span><span class="o">.</span><span class="nx">_hideShowEl</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HSV_CONTROLS</span><span class="o">,</span> <span class="nx">on</span><span class="o">);</span>
 
-                        <span class="c">// can&#39;t show both the hsv controls and the rbg hex summary</span>
+                        <span class="c">// can't show both the hsv controls and the rbg hex summary</span>
 <span class="c"></span>                        <span class="k">if</span> <span class="o">(</span><span class="nx">on</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">SHOW_HEX_SUMMARY</span><span class="o">))</span> <span class="o">{</span>
                             <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">SHOW_HEX_SUMMARY</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
                         <span class="o">}</span>
@@ -1595,7 +1579,7 @@
                     <span class="nx">method</span><span class="o">:</span> <span class="k">function</span><span class="o">(</span><span class="nx">on</span><span class="o">)</span> <span class="o">{</span>
                         <span class="k">this</span><span class="o">.</span><span class="nx">_hideShowEl</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">ID</span><span class="o">.</span><span class="nx">HEX_SUMMARY</span><span class="o">,</span> <span class="nx">on</span><span class="o">);</span>
 
-                        <span class="c">// can&#39;t show both the hsv controls and the rbg hex summary</span>
+                        <span class="c">// can't show both the hsv controls and the rbg hex summary</span>
 <span class="c"></span>                        <span class="k">if</span> <span class="o">(</span><span class="nx">on</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="o">.</span><span class="nx">get</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">SHOW_HSV_CONTROLS</span><span class="o">))</span> <span class="o">{</span>
                             <span class="k">this</span><span class="o">.</span><span class="nx">set</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">SHOW_HSV_CONTROLS</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
                         <span class="o">}</span>
@@ -1611,15 +1595,15 @@
                     <span class="o">}</span>
                 <span class="o">});</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">HUE</span> <span class="o">+</span> <span class="s2">&quot;Change&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateRGBFromHSV</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">SATURATION</span> <span class="o">+</span> <span class="s2">&quot;Change&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateRGBFromHSV</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">VALUE</span> <span class="o">+</span> <span class="s2">&quot;Change&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateRGBFromHSV</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">HUE</span> <span class="o">+</span> <span class="s2">"Change"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateRGBFromHSV</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">SATURATION</span> <span class="o">+</span> <span class="s2">"Change"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateRGBFromHSV</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">VALUE</span> <span class="o">+</span> <span class="s2">"Change"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateRGBFromHSV</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">RED</span> <span class="o">+</span> <span class="s2">&quot;Change&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateRGB</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">GREEN</span> <span class="o">+</span> <span class="s2">&quot;Change&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateRGB</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
-            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">BLUE</span> <span class="o">+</span> <span class="s2">&quot;Change&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateRGB</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">RED</span> <span class="o">+</span> <span class="s2">"Change"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateRGB</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">GREEN</span> <span class="o">+</span> <span class="s2">"Change"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateRGB</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">BLUE</span> <span class="o">+</span> <span class="s2">"Change"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateRGB</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
-            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">HEX</span> <span class="o">+</span> <span class="s2">&quot;Change&quot;</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateHex</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
+            <span class="k">this</span><span class="o">.</span><span class="nx">on</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="nx">OPT</span><span class="o">.</span><span class="nx">HEX</span> <span class="o">+</span> <span class="s2">"Change"</span><span class="o">,</span> <span class="k">this</span><span class="o">.</span><span class="nx">_updateHex</span><span class="o">,</span> <span class="k">this</span><span class="o">,</span> <span class="kc">true</span><span class="o">);</span>
 
             <span class="k">this</span><span class="o">.</span><span class="nx">_initElements</span><span class="o">();</span>
         <span class="o">}</span>
@@ -1636,8 +1620,7 @@
 
                     <div id="moduleList" class="module">
                         <h4>Modules</h4>
-                        <ul class="content">
-                                <li class=""><a href="module_animation.html" title="animation">animation</a></li>
+                        <ul class="content"><li class=""><a href="module_animation.html" title="animation">animation</a></li>
                                 <li class=""><a href="module_autocomplete.html" title="autocomplete">autocomplete</a></li>
                                 <li class=""><a href="module_button.html" title="button">button</a></li>
                                 <li class=""><a href="module_calendar.html" title="calendar">calendar</a></li>
@@ -1675,24 +1658,19 @@
                                 <li class=""><a href="module_yahoo.html" title="yahoo">yahoo</a></li>
                                 <li class=""><a href="module_yuiloader.html" title="yuiloader">yuiloader</a></li>
                                 <li class=""><a href="module_yuitest.html" title="yuitest">yuitest</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="classList" class="module">
                         <h4>Classes</h4>
-                        <ul class="content">
-                                <li class=""><a href="YAHOO.util.Color.html" title="YAHOO.util.Color">YAHOO.util.Color</a></li>
+                        <ul class="content"><li class=""><a href="YAHOO.util.Color.html" title="YAHOO.util.Color">YAHOO.util.Color</a></li>
                                 <li class=""><a href="YAHOO.widget.ColorPicker.html" title="YAHOO.widget.ColorPicker">YAHOO.widget.ColorPicker</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
                     <div id="fileList" class="module">
                         <h4>Files</h4>
-                        <ul class="content">        
-                                <li class=""><a href="Color.js.html" title="Color.js">Color.js</a></li>
+                        <ul class="content"><li class=""><a href="Color.js.html" title="Color.js">Color.js</a></li>
                                 <li class="selected"><a href="ColorPicker.js.html" title="ColorPicker.js">ColorPicker.js</a></li>
-                        </ul>
-                    </div>
+                        </ul></div>
 
 
 
@@ -1702,12 +1680,9 @@
 		</div>
 	</div>
 	<div id="ft">
-        <hr />
-        Copyright &copy; 2009 Yahoo! Inc. All rights reserved.
+        <hr>
+        Copyright © 2009 Yahoo! Inc. All rights reserved.
 	</div>
-</div>
-<script type="text/javascript">
+</div><script type="text/javascript">
     ALL_YUI_PROPS = [{"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeBlueChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeBlueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeContainerChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeContainerChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeElementsChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeElementsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeGreenChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeGreenChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeHexChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeHexChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeHueChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeHueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeIdsChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeIdsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeImagesChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeImagesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforePickersizeChange", "url": "YAHOO.widget.ColorPicker.html#event_beforePickersizeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeRedChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeRedChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeSaturationChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeSaturationChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeShowcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeShowcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeShowhexcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeShowhexcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeShowhexsummaryChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeShowhexsummaryChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeShowhsvcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeShowhsvcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeShowrgbcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeShowrgbcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeShowwebsafeChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeShowwebsafeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeTxtChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeTxtChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeValueChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeValueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "beforeWebsafeChange", "url": "YAHOO.widget.ColorPicker.html#event_beforeWebsafeChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_bindUI", "url": "YAHOO.widget.ColorPicker.html#method__bindUI", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "blue", "url": "YAHOO.widget.ColorPicker.html#config_blue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "blueChange", "url": "YAHOO.widget.ColorPicker.html#event_blueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "container", "url": "YAHOO.widget.ColorPicker.html#config_container", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "containerChange", "url": "YAHOO.widget.ColorPicker.html#event_containerChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_createHostElement", "url": "YAHOO.widget.ColorPicker.html#method__createHostElement", "type": "method"}, {"access": "", "host": "YAHOO.util.Color", "name": "dec2hex", "url": "YAHOO.util.Color.html#method_dec2hex", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "DEFAULT", "url": "YAHOO.widget.ColorPicker.html#property_DEFAULT", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "elements", "url": "YAHOO.widget.ColorPicker.html#config_elements", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "elementsChange", "url": "YAHOO.widget.ColorPicker.html#event_elementsChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getCommand", "url": "YAHOO.widget.ColorPicker.html#method__getCommand", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "getElement", "url": "YAHOO.widget.ColorPicker.html#method_getElement", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getH", "url": "YAHOO.widget.ColorPicker.html#method__getH", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getS", "url": "YAHOO.widget.ColorPicker.html#method__getS", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getV", "url": "YAHOO.widget.ColorPicker.html#method__getV", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_getValuesFromSliders", "url": "YAHOO.widget.ColorPicker.html#method__getValuesFromSliders", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "green", "url": "YAHOO.widget.ColorPicker.html#config_green", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "greenChange", "url": "YAHOO.widget.ColorPicker.html#event_greenChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hex", "url": "YAHOO.widget.ColorPicker.html#config_hex", "type": "config"}, {"access": "", "host": "YAHOO.util.Color", "name": "hex2dec", "url": "YAHOO.util.Color.html#method_hex2dec", "type": "method"}, {"access": "", "host": "YAHOO.util.Color", "name": "hex2rgb", "url": "YAHOO.util.Color.html#method_hex2rgb", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hexChange", "url": "YAHOO.widget.ColorPicker.html#event_hexChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_hexFieldKeypress", "url": "YAHOO.widget.ColorPicker.html#method__hexFieldKeypress", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_hexOnly", "url": "YAHOO.widget.ColorPicker.html#method__hexOnly", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_hideShowEl", "url": "YAHOO.widget.ColorPicker.html#method__hideShowEl", "type": "method"}, {"access": "", "host": "YAHOO.util.Color", "name": "hsv2rgb", "url": "YAHOO.util.Color.html#method_hsv2rgb", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hue", "url": "YAHOO.widget.ColorPicker.html#config_hue", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hueChange", "url": "YAHOO.widget.ColorPicker.html#event_hueChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "hueSlider", "url": "YAHOO.widget.ColorPicker.html#property_hueSlider", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID", "url": "YAHOO.widget.ColorPicker.html#property_ID", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.B", "url": "YAHOO.widget.ColorPicker.html#property_ID.B", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.B_HEX", "url": "YAHOO.widget.ColorPicker.html#property_ID.B_HEX", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.CONTROLS", "url": "YAHOO.widget.ColorPicker.html#property_ID.CONTROLS", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.CONTROLS_LABEL", "url": "YAHOO.widget.ColorPicker.html#property_ID.CONTROLS_LABEL", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.G", "url": "YAHOO.widget.ColorPicker.html#property_ID.G", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.G_HEX", "url": "YAHOO.widget.ColorPicker.html#property_ID.G_HEX", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.H", "url": "YAHOO.widget.ColorPicker.html#property_ID.H", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HEX", "url": "YAHOO.widget.ColorPicker.html#property_ID.HEX", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HEX_CONTROLS", "url": "YAHOO.widget.ColorPicker.html#property_ID.HEX_CONTROLS", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HEX_SUMMARY", "url": "YAHOO.widget.ColorPicker.html#property_ID.HEX_SUMMARY", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HSV_CONTROLS", "url": "YAHOO.widget.ColorPicker.html#property_ID.HSV_CONTROLS", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HUE_BG", "url": "YAHOO.widget.ColorPicker.html#property_ID.HUE_BG", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.HUE_THUMB", "url": "YAHOO.widget.ColorPicker.html#property_ID.HUE_THUMB", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.PICKER_BG", "url": "YAHOO.widget.ColorPicker.html#property_ID.PICKER_BG", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.PICKER_THUMB", "url": "YAHOO.widget.ColorPicker.html#property_ID.PICKER_THUMB", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.R", "url": "YAHOO.widget.ColorPicker.html#property_ID.R", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.RGB_CONTROLS", "url": "YAHOO.widget.ColorPicker.html#property_ID.RGB_CONTROLS", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.R_HEX", "url": "YAHOO.widget.ColorPicker.html#property_ID.R_HEX", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.S", "url": "YAHOO.widget.ColorPicker.html#property_ID.S", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ids", "url": "YAHOO.widget.ColorPicker.html#config_ids", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "idsChange", "url": "YAHOO.widget.ColorPicker.html#event_idsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.SWATCH", "url": "YAHOO.widget.ColorPicker.html#property_ID.SWATCH", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.V", "url": "YAHOO.widget.ColorPicker.html#property_ID.V", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "ID.WEBSAFE_SWATCH", "url": "YAHOO.widget.ColorPicker.html#property_ID.WEBSAFE_SWATCH", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "IMAGE", "url": "YAHOO.widget.ColorPicker.html#property_IMAGE", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "images", "url": "YAHOO.widget.ColorPicker.html#config_images", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "imagesChange", "url": "YAHOO.widget.ColorPicker.html#event_imagesChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "initAttributes", "url": "YAHOO.widget.ColorPicker.html#method_initAttributes", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_initElements", "url": "YAHOO.widget.ColorPicker.html#method__initElements", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "initPicker", "url": "YAHOO.widget.ColorPicker.html#method_initPicker", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_initSliders", "url": "YAHOO.widget.ColorPicker.html#method__initSliders", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_numbersOnly", "url": "YAHOO.widget.ColorPicker.html#method__numbersOnly", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_onHueSliderChange", "url": "YAHOO.widget.ColorPicker.html#method__onHueSliderChange", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_onPickerSliderChange", "url": "YAHOO.widget.ColorPicker.html#method__onPickerSliderChange", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "OPT", "url": "YAHOO.widget.ColorPicker.html#property_OPT", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "pickersize", "url": "YAHOO.widget.ColorPicker.html#config_pickersize", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "pickersizeChange", "url": "YAHOO.widget.ColorPicker.html#event_pickersizeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "pickerSlider", "url": "YAHOO.widget.ColorPicker.html#property_pickerSlider", "type": "property"}, {"access": "", "host": "YAHOO.util.Color", "name": "real2dec", "url": "YAHOO.util.Color.html#method_real2dec", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "red", "url": "YAHOO.widget.ColorPicker.html#config_red", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "redChange", "url": "YAHOO.widget.ColorPicker.html#event_redChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Color", "name": "rgb2hex", "url": "YAHOO.util.Color.html#method_rgb2hex", "type": "method"}, {"access": "", "host": "YAHOO.util.Color", "name": "rgb2hsv", "url": "YAHOO.util.Color.html#method_rgb2hsv", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_rgbFieldKeypress", "url": "YAHOO.widget.ColorPicker.html#method__rgbFieldKeypress", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "saturation", "url": "YAHOO.widget.ColorPicker.html#config_saturation", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "saturationChange", "url": "YAHOO.widget.ColorPicker.html#event_saturationChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "setValue", "url": "YAHOO.widget.ColorPicker.html#method_setValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showcontrols", "url": "YAHOO.widget.ColorPicker.html#config_showcontrols", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_showcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhexcontrols", "url": "YAHOO.widget.ColorPicker.html#config_showhexcontrols", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhexcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_showhexcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhexsummary", "url": "YAHOO.widget.ColorPicker.html#config_showhexsummary", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhexsummaryChange", "url": "YAHOO.widget.ColorPicker.html#event_showhexsummaryChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhsvcontrols", "url": "YAHOO.widget.ColorPicker.html#config_showhsvcontrols", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showhsvcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_showhsvcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showrgbcontrols", "url": "YAHOO.widget.ColorPicker.html#config_showrgbcontrols", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showrgbcontrolsChange", "url": "YAHOO.widget.ColorPicker.html#event_showrgbcontrolsChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showwebsafe", "url": "YAHOO.widget.ColorPicker.html#config_showwebsafe", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "showwebsafeChange", "url": "YAHOO.widget.ColorPicker.html#event_showwebsafeChange", "type": "event"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "skipAnim", "url": "YAHOO.widget.ColorPicker.html#property_skipAnim", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "syncUI", "url": "YAHOO.widget.ColorPicker.html#method_syncUI", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "TXT", "url": "YAHOO.widget.ColorPicker.html#property_TXT", "type": "property"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "txt", "url": "YAHOO.widget.ColorPicker.html#config_txt", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "txtChange", "url": "YAHOO.widget.ColorPicker.html#event_txtChange", "type": "event"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateFormFields", "url": "YAHOO.widget.ColorPicker.html#method__updateFormFields", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateHex", "url": "YAHOO.widget.ColorPicker.html#method__updateHex", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateHueSlider", "url": "YAHOO.widget.ColorPicker.html#method__updateHueSlider", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updatePickerSlider", "url": "YAHOO.widget.ColorPicker.html#method__updatePickerSlider", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateRGB", "url": "YAHOO.widget.ColorPicker.html#method__updateRGB", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateRGBFromHSV", "url": "YAHOO.widget.ColorPicker.html#method__updateRGBFromHSV", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateSliders", "url": "YAHOO.widget.ColorPicker.html#method__updateSliders", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_updateSwatch", "url": "YAHOO.widget.ColorPicker.html#method__updateSwatch", "type": "method"}, {"access": "protected", "host": "YAHOO.widget.ColorPicker", "name": "_useFieldValue", "url": "YAHOO.widget.ColorPicker.html#method__useFieldValue", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "value", "url": "YAHOO.widget.ColorPicker.html#config_value", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "valueChange", "url": "YAHOO.widget.ColorPicker.html#event_valueChange", "type": "event"}, {"access": "", "host": "YAHOO.util.Color", "name": "websafe", "url": "YAHOO.util.Color.html#method_websafe", "type": "method"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "websafe", "url": "YAHOO.widget.ColorPicker.html#config_websafe", "type": "config"}, {"access": "", "host": "YAHOO.widget.ColorPicker", "name": "websafeChange", "url": "YAHOO.widget.ColorPicker.html#event_websafeChange", "type": "event"}];
-</script>
-</body>
-</html>
+</script></body>
