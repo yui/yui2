@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Module</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Module</h1></div>
 </div>
 <div id="bd">
@@ -126,14 +126,14 @@
     <ul>
       <li><a href="../../examples/container/index.html">Examples</a>: Explore examples of the Module Control in action.</li>
       <li><a href="../../docs/module_container.html">API Documentation</a>: View the full API documentation for the Module Control.</li>
-	  <li><a id="releasenotes" href="../../releasenotes/README.container">Release Notes</a>: Detailed change log for the Module Control.</li>
+	  <li><a id="releasenotes" href="../../releasenotes/README.container.txt">Release Notes</a>: Detailed change log for the Module Control.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Module Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
   </div>
 </div>
 <h2 class="first">Getting Started<a name="start"></a></h2>
-<p>To use Module, include the following code in your page:</p> 
+<p>To use Module, include the following code in your page:</p>
 <div id="syntax-0e043a2cacbf073e96f5954fbcccd296" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 &nbsp;
@@ -151,14 +151,14 @@
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-45403f06ce1fcf6750f93c9f536c10a0-plain"><!-- If not using Tooltip, Panel, Dialog, or SimpleDialog: -->
 <script src="http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js"></script>
-</textarea></div>Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
-in which the Module Control lives.  You can usually accomplish this simply by putting the class on the 
+</textarea></div>Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element
+in which the Module Control lives.  You can usually accomplish this simply by putting the class on the
 <code>&#60;body&#62;</code> tag:</p>
 <div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
 </textarea></div>
-<p class="lastP">For more information on skinning YUI components and making use of default skins, 
-see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+<p class="lastP">For more information on skinning YUI components and making use of default skins,
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a>
 article here on the website.</p>
 
 
@@ -170,7 +170,7 @@ article here on the website.</p>
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../../yuiloader/index.html">YUI Loader</a>, its module name is <code>container</code>. (<a href="../../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -183,7 +183,7 @@ article here on the website.</p>
 <h2>Using Module<a name="using"></a></h2>
 <p>This section describes common tasks for creating and using Module.  It contains
 these sections:</p>
-<ul> 
+<ul>
 <li><a href="#html">Defining  Module Markup</a></li>
 <li><a href="#init">Initializing the Module</a></li>
 <li><a href="#config">Using Configuration Properties</a></li>
@@ -195,14 +195,14 @@ these sections:</p>
 <p>
 In its most basic form, the HTML markup for a Module might look like this:</p>
 <div id="syntax-827554f6c218b38b02a87e8479ef9d28" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myModule&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;hd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> </div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;bd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> </div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;ft&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> </div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myModule&quot;</span>&gt;</span>
-  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;hd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> 
-  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;bd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> 
-  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;ft&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> 
+  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;hd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;bd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;ft&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
 <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-827554f6c218b38b02a87e8479ef9d28-plain"><div id="myModule">
-  <div class="hd"></div> 
-  <div class="bd"></div> 
-  <div class="ft"></div> 
+  <div class="hd"></div>
+  <div class="bd"></div>
+  <div class="ft"></div>
 </div>
 </textarea></div><h3> Initializing the Module<a name="init"></a></h3>
 <p>
@@ -226,10 +226,10 @@ myModule.setFooter("This is my footer content");
 <h3 id="config">Using Configuration Properties</h3>
 
 <p>
-Configuration properties control the look and behavior of Module instances (and its subclasses). 
-These properties are managed by a configuration object (defined by 
-<a href="../../docs/YAHOO.util.Config.html">YAHOO.util.Config</a>) that is automatically instantiated 
-by Module's constructor.  The configuration object is accessible at runtime via its host object 
+Configuration properties control the look and behavior of Module instances (and its subclasses).
+These properties are managed by a configuration object (defined by
+<a href="../../docs/YAHOO.util.Config.html">YAHOO.util.Config</a>) that is automatically instantiated
+by Module's constructor.  The configuration object is accessible at runtime via its host object
 instance's "cfg" property.  The following diagram illustrates the relationship of the configuration
 object and its properties with its host Container family object instance:
 </p>
@@ -237,11 +237,11 @@ object and its properties with its host Container family object instance:
 <img src="../img/config.png" width="150" height="211" alt="Illustration of the relation of the Configuration object to its host Module instance.">
 
 <p>
-There are two different ways to set the initial value of configuration properties:  The first is 
-via an object literal that is passed as a second argument to the Module's constructor.  
-Configuration properties can also be set via the configuration object's 
-<a href="../../docs/YAHOO.util.Config.html#method_queueProperty"><code>queueProperty</code></a> method.  In 
-either case, these properties are not applied to the Container family object instance until it is 
+There are two different ways to set the initial value of configuration properties:  The first is
+via an object literal that is passed as a second argument to the Module's constructor.
+Configuration properties can also be set via the configuration object's
+<a href="../../docs/YAHOO.util.Config.html#method_queueProperty"><code>queueProperty</code></a> method.  In
+either case, these properties are not applied to the Container family object instance until it is
 rendered.  For example:
 </p>
 
@@ -274,23 +274,23 @@ rendered.  For example:
     oModule.cfg.queueProperty("visible", true);
 
     oModule.setBody("This is the body");
-    
-    // Render the Module instance, triggering the application of the "visible" 
+
+    // Render the Module instance, triggering the application of the "visible"
     // configuration property
-    
+
     oModule.render(document.body);
 
 });
 </textarea></div>
 <p>
-Once rendered, a Container object instance's configuration properties are accessible at runtime 
-through the configuration object's 
-<a href="../../docs/YAHOO.util.Config.html#method_getProperty"><code>getProperty</code></a> 
-and <a href="../../docs/YAHOO.util.Config.html#method_setProperty"><code>setProperty</code></a> 
-methods. It is possible to listen for when the value of a specific configuration property changes by 
-using the configuration object's 
-<a href="../../docs/YAHOO.util.Config.html#method_subscribeToConfigEvent"><code>subscribeToConfigEvent</code></a> 
-method.  Additionally, the configuration fires a "configChanged" event that can be used to listen 
+Once rendered, a Container object instance's configuration properties are accessible at runtime
+through the configuration object's
+<a href="../../docs/YAHOO.util.Config.html#method_getProperty"><code>getProperty</code></a>
+and <a href="../../docs/YAHOO.util.Config.html#method_setProperty"><code>setProperty</code></a>
+methods. It is possible to listen for when the value of a specific configuration property changes by
+using the configuration object's
+<a href="../../docs/YAHOO.util.Config.html#method_subscribeToConfigEvent"><code>subscribeToConfigEvent</code></a>
+method.  Additionally, the configuration fires a "configChanged" event that can be used to listen
 for changes made to the value of any configuration property.  For example:
 </p>
 
@@ -347,35 +347,35 @@ for changes made to the value of any configuration property.  For example:
 
 
     oModule.setBody("This is the body");
-    
 
-    // Render the Module instance, triggering the application of the "visible" 
+
+    // Render the Module instance, triggering the application of the "visible"
     // configuration property
-    
+
     oModule.render(document.body);
 
 
     // Add an event listener for changes to the "visible" configuration property
 
     oModule.cfg.subscribeToConfigEvent("visible", function (p_sType, p_aArgs) {
-    
+
         var oValue = p_aArgs[0];
-    
+
         alert("The value of the visible property was changed to: " + oValue);
-    
+
     });
 
 
     // Add an event listener for all changes to configuration properties
 
     oModule.cfg.subscribe("configChanged", function (p_sType, p_aArgs) {
-    
+
         var aProperty = p_aArgs[0],
             sPropertyName = aProperty[0],
             oPropertyValue = aProperty[1];
-    
+
         alert("The value of the " + sPropertyName + " property was changed to: " + oPropertyValue);
-    
+
     });
 
 
@@ -434,7 +434,7 @@ See the <a href="../../docs/YAHOO.util.Config.html">Configuration object's API d
             <td>false</td>
             <td>
                 <p>Specifies if the module should be rendered as the first child of document.body or appended as the last child when render is called with document.body as the "appendToNode".</p>
-                <p>Appending to the body while the DOM is still being constructed can lead to Operation Aborted errors in IE hence this flag is set to false by default.</p>            
+                <p>Appending to the body while the DOM is still being constructed can lead to Operation Aborted errors in IE hence this flag is set to false by default.</p>
             </td>
         </tr>
 
@@ -478,14 +478,14 @@ myModule.cfg.setProperty("visible", false);
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
         </div>
          <div class="yui-u">
-            
+
             <div id="examples">
 <h3>Container Family Examples:</h3>
 
@@ -531,12 +531,12 @@ myModule.cfg.setProperty("visible", false);
 <li><a href='../../examples/menu/applicationmenubar.html'>Application Menubar</a> (included with examples for the <a href='../../menu/index.html'>Menu Family</a>)</li>
 <li><a href='../../examples/button/btn_example14.html'>Slider Button</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
 <li><a href='../../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../../layout/index.html'>Layout Manager</a>)</li>
-</ul>		
+</ul>
            </div>
 
             <div id="morereading">
                 <h3>More Reading about the YUI Module Control:</h3>
-                
+
                 <ul>
                   <li><a href="http://vani.vox.com/library/post/yui-simple-showhide-div-using-module.html">YUI: Simple show/hide div using Module</a>, by Vani</li>
                </ul>
@@ -582,15 +582,15 @@ myModule.cfg.setProperty("visible", false);
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Carousel Control</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Carousel Control</h1></div>
 </div>
 <div id="bd">
@@ -102,18 +102,18 @@
     <div class="yui-b">
         <div class="yui-ge">
             <div class="yui-u first">
-                
+
                 <div id="promo" class="component">
                     <h1>YUI 2: Carousel Control</h1>
-                    
+
                     <p>
                         The YUI Carousel Control provides a widget for browsing among
                         a set of like objects arrayed vertically or horizontally in an
                         overloaded page region.  The "carousel" metaphor derives from an
-                        analogy to slide carousels in the days of film photography; 
+                        analogy to slide carousels in the days of film photography;
                         the Carousel Control can maintain fidelity to this metaphor by
-                        allowing a continuous, circular navigation through all of the 
-                        content blocks. 
+                        allowing a continuous, circular navigation through all of the
+                        content blocks.
                     </p>
 
                     <p>
@@ -122,10 +122,10 @@
                         configured and populated entirely via script.  Support for
                         lazy-loading of content via XMLHttpRequest (using <a href="../connection/index.html">Connection
                         Manager</a>) is built in.</p>
-                        
-                        <p>You can <a href="http://developer.yahoo.com/ypatterns/pattern.php?pattern=carousel">read more about the Carousel Design Pattern at the 
+
+                        <p>You can <a href="http://developer.yahoo.com/ypatterns/pattern.php?pattern=carousel">read more about the Carousel Design Pattern at the
                         Yahoo! Design Pattern Library</a>.</p>
-                        
+
 
                     <div>
                         <h4>On This Page:</h4>
@@ -164,47 +164,47 @@
     <ul>
       <li><a href="../examples/carousel/index.html">Examples</a>: Explore examples of the Carousel Control in action.</li>
       <li><a href="../docs/module_carousel.html">API Documentation</a>: View the full API documentation for the Carousel Control.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.carousel">Release Notes</a>: Detailed change log for the Carousel Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.carousel.txt">Release Notes</a>: Detailed change log for the Carousel Control.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Carousel Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
   </div>
                 </div>
-                
+
                 <h2 class="first" id="start">Getting Started</h2>
                 <p>To use the Carousel Control, include the following source
                 files in your web page:</p>
-                
-<div id="syntax-4f0798574f527216de6321e492ce741a" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Core + Skin CSS --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/carousel/assets/skins/sam/carousel.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Optional: Animation library for animating the scrolling of items --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Optional: Connection library for dynamically loading items --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/carousel/carousel-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Core + Skin CSS --&gt;</span> 
+
+<div id="syntax-4f0798574f527216de6321e492ce741a" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Core + Skin CSS --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/carousel/assets/skins/sam/carousel.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Optional: Animation library for animating the scrolling of items --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Optional: Connection library for dynamically loading items --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/carousel/carousel-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Core + Skin CSS --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/carousel/assets/skins/sam/carousel.css&quot;</span>&gt;</span>
 &nbsp;
-<span class="sc-1">&lt;!-- Dependencies --&gt;</span> 
+<span class="sc-1">&lt;!-- Dependencies --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 &nbsp;
-<span class="sc-1">&lt;!-- Optional: Animation library for animating the scrolling of items --&gt;</span> 
+<span class="sc-1">&lt;!-- Optional: Animation library for animating the scrolling of items --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
-<span class="sc-1">&lt;!-- Optional: Connection library for dynamically loading items --&gt;</span> 
+<span class="sc-1">&lt;!-- Optional: Connection library for dynamically loading items --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 &nbsp;
-<span class="sc-1">&lt;!-- Source file --&gt;</span> 
+<span class="sc-1">&lt;!-- Source file --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/carousel/carousel-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
-&nbsp;</pre></div><textarea id="syntax-4f0798574f527216de6321e492ce741a-plain"><!-- Core + Skin CSS --> 
+&nbsp;</pre></div><textarea id="syntax-4f0798574f527216de6321e492ce741a-plain"><!-- Core + Skin CSS -->
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/carousel/assets/skins/sam/carousel.css">
 
-<!-- Dependencies --> 
+<!-- Dependencies -->
 <script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
 
-<!-- Optional: Animation library for animating the scrolling of items --> 
+<!-- Optional: Animation library for animating the scrolling of items -->
 <script src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
-<!-- Optional: Connection library for dynamically loading items --> 
+<!-- Optional: Connection library for dynamically loading items -->
 <script src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
 
-<!-- Source file --> 
+<!-- Source file -->
 <script src="http://yui.yahooapis.com/2.9.0/build/carousel/carousel-min.js"></script>
-</textarea></div>                
-                
+</textarea></div>
+
 <div class="configurator-notice">
 <p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
 
@@ -213,7 +213,7 @@
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>carousel</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -223,7 +223,7 @@
 <p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
 
 </div>
-                
+
                 <h3 id="basic">Basic Setup</h3>
 
                 <p>
@@ -322,7 +322,7 @@ carousel.show(); // display the widget (redundant from 2.8.0), but use if carous
 &nbsp;</pre></div><textarea id="syntax-d4fba802f5662f3f1e6617a78176ec56-plain">var carousel = new YAHOO.widget.Carousel("container", {
     carouselEl: "UL"
 });
-</textarea></div>                
+</textarea></div>
                 <h4 id="buildfromjs">
                     Using no existing HTML
                 </h4>
@@ -342,7 +342,7 @@ carousel.<span class="me1">render</span><span class="br0">&#40;</span><span clas
 carousel.addItem(...); // add an item to the Carousel
 carousel.addItems(...); // add multiple items at one go
 carousel.render(); // render the widget inside the
-                   // parentContainerId container 
+                   // parentContainerId container
 </textarea></div>                <p>
                     The constructor is passed with the parent container id within which the Carousel will be created.
                 </p>
@@ -460,7 +460,7 @@ carousel.render(); // render the widget inside the
 
                   <p>
                     By default, the Carousel displays three items per page. To override the default,
-                    simply set a Carousel's <code>numVisible</code> property to another <code>Number</code>. 
+                    simply set a Carousel's <code>numVisible</code> property to another <code>Number</code>.
                   </p>
 <div id="syntax-2c5ad30e32e245b93d7f009fb1cff165" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;numVisible&quot;</span><span class="sy0">,</span> <span class="nu0">4</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;numVisible&quot;</span><span class="sy0">,</span> <span class="nu0">4</span><span class="br0">&#41;</span><span class="sy0">;</span>
@@ -623,7 +623,7 @@ carousel.render();
 
                 <p>
                     If you want to display a multi-row Carousel Control, you can
-                    pass the <code>numVisible</code> property an <code>Array</code> specifying rows 
+                    pass the <code>numVisible</code> property an <code>Array</code> specifying rows
                     and columns (both <code>Numbers</code>).  The
                     following example illustrates creating a multi-row Carousel
                     Widget.
@@ -923,7 +923,7 @@ alert(carousel.get("numVisible")); // alerts 1 (new value)
                         Carousel Control:
                     </p>
 
-                    
+
                     <table>
                         <thead>
                             <tr>
@@ -997,7 +997,7 @@ alert(carousel.get("numVisible")); // alerts 1 (new value)
 
                 <h2 id="knownissues">Known Issues</h2>
                 <!-- TODO: any known issues? -->
-                
+
                 <h2 id="mobile">YUI on Mobile: Using Carousel Control with "A-Grade" Mobile Browsers</h2>
 
 <div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
@@ -1023,12 +1023,12 @@ alert(carousel.get("numVisible")); // alerts 1 (new value)
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
-                
+
+
             </div>
 
             <div class="yui-u">
@@ -1060,11 +1060,11 @@ alert(carousel.get("numVisible")); // alerts 1 (new value)
 </ul>
 
 
-		
+
                  </div
 
-                
-                ><!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fcarousel%2F-->                
+
+                ><!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fcarousel%2F-->
                 <h3 id="delicious">YUI Carousel Control on del.icio.us:</h3>
                 <div class="delicious">
                     <div id="delicious-badge">
@@ -1086,7 +1086,7 @@ alert(carousel.get("numVisible")); // alerts 1 (new value)
    </div>
             <p><a href="http://del.icio.us/url/1e280ba69a43989500a91475af5e00fb" class="saved-by">saved by <span>82</span>  people</a></p>
    </div>                </div>
-                
+
             </div>
         </div>
 
@@ -1108,15 +1108,15 @@ alert(carousel.get("numVisible")); // alerts 1 (new value)
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

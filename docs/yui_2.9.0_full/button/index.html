@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Button</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Button</h1></div>
 </div>
 <div id="bd">
@@ -127,7 +127,7 @@
     <ul>
       <li><a href="../examples/button/index.html">Examples</a>: Explore examples of the Button Control in action.</li>
       <li><a href="../docs/module_button.html">API Documentation</a>: View the full API documentation for the Button Control.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.button">Release Notes</a>: Detailed change log for the Button Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.button.txt">Release Notes</a>: Detailed change log for the Button Control.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Button Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
@@ -201,14 +201,14 @@
 
 <!-- Source file -->
 <script src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
-</textarea></div>Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
-in which the Button Control lives.  You can usually accomplish this simply by putting the class on the 
+</textarea></div>Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element
+in which the Button Control lives.  You can usually accomplish this simply by putting the class on the
 <code>&#60;body&#62;</code> tag:</p>
 <div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
 </textarea></div>
-<p class="lastP">For more information on skinning YUI components and making use of default skins, 
-see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+<p class="lastP">For more information on skinning YUI components and making use of default skins,
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a>
 article here on the website.</p>
 
 
@@ -220,7 +220,7 @@ article here on the website.</p>
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>button</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -246,38 +246,38 @@ article here on the website.</p>
 <div id="syntax-ff2c7188433779e8a5a50a32b3be6fed" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;checkbox&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;checkbox1&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;field1&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;somevalue&quot;</span> checked&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;checkbox&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;checkbox1&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;field1&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;somevalue&quot;</span> checked&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-ff2c7188433779e8a5a50a32b3be6fed-plain"><input type="checkbox" id="checkbox1" name="field1" value="somevalue" checked>
 </textarea></div><p>
-When creating a Button instance from existing markup the markup for the 
-Button must be already parsed by the browser and its DOM tree ready to be 
-scripted.  This is, of course, a basic principle of DOM scripting&#151;you 
-cannot script what hasn't been loaded.  To ensure the markup for a Button is 
-ready to be scripted either place the <code>&#60;script&#62;</code> block 
-after the Button markup, or use the Event Utility's 
-<a href="../event/index.html#onavailable"><code>onContentReady</code></a> method.  For 
-more, see the section titled <a href="#usingoncontentready">Using Button with 
+When creating a Button instance from existing markup the markup for the
+Button must be already parsed by the browser and its DOM tree ready to be
+scripted.  This is, of course, a basic principle of DOM scripting&#151;you
+cannot script what hasn't been loaded.  To ensure the markup for a Button is
+ready to be scripted either place the <code>&#60;script&#62;</code> block
+after the Button markup, or use the Event Utility's
+<a href="../event/index.html#onavailable"><code>onContentReady</code></a> method.  For
+more, see the section titled <a href="#usingoncontentready">Using Button with
 YAHOO.util.Event.onContentReady</a>.
 </p>
 <p>
-To instantiate a Button, pass the id of the source element as the first argument 
-to the Button's constructor.  The attributes of the source element are captured 
-and used for the creation of a new element that replaces the source element 
-inline.  Additional 
-<a href="#buttonconfigreference">configuration attributes</a> for a Button can 
-be set at instantiation time by specifying them in an object literal that is 
-passed as the second argument to the Button's constructor.  <em>Note: the value 
-of <a href="#buttonconfigreference">configuration attributes</a> passed to the 
-Button constructor will trump those of the corresponding HTML attributes of the 
+To instantiate a Button, pass the id of the source element as the first argument
+to the Button's constructor.  The attributes of the source element are captured
+and used for the creation of a new element that replaces the source element
+inline.  Additional
+<a href="#buttonconfigreference">configuration attributes</a> for a Button can
+be set at instantiation time by specifying them in an object literal that is
+passed as the second argument to the Button's constructor.  <em>Note: the value
+of <a href="#buttonconfigreference">configuration attributes</a> passed to the
+Button constructor will trump those of the corresponding HTML attributes of the
 original source element.</em>
 </p>
 <div id="syntax-55ff5f6b1a268aaada350f7f95a83629" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span></div></li><li class="li1"><div class="de1">    <span class="st0">&quot;checkbox1&quot;</span><span class="sy0">,</span>  <span class="co1">// Source element id</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">        checked<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span> <span class="co1">// Attribute override </span></div></li><li class="li2"><div class="de2">        label<span class="sy0">:</span> <span class="st0">&quot;Check me!&quot;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span>
     <span class="st0">&quot;checkbox1&quot;</span><span class="sy0">,</span>  <span class="co1">// Source element id</span>
-    <span class="br0">&#123;</span> 
+    <span class="br0">&#123;</span>
         checked<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span> <span class="co1">// Attribute override </span>
         label<span class="sy0">:</span> <span class="st0">&quot;Check me!&quot;</span>
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-55ff5f6b1a268aaada350f7f95a83629-plain">var oButton = new YAHOO.widget.Button(
     "checkbox1",  // Source element id
-    { 
-        checked: false, // Attribute override 
+    {
+        checked: false, // Attribute override
         label: "Check me!"
 });
 </textarea></div>
@@ -286,16 +286,16 @@ original source element.</em>
 <h4 id="buildingfromjavascript">Using no existing HTML</h4>
 <p>To build a Button without any existing HTML, pass a set of <a href="#buttonconfigreference">configuration attributes</a> as a single argument to the constructor using an object literal.</p>
 <div id="syntax-5e14f39f15028171a09bd23335678564" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    type<span class="sy0">:</span> <span class="st0">&quot;button&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">    container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span> </div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
-    id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span> 
-    type<span class="sy0">:</span> <span class="st0">&quot;button&quot;</span><span class="sy0">,</span> 
-    label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span> 
-    container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span> 
+    id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span>
+    type<span class="sy0">:</span> <span class="st0">&quot;button&quot;</span><span class="sy0">,</span>
+    label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span>
+    container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span>
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-5e14f39f15028171a09bd23335678564-plain">var oButton = new YAHOO.widget.Button({
-    id: "mybuttonid", 
-    type: "button", 
-    label: "My Button", 
-    container: "someelement" 
+    id: "mybuttonid",
+    type: "button",
+    label: "My Button",
+    container: "someelement"
 });
 </textarea></div>
 <p>In most cases, it is necessary to specify the button's id, type, label and container (the HTML element that the button should be appended to once created).  If an id is not specified for the button, one will be generated using the <code><a href="../docs/YAHOO.util.Dom.html#generateId">generateId</a></code> method of the <a href="../docs/module_dom.html">Dom utility</a>.  Similarly, if the "type" attribute is omitted, the default type of "button" will be applied.</p>
@@ -314,13 +314,13 @@ original source element.</em>
     </span>
 </span>
 </textarea></div><p>To instantiate a Button using the Button Control HTML, pass the id of the Button's <code>&#60;span&#62;</code> element as the first argument to constructor and any additional <a href="#buttonconfigreference">configuration attributes</a> as the second argument via an object literal.</p>
-<div id="syntax-5f045d33d4cc8b2c097c780fcc9e1687" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;mycheckbox&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">    type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;field1&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    value<span class="sy0">:</span> <span class="st0">&quot;somevalue&quot;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;mycheckbox&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> 
-    type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span> 
+<div id="syntax-5f045d33d4cc8b2c097c780fcc9e1687" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;mycheckbox&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">    type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;field1&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    value<span class="sy0">:</span> <span class="st0">&quot;somevalue&quot;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;mycheckbox&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span>
     <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;field1&quot;</span><span class="sy0">,</span>
     value<span class="sy0">:</span> <span class="st0">&quot;somevalue&quot;</span>
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
-&nbsp;</pre></div><textarea id="syntax-5f045d33d4cc8b2c097c780fcc9e1687-plain">var oButton = new YAHOO.widget.Button("mycheckbox", { 
-    type: "checkbox", 
+&nbsp;</pre></div><textarea id="syntax-5f045d33d4cc8b2c097c780fcc9e1687-plain">var oButton = new YAHOO.widget.Button("mycheckbox", {
+    type: "checkbox",
     name: "field1",
     value: "somevalue"
 });
@@ -432,19 +432,19 @@ YAHOO.util.Event.onContentReady("buttons", onButtonsReady);
         <tr class="odd">
             <td><img src="img/button_focus.png" width="60" height="26" alt="The default rendering of the focus state of a Button."></td>
             <td>Triggered when a Button receives focus.</td>
-        </tr>    
+        </tr>
         <tr>
             <td><img src="img/button_hover.png" width="62" height="26" alt="The default rendering of the hover state of a Button."></td>
             <td>Triggered when the user hovers over a Button with the mouse.</td>
-        </tr>    
+        </tr>
         <tr class="odd">
             <td><img src="img/button_active.png" width="62" height="26" alt="The default rendering of the active state of a Button."></td>
             <td>Triggered when a Button is depressed &#151; either by the user mousing down on a Button or by pressing the Enter key or spacebar when a Button has focus.</td>
-        </tr>    
+        </tr>
         <tr>
             <td><img src="img/button_disabled.png" width="79" height="26" alt="The default rendering of the disabled state of a Button."></td>
             <td>Triggered when the button is disabled.</td>
-        </tr>    
+        </tr>
     </tbody>
 </table>
 </div>
@@ -501,37 +501,37 @@ YAHOO.util.Event.onContentReady("buttons", onButtonsReady);
 
 <p>
 Buttons of type "split" have two unique states: "activeoption" and "hoveroption".
-The "activeoption" state is set in reponse to the firing of the "option" event, which is fired 
-when the user has invoked the display of a split button's optional menu.  When a Button is in the 
-"activeoption" state, a class name of "yui-split-button-activeoption" is applied to the Button's 
+The "activeoption" state is set in reponse to the firing of the "option" event, which is fired
+when the user has invoked the display of a split button's optional menu.  When a Button is in the
+"activeoption" state, a class name of "yui-split-button-activeoption" is applied to the Button's
 root element. The default style for the "activeoption" state is illustrated below:
 </p>
 <img src="img/split_button_activeoption.png" width="102" height="26" alt="The default rendering of the activeoption state of a Button of type split.">
 <p>
 The "hoveroption" state is set when the user is hovering the mouse inside the region of a Split
-Button that triggers the display of its optional menu.  When a Button is in the 
-"hoveroption" state, a class name of "yui-split-button-hoveroption" is applied to the Button's 
+Button that triggers the display of its optional menu.  When a Button is in the
+"hoveroption" state, a class name of "yui-split-button-hoveroption" is applied to the Button's
 root element.
 </p>
 
 
 <h3 id="stylingfocus">Styling Focus</h3>
 <p>
-When Button instances recieve focus, their inner <code>&#60;button&#62;</code> 
-or <code>&#60;a&#62;</code> element is outlined or highlighted in some way by 
-the browser.  Typically the rendering of the focus outline follows that of 
-native OS controls for the platform, however, the style can vary depending on 
+When Button instances recieve focus, their inner <code>&#60;button&#62;</code>
+or <code>&#60;a&#62;</code> element is outlined or highlighted in some way by
+the browser.  Typically the rendering of the focus outline follows that of
+native OS controls for the platform, however, the style can vary depending on
 the OS + browser combination.  For example, in Firefox the focus outline is
-drawn as a dotted border, while in Safari the focus outline is drawn as a blue 
-border.  Even though the focus style is inconsistent across OS + browser 
-combinations, this inconsistency is of benefit to the user for two reasons: it 
-provides a visual indication of keyboard navigability and does so in a way that 
+drawn as a dotted border, while in Safari the focus outline is drawn as a blue
+border.  Even though the focus style is inconsistent across OS + browser
+combinations, this inconsistency is of benefit to the user for two reasons: it
+provides a visual indication of keyboard navigability and does so in a way that
 is familiar on their OS + browser of choice.
 </p>
 <p>
 If it is absolutely necessary to hide the focus outline for Button instances
-it is possible to do in all of the supported browsers with the exception 
-of Opera.  To disable the focus outline in Internet Explorer, set the 
+it is possible to do in all of the supported browsers with the exception
+of Opera.  To disable the focus outline in Internet Explorer, set the
 <a href="http://msdn2.microsoft.com/en-us/library/ms533783.aspx"><code>hideFocus
 </code> attribute</a> to "true."  For example:
 </p>
@@ -550,9 +550,9 @@ Or if you are creating Buttons from script:
 </p>
 <div id="syntax-77a8acbce15aa726c5dd6a9b7127eaba" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onDOMReady</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        id<span class="sy0">:</span> <span class="st0">&quot;mybutton&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">        type<span class="sy0">:</span> <span class="st0">&quot;button&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">        label<span class="sy0">:</span> <span class="st0">&quot;Click Me&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">        container<span class="sy0">:</span> document.<span class="me1">body</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    oButton.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;element&quot;</span><span class="br0">&#41;</span>.<span class="me1">firstChild</span>.<span class="me1">firstChild</span>.<span class="me1">hideFocus</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onDOMReady</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
     <span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
-        id<span class="sy0">:</span> <span class="st0">&quot;mybutton&quot;</span><span class="sy0">,</span> 
-        type<span class="sy0">:</span> <span class="st0">&quot;button&quot;</span><span class="sy0">,</span> 
-        label<span class="sy0">:</span> <span class="st0">&quot;Click Me&quot;</span><span class="sy0">,</span> 
+        id<span class="sy0">:</span> <span class="st0">&quot;mybutton&quot;</span><span class="sy0">,</span>
+        type<span class="sy0">:</span> <span class="st0">&quot;button&quot;</span><span class="sy0">,</span>
+        label<span class="sy0">:</span> <span class="st0">&quot;Click Me&quot;</span><span class="sy0">,</span>
         container<span class="sy0">:</span> document.<span class="me1">body</span>
     <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
@@ -560,16 +560,16 @@ Or if you are creating Buttons from script:
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-77a8acbce15aa726c5dd6a9b7127eaba-plain">YAHOO.util.Event.onDOMReady(function () {
     var oButton = new YAHOO.widget.Button({
-        id: "mybutton", 
-        type: "button", 
-        label: "Click Me", 
+        id: "mybutton",
+        type: "button",
+        label: "Click Me",
         container: document.body
     });
 
     oButton.get("element").firstChild.firstChild.hideFocus = true;
 });
 </textarea></div><p>
-In Firefox and Safari, set the 
+In Firefox and Safari, set the
 <a href="http://www.w3.org/TR/CSS21/ui.html#propdef-outline"><code>outline</code></a>
 CSS property to "none."  For example:
 </p>
@@ -583,32 +583,32 @@ CSS property to "none."  For example:
 .yui-button a {
 
     outline: none;
-    
+
 }
 </textarea></div>
 
 <h3 id="usingwithforms">Using Button with HTML forms</h3>
 <p>
-Buttons created with the Button Control can be used with or without HTML forms.  
-When appended to a form, each Button Control will behave like a traditional 
-HTML form element.  Resetting a form containing Button Controls will result in 
-each Button reverting to its initial value and/or state.  When appended to a 
+Buttons created with the Button Control can be used with or without HTML forms.
+When appended to a form, each Button Control will behave like a traditional
+HTML form element.  Resetting a form containing Button Controls will result in
+each Button reverting to its initial value and/or state.  When appended to a
 form, Buttons of type "submit," "checkbox," "radio," "menu," and "split"
-listen for the "submit" event of their parent form and will create a hidden 
-field representing their name and value in response to the firing of that event 
-to ensure the form's data set is accurate when the form is submitted.  
+listen for the "submit" event of their parent form and will create a hidden
+field representing their name and value in response to the firing of that event
+to ensure the form's data set is accurate when the form is submitted.
 </p>
 <p>
-Buttons of type "menu" and "split" will append two hidden fields to 
-their parent form when it is submitted &#151; one representing the name and  
-value of the Button, the other representing the name and value of the Menu.  The 
+Buttons of type "menu" and "split" will append two hidden fields to
+their parent form when it is submitted &#151; one representing the name and
+value of the Button, the other representing the name and value of the Menu.  The
 name used for the hidden field for the Button's Menu depends on how the Button's
-Menu was created.  If the Button's Menu was created from existing markup using a 
-<code>&#60;select&#62;</code> element, the name of the hidden field will 
-be identical to that the of the <code>&#60;select&#62;</code> element.  If the 
-Menu was created using JavaScript, the name of its hidden field will be the 
-name of the Button followed by "_options".  For example, if the Button's 
-name configuration attribute is set to "button1" the name of the hidden field 
+Menu was created.  If the Button's Menu was created from existing markup using a
+<code>&#60;select&#62;</code> element, the name of the hidden field will
+be identical to that the of the <code>&#60;select&#62;</code> element.  If the
+Menu was created using JavaScript, the name of its hidden field will be the
+name of the Button followed by "_options".  For example, if the Button's
+name configuration attribute is set to "button1" the name of the hidden field
 for its Menu will be "button1_options".
 </p>
 
@@ -706,28 +706,28 @@ for its Menu will be "button1_options".
 
 <h4>Creating a ButtonGroup without existing HTML</h4>
 <p>To build a ButtonGroup with no existing HTML, pass a set of <a href="#buttongroupconfigreference">configuration attributes</a> as a single argument to the constructor using an object literal.  Add buttons to the ButtonGroup via the <code>addButton</code> or <code>addButtons</code> methods.</p>
-<div id="syntax-a848747388db37a5972c8b208a58b7fb" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oButtonGroup <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ButtonGroup</span><span class="br0">&#40;</span><span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">    id<span class="sy0">:</span> <span class="st0">&quot;mybuttongroup&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;radiofield&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    container<span class="sy0">:</span><span class="st0">&quot;someelement&quot;</span> </div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">oButtonGroup.<span class="me1">addButtons</span><span class="br0">&#40;</span><span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 1&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 1&quot;</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 2&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 2&quot;</span> <span class="br0">&#125;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">    <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 3&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 3&quot;</span> <span class="br0">&#125;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 4&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 4&quot;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oButtonGroup <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ButtonGroup</span><span class="br0">&#40;</span><span class="br0">&#123;</span> 
-    id<span class="sy0">:</span> <span class="st0">&quot;mybuttongroup&quot;</span><span class="sy0">,</span> 
-    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;radiofield&quot;</span><span class="sy0">,</span> 
-    container<span class="sy0">:</span><span class="st0">&quot;someelement&quot;</span> 
+<div id="syntax-a848747388db37a5972c8b208a58b7fb" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oButtonGroup <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ButtonGroup</span><span class="br0">&#40;</span><span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">    id<span class="sy0">:</span> <span class="st0">&quot;mybuttongroup&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;radiofield&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    container<span class="sy0">:</span><span class="st0">&quot;someelement&quot;</span> </div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">oButtonGroup.<span class="me1">addButtons</span><span class="br0">&#40;</span><span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 1&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 1&quot;</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 2&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 2&quot;</span> <span class="br0">&#125;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">    <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 3&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 3&quot;</span> <span class="br0">&#125;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 4&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 4&quot;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oButtonGroup <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ButtonGroup</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    id<span class="sy0">:</span> <span class="st0">&quot;mybuttongroup&quot;</span><span class="sy0">,</span>
+    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;radiofield&quot;</span><span class="sy0">,</span>
+    container<span class="sy0">:</span><span class="st0">&quot;someelement&quot;</span>
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
 oButtonGroup.<span class="me1">addButtons</span><span class="br0">&#40;</span><span class="br0">&#91;</span>
     <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 1&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 1&quot;</span> <span class="br0">&#125;</span><span class="sy0">,</span>
-    <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 2&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 2&quot;</span> <span class="br0">&#125;</span><span class="sy0">,</span> 
-    <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 3&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 3&quot;</span> <span class="br0">&#125;</span><span class="sy0">,</span> 
+    <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 2&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 2&quot;</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 3&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 3&quot;</span> <span class="br0">&#125;</span><span class="sy0">,</span>
     <span class="br0">&#123;</span> label<span class="sy0">:</span><span class="st0">&quot;Radio 4&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span><span class="st0">&quot;Radio 4&quot;</span> <span class="br0">&#125;</span>
 <span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
-&nbsp;</pre></div><textarea id="syntax-a848747388db37a5972c8b208a58b7fb-plain">var oButtonGroup = new YAHOO.widget.ButtonGroup({ 
-    id: "mybuttongroup", 
-    name: "radiofield", 
-    container:"someelement" 
+&nbsp;</pre></div><textarea id="syntax-a848747388db37a5972c8b208a58b7fb-plain">var oButtonGroup = new YAHOO.widget.ButtonGroup({
+    id: "mybuttongroup",
+    name: "radiofield",
+    container:"someelement"
 });
-    
+
 oButtonGroup.addButtons([
     { label:"Radio 1", value:"Radio 1" },
-    { label:"Radio 2", value:"Radio 2" }, 
-    { label:"Radio 3", value:"Radio 3" }, 
+    { label:"Radio 2", value:"Radio 2" },
+    { label:"Radio 3", value:"Radio 3" },
     { label:"Radio 4", value:"Radio 4" }
 ]);
 </textarea></div>
@@ -735,7 +735,7 @@ oButtonGroup.addButtons([
 
 <h3 id="usingbuttonwithmenu">Using Button with Menu</h3>
 <p>
-By including the <a href="../menu/index.html">Menu family of controls</a>, it is 
+By including the <a href="../menu/index.html">Menu family of controls</a>, it is
 possible to create two different types of Buttons that incorporate a menu:
 </p>
 <dl>
@@ -746,9 +746,9 @@ possible to create two different types of Buttons that incorporate a menu:
     <dd>Can execute a user-specified command or display a menu when pressed.</dd>
 </dl>
 <p>
-Like all other Buttons, menu buttons and split buttons can be created with or 
-without existing HTML.  In either case, create a menu button or a split button 
-by setting the Button's "type" attribute to "menu" or "split" and "menu" 
+Like all other Buttons, menu buttons and split buttons can be created with or
+without existing HTML.  In either case, create a menu button or a split button
+by setting the Button's "type" attribute to "menu" or "split" and "menu"
 attribute to one of the following values:</p>
 <ul>
     <li>Object specifying a rendered <a href="../docs/YAHOO.widget.Menu.html">YAHOO.widget.Menu</a> instance.</li>
@@ -761,7 +761,7 @@ attribute to one of the following values:</p>
     <li>Array of strings representing the text labels for each menu item in the menu.</li>
 </ul>
 <p>
-This section provides information on how to create and use Buttons that 
+This section provides information on how to create and use Buttons that
 incorporate a menu.
 </p>
 <ul>
@@ -770,71 +770,71 @@ incorporate a menu.
 	<li><a href="#usingmenu">Using A Button's Menu</a></li>
 	<li><a href="#lazyload">Lazy Loading</a></li>
 	<li><a href="#menuevents">Handling Menu Events</a></li>
-	<li><a href="#selectedmenuitemattr">The <code>selectedMenuItem</code> Attribute</a></li>	
+	<li><a href="#selectedmenuitemattr">The <code>selectedMenuItem</code> Attribute</a></li>
 </ul>
 
 <h4 id="menufrommarkup">Creating From Existing Markup</h4>
-<p>Since the "menu" attribute can be set to the id of an existing 
-<code>&#60;select&#62;</code> element, Buttons of type "menu" and "split" can be 
-used to collapse two HTML form controls (<code>&#60;input&#62;</code> and 
-<code>&#60;select&#62;</code>) into one DHTML control.  For example, start 
+<p>Since the "menu" attribute can be set to the id of an existing
+<code>&#60;select&#62;</code> element, Buttons of type "menu" and "split" can be
+used to collapse two HTML form controls (<code>&#60;input&#62;</code> and
+<code>&#60;select&#62;</code>) into one DHTML control.  For example, start
 with an <code>&#60;input&#62;</code> and <code>&#60;select&#62;</code> element:
 <p>
 <div id="syntax-c22c024e504fcf33a942e288738d07ce" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-button&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;menu button&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">select</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton-select&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-select&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;0&quot;</span>&gt;</span>One<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;1&quot;</span>&gt;</span>Two<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span></div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;2&quot;</span>&gt;</span>Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>                </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">select</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-button&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;menu button&quot;</span>&gt;</span>
 <span class="sc2">&lt;<span class="kw2">select</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton-select&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-select&quot;</span>&gt;</span>
     <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;0&quot;</span>&gt;</span>One<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>
     <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;1&quot;</span>&gt;</span>Two<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>
-    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;2&quot;</span>&gt;</span>Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>                
+    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;2&quot;</span>&gt;</span>Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>
 <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">select</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-c22c024e504fcf33a942e288738d07ce-plain"><input type="button" id="menubutton" name="menubutton-button" value="menu button">
 <select id="menubutton-select" name="menubutton-select">
     <option value="0">One</option>
     <option value="1">Two</option>
-    <option value="2">Three</option>                
+    <option value="2">Three</option>
 </select>
 </textarea></div>
 <p>
-Next, pass the id of the <code>&#60;input&#62;</code> as the first argument to 
-the Button's constructor and the id of the <code>&#60;select&#62;</code> element 
+Next, pass the id of the <code>&#60;input&#62;</code> as the first argument to
+the Button's constructor and the id of the <code>&#60;select&#62;</code> element
 as the value of the "menu" configuration attribute:
 </p>
 <div id="syntax-eb77ecb3b74d4cdb213b5a966550bc36" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onContentReady</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//	Create a Button using an existing &lt;input&gt; and &lt;select&gt; element</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">        type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">        menu<span class="sy0">:</span> <span class="st0">&quot;menubutton-select&quot;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onContentReady</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
     <span class="co1">//	Create a Button using an existing &lt;input&gt; and &lt;select&gt; element</span>
-    <span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> 
-        type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span> 
+    <span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+        type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span>
         menu<span class="sy0">:</span> <span class="st0">&quot;menubutton-select&quot;</span>
     <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-eb77ecb3b74d4cdb213b5a966550bc36-plain">YAHOO.util.Event.onContentReady("menubutton", function () {
     //	Create a Button using an existing <input> and <select> element
-    var oMenuButton = new YAHOO.widget.Button("menubutton", { 
-        type: "menu", 
+    var oMenuButton = new YAHOO.widget.Button("menubutton", {
+        type: "menu",
         menu: "menubutton-select"
     });
 });
 </textarea></div><p>
 For more examples of how to create menu buttons and split button from existing
-markup, see the 
-<a href="../examples/button/btn_example07.html">menu button</a> and 
+markup, see the
+<a href="../examples/button/btn_example07.html">menu button</a> and
 <a href="../examples/button/btn_example08.html">split button</a> examples.
 </p>
 
 
 <h4 id="menufromscript">Creating From JavaScript</h4>
 <p>
-Create a menu button from JavaScript by setting the "menu" configuration 
-attribute to an array of 
+Create a menu button from JavaScript by setting the "menu" configuration
+attribute to an array of
 <a href="../docs/YAHOO.widget.MenuItem.html#configList">MenuItem configuration properties</a>.
 </p>
 <div id="syntax-234848d45161016b8f0a31418e757895" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onDOMReady</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//	&quot;click&quot; event handler for each item in the Button's Menu</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> onMenuItemClick <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>p_sType<span class="sy0">,</span> p_aArgs<span class="sy0">,</span> p_oItem<span class="br0">&#41;</span> <span class="br0">&#123;</span>	</div></li><li class="li2"><div class="de2">		<span class="kw2">var</span> sText <span class="sy0">=</span> p_oItem.<span class="me1">cfg</span>.<span class="me1">getProperty</span><span class="br0">&#40;</span><span class="st0">&quot;text&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">		<span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;[MenuItem Properties] text: &quot;</span> <span class="sy0">+</span> sText <span class="sy0">+</span> <span class="st0">&quot;, value: &quot;</span> <span class="sy0">+</span> </div></li><li class="li1"><div class="de1">				p_oItem.<span class="me1">value</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">		oMenuButton5.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;label&quot;</span><span class="sy0">,</span> sText<span class="br0">&#41;</span><span class="sy0">;</span>			</div></li><li class="li2"><div class="de2">	<span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//	Create an array of YAHOO.widget.MenuItem configuration properties</span></div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> aMenuItemData <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li2"><div class="de2">		<span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">&quot;One&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span> onclick<span class="sy0">:</span> <span class="br0">&#123;</span> fn<span class="sy0">:</span> onMenuItemClick <span class="br0">&#125;</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		<span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">&quot;Two&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span> onclick<span class="sy0">:</span> <span class="br0">&#123;</span> fn<span class="sy0">:</span> onMenuItemClick <span class="br0">&#125;</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		<span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">&quot;Three&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="nu0">3</span><span class="sy0">,</span> onclick<span class="sy0">:</span> <span class="br0">&#123;</span> fn<span class="sy0">:</span> onMenuItemClick <span class="br0">&#125;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	<span class="co1">//	Instantiate a menu button using the array of YAHOO.widget.MenuItem </span></div></li><li class="li1"><div class="de1">	<span class="co1">//	configuration properties as the value for the &quot;menu&quot;  </span></div></li><li class="li1"><div class="de1">	<span class="co1">//	configuration attribute.</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">	    label<span class="sy0">:</span> <span class="st0">&quot;One&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">	    menu<span class="sy0">:</span> aMenuItemData<span class="sy0">,</span> </div></li><li class="li1"><div class="de1">	    container<span class="sy0">:</span> document.<span class="me1">body</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onDOMReady</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
     <span class="co1">//	&quot;click&quot; event handler for each item in the Button's Menu</span>
 &nbsp;
-	<span class="kw2">var</span> onMenuItemClick <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>p_sType<span class="sy0">,</span> p_aArgs<span class="sy0">,</span> p_oItem<span class="br0">&#41;</span> <span class="br0">&#123;</span>	
+	<span class="kw2">var</span> onMenuItemClick <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>p_sType<span class="sy0">,</span> p_aArgs<span class="sy0">,</span> p_oItem<span class="br0">&#41;</span> <span class="br0">&#123;</span>
 		<span class="kw2">var</span> sText <span class="sy0">=</span> p_oItem.<span class="me1">cfg</span>.<span class="me1">getProperty</span><span class="br0">&#40;</span><span class="st0">&quot;text&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
-		<span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;[MenuItem Properties] text: &quot;</span> <span class="sy0">+</span> sText <span class="sy0">+</span> <span class="st0">&quot;, value: &quot;</span> <span class="sy0">+</span> 
+		<span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;[MenuItem Properties] text: &quot;</span> <span class="sy0">+</span> sText <span class="sy0">+</span> <span class="st0">&quot;, value: &quot;</span> <span class="sy0">+</span>
 				p_oItem.<span class="me1">value</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
-		oMenuButton5.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;label&quot;</span><span class="sy0">,</span> sText<span class="br0">&#41;</span><span class="sy0">;</span>			
+		oMenuButton5.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;label&quot;</span><span class="sy0">,</span> sText<span class="br0">&#41;</span><span class="sy0">;</span>
 	<span class="br0">&#125;</span><span class="sy0">;</span>
 &nbsp;
 &nbsp;
@@ -850,9 +850,9 @@ attribute to an array of
 	<span class="co1">//	configuration attribute.</span>
 &nbsp;
 	<span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
-        type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span> 
+        type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span>
 	    label<span class="sy0">:</span> <span class="st0">&quot;One&quot;</span><span class="sy0">,</span>
-	    menu<span class="sy0">:</span> aMenuItemData<span class="sy0">,</span> 
+	    menu<span class="sy0">:</span> aMenuItemData<span class="sy0">,</span>
 	    container<span class="sy0">:</span> document.<span class="me1">body</span>
     <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
@@ -860,12 +860,12 @@ attribute to an array of
 &nbsp;</pre></div><textarea id="syntax-234848d45161016b8f0a31418e757895-plain">YAHOO.util.Event.onDOMReady(function () {
     //	"click" event handler for each item in the Button's Menu
 
-	var onMenuItemClick = function (p_sType, p_aArgs, p_oItem) {	
+	var onMenuItemClick = function (p_sType, p_aArgs, p_oItem) {
 		var sText = p_oItem.cfg.getProperty("text");
-		alert("[MenuItem Properties] text: " + sText + ", value: " + 
+		alert("[MenuItem Properties] text: " + sText + ", value: " +
 				p_oItem.value);
-		
-		oMenuButton5.set("label", sText);			
+
+		oMenuButton5.set("label", sText);
 	};
 
 
@@ -876,92 +876,92 @@ attribute to an array of
 		{ text: "Three", value: 3, onclick: { fn: onMenuItemClick } }
 	];
 
-	//	Instantiate a menu button using the array of YAHOO.widget.MenuItem 
-	//	configuration properties as the value for the "menu"  
+	//	Instantiate a menu button using the array of YAHOO.widget.MenuItem
+	//	configuration properties as the value for the "menu"
 	//	configuration attribute.
 
 	var oMenuButton = new YAHOO.widget.Button({
-        type: "menu", 
+        type: "menu",
 	    label: "One",
-	    menu: aMenuItemData, 
+	    menu: aMenuItemData,
 	    container: document.body
     });
-	
+
 });
 </textarea></div>
 <p>
 For more examples of how to create menu buttons and split button using
-JavaScript, see the 
-<a href="../examples/button/btn_example07.html">menu button</a> and 
+JavaScript, see the
+<a href="../examples/button/btn_example07.html">menu button</a> and
 <a href="../examples/button/btn_example08.html">split button</a> examples.
 </p>
 
 
 <h4 id="usingmenu">Using A Button's Menu</h4>
 <p>
-Button's 
-<a href="../docs/YAHOO.widget.Button.html#config_menu"><code>menu</code></a> 
-configuration attribute can only be set once, either via the object literal 
-passed to the constructor, or on a Button instance via the 
-<a href="../docs/YAHOO.util.AttributeProvider.html#method_set"><code>set</code></a> 
-method.  Once the 
-<a href="../docs/YAHOO.widget.Button.html#config_menu"><code>menu</code></a> 
-attribute is set, use the 
-<a href="../docs/YAHOO.widget.Button.html#method_getMenu"><code>getMenu</code></a> 
-method to retrieve a reference to the 
-<a href="../docs/YAHOO.widget.Menu.html">Menu</a> 
-or <a href="../docs/YAHOO.widget.Overlay.html">Overlay</a> 
-instance used for the Button's menu.  With a reference to the Button's menu, 
-use the <a href="../docs/YAHOO.widget.Menu.html">Menu</a> widget  
-or <a href="../docs/YAHOO.widget.Overlay.html">Overlay</a> widget 
+Button's
+<a href="../docs/YAHOO.widget.Button.html#config_menu"><code>menu</code></a>
+configuration attribute can only be set once, either via the object literal
+passed to the constructor, or on a Button instance via the
+<a href="../docs/YAHOO.util.AttributeProvider.html#method_set"><code>set</code></a>
+method.  Once the
+<a href="../docs/YAHOO.widget.Button.html#config_menu"><code>menu</code></a>
+attribute is set, use the
+<a href="../docs/YAHOO.widget.Button.html#method_getMenu"><code>getMenu</code></a>
+method to retrieve a reference to the
+<a href="../docs/YAHOO.widget.Menu.html">Menu</a>
+or <a href="../docs/YAHOO.widget.Overlay.html">Overlay</a>
+instance used for the Button's menu.  With a reference to the Button's menu,
+use the <a href="../docs/YAHOO.widget.Menu.html">Menu</a> widget
+or <a href="../docs/YAHOO.widget.Overlay.html">Overlay</a> widget
 APIs to make changes to the menu's content and add event listeners.
 </p>
 
 <h4 id="lazyload">Lazy Loading</h4>
 <p>
 To improve performance, a Button's Menu is lazy loaded by default;  the creation
-and rendering of the Menu's MenuItems is deferred to the first time the user 
-clicks on the Button.  Therefore, any modifications to a Button's Menu that 
-need to be made after a Button has been instantiated should be done via a 
-listener for the Menu's 
-<a href="../docs/YAHOO.widget.Module.html#event_renderEvent"><code>render</code></a> 
-event to ensure that the Menu's content has been 
-fully initialized and rendered to the page.  The following example illustrates 
-how to add MenuItems to a menu button that has been created from 
+and rendering of the Menu's MenuItems is deferred to the first time the user
+clicks on the Button.  Therefore, any modifications to a Button's Menu that
+need to be made after a Button has been instantiated should be done via a
+listener for the Menu's
+<a href="../docs/YAHOO.widget.Module.html#event_renderEvent"><code>render</code></a>
+event to ensure that the Menu's content has been
+fully initialized and rendered to the page.  The following example illustrates
+how to add MenuItems to a menu button that has been created from
 existing markup.
 </p>
 <p>
-Start with an existing <code>&#60;input&#62;</code> and 
+Start with an existing <code>&#60;input&#62;</code> and
 <code>&#60;select&#62;</code> element to be transformed into a menu button.
 </p>
 <div id="syntax-c22c024e504fcf33a942e288738d07ce" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-button&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;menu button&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">select</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton-select&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-select&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;0&quot;</span>&gt;</span>One<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;1&quot;</span>&gt;</span>Two<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span></div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;2&quot;</span>&gt;</span>Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>                </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">select</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-button&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;menu button&quot;</span>&gt;</span>
 <span class="sc2">&lt;<span class="kw2">select</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton-select&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-select&quot;</span>&gt;</span>
     <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;0&quot;</span>&gt;</span>One<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>
     <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;1&quot;</span>&gt;</span>Two<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>
-    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;2&quot;</span>&gt;</span>Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>                
+    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;2&quot;</span>&gt;</span>Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>
 <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">select</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-c22c024e504fcf33a942e288738d07ce-plain"><input type="button" id="menubutton" name="menubutton-button" value="menu button">
 <select id="menubutton-select" name="menubutton-select">
     <option value="0">One</option>
     <option value="1">Two</option>
-    <option value="2">Three</option>                
+    <option value="2">Three</option>
 </select>
 </textarea></div><p>
-Once the Button has been instantiated, use the 
+Once the Button has been instantiated, use the
 <a href="../docs/YAHOO.widget.Button.html#method_getMenu"><code>getMenu</code></a>
-method to retrieve a reference to the Button's Menu.  Add a listener for the 
-Menu's 
-<a href="../docs/YAHOO.widget.Module.html#event_renderEvent"><code>render</code></a> 
-event, via the Menu's 
+method to retrieve a reference to the Button's Menu.  Add a listener for the
+Menu's
+<a href="../docs/YAHOO.widget.Module.html#event_renderEvent"><code>render</code></a>
+event, via the Menu's
 <a href="../docs/YAHOO.widget.Module.html#method_subscribe"><code>subscribe</code></a>
-method.  Finally, use the Menu's 
+method.  Finally, use the Menu's
 <a href="../docs/YAHOO.widget.Module.html#method_addItems"><code>addItems</code></a>
 method to append new MenuItems to the Menu once it has been rendered.
 </p>
 <div id="syntax-2c29c8750d84178c9f1f62d7afcde669" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//	Create a Button using an existing &lt;input&gt; and &lt;select&gt; element</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">                                        type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">                                        menu<span class="sy0">:</span> <span class="st0">&quot;menubutton-select&quot;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//	&quot;render&quot; event handler for the Button's Menu</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="kw2">var</span> onMenuRender <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>p_sType<span class="sy0">,</span> p_aArgs<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="kw1">this</span>.<span class="me1">addItems</span><span class="br0">&#40;</span><span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">		<span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">&quot;Four&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="nu0">4</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">		<span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">&quot;Five&quot;</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="nu0">5</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//	Add some additional MenuItems to the Button's Menu once it has been rendered</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">oMenuButton.<span class="me1">getMenu</span><span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;render&quot;</span><span class="sy0">,</span> onMenuRender<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//	Create a Button using an existing &lt;input&gt; and &lt;select&gt; element</span>
 &nbsp;
-<span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> 
-                                        type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span> 
+<span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+                                        type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span>
                                         menu<span class="sy0">:</span> <span class="st0">&quot;menubutton-select&quot;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
 &nbsp;
@@ -984,8 +984,8 @@ method to append new MenuItems to the Menu once it has been rendered.
 oMenuButton.<span class="me1">getMenu</span><span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;render&quot;</span><span class="sy0">,</span> onMenuRender<span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-2c29c8750d84178c9f1f62d7afcde669-plain">//	Create a Button using an existing <input> and <select> element
 
-var oMenuButton = new YAHOO.widget.Button("menubutton", { 
-                                        type: "menu", 
+var oMenuButton = new YAHOO.widget.Button("menubutton", {
+                                        type: "menu",
                                         menu: "menubutton-select" });
 
 
@@ -1008,67 +1008,67 @@ var onMenuRender = function (p_sType, p_aArgs) {
 oMenuButton.getMenu().subscribe("render", onMenuRender);
 </textarea></div>
 <p>
-Alternatively, setting Button's 
-<a href="../docs/YAHOO.widget.Button.html#config_lazyloadmenu"><code>lazyloadmenu</code></a> 
-configuration attribute to <code>false</code> will immediately initialize all 
-of the MenuItems in a Button's Menu and render it to the page.  Therefore, if 
-the 
-<a href="../docs/YAHOO.widget.Button.html#config_lazyloadmenu"><code>lazyloadmenu</code></a> 
-attribute is set to <code>false</code>, it is possible use the Menu API 
-to update the content of the Menu immediately, without having to wait for the 
+Alternatively, setting Button's
+<a href="../docs/YAHOO.widget.Button.html#config_lazyloadmenu"><code>lazyloadmenu</code></a>
+configuration attribute to <code>false</code> will immediately initialize all
+of the MenuItems in a Button's Menu and render it to the page.  Therefore, if
+the
+<a href="../docs/YAHOO.widget.Button.html#config_lazyloadmenu"><code>lazyloadmenu</code></a>
+attribute is set to <code>false</code>, it is possible use the Menu API
+to update the content of the Menu immediately, without having to wait for the
 Menu's <code>render</code> event to fire.
 </p>
 
 
 <h4 id="menuevents">Handling Menu Events</h4>
 <p>
-Listening for events for a Button's menu differs based on whether 
+Listening for events for a Button's menu differs based on whether
 the menu was created using the Menu or Overlay widget.
 </p>
 
 <h5>Handling Menu Events Using Menu</h5>
 <p>
-All of the events for Menu and MenuItem (including DOM-based events such as 
-"mouseover" or "click") are implemented as instances of 
-<a href="../event/index.html#customevent">Custom Event 
-(<code>YAHOO.util.CustomEvent</code>)</a>.  If a Button's menu was created 
-using the Menu widget, use the provided Custom Event-based interface 
-rather than attaching handlers directly to a Menu's DOM elements.  
-The following example illustrates how to add both a <code>click</code> 
+All of the events for Menu and MenuItem (including DOM-based events such as
+"mouseover" or "click") are implemented as instances of
+<a href="../event/index.html#customevent">Custom Event
+(<code>YAHOO.util.CustomEvent</code>)</a>.  If a Button's menu was created
+using the Menu widget, use the provided Custom Event-based interface
+rather than attaching handlers directly to a Menu's DOM elements.
+The following example illustrates how to add both a <code>click</code>
 and <code>show</code> event listener to a Button's menu.
 </p>
 <p>
-Start with an existing <code>&#60;input&#62;</code> and 
+Start with an existing <code>&#60;input&#62;</code> and
 <code>&#60;select&#62;</code> element to be transformed into a menu button.
 </p>
 <div id="syntax-c22c024e504fcf33a942e288738d07ce" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-button&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;menu button&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">select</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton-select&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-select&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;0&quot;</span>&gt;</span>One<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;1&quot;</span>&gt;</span>Two<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span></div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;2&quot;</span>&gt;</span>Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>                </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">select</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-button&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;menu button&quot;</span>&gt;</span>
 <span class="sc2">&lt;<span class="kw2">select</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton-select&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-select&quot;</span>&gt;</span>
     <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;0&quot;</span>&gt;</span>One<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>
     <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;1&quot;</span>&gt;</span>Two<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>
-    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;2&quot;</span>&gt;</span>Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>                
+    <span class="sc2">&lt;<span class="kw2">option</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;2&quot;</span>&gt;</span>Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">option</span>&gt;</span>
 <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">select</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-c22c024e504fcf33a942e288738d07ce-plain"><input type="button" id="menubutton" name="menubutton-button" value="menu button">
 <select id="menubutton-select" name="menubutton-select">
     <option value="0">One</option>
     <option value="1">Two</option>
-    <option value="2">Three</option>                
+    <option value="2">Three</option>
 </select>
 </textarea></div><p>
-Once the Button has been instantiated, use the 
+Once the Button has been instantiated, use the
 <a href="../docs/YAHOO.widget.Button.html#method_getMenu"><code>getMenu</code></a>
-method to retrieve a reference to the Button's Menu.  Add a listener for the 
-Menu's 
-<a href="../docs/YAHOO.widget.Module.html#event_showEvent"><code>show</code></a> 
-and 
+method to retrieve a reference to the Button's Menu.  Add a listener for the
+Menu's
+<a href="../docs/YAHOO.widget.Module.html#event_showEvent"><code>show</code></a>
+and
 <a href="../docs/YAHOO.widget.Menu.html#event_clickEvent"><code>click</code></a>
-events using the 
+events using the
 <a href="../docs/YAHOO.widget.Module.html#method_subscribe"><code>subscribe</code></a>
 method.
 </p>
 <div id="syntax-beb23e214d6618f2d55aeaae94bf4f0d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//	Create a Button using an existing &lt;input&gt; and &lt;select&gt; element</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">                                        type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">                                        menu<span class="sy0">:</span> <span class="st0">&quot;menubutton-select&quot;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//	&quot;click&quot; event listener for the Button's Menu instance</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> onMenuClick <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>p_sType<span class="sy0">,</span> p_aArgs<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> oEvent <span class="sy0">=</span> p_aArgs<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">,</span>	<span class="co1">//	DOM event</span></div></li><li class="li1"><div class="de1">		oMenuItem <span class="sy0">=</span> p_aArgs<span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span><span class="sy0">;</span>	<span class="co1">//	MenuItem instance that was the target of </span></div></li><li class="li1"><div class="de1">								<span class="co1">//	the event</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	<span class="kw1">if</span> <span class="br0">&#40;</span>oMenuItem<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">		<span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;[MenuItem Properties] text: &quot;</span> <span class="sy0">+</span> </div></li><li class="li1"><div class="de1">					oMenuItem.<span class="me1">cfg</span>.<span class="me1">getProperty</span><span class="br0">&#40;</span><span class="st0">&quot;text&quot;</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">&quot;, value: &quot;</span> <span class="sy0">+</span> </div></li><li class="li1"><div class="de1">					oMenuItem.<span class="me1">value</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//	Add a &quot;click&quot; event listener for the Button's Menu</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">oMenuButton.<span class="me1">getMenu</span><span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="sy0">,</span> onMenuClick<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//	&quot;show&quot; event listener for the Button's Menu instance</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> onMenuShow <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>p_sType<span class="sy0">,</span> p_aArgs<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	<span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;The Button's Menu is now visible.&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//	Add a &quot;show&quot; event listener for the Button's Menu</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">oMenuButton.<span class="me1">getMenu</span><span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;show&quot;</span><span class="sy0">,</span> onMenuShow<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//	Create a Button using an existing &lt;input&gt; and &lt;select&gt; element</span>
 &nbsp;
-<span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> 
-                                        type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span> 
+<span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+                                        type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span>
                                         menu<span class="sy0">:</span> <span class="st0">&quot;menubutton-select&quot;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
 <span class="co1">//	&quot;click&quot; event listener for the Button's Menu instance</span>
@@ -1081,8 +1081,8 @@ method.
 &nbsp;
 	<span class="kw1">if</span> <span class="br0">&#40;</span>oMenuItem<span class="br0">&#41;</span> <span class="br0">&#123;</span>
 &nbsp;
-		<span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;[MenuItem Properties] text: &quot;</span> <span class="sy0">+</span> 
-					oMenuItem.<span class="me1">cfg</span>.<span class="me1">getProperty</span><span class="br0">&#40;</span><span class="st0">&quot;text&quot;</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">&quot;, value: &quot;</span> <span class="sy0">+</span> 
+		<span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;[MenuItem Properties] text: &quot;</span> <span class="sy0">+</span>
+					oMenuItem.<span class="me1">cfg</span>.<span class="me1">getProperty</span><span class="br0">&#40;</span><span class="st0">&quot;text&quot;</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">&quot;, value: &quot;</span> <span class="sy0">+</span>
 					oMenuItem.<span class="me1">value</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
 	<span class="br0">&#125;</span>
@@ -1108,22 +1108,22 @@ oMenuButton.<span class="me1">getMenu</span><span class="br0">&#40;</span><span 
 oMenuButton.<span class="me1">getMenu</span><span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;show&quot;</span><span class="sy0">,</span> onMenuShow<span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-beb23e214d6618f2d55aeaae94bf4f0d-plain">//	Create a Button using an existing <input> and <select> element
 
-var oMenuButton = new YAHOO.widget.Button("menubutton", { 
-                                        type: "menu", 
+var oMenuButton = new YAHOO.widget.Button("menubutton", {
+                                        type: "menu",
                                         menu: "menubutton-select" });
-	
+
 //	"click" event listener for the Button's Menu instance
 
 var onMenuClick = function (p_sType, p_aArgs) {
 
 	var oEvent = p_aArgs[0],	//	DOM event
-		oMenuItem = p_aArgs[1];	//	MenuItem instance that was the target of 
+		oMenuItem = p_aArgs[1];	//	MenuItem instance that was the target of
 								//	the event
 
 	if (oMenuItem) {
 
-		alert("[MenuItem Properties] text: " + 
-					oMenuItem.cfg.getProperty("text") + ", value: " + 
+		alert("[MenuItem Properties] text: " +
+					oMenuItem.cfg.getProperty("text") + ", value: " +
 					oMenuItem.value);
 
 	}
@@ -1148,10 +1148,10 @@ var onMenuShow = function (p_sType, p_aArgs) {
 
 oMenuButton.getMenu().subscribe("show", onMenuShow);
 </textarea></div><p>
-For more information on Menu events, see the 
-<a href="../menu/index.html#handlingevents">"Handling Events"</a> section of the 
-<a href="../menu/index.html">Menu landing page</a>, as well as the 
-<a href="../examples/button/btn_example07.html">menu button</a> and 
+For more information on Menu events, see the
+<a href="../menu/index.html#handlingevents">"Handling Events"</a> section of the
+<a href="../menu/index.html">Menu landing page</a>, as well as the
+<a href="../examples/button/btn_example07.html">menu button</a> and
 <a href="../examples/button/btn_example08.html">split button</a> examples.
 </p>
 
@@ -1159,19 +1159,19 @@ For more information on Menu events, see the
 <h5>Handling Menu Events Using Overlay</h5>
 <p>
 Listening for events on menus created using the Overlay widget differ based on
-the type of event.  For DOM-based events, use the Event Utility's 
-<a href="../docs/YAHOO.util.Event.html#method_addListener"><code>addListener</code></a> 
-method (<code>on</code> for short).  For Overlay-specific Custom Events (e.g. 
-<a href="../docs/YAHOO.widget.Module.html#event_showEvent"><code>show</code></a>, 
-<a href="../docs/YAHOO.widget.Module.html#event_hideEvent"><code>hide</code></a>, 
-and 
-<a href="../docs/YAHOO.widget.Overlay.html#event_moveEvent"><code>move</code></a>), 
-use the <code>subscribe</code> method.  The follow example illustrates how to 
-listen for both a <code>click</code> and <code>show</code> event on a Button 
+the type of event.  For DOM-based events, use the Event Utility's
+<a href="../docs/YAHOO.util.Event.html#method_addListener"><code>addListener</code></a>
+method (<code>on</code> for short).  For Overlay-specific Custom Events (e.g.
+<a href="../docs/YAHOO.widget.Module.html#event_showEvent"><code>show</code></a>,
+<a href="../docs/YAHOO.widget.Module.html#event_hideEvent"><code>hide</code></a>,
+and
+<a href="../docs/YAHOO.widget.Overlay.html#event_moveEvent"><code>move</code></a>),
+use the <code>subscribe</code> method.  The follow example illustrates how to
+listen for both a <code>click</code> and <code>show</code> event on a Button
 whose menu was created using the Overlay widget.
 </p>
 <p>
-Begin with an <code>&#60;input&#62;</code> element and the markup format 
+Begin with an <code>&#60;input&#62;</code> element and the markup format
 required for Overlay:
 </p>
 <div id="syntax-7a34b45528cf41226de827d1961bc105" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton-1&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-1-button&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;Menu Button&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton-1-menu&quot;</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-overlay&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;bd&quot;</span>&gt;</span>Menu Button Menu<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;menubutton-1&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;menubutton-1-button&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;Menu Button&quot;</span>&gt;</span>
@@ -1198,19 +1198,19 @@ required for Overlay:
 	visibility: hidden;
 }
 </textarea></div><p>
-Once the Button has been instantiated, use the 
+Once the Button has been instantiated, use the
 <a href="../docs/YAHOO.widget.Button.html#method_getMenu"><code>getMenu</code></a>
-method to retrieve a reference to the Button's Overlay.  Add a listener for the 
-Overlay's 
-<code>click</code> event using the <code>on</code> method of the Event Utility 
-and add a listener for the 
-<a href="../docs/YAHOO.widget.Module.html#event_showEvent"><code>show</code></a> 
+method to retrieve a reference to the Button's Overlay.  Add a listener for the
+Overlay's
+<code>click</code> event using the <code>on</code> method of the Event Utility
+and add a listener for the
+<a href="../docs/YAHOO.widget.Module.html#event_showEvent"><code>show</code></a>
 event using the Overlay's <code>subscribe</code> method.
 </p>
 <div id="syntax-5abcdb037b35535e9ed61db8c4addf54" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//	Create a Button using an existing &lt;input&gt; element and a </span></div></li><li class="li1"><div class="de1"><span class="co1">//	YAHOO.widget.Overlay instance as its menu</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton-1&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">						<span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span> menu<span class="sy0">:</span> <span class="st0">&quot;menubutton-1-menu&quot;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//	&quot;click&quot; event listener for the Button's menu (Overlay instance)</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="kw2">var</span> onOverlayClick <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>p_oEvent<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;You clicked the Button's menu.&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//	Add a &quot;click&quot; event listener to the Button's menu (Overlay instance)</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span>oMenuButton.<span class="me1">getMenu</span><span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="me1">element</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> onOverlayClick<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//	&quot;show&quot; event listener for the third Button's menu (Overlay instance)</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> onOverlayShow <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>p_sType<span class="sy0">,</span> p_aArgs<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;The Button's menu is now visible.&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//	Add a listener for the Button's &quot;show&quot; event</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">oMenuButton.<span class="me1">getMenu</span><span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;show&quot;</span><span class="sy0">,</span> onOverlayShow<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//	Create a Button using an existing &lt;input&gt; element and a </span>
 <span class="co1">//	YAHOO.widget.Overlay instance as its menu</span>
 &nbsp;
-<span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton-1&quot;</span><span class="sy0">,</span> 
+<span class="kw2">var</span> oMenuButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="st0">&quot;menubutton-1&quot;</span><span class="sy0">,</span>
 						<span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">&quot;menu&quot;</span><span class="sy0">,</span> menu<span class="sy0">:</span> <span class="st0">&quot;menubutton-1-menu&quot;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
 &nbsp;
@@ -1240,19 +1240,19 @@ event using the Overlay's <code>subscribe</code> method.
 <span class="co1">//	Add a listener for the Button's &quot;show&quot; event</span>
 &nbsp;
 oMenuButton.<span class="me1">getMenu</span><span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;show&quot;</span><span class="sy0">,</span> onOverlayShow<span class="br0">&#41;</span><span class="sy0">;</span>
-&nbsp;</pre></div><textarea id="syntax-5abcdb037b35535e9ed61db8c4addf54-plain">//	Create a Button using an existing <input> element and a 
+&nbsp;</pre></div><textarea id="syntax-5abcdb037b35535e9ed61db8c4addf54-plain">//	Create a Button using an existing <input> element and a
 //	YAHOO.widget.Overlay instance as its menu
 
-var oMenuButton = new YAHOO.widget.Button("menubutton-1", 
+var oMenuButton = new YAHOO.widget.Button("menubutton-1",
 						{ type: "menu", menu: "menubutton-1-menu" });
 
 
 //	"click" event listener for the Button's menu (Overlay instance)
 
 var onOverlayClick = function (p_oEvent) {
-	
+
 	alert("You clicked the Button's menu.");
-	
+
 };
 
 
@@ -1266,7 +1266,7 @@ YAHOO.util.Event.on(oMenuButton.getMenu().element, "click", onOverlayClick);
 var onOverlayShow = function (p_sType, p_aArgs) {
 
 	alert("The Button's menu is now visible.");
-	
+
 };
 
 
@@ -1278,14 +1278,14 @@ oMenuButton.getMenu().subscribe("show", onOverlayShow);
 
 <h4 id="selectedmenuitemattr">The <code>selectedMenuItem</code> Attribute</h4>
 <p>
-When the user selects a MenuItem in a Button's Menu by clicking on it, a 
-reference to the selected MenuItem is maintained in the Button's 
-<a href="../docs/YAHOO.widget.Button.html#config_selectedMenuItem"><code>selectedMenuItem</code></a> 
-attribute.  Additionally, a class named "yui-button-selectedmenuitem" is added 
-to the <code>&#60;li&#62;</code> element of the currently selected MenuItem, 
-allowing for custom styling of the selected state.  For more on using the 
-<a href="../docs/YAHOO.widget.Button.html#config_selectedMenuItem"><code>selectedMenuItem</code></a> 
-see the 
+When the user selects a MenuItem in a Button's Menu by clicking on it, a
+reference to the selected MenuItem is maintained in the Button's
+<a href="../docs/YAHOO.widget.Button.html#config_selectedMenuItem"><code>selectedMenuItem</code></a>
+attribute.  Additionally, a class named "yui-button-selectedmenuitem" is added
+to the <code>&#60;li&#62;</code> element of the currently selected MenuItem,
+allowing for custom styling of the selected state.  For more on using the
+<a href="../docs/YAHOO.widget.Button.html#config_selectedMenuItem"><code>selectedMenuItem</code></a>
+see the
 <a href="../examples/button/button-menu-select_clean.html">Using A Menu Button To Replace A &#60;select&#62; Element</a>
 example.
 </p>
@@ -1293,15 +1293,15 @@ example.
 
 <h3 id="handlingevents">Handling Events</h3>
 <p>
-All of the the events for Button and ButtonGroup (including DOM-based events 
-such as "mouseover" or "click") can be listened for via the <code>addListener</code> 
+All of the the events for Button and ButtonGroup (including DOM-based events
+such as "mouseover" or "click") can be listened for via the <code>addListener</code>
 method (or <code>on</code> for short).
 </p>
 
 <h4>DOM Events</h4>
 <p>
-To listen for DOM-based events, always use the provided event interface rather 
-than attaching handlers directly to Button or ButtonGroup DOM elements using 
+To listen for DOM-based events, always use the provided event interface rather
+than attaching handlers directly to Button or ButtonGroup DOM elements using
 the Event Utility.
 </p>
 <div id="syntax-82c319361a17193b99990fa78bb1ffc6" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span> label<span class="sy0">:</span> <span class="st0">&quot;Click Me!&quot;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> onButtonClick <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="kw3">alert</span><span class="br0">&#40;</span>e.<span class="me1">target</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">oButton.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="sy0">,</span> onButtonClick<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span> label<span class="sy0">:</span> <span class="st0">&quot;Click Me!&quot;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
@@ -1324,9 +1324,9 @@ var onButtonClick = function (e) {
 oButton.on("click", onButtonClick);
 </textarea></div>
 <p>
-As a convenience, Button also provides an 
-<a href="../docs/YAHOO.widget.Button.html#config_onclick"><code>onclick</code></a> 
-configuration attribute that provides a more express means of registering a 
+As a convenience, Button also provides an
+<a href="../docs/YAHOO.widget.Button.html#config_onclick"><code>onclick</code></a>
+configuration attribute that provides a more express means of registering a
 single <code>click</code> event listener to a Button instance.
 </p>
 <div id="syntax-00850028fee41cd45abe1711a5fa4503" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">    <span class="kw2">var</span> onButtonClick <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="kw3">alert</span><span class="br0">&#40;</span>e.<span class="me1">target</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span> label<span class="sy0">:</span> <span class="st0">&quot;Click Me!&quot;</span><span class="sy0">,</span> onclick<span class="sy0">:</span> <span class="br0">&#123;</span> fn<span class="sy0">:</span> onButtonClick <span class="br0">&#125;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">    <span class="kw2">var</span> onButtonClick <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
@@ -1346,16 +1346,16 @@ single <code>click</code> event listener to a Button instance.
 </textarea></div>
 <h4>Custom Events</h4>
 <p>
-For Button-specific events (i.e., non-DOM events, or Custom Events), the first argument passed to 
-the event handler is an object containing relevant event information.  For 
-change events, this includes <code>prevValue</code> (the previous value of the 
+For Button-specific events (i.e., non-DOM events, or Custom Events), the first argument passed to
+the event handler is an object containing relevant event information.  For
+change events, this includes <code>prevValue</code> (the previous value of the
 attribute) and <code>newValue</code> (the new value of the attribute).
-</p>  
+</p>
 <div id="syntax-180a89e4579eb132f677f4474cd2bc5c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">    <span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                                        id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                                        type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                                        label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">                                        container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span> </div></li><li class="li1"><div class="de1">                                    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> onCheckedChange <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">        <span class="kw3">alert</span><span class="br0">&#40;</span>e.<span class="me1">prevValue</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    oButton.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;checkedChange&quot;</span><span class="sy0">,</span> onCheckedChange<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    oButton.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;checked&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">    <span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
-                                        id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span> 
-                                        type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span> 
-                                        label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span> 
-                                        container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span> 
+                                        id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span>
+                                        type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span>
+                                        label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span>
+                                        container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span>
                                     <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
     <span class="kw2">var</span> onCheckedChange <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
@@ -1368,30 +1368,30 @@ attribute) and <code>newValue</code> (the new value of the attribute).
 &nbsp;
     oButton.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;checked&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-180a89e4579eb132f677f4474cd2bc5c-plain">    var oButton = new YAHOO.widget.Button({
-                                        id: "mybuttonid", 
-                                        type: "checkbox", 
-                                        label: "My Button", 
-                                        container: "someelement" 
+                                        id: "mybuttonid",
+                                        type: "checkbox",
+                                        label: "My Button",
+                                        container: "someelement"
                                     });
-    
+
     var onCheckedChange = function (e) {
 
         alert(e.prevValue);
 
     };
-    
+
     oButton.addListener("checkedChange", onCheckedChange);
 
     oButton.set("checked", true);
 </textarea></div>
-<p>Additionally, configuration attribute changes applied via the 
-<a href="../docs/YAHOO.util.AttributeProvider.html#method_set"><code>set</code></a> 
-interface (e.g., <code>oButton.set("checked", true);</code>) can be cancelled by returning false from the beforeChange event.</p>  
+<p>Additionally, configuration attribute changes applied via the
+<a href="../docs/YAHOO.util.AttributeProvider.html#method_set"><code>set</code></a>
+interface (e.g., <code>oButton.set("checked", true);</code>) can be cancelled by returning false from the beforeChange event.</p>
 <div id="syntax-79a276181ce4edc9ac613de17ad7abdc" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">    <span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                                        id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                                        type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                                        label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">                                        container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span> </div></li><li class="li1"><div class="de1">                                    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw2">function</span> onBeforeCheckedChange<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">        <span class="kw1">return</span> <span class="kw2">false</span><span class="sy0">;</span> <span class="co1">// Prevents a change to the &quot;checked&quot; property</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    oButton.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;beforeCheckedChange&quot;</span><span class="sy0">,</span> onBeforeCheckedChange<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    oButton.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;checked&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">    <span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
-                                        id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span> 
-                                        type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span> 
-                                        label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span> 
-                                        container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span> 
+                                        id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span>
+                                        type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span>
+                                        label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span>
+                                        container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span>
                                     <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
     <span class="kw2">function</span> onBeforeCheckedChange<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
@@ -1404,28 +1404,28 @@ interface (e.g., <code>oButton.set("checked", true);</code>) can be cancelled by
 &nbsp;
     oButton.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;checked&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-79a276181ce4edc9ac613de17ad7abdc-plain">    var oButton = new YAHOO.widget.Button({
-                                        id: "mybuttonid", 
-                                        type: "checkbox", 
-                                        label: "My Button", 
-                                        container: "someelement" 
+                                        id: "mybuttonid",
+                                        type: "checkbox",
+                                        label: "My Button",
+                                        container: "someelement"
                                     });
-    
+
     function onBeforeCheckedChange() {
 
         return false; // Prevents a change to the "checked" property
 
     }
-    
+
     oButton.addListener("beforeCheckedChange", onBeforeCheckedChange);
 
     oButton.set("checked", true);
 </textarea></div>
-<p>Event listeners can be removed using <code>removeListener</code>.</p>  
+<p>Event listeners can be removed using <code>removeListener</code>.</p>
 <div id="syntax-42b3ff0bc14148d936943b8215edbf55" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">    <span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                                        id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                                        type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                                        label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">                                        container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span> </div></li><li class="li1"><div class="de1">                                    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw2">function</span> onBeforeCheckedChange<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">        <span class="kw1">return</span> <span class="kw2">false</span><span class="sy0">;</span> <span class="co1">// Prevents a change to the &quot;checked&quot; property</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    oButton.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;beforeCheckedChange&quot;</span><span class="sy0">,</span> onBeforeCheckedChange<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    oButton.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;checked&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>  <span class="co2">/* Button will not be checked*/</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    oButton.<span class="me1">removeListener</span><span class="br0">&#40;</span><span class="st0">&quot;beforeCheckedChange&quot;</span><span class="sy0">,</span> onBeforeCheckedChange<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    oButton.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;checked&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co2">/* Button will be checked */</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">    <span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
-                                        id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span> 
-                                        type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span> 
-                                        label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span> 
-                                        container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span> 
+                                        id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span>
+                                        type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span>
+                                        label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span>
+                                        container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span>
                                     <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
     <span class="kw2">function</span> onBeforeCheckedChange<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
@@ -1440,18 +1440,18 @@ interface (e.g., <code>oButton.set("checked", true);</code>) can be cancelled by
     oButton.<span class="me1">removeListener</span><span class="br0">&#40;</span><span class="st0">&quot;beforeCheckedChange&quot;</span><span class="sy0">,</span> onBeforeCheckedChange<span class="br0">&#41;</span><span class="sy0">;</span>
     oButton.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;checked&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co2">/* Button will be checked */</span>
 &nbsp;</pre></div><textarea id="syntax-42b3ff0bc14148d936943b8215edbf55-plain">    var oButton = new YAHOO.widget.Button({
-                                        id: "mybuttonid", 
-                                        type: "checkbox", 
-                                        label: "My Button", 
-                                        container: "someelement" 
+                                        id: "mybuttonid",
+                                        type: "checkbox",
+                                        label: "My Button",
+                                        container: "someelement"
                                     });
-    
+
     function onBeforeCheckedChange() {
 
         return false; // Prevents a change to the "checked" property
 
     }
-    
+
     oButton.addListener("beforeCheckedChange", onBeforeCheckedChange);
     oButton.set("checked", true);  /* Button will not be checked*/
 
@@ -1462,17 +1462,17 @@ interface (e.g., <code>oButton.set("checked", true);</code>) can be cancelled by
 
 <h3 id="configurationattributes">Configuration Attributes</h3>
 <p>
-Configuration attributes are accessible at runtime through the Button and 
-ButtonGroup 
-<a href="../docs/YAHOO.util.AttributeProvider.html#method_get"><code>get</code></a> 
-and 
+Configuration attributes are accessible at runtime through the Button and
+ButtonGroup
+<a href="../docs/YAHOO.util.AttributeProvider.html#method_get"><code>get</code></a>
+and
 <a href="../docs/YAHOO.util.AttributeProvider.html#method_set"><code>set</code></a>
 methods.  For example:
 </p>
 <div id="syntax-047cbaac01cb88d826a92b6eefb22c56" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                                    id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                                    type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                                    label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">                                    checked<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>  <span class="co1">// Checked by default</span></div></li><li class="li1"><div class="de1">                                    container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span></div></li><li class="li1"><div class="de1">                                <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw3">alert</span><span class="br0">&#40;</span>oButton.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;checked&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>  <span class="co1">// Alerts true</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">oButton.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;checked&quot;</span><span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span>  <span class="co1">// Unchecks the button</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw3">alert</span><span class="br0">&#40;</span>oButton.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;checked&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>  <span class="co1">// Alerts false</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oButton <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
-                                    id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span> 
-                                    type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span> 
-                                    label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span> 
+                                    id<span class="sy0">:</span> <span class="st0">&quot;mybuttonid&quot;</span><span class="sy0">,</span>
+                                    type<span class="sy0">:</span> <span class="st0">&quot;checkbox&quot;</span><span class="sy0">,</span>
+                                    label<span class="sy0">:</span> <span class="st0">&quot;My Button&quot;</span><span class="sy0">,</span>
                                     checked<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>  <span class="co1">// Checked by default</span>
                                     container<span class="sy0">:</span> <span class="st0">&quot;someelement&quot;</span>
                                 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
@@ -1483,9 +1483,9 @@ oButton.<span class="me1">set</span><span class="br0">&#40;</span><span class="s
 &nbsp;
 <span class="kw3">alert</span><span class="br0">&#40;</span>oButton.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;checked&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>  <span class="co1">// Alerts false</span>
 &nbsp;</pre></div><textarea id="syntax-047cbaac01cb88d826a92b6eefb22c56-plain">var oButton = new YAHOO.widget.Button({
-                                    id: "mybuttonid", 
-                                    type: "checkbox", 
-                                    label: "My Button", 
+                                    id: "mybuttonid",
+                                    type: "checkbox",
+                                    label: "My Button",
                                     checked: true,  // Checked by default
                                     container: "someelement"
                                 });
@@ -1497,12 +1497,12 @@ oButton.set("checked", false);  // Unchecks the button
 alert(oButton.get("checked"));  // Alerts false
 </textarea></div>
 <p>
-A handful of Button and ButtonGroup configuration attributes are documented 
-as being <code>writeOnce</code> &#151; meaning that the attribute can only be 
-set once, either via the the object literal passed to the constructor, or on an 
-instance via the 
-<a href="../docs/YAHOO.util.AttributeProvider.html#method_set"><code>set</code></a> 
-method.  The Button and ButtonGroup 
+A handful of Button and ButtonGroup configuration attributes are documented
+as being <code>writeOnce</code> &#151; meaning that the attribute can only be
+set once, either via the the object literal passed to the constructor, or on an
+instance via the
+<a href="../docs/YAHOO.util.AttributeProvider.html#method_set"><code>set</code></a>
+method.  The Button and ButtonGroup
 configuration attributes that can be set once are documented below:
 </p>
 
@@ -1522,10 +1522,10 @@ configuration attributes that can be set once are documented below:
 </ul>
 
 <p>
-See the <a href="#buttonconfigreference">reference table below</a> as well as 
-the API documentation for 
-<a href="../docs/YAHOO.widget.Button.html">Button</a> and 
-<a href="../docs/YAHOO.widget.ButtonGroup.html">ButtonGroup</a> for a 
+See the <a href="#buttonconfigreference">reference table below</a> as well as
+the API documentation for
+<a href="../docs/YAHOO.widget.Button.html">Button</a> and
+<a href="../docs/YAHOO.widget.ButtonGroup.html">ButtonGroup</a> for a
 complete list of configuration attributes.
 </p>
 
@@ -1561,7 +1561,7 @@ complete list of configuration attributes.
         <tr>
             <td colspan="4">See the <a href="../docs/YAHOO.widget.Button.html">API documentation</a> for the complete list of properties and methods.</td>
         </tr>
-    </tfoot> 
+    </tfoot>
     <tbody>
         <tr class="odd" id="typeattribute">
             <td>type</td>
@@ -1686,7 +1686,7 @@ complete list of configuration attributes.
             <td>true</td>
             <td>Boolean indicating whether or not the button's menu should be focused when it is made visible.</td>
         </tr>
-        
+
         <tr class="odd">
             <td>menuminscrollheight</td>
             <td>Number</td>
@@ -1698,7 +1698,7 @@ complete list of configuration attributes.
             <td>Number</td>
             <td>0</td>
             <td>Number defining the maximum height (in pixels) for a menu's body element (<code>&#60;div class="bd"&#60;</code>).  Once a menu's body exceeds this height, the contents of the body are scrolled to maintain this value.  This value cannot be set lower than the value of the "minscrollheight" configuration property.</td>
-        </tr>        
+        </tr>
         <tr class="odd">
             <td>menualignment</td>
             <td>Array</td>
@@ -1726,13 +1726,13 @@ complete list of configuration attributes.
             <th>Type</th>
             <th>Default</th>
             <th>Description</th>
-        </tr>    
+        </tr>
     </thead>
     <tfoot>
         <tr>
             <td colspan="4">See the <a href="../docs/YAHOO.widget.ButtonGroup.html">API documentation</a> for the complete list of properties and methods.</td>
         </tr>
-    </tfoot>     
+    </tfoot>
     <tbody>
         <tr class="odd">
             <td>name</td>
@@ -1855,7 +1855,7 @@ complete list of configuration attributes.
         <tr class="odd">
             <td class="button-class-name">yui-button-selectedmenuitem</td>
             <td>Applied to the <code>&#60;li&#62;</code> element of the MenuItem instance representing the value of the button's "selectedMenuItem" attribute.</td>
-        </tr>       
+        </tr>
     </tbody>
 </table>
 </div>
@@ -1865,34 +1865,34 @@ complete list of configuration attributes.
 
 	<li>
 		<h4>
-			Button instances with the <code>name</code> attribute set to a 
-			value of &#34;submit&#34; will prevent their parent form 
+			Button instances with the <code>name</code> attribute set to a
+			value of &#34;submit&#34; will prevent their parent form
 			from submitting.
 		</h4>
 		<p>
-			Setting a Button instance's <code>name</code> attribute to 
-			&#34;submit&#34; will overwrite the parent form's reference to the 
-			<code>submit</code> method.  <em>This problem is not due to a bug 
+			Setting a Button instance's <code>name</code> attribute to
+			&#34;submit&#34; will overwrite the parent form's reference to the
+			<code>submit</code> method.  <em>This problem is not due to a bug
 			in the Button Widget, is not specific to the Button Widget</em>,
-			and can 
-			<a href="http://yuiblog.com/sandbox/yui/v260/examples/button/example06.html">easily be reproduced</a> 
-			when the <code>name</code> attribute of any form element is set 
+			and can
+			<a href="http://yuiblog.com/sandbox/yui/v260/examples/button/example06.html">easily be reproduced</a>
+			when the <code>name</code> attribute of any form element is set
 			to &#34;submit&#34;.
 		</p>
 	</li>
 
 	<li>
 		<h4>
-			The text label for Buttons of type "link" is rendered one pixel lower than other types 
+			The text label for Buttons of type "link" is rendered one pixel lower than other types
 			of Buttons in Gecko-based browsers
 		</h4>
 		<p>
-			In Gecko-based browsers the text label for Buttons of type "link" is rendered 
-			one pixel lower than other types of Buttons.  This can be an issue when buttons of 
-			various types exist side by side.  To fix this problem, use 
-			<code>YAHOO.env.ua.gecko</code> detect Gecko-based browsers and append a "gecko" 
-			class name to the Button's root element.  Use that class name to create a style 
-			rule that adds a two-pixel transparent bottom border to Buttons of type other than 
+			In Gecko-based browsers the text label for Buttons of type "link" is rendered
+			one pixel lower than other types of Buttons.  This can be an issue when buttons of
+			various types exist side by side.  To fix this problem, use
+			<code>YAHOO.env.ua.gecko</code> detect Gecko-based browsers and append a "gecko"
+			class name to the Button's root element.  Use that class name to create a style
+			rule that adds a two-pixel transparent bottom border to Buttons of type other than
 			"link.  For example:
 		</p>
 <div id="syntax-1c22147a1805080ae40cdf039fcff416" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="re1">.yui-skin-sam</span> <span class="re1">.yui-button</span><span class="re1">.gecko</span> button <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="kw1">border-bottom</span><span class="sy0">:</span> <span class="re3">2px</span> <span class="kw2">solid</span> <span class="kw2">transparent</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="re1">.yui-skin-sam</span> <span class="re1">.yui-button</span><span class="re1">.gecko</span> button <span class="br0">&#123;</span>
@@ -1903,15 +1903,15 @@ complete list of configuration attributes.
 }
 </textarea></div><div id="syntax-96f3dc3674c70d3879a060f668a14b87" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onDOMReady</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> oButton1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">							type<span class="sy0">:</span> <span class="st0">&quot;button&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">							label<span class="sy0">:</span> <span class="st0">&quot;button 1&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">							container<span class="sy0">:</span> document.<span class="me1">body</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> oButton2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">							type<span class="sy0">:</span> <span class="st0">&quot;link&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">							href<span class="sy0">:</span> <span class="st0">&quot;http://www.yahoo.com&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">							label<span class="sy0">:</span> <span class="st0">&quot;button 2&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">							container<span class="sy0">:</span> document.<span class="me1">body</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">env</span>.<span class="me1">ua</span>.<span class="me1">gecko</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">		oButton1.<span class="me1">addClass</span><span class="br0">&#40;</span><span class="st0">&quot;gecko&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onDOMReady</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
 &nbsp;
-	<span class="kw2">var</span> oButton1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span> 
-							type<span class="sy0">:</span> <span class="st0">&quot;button&quot;</span><span class="sy0">,</span> 
-							label<span class="sy0">:</span> <span class="st0">&quot;button 1&quot;</span><span class="sy0">,</span> 
+	<span class="kw2">var</span> oButton1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+							type<span class="sy0">:</span> <span class="st0">&quot;button&quot;</span><span class="sy0">,</span>
+							label<span class="sy0">:</span> <span class="st0">&quot;button 1&quot;</span><span class="sy0">,</span>
 							container<span class="sy0">:</span> document.<span class="me1">body</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
-	<span class="kw2">var</span> oButton2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span> 
-							type<span class="sy0">:</span> <span class="st0">&quot;link&quot;</span><span class="sy0">,</span> 
-							href<span class="sy0">:</span> <span class="st0">&quot;http://www.yahoo.com&quot;</span><span class="sy0">,</span> 
-							label<span class="sy0">:</span> <span class="st0">&quot;button 2&quot;</span><span class="sy0">,</span> 
+	<span class="kw2">var</span> oButton2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Button</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+							type<span class="sy0">:</span> <span class="st0">&quot;link&quot;</span><span class="sy0">,</span>
+							href<span class="sy0">:</span> <span class="st0">&quot;http://www.yahoo.com&quot;</span><span class="sy0">,</span>
+							label<span class="sy0">:</span> <span class="st0">&quot;button 2&quot;</span><span class="sy0">,</span>
 							container<span class="sy0">:</span> document.<span class="me1">body</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
 	<span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">env</span>.<span class="me1">ua</span>.<span class="me1">gecko</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
@@ -1921,15 +1921,15 @@ complete list of configuration attributes.
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-96f3dc3674c70d3879a060f668a14b87-plain">YAHOO.util.Event.onDOMReady(function () {
 
-	var oButton1 = new YAHOO.widget.Button({ 
-							type: "button", 
-							label: "button 1", 
+	var oButton1 = new YAHOO.widget.Button({
+							type: "button",
+							label: "button 1",
 							container: document.body });
-	
-	var oButton2 = new YAHOO.widget.Button({ 
-							type: "link", 
-							href: "http://www.yahoo.com", 
-							label: "button 2", 
+
+	var oButton2 = new YAHOO.widget.Button({
+							type: "link",
+							href: "http://www.yahoo.com",
+							label: "button 2",
 							container: document.body });
 
 	if (YAHOO.env.ua.gecko) {
@@ -1941,13 +1941,13 @@ complete list of configuration attributes.
 
 	<li>
 		<h4>Buttons rendered without rounded corners in IE 6 and IE 7 (Quirks Mode only)</h4>
-		
+
 		<p>
-			To improve stability, as of version 2.6 of YUI Buttons are no longer rendered with 
+			To improve stability, as of version 2.6 of YUI Buttons are no longer rendered with
 			rounded corners in IE 6 and IE 7 (Quirks Mode only).  This helps ensure that Buttons
-			are rendered correctly when placed inside relatively positioned parent elements or 
-			parent elements that are scrolled via use of the CSS "overflow" property.  To restore 
-			rounded corners for IE 6 and 7, include the following CSS code after the inclusion of 
+			are rendered correctly when placed inside relatively positioned parent elements or
+			parent elements that are scrolled via use of the CSS "overflow" property.  To restore
+			rounded corners for IE 6 and 7, include the following CSS code after the inclusion of
 			the Button "Sam" skin CSS file.
 		</p>
 <div id="syntax-992fdfe4f51fc9050fd95ccc2cd71c0e" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="re1">.yui-skin-sam</span> <span class="re1">.yui-button</span> <span class="re1">.first-child</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">border-width</span><span class="sy0">:</span> <span class="nu0">0</span> <span class="re3">1px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">border-style</span><span class="sy0">:</span> <span class="kw2">solid</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">border-color</span><span class="sy0">:</span> <span class="re0">#808080</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="kw1">margin</span><span class="sy0">:</span> <span class="nu0">0</span> <span class="re3">-1px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">*</span><span class="kw1">position</span><span class="sy0">:</span> <span class="kw2">relative</span><span class="sy0">;</span>    <span class="coMULTI">/* Necessary to get negative margins working in IE */</span></div></li><li class="li1"><div class="de1">    <span class="sy0">*</span><span class="kw1">left</span><span class="sy0">:</span> <span class="re3">-1px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="re1">.yui-skin-sam</span> <span class="re1">.yui-button</span> <span class="re1">.first-child</span> <span class="br0">&#123;</span>
@@ -1968,17 +1968,17 @@ complete list of configuration attributes.
 
 	<li>
 		<h4>Buttons flicker when setting the "label" attribute in Firefox 2</h4>
-		
+
 		<p>
-			Button makes use of the Gecko-specific CSS property "-moz-inline-box" in order 
-			to draw rounded corners for the default Sam skin.  Use of this Gecko-specific property 
+			Button makes use of the Gecko-specific CSS property "-moz-inline-box" in order
+			to draw rounded corners for the default Sam skin.  Use of this Gecko-specific property
 			is used to supplement Gecko's lack of support for "inline-block" in Firefox 2, but it
-			has one drawback: When a Button's "label" is changed, the Button fails to redraw at the 
-			correct width.  This problem was 
-			<a href="http://yuilibrary.com/projects/yui2/ticket/1776039">filed as a bug</a> and 
+			has one drawback: When a Button's "label" is changed, the Button fails to redraw at the
+			correct width.  This problem was
+			<a href="http://yuilibrary.com/projects/yui2/ticket/1776039">filed as a bug</a> and
 			the fix was to use a timer to quickly add and then remove the Button's CSS class name.
-			Doing so triggers the Button to redraw itself at the correct width.  Unfortunately, 
-			this also results in a quick flicker as the Button is being redrawn, however, the 
+			Doing so triggers the Button to redraw itself at the correct width.  Unfortunately,
+			this also results in a quick flicker as the Button is being redrawn, however, the
 			flicker is currently considered more acceptable than the Button not redrawing at
 			the correct width.
 		</p>
@@ -1986,20 +1986,20 @@ complete list of configuration attributes.
 
 	<li>
 		<h4>
-			Menu instances appear at the incorrect position when placed inside a statically 
+			Menu instances appear at the incorrect position when placed inside a statically
 			positioned scrolled element.
-		</h4>	
+		</h4>
 
 		<p>
-			There is bug in Menu where Menu instances will appear at the incorrect x and/or y 
-			position if any of its parent elements are both statically positioned and scrolled.  
-			This bug only manifests in Firefox 2, Safari, and Opera.  The position of the Menu 
-			instance will be off by an amount equal to the value of the parent element's 
-			<code>scrollTop</code> and <code>scrollLeft</code> properties. To fix this issue, add 
-			listeners for the change events of the Menu instance's "x" and "y" configuration 
-			properties that adjust the Menu's position according to the value of its parent 
-			element's <code>scrollTop</code> and <code>scrollLeft</code> properties as 
-			illustrated in this example: 
+			There is bug in Menu where Menu instances will appear at the incorrect x and/or y
+			position if any of its parent elements are both statically positioned and scrolled.
+			This bug only manifests in Firefox 2, Safari, and Opera.  The position of the Menu
+			instance will be off by an amount equal to the value of the parent element's
+			<code>scrollTop</code> and <code>scrollLeft</code> properties. To fix this issue, add
+			listeners for the change events of the Menu instance's "x" and "y" configuration
+			properties that adjust the Menu's position according to the value of its parent
+			element's <code>scrollTop</code> and <code>scrollLeft</code> properties as
+			illustrated in this example:
 			<a href="http://yuiblog.com/sandbox/yui/v252/examples/button/example07.html">http://yuiblog.com/sandbox/yui/v252/examples/button/example07.html</a>.
 		</p>
 
@@ -2042,21 +2042,21 @@ complete list of configuration attributes.
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 
 		</div>
          <div class="yui-u">
-		 	
+
         <div id="cheatsheet">
           <h3>Button Control Cheat Sheet:</h3>
           <a href="http://yuiblog.com/assets/pdf/cheatsheets/button.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/button.gif" width="178" height="134" alt="Cheat Sheet for the Button Control."></a>
           <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
         </div>
-			
+
 			<div id="examples">
 <h3>Button Control Examples:</h3>
 
@@ -2089,8 +2089,8 @@ complete list of configuration attributes.
 <li><a href='../examples/autocomplete/ac_combobox.html'>Combobox, with CSS for Multiple Stacked Instances</a> (included with examples for the <a href='../autocomplete/index.html'>AutoComplete Control</a>)</li>
 <li><a href='../examples/datatable/dt_colshowhide.html'>Showing, Hiding, and Reordering Columns.</a> (included with examples for the <a href='../datatable/index.html'>DataTable Control</a>)</li>
 <li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
-</ul>		
-	
+</ul>
+
 		   </div>
 
 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fbutton%2F--><h3 id="delicious">YUI Menu on del.icio.us:</h3>
@@ -2135,15 +2135,15 @@ complete list of configuration attributes.
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: DataTable</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: DataTable</h1></div>
 </div>
 <div id="bd">
@@ -108,18 +108,18 @@
     <h1>YUI 2: DataTable</h1>
 
     <p><img src="datatable.png" alt="The DataTable Control interface with the default YUI Sam Skin applied." width="350" height="197" class="example">The DataTable control provides a simple yet powerful API to display screen-reader accessible tabular data on a web page. Notable features include sortable columns, pagination, scrolling, row selection, resizeable columns, and inline cell editing.</p>
-   
+
     <p>YUI community member Daniel Barreiro (screen name Satyam) has contributed two terrific articles on the YUI DataTable Control on YUIBlog:</p>
-    
+
     <ul>
         <li><a href="http://yuiblog.com/blog/2008/10/15/datatable-260-part-one/">Working with the YUI DataTable Control, Part 1: Getting Started</a></li>
         <li><a href="http://yuiblog.com/blog/2008/10/27/datatable-260-part-two/">Working with the YUI DataTable, Part 2: Changing the Contents of the DataTable</a></li>
     </ul>
-    
+
     <p>In addition to reading this User's Guide and the canonical <a href="../examples/datatable/index.html">DataTable examples</a> by DataTable author Jenny Han Donnelly, we strongly recommend that you review Satyam's work in preparing for your DataTable implementation.</p>
-  
+
   <p><strong>Note: </strong>The 2.6.0 release of DataTable introduces the ScrollingDataTable and CellEditor classes, the Paginator widget is now offered as a standalone component, and significant changes have been applied to DataTable's pagination and sorting architectures. While backward compatibility has been maintained whenever possible, the Paginator widget is now an optional dependency, and custom extensions to inline cell editing or server-side pagination and/or sorting will likely need to be updated to be compatible with the new models. Implementers who are upgrading from an earlier version are strongly advised to read the <a href="#upgrade">Upgrades Notes</a>.</p>
-  
+
   <div>
     <h4>On This Page:</h4>
     <ul>
@@ -137,17 +137,17 @@
       <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
     </ul>
   </div>
-  
+
   <div id="quicklinks">
     <h4>Quick Links:</h4>
     <ul>
       <li><a href="../examples/datatable/index.html">Examples</a>: Explore examples of the DataTable Control in action.</li>
       <li><a href="../docs/module_datatable.html">API Documentation</a>: View the full API documentation for the DataTable Control.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.datatable">Release Notes</a>: Detailed change log for the DataTable Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.datatable.txt">Release Notes</a>: Detailed change log for the DataTable Control.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the DataTable Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
-  </div>  
+  </div>
 </div>
 
 <h2 id="upgrade" class="first">Upgrade Notes</h2>
@@ -189,7 +189,7 @@
         <ul>
         <li><code>paginationEventHandler</code> Attribute</li>
         <li><code>handleSimplePagination()</code></li>
-        <li><code>handleDataSourcePagination()</code></li>     
+        <li><code>handleDataSourcePagination()</code></li>
         <li><code>updatePaginator()</code></li>
         <li><code>showPage()</code></li>
         <li><code>formatPaginator()</code></li>
@@ -214,7 +214,7 @@
 <li>The formatTheadCell() method been changed from static a static method to an instance method with an update to its argument signature.</li>
 
 <li>The initEvent will fire when rows are rendered from an initialized state, and the renderEvent will always fire when rows are rendered, and also when the  underlying DOM incrementally changes (such as adding or deleting rows or Columns). This is a change from prior behavior, when the renderEvent would *not* fire if the initEvent was fired and only when the entire view was rendered (such as a new page load).</li>
-    
+
 <li>For consistency with other "doBefore" abstract methods, <code>doBeforeShowCellEditor()</code> now returns <code>true</code> by default and returns <code>false</code> to cancel showing the cell editor.</li>
 
 <li>The Column property <code>minWidth</code> default value is now <code>null</code>.</li>
@@ -222,13 +222,13 @@
 <li>Added Column property <code>maxAutoWidth</code>.</li>
 
 <li>In the generated markup, the primary data TBODY is (once again) in the DOM before the message TBODY element.</li>
- 
+
 <li>Resizeable Columns now create an additional resizer liner DIV element between the TH element and the liner DIV element. Implementers are advised to access the liner DIV elements via Column method <code>getThLinerEl()</code> rather than directly accessing the DOM via TH.firstChild.</li>
- 
+
 <li>TR element IDs are now assigned with the corresponding Record ID, and the heretofore unused TD IDs have been removed.</li>
- 
+
 <li>All CSS classes representing Column states are now assigned directly on TH and TD elements, not on liner DIV elements.</li>
- 
+
 </ul>
 
 
@@ -287,14 +287,14 @@
 <!-- Source files -->
 <script src="http://yui.yahooapis.com/2.9.0/build/datatable/datatable-min.js"></script>
 </textarea></div>
-Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
-in which the DataTable Control lives.  You can usually accomplish this simply by putting the class on the 
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element
+in which the DataTable Control lives.  You can usually accomplish this simply by putting the class on the
 <code>&#60;body&#62;</code> tag:</p>
 <div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
 </textarea></div>
-<p class="lastP">For more information on skinning YUI components and making use of default skins, 
-see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+<p class="lastP">For more information on skinning YUI components and making use of default skins,
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a>
 article here on the website.</p>
 
 
@@ -306,7 +306,7 @@ article here on the website.</p>
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>datatable</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -752,7 +752,7 @@ users who do have JavaScript enabled -- all from the same code base.</p>
 <code>&lt;table&gt;</code> element as a source of data. The DataTable will parse
 the data out of the table, remove it from the DOM, and replace
 it with an enhanced control.</p>
-  
+
 <div id="syntax-5fd22003ff7e058402eb51e8718de417" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myMarkedUpContainer&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">table</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myTable&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">thead</span>&gt;</span></div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;<span class="kw2">tr</span>&gt;</span></div></li><li class="li2"><div class="de2">                <span class="sc2">&lt;<span class="kw2">th</span>&gt;</span>AAA<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">th</span>&gt;</span></div></li><li class="li1"><div class="de1">                <span class="sc2">&lt;<span class="kw2">th</span>&gt;</span>BBB<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">th</span>&gt;</span></div></li><li class="li1"><div class="de1">                <span class="sc2">&lt;<span class="kw2">th</span>&gt;</span>CCC<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">th</span>&gt;</span></div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">tr</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">thead</span>&gt;</span></div></li><li class="li2"><div class="de2">        <span class="sc2">&lt;<span class="kw2">tbody</span>&gt;</span></div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;<span class="kw2">tr</span>&gt;</span></div></li><li class="li1"><div class="de1">                <span class="sc2">&lt;<span class="kw2">td</span>&gt;</span>1<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">td</span>&gt;</span></div></li><li class="li1"><div class="de1">                <span class="sc2">&lt;<span class="kw2">td</span>&gt;</span>bbb<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">td</span>&gt;</span></div></li><li class="li1"><div class="de1">                <span class="sc2">&lt;<span class="kw2">td</span>&gt;</span>ccc<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">td</span>&gt;</span></div></li><li class="li2"><div class="de2">            <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">tr</span>&gt;</span></div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;<span class="kw2">tr</span>&gt;</span></div></li><li class="li1"><div class="de1">                <span class="sc2">&lt;<span class="kw2">td</span>&gt;</span>2<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">td</span>&gt;</span></div></li><li class="li1"><div class="de1">                <span class="sc2">&lt;<span class="kw2">td</span>&gt;</span>bbb<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">td</span>&gt;</span></div></li><li class="li1"><div class="de1">                <span class="sc2">&lt;<span class="kw2">td</span>&gt;</span>ccc<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">td</span>&gt;</span></div></li><li class="li2"><div class="de2">            <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">tr</span>&gt;</span></div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;<span class="kw2">tr</span>&gt;</span></div></li><li class="li1"><div class="de1">                <span class="sc2">&lt;<span class="kw2">td</span>&gt;</span>3<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">td</span>&gt;</span></div></li><li class="li1"><div class="de1">                <span class="sc2">&lt;<span class="kw2">td</span>&gt;</span>bbb<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">td</span>&gt;</span></div></li><li class="li1"><div class="de1">                <span class="sc2">&lt;<span class="kw2">td</span>&gt;</span>ccc<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">td</span>&gt;</span></div></li><li class="li2"><div class="de2">            <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">tr</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">tbody</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">table</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myMarkedUpContainer&quot;</span>&gt;</span>
     <span class="sc2">&lt;<span class="kw2">table</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myTable&quot;</span>&gt;</span>
         <span class="sc2">&lt;<span class="kw2">thead</span>&gt;</span>
@@ -1012,7 +1012,7 @@ Column object literal can itself host an array of Column object literals. Use
 the <code>children</code> property to assign descendant Columns. The
 following Column properties will cascade to descendant Columns if they are defined by a
 parent but not defined explicitly by children.</p>
-    
+
     <ul>
         <li><code>className</code></li>
         <li><code>editor</code></li>
@@ -1111,7 +1111,7 @@ or you can use one of the static built-in functions:</p>
 };
 </textarea></div>
 <p>If your initial data is already sorted, be sure to specify the DataTable config
-property <code>sortedBy</code> to display the proper UI at instantiation. The value 
+property <code>sortedBy</code> to display the proper UI at instantiation. The value
 of the property should be either the class constant <code>YAHOO.widget.DataTable.CLASS_ASC</code>
 or <code>YAHOO.widget.DataTable.CLASS_DESC</code>. Now when the user goes to sort this Column,
 DataTable will know to sort it in the correct (opposite) direction. Note that
@@ -1350,7 +1350,7 @@ var myDataTable = new YAHOO.widget.DataTable("myContainer",
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
 <span class="co2">/* enables y-scrolling */</span>
-<span class="kw2">var</span> myDataTableY <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ScrollingDataTable</span><span class="br0">&#40;</span><span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myColumnDefs<span class="sy0">,</span> myDataSource<span class="sy0">,</span> <span class="br0">&#123;</span>   
+<span class="kw2">var</span> myDataTableY <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ScrollingDataTable</span><span class="br0">&#40;</span><span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myColumnDefs<span class="sy0">,</span> myDataSource<span class="sy0">,</span> <span class="br0">&#123;</span>
     height<span class="sy0">:</span> <span class="st0">&quot;400px&quot;</span> <span class="co1">// height as a string value</span>
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
@@ -1358,26 +1358,26 @@ var myDataTable = new YAHOO.widget.DataTable("myContainer",
 <span class="kw2">var</span> myDataTableXY <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ScrollingDataTable</span><span class="br0">&#40;</span><span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myColumnDefs<span class="sy0">,</span> myDataSource<span class="sy0">,</span> <span class="br0">&#123;</span>
     width<span class="sy0">:</span> <span class="st0">&quot;40em&quot;</span> <span class="co1">// width as a string value</span>
     height<span class="sy0">:</span> <span class="st0">&quot;400px&quot;</span> <span class="co1">// height as a string value</span>
-<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>                                      
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-f5c3eb8b57943205cb226707357763d2-plain">/* enables x-scrolling */
 var myDataTableX = new YAHOO.widget.ScrollingDataTable("myContainer", myColumnDefs, myDataSource, {
     width: "40em" // width as a string value
 });
-                                             
+
 /* enables y-scrolling */
-var myDataTableY = new YAHOO.widget.ScrollingDataTable("myContainer", myColumnDefs, myDataSource, {   
+var myDataTableY = new YAHOO.widget.ScrollingDataTable("myContainer", myColumnDefs, myDataSource, {
     height: "400px" // height as a string value
 });
-    
+
 /* enables xy-scrolling */
 var myDataTableXY = new YAHOO.widget.ScrollingDataTable("myContainer", myColumnDefs, myDataSource, {
     width: "40em" // width as a string value
     height: "400px" // height as a string value
-});                                      
+});
 </textarea></div>
 <h3>Adjusting the Render Loop Size<a name="renderLoop"></a></h3>
 <p>In cases where your DataTable needs to display the entirety of a very large set of data, the <code>renderLoopSize</code> config can help manage browser DOM rendering so that the UI thread does not get locked up on very large tables. Any value greater than 0 will cause the DOM rendering to be executed in setTimeout() chains that render the specified number of rows in each loop. The ideal value should be determined per implementation since there are no hard and fast rules, only general guidelines:</p>
- 
+
 <ul>
 <li>By default renderLoopSize is 0, so all rows are rendered in a single loop. A renderLoopSize > 0 adds overhead so use thoughtfully.</li>
 <li>If your set of data is large enough (number of rows X number of Columns X formatting complexity) that users experience latency in the visual rendering and/or it causes the script to hang, consider setting a renderLoopSize.</li>
@@ -1553,7 +1553,7 @@ myDataTable.getSelectedColumns();
 </textarea></div>
 <h3>Cell, Row, and Column Highlighting<a name="highlight"></a></h3>
 <p>You can enable cell, row or Column highlighting by assigning the appropriate
-built-in event handlers to Custom Events. Please note that mixing and matching 
+built-in event handlers to Custom Events. Please note that mixing and matching
 cell, row and Column highlighting is not recommended.</p>
 
 <div id="syntax-927d8ba54e27bf0d0fa8f8d8e88571b6" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Enables cell highlighting</span></div></li><li class="li1"><div class="de1">myCellHighlightDataTable.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;cellMouseoverEvent&quot;</span><span class="sy0">,</span> myCellHighlightDataTable.<span class="me1">onEventHighlightCell</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myCellHighlightDataTable.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;cellMouseoutEvent&quot;</span><span class="sy0">,</span> myCellHighlightDataTable.<span class="me1">onEventUnhighlightCell</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">// Enables row highlighting</span></div></li><li class="li1"><div class="de1">myRowHighlightDataTable.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;rowMouseoverEvent&quot;</span><span class="sy0">,</span> myRowHighlightDataTable.<span class="me1">onEventHighlightRow</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myRowHighlightDataTable.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;rowMouseoutEvent&quot;</span><span class="sy0">,</span> myRowHighlightDataTable.<span class="me1">onEventUnhighlightRow</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Enables Column highligting</span></div></li><li class="li2"><div class="de2">myColHighlightDataTable.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;theadCellMouseoverEvent&quot;</span><span class="sy0">,</span> myColHighlightDataTable.<span class="me1">onEventHighlightColumn</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myColHighlightDataTable.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;theadCellMouseoutEvent&quot;</span><span class="sy0">,</span> myColHighlightDataTable.<span class="me1">onEventUnhighlightColumn</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Enables cell highlighting</span>
@@ -1738,7 +1738,7 @@ myDataTable.subscribe("cellClickEvent", this.myDataTable.onEventShowCellEditor);
     var dir = (oState.sortedBy && oState.sortedBy.dir === YAHOO.widget.DataTable.CLASS_DESC) ? "false" : "true";
     var startIndex = (oState.pagination) ? oState.pagination.recordOffset : 0;
     var results = (oState.pagination) ? oState.pagination.rowsPerPage : 100;
-    
+
     // Build custom request
     return  "column=" + sort +
             "&asc=" + true +
@@ -1797,7 +1797,7 @@ var myDataTable = new YAHOO.widget.DataTable("myContainer", myColumnDefs, myData
         argument: "12345"
     }
 });
-    
+
 // Now oPayload is available in the callback loop
 myDataTable.doBeforeLoadData = function (sRequest, oResponse, oPayload) {
     // When response returns, oPayload is "12345"
@@ -1818,7 +1818,7 @@ myDataTable.doBeforeLoadData = function (sRequest, oResponse, oPayload) {
 
 <dt><a href="../docs/YAHOO.widget.DataTable.html#onDataReturnAppendRows"><code>onDataReturnAppendRows</code></a></dt>
 <dd>Rows will be added to the end of the DataTable, preserving the existing records, regardless of sort order.</dd>
-  
+
 <dt><a href="../docs/YAHOO.widget.DataTable.html#onDataReturnSetRows"><code>onDataReturnSetRows</code></a></dt>
 <dd>This method will manage DataSource responses according to oPayload data to create Records at an index corresponding to the request (i.e., if data for page 3 was requested, the Records will be placed at an index corresponding to page 3).</dd>
 </dl>
@@ -1904,7 +1904,7 @@ myDataTable.load({
 
 <p>When data is very dynamic in nature, or too large to store locally in JavaScript, sorting and pagination functionality is best implemented on the server side. When <code>dynamicData</code> is enabled, all pagination and sorting interactions trigger a DataSource request for the new set of data. State management is taken care of for you via an oState object literal which gets sent as a data payload of the <code>sendRequest()</code> method and then handled in callback function along with the response.</p>
 
-<p><strong>Please note: </strong> At this time, row and cell selections are not preserved across dynamicData page views. All selections are purged before requests are sent for new sort or pagination states. Selection preservation for these cases is not provided but should be achieved through custom code.</p> 
+<p><strong>Please note: </strong> At this time, row and cell selections are not preserved across dynamicData page views. All selections are purged before requests are sent for new sort or pagination states. Selection preservation for these cases is not provided but should be achieved through custom code.</p>
 
 <p>Often, server-side pagination relies on the server response to know the number of total results. By defining a <code>totalRecords</code> locator in your DataSource schema's <code>metaFields</code>, you can access this value to update DataTable's state at runtime before the response data gets loaded by customizing the <code>handleDataReturnPayload()</code> method.</p>
 
@@ -1949,7 +1949,7 @@ myDataSource.responseSchema = {
     fields: [ "name", "type" ],
     metaFields: { totalRecords: "Response.totalRecords" } // Access server-provided dynamic value
 };
- 
+
 // Enable sorting for every Column
 var myColumnDefs = [
     { key: "id", sortable: true },
@@ -2036,7 +2036,7 @@ var myHandler = function(oArgs) {
     var oEditor = oArgs.editor,
         newData = oArgs.newData,
         oldData = oArgs.oldData;
-    
+
     // Output a message to a DIV
     YAHOO.util.Dom.get("outputDiv").innerHTML =
             "Cell \"" + oEditor.getTdEl().id + //The edited cell element
@@ -2110,7 +2110,7 @@ Skinning Example</a> where the full CSS for the control is displayed.</p>
 </ul>
 
 <h4>Wide Content Truncation in Gecko Browsers</h4>
-<p>Gecko browsers may truncate some content of Columns whose widths are not 
+<p>Gecko browsers may truncate some content of Columns whose widths are not
 specified if a table's overall content is wider than the  viewport or its parent
 container.</p>
 
@@ -2171,23 +2171,23 @@ not supported on the iPhone.</li>
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 
 		</div>
          <div class="yui-u">
-		 	
+
 			<div id="cheatsheet">
 				<h3>Cheat Sheet for the DataTable Control:</h3>
-				
+
 				<a href="http://yuiblog.com/assets/pdf/cheatsheets/datatable.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/datatable2.gif" width="178" height="129" alt="Cheat Sheet for the DataTable Control."></a>
-				
+
 				<p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
 			</div>
-			
+
 			<div id="examples">
 <h3>DataTable Control Examples:</h3>
 
@@ -2235,9 +2235,9 @@ not supported on the iPhone.</li>
 <li><a href='../examples/progressbar/pb_ratings.html'>Ratings</a> (included with examples for the <a href='../progressbar/index.html'>ProgressBar Control</a>)</li>
 <li><a href='../examples/datasource/datasource_yql.html'>YQLDataSource</a> (included with examples for the <a href='../datasource/index.html'>DataSource Utility</a>)</li>
 <li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
-</ul>		
+</ul>
 		   </div>
-		   
+
 			<div id="morereading">
 				<h3>More Reading about the YUI DataTable Control:</h3>
 
@@ -2253,8 +2253,8 @@ not supported on the iPhone.</li>
 				  <li><a href="http://improbable.org/chris/index.php?ID=193">ImpTable: a PHP5 wrapper for YUI DataTable</a>, by Chris Adams</li>
 			   </ul>
 		   </div>
-		   
-	 
+
+
 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fdatatable%2F-->			<h3 id="delicious">YUI DataTable on del.icio.us:</h3>
 			<div class="delicious">
 				<div id="delicious-badge">
@@ -2298,15 +2298,15 @@ not supported on the iPhone.</li>
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

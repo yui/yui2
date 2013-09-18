@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Panel</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Panel</h1></div>
 </div>
 <div id="bd">
@@ -124,7 +124,7 @@
     <ul>
       <li><a href="../../examples/container/index.html">Examples</a>: Explore examples of the Panel Control in action.</li>
       <li><a href="../../docs/module_container.html">API Documentation</a>: View the full API documentation for the Panel Control.</li>
-	  <li><a id="releasenotes" href="../../releasenotes/README.container">Release Notes</a>: Detailed change log for the Panel Control.</li>
+	  <li><a id="releasenotes" href="../../releasenotes/README.container.txt">Release Notes</a>: Detailed change log for the Panel Control.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Panel Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
@@ -161,14 +161,14 @@
 <!-- Source file -->
 <script src="http://yui.yahooapis.com/2.9.0/build/container/container-min.js"></script>
 </textarea></div>
-Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
-in which the Panel Control lives.  You can usually accomplish this simply by putting the class on the 
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element
+in which the Panel Control lives.  You can usually accomplish this simply by putting the class on the
 <code>&#60;body&#62;</code> tag:</p>
 <div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
 </textarea></div>
-<p class="lastP">For more information on skinning YUI components and making use of default skins, 
-see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+<p class="lastP">For more information on skinning YUI components and making use of default skins,
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a>
 article here on the website.</p>
 
 
@@ -180,7 +180,7 @@ article here on the website.</p>
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../../yuiloader/index.html">YUI Loader</a>, its module name is <code>container</code>. (<a href="../../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -195,7 +195,7 @@ article here on the website.</p>
 <p>This section describes common tasks for creating and using Panel. It contains
 these sections:</p>
 <ul>
-   
+
 <li><a href="#html">Defining Panel Markup</a></li>
 <li><a href="#init">Initializing the Panel </a></li>
 <li><a href="#render">Rendering the Panel </a></li>
@@ -228,12 +228,12 @@ these sections:</p>
 <div id="syntax-129032c7fef472f72816ff4e0e10b70d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//The second argument passed to the</span></div></li><li class="li1"><div class="de1"><span class="co1">//constructor is a configuration object:</span></div></li><li class="li1"><div class="de1">myPanel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Panel</span><span class="br0">&#40;</span><span class="st0">&quot;win&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    width<span class="sy0">:</span> <span class="st0">&quot;400px&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">    fixedcenter<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    constraintoviewport<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    underlay<span class="sy0">:</span> <span class="st0">&quot;shadow&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    <span class="kw3">close</span><span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    visible<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">    draggable<span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//If we haven't built our panel using existing markup,</span></div></li><li class="li1"><div class="de1"><span class="co1">//we can set its content via script:</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">myPanel.<span class="me1">setHeader</span><span class="br0">&#40;</span><span class="st0">&quot;The Panel Control&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myPanel.<span class="me1">setBody</span><span class="br0">&#40;</span><span class="st0">&quot;The Panel is a powerful UI control</span></div></li><li class="li1"><div class="de1"><span class="st0">  that enables you to create floating windows without</span></div></li><li class="li1"><div class="de1"><span class="st0">  using browser popups.  Effects like drag and drop and</span></div></li><li class="li2"><div class="de2"><span class="st0">  constrain-to-viewport are easy to configure.&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//Although we configured many properties in the</span></div></li><li class="li1"><div class="de1"><span class="co1">//constructor, we can configure more properties or </span></div></li><li class="li1"><div class="de1"><span class="co1">//change existing ones after our Panel has been</span></div></li><li class="li2"><div class="de2"><span class="co1">//instantiated:</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">myPanel.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;underlay&quot;</span><span class="sy0">,</span><span class="st0">&quot;matte&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//The second argument passed to the</span>
 <span class="co1">//constructor is a configuration object:</span>
 myPanel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Panel</span><span class="br0">&#40;</span><span class="st0">&quot;win&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
-    width<span class="sy0">:</span> <span class="st0">&quot;400px&quot;</span><span class="sy0">,</span> 
-    fixedcenter<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> 
-    constraintoviewport<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> 
-    underlay<span class="sy0">:</span> <span class="st0">&quot;shadow&quot;</span><span class="sy0">,</span> 
-    <span class="kw3">close</span><span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> 
-    visible<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span> 
+    width<span class="sy0">:</span> <span class="st0">&quot;400px&quot;</span><span class="sy0">,</span>
+    fixedcenter<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+    constraintoviewport<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+    underlay<span class="sy0">:</span> <span class="st0">&quot;shadow&quot;</span><span class="sy0">,</span>
+    <span class="kw3">close</span><span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+    visible<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span>
     draggable<span class="sy0">:</span> <span class="kw2">true</span>
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
@@ -255,12 +255,12 @@ myPanel.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span c
 &nbsp;</pre></div><textarea id="syntax-129032c7fef472f72816ff4e0e10b70d-plain">//The second argument passed to the
 //constructor is a configuration object:
 myPanel = new YAHOO.widget.Panel("win", {
-    width: "400px", 
-    fixedcenter: true, 
-    constraintoviewport: true, 
-    underlay: "shadow", 
-    close: true, 
-    visible: false, 
+    width: "400px",
+    fixedcenter: true,
+    constraintoviewport: true,
+    underlay: "shadow",
+    close: true,
+    visible: false,
     draggable: true
 });
 
@@ -274,7 +274,7 @@ myPanel.setBody("The Panel is a powerful UI control
   constrain-to-viewport are easy to configure.");
 
 //Although we configured many properties in the
-//constructor, we can configure more properties or 
+//constructor, we can configure more properties or
 //change existing ones after our Panel has been
 //instantiated:
 
@@ -307,9 +307,9 @@ method, the parent element to which the Panel should be added.
 </tr>
 <tr>
 <td> modal </td><td> Boolean </td><td> false </td>
-<td> Specifies whether the document should be shielded with a partially transparent mask to require the user to close the Panel before being able to activate any elements in the document. 
+<td> Specifies whether the document should be shielded with a partially transparent mask to require the user to close the Panel before being able to activate any elements in the document.
 <p>
-<strong>NOTE:</strong> When enabling modality, it is strongly recommended that you render the Panel to 
+<strong>NOTE:</strong> When enabling modality, it is strongly recommended that you render the Panel to
 <code>document.body</code> so that the Panel does not inadvertently have any positioned ancestors which may impact the way the mask, panel and underlying elements are <a href="../overlay/index.html#stack">stacked</a>.
 </p>
 <p>
@@ -337,22 +337,22 @@ For example, if you render a modal Panel inside a relatively positioned ancestor
     <tr class="odd"><td> context </td><td> Array </td><td> null </td>
         <td>
             Allows the Overlay to be aligned relative to a context element. The property expects an array value with the format: <code>[contextElementOrId, overlayCorner, contextElementCorner]</code>,
-            where "contextElementOrId" is the context element or the id of the context element. 
+            where "contextElementOrId" is the context element or the id of the context element.
             </p>
             <p>
             The corner parameters are one of the following string values: "tr" (top right), "tl" (top left), "br" (bottom right), or "bl" (bottom left) and define which corners of the overlay and context element should be aligned.
             </p>
-            
+
             <p>The array also supports optional 4th and 5th entries.</p>
-            
-            <p>The 4th entry is an optional array of event names, or Custom Event objects, which should trigger re-alignment of the Overlay with the currently configured context element. For example:</p> 
+
+            <p>The 4th entry is an optional array of event names, or Custom Event objects, which should trigger re-alignment of the Overlay with the currently configured context element. For example:</p>
             <p><code>[contextId, overlayCorner, contextCorner, ["beforeShow", "windowResize"]]</code></p>
             <p>Will re-align the Overlay to the context element just before it's shown, and whenever the window is resized.</p>
-            
+
             <p>The 5th entry is an optional XY pixel offset, which is to be applied <em>after</em> the Overlay is aligned to the specified corner of the context element, and can be used to add a pixel buffer between the context element and the Overlay.
             For example:</p>
             <p><code>[contextId, overlayCorner, contextCorner, triggerEvents, [10, 20]]</code></p>
-            <p>Will offset the Overlay by 10 pixels along the X axis, and 20 pixels along the Y axis, after aligning the specified corners.</p> 
+            <p>Will offset the Overlay by 10 pixels along the X axis, and 20 pixels along the Y axis, after aligning the specified corners.</p>
         </td>
     </tr>
     <tr><td> fixedcenter </td><td> Boolean </td><td> false </td><td> Specifies whether the Overlay should be automatically centered in the viewport on window scroll and resize. </td></tr>
@@ -365,7 +365,7 @@ For example, if you render a modal Panel inside a relatively positioned ancestor
         <td> autofillheight </td>
         <td> String </td>
         <td> "body" </td>
-        <td> Which container element (header, body or footer) should be sized to fill out any remaining 
+        <td> Which container element (header, body or footer) should be sized to fill out any remaining
         vertical space when a height is set on the container using the <code>height</code> configuration property. Supported values are "header", "body" and "footer". Can be set to null (or false) to turn off the feature.
         </td>
     </tr>
@@ -376,22 +376,22 @@ For example, if you render a modal Panel inside a relatively positioned ancestor
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
         </div>
          <div class="yui-u">
-            
+
             <div id="cheatsheet">
                 <h3>Panel Control Cheat Sheet:</h3>
-                
+
                 <a href="http://yuiblog.com/assets/pdf/cheatsheets/panel.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/panel.gif" width="178" height="133" alt="Cheat Sheet for Panel Control."></a>
-                
+
                 <p><a href="../../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
             </div>
-            
+
             <div id="examples">
 <h3>Container Family Examples:</h3>
 
@@ -437,12 +437,12 @@ For example, if you render a modal Panel inside a relatively positioned ancestor
 <li><a href='../../examples/menu/applicationmenubar.html'>Application Menubar</a> (included with examples for the <a href='../../menu/index.html'>Menu Family</a>)</li>
 <li><a href='../../examples/button/btn_example14.html'>Slider Button</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
 <li><a href='../../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../../layout/index.html'>Layout Manager</a>)</li>
-</ul>		
+</ul>
          </div>
-           
+
             <div id="morereading">
                 <h3>More Reading about the YUI Panel Control:</h3>
-                
+
                 <ul>
                   <li><a href="http://icant.co.uk/sandbox/yuipanel/">Seven Examples of YUI Panels</a>, by Christian Heilmann</li>
                </ul>
@@ -489,15 +489,15 @@ For example, if you render a modal Panel inside a relatively positioned ancestor
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

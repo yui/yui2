@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Container</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Container</h1></div>
 </div>
 <div id="bd">
@@ -130,7 +130,7 @@
     <ul>
       <li><a href="../examples/container/index.html">Examples</a>: Explore examples of the Container Family in action.</li>
       <li><a href="../docs/module_container.html">API Documentation</a>: View the full API documentation for the Container Family.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.container">Release Notes</a>: Detailed change log for the Container Family.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.container.txt">Release Notes</a>: Detailed change log for the Container Family.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Container Family as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
@@ -266,7 +266,7 @@
 <!-- OPTIONAL: You only need the YUI Button CSS if you're including the Button script fille, mentioned above. -->
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css">
 </textarea></div>
-<p>If you are <em>not</em> using <a href="tooltip/index.html">Tooltip</a>, <a href="panel/index.html">Panel</a>, <a href="dialog/index.html">Dialog</a>, or <a href="simpledialog/index.html">SimpleDialog</a>, you may substitute 
+<p>If you are <em>not</em> using <a href="tooltip/index.html">Tooltip</a>, <a href="panel/index.html">Panel</a>, <a href="dialog/index.html">Dialog</a>, or <a href="simpledialog/index.html">SimpleDialog</a>, you may substitute
 <code>container-min.js</code> with the smaller <code>container_core-min.js</code> file:</p>
 
 <div id="syntax-45403f06ce1fcf6750f93c9f536c10a0" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- If not using Tooltip, Panel, Dialog, or SimpleDialog: --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- If not using Tooltip, Panel, Dialog, or SimpleDialog: --&gt;</span>
@@ -277,14 +277,14 @@
 <p>Note that a CSS file is not required if you're only using <code>container_core-min.js</code>, however for the Overlay to operate as designed,
 it does need to be positioned absolutely.</p>
 
-Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
-in which the Container Family lives.  You can usually accomplish this simply by putting the class on the 
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element
+in which the Container Family lives.  You can usually accomplish this simply by putting the class on the
 <code>&#60;body&#62;</code> tag:</p>
 <div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
 </textarea></div>
-<p class="lastP">For more information on skinning YUI components and making use of default skins, 
-see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+<p class="lastP">For more information on skinning YUI components and making use of default skins,
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a>
 article here on the website.</p>
 
 
@@ -296,7 +296,7 @@ article here on the website.</p>
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>container</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -316,13 +316,13 @@ article here on the website.</p>
     <li>
         <h4>Overlay instances not rendered at correct z-index in IE</h4>
         <p>
-          In IE, when an Overlay instance is rendered inside a relatively positioned 
-          element the z-index of the Overlay instance is now relative to its 
-          relatively positioned parent element.  This is not a bug in the 
-          Overlay class, but rather a bug in IE where relatively positioned elements 
-          establish a new stacking context for their child nodes.  To avoid this 
+          In IE, when an Overlay instance is rendered inside a relatively positioned
+          element the z-index of the Overlay instance is now relative to its
+          relatively positioned parent element.  This is not a bug in the
+          Overlay class, but rather a bug in IE where relatively positioned elements
+          establish a new stacking context for their child nodes.  To avoid this
           bug it is recommend that all Overlay instances that need to be able to float
-          above any other element in the document be made direct descendants of the 
+          above any other element in the document be made direct descendants of the
           &lt;body&gt; element.
         </p>
            [<a href="http://therealcrisp.xs4all.nl/meuk/IE-zindexbug.html">Read more on this issue</a>.]
@@ -331,70 +331,70 @@ article here on the website.</p>
         <h4>Problems with Table content in IE6 and IE7 when the container is hidden</h4>
 
         <p>In IE6 and IE7, if an Overlay contains a table with a <code>border-collapse:collapse</code> CSS property
-        applied, the borders of the table may remain visible, or become visible if the table is redrawn while 
+        applied, the borders of the table may remain visible, or become visible if the table is redrawn while
         overlay is hidden.</p>
 
         <p>Also, if an Overlay contains a table with a caption, users will not be able to click on content underneath the table, when the overlay is hidden.</p>
-        
+
         <p>These are fundamental bugs in IE, reproducible by placing the table in a regular <code>DIV</code> with <code>visibility:hidden</code></p>
 
         <p>
-        As of version 2.7.0, Overlay based containers have an <code>yui-overlay-hidden</code> class 
-        applied to their outer <code>DIV</code> elements. This class can be used to either modify 
-        the <code>border-collapse</code> property, or hide the table completely (for the caption issue), 
+        As of version 2.7.0, Overlay based containers have an <code>yui-overlay-hidden</code> class
+        applied to their outer <code>DIV</code> elements. This class can be used to either modify
+        the <code>border-collapse</code> property, or hide the table completely (for the caption issue),
         when the container is hidden to workaround these issues in IE.
         </p>
 
         <p>For example:</p>
 
 <div id="syntax-9b34f4188ab9b18b483e3473da321d0f" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  Hide tables inside the overlay with id=&quot;overlay1&quot;, </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  for IE6, IE7 when the overlay is hidden</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">*/</span></div></li><li class="li2"><div class="de2"><span class="re0">#overlay1</span><span class="re1">.yui-overlay-hidden</span> table <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">*</span><span class="kw1">display</span><span class="sy0">:</span><span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="coMULTI">/* </span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;   For overlay2, switch to border-collapse:separate, when </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;   the overlay is hidden</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">*/</span></div></li><li class="li1"><div class="de1"><span class="re0">#overlay2</span><span class="re1">.yui-overlay-hidden</span> table <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">*</span><span class="kw1">border-collapse</span><span class="sy0">:</span><span class="kw2">separate</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="coMULTI">/* </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  For a Panel with id=&quot;panel1&quot; (&quot;panel1_c&quot; is the id of the outer element), </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  hide tables when hidden </span></div></li><li class="li2"><div class="de2"><span class="coMULTI">*/</span></div></li><li class="li1"><div class="de1"><span class="re0">#panel1_c</span><span class="re1">.yui-overlay-hidden</span> table <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">*</span><span class="kw1">display</span><span class="sy0">:</span><span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="coMULTI">/*
-   Hide tables inside the overlay with id=&quot;overlay1&quot;, 
+   Hide tables inside the overlay with id=&quot;overlay1&quot;,
    for IE6, IE7 when the overlay is hidden
 */</span>
 <span class="re0">#overlay1</span><span class="re1">.yui-overlay-hidden</span> table <span class="br0">&#123;</span>
     <span class="sy0">*</span><span class="kw1">display</span><span class="sy0">:</span><span class="kw2">none</span><span class="sy0">;</span>
 <span class="br0">&#125;</span>
 &nbsp;
-<span class="coMULTI">/* 
-    For overlay2, switch to border-collapse:separate, when 
+<span class="coMULTI">/*
+    For overlay2, switch to border-collapse:separate, when
     the overlay is hidden
 */</span>
 <span class="re0">#overlay2</span><span class="re1">.yui-overlay-hidden</span> table <span class="br0">&#123;</span>
     <span class="sy0">*</span><span class="kw1">border-collapse</span><span class="sy0">:</span><span class="kw2">separate</span><span class="sy0">;</span>
 <span class="br0">&#125;</span>
 &nbsp;
-<span class="coMULTI">/* 
-   For a Panel with id=&quot;panel1&quot; (&quot;panel1_c&quot; is the id of the outer element), 
-   hide tables when hidden 
+<span class="coMULTI">/*
+   For a Panel with id=&quot;panel1&quot; (&quot;panel1_c&quot; is the id of the outer element),
+   hide tables when hidden
 */</span>
 <span class="re0">#panel1_c</span><span class="re1">.yui-overlay-hidden</span> table <span class="br0">&#123;</span>
     <span class="sy0">*</span><span class="kw1">display</span><span class="sy0">:</span><span class="kw2">none</span><span class="sy0">;</span>
 <span class="br0">&#125;</span>
 &nbsp;</pre></div><textarea id="syntax-9b34f4188ab9b18b483e3473da321d0f-plain">/*
-   Hide tables inside the overlay with id="overlay1", 
+   Hide tables inside the overlay with id="overlay1",
    for IE6, IE7 when the overlay is hidden
 */
 #overlay1.yui-overlay-hidden table {
     *display:none;
 }
 
-/* 
-    For overlay2, switch to border-collapse:separate, when 
+/*
+    For overlay2, switch to border-collapse:separate, when
     the overlay is hidden
 */
 #overlay2.yui-overlay-hidden table {
     *border-collapse:separate;
 }
 
-/* 
-   For a Panel with id="panel1" ("panel1_c" is the id of the outer element), 
-   hide tables when hidden 
+/*
+   For a Panel with id="panel1" ("panel1_c" is the id of the outer element),
+   hide tables when hidden
 */
 #panel1_c.yui-overlay-hidden table {
     *display:none;
 }
 </textarea></div>
-        <p>See the <a href="../examples/calendar/calcontainer.html">Calendar in Container</a> example 
+        <p>See the <a href="../examples/calendar/calcontainer.html">Calendar in Container</a> example
         to see a working example of how this method is used to hide Calendar's collapsed borders.</p>
     </li>
     <li>
@@ -402,23 +402,23 @@ article here on the website.</p>
         <p>
           Flash movies can appear on top of Overlay instances in IE and Gecko-based
           browsers.  To fix this problem, set the "wmode" of the Flash movie to either
-          "transparent" or "opaque" as indicated below: 
+          "transparent" or "opaque" as indicated below:
         </p>
-            
+
         <h5>Via the &lt;object&gt; tag:</h5>
 <div id="syntax-0590b51a3e7d23780b26ae80b8a62c2c" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">object</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">param</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;wmode&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;opaque&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">object</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">object</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">param</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;wmode&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;transparent&quot;</span>&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">object</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">object</span>&gt;</span>
     <span class="sc2">&lt;<span class="kw2">param</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;wmode&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;opaque&quot;</span>&gt;</span>
 <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">object</span>&gt;</span>
 &nbsp;
 <span class="sc2">&lt;<span class="kw2">object</span>&gt;</span>
-    <span class="sc2">&lt;<span class="kw2">param</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;wmode&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;transparent&quot;</span>&gt;</span> 
+    <span class="sc2">&lt;<span class="kw2">param</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;wmode&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;transparent&quot;</span>&gt;</span>
 <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">object</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-0590b51a3e7d23780b26ae80b8a62c2c-plain"><object>
     <param name="wmode" value="opaque">
 </object>
 
 <object>
-    <param name="wmode" value="transparent"> 
+    <param name="wmode" value="transparent">
 </object>
 </textarea></div>
         <h5>Via the &lt;embed&gt; tag:</h5>
@@ -426,51 +426,51 @@ article here on the website.</p>
 <span class="sc2">&lt;embed wmode<span class="sy0">=</span><span class="st0">&quot;opaque&quot;</span>&gt;</span> ... <span class="sc2">&lt;<span class="sy0">/</span>embed&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-b1f188b49c21cad6e9000ecb395a08cc-plain"><embed wmode="transparent"> ... </embed>
 <embed wmode="opaque"> ... </embed>
-</textarea></div>        
+</textarea></div>
         <em>For more information see the <a href="http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_15523">Adobe TechNote</a> on this issue.</em>
-           
+
     </li>
     <li>
         <h4>Container instances render at 100% of the browser viewport</h4>
         <p>
-          In IE 7 (Quirks Mode) and IE 6 (Quirks Mode and Standards Mode) if any of the 
+          In IE 7 (Quirks Mode) and IE 6 (Quirks Mode and Standards Mode) if any of the
           child nodes of a Constainer instance's root element have "layout" and no value
-          has been specified for the "width" configuration property, the Container will 
-          render at 100% of the width of browser's viewport. To avoid triggering this 
-          IE bug you will need to specify a value for the "width" configuration property 
+          has been specified for the "width" configuration property, the Container will
+          render at 100% of the width of browser's viewport. To avoid triggering this
+          IE bug you will need to specify a value for the "width" configuration property
           if you're adding content to the container which has "layout".
-        </p>  
+        </p>
         For more information on IE and layout, see <a href="http://msdn2.microsoft.com/en-us/library/ms533776.aspx">MSDN's hasLayout reference</a>.
     </li>
     <li>
         <h4>Elements with scrollbars poke through Overlay instances floating above them</h4>
         <p>
-          There is a bug in Gecko-based browsers for Mac OS X where an element's 
+          There is a bug in Gecko-based browsers for Mac OS X where an element's
           scrollbars will poke through absolutely positioned elements floating above
-          them.  To fix this problem the "overflow" property of an Overlay instance's 
-          root element is toggled between "hidden" and "auto" (through the application 
-          and removal of the "hide-scrollbars" and "show-scrollbars" CSS classes) as its 
+          them.  To fix this problem the "overflow" property of an Overlay instance's
+          root element is toggled between "hidden" and "auto" (through the application
+          and removal of the "hide-scrollbars" and "show-scrollbars" CSS classes) as its
           "visibility" configuration property is toggled between "false" and "true."
         </p>
         <p><strong>PLEASE NOTE:</strong></p>
         <ol>
-            <li>The "hide-scrollbars" and "show-scrollbars" CSS classes classes are 
-             applied only for Gecko on Mac OS X and are added/removed to/from the 
-             Overlay's root HTML element (DIV) via the "hideMacGeckoScrollbars" and 
+            <li>The "hide-scrollbars" and "show-scrollbars" CSS classes classes are
+             applied only for Gecko on Mac OS X and are added/removed to/from the
+             Overlay's root HTML element (DIV) via the "hideMacGeckoScrollbars" and
              "showMacGeckoScrollbars" methods of YAHOO.widget.Overlay.</li>
 
-            <li>For Panel (and its subclasses) it is the underlay element, not the root 
+            <li>For Panel (and its subclasses) it is the underlay element, not the root
              element, whose "overflow" property is toggled between "hidden" and "auto."
-             The underlay element therefore acts as a shim to correct the 
+             The underlay element therefore acts as a shim to correct the
              scrollbar problem.</li>
 
-            <li>For Tooltip instances using the "Sam" skin it is the shadow element, not 
-             the root element, whose "overflow" property is toggled between "hidden" 
-             and "auto."  The shadow element therefore acts as a shim to correct the 
+            <li>For Tooltip instances using the "Sam" skin it is the shadow element, not
+             the root element, whose "overflow" property is toggled between "hidden"
+             and "auto."  The shadow element therefore acts as a shim to correct the
              scrollbar problem.</li>
 
-            <li><p>Once the fix is applied the bug will reappear if the window loses focus.  
-             This can be remedied via Javascript by hiding and showing the Overlay 
+            <li><p>Once the fix is applied the bug will reappear if the window loses focus.
+             This can be remedied via Javascript by hiding and showing the Overlay
              instance when the window receives focus:</p>
 
 <div id="syntax-25babb0732c8a745b3f966f0f24af230" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span>window<span class="sy0">,</span> <span class="st0">&quot;focus&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    oMyOverlay.<span class="me1">hide</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    oMyOverlay.<span class="me1">show</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span>window<span class="sy0">,</span> <span class="st0">&quot;focus&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
@@ -482,34 +482,34 @@ article here on the website.</p>
     oMyOverlay.show();
 });
 </textarea></div>            </li>
-        </ol>  
+        </ol>
         <em>For more information see the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=187435">Mozilla bug report</a> for this issue.</em>
     </li>
     <li>
         <h4>Scrollbars remain visible after an Overlay is hidden</h4>
         <p>
-          There is a bug in Gecko-based browsers for Mac OS X where an element's 
-          scrollbars and the scrollbars of its child nodes remain visible when its 
+          There is a bug in Gecko-based browsers for Mac OS X where an element's
+          scrollbars and the scrollbars of its child nodes remain visible when its
           "visibility" property property is set to "hidden."  To fix this problem,
           the "overflow" property of an Overlay instance's root element and child nodes
-          is toggled between "hidden" and "auto" (through the application and removal 
-          of the "hide-scrollbars" and "show-scrollbars" CSS classes) as its 
+          is toggled between "hidden" and "auto" (through the application and removal
+          of the "hide-scrollbars" and "show-scrollbars" CSS classes) as its
           "visibility" configuration property is toggled between "false" and "true."
         </p>
         <p><strong>PLEASE NOTE:</strong></p>
         <ol>
-          <li>The "hide-scrollbars" and "show-scrollbars" CSS classes classes are 
-             applied only for Gecko on Mac OS X and are added/removed to/from the 
-             Overlay's root HTML element (DIV) via the "hideMacGeckoScrollbars" and 
+          <li>The "hide-scrollbars" and "show-scrollbars" CSS classes classes are
+             applied only for Gecko on Mac OS X and are added/removed to/from the
+             Overlay's root HTML element (DIV) via the "hideMacGeckoScrollbars" and
              "showMacGeckoScrollbars" methods of YAHOO.widget.Overlay.</li>
-          
-          <li><p>There may be instances where the CSS for a web page or application 
-             contains style rules whose specificity override the rules implemented by 
-             the Container CSS files to fix this bug.  In such cases, is necessary to 
-             leverage the provided "hide-scrollbars" and "show-scrollbars" classes to 
+
+          <li><p>There may be instances where the CSS for a web page or application
+             contains style rules whose specificity override the rules implemented by
+             the Container CSS files to fix this bug.  In such cases, is necessary to
+             leverage the provided "hide-scrollbars" and "show-scrollbars" classes to
              write custom style rules to guard against this bug. For example:</p>
 
-            <p>To fix the scrollbars issue for an Overlay instance with an id of 
+            <p>To fix the scrollbars issue for an Overlay instance with an id of
              "myoverlay" whose body element has scrollbars applied by default:</p>
 
 <div id="syntax-d27b9c9e84a66fdc18ca79b026b09327" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="re0">#myoverlay</span> <span class="re1">.bd</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">height</span><span class="sy0">:</span> <span class="re3">100px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="coMULTI">/* Apply scrollbars for all browsers. */</span></div></li><li class="li1"><div class="de1">    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">auto</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">#myoverlay</span><span class="re1">.hide-scrollbars</span> <span class="re1">.bd</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="coMULTI">/* Hide scrollbars by default for Gecko on OS X */</span></div></li><li class="li1"><div class="de1">    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">hidden</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">#myoverlay</span><span class="re1">.show-scrollbars</span> <span class="re1">.bd</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="coMULTI">/* Show scrollbars for Gecko on OS X when the Overlay is visible */</span></div></li><li class="li1"><div class="de1">    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">auto</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span>        </div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="re0">#myoverlay</span> <span class="re1">.bd</span> <span class="br0">&#123;</span>
@@ -526,7 +526,7 @@ article here on the website.</p>
 <span class="re0">#myoverlay</span><span class="re1">.show-scrollbars</span> <span class="re1">.bd</span> <span class="br0">&#123;</span>
     <span class="coMULTI">/* Show scrollbars for Gecko on OS X when the Overlay is visible */</span>
     <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">auto</span><span class="sy0">;</span>
-<span class="br0">&#125;</span>        
+<span class="br0">&#125;</span>
 &nbsp;</pre></div><textarea id="syntax-d27b9c9e84a66fdc18ca79b026b09327-plain">#myoverlay .bd {
     height: 100px;
     /* Apply scrollbars for all browsers. */
@@ -541,10 +541,10 @@ article here on the website.</p>
 #myoverlay.show-scrollbars .bd {
     /* Show scrollbars for Gecko on OS X when the Overlay is visible */
     overflow: auto;
-}        
+}
 </textarea></div>
                 <p>
-                 To fix the scrollbars issue for a Panel instance with an id of "mypanel" 
+                 To fix the scrollbars issue for a Panel instance with an id of "mypanel"
                  whose body element has scrollbars applied by default:
                  </p>
 
@@ -585,25 +585,25 @@ article here on the website.</p>
     <li>
         <h4>Panel instances render at 2px wider when using "Sam" skin</h4>
         <p>
-          For the "Sam" skin a Panel instance's rounded corners are created via the 
-          application of negative 1px left and right margins on the header, body and 
-          footer elements.  These negative margins will cause a Panel instance to be 
-          rendered at 2px wider than the value specified by the "width" configuration 
-          property.  Therefore, when using the "Sam" skin consider the negative left 
-          and right margins and subtract 2 from the value passed to the "width" 
-          configuration property in order to have the Panel render at the desired 
-          width.  For example, to render a Panel 300px wide, pass a value of "298px" 
+          For the "Sam" skin a Panel instance's rounded corners are created via the
+          application of negative 1px left and right margins on the header, body and
+          footer elements.  These negative margins will cause a Panel instance to be
+          rendered at 2px wider than the value specified by the "width" configuration
+          property.  Therefore, when using the "Sam" skin consider the negative left
+          and right margins and subtract 2 from the value passed to the "width"
+          configuration property in order to have the Panel render at the desired
+          width.  For example, to render a Panel 300px wide, pass a value of "298px"
           to the "width" configuration property.
         </p>
     </li>
     <li>
         <h4>Text input/Textarea caret not displayed in Firefox</h4>
         <p>
-           When a Panel's "modal" or "iframe" options are enabled, Gecko-based browsers such as Firefox do not render the flashing caret 
+           When a Panel's "modal" or "iframe" options are enabled, Gecko-based browsers such as Firefox do not render the flashing caret
            for text input boxes or text areas contained inside the Panel.
         </p>
         <p>
-            This is a known problem with Gecko-based browsers related to text input fields being rendered on top of elements with overflow set to "auto" or "scroll", or iframes. More information 
+            This is a known problem with Gecko-based browsers related to text input fields being rendered on top of elements with overflow set to "auto" or "scroll", or iframes. More information
             can be found in the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=167801">Mozilla bug report</a> for the issue.
         </p>
         <p>The simplest workaround when using the modal mask, would be to set overflow to "visible" (or "hidden") on the mask, overriding the default value of "auto":</p>
@@ -617,11 +617,11 @@ article here on the website.</p>
 </textarea></div>
         <p><strong>However, there are side-effects associated with this simple mask workaround and it cannot always be applied.</strong></p>
 
-        <p>The value of "overflow:auto" applied to the mask by default is used to workaround another <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=187435">Mozilla bug</a> and 
+        <p>The value of "overflow:auto" applied to the mask by default is used to workaround another <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=187435">Mozilla bug</a> and
         prevents scrollbars in Gecko-based browsers on MacOS from bleeding through the mask. If you intend to support Gecko-based browsers on MacOS and your page has elements with scrollbars, then this workaround cannot be used.
         Note that it also does not solve the problem if you have the "iframe" option enabled, or other page elements with overflow set to "auto" or "scroll" underneath the Panel.</p>
 
-        <p>A more complex workaround for the bug involves setting "overflow:auto" on the text field (or one of it's containers) and also flipping it's display 
+        <p>A more complex workaround for the bug involves setting "overflow:auto" on the text field (or one of it's containers) and also flipping it's display
         property (see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=167801#c84">Mozilla Bug 167801, comment 84</a>). Although more complex, this workaround helps resolve the issue
         for both the iframe and modal mask use cases, as well any other elements you may have on the page with overflow set to "auto" or "scroll".</p>
 
@@ -634,23 +634,23 @@ article here on the website.</p>
            By default, text will be aligned based on the <code>text-align</code> value <em>inherited</em> from the container's ancestor(s) in the document.
         </p>
         <p>
-           A common YUI scenario where you may see this is when YUI Grids is used. Containers rendered to document.body will have <code>text-align</code> 
+           A common YUI scenario where you may see this is when YUI Grids is used. Containers rendered to document.body will have <code>text-align</code>
            evaluate to <code>center</code>, inherited from the YUI Grids rule for the body element.
         </p>
         <p>
-            If you do need to specify a default <code>text-align</code> value for any particular member of the container family (and it's subclasses), 
+            If you do need to specify a default <code>text-align</code> value for any particular member of the container family (and it's subclasses),
             a simple option is to use the default class name, to define your default <code>text-align</code> value:
         </p>
-<div id="syntax-dfdda9ae549b741b0b70fa127990154f" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/* </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  Align text left by default, for Panel, Dialog and SimpleDialog (subclasses of Panel).</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  Module, Overlay and Tooltip are not affected. </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">*/</span></div></li><li class="li2"><div class="de2"><span class="re1">.yui-panel</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">text-align</span><span class="sy0">:</span><span class="kw1">left</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="coMULTI">/* 
+<div id="syntax-dfdda9ae549b741b0b70fa127990154f" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/* </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  Align text left by default, for Panel, Dialog and SimpleDialog (subclasses of Panel).</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  Module, Overlay and Tooltip are not affected. </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">*/</span></div></li><li class="li2"><div class="de2"><span class="re1">.yui-panel</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">text-align</span><span class="sy0">:</span><span class="kw1">left</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="coMULTI">/*
    Align text left by default, for Panel, Dialog and SimpleDialog (subclasses of Panel).
-   Module, Overlay and Tooltip are not affected. 
+   Module, Overlay and Tooltip are not affected.
 */</span>
 <span class="re1">.yui-panel</span> <span class="br0">&#123;</span>
     <span class="kw1">text-align</span><span class="sy0">:</span><span class="kw1">left</span><span class="sy0">;</span>
 <span class="br0">&#125;</span>
-&nbsp;</pre></div><textarea id="syntax-dfdda9ae549b741b0b70fa127990154f-plain">/* 
+&nbsp;</pre></div><textarea id="syntax-dfdda9ae549b741b0b70fa127990154f-plain">/*
    Align text left by default, for Panel, Dialog and SimpleDialog (subclasses of Panel).
-   Module, Overlay and Tooltip are not affected. 
+   Module, Overlay and Tooltip are not affected.
 */
 .yui-panel {
     text-align:left;
@@ -664,10 +664,10 @@ article here on the website.</p>
             does not impact container functionality.
         </p>
         <p>
-            This appears to be a bug in the HTML Validator add-on and it's ability to validate pages with iframes containing 
-            <code>data:</code> urls, which are used by container to implement the <code>monitorresize</code> 
-            functionality for Gecko browers. The <a href="http://www.htmlpedia.org/phpBB/viewtopic.php?f=9&t=119" title="HTML Validator bug post">issue</a> 
-            has been posted on the bug forum for the add-on. 
+            This appears to be a bug in the HTML Validator add-on and it's ability to validate pages with iframes containing
+            <code>data:</code> urls, which are used by container to implement the <code>monitorresize</code>
+            functionality for Gecko browers. The <a href="http://www.htmlpedia.org/phpBB/viewtopic.php?f=9&t=119" title="HTML Validator bug post">issue</a>
+            has been posted on the bug forum for the add-on.
         </p>
         <p>
             Disabling the add-on will fix the problem.
@@ -732,7 +732,7 @@ article here on the website.</p>
         It provides UI targets, such as close buttons, dialog buttons and title bars, which are large enough or have enough whitespace around them so as to be usable on touch devices such as the iPhone.</p>
         <p>If you do wish to optimize the mobile experience for users, you may consider serving up custom skin CSS based on the mobile browser's user agent string.
         The <a href="../yahoo/index.html#mobile">YAHOO mobile section</a> has an example of how to parse the user agent string on the client; the same logic can be applied on the server also.</p>
-        
+
         <p>Some of the UI targets/CSS rules you may want to customize when <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">creating a custom mobile skin</a> for Panel based containers to increase their target areas are:</p>
         <ul>
             <li>Close Button: <em>.yui-skin-sam .yui-panel .container-close</em></li>
@@ -746,14 +746,14 @@ article here on the website.</p>
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
       </div>
          <div class="yui-u">
-            
+
             <div id="cheatsheet">
                 <h3>Cheat Sheets for Container-family Controls:</h3>
 
@@ -811,9 +811,9 @@ article here on the website.</p>
 <li><a href='../examples/menu/applicationmenubar.html'>Application Menubar</a> (included with examples for the <a href='../menu/index.html'>Menu Family</a>)</li>
 <li><a href='../examples/button/btn_example14.html'>Slider Button</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
 <li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
-</ul>		
-           </div>    
-      
+</ul>
+           </div>
+
 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fcontainer%2F--><h3 id="delicious">YUI Container on del.icio.us:</h3>
 <div class="delicious">
 <div id="delicious-badge">
@@ -856,15 +856,15 @@ article here on the website.</p>
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

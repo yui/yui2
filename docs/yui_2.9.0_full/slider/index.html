@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Slider</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Slider</h1></div>
 </div>
 <div id="bd">
@@ -123,7 +123,7 @@
     <ul>
       <li><a href="../examples/slider/index.html">Examples</a>: Explore examples of the Slider Control in action.</li>
       <li><a href="../docs/module_slider.html">API Documentation</a>: View the full API documentation for the Slider Control.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.slider">Release Notes</a>: Detailed change log for the Slider Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.slider.txt">Release Notes</a>: Detailed change log for the Slider Control.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Slider Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
@@ -134,23 +134,23 @@
 <h2 id="start" class="first">Getting Started</h2>
 <p>To use the Slider control, include the following source files in your web page with the script tag:</p>
 
-<div id="syntax-8c344e76fb32874aa37e038dc1bf5565" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Slider skin (optional) --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/slider/assets/skins/sam/slider.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Slider source file --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/slider/slider-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> 
+<div id="syntax-8c344e76fb32874aa37e038dc1bf5565" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Slider skin (optional) --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/slider/assets/skins/sam/slider.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Slider source file --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/slider/slider-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 &nbsp;
-<span class="sc-1">&lt;!-- Slider skin (optional) --&gt;</span> 
+<span class="sc-1">&lt;!-- Slider skin (optional) --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/slider/assets/skins/sam/slider.css&quot;</span>&gt;</span>
 &nbsp;
-<span class="sc-1">&lt;!-- Slider source file --&gt;</span> 
+<span class="sc-1">&lt;!-- Slider source file --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/slider/slider-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
-&nbsp;</pre></div><textarea id="syntax-8c344e76fb32874aa37e038dc1bf5565-plain"><!-- Dependencies --> 
+&nbsp;</pre></div><textarea id="syntax-8c344e76fb32874aa37e038dc1bf5565-plain"><!-- Dependencies -->
 <script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
 
-<!-- Slider skin (optional) --> 
+<!-- Slider skin (optional) -->
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/slider/assets/skins/sam/slider.css">
 
-<!-- Slider source file --> 
+<!-- Slider source file -->
 <script src="http://yui.yahooapis.com/2.9.0/build/slider/slider-min.js"></script>
 </textarea></div>
 
@@ -162,7 +162,7 @@
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>slider</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -206,7 +206,7 @@ function sliderInit() {
 </textarea></div>
 <p>The Slider instance in this example is configured so that it can be moved 200 pixels to the right, and 0 pixels to the left. It is also possible to configure the slider thumb to start in the center of the background, which would make sense if your default landing zone or zero value is in the middle of the range.</p>
 
-<p>The <code>getHorizSlider</code> method produces a horizontal slider.  The <code>getVertSlider</code>  method produces a vertical slider.  The full constructor for both looks like this:</p>    
+<p>The <code>getHorizSlider</code> method produces a horizontal slider.  The <code>getVertSlider</code>  method produces a vertical slider.  The full constructor for both looks like this:</p>
 
 <p><code>YAHOO.widget.Slider.getHorizSlider(string bgid, string thumbid, int leftup, int rightdown, [int tick])</code></p>
 
@@ -349,7 +349,7 @@ slider.subscribe("slideEnd", function() {
     YAHOO.log("The thumb has arrived");
 
     YAHOO.util.Dom.setStyle(myElement,'background-color','#9f9');
-    
+
     // Move the thumb to an increment of 10 pixels
     // (see using ticks for a better option)
     var val = slider.getValue(),
@@ -647,11 +647,11 @@ dualSlider = YAHOO.widget.Slider.getHorizDualSlider(
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 
 <!-- Indent | recovery -->
             </div>
@@ -687,7 +687,7 @@ dualSlider = YAHOO.widget.Slider.getHorizDualSlider(
 <li><a href='../examples/progressbar/pb_events.html'>Events</a> (included with examples for the <a href='../progressbar/index.html'>ProgressBar Control</a>)</li>
 <li><a href='../examples/button/btn_example14.html'>Slider Button</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
 <li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
-</ul>		
+</ul>
                 </div>
 
                 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fslider%2F-->
@@ -734,15 +734,15 @@ dualSlider = YAHOO.widget.Slider.getHorizDualSlider(
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

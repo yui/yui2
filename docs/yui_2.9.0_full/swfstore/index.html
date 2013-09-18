@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: SWFStore</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: SWFStore</h1></div>
 </div>
 <div id="bd">
@@ -112,16 +112,16 @@
 <li> The data has the ability to persist across multiple browsers. (See <a href="#crossbrowser">Sharing Data Across Browsers</a>)</li>
 <li> The amount of data that can be stored is much larger than a cookie. (See <a href="#settings">settings</a>)</li>
 <li> The data has no built-in encryption. (See <a href="#security">security</a>)</li>
-</ol> 
-  
+</ol>
+
   <p><strong>Important usage notes:</strong></p>
-  
+
   <ul>
     <li>The SWFStore Utility does not encrypt data. Data is stored locally in unencrypted binary.</li>
     <li>The Utility does have a built-in security mechanism to help sandbox your data. See <a href="#security">security</a> below.</li>
     <li>The Utility requires Flash Player 9.0.115 or higher. The latest version of Flash Player is available at the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.</li>
   </ul>
-  
+
   <div>
     <h4>On This Page:</h4>
     <ul>
@@ -132,17 +132,17 @@
       <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
     </ul>
   </div>
-  
+
   <div id="quicklinks">
     <h4>Quick Links:</h4>
     <ul>
       <li><a href="../examples/swfstore/index.html">Examples</a>: Explore examples of the SWFStore Utility in action.</li>
       <li><a href="../docs/module_swfstore.html">API Documentation</a>: View the full API documentation for the SWFStore Utility.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.swfstore">Release Notes</a>: Detailed change log for the SWFStore Utility.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.swfstore.txt">Release Notes</a>: Detailed change log for the SWFStore Utility.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the SWFStore Utility as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
-  </div>  
+  </div>
 </div>
 
 <h2 id="start" class="first">Getting Started</h2>
@@ -156,7 +156,7 @@
 &nbsp;</pre></div><textarea id="syntax-e82937972dfe2bd84f66bcab93d2af25-plain"><!-- Dependencies -->
 <script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo.js"></script>
 <script src="http://yui.yahooapis.com/2.9.0/build/dom/dom.js"></script>
-    
+
 <!-- Source files -->
 <script src="http://yui.yahooapis.com/2.9.0/build/swfstore/swfstore.js"></script>
 </textarea></div>
@@ -169,7 +169,7 @@
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>swfstore</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -194,7 +194,7 @@ Unable to load Flash content. The YUI SWFStore Utility requires Flash Player 9.0
 Unable to load Flash content. The YUI SWFStore Utility requires Flash Player 9.0.115 or higher.
 <br>
 </div>
-</textarea></div>  
+</textarea></div>
 
 <p>Then, instantiate the SWFStore by passing the <code>id</code> of this container <code>&lt;div&gt;</code> to it:</p>
 
@@ -229,23 +229,23 @@ Unable to load Flash content. The YUI SWFStore Utility requires Flash Player 9.0
         </thead>
         <tbody>
     <tr class="odd">
-        <td><strong>contentReady</strong></td> 
+        <td><strong>contentReady</strong></td>
         <td> dispatched when the SWFStore Flash file has successfully initialized. No event object is passed to the listener function. </td>
-    </tr> 
+    </tr>
     <tr>
-        <td><strong>save</strong></td> <td> dispatched when the SWFStore has successfully saved data.</td> 
-    </tr> 
+        <td><strong>save</strong></td> <td> dispatched when the SWFStore has successfully saved data.</td>
+    </tr>
     <tr class="odd">
         <td><strong>error</strong></td> <td> dispatched when the SWFStore is not able to save data. </td>
-    </tr> 
+    </tr>
     <tr>
-        <td><strong>quotaExceededError</strong></td> <td> dispatched when the SWFStore is attempting to save a large amount of data that exceeds the amount allowed by the user. Please see the <a href="#settings">settings</a> section for more information.</td> 
-    </tr> 
+        <td><strong>quotaExceededError</strong></td> <td> dispatched when the SWFStore is attempting to save a large amount of data that exceeds the amount allowed by the user. Please see the <a href="#settings">settings</a> section for more information.</td>
+    </tr>
     <tr class="odd">
         <td><strong>inadequateDimensions</strong></td> <td> dispatched when the the width and height of the SWFStore SWF is not large enough to display a settings panel.</td>
     </tr>
     <tr>
-        <td><strong>securityError</strong></td> <td> dispatched when the SWFStore cannot initiatrze due to security restrictions. This is either because the whitelist check failed, or--if there is no whitelist specified--that the calling page's URL does not match the URL of the SWFStore SWF. It can also occur if a local html page is attempting to load the whitelist, as Flash security restrictions will generally not allow this. </td> 
+        <td><strong>securityError</strong></td> <td> dispatched when the SWFStore cannot initiatrze due to security restrictions. This is either because the whitelist check failed, or--if there is no whitelist specified--that the calling page's URL does not match the URL of the SWFStore SWF. It can also occur if a local html page is attempting to load the whitelist, as Flash security restrictions will generally not allow this. </td>
     </tr>
 
         </tbody>
@@ -268,7 +268,7 @@ Unable to load Flash content. The YUI SWFStore Utility requires Flash Player 9.0
             <tr class="odd">
                 <td>getLength()</td>
                 <td>(number) The number of keys currently stored in the engine.</td>
-            </tr>        
+            </tr>
             <tr>
                 <td>clear()</td>
                 <td>(function) Clears all keys and the data from the engine.</td>
@@ -302,13 +302,13 @@ Unable to load Flash content. The YUI SWFStore Utility requires Flash Player 9.0
 </div>
 
 <h3 id="settings">SWFStore Settings and Requesting more Storage</h3>
-<p>When attempting to store data above the 100kb default, a Flash Player dialog will attempt to display in the SWF file, which confirms the request for more storage. If the size of the SWF is inadequate, it will not be able to display, an <code>quotaExceededError</code> will be dispatched, and the store will fail.</li> Please see the <a href="../examples/swfstore/swfstore-settings-example.html">SWFStore Settings Example</a> for more information on how to prepare your application for this scenario. 
+<p>When attempting to store data above the 100kb default, a Flash Player dialog will attempt to display in the SWF file, which confirms the request for more storage. If the size of the SWF is inadequate, it will not be able to display, an <code>quotaExceededError</code> will be dispatched, and the store will fail.</li> Please see the <a href="../examples/swfstore/swfstore-settings-example.html">SWFStore Settings Example</a> for more information on how to prepare your application for this scenario.
 </p>
 
 <h3>Sharing Data Across Browsers <a name="crossbrowser"></a></h3>
 <p>Unlike a browser cookie, SWFStore can share its data across browsers. This is turned off by default, but can be turned on using the <code>shareData</code> parameter. See the <a href="../examples/swfstore/swfstore-advanced-example.html">SWFStore Advanced Example</a> for an example of this in action.
 </p>
-    
+
 <h3>A Note about Security <a name="security"></a></h3>
 
 <p>To help protect your stored data, only the directory which loaded the swfstore.swf will have access to the data stored in that path. For example, www.badsite.com cannot access data stored via www.goodsite.com/preferences/swfstore.swf. However, the page www.goodsite.com/games.html also cannot access this information. By default, SWFStore will allow subdirectories to access data in the same directory or above. For instance, if the SWF were placed at the top level,  www.goodsite.com/swfstore.swf, games.html would have access to it, as would the subdirectory  www.goodsite.com/preferences/. If you would like to share stored data across different sites, or you would like more fine-grained control, you can simply place the file <code>storage-whitelist.xml</code> in the same location as the SWFStore.swf file, and within this file detail allowed URLs. The format of the file is the following: </p>
@@ -335,13 +335,13 @@ Unable to load Flash content. The YUI SWFStore Utility requires Flash Player 9.0
 
 </style>
 <div id="syntax-35400cfcdc969bdaf652dde168010a33" class="yui-syntax-highlight"><div class="numbers"><pre class="xml" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc3"><span class="re1">&lt;url-policy<span class="re2">&gt;</span></span></span></div></li><li class="li1"><div class="de1">    <span class="sc3"><span class="re1">&lt;allow-access-from</span> <span class="re0">url</span>=<span class="st0">&quot;www.mail.yahoo.com&quot;</span> <span class="re2">/&gt;</span></span> </div></li><li class="li1"><div class="de1">    <span class="sc3"><span class="re1">&lt;allow-access-from</span> <span class="re0">url</span>=<span class="st0">&quot;www.yahoo.com&quot;</span> <span class="re2">/&gt;</span></span> </div></li><li class="li1"><div class="de1">    <span class="sc3"><span class="re1">&lt;allow-access-from</span> <span class="re0">url</span>=<span class="st0">&quot;www.google.com&quot;</span> <span class="re2">/&gt;</span></span></div></li><li class="li2"><div class="de2"><span class="sc3"><span class="re1">&lt;/url-policy<span class="re2">&gt;</span></span></span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="xml" style="font-family:monospace;"><span class="sc3"><span class="re1">&lt;url-policy<span class="re2">&gt;</span></span></span>
-    <span class="sc3"><span class="re1">&lt;allow-access-from</span> <span class="re0">url</span>=<span class="st0">&quot;www.mail.yahoo.com&quot;</span> <span class="re2">/&gt;</span></span> 
-    <span class="sc3"><span class="re1">&lt;allow-access-from</span> <span class="re0">url</span>=<span class="st0">&quot;www.yahoo.com&quot;</span> <span class="re2">/&gt;</span></span> 
+    <span class="sc3"><span class="re1">&lt;allow-access-from</span> <span class="re0">url</span>=<span class="st0">&quot;www.mail.yahoo.com&quot;</span> <span class="re2">/&gt;</span></span>
+    <span class="sc3"><span class="re1">&lt;allow-access-from</span> <span class="re0">url</span>=<span class="st0">&quot;www.yahoo.com&quot;</span> <span class="re2">/&gt;</span></span>
     <span class="sc3"><span class="re1">&lt;allow-access-from</span> <span class="re0">url</span>=<span class="st0">&quot;www.google.com&quot;</span> <span class="re2">/&gt;</span></span>
 <span class="sc3"><span class="re1">&lt;/url-policy<span class="re2">&gt;</span></span></span>
 &nbsp;</pre></div><textarea id="syntax-35400cfcdc969bdaf652dde168010a33-plain"><url-policy>
-    <allow-access-from url="www.mail.yahoo.com" /> 
-    <allow-access-from url="www.yahoo.com" /> 
+    <allow-access-from url="www.mail.yahoo.com" />
+    <allow-access-from url="www.yahoo.com" />
     <allow-access-from url="www.google.com" />
 </url-policy>
 </textarea></div>
@@ -359,23 +359,23 @@ Unable to load Flash content. The YUI SWFStore Utility requires Flash Player 9.0
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 
     </div>
          <div class="yui-u">
-            
+
             <div id="cheatsheet">
                 <h3>SWFStore Utility Cheat Sheet:</h3>
-                
+
                 <a href="http://yuiblog.com/assets/pdf/cheatsheets/swfstore.pdf"><img src="http://us.i1.yimg.com/us.yimg.com/i/ydn/yuiweb/img/cheatsheet-images/swfstore.gif" width="178" height="132" alt="Cheat Sheet for the SWFStore Utility."></a>
-                
+
                 <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
             </div>
-            
+
 <div id="examples">
 <h3>SWFStore Utility Examples:</h3>
 
@@ -385,15 +385,15 @@ Unable to load Flash content. The YUI SWFStore Utility requires Flash Player 9.0
 </ul>
 
 
-		
+
 </div>
-    
+
 <h3 id="delicious">YUI SWFStore Utility on del.icio.us:</h3>
 <div class="delicious">
 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fswfstore%2F--></div>
 
          </div>
-   </div>  
+   </div>
 </div>
 </div>
 
@@ -412,15 +412,15 @@ Unable to load Flash content. The YUI SWFStore Utility requires Flash Player 9.0
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Selector Utility</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Selector Utility</h1></div>
 </div>
 <div id="bd">
@@ -103,8 +103,8 @@
 <div class="yui-b">
   <div class="yui-ge">
       <div class="yui-u first">
-      
-      
+
+
 <div id="promo" class="component">
   <h1>YUI 2: Selector Utility</h1>
   <p>The YUI Selector Utility brings <a href="http://www.w3.org/TR/css3-selectors/">CSS3 Selector</a> syntax to JavaScript, providing a compact shorthand for collecting, filtering, and testing HTMLElements.</p>
@@ -124,7 +124,7 @@
     <ul>
       <li><a href="../examples/selector/index.html">Examples</a>: Explore examples of the Selector Utility in action.</li>
       <li><a href="../docs/module_selector.html">API Documentation</a>: View the full API documentation for the Selector Utility.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.selector">Release Notes</a>: Detailed change log for the Selector Utility.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.selector.txt">Release Notes</a>: Detailed change log for the Selector Utility.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Selector Utility as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
@@ -153,7 +153,7 @@
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>selector</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -209,7 +209,7 @@ YAHOO.util.Event.on(nodes, 'click', handleClick);
 &nbsp;</pre></div><textarea id="syntax-b8e9918c0f5419b1bad06b11c6daa717-plain">var node = document.getElementById('foo');
 alert(YAHOO.util.Selector.test(node, 'div.bar'));
 </textarea></div>
-<p>The above example will alert <code>true</code> if the node is of type <code>DIV</code> and has a class of <code>bar</code>, otherwise it will alert <code>false</code>.</p>  
+<p>The above example will alert <code>true</code> if the node is of type <code>DIV</code> and has a class of <code>bar</code>, otherwise it will alert <code>false</code>.</p>
 
 <h3 id="filter">Filtering Nodes</h3>
 
@@ -220,7 +220,7 @@ alert(YAHOO.util.Selector.test(node, 'div.bar'));
 &nbsp;</pre></div><textarea id="syntax-890172fcc43c747c1d317dea36a69b20-plain">var candidates = document.getElementsByTagName('a');
 var nodes = YAHOO.util.Selector.filter(candidates, '[href]');
 </textarea></div>
-<p>The above example filters the candidate anchor elements and returns only those that have the <code>href</code> attribute set.</p> 
+<p>The above example filters the candidate anchor elements and returns only those that have the <code>href</code> attribute set.</p>
 
 <h3 id="operators">Using Attribute Operators</h3>
 
@@ -230,7 +230,7 @@ var nodes = YAHOO.util.Selector.filter(candidates, '[href]');
 <div id="syntax-5950fbb892700c4be4612c9d84626dce" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> nodes <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Selector</span>.<span class="me1">query</span><span class="br0">&#40;</span><span class="st0">'input[name^=yui]'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> nodes <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Selector</span>.<span class="me1">query</span><span class="br0">&#40;</span><span class="st0">'input[name^=yui]'</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-5950fbb892700c4be4612c9d84626dce-plain">var nodes = YAHOO.util.Selector.query('input[name^=yui]');
 </textarea></div>
-<p>The above example returns only input elements whose <code>name</code> attribute begins with "yui".  See the <a href="http://www.w3.org/TR/css3-selectors/#attribute-selectors">CSS3 Specification</a> for additional examples of attribute operators.</p> 
+<p>The above example returns only input elements whose <code>name</code> attribute begins with "yui".  See the <a href="http://www.w3.org/TR/css3-selectors/#attribute-selectors">CSS3 Specification</a> for additional examples of attribute operators.</p>
 
 
 <h3 id="pseudos">Using Pseudo-classes</h3>
@@ -246,7 +246,7 @@ var nodes = YAHOO.util.Selector.filter(candidates, '[href]');
 <div id="syntax-83b162416bc12f288276317d859e3c3f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> nodes <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Selector</span>.<span class="me1">query</span><span class="br0">&#40;</span><span class="st0">'input:not([type=button])'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> nodes <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Selector</span>.<span class="me1">query</span><span class="br0">&#40;</span><span class="st0">'input:not([type=button])'</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-83b162416bc12f288276317d859e3c3f-plain">var nodes = YAHOO.util.Selector.query('input:not([type=button])');
 </textarea></div>
-<p>The above example returns only input elements that are NOT of type BUTTON.  See the <a href="http://www.w3.org/TR/css3-selectors/#attribute-pseudo-classes">CSS3 Specification</a> for additional examples of pseudo-classes.</p> 
+<p>The above example returns only input elements that are NOT of type BUTTON.  See the <a href="http://www.w3.org/TR/css3-selectors/#attribute-pseudo-classes">CSS3 Specification</a> for additional examples of pseudo-classes.</p>
 
 <h2 id="mobile">YUI on Mobile: Using Selector Utility with "A-Grade" Mobile Browsers</h2>
 
@@ -264,24 +264,24 @@ var nodes = YAHOO.util.Selector.filter(candidates, '[href]');
 <ul>
 	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
 	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
-</ul></div>  
+</ul></div>
 <p>The Selector Utility is fully supported on Apple's iPhone and the Nokia N-Series browsers; you can expect functional parity between Selector Utility on these devices as compared to the supported <a href="http://yuilibrary.com/yui/docs/tutorials/gbs/">A-Grade browsers</a>.</p>	<h2 id="support">Support &amp; Community</h2>
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 
         </div>
          <div class="yui-u">
             <div id="cheatsheet">
                 <h3>Selector Utility Cheat Sheet:</h3>
-                
+
                 <a href="http://yuiblog.com/assets/pdf/cheatsheets/selector.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/selector.gif" width="178" height="132" alt="Cheat Sheet for the Selector Utility."></a>
-                
+
                 <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
             </div>
 
@@ -300,7 +300,7 @@ var nodes = YAHOO.util.Selector.filter(candidates, '[href]');
 
 <ul>
 <li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
-</ul>		
+</ul>
 </div>
 
 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fselector%2F--><h3 id="delicious">YUI Selector on del.icio.us:</h3>
@@ -332,15 +332,15 @@ var nodes = YAHOO.util.Selector.filter(candidates, '[href]');
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

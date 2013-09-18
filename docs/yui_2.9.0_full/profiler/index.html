@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Profiler</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Profiler</h1></div>
 </div>
 <div id="bd">
@@ -107,9 +107,9 @@
 <div id="promo" class="component">
 
     <h1>YUI 2: Profiler</h1>
-    <p>The YUI Profiler is a simple, non-visual code profiler for JavaScript. Unlike most code profilers, this one 
-    allows you to specify exactly what parts of your application to profile. You can also programmatically 
-    retrieve profiling information as the application is running, allowing you to create performance tests 
+    <p>The YUI Profiler is a simple, non-visual code profiler for JavaScript. Unlike most code profilers, this one
+    allows you to specify exactly what parts of your application to profile. You can also programmatically
+    retrieve profiling information as the application is running, allowing you to create performance tests
     <a href="../yuitest/index.html">YUI Test</a> or other unit testing frameworks.
     <div>
         <h4>On This Page:</h4>
@@ -123,7 +123,7 @@
             <li><a href="#mobile">YUI on Mobile Devices</a></li>
             <li><a href="#support">Support &amp; Community</a></li><li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
         </ul>
-        
+
     </div>
 
   <div id="quicklinks">
@@ -131,21 +131,21 @@
     <ul>
       <li><a href="../examples/profiler/index.html">Examples</a>: Explore examples of the Profiler in action.</li>
       <li><a href="../docs/module_profiler.html">API Documentation</a>: View the full API documentation for the Profiler.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.profiler">Release Notes</a>: Detailed change log for the Profiler.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.profiler.txt">Release Notes</a>: Detailed change log for the Profiler.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Profiler as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
-  </div>  
+  </div>
 </div>
-    
+
 <h2 id="start" class="first">Getting Started</h2>
 <p>To use the Profiler, include the following source files in your web page:</p>
-<div id="syntax-d27178702d902a0dedf4d9f4a81f1e62" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source File --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/profiler/profiler-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> 
+<div id="syntax-d27178702d902a0dedf4d9f4a81f1e62" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source File --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/profiler/profiler-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 &nbsp;
 <span class="sc-1">&lt;!-- Source File --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/profiler/profiler-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
-&nbsp;</pre></div><textarea id="syntax-d27178702d902a0dedf4d9f4a81f1e62-plain"><!-- Dependencies --> 
+&nbsp;</pre></div><textarea id="syntax-d27178702d902a0dedf4d9f4a81f1e62-plain"><!-- Dependencies -->
 <script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo.js"></script>
 
 <!-- Source File -->
@@ -161,7 +161,7 @@
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>profiler</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -184,7 +184,7 @@ object. If the function exists globally, then you can just pass in the fully-qua
 <span class="kw2">var</span> myObject <span class="sy0">=</span> <span class="br0">&#123;</span>
     getName <span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#123;</span>
         <span class="kw1">return</span> <span class="st0">&quot;MyObject&quot;</span><span class="sy0">;</span>
-    <span class="br0">&#125;</span>    
+    <span class="br0">&#125;</span>
 <span class="br0">&#125;</span><span class="sy0">;</span>
 &nbsp;
 <span class="co1">//register the global function for profiling - pass in window to indicate a global function</span>
@@ -203,7 +203,7 @@ function sayHi(){
 var myObject = {
     getName : function(){
         return "MyObject";
-    }    
+    }
 };
 
 //register the global function for profiling - pass in window to indicate a global function
@@ -214,7 +214,7 @@ YAHOO.tool.Profiler.registerFunction("myObject.getName");
 
 //alternate - providing second argument doesn't hurt
 YAHOO.tool.Profiler.registerFunction("myObject.getName", myObject);
-</textarea></div>    
+</textarea></div>
 <p>In this example, there is a global function <code>sayHi()</code> and a global object <code>myObject</code>. These
 can both be profiled by calling the <code>registerFunction()</code> method. For <code>sayHi()</code>, the first
 argument is the name of the function and the second argument is the owner object, <code>window</code>. For the
@@ -249,7 +249,7 @@ var callCount = YAHOO.tool.Profiler.getCallCount("myObject.getName");
 
 //get the full report for sayHi()
 var report = YAHOO.tool.Profiler.getFunctionReport("sayHi");
-</textarea></div>    
+</textarea></div>
 <p>When you are done profiling, you can unregister the functions by using <code>unregisterFunction()</code>, which
 undoes all of the profiling instrumentation and deletes all profiling data about the given function. Always make
 sure to retrieve the profiling data for functions before calling <code>unregisterFunction()</code>. To unregister
@@ -329,8 +329,8 @@ o1.setName("And another name");
 //get the information
 var constructorCalls = YAHOO.tool.Profiler.getCallCount("MyObject"); //3
 var getNameCalls = YAHOO.tool.Profiler.getCallCount("MyObject.prototype.getName"); //1
-var setNameCalls = YAHOO.tool.Profiler.getCallCount("MyObject.prototype.setName"); //2    
-</textarea></div>    
+var setNameCalls = YAHOO.tool.Profiler.getCallCount("MyObject.prototype.setName"); //2
+</textarea></div>
 <p>In this example, there is a global constructor <code>MyObject</code> that has two methods on its
 prototype. By registering the constructor, three entries are made in profiler, one for <code>MyObject</code>,
 one for <code>MyObject.prototype.getName</code> and one for <code>MyObject.prototype.setName</code>. When
@@ -364,7 +364,7 @@ the profiler. Example:</p>
 &nbsp;
     subtract <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>num1<span class="sy0">,</span> num2<span class="br0">&#41;</span><span class="br0">&#123;</span>
         <span class="kw1">return</span> num1 <span class="sy0">-</span> num2<span class="sy0">;</span>
-    <span class="br0">&#125;</span>    
+    <span class="br0">&#125;</span>
 <span class="br0">&#125;</span><span class="sy0">;</span>
 &nbsp;
 <span class="co1">//register the object</span>
@@ -380,14 +380,14 @@ the profiler. Example:</p>
 <span class="kw2">var</span> subtractCalls <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">Profiler</span>.<span class="me1">getCallCount</span><span class="br0">&#40;</span><span class="st0">&quot;obj.subtract&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">//1    </span>
 &nbsp;</pre></div><textarea id="syntax-a9e5183c2c506ba149b19153f1486ef5-plain">//object
 var obj = {
-    
+
     add : function (num1, num2) {
         return num1 + num2;
     },
-    
+
     subtract : function (num1, num2){
         return num1 - num2;
-    }    
+    }
 };
 
 //register the object
@@ -400,8 +400,8 @@ var sum2 = obj.add(10, 40);
 
 //get the information
 var addCalls = YAHOO.tool.Profiler.getCallCount("obj.add"); //2
-var subtractCalls = YAHOO.tool.Profiler.getCallCount("obj.subtract"); //1    
-</textarea></div>    
+var subtractCalls = YAHOO.tool.Profiler.getCallCount("obj.subtract"); //1
+</textarea></div>
 <p>In this example, an object <code>obj</code> contains two methods, <code>add()</code> and <code>subtract()</code>. Both
 methods are registered when <code>obj</code> is passed into the <code>registerObject()</code> method. Information about
 the methods is then returned via <code>getCallCount()</code> by passing in the complete method names of <code>obj.add</code>
@@ -414,7 +414,7 @@ is necessary.</p>
 <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">Profiler</span>.<span class="me1">unregisterObject</span><span class="br0">&#40;</span><span class="st0">&quot;obj&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-7624c4ab512d1f0be4093bbccecb1d82-plain">//unregister MyObject
 YAHOO.tool.Profiler.unregisterObject("obj");
-</textarea></div>    
+</textarea></div>
 <h2 id="reportingresults">Reporting Results</h2>
 <p>If you'd like to get the results of all profiling, the <code>getFullReport()</code> method can be called. This method
 returns an object containing all of the profiling information for every registered function (the data for each function
@@ -455,7 +455,7 @@ is destroyed when it's unregistered, so this method should be called before unre
         min: 0,
         points : []
     },
-    
+
     "function_name2": {
         calls : 0,
         avg : 0,
@@ -463,7 +463,7 @@ is destroyed when it's unregistered, so this method should be called before unre
         min: 0,
         points : []
     },
-    
+
     "function_name3": {
         calls : 0,
         avg : 0,
@@ -471,7 +471,7 @@ is destroyed when it's unregistered, so this method should be called before unre
         min: 0,
         points : []
     }
-   
+
 }
 </textarea></div>
 <p>If you'd like to only return profiling information based on certain criteria, you can pass in an optional filter
@@ -488,7 +488,7 @@ least once, the following can be used:</p>
 var report = YAHOO.tool.Profiler.getFullReport(function(report){
     return (report.calls > 0);
 });
-</textarea></div>    
+</textarea></div>
 
 <p>Using a filter produces an object in the same format as when the filter is not provided; the only difference
 is the set of functions included in the report.</p>
@@ -527,23 +527,23 @@ is the set of functions included in the report.</p>
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 
       </div>
          <div class="yui-u">
-            
+
             <div id="cheatsheet">
                 <h3>Profiler Cheat Sheet:</h3>
-                
+
                 <a href="http://yuiblog.com/assets/pdf/cheatsheets/profiler.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/profiler.gif" width="178" height="132" alt="Cheat Sheet for the YUI Profiler"></a>
-                
+
                 <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
             </div>
-            
+
             <div id="examples">
 <h3>Profiler Examples:</h3>
 
@@ -553,7 +553,7 @@ is the set of functions included in the report.</p>
 </ul>
 
 
-		
+
            </div>
 
 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fprofiler%2F--><h3 id="delicious">Profiler on del.icio.us:</h3>
@@ -598,15 +598,15 @@ is the set of functions included in the report.</p>
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

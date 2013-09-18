@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Layout Manager</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Layout Manager</h1></div>
 </div>
 <div id="bd">
@@ -102,12 +102,12 @@
 <div class="yui-b">
   <div class="yui-ge">
       <div class="yui-u first">
-	  
-	  
+
+
 <div id="promo" class="component">
   <h1>YUI 2: Layout Manager</h1>
     <p><img src="assets/layout.png" alt="The YUI Layout Manager" width="280" height="192" hspace="10" vspace="5" align="right">The YUI Layout Manager allows you to create cross-browser, pixel-perfect application layouts with little effort. Layout Manager establishes structured layouts containing top, bottom, left, right and center layout units.  Units can be resized or collapsed by the user; properties and contents of layout units can be modifed scriptologically through an extensive API.  Layout Manager can establish a new layout either at the body-element level (taking up the full viewport) or within a single element (such as within a <a href="../container/panel/index.html">Panel</a>).</p>
-    
+
 
   <div>
     <h4>On This Page:</h4>
@@ -132,7 +132,7 @@
     <ul>
       <li><a href="../examples/layout/index.html">Examples</a>: Explore examples of the Layout Manager in action.</li>
       <li><a href="../docs/module_layout.html">API Documentation</a>: View the full API documentation for the Layout Manager.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.layout">Release Notes</a>: Detailed change log for the Layout Manager.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.layout.txt">Release Notes</a>: Detailed change log for the Layout Manager.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Layout Manager as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
@@ -145,11 +145,11 @@
 <span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/resize.css&quot;</span>&gt;</span>
 <span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/layout.css&quot;</span>&gt;</span>
 <span class="sc-1">&lt;!-- Utility Dependencies --&gt;</span>
-<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
-<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
-<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 <span class="sc-1">&lt;!-- Optional Animation Support--&gt;</span>
-<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 <span class="sc-1">&lt;!-- Optional Resize Support --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/resize/resize-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 <span class="sc-1">&lt;!-- Source file for the Layout Manager --&gt;</span>
@@ -159,25 +159,25 @@
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/resize.css">
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/layout.css">
 <!-- Utility Dependencies -->
-<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
-<script src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script> 
-<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
 <!-- Optional Animation Support-->
-<script src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script> 
+<script src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
 <!-- Optional Resize Support -->
 <script src="http://yui.yahooapis.com/2.9.0/build/resize/resize-min.js"></script>
 <!-- Source file for the Layout Manager -->
 <script src="http://yui.yahooapis.com/2.9.0/build/layout/layout-min.js"></script>
 </textarea></div>
 
-Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
-in which the Layout Manager lives.  You can usually accomplish this simply by putting the class on the 
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element
+in which the Layout Manager lives.  You can usually accomplish this simply by putting the class on the
 <code>&#60;body&#62;</code> tag:</p>
 <div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
 </textarea></div>
-<p class="lastP">For more information on skinning YUI components and making use of default skins, 
-see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+<p class="lastP">For more information on skinning YUI components and making use of default skins,
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a>
 article here on the website.</p>
 
 
@@ -189,7 +189,7 @@ article here on the website.</p>
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>layout</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -318,28 +318,28 @@ layout.render();
             units<span class="sy0">:</span> <span class="br0">&#91;</span>
                 <span class="br0">&#123;</span>
                     position<span class="sy0">:</span> <span class="st0">'top'</span><span class="sy0">,</span>
-                    height<span class="sy0">:</span> <span class="nu0">50</span><span class="sy0">,</span> 
-                    resize<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span> 
-                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span> 
-                    collapse<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> 
+                    height<span class="sy0">:</span> <span class="nu0">50</span><span class="sy0">,</span>
+                    resize<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span>
+                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span>
+                    collapse<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
                     resize<span class="sy0">:</span> <span class="kw2">true</span>
                 <span class="br0">&#125;</span><span class="sy0">,</span>
                 <span class="br0">&#123;</span>
                     position<span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span>
                     header<span class="sy0">:</span> <span class="st0">'Right'</span><span class="sy0">,</span>
                     width<span class="sy0">:</span> <span class="nu0">300</span><span class="sy0">,</span>
-                    resize<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> 
-                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span> 
-                    footer<span class="sy0">:</span> <span class="st0">'Footer'</span><span class="sy0">,</span> 
-                    collapse<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> 
+                    resize<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span>
+                    footer<span class="sy0">:</span> <span class="st0">'Footer'</span><span class="sy0">,</span>
+                    collapse<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
                     <span class="kw3">scroll</span><span class="sy0">:</span> <span class="kw2">true</span>
                 <span class="br0">&#125;</span><span class="sy0">,</span>
                 <span class="br0">&#123;</span>
-                    position<span class="sy0">:</span> <span class="st0">'bottom'</span><span class="sy0">,</span> 
-                    header<span class="sy0">:</span> <span class="st0">'Bottom'</span><span class="sy0">,</span> 
-                    height<span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span> 
-                    resize<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> 
-                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span> 
+                    position<span class="sy0">:</span> <span class="st0">'bottom'</span><span class="sy0">,</span>
+                    header<span class="sy0">:</span> <span class="st0">'Bottom'</span><span class="sy0">,</span>
+                    height<span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span>
+                    resize<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span>
                     collapse<span class="sy0">:</span> <span class="kw2">true</span>
                 <span class="br0">&#125;</span><span class="sy0">,</span>
                 <span class="br0">&#123;</span>
@@ -370,28 +370,28 @@ layout.render();
             units: [
                 {
                     position: 'top',
-                    height: 50, 
-                    resize: false, 
-                    gutter: '5px', 
-                    collapse: true, 
+                    height: 50,
+                    resize: false,
+                    gutter: '5px',
+                    collapse: true,
                     resize: true
                 },
                 {
                     position: 'right',
                     header: 'Right',
                     width: 300,
-                    resize: true, 
-                    gutter: '5px', 
-                    footer: 'Footer', 
-                    collapse: true, 
+                    resize: true,
+                    gutter: '5px',
+                    footer: 'Footer',
+                    collapse: true,
                     scroll: true
                 },
                 {
-                    position: 'bottom', 
-                    header: 'Bottom', 
-                    height: 100, 
-                    resize: true, 
-                    gutter: '5px', 
+                    position: 'bottom',
+                    header: 'Bottom',
+                    height: 100,
+                    resize: true,
+                    gutter: '5px',
                     collapse: true
                 },
                 {
@@ -524,23 +524,23 @@ layout.render();
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 
 		</div>
          <div class="yui-u">
-		 	
+
 			<div id="cheatsheet">
 				<h3>Layout Manager Cheat Sheet:</h3>
-				
+
 				<a href="http://yuiblog.com/assets/pdf/cheatsheets/layout.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/layout.gif" width="178" height="135" alt="Cheat Sheet for the Layout Manager."></a>
-				
+
 			  <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
 			</div>
-			
+
 			<div id="examples">
 <h3>Layout Manager Examples:</h3>
 
@@ -556,9 +556,9 @@ layout.render();
 </ul>
 
 
-		
+
 		   </div>
-		   
+
 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Flayout%2F--><h3 id="delicious">YUI Layout Manager on del.icio.us:</h3>
 <div class="delicious">
 <div id="delicious-badge">
@@ -587,15 +587,15 @@ layout.render();
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

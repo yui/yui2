@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Tooltip</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Tooltip</h1></div>
 </div>
 <div id="bd">
@@ -119,7 +119,7 @@
     <ul>
       <li><a href="../../examples/container/index.html">Examples</a>: Explore examples of the Tooltip Control in action.</li>
       <li><a href="../../docs/module_container.html">API Documentation</a>: View the full API documentation for the Tooltip Control.</li>
-	  <li><a id="releasenotes" href="../../releasenotes/README.container">Release Notes</a>: Detailed change log for the Tooltip Control.</li>
+	  <li><a id="releasenotes" href="../../releasenotes/README.container.txt">Release Notes</a>: Detailed change log for the Tooltip Control.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Tooltip Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
@@ -150,14 +150,14 @@
 <!-- Source file -->
 <script src="http://yui.yahooapis.com/2.9.0/build/container/container-min.js"></script>
 </textarea></div>
-Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
-in which the Tooltip Control lives.  You can usually accomplish this simply by putting the class on the 
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element
+in which the Tooltip Control lives.  You can usually accomplish this simply by putting the class on the
 <code>&#60;body&#62;</code> tag:</p>
 <div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
 </textarea></div>
-<p class="lastP">For more information on skinning YUI components and making use of default skins, 
-see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+<p class="lastP">For more information on skinning YUI components and making use of default skins,
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a>
 article here on the website.</p>
 
 
@@ -169,7 +169,7 @@ article here on the website.</p>
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../../yuiloader/index.html">YUI Loader</a>, its module name is <code>container</code>. (<a href="../../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -196,16 +196,16 @@ Tooltips require no existing HTML markup, as they are created entirely in JavaSc
   The HTML ID of that related element &mdash; we'll call that the <em>context
   element</em> &mdash; must be supplied to the Tooltip constructor and it must
   exist on the page prior to instantiating your Tooltip.</p>
-  
+
  <p>Assuming, then, that there is a context element on the page with an HTML ID of <code>myContextEl</code>, you can instantiate a Tooltip this way:</p>
- 
-<div id="syntax-3e5e327c990ad1da0a56befbc91f0600" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myTooltip <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Tooltip</span><span class="br0">&#40;</span><span class="st0">&quot;myTooltip&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">    context<span class="sy0">:</span> <span class="st0">&quot;myContextEl&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    text<span class="sy0">:</span> <span class="st0">&quot;You have hovered over myContextEl.&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    showDelay<span class="sy0">:</span> <span class="nu0">500</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myTooltip <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Tooltip</span><span class="br0">&#40;</span><span class="st0">&quot;myTooltip&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> 
-    context<span class="sy0">:</span> <span class="st0">&quot;myContextEl&quot;</span><span class="sy0">,</span> 
+
+<div id="syntax-3e5e327c990ad1da0a56befbc91f0600" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myTooltip <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Tooltip</span><span class="br0">&#40;</span><span class="st0">&quot;myTooltip&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">    context<span class="sy0">:</span> <span class="st0">&quot;myContextEl&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    text<span class="sy0">:</span> <span class="st0">&quot;You have hovered over myContextEl.&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    showDelay<span class="sy0">:</span> <span class="nu0">500</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myTooltip <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Tooltip</span><span class="br0">&#40;</span><span class="st0">&quot;myTooltip&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    context<span class="sy0">:</span> <span class="st0">&quot;myContextEl&quot;</span><span class="sy0">,</span>
     text<span class="sy0">:</span> <span class="st0">&quot;You have hovered over myContextEl.&quot;</span><span class="sy0">,</span>
     showDelay<span class="sy0">:</span> <span class="nu0">500</span>
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
-&nbsp;</pre></div><textarea id="syntax-3e5e327c990ad1da0a56befbc91f0600-plain">myTooltip = new YAHOO.widget.Tooltip("myTooltip", { 
-    context: "myContextEl", 
+&nbsp;</pre></div><textarea id="syntax-3e5e327c990ad1da0a56befbc91f0600-plain">myTooltip = new YAHOO.widget.Tooltip("myTooltip", {
+    context: "myContextEl",
     text: "You have hovered over myContextEl.",
     showDelay: 500
 });
@@ -294,14 +294,14 @@ Tooltip has the following configuration properties:</p>
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
         </div>
          <div class="yui-u">
-            
+
             <div id="examples">
 <h3>Container Family Examples:</h3>
 
@@ -347,7 +347,7 @@ Tooltip has the following configuration properties:</p>
 <li><a href='../../examples/menu/applicationmenubar.html'>Application Menubar</a> (included with examples for the <a href='../../menu/index.html'>Menu Family</a>)</li>
 <li><a href='../../examples/button/btn_example14.html'>Slider Button</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
 <li><a href='../../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../../layout/index.html'>Layout Manager</a>)</li>
-</ul>		
+</ul>
            </div>
 
 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fcontainer%2Ftooltip%2F--><h3 id="delicious">YUI Tooltip on del.icio.us:</h3>
@@ -372,7 +372,7 @@ Tooltip has the following configuration properties:</p>
             <p><a href="http://del.icio.us/url/5dd7608225f6c4354affce2e73e70bf9" class="saved-by">saved by <span>16</span>  people</a></p>
    </div></div>
 
-     
+
          </div>
       </div>
 </div>
@@ -392,15 +392,15 @@ Tooltip has the following configuration properties:</p>
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

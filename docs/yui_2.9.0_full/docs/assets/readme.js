@@ -104,7 +104,7 @@ YAHOO.yui.ReadMe.init = function() {
 			}
 
 			}
-			$e.on("releasenotes", "click", launchReadme);
+			//$e.on("releasenotes", "click", launchReadme);
 
 			var processReleaseNotes = function(o) {
 				rt = o.responseText;

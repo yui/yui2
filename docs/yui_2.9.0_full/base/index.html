@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Base CSS</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Base CSS</h1></div>
 </div>
 <div id="bd">
@@ -123,17 +123,17 @@
     <h4>Quick Links:</h4>
     <ul>
       <li><a href="../examples/base/index.html">Examples</a>: Explore examples of the Base CSS Package in action.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.base">Release Notes</a>: Detailed change log for the Base CSS Package.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.base.txt">Release Notes</a>: Detailed change log for the Base CSS Package.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Base CSS Package as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
   </div>
 		</div>
-        
+
                 <h2 id="video" class="first">Video: The YUI CSS Foundation</h2>
-        
+
         <p>In this 42-minute tech talk from October 2007, YUI senior engineer and CSS component author Nate Koechley provides a holistic introduction to this and all of the YUI CSS components. [<a href="http://us.dl1.yimg.com/download.yahoo.com/dl/ydn/yui/theater/koechley-yuicss.m4v">iPod/iPhone compatible download also available</a>.]</p>
-        
+
 <p><object width="512" height="323"><param name="movie" value="http://l.yimg.com/ht/yep/YV_YEP.swf?ver=2.1.12" /><param name="allowFullScreen" value="true" /><param name="flashVars" value="id=4732784&vid=1373808&lang=en-us&intl=us&thumbUrl=http://l.yimg.com/a/i/us/sch/cn/v/v3/w956/1373808_320_240.jpeg" /><embed src="http://l.yimg.com/ht/yep/YV_YEP.swf?ver=2.1.12" type="application/x-shockwave-flash" width="512" height="323" allowFullScreen="true" flashVars="id=4732784&vid=1373808&lang=en-us&intl=us&thumbUrl=http://l.yimg.com/a/i/us/sch/cn/v/v3/w956/1373808_320_240.jpeg" ></embed></object></p>
 
 		<h2 id="start">Getting Started</h2>
@@ -163,7 +163,7 @@
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>base</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -175,21 +175,21 @@
 </div>
 
 		<h2 id="code">See the Code</h2>
-		
+
 		<p>Here is what's in Base. As you can see in the code below, or in this example showing <a href="../examples/base/base-simple.html">HTML elements after Base has been applied</a>, it creates a familiar presentation for HTML elements.</p>
-		
+
 <div id="syntax-d6474f813bbef5e66ad530aa2f867a0f" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/* base.css, part of YUI's CSS Foundation */</span></div></li><li class="li1"><div class="de1">h1 <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*18px via YUI Fonts CSS foundation*/</span></div></li><li class="li1"><div class="de1">	<span class="kw1">font-size</span><span class="sy0">:</span><span class="re3"><span class="nu0">138.5</span>%</span><span class="sy0">;</span>  </div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">h2 <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*16px via YUI Fonts CSS foundation*/</span></div></li><li class="li1"><div class="de1">	<span class="kw1">font-size</span><span class="sy0">:</span><span class="re3"><span class="nu0">123.1</span>%</span><span class="sy0">;</span> </div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">h3 <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*14px via YUI Fonts CSS foundation*/</span></div></li><li class="li1"><div class="de1">	<span class="kw1">font-size</span><span class="sy0">:</span><span class="re3"><span class="nu0">108</span>%</span><span class="sy0">;</span>  </div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">h1<span class="sy0">,</span>h2<span class="sy0">,</span>h3 <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	<span class="coMULTI">/* top &amp; bottom margin based on font size */</span></div></li><li class="li1"><div class="de1">	<span class="kw1">margin</span><span class="sy0">:</span><span class="re3">1em</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">h1<span class="sy0">,</span>h2<span class="sy0">,</span>h3<span class="sy0">,</span>h4<span class="sy0">,</span>h5<span class="sy0">,</span>h6<span class="sy0">,</span>strong <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*bringing boldness back to headers and the strong element*/</span></div></li><li class="li2"><div class="de2">	<span class="kw1">font-weight</span><span class="sy0">:</span><span class="kw2">bold</span><span class="sy0">;</span> </div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">abbr<span class="sy0">,</span>acronym <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*indicating to users that more info is available */</span></div></li><li class="li1"><div class="de1">	<span class="kw1">border-bottom</span><span class="sy0">:</span><span class="re3">1px</span> <span class="kw2">dotted</span> <span class="re0">#000</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">	<span class="kw1">cursor</span><span class="sy0">:</span><span class="kw2">help</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span> </div></li><li class="li1"><div class="de1">em <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*bringing italics back to the em element*/</span></div></li><li class="li1"><div class="de1">	<span class="kw1">font-style</span><span class="sy0">:</span><span class="kw2">italic</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">blockquote<span class="sy0">,</span>ul<span class="sy0">,</span>ol<span class="sy0">,</span>dl <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*giving blockquotes and lists room to breath*/</span></div></li><li class="li1"><div class="de1">	<span class="kw1">margin</span><span class="sy0">:</span><span class="re3">1em</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">ol<span class="sy0">,</span>ul<span class="sy0">,</span>dl <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*bringing lists on to the page with breathing room */</span></div></li><li class="li1"><div class="de1">	<span class="kw1">margin-left</span><span class="sy0">:</span><span class="re3">2em</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">ol li <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	<span class="coMULTI">/*giving OL's LIs generated numbers*/</span></div></li><li class="li1"><div class="de1">	<span class="kw1">list-style</span><span class="sy0">:</span> <span class="kw2">decimal</span> <span class="kw2">outside</span><span class="sy0">;</span>	</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">ul li <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*giving UL's LIs generated disc markers*/</span></div></li><li class="li2"><div class="de2">	<span class="kw1">list-style</span><span class="sy0">:</span> <span class="kw2">disc</span> <span class="kw2">outside</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">dl dd <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*giving UL's LIs generated numbers*/</span></div></li><li class="li1"><div class="de1">	<span class="kw1">margin-left</span><span class="sy0">:</span><span class="re3">1em</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">th<span class="sy0">,</span>td <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*borders and padding to make the table readable*/</span></div></li><li class="li1"><div class="de1">	<span class="kw1">border</span><span class="sy0">:</span><span class="re3">1px</span> <span class="kw2">solid</span> <span class="re0">#000</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="kw1">padding</span><span class="sy0">:</span><span class="re3">.5em</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">th <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*distinguishing table headers from data cells*/</span></div></li><li class="li1"><div class="de1">	<span class="kw1">font-weight</span><span class="sy0">:</span><span class="kw2">bold</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="kw1">text-align</span><span class="sy0">:</span><span class="kw2">center</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">caption <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*coordinated marking to match cell's padding*/</span></div></li><li class="li1"><div class="de1">	<span class="kw1">margin-bottom</span><span class="sy0">:</span><span class="re3">.5em</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*centered so it doesn't blend in to other content*/</span></div></li><li class="li2"><div class="de2">	<span class="kw1">text-align</span><span class="sy0">:</span><span class="kw2">center</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">p<span class="sy0">,</span>fieldset<span class="sy0">,</span>table <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*so things don't run into each other*/</span></div></li><li class="li1"><div class="de1">	<span class="kw1">margin-bottom</span><span class="sy0">:</span><span class="re3">1em</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="coMULTI">/* base.css, part of YUI's CSS Foundation */</span>
 h1 <span class="br0">&#123;</span>
 	<span class="coMULTI">/*18px via YUI Fonts CSS foundation*/</span>
-	<span class="kw1">font-size</span><span class="sy0">:</span><span class="re3"><span class="nu0">138.5</span>%</span><span class="sy0">;</span>  
+	<span class="kw1">font-size</span><span class="sy0">:</span><span class="re3"><span class="nu0">138.5</span>%</span><span class="sy0">;</span>
 <span class="br0">&#125;</span>
 h2 <span class="br0">&#123;</span>
 	<span class="coMULTI">/*16px via YUI Fonts CSS foundation*/</span>
-	<span class="kw1">font-size</span><span class="sy0">:</span><span class="re3"><span class="nu0">123.1</span>%</span><span class="sy0">;</span> 
+	<span class="kw1">font-size</span><span class="sy0">:</span><span class="re3"><span class="nu0">123.1</span>%</span><span class="sy0">;</span>
 <span class="br0">&#125;</span>
 h3 <span class="br0">&#123;</span>
 	<span class="coMULTI">/*14px via YUI Fonts CSS foundation*/</span>
-	<span class="kw1">font-size</span><span class="sy0">:</span><span class="re3"><span class="nu0">108</span>%</span><span class="sy0">;</span>  
+	<span class="kw1">font-size</span><span class="sy0">:</span><span class="re3"><span class="nu0">108</span>%</span><span class="sy0">;</span>
 <span class="br0">&#125;</span>
 h1<span class="sy0">,</span>h2<span class="sy0">,</span>h3 <span class="br0">&#123;</span>
 	<span class="coMULTI">/* top &amp; bottom margin based on font size */</span>
@@ -197,13 +197,13 @@ h1<span class="sy0">,</span>h2<span class="sy0">,</span>h3 <span class="br0">&#1
 <span class="br0">&#125;</span>
 h1<span class="sy0">,</span>h2<span class="sy0">,</span>h3<span class="sy0">,</span>h4<span class="sy0">,</span>h5<span class="sy0">,</span>h6<span class="sy0">,</span>strong <span class="br0">&#123;</span>
 	<span class="coMULTI">/*bringing boldness back to headers and the strong element*/</span>
-	<span class="kw1">font-weight</span><span class="sy0">:</span><span class="kw2">bold</span><span class="sy0">;</span> 
+	<span class="kw1">font-weight</span><span class="sy0">:</span><span class="kw2">bold</span><span class="sy0">;</span>
 <span class="br0">&#125;</span>
 abbr<span class="sy0">,</span>acronym <span class="br0">&#123;</span>
 	<span class="coMULTI">/*indicating to users that more info is available */</span>
 	<span class="kw1">border-bottom</span><span class="sy0">:</span><span class="re3">1px</span> <span class="kw2">dotted</span> <span class="re0">#000</span><span class="sy0">;</span>
 	<span class="kw1">cursor</span><span class="sy0">:</span><span class="kw2">help</span><span class="sy0">;</span>
-<span class="br0">&#125;</span> 
+<span class="br0">&#125;</span>
 em <span class="br0">&#123;</span>
 	<span class="coMULTI">/*bringing italics back to the em element*/</span>
 	<span class="kw1">font-style</span><span class="sy0">:</span><span class="kw2">italic</span><span class="sy0">;</span>
@@ -218,7 +218,7 @@ ol<span class="sy0">,</span>ul<span class="sy0">,</span>dl <span class="br0">&#1
 <span class="br0">&#125;</span>
 ol li <span class="br0">&#123;</span>
 	<span class="coMULTI">/*giving OL's LIs generated numbers*/</span>
-	<span class="kw1">list-style</span><span class="sy0">:</span> <span class="kw2">decimal</span> <span class="kw2">outside</span><span class="sy0">;</span>	
+	<span class="kw1">list-style</span><span class="sy0">:</span> <span class="kw2">decimal</span> <span class="kw2">outside</span><span class="sy0">;</span>
 <span class="br0">&#125;</span>
 ul li <span class="br0">&#123;</span>
 	<span class="coMULTI">/*giving UL's LIs generated disc markers*/</span>
@@ -251,15 +251,15 @@ p<span class="sy0">,</span>fieldset<span class="sy0">,</span>table <span class="
 &nbsp;</pre></div><textarea id="syntax-d6474f813bbef5e66ad530aa2f867a0f-plain">/* base.css, part of YUI's CSS Foundation */
 h1 {
 	/*18px via YUI Fonts CSS foundation*/
-	font-size:138.5%;  
+	font-size:138.5%;
 }
 h2 {
 	/*16px via YUI Fonts CSS foundation*/
-	font-size:123.1%; 
+	font-size:123.1%;
 }
 h3 {
 	/*14px via YUI Fonts CSS foundation*/
-	font-size:108%;  
+	font-size:108%;
 }
 h1,h2,h3 {
 	/* top & bottom margin based on font size */
@@ -267,13 +267,13 @@ h1,h2,h3 {
 }
 h1,h2,h3,h4,h5,h6,strong {
 	/*bringing boldness back to headers and the strong element*/
-	font-weight:bold; 
+	font-weight:bold;
 }
 abbr,acronym {
 	/*indicating to users that more info is available */
 	border-bottom:1px dotted #000;
 	cursor:help;
-} 
+}
 em {
 	/*bringing italics back to the em element*/
 	font-style:italic;
@@ -288,7 +288,7 @@ ol,ul,dl {
 }
 ol li {
 	/*giving OL's LIs generated numbers*/
-	list-style: decimal outside;	
+	list-style: decimal outside;
 }
 ul li {
 	/*giving UL's LIs generated disc markers*/
@@ -318,29 +318,29 @@ p,fieldset,table {
 	/*so things don't run into each other*/
 	margin-bottom:1em;
 }
-</textarea></div>		
+</textarea></div>
 
 	<h2 id="support">Support &amp; Community</h2>
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 
 		</div>
          <div class="yui-u">
-		 	
+
 			<div id="cheatsheet">
 				<h3>CSS Reset/Base/Fonts/Grids Cheat Sheet:</h3>
-				
+
 				<a href="http://yuiblog.com/assets/pdf/cheatsheets/css.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/css.gif" width="178" height="132" alt="Cheat Sheet for CSS Reset, Fonts and Grids."></a>
-				
+
 				<p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
 			</div>
-			
+
 			<div id="examples">
 <h3>Base CSS Examples:</h3>
 
@@ -353,7 +353,7 @@ p,fieldset,table {
 </ul>
 
 
-		
+
 		   </div>
 
 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fbase%2F--><h3 id="delicious">YUI Base on del.icio.us:</h3>
@@ -399,15 +399,15 @@ p,fieldset,table {
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

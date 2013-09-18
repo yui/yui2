@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Dialog</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Dialog</h1></div>
 </div>
 <div id="bd">
@@ -105,7 +105,7 @@
 <div id="promo" class="component">
     <h1>YUI 2: Dialog</h1>
     <p> The Dialog component is an extension of <a href="../panel/index.html">Panel</a> that is meant to emulate the behavior of an  dialog window using a floating, draggable HTML element. Dialog provides an interface for easily gathering information from the user without leaving the underlying page context.  The information is collected via a standard HTML form; Dialog supports the submission of form data either through an XMLHttpRequest, through a normal form submission, or through a fully script-based response (where the script reads and responds to the form values and the form is never actually submitted via HTTP to a server).</p>
- 
+
   <div>
     <h4>On This Page:</h4>
     <ul>
@@ -121,7 +121,7 @@
     <ul>
       <li><a href="../../examples/container/index.html">Examples</a>: Explore examples of the Dialog Control in action.</li>
       <li><a href="../../docs/module_container.html">API Documentation</a>: View the full API documentation for the Dialog Control.</li>
-	  <li><a id="releasenotes" href="../../releasenotes/README.container">Release Notes</a>: Detailed change log for the Dialog Control.</li>
+	  <li><a id="releasenotes" href="../../releasenotes/README.container.txt">Release Notes</a>: Detailed change log for the Dialog Control.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Dialog Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
@@ -180,14 +180,14 @@
 <script src="http://yui.yahooapis.com/2.9.0/build/container/container-min.js"></script>
 </textarea></div>
 
-Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
-in which the Dialog Control lives.  You can usually accomplish this simply by putting the class on the 
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element
+in which the Dialog Control lives.  You can usually accomplish this simply by putting the class on the
 <code>&#60;body&#62;</code> tag:</p>
 <div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
 </textarea></div>
-<p class="lastP">For more information on skinning YUI components and making use of default skins, 
-see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+<p class="lastP">For more information on skinning YUI components and making use of default skins,
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a>
 article here on the website.</p>
 
 
@@ -199,7 +199,7 @@ article here on the website.</p>
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../../yuiloader/index.html">YUI Loader</a>, its module name is <code>container</code>. (<a href="../../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -225,7 +225,7 @@ these sections:</p>
 <p>Dialog inherits its constructor and configuration, as well as several other
   important methods, from Panel, and thus from Overlay. See <a href="../panel/index.html">Panel</a> and <a href="../overlay/index.html">Overlay</a> for
   more information on how to utilize Dialog's inherited features.</p>
-  
+
 <h3 id="html">Defining Dialog Markup</h3>
 <p>HTML markup for Dialog uses the same modular format underlying <a href="../module/index.html">Module</a>.
   Because the core interaction supported by Dialog involves gathering information
@@ -339,7 +339,7 @@ myDialog.cfg.queueProperty("buttons", myButtons);
 &nbsp;</pre></div><textarea id="syntax-dd7d958e27f6c7fe3b1e647430364121-plain">myDialog.submit();
 </textarea></div>
 
-<p>The default <code>postmethod</code> for the Dialog is <code>async</code>. Upon submission of a Dialog whose <code>postmethod</code> configuration is set to <code>async</code> (meaning that it will use <a href="../../connection/index.html">Connection Manager</a> to post the form's data via XMLHttpRequest to the URI specified in the form element's <code>action</code> attribute), all of the appropriate <a href="../../connection/index.html">Connection Manager</a> callbacks documented in the API will be executed, allowing for easy handling of the response.  
+<p>The default <code>postmethod</code> for the Dialog is <code>async</code>. Upon submission of a Dialog whose <code>postmethod</code> configuration is set to <code>async</code> (meaning that it will use <a href="../../connection/index.html">Connection Manager</a> to post the form's data via XMLHttpRequest to the URI specified in the form element's <code>action</code> attribute), all of the appropriate <a href="../../connection/index.html">Connection Manager</a> callbacks documented in the API will be executed, allowing for easy handling of the response.
 By default the Dialog is automatically hidden after submission, however the <code>hideaftersubmit</code> configuration property can be used to control this behavior.</p>
 
 <p>For example, to set up the handlers for both successful and failing Dialog submissions when using an asynchronous form post, the code might look like this:</p>
@@ -388,8 +388,8 @@ myDialog.callback.failure = onFailure;
 </textarea></div>
 <p>
 If the Dialog's form contains a file upload input control (<code>&#60input type="file"&#62;</code>) the Dialog will use Connection Manager's <a href="../../connection/index.html#file">file upload</a> support when sending
-out the async request. For file uploads Connection Manager expects the callback to be defined with a single <code>upload</code> handler, replacing the <code>success</code> and <code>failure</code> handlers. 
-The <code>upload</code> handler will be invoked on completion of the transaction: 
+out the async request. For file uploads Connection Manager expects the callback to be defined with a single <code>upload</code> handler, replacing the <code>success</code> and <code>failure</code> handlers.
+The <code>upload</code> handler will be invoked on completion of the transaction:
 </p>
 
 <div id="syntax-cd78ccfeb95277770f780128636c12a1" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> onUpload <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// NOTE: In this case, since Connection Manager uses an iframe for submission,</span></div></li><li class="li1"><div class="de1">    <span class="co1">// o.responseText will contain the contents of the iframe's document.body tag as a string.</span></div></li><li class="li1"><div class="de1">    <span class="co1">// See the Connection Manager documentation for more details</span></div></li><li class="li2"><div class="de2">    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Your data was successfully submitted. The response was: &quot;</span> <span class="sy0">+</span> o.<span class="me1">responseText</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">myDialog.<span class="me1">callback</span>.<span class="me1">upload</span> <span class="sy0">=</span> onUpload<span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> onUpload <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
@@ -473,22 +473,22 @@ myDialog.callback.upload = onUpload;
     <tr class="odd"><td> context </td><td> Array </td><td> null </td>
     <td>
             Allows the Overlay to be aligned relative to a context element. The property expects an array value with the format: <code>[contextElementOrId, overlayCorner, contextElementCorner]</code>,
-            where "contextElementOrId" is the context element or the id of the context element. 
+            where "contextElementOrId" is the context element or the id of the context element.
             </p>
             <p>
             The corner parameters are one of the following string values: "tr" (top right), "tl" (top left), "br" (bottom right), or "bl" (bottom left) and define which corners of the overlay and context element should be aligned.
             </p>
-            
+
             <p>The array also supports optional 4th and 5th entries.</p>
-            
-            <p>The 4th entry is an optional array of event names, or Custom Event objects, which should trigger re-alignment of the Overlay with the currently configured context element. For example:</p> 
+
+            <p>The 4th entry is an optional array of event names, or Custom Event objects, which should trigger re-alignment of the Overlay with the currently configured context element. For example:</p>
             <p><code>[contextId, overlayCorner, contextCorner, ["beforeShow", "windowResize"]]</code></p>
             <p>Will re-align the Overlay to the context element just before it's shown, and whenever the window is resized.</p>
-            
+
             <p>The 5th entry is an optional XY pixel offset, which is to be applied <em>after</em> the Overlay is aligned to the specified corner of the context element, and can be used to add a pixel buffer between the context element and the Overlay.
             For example:</p>
             <p><code>[contextId, overlayCorner, contextCorner, triggerEvents, [10, 20]]</code></p>
-            <p>Will offset the Overlay by 10 pixels along the X axis, and 20 pixels along the Y axis, after aligning the specified corners.</p> 
+            <p>Will offset the Overlay by 10 pixels along the X axis, and 20 pixels along the Y axis, after aligning the specified corners.</p>
     </td>
     </tr>
     <tr><td> fixedcenter </td><td> Boolean </td><td> false </td><td> Specifies whether the Overlay should be automatically centered in the viewport on window scroll and resize. </td></tr>
@@ -507,7 +507,7 @@ myDialog.callback.upload = onUpload;
         <td> autofillheight </td>
         <td> String </td>
         <td> "body" </td>
-        <td> Which container element (header, body or footer) should be sized to fill out any remaining 
+        <td> Which container element (header, body or footer) should be sized to fill out any remaining
         vertical space when a height is set on the container using the <code>height</code> configuration property. Supported values are "header", "body" and "footer". Can be set to null (or false) to turn off the feature.
         </td>
     </tr>
@@ -523,22 +523,22 @@ myDialog.callback.upload = onUpload;
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 </div>
          <div class="yui-u">
-            
+
             <div id="cheatsheet">
                 <h3>Dialog/SimpleDialog Controls Cheat Sheet:</h3>
-                
+
                 <a href="http://yuiblog.com/assets/pdf/cheatsheets/dialog.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/css.gif" width="178" height="132" alt="Cheat Sheet for the Dialog and SimpleDialog Controls"></a>
-                
+
                 <p><a href="../../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
             </div>
-        
+
             <div id="examples">
 <h3>Container Family Examples:</h3>
 
@@ -584,25 +584,25 @@ myDialog.callback.upload = onUpload;
 <li><a href='../../examples/menu/applicationmenubar.html'>Application Menubar</a> (included with examples for the <a href='../../menu/index.html'>Menu Family</a>)</li>
 <li><a href='../../examples/button/btn_example14.html'>Slider Button</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
 <li><a href='../../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../../layout/index.html'>Layout Manager</a>)</li>
-</ul>		
+</ul>
            </div>
-           
+
             <div id="morereading">
                 <h3>More Reading about the YUI Dialog Control:</h3>
-                
+
                 <ul>
                   <li><a href="http://thecodecentral.com/2007/07/13/creating-lightbox-with-yahoo-user-interface-library">Creating Lightbox with Yahoo! User Interface Library</a>, at TheCodeCentral</li>
                   <li><a href="http://www.creativeui.com/2007/04/11/yui-part-iii-the-mighty-dialog/">YUI - Part III - The mighty dialog</a>, by David Baxter on the CreativeUI blog</li>
                </ul>
            </div>
-           
+
 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fcontainer%2Fdialog%2F--><h3 id="delicious">YUI Dialog on del.icio.us:</h3>
 <div class="delicious">
 <div id="delicious-badge">
    <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/container/dialog/" class="bookmark">bookmark on del.icio.us</a></p>
             <p class="be-first">be the first to bookmark this page!</a></p>
    </div></div>
-     
+
          </div>
       </div>
 </div>
@@ -622,15 +622,15 @@ myDialog.callback.upload = onUpload;
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

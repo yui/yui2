@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: SWF Utility</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: SWF Utility</h1></div>
 </div>
 <div id="bd">
@@ -123,7 +123,7 @@
     <li>The SWF Utility uses only <code>&lt;object&gt;</code> tag-based markup for embedding Flash content, which is only properly supported in A-grade browsers.</li>
     <li>While the SWF Utility supports embedding Flash content for Flash Player 6 and above, the ExternalInterface communication is available starting in Flash Player 8 and above.</li>
   </ul>
-  
+
 
   <div>
     <h4>On This Page:</h4>
@@ -133,7 +133,7 @@
       <li><a href="#knownissues">Known Issues</a></li>
       <li><a href="#support">Support &amp; Community</a></li>
       <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
-    
+
     </ul>
   </div>
 
@@ -142,7 +142,7 @@
     <ul>
       <li><a href="../examples/swf/index.html">Examples</a>: Explore examples of the SWF Utility in action.</li>
       <li><a href="../docs/module_swf.html">API Documentation</a>: View the full API documentation for the SWF Utility.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.swf">Release Notes</a>: Detailed change log for the SWF Utility.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.swf.txt">Release Notes</a>: Detailed change log for the SWF Utility.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the SWF Utility as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
@@ -173,7 +173,7 @@
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>swf</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -201,11 +201,11 @@
         width<span class="sy0">:</span> <span class="nu0">50</span>
     <span class="br0">&#125;</span><span class="sy0">,</span>
     flashVars<span class="sy0">:</span> <span class="br0">&#123;</span>
-        flashvar1<span class="sy0">:</span> <span class="st0">&quot;One word&quot;</span><span class="sy0">,</span> 
-        flashvar2<span class="sy0">:</span> <span class="st0">&quot;A word &amp; another&quot;</span><span class="sy0">,</span> 
+        flashvar1<span class="sy0">:</span> <span class="st0">&quot;One word&quot;</span><span class="sy0">,</span>
+        flashvar2<span class="sy0">:</span> <span class="st0">&quot;A word &amp; another&quot;</span><span class="sy0">,</span>
         flashvar3<span class="sy0">:</span> <span class="st0">&quot;Three words - 100% done &amp; done&quot;</span>
     <span class="br0">&#125;</span>
-<span class="br0">&#125;</span><span class="sy0">;</span> 
+<span class="br0">&#125;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-8bb52d696e1b25ee971f5c5e3b611528-plain">var params = {
     version: 9.115,
     useExpressInstall: false,
@@ -215,11 +215,11 @@
         width: 50
     },
     flashVars: {
-        flashvar1: "One word", 
-        flashvar2: "A word & another", 
+        flashvar1: "One word",
+        flashvar2: "A word & another",
         flashvar3: "Three words - 100% done & done"
     }
-}; 
+};
 </textarea></div>
 <p>The parameters are all optional, and are as follows:
     <ul>
@@ -264,11 +264,11 @@
     <li><code>bgcolor</code> - a hexadecimal string in the format #RRGGBB. Sets the background color of the SWF. This attribute will override the setting inside the SWF file.</li>
 
     <li><code>base</code> - a string specifying the URL prepended to all relative paths in the Flash application. By the default resolves to ".", which is the same path as the SWF itself.</li>
-    
+
     <li><code>allowScriptAccess</code> - a parameter that can have one of three possible values: <code>always, sameDomain, never.</code> If set to <code>always</code>, the communication with the Javascript on the page is fully allowed. If set to <code>sameDomain</code>, the communication with the Javascript on the page is only allowed if the SWF is loaded from the same domain as the page containing it. If set to <code>never</code>, the communication with the Javascript is not allowed.</li>
-    
+
     <li><code>allowNetworking</code> - a parameter with possible values of <code>all, internal, none</code>. If set to <code>all</code>, all networking APIs (loading data, opening new browser windows, etc.) are permitted in the SWF. If set to <code>internal</code>, the SWF cannot use browser navigation or interaction, but can use its own network APIs to load and send data. If set to <code>none</code>, the SWF cannot use any networking APIs, including SWF-to-SWF networking.</li>
-    
+
     <li><code>allowFullScreen</code> - a parameter with possible values of <code>true or false</code>. If <code>true</code>, the SWF is allowed to expand to full screen; otherwise, it is not.</li>
 </ul>
 
@@ -285,11 +285,11 @@
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 
     </div>
          <div class="yui-u">
@@ -302,7 +302,7 @@
 </ul>
 
 
-		
+
 </div>
 
 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fswf%2F--><h3 id="delicious">YUI SWF Utility on del.icio.us:</h3>
@@ -347,15 +347,15 @@
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

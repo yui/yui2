@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Rich Text Editor</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Rich Text Editor</h1></div>
 </div>
 <div id="bd">
@@ -107,14 +107,14 @@ li.new, li.new code {
 <div class="yui-b">
   <div class="yui-ge">
       <div class="yui-u first">
-      
-      
+
+
 <div id="promo" class="component">
   <h1>YUI 2: Rich Text Editor</h1>
   <p><img src="assets/editor.png" alt="The Rich Text Editor interface with the default YUI Sam Skin applied." width="350" height="225" class="example">The Rich Text Editor is a UI control that replaces a standard HTML textarea; it allows for the rich formatting of text content, including common structural treatments like lists, formatting treatments like bold and italic text, and drag-and-drop inclusion and sizing of images.  The Rich Text Editor's toolbar is extensible via a plugin architecture so that advanced implementations can achieve a high degree of customization.</p>
-  
+
   <p>In order to give you the greatest possible control over the size and performance of the Rich Text Editor codebase, we provide two versions of the Editor module and two versions of the buttons that live on the Toolbar:</p>
-  
+
   <ul>
     <li><strong>Editor:</strong> Editor contains all features described on this page;</li>
     <li><strong>SimpleEditor:</strong> SimpleEditor contains a subset of Editor's features. (See &quot;<a href="#choosing">Choosing Between Editor and SimpleEditor</a>&quot; for more details.)</li>
@@ -139,7 +139,7 @@ li.new, li.new code {
     <ul>
       <li><a href="../examples/editor/index.html">Examples</a>: Explore examples of the Rich Text Editor in action.</li>
       <li><a href="../docs/module_editor.html">API Documentation</a>: View the full API documentation for the Rich Text Editor.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.editor">Release Notes</a>: Detailed change log for the Rich Text Editor.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.editor.txt">Release Notes</a>: Detailed change log for the Rich Text Editor.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Rich Text Editor as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
@@ -156,8 +156,8 @@ li.new, li.new code {
 <div id="syntax-18e5f5dd5eb8490bc329480ba6e11299" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Skin CSS file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Utility Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> </div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Needed for Menus, Buttons and Overlays used in the Toolbar --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/button/button-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Source file for Rich Text Editor--&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/editor/editor-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Skin CSS file --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css&quot;</span>&gt;</span>
 <span class="sc-1">&lt;!-- Utility Dependencies --&gt;</span>
-<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
-<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 <span class="sc-1">&lt;!-- Needed for Menus, Buttons and Overlays used in the Toolbar --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
@@ -167,8 +167,8 @@ li.new, li.new code {
 &nbsp;</pre></div><textarea id="syntax-18e5f5dd5eb8490bc329480ba6e11299-plain"><!-- Skin CSS file -->
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css">
 <!-- Utility Dependencies -->
-<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
-<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
 <!-- Needed for Menus, Buttons and Overlays used in the Toolbar -->
 <script src="http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js"></script>
 <script src="http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js"></script>
@@ -180,8 +180,8 @@ li.new, li.new code {
 <div id="syntax-6a28a97cb83053a14e0eaf0b9e0a94aa" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Skin CSS file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Utility Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> </div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Needed for Menus, Buttons and Overlays used in the Toolbar --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file for Rich Text Editor--&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/editor/simpleeditor-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Skin CSS file --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css&quot;</span>&gt;</span>
 <span class="sc-1">&lt;!-- Utility Dependencies --&gt;</span>
-<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
-<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 <span class="sc-1">&lt;!-- Needed for Menus, Buttons and Overlays used in the Toolbar --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 <span class="sc-1">&lt;!-- Source file for Rich Text Editor--&gt;</span>
@@ -189,8 +189,8 @@ li.new, li.new code {
 &nbsp;</pre></div><textarea id="syntax-6a28a97cb83053a14e0eaf0b9e0a94aa-plain"><!-- Skin CSS file -->
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css">
 <!-- Utility Dependencies -->
-<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
-<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
 <!-- Needed for Menus, Buttons and Overlays used in the Toolbar -->
 <script src="http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js"></script>
 <!-- Source file for Rich Text Editor-->
@@ -198,14 +198,14 @@ li.new, li.new code {
 </textarea></div>
 
 
-Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
-in which the Rich Text Editor lives.  You can usually accomplish this simply by putting the class on the 
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element
+in which the Rich Text Editor lives.  You can usually accomplish this simply by putting the class on the
 <code>&#60;body&#62;</code> tag:</p>
 <div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
 </textarea></div>
-<p class="lastP">For more information on skinning YUI components and making use of default skins, 
-see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+<p class="lastP">For more information on skinning YUI components and making use of default skins,
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a>
 article here on the website.</p>
 
 
@@ -217,7 +217,7 @@ article here on the website.</p>
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>editor</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -738,7 +738,7 @@ myEditor.on('toolbarLoaded', function() {
         value: 'mybutton3',
         disabled: false
     };
-    
+
     //Add the button to the toolbar; "this"
     //refers to myEditor, our RTE instance:
     this.toolbar.addButton(button);
@@ -847,7 +847,7 @@ _disabled<span class="sy0">:</span> <span class="br0">&#91;</span>
     <span class="st0">'createlink'</span><span class="sy0">,</span>
     <span class="st0">'forecolor'</span><span class="sy0">,</span>
     <span class="st0">'backcolor'</span><span class="sy0">,</span>
-    <span class="st0">'fontname'</span><span class="sy0">,</span> 
+    <span class="st0">'fontname'</span><span class="sy0">,</span>
     <span class="st0">'fontsize'</span><span class="sy0">,</span>
     <span class="st0">'superscript'</span><span class="sy0">,</span>
     <span class="st0">'subscript'</span><span class="sy0">,</span>
@@ -861,7 +861,7 @@ _disabled: [
     'createlink',
     'forecolor',
     'backcolor',
-    'fontname', 
+    'fontname',
     'fontsize',
     'superscript',
     'subscript',
@@ -930,23 +930,23 @@ panel.hideEvent.subscribe(myEditor.hide, myEditor, true);
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 
         </div>
          <div class="yui-u">
-            
+
             <div id="cheatsheet">
                 <h3>Rich Text Editor Cheat Sheet:</h3>
-                
+
                 <a href="http://yuiblog.com/assets/pdf/cheatsheets/editor.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/editor.gif" width="178" height="136" alt="Cheat Sheet for the Rich Text Editor."></a>
-                
+
                 <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
             </div>
-            
+
             <div id="examples">
 <h3>Rich Text Editor Examples:</h3>
 
@@ -978,7 +978,7 @@ panel.hideEvent.subscribe(myEditor.hide, myEditor, true);
 <li><a href='../examples/resize/rte_resize.html'>Custom resizing for the Rich Text Editor</a> (included with examples for the <a href='../resize/index.html'>Resize Utility</a>)</li>
 <li><a href='../examples/layout/calrte_layout.html'>Simple Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
 <li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
-</ul>		
+</ul>
            </div>
            <div id="morereading">
             <h3>More Reading about the YUI Rich Text Editor</h3>
@@ -1035,15 +1035,15 @@ panel.hideEvent.subscribe(myEditor.hide, myEditor, true);
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

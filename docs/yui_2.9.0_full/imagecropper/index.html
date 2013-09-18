@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: ImageCropper</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: ImageCropper</h1></div>
 </div>
 <div id="bd">
@@ -102,12 +102,12 @@
 <div class="yui-b">
   <div class="yui-ge">
       <div class="yui-u first">
-	  
-	  
+
+
 <div id="promo" class="component">
   <h1>YUI 2: ImageCropper</h1>
   <p>The ImageCropper Control gives you an interactive interface for getting the dimensions to crop an image.</p>
- 
+
   <div>
     <h4>On This Page:</h4>
     <ul>
@@ -117,7 +117,7 @@
         <li><a href="#events">ImageCropper Events</a></li>
         <li><a href="#coords">Getting the crop area</a></li>
         <li><a href="#skinning">Skinning ImageCropper</a></li>
-        <li><a href="#knownissues">Known Issues</a></li>        
+        <li><a href="#knownissues">Known Issues</a></li>
         <li><a href="#mobile">YUI on Mobile Devices</a></li>
         <li><a href="#support">Support &amp; Community</a></li>
 	    <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
@@ -129,7 +129,7 @@
     <ul>
       <li><a href="../examples/imagecropper/index.html">Examples</a>: Explore examples of the ImageCropper in action.</li>
       <li><a href="../docs/module_imagecropper.html">API Documentation</a>: View the full API documentation for the ImageCropper.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.imagecropper">Release Notes</a>: Detailed change log for the ImageCropper.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.imagecropper.txt">Release Notes</a>: Detailed change log for the ImageCropper.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the ImageCropper as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
@@ -141,9 +141,9 @@
 <span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/resize.css&quot;</span>&gt;</span>
 <span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/imagecropper.css&quot;</span>&gt;</span>
 <span class="sc-1">&lt;!-- Utility Dependencies --&gt;</span>
-<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
-<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
-<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 <span class="sc-1">&lt;!-- Source file for the Resize Utility --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/resize/resize-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 <span class="sc-1">&lt;!-- Source file for the ImageCropper Control --&gt;</span>
@@ -152,9 +152,9 @@
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/resize.css">
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/imagecropper.css">
 <!-- Utility Dependencies -->
-<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
-<script src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script> 
-<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
 <!-- Source file for the Resize Utility -->
 <script src="http://yui.yahooapis.com/2.9.0/build/resize/resize-min.js"></script>
 <!-- Source file for the ImageCropper Control -->
@@ -170,7 +170,7 @@
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>imagecropper</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -323,7 +323,7 @@
 <span class="br0">&#125;</span>
 &nbsp;</pre></div><textarea id="syntax-4990c3aa1f16ffca98d1b7f34c9ea389-plain">//setup a new cropper
 var cropImg = new YAHOO.widget.ImageCropper('img1');
-//get the crop area 
+//get the crop area
 var cropArea = cropImg.getCropCoords();
 
 // cropArea now looks like this:
@@ -456,23 +456,23 @@ system($comm);
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 
 		</div>
          <div class="yui-u">
-		 	
+
 			<div id="cheatsheet">
 				<h3>ImageCropper Cheat Sheet:</h3>
-				
+
 				<a href="http://yuiblog.com/assets/pdf/cheatsheets/imagecropper.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/imagecropper.gif" width="178" height="121" alt="Cheat Sheet for the ImageCropper Control."></a>
-				
+
 			  <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
 			</div>
-			
+
 			<div id="examples">
 <h3>ImageCropper Control Examples:</h3>
 
@@ -485,9 +485,9 @@ system($comm);
 </ul>
 
 
-		
+
 		   </div>
-		   
+
 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fimagecropper%2F--><h3 id="delicious">YUI ImageCropper on del.icio.us:</h3>
 <div class="delicious">
 <div id="delicious-badge">
@@ -531,15 +531,15 @@ system($comm);
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

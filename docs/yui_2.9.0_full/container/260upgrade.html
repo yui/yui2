@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Container</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Container</h1></div>
 </div>
 <div id="bd">
@@ -111,28 +111,28 @@
             <h5>IE &amp; Sam Skin 1px Rounded Corners</h5>
             <p>1px rounded corners added in 2.3.0 for Sam Skin, are no longer rendered for IE6 or IE7.</p>
             <p>
-               Introducing "layout" and relative positioning to the header, body and footer elements to achieve the 1px 
-               rounded corners for Sam Skin had functional side effects in IE, such as 
-               <a target="_blank" href="http://www.brunildo.org/test/iew_shrink_lay.html">the inability of 
-               auto-width containers to shrink wrap</a>, and the <a target="_blank" href="http://therealcrisp.xs4all.nl/meuk/IE-zindexbug.html">creation of unwanted stacking contexts</a> for header, body and 
+               Introducing "layout" and relative positioning to the header, body and footer elements to achieve the 1px
+               rounded corners for Sam Skin had functional side effects in IE, such as
+               <a target="_blank" href="http://www.brunildo.org/test/iew_shrink_lay.html">the inability of
+               auto-width containers to shrink wrap</a>, and the <a target="_blank" href="http://therealcrisp.xs4all.nl/meuk/IE-zindexbug.html">creation of unwanted stacking contexts</a> for header, body and
                footer elements. On re-evaluation, these functional side effects were not deemed to be worth the cost  to display 1px rounded corners and hence support was removed.
             </p>
             <p>
-               Users who wish to re-establish 1px rounded corners for IE 6 and 7 can add the CSS provided in the following example to 
+               Users who wish to re-establish 1px rounded corners for IE 6 and 7 can add the CSS provided in the following example to
                re-enable them: <a href="1pxRoundedCornersIE.html">Re-enabling 1px rounded corners in IE</a>.
             </p>
         </li>
         <li>
             <h5>Auto-Fill Height</h5>
             <p>
-                In versions prior to 2.6.0, setting the <code>height</code> configuration property on 
-                the container had no impact on the child header, body or footer elements. As a result, 
-                these child elements were sized based on their content resulting in the container being 
+                In versions prior to 2.6.0, setting the <code>height</code> configuration property on
+                the container had no impact on the child header, body or footer elements. As a result,
+                these child elements were sized based on their content resulting in the container being
                 potentially shorter or taller than the sum of it's child header, body and footer elements.
             </p>
             <p>
-                2.6.0 adds an <code>autofillheight</code> configuration property to Overlay, which is set to 
-                <code>"body"</code> by default. This property will result in the container's body element 
+                2.6.0 adds an <code>autofillheight</code> configuration property to Overlay, which is set to
+                <code>"body"</code> by default. This property will result in the container's body element
                 being sized to fill out any remaining space in the container when the <code>height</code>
                 configuration property is set.
             </p>
@@ -142,25 +142,25 @@
         </li>
         <li>
             <h5>Close Button</h5>
-            <p>In order to provide a focusable target across the A-Grade browsers, 2.6.0 changes the 
+            <p>In order to provide a focusable target across the A-Grade browsers, 2.6.0 changes the
             rendering for Panel's close button from a span to an anchor (<code>&#60;A&#62;</code>). CSS and class names applied
-            to the element are unchanged, so unless you're specifically looking for the element type 
+            to the element are unchanged, so unless you're specifically looking for the element type
             in code or CSS customizations, the change should be transparent.</p>
         </li>
     </ul>
 
-    <p>See the <a href="../releasenotes/README.container">Release Notes</a> for detailed information about this change</p>
+    <p>See the <a href="../releasenotes/README.container.txt">Release Notes</a> for detailed information about this change</p>
 
 </div>
 	<h2 id="support">Support &amp; Community</h2>
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 </div>
 </div>
 
@@ -178,15 +178,15 @@
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->

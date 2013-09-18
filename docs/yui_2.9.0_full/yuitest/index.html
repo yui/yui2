@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: YUI Test</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: YUI Test</h1></div>
 </div>
 <div id="bd">
@@ -107,7 +107,7 @@
 <div id="promo" class="component">
 
     <h1>YUI 2: YUI Test</h1>
-    <p>YUI Test is a testing framework for browser-based JavaScript solutions. Using YUI Test, you can easily add unit testing to your JavaScript solutions. While not a direct port from any specific xUnit framework, YUI Test does derive some characteristics from <a href="http://www.nunit.org/">nUnit</a> and <a href="http://www.junit.org/">JUnit</a>.</p> 
+    <p>YUI Test is a testing framework for browser-based JavaScript solutions. Using YUI Test, you can easily add unit testing to your JavaScript solutions. While not a direct port from any specific xUnit framework, YUI Test does derive some characteristics from <a href="http://www.nunit.org/">nUnit</a> and <a href="http://www.junit.org/">JUnit</a>.</p>
     <p>YUI Test features:</p>
     <ul>
         <li>Rapid creation of <strong>test cases</strong> through simple syntax.</li>
@@ -132,7 +132,7 @@
             <li><a href="#mobile">YUI on Mobile Devices</a></li>
             <li><a href="#support">Support &amp; Community</a></li><li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
         </ul>
-        
+
     </div>
 
   <div id="quicklinks">
@@ -140,17 +140,17 @@
     <ul>
       <li><a href="../examples/yuitest/index.html">Examples</a>: Explore examples of the Testing Framework in action.</li>
       <li><a href="../docs/module_yuitest.html">API Documentation</a>: View the full API documentation for the Testing Framework.</li>
-	  <li><a id="releasenotes" href="../releasenotes/README.yuitest">Release Notes</a>: Detailed change log for the Testing Framework.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.yuitest.txt">Release Notes</a>: Detailed change log for the Testing Framework.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Testing Framework as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
-  </div>  
+  </div>
 </div>
 
         <h2 id="video" class="first">Video: Test-Driven Development with YUI Test</h2>
-        
+
         <p>In this 48-minute tech talk from October 2008, Yahoo! engineer Nicholas C. Zakas introduces you to the world of test-driven development and how it can be applied to JavaScript projects using YUI Test. [<a href="http://us.dl1.yimg.com/download.yahoo.com/dl/ydn/yui/theater/zakas-yuitest.m4v">iPod/iPhone compatible download also available</a>.]</p>
-        
+
 <p>
     <div id="yuiVideoContent" style="width:512px;height:322px"></div>
 </p>
@@ -178,14 +178,14 @@ var params = {
     },
     swfURL = "http://l.yimg.com/ht/yep/YV_YEP.swf?ver=2.2.30",
     newswf = new YAHOO.widget.SWF("yuiVideoContent", swfURL, params);
-</script>    
+</script>
 <h2 id="start">Getting Started</h2>
 <p>To use YUI Test, include the following source files in your web page:</p>
 <div id="syntax-136a2d0b7997cfab7ef574d7028f5642" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!--CSS--&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/logger/assets/logger.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yuitest/assets/testlogger.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source File --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yuitest/yuitest-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!--CSS--&gt;</span>
 <span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/logger/assets/logger.css&quot;</span>&gt;</span>
 <span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yuitest/assets/testlogger.css&quot;</span>&gt;</span>
 &nbsp;
-<span class="sc-1">&lt;!-- Dependencies --&gt;</span> 
+<span class="sc-1">&lt;!-- Dependencies --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 <span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
 &nbsp;
@@ -195,7 +195,7 @@ var params = {
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/logger/assets/logger.css">
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/yuitest/assets/testlogger.css">
 
-<!-- Dependencies --> 
+<!-- Dependencies -->
 <script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
 <script src="http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js"></script>
 
@@ -210,7 +210,7 @@ var params = {
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>yuitest</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -221,8 +221,8 @@ var params = {
 
 </div>
 <h2 id="testcases">Using Test Cases</h2>
-<p>The basis of YUI Test is the <code>YAHOO.tool.TestCase</code> object. A <code>TestCase</code> object is created by using the 
-  <code>YAHOO.tool.TestCase</code> constructor and passing in an object containing methods and other information with which 
+<p>The basis of YUI Test is the <code>YAHOO.tool.TestCase</code> object. A <code>TestCase</code> object is created by using the
+  <code>YAHOO.tool.TestCase</code> constructor and passing in an object containing methods and other information with which
   to initialize the test case. Typically, the argument is an object literal, for example:</p>
 <div id="syntax-4a85cd67b72134fa3ca7508f4243fbf4" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;TestCase Name&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    testSomething <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="co1">//...</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    testSomethingElse <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        <span class="co1">//...</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
 &nbsp;
@@ -239,7 +239,7 @@ var params = {
 &nbsp;</pre></div><textarea id="syntax-4a85cd67b72134fa3ca7508f4243fbf4-plain">var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     testSomething : function () {
         //...
     },
@@ -255,11 +255,11 @@ var params = {
   methods in this example are tests methods ( <code>testSomething()</code> and <code>testSomethingElse())</code>, which means
   that they are methods designed to test a specific piece of functional code. Each test method name must begin with <code>test</code> in order to be recognized and
   run as a test and each should have one or more <a href="#assertions">assertions</a> that test data for validity.</p>
-  
-<h3 id="setup-and-teardown">setUp() and tearDown()</h3>  
-<p>As each test method is called, it may be necessary to setup information before it's run and then potentially clean up that information 
-  after the test is run. The <code>setUp()</code> method is run before each and every test in the test case and likewise the <code>tearDown()</code> method is run 
-  after each test is run. These methods should be used in conjunction to create objects before a test is run and free up memory after the 
+
+<h3 id="setup-and-teardown">setUp() and tearDown()</h3>
+<p>As each test method is called, it may be necessary to setup information before it's run and then potentially clean up that information
+  after the test is run. The <code>setUp()</code> method is run before each and every test in the test case and likewise the <code>tearDown()</code> method is run
+  after each test is run. These methods should be used in conjunction to create objects before a test is run and free up memory after the
   test is run. For example:</p>
 <div id="syntax-c5604eff53953bb8b848bc8252677b33" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;TestCase Name&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="co1">//---------------------------------------------</span></div></li><li class="li1"><div class="de1">    <span class="co1">// Setup and tear down</span></div></li><li class="li1"><div class="de1">    <span class="co1">//---------------------------------------------</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    setUp <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        <span class="kw1">this</span>.<span class="me1">data</span> <span class="sy0">=</span> <span class="br0">&#123;</span> <span class="kw3">name</span> <span class="sy0">:</span> <span class="st0">&quot;Nicholas&quot;</span><span class="sy0">,</span> age <span class="sy0">:</span> <span class="nu0">28</span> <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    tearDown <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">delete</span> <span class="kw1">this</span>.<span class="me1">data</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">//---------------------------------------------</span></div></li><li class="li1"><div class="de1">    <span class="co1">// Tests</span></div></li><li class="li1"><div class="de1">    <span class="co1">//---------------------------------------------</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    testName<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Assert</span>.<span class="me1">areEqual</span><span class="br0">&#40;</span><span class="st0">&quot;Nicholas&quot;</span><span class="sy0">,</span> <span class="kw1">this</span>.<span class="me1">data</span>.<span class="kw3">name</span><span class="sy0">,</span> <span class="st0">&quot;Name should be 'Nicholas'&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    testAge<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Assert</span>.<span class="me1">areEqual</span><span class="br0">&#40;</span><span class="nu0">28</span><span class="sy0">,</span> <span class="kw1">this</span>.<span class="me1">data</span>.<span class="me1">age</span><span class="sy0">,</span> <span class="st0">&quot;Age should be 28&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span>    </div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
 &nbsp;
@@ -287,16 +287,16 @@ var params = {
 &nbsp;
     testAge<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
         <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Assert</span>.<span class="me1">areEqual</span><span class="br0">&#40;</span><span class="nu0">28</span><span class="sy0">,</span> <span class="kw1">this</span>.<span class="me1">data</span>.<span class="me1">age</span><span class="sy0">,</span> <span class="st0">&quot;Age should be 28&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
-    <span class="br0">&#125;</span>    
+    <span class="br0">&#125;</span>
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-c5604eff53953bb8b848bc8252677b33-plain">var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     //---------------------------------------------
     // Setup and tear down
     //---------------------------------------------
-    
+
     setUp : function () {
         this.data = { name : "Nicholas", age : 28 };
     },
@@ -315,17 +315,17 @@ var params = {
 
     testAge: function () {
         YAHOO.util.Assert.areEqual(28, this.data.age, "Age should be 28");
-    }    
+    }
 });
 </textarea></div>
 
-<p>In this example, a <code>setUp()</code> method creates a data object with some basic information. Each property of the data object is checked with 
-  a different test, <code>testName()</code> tests the value of <code>data.name</code> while <code>testAge()</code> tests the value of <code>data.age</code>. Afterwards, the data object is deleted 
+<p>In this example, a <code>setUp()</code> method creates a data object with some basic information. Each property of the data object is checked with
+  a different test, <code>testName()</code> tests the value of <code>data.name</code> while <code>testAge()</code> tests the value of <code>data.age</code>. Afterwards, the data object is deleted
   to free up the memory. Real-world implementations will have more complex tests, of course, but they should follow the basic pattern you see in the above code.</p>
 <p><strong>Note: </strong>Both <code>setUp()</code> and <code>tearDown()</code> are optional methods and are only used when defined.</p>
 
 <h3 id="ignoring">Ignoring Tests</h3>
-<p>There may be times when you want to ignore a test (perhaps the test is invalid for your purposes or the functionality is being re-engineered and so it shouldn't be tested at this time). To specify tests to ignore, 
+<p>There may be times when you want to ignore a test (perhaps the test is invalid for your purposes or the functionality is being re-engineered and so it shouldn't be tested at this time). To specify tests to ignore,
   use the <code>_should.ignore</code> property and name each test to skip as a property whose value is set to <code>true</code>:</p>
 <div id="syntax-d998558e30584110d50143930208e58d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;TestCase Name&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="co1">//---------------------------------------------</span></div></li><li class="li1"><div class="de1">    <span class="co1">// Special instructions</span></div></li><li class="li1"><div class="de1">    <span class="co1">//---------------------------------------------</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    _should<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        ignore<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            testName<span class="sy0">:</span> <span class="kw2">true</span> <span class="co1">//ignore this test</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="co1">//---------------------------------------------</span></div></li><li class="li1"><div class="de1">    <span class="co1">// Setup and tear down</span></div></li><li class="li1"><div class="de1">    <span class="co1">//---------------------------------------------</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    setUp <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        <span class="kw1">this</span>.<span class="me1">data</span> <span class="sy0">=</span> <span class="br0">&#123;</span> <span class="kw3">name</span> <span class="sy0">:</span> <span class="st0">&quot;Nicholas&quot;</span><span class="sy0">,</span> age <span class="sy0">:</span> <span class="nu0">28</span> <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    tearDown <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">delete</span> <span class="kw1">this</span>.<span class="me1">data</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">//---------------------------------------------</span></div></li><li class="li1"><div class="de1">    <span class="co1">// Tests</span></div></li><li class="li1"><div class="de1">    <span class="co1">//---------------------------------------------        </span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    testName<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Assert</span>.<span class="me1">areEqual</span><span class="br0">&#40;</span><span class="st0">&quot;Nicholas&quot;</span><span class="sy0">,</span> <span class="kw1">this</span>.<span class="me1">data</span>.<span class="kw3">name</span><span class="sy0">,</span> <span class="st0">&quot;Name should be 'Nicholas'&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    testAge<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Assert</span>.<span class="me1">areEqual</span><span class="br0">&#40;</span><span class="nu0">28</span><span class="sy0">,</span> <span class="kw1">this</span>.<span class="me1">data</span>.<span class="me1">age</span><span class="sy0">,</span> <span class="st0">&quot;Age should be 28&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
 &nbsp;
@@ -369,11 +369,11 @@ var params = {
 &nbsp;</pre></div><textarea id="syntax-d998558e30584110d50143930208e58d-plain">var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     //---------------------------------------------
     // Special instructions
     //---------------------------------------------
-    
+
     _should: {
         ignore: {
             testName: true //ignore this test
@@ -387,14 +387,14 @@ var params = {
     setUp : function () {
         this.data = { name : "Nicholas", age : 28 };
     },
-    
+
     tearDown : function () {
         delete this.data;
     },
-  
+
     //---------------------------------------------
     // Tests
-    //---------------------------------------------        
+    //---------------------------------------------
 
     testName: function () {
         YAHOO.util.Assert.areEqual("Nicholas", this.data.name, "Name should be 'Nicholas'");
@@ -407,14 +407,14 @@ var params = {
 });
 </textarea></div>
 
-<p>Here, the <code>testName()</code> method will be ignored when the test case is run. This is accomplished by first defining the special <code>_should</code> 
-  property and within it, an <code>ignore</code> property. The ignore property is an object containing name-value pairs representing the names of the tests 
-  to ignore. By defining a property named &quot;testName&quot; and setting its value to <code>true</code>, it says that the method named &quot;testName&quot; 
+<p>Here, the <code>testName()</code> method will be ignored when the test case is run. This is accomplished by first defining the special <code>_should</code>
+  property and within it, an <code>ignore</code> property. The ignore property is an object containing name-value pairs representing the names of the tests
+  to ignore. By defining a property named &quot;testName&quot; and setting its value to <code>true</code>, it says that the method named &quot;testName&quot;
   should not be executed.</p>
 
 <h3 id="intentional-errors">Intentional Errors</h3>
-<p>There may be a time that a test throws an error that was expected. For instance, perhaps you're testing a function that should throw an error if invalid data 
-  is passed in. A thrown error in this case can signify that the test has passed. To indicate that 
+<p>There may be a time that a test throws an error that was expected. For instance, perhaps you're testing a function that should throw an error if invalid data
+  is passed in. A thrown error in this case can signify that the test has passed. To indicate that
   a test should throw an error, use the <code>_should.error</code> property.  For example:</p>
 <div id="syntax-232f3de20e0632bfa81b8fa50f3b7354" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">function</span> sortArray<span class="br0">&#40;</span>array<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">if</span> <span class="br0">&#40;</span>array <span class="kw1">instanceof</span> Array<span class="br0">&#41;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        array.<span class="me1">sort</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        <span class="kw1">throw</span> <span class="kw2">new</span> TypeError<span class="br0">&#40;</span><span class="st0">&quot;Expected an array&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;TestCase Name&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">//---------------------------------------------</span></div></li><li class="li1"><div class="de1">    <span class="co1">// Special instructions</span></div></li><li class="li2"><div class="de2">    <span class="co1">//---------------------------------------------</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    _should<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        error<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            testSortArray<span class="sy0">:</span> <span class="kw2">true</span> <span class="co1">//this test should throw an error</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">//---------------------------------------------</span></div></li><li class="li1"><div class="de1">    <span class="co1">// Tests</span></div></li><li class="li2"><div class="de2">    <span class="co1">//---------------------------------------------        </span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    testSortArray<span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        sortArray<span class="br0">&#40;</span><span class="nu0">12</span><span class="br0">&#41;</span><span class="sy0">;</span>  <span class="co1">//this should throw an error</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">function</span> sortArray<span class="br0">&#40;</span>array<span class="br0">&#41;</span> <span class="br0">&#123;</span>
     <span class="kw1">if</span> <span class="br0">&#40;</span>array <span class="kw1">instanceof</span> Array<span class="br0">&#41;</span><span class="br0">&#123;</span>
@@ -458,11 +458,11 @@ var params = {
 var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     //---------------------------------------------
     // Special instructions
     //---------------------------------------------
-    
+
     _should: {
         error: {
             testSortArray: true //this test should throw an error
@@ -471,7 +471,7 @@ var oTestCase = new YAHOO.tool.TestCase({
 
     //---------------------------------------------
     // Tests
-    //---------------------------------------------        
+    //---------------------------------------------
 
     testSortArray: function () {
         sortArray(12);  //this should throw an error
@@ -480,9 +480,9 @@ var oTestCase = new YAHOO.tool.TestCase({
 });
 </textarea></div>
 
-<p>In this example, a test case is created to test the standalone <code>sortArray()</code> function, which simply accepts an array and calls its <code>sort()</code> method. 
-  But if the argument is not an array, an error is thrown. When <code>testSortArray()</code> is called, it throws an error because a number is passed into <code>sortArray()</code>. 
-  Since the <code>_should.error</code> object has a property called &quot;testSortArray&quot; set to <code>true</code>, this indicates that <code>testSortArray()</code> should 
+<p>In this example, a test case is created to test the standalone <code>sortArray()</code> function, which simply accepts an array and calls its <code>sort()</code> method.
+  But if the argument is not an array, an error is thrown. When <code>testSortArray()</code> is called, it throws an error because a number is passed into <code>sortArray()</code>.
+  Since the <code>_should.error</code> object has a property called &quot;testSortArray&quot; set to <code>true</code>, this indicates that <code>testSortArray()</code> should
   pass only if an error is thrown.</p>
 <p>It is possible to be more specific about the error that should be thrown. By setting a property in <code>_should.error</code> to a string, you can
   specify that only a specific error message can be construed as a passed test.  Here's an example:</p>
@@ -528,11 +528,11 @@ var oTestCase = new YAHOO.tool.TestCase({
 var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     //---------------------------------------------
     // Special instructions
     //---------------------------------------------
-    
+
     _should: {
         error: {
             testSortArray: "Expected an array"
@@ -541,7 +541,7 @@ var oTestCase = new YAHOO.tool.TestCase({
 
     //---------------------------------------------
     // Tests
-    //---------------------------------------------        
+    //---------------------------------------------
 
     testSortArray: function () {
         sortArray(12);  //this should throw an error
@@ -596,11 +596,11 @@ you're expecting to occur:</p>
 var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     //---------------------------------------------
     // Special instructions
     //---------------------------------------------
-    
+
     _should: {
         error: {
             testSortArray: TypeError
@@ -609,7 +609,7 @@ var oTestCase = new YAHOO.tool.TestCase({
 
     //---------------------------------------------
     // Tests
-    //---------------------------------------------        
+    //---------------------------------------------
 
     testSortArray: function () {
         sortArray(12);  //this should throw an error
@@ -665,11 +665,11 @@ so specifying a <code>TypeError</code> as expected may give false passes.</p>
 var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     //---------------------------------------------
     // Special instructions
     //---------------------------------------------
-    
+
     _should: {
         error: {
             testSortArray: new TypeError("Expected an array")
@@ -678,7 +678,7 @@ var oTestCase = new YAHOO.tool.TestCase({
 
     //---------------------------------------------
     // Tests
-    //---------------------------------------------        
+    //---------------------------------------------
 
     testSortArray: function () {
         sortArray(12);  //this should throw an error
@@ -690,10 +690,10 @@ var oTestCase = new YAHOO.tool.TestCase({
 <p>Using this code, the <code>testSortArray()</code> method will only pass if a <code>TypeError</code> object is thrown with a message of
   &quot;Expected an array&quot;; if any other type of error occurs, then the test fails due to an unexpected error.</p>
 <p><strong>Note: </strong>If a test is marked as expecting an error, the test will fail unless that specific error is thrown. If the test
-  completes without an error being thrown, then it fails.</p>  
+  completes without an error being thrown, then it fails.</p>
 <h2 id="assertions">Assertions</h2>
-<p>Test methods use assertions to check the validity of a particular action or function. An assertion method tests (asserts) that a 
-condition is valid; if not, it throws an error that causes the test to fail. If all assertions pass within a test method, 
+<p>Test methods use assertions to check the validity of a particular action or function. An assertion method tests (asserts) that a
+condition is valid; if not, it throws an error that causes the test to fail. If all assertions pass within a test method,
 it is said that the test has passed. To aid in writing tests, the <code>YAHOO.util.Assert</code> object contains several assertion
 methods that can be used to validate data.</p>
 <p>Topics covered in this section include:</p>
@@ -723,10 +723,10 @@ methods that can be used to validate data.</p>
 &nbsp;</pre></div><textarea id="syntax-cdc45a567d80b3a4c74caabc56cd8d77-plain">var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     testEqualityAsserts : function () {
         var Assert = YAHOO.util.Assert;
-        
+
         Assert.areEqual(5, 5);     //passes
         Assert.areEqual(5, "5");     //passes
         Assert.areNotEqual(5, 6);  //passes
@@ -760,10 +760,10 @@ methods that can be used to validate data.</p>
 &nbsp;</pre></div><textarea id="syntax-9b743597f0a0ebc864c3bb2ede42ee21-plain">var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     testSamenessAsserts : function () {
         var Assert = YAHOO.util.Assert;
-        
+
         Assert.areSame(5, 5);      //passes
         Assert.areSame(5, "5");    //fails
         Assert.areNotSame(5, 6);   //passes
@@ -811,10 +811,10 @@ methods that can be used to validate data.</p>
 &nbsp;</pre></div><textarea id="syntax-75388c50843da760e19bff4065b08aa3-plain">var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     testDataTypeAsserts : function () {
         var Assert = YAHOO.util.Assert;
-        
+
         Assert.isString("Hello world");     //passes
         Assert.isNumber(1);                 //passes
         Assert.isArray([]);                 //passes
@@ -830,8 +830,8 @@ methods that can be used to validate data.</p>
 </textarea></div>
 <p>In addition to these specific data type assertions, there are two generic data type assertions.</p>
 <p>The <code>isTypeOf()</code> method tests the string returned when the <code>typeof</code> operator is applied to a value. This
-  method accepts three arguments: the type that the value should be (&quot;string&quot;, &quot;number&quot;, 
-  &quot;boolean&quot;, &quot;undefined&quot;, &quot;object&quot;, or &quot;function&quot;), the value to test,  and an optional failure message. 
+  method accepts three arguments: the type that the value should be (&quot;string&quot;, &quot;number&quot;,
+  &quot;boolean&quot;, &quot;undefined&quot;, &quot;object&quot;, or &quot;function&quot;), the value to test,  and an optional failure message.
   For example:</p>
 <div id="syntax-c14c8845078289b6025851e782e0ca08" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;TestCase Name&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    testTypeOf <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> Assert <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Assert</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isTypeOf</span><span class="br0">&#40;</span><span class="st0">&quot;string&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Hello world&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>   <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isTypeOf</span><span class="br0">&#40;</span><span class="st0">&quot;number&quot;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span>               <span class="co1">//passes</span></div></li><li class="li2"><div class="de2">        Assert.<span class="me1">isTypeOf</span><span class="br0">&#40;</span><span class="st0">&quot;boolean&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>           <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isTypeOf</span><span class="br0">&#40;</span><span class="st0">&quot;number&quot;</span><span class="sy0">,</span> <span class="nu0">1.5</span><span class="br0">&#41;</span><span class="sy0">;</span>             <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isTypeOf</span><span class="br0">&#40;</span><span class="st0">&quot;function&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#123;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>  <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isTypeOf</span><span class="br0">&#40;</span><span class="st0">&quot;object&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>              <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isTypeOf</span><span class="br0">&#40;</span><span class="st0">&quot;undefined&quot;</span><span class="sy0">,</span> <span class="kw1">this</span>.<span class="me1">blah</span><span class="br0">&#41;</span><span class="sy0">;</span>    <span class="co1">//passes</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isTypeOf</span><span class="br0">&#40;</span><span class="st0">&quot;number&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Hello world&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Value should be a number.&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">//fails</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
 &nbsp;
@@ -855,10 +855,10 @@ methods that can be used to validate data.</p>
 &nbsp;</pre></div><textarea id="syntax-c14c8845078289b6025851e782e0ca08-plain">var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     testTypeOf : function () {
         var Assert = YAHOO.util.Assert;
-        
+
         Assert.isTypeOf("string", "Hello world");   //passes
         Assert.isTypeOf("number", 1);               //passes
         Assert.isTypeOf("boolean", true);           //passes
@@ -866,14 +866,14 @@ methods that can be used to validate data.</p>
         Assert.isTypeOf("function", function(){});  //passes
         Assert.isTypeOf("object", {});              //passes
         Assert.isTypeOf("undefined", this.blah);    //passes
-        
+
         Assert.isTypeOf("number", "Hello world", "Value should be a number."); //fails
-        
+
     }
 });
 </textarea></div>
 
-<p>If you need to test object types instead of simple data types, you can also use the <code>isInstanceOf()</code> assertion, which accepts three 
+<p>If you need to test object types instead of simple data types, you can also use the <code>isInstanceOf()</code> assertion, which accepts three
   arguments: the constructor function to test for, the value to test, and an optional failure message. This assertion uses the <code>instanceof</code>
   operator to determine if it should pass or fail. Example:</p>
 <div id="syntax-c7b883de40077f3026371eaa394f0051" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;TestCase Name&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    testInstanceOf <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> Assert <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Assert</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isInstanceOf</span><span class="br0">&#40;</span>Object<span class="sy0">,</span> <span class="br0">&#123;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>    <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isInstanceOf</span><span class="br0">&#40;</span>Array<span class="sy0">,</span> <span class="br0">&#91;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>     <span class="co1">//passes            </span></div></li><li class="li2"><div class="de2">        Assert.<span class="me1">isInstanceOf</span><span class="br0">&#40;</span>Object<span class="sy0">,</span> <span class="br0">&#91;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>     <span class="co1">//passes            </span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isInstanceOf</span><span class="br0">&#40;</span><span class="kw2">Function</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#123;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>  <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isInstanceOf</span><span class="br0">&#40;</span>Object<span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#123;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>  <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isTypeOf</span><span class="br0">&#40;</span>Array<span class="sy0">,</span> <span class="br0">&#123;</span><span class="br0">&#125;</span><span class="sy0">,</span> <span class="st0">&quot;Value should be an array.&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">//fails</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
@@ -896,18 +896,18 @@ methods that can be used to validate data.</p>
 &nbsp;</pre></div><textarea id="syntax-c7b883de40077f3026371eaa394f0051-plain">var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     testInstanceOf : function () {
         var Assert = YAHOO.util.Assert;
-        
+
         Assert.isInstanceOf(Object, {});    //passes
-        Assert.isInstanceOf(Array, []);     //passes            
-        Assert.isInstanceOf(Object, []);     //passes            
+        Assert.isInstanceOf(Array, []);     //passes
+        Assert.isInstanceOf(Object, []);     //passes
         Assert.isInstanceOf(Function, function(){});  //passes
         Assert.isInstanceOf(Object, function(){});  //passes
-        
+
         Assert.isTypeOf(Array, {}, "Value should be an array."); //fails
-        
+
     }
 });
 </textarea></div>
@@ -925,7 +925,7 @@ methods that can be used to validate data.</p>
   <li><code>isNotUndefined()</code> - passes if the value is not <code>undefined</code>.</li>
 </ul>
 <p>Each of these methods accepts two arguments: the value to test and an optional failure message. All of the assertions expect the
-  exact value (no type cohersion occurs), so for example calling <code>isFalse(0)</code> will fail.</p>  
+  exact value (no type cohersion occurs), so for example calling <code>isFalse(0)</code> will fail.</p>
 <div id="syntax-59011e8ebe1a0101998bfdf11ab47d9e" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;TestCase Name&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    testSpecialValues <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> Assert <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Assert</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isFalse</span><span class="br0">&#40;</span><span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span>      <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isTrue</span><span class="br0">&#40;</span><span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>        <span class="co1">//passes            </span></div></li><li class="li2"><div class="de2">        Assert.<span class="me1">isNaN</span><span class="br0">&#40;</span>NaN<span class="br0">&#41;</span><span class="sy0">;</span>          <span class="co1">//passes            </span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isNaN</span><span class="br0">&#40;</span><span class="nu0">5</span> <span class="sy0">/</span> <span class="st0">&quot;5&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>      <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isNotNaN</span><span class="br0">&#40;</span><span class="nu0">5</span><span class="br0">&#41;</span><span class="sy0">;</span>         <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isNull</span><span class="br0">&#40;</span><span class="kw2">null</span><span class="br0">&#41;</span><span class="sy0">;</span>        <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isNotNull</span><span class="br0">&#40;</span>undefined<span class="br0">&#41;</span><span class="sy0">;</span>    <span class="co1">//passes</span></div></li><li class="li2"><div class="de2">        Assert.<span class="me1">isUndefined</span><span class="br0">&#40;</span>undefined<span class="br0">&#41;</span><span class="sy0">;</span>  <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isNotUndefined</span><span class="br0">&#40;</span><span class="kw2">null</span><span class="br0">&#41;</span><span class="sy0">;</span>    <span class="co1">//passes</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        Assert.<span class="me1">isUndefined</span><span class="br0">&#40;</span><span class="br0">&#123;</span><span class="br0">&#125;</span><span class="sy0">,</span> <span class="st0">&quot;Value should be undefined.&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">//fails</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
 &nbsp;
     <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;TestCase Name&quot;</span><span class="sy0">,</span>
@@ -950,29 +950,29 @@ methods that can be used to validate data.</p>
 &nbsp;</pre></div><textarea id="syntax-59011e8ebe1a0101998bfdf11ab47d9e-plain">var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     testSpecialValues : function () {
         var Assert = YAHOO.util.Assert;
-        
+
         Assert.isFalse(false);      //passes
-        Assert.isTrue(true);        //passes            
-        Assert.isNaN(NaN);          //passes            
+        Assert.isTrue(true);        //passes
+        Assert.isNaN(NaN);          //passes
         Assert.isNaN(5 / "5");      //passes
         Assert.isNotNaN(5);         //passes
         Assert.isNull(null);        //passes
         Assert.isNotNull(undefined);    //passes
         Assert.isUndefined(undefined);  //passes
         Assert.isNotUndefined(null);    //passes
-        
+
         Assert.isUndefined({}, "Value should be undefined."); //fails
-        
+
     }
 });
 </textarea></div>
 
 <h3 id="forcedfailures">Forced Failures</h3>
-<p>While most tests fail as a result of an assertion, there may be times when 
-  you want to force a test to fail or create your own assertion method. To do this, use the 
+<p>While most tests fail as a result of an assertion, there may be times when
+  you want to force a test to fail or create your own assertion method. To do this, use the
   <code>fail()</code> method to force a test method to fail immediately:</p>
 <div id="syntax-b72aaa8e27cc83c8a78187cc4a65ac02" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;TestCase Name&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    testForceFail <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Assert</span>.<span class="me1">fail</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>  <span class="co1">//causes the test to fail</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
 &nbsp;
@@ -985,15 +985,15 @@ methods that can be used to validate data.</p>
 &nbsp;</pre></div><textarea id="syntax-b72aaa8e27cc83c8a78187cc4a65ac02-plain">var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     testForceFail : function () {
         YAHOO.util.Assert.fail();  //causes the test to fail
     }
 });
 </textarea></div>
 
-<p>In this case, the <code>testForceFail()</code> method does nothing but force 
-  the method to fail. Optionally, you can pass in a message to <code>fail()</code> 
+<p>In this case, the <code>testForceFail()</code> method does nothing but force
+  the method to fail. Optionally, you can pass in a message to <code>fail()</code>
   which will be displayed as the failure message:</p>
 <div id="syntax-9ad4ed81d6a4e6dbdd42f694e3572711" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;TestCase Name&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    testForceFail <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Assert</span>.<span class="me1">fail</span><span class="br0">&#40;</span><span class="st0">&quot;I decided this should fail.&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oTestCase <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
 &nbsp;
@@ -1006,7 +1006,7 @@ methods that can be used to validate data.</p>
 &nbsp;</pre></div><textarea id="syntax-9ad4ed81d6a4e6dbdd42f694e3572711-plain">var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     testForceFail : function () {
         YAHOO.util.Assert.fail("I decided this should fail.");
     }
@@ -1022,7 +1022,7 @@ methods that can be used to validate data.</p>
   and <code>event</code> objects are created with properties containing data about the event (sometimes these properties are browser-specific, so it's
   recommended that you make use of the browser-equalizing methods of <code>YAHOO.util.Event</code> to retrieve the appropriate values for
   properties such as <code>target</code>, <code>relatedTarget</code>, and <code>charCode</code>. All event handlers are called synchronously
-  at each event target throughout the event's lifetime.</p>  
+  at each event target throughout the event's lifetime.</p>
 <h3>Mouse Events</h3>
 <p>There are seven mouse events that can be simulated using methods on <code>UserAction</code>:</p>
 <ul>
@@ -1116,7 +1116,7 @@ YAHOO.util.UserAction.mousemove(document.body, { clientX: 200, clientY: 200 });
 </ul>
 <p>As with the mouse events, each key event has a corresponding method of the same name and accepts two arguments, which are the
   target of the event and an object specifying additional properties for the event. For key events, the second argument is required
-  as you must specify which key was interacted with. For <code>keyup()</code> and <code>keydown()</code>, the <code>keyCode</code> 
+  as you must specify which key was interacted with. For <code>keyup()</code> and <code>keydown()</code>, the <code>keyCode</code>
   property must be specified; for <code>keypress()</code>, the <code>charCode</code> property must be included. In many cases,
   <code>keyCode</code> and <code>charCode</code> may be the same value to represent the same key (97, for instance, represents the &quot;A&quot;
   key as well as being the ASCII code for the letter &quot;a&quot;). For example:</p>
@@ -1129,7 +1129,7 @@ YAHOO.util.UserAction.mousemove(document.body, { clientX: 200, clientY: 200 });
 <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">UserAction</span>.<span class="me1">keydown</span><span class="br0">&#40;</span>element<span class="sy0">,</span> <span class="br0">&#123;</span> keyCode<span class="sy0">:</span> <span class="nu0">97</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
 <span class="co1">//simulate typing &quot;a&quot;</span>
-<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">UserAction</span>.<span class="me1">keypress</span><span class="br0">&#40;</span>element<span class="sy0">,</span> <span class="br0">&#123;</span> charCode<span class="sy0">:</span> <span class="nu0">97</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>    
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">UserAction</span>.<span class="me1">keypress</span><span class="br0">&#40;</span>element<span class="sy0">,</span> <span class="br0">&#123;</span> charCode<span class="sy0">:</span> <span class="nu0">97</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-8fdbbc36957877da5cc6b0c43a703acc-plain">var element = document.getElementById("myDiv");
 
 //simulate a keydown on the A key
@@ -1139,18 +1139,18 @@ YAHOO.util.UserAction.keydown(element, { keyCode: 97 });
 YAHOO.util.UserAction.keydown(element, { keyCode: 97 });
 
 //simulate typing "a"
-YAHOO.util.UserAction.keypress(element, { charCode: 97 });    
+YAHOO.util.UserAction.keypress(element, { charCode: 97 });
 </textarea></div>
 <p>Key events also support the <code>ctrlKey</code>, <code>altKey</code>, <code>shiftKey</code>, and <code>metaKey</code> event properties.</p>
-<p><strong>Note:</strong> Due to differences in browser implementations, key events may not be simulated in the same manner across 
+<p><strong>Note:</strong> Due to differences in browser implementations, key events may not be simulated in the same manner across
   all browsers. For instance, when simulating a keypress event on a textbox, only Firefox will update the textbox with the new character
   of the key that was simulated to be pressed. For other browsers, the events are still registered and all event handlers are called,
   however, the textbox display and <code>value</code> property are not updated. These differences should go away as browser support
   for simulated events improves in the future.</p>
-<p><strong>Safari 2.x Developers:</strong> Due to a bug in the Safari 2.x codebase, simulating a keydown event may cause the browser to 
-  crash. This issue has been resolved in Safari 3.x.</p>  
+<p><strong>Safari 2.x Developers:</strong> Due to a bug in the Safari 2.x codebase, simulating a keydown event may cause the browser to
+  crash. This issue has been resolved in Safari 3.x.</p>
 <h2 id="asynctests">Asynchronous Tests</h2>
-<p>YUI Test allows you to pause a currently running test and resume either after a set amount of time or 
+<p>YUI Test allows you to pause a currently running test and resume either after a set amount of time or
   at another designated time. The <code>TestCase</code> object has a method called <code>wait()</code>. When <code>wait()</code>
   is called, the test immediately exits (meaning that any code after that point will be ignored) and waits for a signal to resume
   the test.</p>
@@ -1185,17 +1185,17 @@ YAHOO.util.UserAction.keypress(element, { charCode: 97 });
         <span class="kw1">this</span>.<span class="me1">wait</span><span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#123;</span>
             <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Assert</span>.<span class="me1">areEqual</span><span class="br0">&#40;</span><span class="nu0">29</span><span class="sy0">,</span> <span class="kw1">this</span>.<span class="me1">data</span>.<span class="me1">age</span><span class="sy0">,</span> <span class="st0">&quot;Age should be 29&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
-        <span class="br0">&#125;</span><span class="sy0">,</span> <span class="nu0">1000</span><span class="br0">&#41;</span><span class="sy0">;</span>   
-    <span class="br0">&#125;</span>  
+        <span class="br0">&#125;</span><span class="sy0">,</span> <span class="nu0">1000</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-42d4c14a7466adb71a2d390e78a0e3ae-plain">var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     //---------------------------------------------
     // Setup and tear down
     //---------------------------------------------
-    
+
     setUp : function () {
         this.data = { name : "Nicholas", age : 29 };
     },
@@ -1210,13 +1210,13 @@ YAHOO.util.UserAction.keypress(element, { charCode: 97 });
 
     testAsync: function () {
         YAHOO.util.Assert.areEqual("Nicholas", this.data.name, "Name should be 'Nicholas'");
-        
+
         //wait 1000 milliseconds and then run this function
         this.wait(function(){
             YAHOO.util.Assert.areEqual(29, this.data.age, "Age should be 29");
-        
-        }, 1000);   
-    }  
+
+        }, 1000);
+    }
 });
 </textarea></div>
 
@@ -1225,7 +1225,7 @@ YAHOO.util.UserAction.keypress(element, { charCode: 97 });
   access to <code>this.data</code> just as the original part of the test does. Timed waits are helpful in situations when
   there are no events to indicate when the test should resume.</p>
 <p>If you want a test to wait until a specific event occurs before resuming, the <code>wait()</code> method can be called
-  without any arguments. At that point, testing will resume only when the <code>resume()</code> method is called. The 
+  without any arguments. At that point, testing will resume only when the <code>resume()</code> method is called. The
   <code>resume()</code> method accepts a single argument, which is a function to run when the test resumes. This function
   should specify additional assertions. The following tests to see if the <code>Anim</code> object has performed its
   animation completely:</p>
@@ -1262,12 +1262,12 @@ YAHOO.util.UserAction.keypress(element, { charCode: 97 });
         <span class="co1">//wait until something happens</span>
         <span class="kw1">this</span>.<span class="me1">wait</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;
-    <span class="br0">&#125;</span>  
+    <span class="br0">&#125;</span>
 <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-2eb38654796c7e76ad8bf050c8ad973f-plain">var oTestCase = new YAHOO.tool.TestCase({
 
     name: "TestCase Name",
-    
+
     //---------------------------------------------
     // Tests
     //---------------------------------------------
@@ -1275,39 +1275,39 @@ YAHOO.util.UserAction.keypress(element, { charCode: 97 });
     testAnimation : function (){
         var Assert = YAHOO.util.Assert;
         var YUD = YAHOO.util.Dom;
-        
+
         //animate width to 400px
         var myAnim = new YAHOO.util.Anim('testDiv', { width: { to: 400 } }, 3, YAHOO.util.Easing.easeOut);
-        
+
         //assign oncomplete handler
         myAnim.onComplete.subscribe(function(){
-        
+
             //tell the TestRunner to resume
             this.resume(function(){
-            
+
                 Assert.areEqual(YUD.get("testDiv").offsetWidth, 400, "Width of the DIV should be 400.");
-            
+
             });
-        
+
         }, this, true);
 
         //start the animation
         myAnim.animate();
-        
+
         //wait until something happens
         this.wait();
-    
-    }  
+
+    }
 });
 </textarea></div><p>In this example, an <code>Anim</code> object is used to animate the width of an element to 400 pixels. When the animation
   is complete, the <code>onComplete</code> method is fired, so that is where the <code>resume()</code> method is called. The
   function passed into <code>resume()</code> simply tests that the final width of the element is indeed 400 pixels. Note that
-  for this to work, the scope of the event handler had to be adjusted by passing in the second and third arguments to 
+  for this to work, the scope of the event handler had to be adjusted by passing in the second and third arguments to
   <code>subscribe()</code>. Once the event handler is set up, the animation begins and then the <code>wait()</code> method is
   called without any arguments. At that point, testing stops until the animation completes and <code>resume()</code> is called.</p>
 <h2 id="testsuites">Test Suites</h2>
-<p>For large web applications, you'll probably have many test cases that should be run during a testing phase. A test suite helps to handle multiple test cases 
-  by grouping them together into functional units that can be run together. To create new test suite, use the <code>YAHOO.tool.TestSuite</code> 
+<p>For large web applications, you'll probably have many test cases that should be run during a testing phase. A test suite helps to handle multiple test cases
+  by grouping them together into functional units that can be run together. To create new test suite, use the <code>YAHOO.tool.TestSuite</code>
   constructor and pass in the name of the test suite. The name you pass in is for logging purposes and allows you to discern which <code>TestSuite</code> instance currently running. For example: </p>
 <div id="syntax-5c77545c9af11204b2fe6edd83f55dda" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//create the test suite</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> oSuite <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestSuite</span><span class="br0">&#40;</span><span class="st0">&quot;TestSuite Name&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//add test cases</span></div></li><li class="li2"><div class="de2">oSuite.<span class="me1">add</span><span class="br0">&#40;</span><span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//...</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">oSuite.<span class="me1">add</span><span class="br0">&#40;</span><span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//...</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">oSuite.<span class="me1">add</span><span class="br0">&#40;</span><span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//...</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//create the test suite</span>
 <span class="kw2">var</span> oSuite <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestSuite</span><span class="br0">&#40;</span><span class="st0">&quot;TestSuite Name&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
@@ -1337,7 +1337,7 @@ oSuite.add(new YAHOO.tool.TestCase({
 }));
 </textarea></div>
 
-<p>Here, a test suite is created and three test cases are added to it using the <code>add()</code> method. The test suite now contains all of the 
+<p>Here, a test suite is created and three test cases are added to it using the <code>add()</code> method. The test suite now contains all of the
   information to run a series of tests.</p>
 <p>It's also possible to add other multiple <code>TestSuite</code> instances together under a parent <code>TestSuite</code> using the same <code>add()</code> method:</p>
 <div id="syntax-fd2908a56bceae46bf82edd5f6a8ced2" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//create a test suite</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> oSuite <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestSuite</span><span class="br0">&#40;</span><span class="st0">&quot;TestSuite Name&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//add a test case</span></div></li><li class="li2"><div class="de2">oSuite.<span class="me1">add</span><span class="br0">&#40;</span><span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    ...</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//create another suite</span></div></li><li class="li2"><div class="de2"><span class="kw2">var</span> oAnotherSuite <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestSuite</span><span class="br0">&#40;</span><span class="st0">&quot;test_suite_name&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//add a test case</span></div></li><li class="li1"><div class="de1">oAnotherSuite.<span class="me1">add</span><span class="br0">&#40;</span><span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestCase</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    ...</div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//add the second suite to the first</span></div></li><li class="li1"><div class="de1">oSuite.<span class="me1">add</span><span class="br0">&#40;</span>oAnotherSuite<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//create a test suite</span>
@@ -1396,18 +1396,18 @@ oSuite.add(oAnotherSuite);
 &nbsp;</pre></div><textarea id="syntax-ae5a55f7ff9d9ee723605300a9dd3763-plain">//create a test suite
 var oSuite = new YAHOO.tool.TestSuite({
     name : "TestSuite Name",
-    
+
     setUp : function () {
-        //test-suite-level setup 
+        //test-suite-level setup
     },
-    
+
     tearDown: function () {
         //test-suite-level teardown
     }
 });
 </textarea></div>
 <p>Test suite <code>setUp()</code> and <code>tearDown()</code> may be helpful in setting up global objects that are necessary for a multitude of tests
-  and test cases.</p>  
+  and test cases.</p>
 <h2 id="running-tests">Running Tests</h2>
 <p>In order to run test cases and test suites, use the <code>YAHOO.tool.TestRunner</code> object. This object is a singleton that
   simply runs all of the tests in test cases and suites, reporting back on passes and failures. To determine which test cases/suites
@@ -1435,8 +1435,8 @@ YAHOO.tool.TestRunner.run();
 <h3>TestRunner Events</h3>
 <p>The <code>TestRunner</code> provides results and information about the process by publishing several events. These events can occur at four
   different points of interest: at the test level, at the test case level, at the test suite level, and at the <code>TestRunner</code> level.
-  The data available for each event depends completely on the type of event and the level at which the event occurs.</p>  
-  
+  The data available for each event depends completely on the type of event and the level at which the event occurs.</p>
+
 <h4>Test-Level Events</h4>
 <p>Test-level events occur during the execution of specific test methods. There are three test-level events:</p>
 <ul>
@@ -1466,10 +1466,10 @@ YAHOO.tool.TestRunner.run();
 </ul>
 <p>For <code>TEST_CASE_COMPLETE_EVENT</code>, an additional property called <code>results</code> is included. The <code>results</code>
   property is an object containing the aggregated results for all tests in the test case (it does not include information about tests that
-  were ignored). Each test that was run has an entry in the <code>result</code> object where the property name is the name of the test method 
-  and the value is an object with two properties: <code>result</code>, which is either "pass" or "fail", and <code>message</code>, which is a 
-  text description of the result (simply "Test passed" when a test passed or the error message when a test fails). Additionally, the 
-  <code>failed</code> property indicates the number of tests that failed in the test case, the <code>passed</code> property indicates the 
+  were ignored). Each test that was run has an entry in the <code>result</code> object where the property name is the name of the test method
+  and the value is an object with two properties: <code>result</code>, which is either "pass" or "fail", and <code>message</code>, which is a
+  text description of the result (simply "Test passed" when a test passed or the error message when a test fails). Additionally, the
+  <code>failed</code> property indicates the number of tests that failed in the test case, the <code>passed</code> property indicates the
   number of tests that passed, and the <code>total</code> property indicates the total number of tests executed. A typical <code>results</code>
   object looks like this:</p>
 <div id="syntax-709ea70a666990fd7051f374c7e78f5a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    failed<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    passed<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    ignored<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    total<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    type<span class="sy0">:</span> <span class="st0">&quot;testcase&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Test Case 0&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    test0<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        result<span class="sy0">:</span> <span class="st0">&quot;pass&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        message<span class="sy0">:</span> <span class="st0">&quot;Test passed&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test0&quot;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    test1<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        result<span class="sy0">:</span> <span class="st0">&quot;fail&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        message<span class="sy0">:</span> <span class="st0">&quot;Assertion failed&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test1&quot;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="br0">&#123;</span>
@@ -1508,7 +1508,7 @@ YAHOO.tool.TestRunner.run();
         type: "test",
         name: "test0"
     },
-    
+
     test1: {
         result: "fail",
         message: "Assertion failed",
@@ -1532,7 +1532,7 @@ YAHOO.tool.TestRunner.run();
 <p>The <code>TEST_SUITE_COMPLETE_EVENT</code> also has a <code>results</code> property, which contains aggregated results for all of the
   test cases (and other test suites) it contains. Each test case and test suite contained within the main suite has an entry in the
   <code>results</code> object, forming a hierarchical structure of data. A typical <code>results</code> object may look like this:</p>
-<div id="syntax-878ea23bad406413a46739391380d855" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="br0">&#123;</span>    </div></li><li class="li1"><div class="de1">    failed<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    passed<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    ignored<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    total<span class="sy0">:</span> <span class="nu0">4</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    type<span class="sy0">:</span> <span class="st0">&quot;testsuite&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Test Suite 0&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    testCase0<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        failed<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        passed<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        ignored<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        total<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        type<span class="sy0">:</span> <span class="st0">&quot;testcase&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;testCase0&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        test0<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            result<span class="sy0">:</span> <span class="st0">&quot;pass&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            message<span class="sy0">:</span> <span class="st0">&quot;Test passed.&quot;</span></div></li><li class="li2"><div class="de2">            type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test0&quot;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">,</span>            </div></li><li class="li1"><div class="de1">        test1<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            result<span class="sy0">:</span> <span class="st0">&quot;fail&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">            message<span class="sy0">:</span> <span class="st0">&quot;Assertion failed.&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test1&quot;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    testCase1<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        failed<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        passed<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        ignored<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        total<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        type<span class="sy0">:</span> <span class="st0">&quot;testcase&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;testCase1&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        test0<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            result<span class="sy0">:</span> <span class="st0">&quot;pass&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">            message<span class="sy0">:</span> <span class="st0">&quot;Test passed.&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test0&quot;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">,</span>            </div></li><li class="li1"><div class="de1">        test1<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">            result<span class="sy0">:</span> <span class="st0">&quot;fail&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            message<span class="sy0">:</span> <span class="st0">&quot;Assertion failed.&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test1&quot;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span>   </div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="br0">&#123;</span>    
+<div id="syntax-878ea23bad406413a46739391380d855" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="br0">&#123;</span>    </div></li><li class="li1"><div class="de1">    failed<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    passed<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    ignored<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    total<span class="sy0">:</span> <span class="nu0">4</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    type<span class="sy0">:</span> <span class="st0">&quot;testsuite&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Test Suite 0&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    testCase0<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        failed<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        passed<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        ignored<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        total<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        type<span class="sy0">:</span> <span class="st0">&quot;testcase&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;testCase0&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        test0<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            result<span class="sy0">:</span> <span class="st0">&quot;pass&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            message<span class="sy0">:</span> <span class="st0">&quot;Test passed.&quot;</span></div></li><li class="li2"><div class="de2">            type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test0&quot;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">,</span>            </div></li><li class="li1"><div class="de1">        test1<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            result<span class="sy0">:</span> <span class="st0">&quot;fail&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">            message<span class="sy0">:</span> <span class="st0">&quot;Assertion failed.&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test1&quot;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    testCase1<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        failed<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        passed<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        ignored<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        total<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        type<span class="sy0">:</span> <span class="st0">&quot;testcase&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;testCase1&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        test0<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            result<span class="sy0">:</span> <span class="st0">&quot;pass&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">            message<span class="sy0">:</span> <span class="st0">&quot;Test passed.&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test0&quot;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">,</span>            </div></li><li class="li1"><div class="de1">        test1<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">            result<span class="sy0">:</span> <span class="st0">&quot;fail&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            message<span class="sy0">:</span> <span class="st0">&quot;Assertion failed.&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test1&quot;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span>   </div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="br0">&#123;</span>
     failed<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span>
     passed<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span>
     ignored<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span>
@@ -1553,7 +1553,7 @@ YAHOO.tool.TestRunner.run();
             message<span class="sy0">:</span> <span class="st0">&quot;Test passed.&quot;</span>
             type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span>
             <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test0&quot;</span>
-        <span class="br0">&#125;</span><span class="sy0">,</span>            
+        <span class="br0">&#125;</span><span class="sy0">,</span>
         test1<span class="sy0">:</span> <span class="br0">&#123;</span>
             result<span class="sy0">:</span> <span class="st0">&quot;fail&quot;</span><span class="sy0">,</span>
             message<span class="sy0">:</span> <span class="st0">&quot;Assertion failed.&quot;</span><span class="sy0">,</span>
@@ -1574,7 +1574,7 @@ YAHOO.tool.TestRunner.run();
             message<span class="sy0">:</span> <span class="st0">&quot;Test passed.&quot;</span><span class="sy0">,</span>
             type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span>
             <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test0&quot;</span>
-        <span class="br0">&#125;</span><span class="sy0">,</span>            
+        <span class="br0">&#125;</span><span class="sy0">,</span>
         test1<span class="sy0">:</span> <span class="br0">&#123;</span>
             result<span class="sy0">:</span> <span class="st0">&quot;fail&quot;</span><span class="sy0">,</span>
             message<span class="sy0">:</span> <span class="st0">&quot;Assertion failed.&quot;</span><span class="sy0">,</span>
@@ -1582,8 +1582,8 @@ YAHOO.tool.TestRunner.run();
             <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test1&quot;</span>
         <span class="br0">&#125;</span>
     <span class="br0">&#125;</span>
-<span class="br0">&#125;</span>   
-&nbsp;</pre></div><textarea id="syntax-878ea23bad406413a46739391380d855-plain">{    
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-878ea23bad406413a46739391380d855-plain">{
     failed: 2,
     passed: 2,
     ignored: 0,
@@ -1604,7 +1604,7 @@ YAHOO.tool.TestRunner.run();
             message: "Test passed."
             type: "test",
             name: "test0"
-        },            
+        },
         test1: {
             result: "fail",
             message: "Assertion failed.",
@@ -1625,7 +1625,7 @@ YAHOO.tool.TestRunner.run();
             message: "Test passed.",
             type: "test",
             name: "test0"
-        },            
+        },
         test1: {
             result: "fail",
             message: "Assertion failed.",
@@ -1633,7 +1633,7 @@ YAHOO.tool.TestRunner.run();
             name: "test1"
         }
     }
-}   
+}
 </textarea></div>
 <p>This example shows the results for a test suite with two test cases, but there may be test suites contained within test suites. In that case,
   the hierarchy is built out accordingly, for example:</p>
@@ -1657,13 +1657,13 @@ YAHOO.tool.TestRunner.run();
             result<span class="sy0">:</span> <span class="st0">&quot;pass&quot;</span><span class="sy0">,</span>
             message<span class="sy0">:</span> <span class="st0">&quot;Test passed.&quot;</span><span class="sy0">,</span>
             type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span>
-            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test0&quot;</span>                
-        <span class="br0">&#125;</span><span class="sy0">,</span>            
+            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test0&quot;</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span>
         test1<span class="sy0">:</span> <span class="br0">&#123;</span>
             result<span class="sy0">:</span> <span class="st0">&quot;fail&quot;</span><span class="sy0">,</span>
             message<span class="sy0">:</span> <span class="st0">&quot;Assertion failed.&quot;</span><span class="sy0">,</span>
             type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span>
-            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test1&quot;</span>                
+            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test1&quot;</span>
         <span class="br0">&#125;</span>
     <span class="br0">&#125;</span><span class="sy0">,</span>
 &nbsp;
@@ -1679,13 +1679,13 @@ YAHOO.tool.TestRunner.run();
             result<span class="sy0">:</span> <span class="st0">&quot;pass&quot;</span><span class="sy0">,</span>
             message<span class="sy0">:</span> <span class="st0">&quot;Test passed.&quot;</span><span class="sy0">,</span>
             type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span>
-            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test0&quot;</span>                
-        <span class="br0">&#125;</span><span class="sy0">,</span>            
+            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test0&quot;</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span>
         test1<span class="sy0">:</span> <span class="br0">&#123;</span>
             result<span class="sy0">:</span> <span class="st0">&quot;fail&quot;</span><span class="sy0">,</span>
             message<span class="sy0">:</span> <span class="st0">&quot;Assertion failed.&quot;</span><span class="sy0">,</span>
             type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span>
-            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test1&quot;</span>                
+            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test1&quot;</span>
         <span class="br0">&#125;</span>
     <span class="br0">&#125;</span><span class="sy0">,</span>
 &nbsp;
@@ -1695,7 +1695,7 @@ YAHOO.tool.TestRunner.run();
         ignored<span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">,</span>
         total<span class="sy0">:</span> <span class="nu0">2</span><span class="sy0">,</span>
         type<span class="sy0">:</span> <span class="st0">&quot;testsuite&quot;</span><span class="sy0">,</span>
-        <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;testSuite0&quot;</span><span class="sy0">,</span>        
+        <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;testSuite0&quot;</span><span class="sy0">,</span>
 &nbsp;
         testCase2<span class="sy0">:</span> <span class="br0">&#123;</span>
             failed<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span>
@@ -1710,7 +1710,7 @@ YAHOO.tool.TestRunner.run();
                 message<span class="sy0">:</span> <span class="st0">&quot;Test passed.&quot;</span><span class="sy0">,</span>
                 type<span class="sy0">:</span> <span class="st0">&quot;test&quot;</span><span class="sy0">,</span>
                 <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;test0&quot;</span>
-            <span class="br0">&#125;</span><span class="sy0">,</span>   
+            <span class="br0">&#125;</span><span class="sy0">,</span>
 &nbsp;
             test1<span class="sy0">:</span> <span class="br0">&#123;</span>
                 result<span class="sy0">:</span> <span class="st0">&quot;fail&quot;</span><span class="sy0">,</span>
@@ -1720,7 +1720,7 @@ YAHOO.tool.TestRunner.run();
             <span class="br0">&#125;</span>
         <span class="br0">&#125;</span>
     <span class="br0">&#125;</span>
-<span class="br0">&#125;</span> 
+<span class="br0">&#125;</span>
 &nbsp;</pre></div><textarea id="syntax-c8c422d9a628e733c96a282a3d38bfb3-plain">{
     failed: 3,
     passed: 3,
@@ -1741,16 +1741,16 @@ YAHOO.tool.TestRunner.run();
             result: "pass",
             message: "Test passed.",
             type: "test",
-            name: "test0"                
-        },            
+            name: "test0"
+        },
         test1: {
             result: "fail",
             message: "Assertion failed.",
             type: "test",
-            name: "test1"                
+            name: "test1"
         }
     },
-    
+
     testCase1: {
         failed: 1,
         passed: 1,
@@ -1763,24 +1763,24 @@ YAHOO.tool.TestRunner.run();
             result: "pass",
             message: "Test passed.",
             type: "test",
-            name: "test0"                
-        },            
+            name: "test0"
+        },
         test1: {
             result: "fail",
             message: "Assertion failed.",
             type: "test",
-            name: "test1"                
+            name: "test1"
         }
     },
-    
+
     testSuite0:{
         failed: 1,
         passed: 1,
         ignored: 0,
         total: 2,
         type: "testsuite",
-        name: "testSuite0",        
-    
+        name: "testSuite0",
+
         testCase2: {
             failed: 1,
             passed: 1,
@@ -1794,8 +1794,8 @@ YAHOO.tool.TestRunner.run();
                 message: "Test passed.",
                 type: "test",
                 name: "test0"
-            },   
-     
+            },
+
             test1: {
                 result: "fail",
                 message: "Assertion failed.",
@@ -1804,7 +1804,7 @@ YAHOO.tool.TestRunner.run();
             }
         }
     }
-} 
+}
 </textarea></div>
 <p>In this code, the test suite contained another test suite named &quot;testSuite0&quot;, which is included in the results along
   with its test cases. At each level, the results are aggregated so that you can tell how many tests passed or failed within each
@@ -1820,8 +1820,8 @@ YAHOO.tool.TestRunner.run();
   also includes a <code>results</code> property that is formatted the same as the data returned from <code>TEST_SUITE_COMPLETE_EVENT</code> and
   contains rollup information for all test cases and tests suites that were added to the <code>TestRunner</code>.</p>
 
-<h4>Subscribing to Events</h4>  
-<p>You can subscribe to particular events by calling the <code>subscribe()</code> method 
+<h4>Subscribing to Events</h4>
+<p>You can subscribe to particular events by calling the <code>subscribe()</code> method
   (see the <a href="../docs/YAHOO.util.EventProvider.html#subscribe">documentation</a>). Your event handler code
   should expect a single object to be passed in as an argument. This object provides information about the event that just occured. Minimally,
   the object has a <code>type</code> property that tells you which type of event occurred. Example:</p>
@@ -1867,7 +1867,7 @@ TestRunner.<span class="me1">subscribe</span><span class="br0">&#40;</span>TestR
 TestRunner.<span class="me1">run</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-052f6a3664e99d3405da5f9ae08ef087-plain">function handleTestResult(data){
     var TestRunner = YAHOO.tool.TestRunner;
-    
+
     switch(data.type) {
         case TestRunner.TEST_FAIL_EVENT:
             alert("Test named '" + data.testName + "' failed with message: '" + data.error.message + "'.");
@@ -1879,7 +1879,7 @@ TestRunner.<span class="me1">run</span><span class="br0">&#40;</span><span class
             alert("Test named '" + data.testName + "' was ignored.");
             break;
     }
-    
+
 }
 
 var TestRunner = YAHOO.tool.TestRunner;
@@ -1890,7 +1890,7 @@ TestRunner.run();
 </textarea></div>
 <h2 id="viewing-results">Viewing Results</h2>
 <p>To view the results of tests, create a new <code>YAHOO.tool.TestLogger</code> object. The <code>TestLogger</code> is a subclass of the
-  <a href="../logger/index.html">Logger</a> widget that is specifically designed to output results from the <code>TestRunner</code>. Before calling 
+  <a href="../logger/index.html">Logger</a> widget that is specifically designed to output results from the <code>TestRunner</code>. Before calling
   <code>TestRunner.run()</code>, create a new instance of the <code>TestLogger</code> to ensure that all results are reported:</p>
 <div id="syntax-52305663a6a1d8a2851187434afa598f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oLogger <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestLogger</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestRunner</span>.<span class="me1">run</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oLogger <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestLogger</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestRunner</span>.<span class="me1">run</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
@@ -1917,7 +1917,7 @@ oReporter.report(results);
 one direction; the reporter does not get any content back from the server.</p>
 <h3>Serialization Formats</h3>
 <p>There are two predefined serialization formats for results objects: XML (the default) and JSON. The format can be
-specified in the <code>TestReporter</code> constructor by passing in <code>YAHOO.tool.TestFormat.XML</code> or 
+specified in the <code>TestReporter</code> constructor by passing in <code>YAHOO.tool.TestFormat.XML</code> or
 <code>YAHOO.tool.TestFormat.JSON</code> (when no argument is specified, <code>YAHOO.tool.TestFormat.XML</code> is used:</p>
 <div id="syntax-7554ea3194fb4ea489a80ae34a9dbb63" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oReporter <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestReporter</span><span class="br0">&#40;</span><span class="st0">&quot;http://www.yourserver.com/path/to/target&quot;</span><span class="sy0">,</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestFormat</span>.<span class="me1">JSON</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oReporter <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestReporter</span><span class="br0">&#40;</span><span class="st0">&quot;http://www.yourserver.com/path/to/target&quot;</span><span class="sy0">,</span> <span class="kw4">YAHOO</span>.<span class="me1">tool</span>.<span class="me1">TestFormat</span>.<span class="me1">JSON</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-7554ea3194fb4ea489a80ae34a9dbb63-plain">var oReporter = new YAHOO.tool.TestReporter("http://www.yourserver.com/path/to/target", YAHOO.tool.TestFormat.JSON);
@@ -1926,22 +1926,22 @@ format:</p>
 <div id="syntax-0d2cc6e6067e1a2b0670428f94bc61ee" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;report <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;YUI Test Results&quot;</span> passed<span class="sy0">=</span><span class="st0">&quot;5&quot;</span> failed<span class="sy0">=</span><span class="st0">&quot;3&quot;</span> ignored<span class="sy0">=</span><span class="st0">&quot;1&quot;</span> total<span class="sy0">=</span><span class="st0">&quot;5&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;testsuite <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;yuisuite&quot;</span> passed<span class="sy0">=</span><span class="st0">&quot;5&quot;</span> failed<span class="sy0">=</span><span class="st0">&quot;0&quot;</span> ignored<span class="sy0">=</span><span class="st0">&quot;0&quot;</span> total<span class="sy0">=</span><span class="st0">&quot;5&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;testcase <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;YAHOO.util.Anim&quot;</span> passed<span class="sy0">=</span><span class="st0">&quot;5&quot;</span> failed<span class="sy0">=</span><span class="st0">&quot;0&quot;</span> ignored<span class="sy0">=</span><span class="st0">&quot;0&quot;</span> total<span class="sy0">=</span><span class="st0">&quot;5&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_getEl&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span> </div></li><li class="li2"><div class="de2">            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_isAnimated&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span> </div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_stop&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span> </div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_onStart&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span> </div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_endValue&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span> </div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="sy0">/</span>testcase&gt;</span></div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="sy0">/</span>testsuite&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span>report&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;report <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;YUI Test Results&quot;</span> passed<span class="sy0">=</span><span class="st0">&quot;5&quot;</span> failed<span class="sy0">=</span><span class="st0">&quot;3&quot;</span> ignored<span class="sy0">=</span><span class="st0">&quot;1&quot;</span> total<span class="sy0">=</span><span class="st0">&quot;5&quot;</span>&gt;</span>
     <span class="sc2">&lt;testsuite <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;yuisuite&quot;</span> passed<span class="sy0">=</span><span class="st0">&quot;5&quot;</span> failed<span class="sy0">=</span><span class="st0">&quot;0&quot;</span> ignored<span class="sy0">=</span><span class="st0">&quot;0&quot;</span> total<span class="sy0">=</span><span class="st0">&quot;5&quot;</span>&gt;</span>
         <span class="sc2">&lt;testcase <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;YAHOO.util.Anim&quot;</span> passed<span class="sy0">=</span><span class="st0">&quot;5&quot;</span> failed<span class="sy0">=</span><span class="st0">&quot;0&quot;</span> ignored<span class="sy0">=</span><span class="st0">&quot;0&quot;</span> total<span class="sy0">=</span><span class="st0">&quot;5&quot;</span>&gt;</span>
-            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_getEl&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span> 
-            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_isAnimated&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span> 
-            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_stop&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span> 
-            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_onStart&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span> 
-            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_endValue&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span> 
+            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_getEl&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span>
+            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_isAnimated&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span>
+            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_stop&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span>
+            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_onStart&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span>
+            <span class="sc2">&lt;test <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;test_endValue&quot;</span> result<span class="sy0">=</span><span class="st0">&quot;pass&quot;</span> message<span class="sy0">=</span><span class="st0">&quot;Test passed&quot;</span> <span class="sy0">/</span>&gt;</span>
         <span class="sc2">&lt;<span class="sy0">/</span>testcase&gt;</span>
     <span class="sc2">&lt;<span class="sy0">/</span>testsuite&gt;</span>
 <span class="sc2">&lt;<span class="sy0">/</span>report&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-0d2cc6e6067e1a2b0670428f94bc61ee-plain"><report name="YUI Test Results" passed="5" failed="3" ignored="1" total="5">
     <testsuite name="yuisuite" passed="5" failed="0" ignored="0" total="5">
         <testcase name="YAHOO.util.Anim" passed="5" failed="0" ignored="0" total="5">
-            <test name="test_getEl" result="pass" message="Test passed" /> 
-            <test name="test_isAnimated" result="pass" message="Test passed" /> 
-            <test name="test_stop" result="pass" message="Test passed" /> 
-            <test name="test_onStart" result="pass" message="Test passed" /> 
-            <test name="test_endValue" result="pass" message="Test passed" /> 
+            <test name="test_getEl" result="pass" message="Test passed" />
+            <test name="test_isAnimated" result="pass" message="Test passed" />
+            <test name="test_stop" result="pass" message="Test passed" />
+            <test name="test_onStart" result="pass" message="Test passed" />
+            <test name="test_endValue" result="pass" message="Test passed" />
         </testcase>
     </testsuite>
 </report>
@@ -1976,32 +1976,32 @@ format:</p>
                 <span class="st0">&quot;result&quot;</span><span class="sy0">:</span><span class="st0">&quot;pass&quot;</span><span class="sy0">,</span>
                 <span class="st0">&quot;message&quot;</span><span class="sy0">:</span><span class="st0">&quot;Test passed.&quot;</span><span class="sy0">,</span>
                 <span class="st0">&quot;type&quot;</span><span class="sy0">:</span><span class="st0">&quot;test&quot;</span><span class="sy0">,</span>
-                <span class="st0">&quot;name&quot;</span><span class="sy0">:</span><span class="st0">&quot;test_getEl&quot;</span>            
+                <span class="st0">&quot;name&quot;</span><span class="sy0">:</span><span class="st0">&quot;test_getEl&quot;</span>
             <span class="br0">&#125;</span><span class="sy0">,</span>
             <span class="st0">&quot;test_isAnimated&quot;</span><span class="sy0">:</span><span class="br0">&#123;</span>
                 <span class="st0">&quot;result&quot;</span><span class="sy0">:</span><span class="st0">&quot;pass&quot;</span><span class="sy0">,</span>
                 <span class="st0">&quot;message&quot;</span><span class="sy0">:</span><span class="st0">&quot;Test passed.&quot;</span><span class="sy0">,</span>
                 <span class="st0">&quot;type&quot;</span><span class="sy0">:</span><span class="st0">&quot;test&quot;</span><span class="sy0">,</span>
-                <span class="st0">&quot;name&quot;</span><span class="sy0">:</span><span class="st0">&quot;test_isAnimated&quot;</span>            
+                <span class="st0">&quot;name&quot;</span><span class="sy0">:</span><span class="st0">&quot;test_isAnimated&quot;</span>
             <span class="br0">&#125;</span><span class="sy0">,</span>
             <span class="st0">&quot;test_stop&quot;</span><span class="sy0">:</span><span class="br0">&#123;</span>
                 <span class="st0">&quot;result&quot;</span><span class="sy0">:</span><span class="st0">&quot;pass&quot;</span><span class="sy0">,</span>
                 <span class="st0">&quot;message&quot;</span><span class="sy0">:</span><span class="st0">&quot;Test passed.&quot;</span><span class="sy0">,</span>
                 <span class="st0">&quot;type&quot;</span><span class="sy0">:</span><span class="st0">&quot;test&quot;</span><span class="sy0">,</span>
-                <span class="st0">&quot;name&quot;</span><span class="sy0">:</span><span class="st0">&quot;test_stop&quot;</span>            
+                <span class="st0">&quot;name&quot;</span><span class="sy0">:</span><span class="st0">&quot;test_stop&quot;</span>
             <span class="br0">&#125;</span><span class="sy0">,</span>
             <span class="st0">&quot;test_onStart&quot;</span><span class="sy0">:</span><span class="br0">&#123;</span>
                 <span class="st0">&quot;result&quot;</span><span class="sy0">:</span><span class="st0">&quot;pass&quot;</span><span class="sy0">,</span>
                 <span class="st0">&quot;message&quot;</span><span class="sy0">:</span><span class="st0">&quot;Test passed.&quot;</span><span class="sy0">,</span>
                 <span class="st0">&quot;type&quot;</span><span class="sy0">:</span><span class="st0">&quot;test&quot;</span><span class="sy0">,</span>
-                <span class="st0">&quot;name&quot;</span><span class="sy0">:</span><span class="st0">&quot;test_onStart&quot;</span>            
+                <span class="st0">&quot;name&quot;</span><span class="sy0">:</span><span class="st0">&quot;test_onStart&quot;</span>
             <span class="br0">&#125;</span><span class="sy0">,</span>
             <span class="st0">&quot;test_endValue&quot;</span><span class="sy0">:</span><span class="br0">&#123;</span>
                 <span class="st0">&quot;result&quot;</span><span class="sy0">:</span><span class="st0">&quot;pass&quot;</span><span class="sy0">,</span>
                 <span class="st0">&quot;message&quot;</span><span class="sy0">:</span><span class="st0">&quot;Test passed.&quot;</span><span class="sy0">,</span>
                 <span class="st0">&quot;type&quot;</span><span class="sy0">:</span><span class="st0">&quot;test&quot;</span><span class="sy0">,</span>
-                <span class="st0">&quot;name&quot;</span><span class="sy0">:</span><span class="st0">&quot;test_endValue&quot;</span>            
-            <span class="br0">&#125;</span>        
+                <span class="st0">&quot;name&quot;</span><span class="sy0">:</span><span class="st0">&quot;test_endValue&quot;</span>
+            <span class="br0">&#125;</span>
         <span class="br0">&#125;</span>
     <span class="br0">&#125;</span>
 <span class="br0">&#125;</span>
@@ -2012,7 +2012,7 @@ format:</p>
     "total": 0,
     "type": "report",
     "name": "YUI Test Results",
-    
+
     "yuisuite":{
         "passed": 5,
         "failed": 0,
@@ -2020,7 +2020,7 @@ format:</p>
         "total": 0,
         "type": "testsuite",
         "name": "yuisuite",
-        
+
         "YAHOO.util.Anim":{
             "passed": 5,
             "failed": 0,
@@ -2028,37 +2028,37 @@ format:</p>
             "total": 0,
             "type":"testcase",
             "name":"YAHOO.util.Anim",
-            
+
             "test_getEl":{
                 "result":"pass",
                 "message":"Test passed.",
                 "type":"test",
-                "name":"test_getEl"            
+                "name":"test_getEl"
             },
             "test_isAnimated":{
                 "result":"pass",
                 "message":"Test passed.",
                 "type":"test",
-                "name":"test_isAnimated"            
+                "name":"test_isAnimated"
             },
             "test_stop":{
                 "result":"pass",
                 "message":"Test passed.",
                 "type":"test",
-                "name":"test_stop"            
+                "name":"test_stop"
             },
             "test_onStart":{
                 "result":"pass",
                 "message":"Test passed.",
                 "type":"test",
-                "name":"test_onStart"            
+                "name":"test_onStart"
             },
             "test_endValue":{
                 "result":"pass",
                 "message":"Test passed.",
                 "type":"test",
-                "name":"test_endValue"            
-            }        
+                "name":"test_endValue"
+            }
         }
     }
 }
@@ -2072,7 +2072,7 @@ the default fields back to the server:</p>
 oReporter.<span class="me1">addField</span><span class="br0">&#40;</span><span class="st0">&quot;message&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Hello world!&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-6917dbb96398f8051180aa4a1265a16d-plain">oReporter.addField("color", "blue");
 oReporter.addField("message", "Hello world!");
-</textarea></div><p>Note that if you specify a field name that is the same as a default field, the custom field is ignored in favor of 
+</textarea></div><p>Note that if you specify a field name that is the same as a default field, the custom field is ignored in favor of
 the default field.</p>
 
 <h2 id="mobile">YUI on Mobile: Using Testing Framework with "A-Grade" Mobile Browsers</h2>
@@ -2094,7 +2094,7 @@ the default field.</p>
 </ul></div>
 <p>YUI Test works with only minor issues on mobile devices. Things to be aware of:</p>
 <ul>
-    <li>Asynchronous tests may not work. Certain mobile browsers, such as Opera Mini 4, do not support the 
+    <li>Asynchronous tests may not work. Certain mobile browsers, such as Opera Mini 4, do not support the
         <code>setTimeout()</code> function, which is necessary for asynchronous tests. YUI Test will automatically
         revert to synchronous mode for running tests in this situation and any tests that the <code>wait()</code>
         method will throw an error.</li>
@@ -2107,23 +2107,23 @@ the default field.</p>
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
 
       </div>
          <div class="yui-u">
-            
+
             <div id="cheatsheet">
                 <h3>YUI Test Cheat Sheet:</h3>
-                
+
                 <a href="http://yuiblog.com/assets/pdf/cheatsheets/yuitest.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/yuitest.gif" width="178" height="132" alt="Cheat Sheet for the YUI Test Utility"></a>
-                
+
                 <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
             </div>
-            
+
             <div id="examples">
 <h3>YUI Test Utility Examples:</h3>
 
@@ -2136,7 +2136,7 @@ the default field.</p>
 </ul>
 
 
-		
+
            </div>
 
 <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fyuitest%2F--><h3 id="delicious">YUI Test on del.icio.us:</h3>
@@ -2181,15 +2181,15 @@ the default field.</p>
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>

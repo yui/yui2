@@ -3,7 +3,7 @@
 <head>
 	<title>YUI 2: Overlay</title>
 
-    
+
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8">
     	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
@@ -78,7 +78,7 @@
 <div id="hd">
 	<div id="ygunav">
 		<p><em>
-			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
 			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
 			</em>
 		</p>
@@ -92,7 +92,7 @@
 		</form>
 	</div>
 
-	
+
 	<div id="pagetitle"><h1>YUI 2: Overlay</h1></div>
 </div>
 <div id="bd">
@@ -122,14 +122,14 @@
     <ul>
       <li><a href="../../examples/container/index.html">Examples</a>: Explore examples of the Overlay Control in action.</li>
       <li><a href="../../docs/module_container.html">API Documentation</a>: View the full API documentation for the Overlay Control.</li>
-	  <li><a id="releasenotes" href="../../releasenotes/README.container">Release Notes</a>: Detailed change log for the Overlay Control.</li>
+	  <li><a id="releasenotes" href="../../releasenotes/README.container.txt">Release Notes</a>: Detailed change log for the Overlay Control.</li>
       <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
       <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Overlay Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
     </ul>
   </div>
 </div>
 <h2 class="first">Getting Started<a name="start"></a></h2>
-<p>To use Overlay, include the following code in your page:</p> 
+<p>To use Overlay, include the following code in your page:</p>
 <div id="syntax-6977741380043a712da7f46d53a377e9" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Sam Skin CSS --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: Animation (only required if using ContainerEffect) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Sam Skin CSS --&gt;</span>
 <span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css&quot;</span>&gt;</span>
 &nbsp;
@@ -162,17 +162,17 @@
 </textarea></div>
 <p>Note that a CSS file is not required if you're only using <code>container_core-min.js</code>, however for the Overlay to operate as designed,
 it does need to be positioned absolutely. The <code>yui-overlay</code> class applied to all overlays can be used to define your own rule to apply
-<code>position:absolute</code> for all overlays. Alternatively you could include the <code>container.css</code> file mentioned above, but since it only has a single 
+<code>position:absolute</code> for all overlays. Alternatively you could include the <code>container.css</code> file mentioned above, but since it only has a single
 rule which applies to Overlays, it's overkill if you're aiming to optimize the amount of code required for your page.</p>
 
-Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
-in which the Overlay Control lives.  You can usually accomplish this simply by putting the class on the 
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element
+in which the Overlay Control lives.  You can usually accomplish this simply by putting the class on the
 <code>&#60;body&#62;</code> tag:</p>
 <div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
 </textarea></div>
-<p class="lastP">For more information on skinning YUI components and making use of default skins, 
-see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+<p class="lastP">For more information on skinning YUI components and making use of default skins,
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a>
 article here on the website.</p>
 
 
@@ -184,7 +184,7 @@ article here on the website.</p>
 
 <p>
   <strong>Note:</strong> If you wish to include this component via the <a href="../../yuiloader/index.html">YUI Loader</a>, its module name is <code>container</code>. (<a href="../../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
-  
+
   </p>
 </div>
 
@@ -197,7 +197,7 @@ article here on the website.</p>
 <h2>Using Overlay<a name="using"></a></h2>
 <p>This section describes common tasks for creating and using Overlay.  It contains
 these sections:</p>
-<ul> 
+<ul>
 <li><a href="#html">Defining Overlay Markup</a></li>
 <li><a href="#init">Initializing Overlay</a></li>
 <li><a href="#position">Positioning the Overlay </a></li>
@@ -211,14 +211,14 @@ Note that Overlay inherits its constructor and configuration, as well as several
 <p>
 In its most basic form, the HTML markup for an Overlay looks like this:</p>
 <div id="syntax-a4bcb24f28c73bd095c1a97a4b133126" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myOverlay&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;hd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> </div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;bd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> </div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;ft&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> </div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myOverlay&quot;</span>&gt;</span>
-  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;hd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> 
-  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;bd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> 
-  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;ft&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> 
+  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;hd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;bd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;ft&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
 <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
 &nbsp;</pre></div><textarea id="syntax-a4bcb24f28c73bd095c1a97a4b133126-plain"><div id="myOverlay">
-  <div class="hd"></div> 
-  <div class="bd"></div> 
-  <div class="ft"></div> 
+  <div class="hd"></div>
+  <div class="bd"></div>
+  <div class="ft"></div>
 </div>
 </textarea></div><h3>Initializing Overlay<a name="init"></a></h3>
 <p>
@@ -263,12 +263,12 @@ myOverlay.cfg.setProperty("fixedcenter", true);
 myOverlay.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;context&quot;</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="st0">&quot;myContextEl&quot;</span><span class="sy0">,</span> <span class="st0">&quot;tr&quot;</span><span class="sy0">,</span> <span class="st0">&quot;tl&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 <span class="co1">// To change the alignment later, you can also call &quot;align&quot; once the context property has already been set.</span>
 <span class="co1">// This call will change the alignment so that myOverlay's top right corner is snapped to &quot;myContextEl&quot;'s bottom left corner.</span>
-myOverlay.<span class="me1">align</span><span class="br0">&#40;</span><span class="st0">&quot;tr&quot;</span><span class="sy0">,</span> <span class="st0">&quot;bl&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> 
+myOverlay.<span class="me1">align</span><span class="br0">&#40;</span><span class="st0">&quot;tr&quot;</span><span class="sy0">,</span> <span class="st0">&quot;bl&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
 &nbsp;</pre></div><textarea id="syntax-631dc72dad05d19c89cf984040a7c60b-plain">// This call says that myOverlay's top right corner should be snapped to "myContextEl"'s top left corner.
 myOverlay.cfg.setProperty("context", ["myContextEl", "tr", "tl"]);
 // To change the alignment later, you can also call "align" once the context property has already been set.
 // This call will change the alignment so that myOverlay's top right corner is snapped to "myContextEl"'s bottom left corner.
-myOverlay.align("tr", "bl"); 
+myOverlay.align("tr", "bl");
 </textarea></div>
 
 <p>
@@ -277,7 +277,7 @@ For example, unlike the <code>fixedcenter</code> property which repositions the 
 the page co-ordinates of the context element remains unchanged when the user scrolls or resizes the window.
 </p>
 <p>
-However if the layout of your page could result in the page co-orindates of the context element being modified (e.g. in fluid layouts), you can provide an optional 
+However if the layout of your page could result in the page co-orindates of the context element being modified (e.g. in fluid layouts), you can provide an optional
 list of events which should trigger context element re-alignment as shown below:
 </p>
 <div id="syntax-99c57fbdd71b2675bec5f02f1089ca81" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// myOverlay's top right corner should be snapped to &quot;myContextEl&quot;'s top left corner, and we should realign just before the Overlay is shown, or whenever the window is resized:</span></div></li><li class="li1"><div class="de1">myOverlay.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;context&quot;</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="st0">&quot;myContextEl&quot;</span><span class="sy0">,</span> <span class="st0">&quot;tr&quot;</span><span class="sy0">,</span> <span class="st0">&quot;tl&quot;</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="st0">&quot;beforeShow&quot;</span><span class="sy0">,</span> <span class="st0">&quot;windowResize&quot;</span><span class="br0">&#93;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// myOverlay's top right corner should be snapped to &quot;myContextEl&quot;'s top left corner, and we should realign just before the Overlay is shown, or whenever the window is resized:</span>
@@ -294,11 +294,11 @@ method, the parent element to which the Overlay should be added.
 
 <h3>Stacking the Overlay<a name="stack"></a></h3>
 <p>
-One piece of core functionality provided by Overlay is support for a <code>zIndex</code> 
-configuration property that enables it to be stacked above other elements on the page. 
-The zIndex configuration property is an interface for setting the 
-<a href="http://www.w3.org/TR/CSS21/visuren.html#propdef-z-index">CSS z-index property</a>, and 
-understanding how the browser handles z-index values is therefore an important part of using the  
+One piece of core functionality provided by Overlay is support for a <code>zIndex</code>
+configuration property that enables it to be stacked above other elements on the page.
+The zIndex configuration property is an interface for setting the
+<a href="http://www.w3.org/TR/CSS21/visuren.html#propdef-z-index">CSS z-index property</a>, and
+understanding how the browser handles z-index values is therefore an important part of using the
 Overlay control and its subclasses.
 </p>
 <p>
@@ -309,8 +309,8 @@ Understanding stacking contexts will help you answer this question.
 <h4>Understanding z-index and stacking contexts</h4>
 <p>
 Relatively and absolutely positioned elements can overlap other elements on the page. In situations where
-elements overlap, the browser uses the CSS z-index property to determine how overlapping elements are 
-stacked on top of each other along the z-axis: Generally speaking elements with higher z-indices are 
+elements overlap, the browser uses the CSS z-index property to determine how overlapping elements are
+stacked on top of each other along the z-axis: Generally speaking elements with higher z-indices are
 rendered above elements with lower z-indices.
 </p>
 <p>Consider the following simple markup structure:</p>
@@ -334,13 +334,13 @@ rendered above elements with lower z-indices.
         <div id="B1" style="position:absolute;z-index:10;">B1, z-index = 10</div>
     </div>
 </body>
-</textarea></div><p>In the example above, <code>DIV A1</code> would be rendered on top of <code>DIV B1</code> 
-if they were to overlap. <code>DIV A1</code> and <code>DIV B1</code> both have the same 
-<em>stacking context</em>, the root or <code>body</code> element, and are stacked relative to 
+</textarea></div><p>In the example above, <code>DIV A1</code> would be rendered on top of <code>DIV B1</code>
+if they were to overlap. <code>DIV A1</code> and <code>DIV B1</code> both have the same
+<em>stacking context</em>, the root or <code>body</code> element, and are stacked relative to
 each other within this context based on their z-index values.
 </p>
 <p>
-However, if <code>DIV A</code> and <code>DIV B</code> are either relatively or 
+However, if <code>DIV A</code> and <code>DIV B</code> are either relatively or
 absolutely positioned, the scenario changes:
 </p>
 <div id="syntax-e1cee15671e8376de6eb85ede7aff312" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc-1">&lt;!-- DIV A and B are now relatively positioned --&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;A&quot;</span> <span class="kw3">style</span><span class="sy0">=</span><span class="st0">&quot;position:relative; z-index:1&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;A1&quot;</span> <span class="kw3">style</span><span class="sy0">=</span><span class="st0">&quot;position:absolute;z-index:20;&quot;</span>&gt;</span>A1, z-index = 20<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;B&quot;</span> <span class="kw3">style</span><span class="sy0">=</span><span class="st0">&quot;position:relative; z-index:2&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;B1&quot;</span> <span class="kw3">style</span><span class="sy0">=</span><span class="st0">&quot;position:absolute;z-index:10;&quot;</span>&gt;</span>B1, z-index = 10<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">body</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span>&gt;</span>
@@ -362,38 +362,38 @@ absolutely positioned, the scenario changes:
     </div>
 </body>
 </textarea></div><p>
-   <code>DIV B1 (z-index=10)</code> will be rendered on top of <code>DIV A1 (z-index=20)</code>, even though it has a lower z-index. 
+   <code>DIV B1 (z-index=10)</code> will be rendered on top of <code>DIV A1 (z-index=20)</code>, even though it has a lower z-index.
 </p>
 <p>
-   With different, positioned, parent elements, <code>DIV A1</code> and <code>DIV B1</code> no 
-   longer share a stacking context.  As per the 
-   <a href="http://www.w3.org/TR/CSS21/visuren.html#layers">W3C layering spec</a>, 
-   <code>DIV A</code> and <code>DIV B</code> establish stacking contexts since they are relatively 
-   positioned <strong>AND</strong> have a z-index defined.  Therefore, when determining how to 
-   stack the elements the browser doesn't compare their z-index values relative to each other, but 
+   With different, positioned, parent elements, <code>DIV A1</code> and <code>DIV B1</code> no
+   longer share a stacking context.  As per the
+   <a href="http://www.w3.org/TR/CSS21/visuren.html#layers">W3C layering spec</a>,
+   <code>DIV A</code> and <code>DIV B</code> establish stacking contexts since they are relatively
+   positioned <strong>AND</strong> have a z-index defined.  Therefore, when determining how to
+   stack the elements the browser doesn't compare their z-index values relative to each other, but
    rather to other elements in the stacking contexts established by their separate parent elements.
 </p>
 
 <p>
-Additionally, since <code>DIV A</code> and <code>DIV B</code> share a stacking context (<code>body</code>), 
-they are stacked so that <code>DIV B (z-index=2)</code> is placed above <code>DIV A (z-index=1)</code>, 
-based on their z-index values.  Furthermore, any elements which are children of <code>DIV A</code> 
-will always be below <code>DIV B</code> and any of its children.  No matter how high or low  
-the z-indices of <code>DIV A1</code> and <code>DIV B1</code> are set, <code>DIV B1</code> will 
+Additionally, since <code>DIV A</code> and <code>DIV B</code> share a stacking context (<code>body</code>),
+they are stacked so that <code>DIV B (z-index=2)</code> is placed above <code>DIV A (z-index=1)</code>,
+based on their z-index values.  Furthermore, any elements which are children of <code>DIV A</code>
+will always be below <code>DIV B</code> and any of its children.  No matter how high or low
+the z-indices of <code>DIV A1</code> and <code>DIV B1</code> are set, <code>DIV B1</code> will
 always stack above <code>DIV A1</code>, because <code>DIV B</code> is stacked above <code>DIV A</code>.
 </p>
 
 <p>
-As mentioned above, positioned elements with a specified z-index will establish new stacking 
-contexts for their child nodes. This is true for all A-Grade browsers. However in IE even 
-positioned elements that <em>lack a defined z-index</em> establish a new stacking context.  
+As mentioned above, positioned elements with a specified z-index will establish new stacking
+contexts for their child nodes. This is true for all A-Grade browsers. However in IE even
+positioned elements that <em>lack a defined z-index</em> establish a new stacking context.
 This is considered to be an <a href="http://therealcrisp.xs4all.nl/meuk/IE-zindexbug.html">IE bug</a>.
 </p>
 
 <p>
-To completely avoid the potential impact of ancestor elements establishing new stacking contexts, 
-render Overlays into the document's <code>&#60;body&#62;</code> element.  Doing so will gaurantee 
-that all Overlay instances exist within the same stacking context, making it easier to manage how 
+To completely avoid the potential impact of ancestor elements establishing new stacking contexts,
+render Overlays into the document's <code>&#60;body&#62;</code> element.  Doing so will gaurantee
+that all Overlay instances exist within the same stacking context, making it easier to manage how
 they are stacked above all other elements in the page.
 </p>
 
@@ -412,22 +412,22 @@ they are stacked above all other elements in the page.
         <td> null </td>
         <td>
             Allows the Overlay to be aligned relative to a context element. The property expects an array value with the format: <code>[contextElementOrId, overlayCorner, contextElementCorner]</code>,
-            where "contextElementOrId" is the context element or the id of the context element. 
+            where "contextElementOrId" is the context element or the id of the context element.
             </p>
             <p>
             The corner parameters are one of the following string values: "tr" (top right), "tl" (top left), "br" (bottom right), or "bl" (bottom left) and define which corners of the overlay and context element should be aligned.
             </p>
-            
+
             <p>The array also supports optional 4th and 5th entries.</p>
-            
-            <p>The 4th entry is an optional array of event names, or Custom Event objects, which should trigger re-alignment of the Overlay with the currently configured context element. For example:</p> 
+
+            <p>The 4th entry is an optional array of event names, or Custom Event objects, which should trigger re-alignment of the Overlay with the currently configured context element. For example:</p>
             <p><code>[contextId, overlayCorner, contextCorner, ["beforeShow", "windowResize"]]</code></p>
             <p>Will re-align the Overlay to the context element just before it's shown, and whenever the window is resized.</p>
-            
+
             <p>The 5th entry is an optional XY pixel offset, which is to be applied <em>after</em> the Overlay is aligned to the specified corner of the context element, and can be used to add a pixel buffer between the context element and the Overlay.
             For example:</p>
             <p><code>[contextId, overlayCorner, contextCorner, triggerEvents, [10, 20]]</code></p>
-            <p>Will offset the Overlay by 10 pixels along the X axis, and 20 pixels along the Y axis, after aligning the specified corners.</p> 
+            <p>Will offset the Overlay by 10 pixels along the X axis, and 20 pixels along the Y axis, after aligning the specified corners.</p>
         </td>
     </tr>
     <tr class="odd">
@@ -449,7 +449,7 @@ they are stacked above all other elements in the page.
         <td> autofillheight </td>
         <td> String </td>
         <td> "body" </td>
-        <td> Which container element (header, body or footer) should be sized to fill out any remaining 
+        <td> Which container element (header, body or footer) should be sized to fill out any remaining
         vertical space when a height is set on the container using the <code>height</code> configuration property. Supported values are "header", "body" and "footer". Can be set to null (or false) to turn off the feature.
         </td>
     </tr>
@@ -486,14 +486,14 @@ they are stacked above all other elements in the page.
 	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
 
     <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
-	
+
 	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
-	
+
 	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
-	
+
         </div>
          <div class="yui-u">
-            
+
             <div id="examples">
 <h3>Container Family Examples:</h3>
 
@@ -539,12 +539,12 @@ they are stacked above all other elements in the page.
 <li><a href='../../examples/menu/applicationmenubar.html'>Application Menubar</a> (included with examples for the <a href='../../menu/index.html'>Menu Family</a>)</li>
 <li><a href='../../examples/button/btn_example14.html'>Slider Button</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
 <li><a href='../../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../../layout/index.html'>Layout Manager</a>)</li>
-</ul>		
+</ul>
            </div>
-           
+
             <div id="morereading">
                 <h3>More Reading about the YUI Overlay Control:</h3>
-                
+
                 <ul>
                   <li><a href="http://allmybrain.com/2007/12/05/creating-image-preview-tooltips-with-the-yui-overlay-widget/">Creating Image Preview Tooltips with the YUI Overlay Widget</a>, by Dennis Mulestein</li>
                </ul>
@@ -557,7 +557,7 @@ they are stacked above all other elements in the page.
             <p class="be-first">be the first to bookmark this page!</a></p>
    </div></div>
 
-     
+
          </div>
       </div>
 </div>
@@ -577,15 +577,15 @@ they are stacked above all other elements in the page.
 
 	<div id="ft">
         <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
-        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
-            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
             <a href="http://careers.yahoo.com/">Job Openings</a></p>
 	</div>
 </div>
 
 <script src="../../assets/dpSyntaxHighlighter.js"></script>
-<script language="javascript"> 
-dp.SyntaxHighlighter.HighlightAll('code'); 
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
 </script>
 <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
 <!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
