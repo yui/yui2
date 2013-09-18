@@ -1,0 +1,719 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Charts Control: Customize series items</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/json/json-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/swf/swf-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/charts/charts-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+	#chart
+	{
+		width: 600px;
+		height: 350px;
+		margin-bottom: 10px;
+	}
+	.yui-dt-table {width: 500px;}
+
+	.chart_title
+	{
+		display: block;
+		font-size: 1.2em;
+		font-weight: bold;
+		margin-bottom: 0.4em;
+	}
+</style>
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	<div id="ygma"><a href="/"><img src="http://l.yimg.com/a/i/brand/purplelogo/uh/us/ydn.gif" width="266" height="34" border="0"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: Charts Control: Customize series items</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Charts Control: Customize series items</h1>
+	
+	<div class="exampleIntro">
+	<p>A <a href="http://developer.yahoo.com/yui/charts/">YUI Charts Control</a> can be configured at the Chart and series level. In this example, we'll use series properties to customize a combination chart.</p>
+<p>Please note: The YUI Charts Control requires Flash Player 9.0.45 or higher. The latest version of Flash Player is available at the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.</p>			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="charts-seriescustomization_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<span class="chart_title">Personal Finances</span>
+<div id="chart">Unable to load Flash content. The YUI Charts Control requires Flash Player 9.0.45 or higher. You can download the latest version of Flash Player from the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.</p></div>
+
+<script type="text/javascript">
+
+	YAHOO.widget.Chart.SWFURL = "http://yui.yahooapis.com/2.9.0/build/charts/assets/charts.swf";
+
+	//--- data
+
+	YAHOO.example.monthlyExpenses =
+	[
+		{ 
+			month: "January", 
+			rent: -1280.00, 
+			utilities: -494.68, 
+			gamblingprofits:292.00, 
+			gamblinglosses:-85.00, 
+			pay:2450.00, 
+			incidentals:-654.32
+		},
+		{ 
+			month: "February", 
+			rent: -1280.00, 
+			utilities: -401.35, 
+			gamblingprofits:292.00, 
+			gamblinglosses:-185.00, 
+			pay:2450.00, 
+			incidentals:-432.26
+		},
+		{ 
+			month: "March", 
+			rent: -1280.00, 
+			utilities: -489.32, 
+			gamblingprofits:292.00, 
+			gamblinglosses:-485.00, 
+			pay:2450.00, 
+			incidentals:-523.33
+		},
+		{ 
+			month: "April", 
+			rent: -1280.00, 
+			utilities: -484.71, 
+			gamblingprofits:292.00, 
+			gamblinglosses:-185.00, 
+			pay:2450.00, 
+			incidentals:-765.45
+		},
+		{ 
+			month: "May", 
+			rent: -1310.00, 
+			utilities: -479.811, 
+			gamblingprofits:292.00, 
+			gamblinglosses:-485.00, 
+			pay:2450.00, 
+			incidentals:-555.11
+		},
+		{ 
+			month: "June", 
+			rent: -1310.00, 
+			utilities: -497.95, 
+			gamblingprofits:292.00, 
+			gamblinglosses:-220.00, 
+			pay:2450.00, 
+			incidentals:-633.48
+		}
+	];
+
+	function calculateNet(dataArray)
+	{
+		var len = dataArray.length;
+		var obj, net;
+		for(var i = 0; i < len; i++)
+		{
+			obj = dataArray[i];
+			net = 0;
+			for(var z in obj)
+			{
+				if (!isNaN(obj[z])) net += obj[z];
+			}
+			obj.net = net;
+		}
+		return dataArray;
+	}
+	var myDataSource = new YAHOO.util.DataSource( calculateNet(YAHOO.example.monthlyExpenses) );
+	myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+	myDataSource.responseSchema =
+	{
+		fields: [ "month", "rent", "utilities", "gamblinglosses", "gamblingprofits", "pay", "incidentals", "net" ]
+	};
+
+	//--- chart
+
+	YAHOO.example.formatCurrencyAxisLabel = function( value )
+	{
+		return YAHOO.util.Number.format( value,
+		{
+			prefix: "$",
+			thousandsSeparator: ",",
+			decimalPlaces: 2
+		});
+	}
+
+	YAHOO.example.getDataTipText = function( item, index, series )
+	{
+		var toolTipText = series.displayName + " for " + item.month;
+		toolTipText += "\n" + YAHOO.example.formatCurrencyAxisLabel( Math.abs(item[series.yField]) );
+		return toolTipText;
+	}
+	
+	YAHOO.example.gainsLossesDataTipFunction = function( item, index, series )
+	{
+		var amt = item[series.yField];
+		var toolTipText = series.displayName + (amt >= 0 ? " Gains" : " Losses") + " for " + item.month;;
+		toolTipText += "\n" + YAHOO.example.formatCurrencyAxisLabel( Math.abs(amt) );
+		return toolTipText; 
+	}		
+
+	YAHOO.example.getLegendLabelText = function(value)
+	{
+		return value;
+	}
+	
+	YAHOO.example.getGamblingLegendLabelText = function(value)
+	{
+		return value + " (wins/losses)";
+	}
+	
+	var seriesDef =
+	[
+		{ 
+			displayName: "Rent", 
+			yField: "rent", 
+			style:{borderColor:0x006600} 
+		},
+		{ 
+			displayName: "Utilities", 
+			yField: "utilities", 
+			style:{borderColor:0x006699}
+		},
+		{ 
+			displayName: "Gambling", 
+			yField:"gamblingprofits", 
+			style:{borderColor:0x000000, fillColor:0xff0000}, 
+			legendLabelFunction:YAHOO.example.getGamblingLegendLabelText,
+			dataTipFunction:YAHOO.example.gainsLossesDataTipFunction
+		},
+		{ 
+			displayName: "Gambling", 
+			yField:"gamblinglosses", 
+			style:{borderColor:0x000000, fillColor:0xff0000}, 
+			showInLegend:false,
+			dataTipFunction:YAHOO.example.gainsLossesDataTipFunction
+		 },
+		{ 
+			displayName: "Pay", 
+			yField:"pay", 
+			style:{borderColor:0x000000} 
+		},
+		{ 
+			displayName: "Misc.", 
+			yField:"incidentals", 
+			style:{borderColor:0x660000}
+		},
+		{ 
+			type:"line", 
+			displayName: "Net", 
+			yField:"net", 
+			style:{fillColor:0xdddeee, borderColor:0x0000ff, lineColor:0x0000ff, skin:"DiamondSkin"}, 
+			dataTipFunction:YAHOO.example.gainsLossesDataTipFunction
+		}
+	];
+
+	var currencyAxis = new YAHOO.widget.NumericAxis();
+	currencyAxis.labelFunction = YAHOO.example.formatCurrencyAxisLabel;
+	currencyAxis.title = "Money Gained";
+
+	var categoryAxis = new YAHOO.widget.CategoryAxis();
+	categoryAxis.title = "Month";
+	
+	var styleDef = 
+	{
+		font:{color:0xeeeeee},
+		background:{color:0x677164},
+		border:{size:1, color:0x000000},
+		yAxis:
+		{
+			titleRotation:90, 
+			color:0xeeeeee, 
+			titleFont:{color:0xeeeeee}, 
+			majorGridLines:{color:0xeeeeee}, 
+			minorTicks:{display:"none"}, 
+			majorTicks:{display:"none"}
+		},
+		xAxis:
+		{
+			color:0xeeeeee, 
+			titleFont:{color:0xeeeeee}
+		},
+		legend:
+		{
+			display: "bottom",
+			padding: 10,
+			spacing: 5,
+			font:
+			{
+				color:0xeeeeee,
+				family: "Arial",
+				size: 11
+			}
+		}
+	}
+
+	var mychart = new YAHOO.widget.ColumnChart( "chart", myDataSource,
+	{
+		series: seriesDef,
+		xField: "month",
+		yAxis: currencyAxis,
+		xAxis: categoryAxis,
+		style: styleDef,
+		legendLabelFunction: YAHOO.example.getLegendLabelText,
+		dataTipFunction: YAHOO.example.getDataTipText
+	});
+	
+</script>
+	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	
+<h2 class="first">Create a DataSource</h2>
+
+<p>In this example, we're going to use custom series properties to format and display series information differently. We'll start with a data source representing household income and expenses. Expenses are represented negative values while income is represented with positive values. We'll use these values to calculate net income/losses, and add the calculated information as an additional property in the data source.</p>
+
+<textarea name="code" class="JScript" cols="60" rows="10">
+	YAHOO.example.monthlyExpenses =
+	[
+		{ 
+			month: "January", 
+			rent: -1280.00, 
+			utilities: -494.68, 
+			gamblingprofits:292.00, 
+			gamblinglosses:-85.00, 
+			pay:2450.00, 
+			incidentals:-654.32
+		},
+		{ 
+			month: "February", 
+			rent: -1280.00, 
+			utilities: -401.35, 
+			gamblingprofits:292.00, 
+			gamblinglosses:-185.00, 
+			pay:2450.00, 
+			incidentals:-432.26
+		},
+		{ 
+			month: "March", 
+			rent: -1280.00, 
+			utilities: -489.32, 
+			gamblingprofits:292.00, 
+			gamblinglosses:-485.00, 
+			pay:2450.00, 
+			incidentals:-523.33
+		},
+		{ 
+			month: "April", 
+			rent: -1280.00, 
+			utilities: -484.71, 
+			gamblingprofits:292.00, 
+			gamblinglosses:-185.00, 
+			pay:2450.00, 
+			incidentals:-765.45
+		},
+		{ 
+			month: "May", 
+			rent: -1310.00, 
+			utilities: -479.811, 
+			gamblingprofits:292.00, 
+			gamblinglosses:-485.00, 
+			pay:2450.00, 
+			incidentals:-555.11
+		},
+		{ 
+			month: "June", 
+			rent: -1310.00, 
+			utilities: -497.95, 
+			gamblingprofits:292.00, 
+			gamblinglosses:-220.00, 
+			pay:2450.00, 
+			incidentals:-633.48
+		}
+	];
+
+	function calculateNet(dataArray)
+	{
+		var len = dataArray.length;
+		var obj, net;
+		for(var i = 0; i < len; i++)
+		{
+			obj = dataArray[i];
+			net = 0;
+			for(var z in obj)
+			{
+				if (!isNaN(obj[z])) net += obj[z];
+			}
+			obj.net = net;
+		}
+		return dataArray;
+	}
+	var myDataSource = new YAHOO.util.DataSource( calculateNet(YAHOO.example.monthlyExpenses) );
+	myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+	myDataSource.responseSchema =
+	{
+		fields: [ "month", "rent", "utilities", "gamblinglosses", "gamblingprofits", "pay", "incidentals", "net" ]
+	};
+</textarea>
+
+<h2>Define our Text formatting functions</h2>
+
+<p>We will create methods to format the labels for our axis, dataTip and legend.</p>
+
+<textarea name="code" class="JScript" cols="60" rows="10">
+	YAHOO.example.formatCurrencyAxisLabel = function( value )
+	{
+		return YAHOO.util.Number.format( value,
+		{
+			prefix: "$",
+			thousandsSeparator: ",",
+			decimalPlaces: 2
+		});
+	}
+
+	YAHOO.example.getDataTipText = function( item, index, series )
+	{
+		var toolTipText = series.displayName + " for " + item.month;
+		toolTipText += "\n" + YAHOO.example.formatCurrencyAxisLabel( Math.abs(item[series.yField]) );
+		return toolTipText;
+	}
+	
+	YAHOO.example.gainsLossesDataTipFunction = function( item, index, series )
+	{
+		var amt = item[series.yField];
+		var toolTipText = series.displayName + (amt >= 0 ? " Gains" : " Losses") + " for " + item.month;;
+		toolTipText += "\n" + YAHOO.example.formatCurrencyAxisLabel( Math.abs(amt) );
+		return toolTipText; 
+	}		
+
+	YAHOO.example.getLegendLabelText = function(value)
+	{
+		return value;
+	}
+	
+	YAHOO.example.getGamblingLegendLabelText = function(value)
+	{
+		return value + " (wins/losses)";
+	}	
+</textarea>
+
+<p>Some series, such as pay and rent, will always be either positive or negative. Others, such as gambling and net, can either be positive or negative. As a result, we will need to specify different dataTip functions for different series. This is best accomplished by setting one method on the chart level, and then overriding these on the series level. In the code above, we have created a default dataTipFunction for income and expense series and an additional function for series that can render a gain or a loss.</p>
+
+
+<h2>Define a Series Definition</h2>
+
+<p>We'll set a series definition to style each series. Additionally, we will use this series definition to specify which series will use the custom label functions created above.</p>
+
+<textarea name="code" class="JScript" cols="60" rows="10">
+	var seriesDef =
+	[
+		{ 
+			displayName: "Rent", 
+			yField: "rent", 
+			style:{borderColor:0x006600} 
+		},
+		{ 
+			displayName: "Utilities", 
+			yField: "utilities", 
+			style:{borderColor:0x006699}
+		},
+		{ 
+			displayName: "Gambling", 
+			yField:"gamblingprofits", 
+			style:{borderColor:0x000000, fillColor:0xff0000}, 
+			legendLabelFunction:YAHOO.example.getGamblingLegendLabelText,
+			dataTipFunction:YAHOO.example.gainsLossesDataTipFunction
+		},
+		{ 
+			displayName: "Gambling", 
+			yField:"gamblinglosses", 
+			style:{borderColor:0x000000, fillColor:0xff0000}, 
+			showInLegend:false,
+			dataTipFunction:YAHOO.example.gainsLossesDataTipFunction
+		 },
+		{ 
+			displayName: "Pay", 
+			yField:"pay", 
+			style:{borderColor:0x000000} 
+		},
+		{ 
+			displayName: "Misc.", 
+			yField:"incidentals", 
+			style:{borderColor:0x660000}
+		},
+		{ 
+			type:"line", 
+			displayName: "Net", 
+			yField:"net", 
+			style:{fillColor:0xdddeee, borderColor:0x0000ff, lineColor:0x0000ff, skin:"DiamondSkin"}, 
+			dataTipFunction:YAHOO.example.gainsLossesDataTipFunction
+		}
+	];
+</textarea>
+
+<p>In the above series definition, we have styled the properties <code>gamblinglosses</code> and <code>gamblingprofits</code> identically. We have also given them the same display name. In our chart, they will both be displayed as "gambling". We will use our custom dataTip function to differentiate between the series based on a positive or negative value. Since they both represent gambling, we only want one reference in the legend. We can use the <code>showInLegend</code> property to filter out one from the legend list. We'll also put in a custom legendLabelFunction for the gambling series displayed in the legend. Finally, we will attach the custom dataTip function to our net series.</p>
+
+
+<h2>Add axes and styles</h2>
+<p>Next, we'll add our styles and axes.</p>
+<textarea name="code" class="JScript" cols="60" rows="6">
+	var currencyAxis = new YAHOO.widget.NumericAxis();
+	currencyAxis.labelFunction = YAHOO.example.formatCurrencyAxisLabel;
+	currencyAxis.title = "Money Gained";
+
+	var categoryAxis = new YAHOO.widget.CategoryAxis();
+	categoryAxis.title = "Month";
+	
+	var styleDef = 
+	{
+		font:{color:0xeeeeee},
+		background:{color:0x677164},
+		border:{size:1, color:0x000000},
+		yAxis:
+		{
+			titleRotation:90, 
+			color:0xeeeeee, 
+			titleFont:{color:0xeeeeee}, 
+			majorGridLines:{color:0xeeeeee}, 
+			minorTicks:{display:"none"}, 
+			majorTicks:{display:"none"}
+		},
+		xAxis:
+		{
+			color:0xeeeeee, 
+			titleFont:{color:0xeeeeee}
+		},
+		legend:
+		{
+			display: "bottom",
+			padding: 10,
+			spacing: 5,
+			font:
+			{
+				color:0xeeeeee,
+				family: "Arial",
+				size: 11
+			}
+		}
+	}
+</textarea>
+
+<h2>Create the Chart</h2>
+
+<p>Finally, we'll create a chart, setting our default dataTip and legendLabel methods.</p>
+
+<textarea name="code" class="JScript" cols="60" rows="6">
+	var mychart = new YAHOO.widget.ColumnChart( "chart", myDataSource,
+	{
+		series: seriesDef,
+		xField: "month",
+		yAxis: currencyAxis,
+		xAxis: categoryAxis,
+		style: styleDef,
+		legendLabelFunction: YAHOO.example.getLegendLabelText,
+		dataTipFunction: YAHOO.example.getDataTipText
+	});
+</textarea>
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerDiv"></div>
+							<div id="loggerGloss">
+								<p><strong>Note:</strong> You are viewing this example in debug mode with logging enabled.  This can significantly slow performance.</p>
+	
+								<p class="loggerButton"><span id="loggerLink"><span class="first-child"><a href="charts-seriescustomization.html">Reload with logging<br />and debugging disabled.</a></span></span></p>
+							</div>
+						</div>
+					
+				
+					<div id="examples">
+						<h3>Charts Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='../charts/charts-quickstart.html'>Charts Quickstart Example</a></li><li><a href='../charts/charts-legend.html'>Chart with Legend Example</a></li><li><a href='../charts/charts-skins.html'>Skinning a Chart Example</a></li><li><a href='../charts/charts-datatable.html'>Chart and DataTable Example</a></li><li><a href='../charts/charts-xhr-polling.html'>Chart with DataSource Polling</a></li><li><a href='../charts/charts-stacked.html'>Stacked Bar Chart</a></li><li><a href='../charts/charts-tabview.html'>Charts in a TabView</a></li><li><a href='../charts/charts-rotation.html'>Column Chart with Rotated Title and Labels</a></li><li><a href='../charts/charts-styles.html'>Styling Lines, Borders and Fills</a></li><li><a href='../charts/charts-dualaxes.html'>Chart with 2 Numeric Axes</a></li><li><a href='../charts/charts-hideseries.html'>Hide series in a chart.</a></li><li class='selected'><a href='../charts/charts-seriescustomization.html'>Customize series items</a></li><li><a href='../charts/charts-functionscope.html'>Apply scope to label functions</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Charts Control Resources:</h3>
+						<ul>
+							
+						<li><a href="../../docs/module_charts.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/charts.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="/yui/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="/yui/3/">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="/yui/license.html">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- proven and robust." href="/yui/2/">YUI 2</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="/yui/examples/">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="/yui/docs/">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="item"><a title="Configure your YUI implementation; serve YUI source files from Yahoo! -- free, fast, and simple" href="/yui/articles/hosting/">Dependency Configurator</a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="/yui/animation/">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="/yui/autocomplete/">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="/yui/history/">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="/yui/button/">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="/yui/calendar/">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="/yui/carousel/">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="/yui/charts/">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="/yui/colorpicker/">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="/yui/connection/">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="/yui/container/">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="/yui/cookie/">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="/yui/datasource/">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="/yui/datatable/">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="/yui/dom/">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="/yui/dragdrop/">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="/yui/element/">Element</a></li><li class="item"><a title="The YUI Event Utility" href="/yui/event/">Event</a></li><li class="item"><a title="The YUI Get Utility" href="/yui/get/">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="/yui/imagecropper/">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="/yui/imageloader/">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="/yui/json/">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="/yui/layout/">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="/yui/logger/">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="/yui/menu/">Menu</a></li><li class="item"><a title="The YUI Paginator" href="/yui/paginator/">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="/yui/profiler/">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="/yui/profilerviewer/">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="/yui/progressbar/">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="/yui/resize/">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="/yui/editor/">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="/yui/selector/">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="/yui/slider/">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="/yui/storage/">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="/yui/stylesheet/">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="/yui/swf/">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="/yui/swfstore/">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="/yui/tabview/">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="/yui/treeview/">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="/yui/uploader/">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="/yui/yahoo/">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="/yui/yuiloader/">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="/yui/yuitest/">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="/yui/reset/">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="/yui/base/">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="/yui/fonts/">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="/yui/grids/">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:47 PDT 2013 -->

@@ -1,0 +1,1198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: TreeView</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: TreeView</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+
+  <div id="promo" class="component">
+  <h1>YUI 2: TreeView</h1>
+
+<p>The YUI TreeView Control provides a rich, compact visual presentation of hierarchical node data.  Support is provided for several common node types, for the association of custom metadata with each node, and for the dynamic loading of node data (via in-page data or via XMLHttpRequest using <a href="../connection/index.html">Connection Manager</a>) to navigate large datasets with a small initial payload.</p>
+
+    <div><img class="screenshot" src="http://us.i1.yimg.com/us.yimg.com/i/ydn/yuiweb/img/treeview.gif" width="145" height="194"></div>
+   <div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#upgrade">Upgrade Notes</a></li>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#using">Using TreeView</a> </li>
+      <li><a href="#knownissues">Known Issues</a></li>
+      <li><a href="#mobile">YUI on Mobile Devices</a></li>
+      <li><a href="#support">Support &amp; Community</a></li><li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/treeview/index.html">Examples</a>: Explore examples of the TreeView Control in action.</li>
+      <li><a href="../docs/module_treeview.html">API Documentation</a>: View the full API documentation for the TreeView Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.treeview">Release Notes</a>: Detailed change log for the TreeView Control.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the TreeView Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+  </div>
+
+  <h2 class="first"><a name="upgrade"></a>Upgrade Notes</h2>
+  <p>Users new to TreeView can skip this section and proceed directly to the <a href="#start">Getting Started</a> section. 
+  Implementers who are upgrading from previous versions should not find any compatibility issues.  
+  All published public interfaces and general behavior were preserved.  The following are the most significant changes:</p>
+  <ul>
+  <li>All the individual in-line event listeners in each of the nodes were moved to the top of the tree and handled through event delegation.</li>
+  <li>A <code>destroy()</code> method has been added to delete the tree and detach all the event listeners.</li>
+  <li>TreeViews can now be built from existing markup or from an object literal provided as the second argument to the constructor.</li>
+  <li>The definition of a tree or any branch of it can now be saved and later used to rebuild the tree.</li>
+  <li>All public properties of a Node can now be set upon instancing by providing an object literal in the first argument with same-name properties.  
+  This replaces the optional third (<code>expanded</code>) and following arguments (<code>hasIcon</code>) which, though deprecated, have been preserved for backward compatibility.</li>
+  <li>Nodes can now receive the focus and the node will be highlighted accordingly.</li>
+  <li>New events were added: <code>enterKeyPressed</code>, <code>clickEvent</code> and <code>dblClickEvent</code>.</li>
+  <li>Event <code>labelClick</code> is deprecated, though kept for compatibility. Use <code>clickEvent</code> instead.</li>
+  <li>TreeView now responds to keys: arrow keys, home and end will move the focus, plus and minus will expand and collapse a branch 
+  and coupled with the Shift key they will expand or collapse the whole tree
+  and Enter will toggle the node or navigate if the node with the focus has a value for <code>href</code>.</li>
+  <li>The Enter key will fire the event <code>enterKeyPressed</code>.</li>
+  <li>Method <code>draw()</code> is now deprecated (though preserved) in favor of <code>render()</code>.</li>
+  <li>Method <code>getNodeCount()</code> now provides the actual number of nodes.</li>
+  <li>Nodes have a class <code>ygtvdepth0</code> where the last digit(s) signal the depth.</li>
+  <li>TextNodes with the <code>href</code> property set will be built with the label enclosed in an anchor &lt;a&gt; element, 
+  others will simply be enclosed in span &lt;span&gt; elements, thus allowing different styles to be set on each.</li>
+  <li>TreeView now supports in-line editing:<ul>
+    <li>Node method <code>editNode</code> opens up the label editor</li>
+    <li>TreeView method <code>onEventEditNode</code> has been provided to listen to either <code>clickEvent</code>, 
+    <code>dblClickEvent</code> or <code>enterKeyPressed</code> to pop up the label editor</li>
+    <li>Node property <code>editable</code> enables label editing for a specific node.</li>
+    <li>A single-line text editor has been added for TextNode (and its descendant, MenuNode).</li>
+    <li>A new node type, DateNode, is included which derives from TextNode and allows date editing via YUI's Calendar widget.  
+    If Calendar is not included, it will fall back to the plain single-line text editor.</li>
+    <li>No editor has been provided for HTMLNodes.</li>
+    <li>Editing for new node types can be provided (such as it was for DateNode) by overriding methods: 
+    <code>fillEditorContainer</code> and <code>saveEditorValue</code>. 
+    Visual customization of the editor box is provided by the <code>ygtv-edit-<i>XxxxNode</i></code> class
+    where <i>XxxxNode</i> is the name of the Node object (DateNode, TextNode, etc.)</li>
+</ul></li>
+</ul>
+  <h3>new for 2.7.0</h3>
+  <ul>
+  <li>Fixed several bugs in the previous version, see the README file for more details</li>
+  <li>HTML markup may contain an attribute <code>yuiConfig</code> which can contain a JSON encoded object literal with values for Node properties 
+  that will override those implied in the markup</li>
+  <li>Method "focus" can now be called safely from code and will expand the branch where the focused item is</li>
+  <li>The TreeView now has a <code>validator</code> property that can take a function to validate and/or convert the new  value just
+  entered and reject it if wrong</li>
+  <li>Nodes can be highlighted and optionally have that state propagated both up to parent nodes and down along its branch</li>
+  </ul>
+  
+  <h2><a name="start"></a>Getting Started</h2>
+<p>
+To use the TreeView control include the following source files in your web page:
+</p>
+
+<div id="syntax-93a024605445a1404e373281400338dd" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Required CSS --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/treeview/assets/skins/sam/treeview.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Optional CSS for for date editing with Calendar--&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/calendar/assets/skins/sam/calendar.css&quot;</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependency source file --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Optional dependency source file --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/javascript&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Optional dependency source file for date editing with Calendar--&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/calendar/calendar-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Optional dependency source file to decode contents of yuiConfig markup attribute--&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/json/json-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- TreeView source file --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/treeview/treeview-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Required CSS --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/treeview/assets/skins/sam/treeview.css&quot;</span>&gt;</span>
+<span class="sc-1">&lt;!-- Optional CSS for for date editing with Calendar--&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/calendar/assets/skins/sam/calendar.css&quot;</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Dependency source file --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc-1">&lt;!-- Optional dependency source file --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/javascript&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc-1">&lt;!-- Optional dependency source file for date editing with Calendar--&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/calendar/calendar-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc-1">&lt;!-- Optional dependency source file to decode contents of yuiConfig markup attribute--&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/json/json-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- TreeView source file --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/treeview/treeview-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-93a024605445a1404e373281400338dd-plain"><!-- Required CSS -->
+<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.9.0/build/treeview/assets/skins/sam/treeview.css">
+<!-- Optional CSS for for date editing with Calendar-->
+<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.9.0/build/calendar/assets/skins/sam/calendar.css">
+
+<!-- Dependency source file --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js" ></script>
+<!-- Optional dependency source file --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js" type="text/javascript"></script>
+<!-- Optional dependency source file for date editing with Calendar--> 
+<script src="http://yui.yahooapis.com/2.9.0/build/calendar/calendar-min.js" ></script>
+<!-- Optional dependency source file to decode contents of yuiConfig markup attribute--> 
+<script src="http://yui.yahooapis.com/2.9.0/build/json/json-min.js" ></script>
+
+<!-- TreeView source file --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/treeview/treeview-min.js" ></script>
+</textarea></div>
+
+  Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
+in which the TreeView Control lives.  You can usually accomplish this simply by putting the class on the 
+<code>&#60;body&#62;</code> tag:</p>
+<div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
+</textarea></div>
+<p class="lastP">For more information on skinning YUI components and making use of default skins, 
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+article here on the website.</p>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>treeview</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+  <p>The TreeView control is defined by YAHOO.widget.TreeView. The nodes of the
+    tree are defined by the base class YAHOO.widget.Node
+    and various subclasses.</p>
+  <h3>Creating the Tree </h3>
+
+    <p>
+    Create a tree by instantiating TreeView with the ID of the element in which
+      you want to draw the tree:
+    </p>
+
+<div id="syntax-9c7ed91797377a8e2f058406d12b503d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> tree<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> tree<span class="sy0">;</span>
+<span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-9c7ed91797377a8e2f058406d12b503d-plain">var tree;
+function treeInit() {
+    tree = new YAHOO.widget.TreeView("treeDiv1");
+}
+</textarea></div>
+    <p>
+    You can use an element reference instead of an ID:
+    </p>
+
+<div id="syntax-7303142d512338ebb3995f5f91f4ac1b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> tree<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span>document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> tree<span class="sy0">;</span>
+<span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span>document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-7303142d512338ebb3995f5f91f4ac1b-plain">var tree;
+function treeInit() {
+    tree = new YAHOO.widget.TreeView(document.getElementById("treeDiv1"));
+}
+</textarea></div><p>
+If the element that will contain the tree already has a series of 
+nested ordered or unordered lists, the tree will be built using that information.  
+The format for such existing markup should be:
+</p>
+<div id="syntax-6d119bbb384e093f9b025e0b40a389e6" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;treeDiv1&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;expanded&quot;</span>&gt;</span>List 0</div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span></div></li><li class="li2"><div class="de2">                <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;expanded&quot;</span>&gt;</span>List 0-0</div></li><li class="li1"><div class="de1">                    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1">                        <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>item 0-0-0<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">                        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">a</span> <span class="kw3">target</span><span class="sy0">=</span><span class="st0">&quot;_new&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;www.elsewhere.com&quot;</span> <span class="kw3">title</span><span class="sy0">=</span><span class="st0">&quot;go elsewhere&quot;</span>&gt;</span>elsewhere<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">                    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li2"><div class="de2">                <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>List 1</div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span></div></li><li class="li2"><div class="de2">                <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>List 1-0</div></li><li class="li1"><div class="de1">                    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1">                        <span class="sc2">&lt;<span class="kw2">li</span> yuiConfig<span class="sy0">=</span><span class="st0">'{&quot;type&quot;:&quot;DateNode&quot;,&quot;editable&quot;:true}'</span>&gt;</span>02/01/2009<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">                        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">span</span>&gt;</span>item <span class="sc2">&lt;<span class="kw2">strong</span>&gt;</span>1-1-0<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">strong</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">span</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">                    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li2"><div class="de2">                <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;treeDiv1&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;expanded&quot;</span>&gt;</span>List 0
+            <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span>
+                <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;expanded&quot;</span>&gt;</span>List 0-0
+                    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span>
+                        <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>item 0-0-0<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+                        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">a</span> <span class="kw3">target</span><span class="sy0">=</span><span class="st0">&quot;_new&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;www.elsewhere.com&quot;</span> <span class="kw3">title</span><span class="sy0">=</span><span class="st0">&quot;go elsewhere&quot;</span>&gt;</span>elsewhere<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">a</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+                    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span>
+                <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+            <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span>
+        <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>List 1
+            <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span>
+                <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>List 1-0
+                    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span>
+                        <span class="sc2">&lt;<span class="kw2">li</span> yuiConfig<span class="sy0">=</span><span class="st0">'{&quot;type&quot;:&quot;DateNode&quot;,&quot;editable&quot;:true}'</span>&gt;</span>02/01/2009<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+                        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">span</span>&gt;</span>item <span class="sc2">&lt;<span class="kw2">strong</span>&gt;</span>1-1-0<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">strong</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">span</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+                    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span>
+                <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+            <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span>
+        <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-6d119bbb384e093f9b025e0b40a389e6-plain"><div id="treeDiv1">
+    <ul>
+        <li class="expanded">List 0
+            <ul>
+                <li class="expanded">List 0-0
+                    <ul>
+                        <li>item 0-0-0</li>
+                        <li><a target="_new" href="www.elsewhere.com" title="go elsewhere">elsewhere</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>List 1
+            <ul>
+                <li>List 1-0
+                    <ul>
+                        <li yuiConfig='{"type":"DateNode","editable":true}'>02/01/2009</li>
+                        <li><span>item <strong>1-1-0</strong></span></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+</textarea></div>
+<p>TreeView will create TextNodes from text contained in list-item &lt;li&gt; elements and from &lt;a&gt; anchor elements.  
+It will create child nodes from &lt;ul&gt; or &lt;ol&gt; elements and HTMLNodes from any other markup found. 
+The first branch of the tree will be expanded.
+The first item of <code>List 1-0</code> would nornally be a plain TextNode, but by using the <code>yuiConfig</code> 
+attribute, it can be changed to a DateNode and made editable. Decoding the <code>yuiConfig</code> attribute requires the JSON utility to be loaded.</p>
+<p>Though the user will see item 1-1-0 as a single text, in the DOM it will be represented as three elements, 
+two text elements, the second enclosed in a &lt;strong&gt; element.  
+Since the markup parser can take only the first element of each list-item, 
+the item has to be enclosed in a single &lt;span&gt; container.  The item will be turned into an HTMLNode.
+</p>
+
+<p>The constructor also accepts a second argument, an array containing the tree definition.  
+If such a tree definition is provided, no markup will be parsed.
+The array can contain any number of string or object literals, each a definition for a node.
+TextNodes will be created from string literals.
+Each object node definition should contain a <code>type</code> property that can be any of the short-names (case-insensitive)
+<code>"text"</code>, <code>"html"</code> or <code>"menu"</code>, it can be the full name of
+an object definition in the <code>YAHOO.widget</code> object that inherits from <code>YAHOO.widget.Node</code>,
+such as <code>"TextNode"</code> or <code>"HTMLNode"</code> of a full reference to an object that inherits from <code>YAHOO.widget.Node</code>.</p>
+
+<p>The definition can have an optional <code>children</code> property containing an array of further node definitions with the same format.</p>
+
+<p>All other properties of each definition, if its name matches that of an existing public property, will have its value assigned to it. 
+It is to be expected that node definitions of type <code>"text"</code> would have a <code>label</code> property and those of type <code>"html"</code>
+an <code>html</code> property.
+All other extra custom properties will be assigned to the <code>data</code> property of the node.</p>
+<p>This tree definition object is of the same format as would be obtained from calling method <code>getTreeDefinition()</code>, 
+thus, by calling this method, the structure of the tree can be preserved and regenerated later. 
+Any branch of the tree can be preserved by calling method <code>getNodeDefinition()</code> on any Node.  
+In fact, <code>getTreeDefinition()</code> simply calls <code>getNodeDefinition()</code> on the root node.</p>
+<p>Methods <code>buildTreeFromMarkup</code> and <code>buildTreeFromObject</code> which are the ones providing this functionality, 
+can actually be called at any time after the TreeView instance has been created</p>
+<p>The following code would produce the same tree as the markup in the above example</p>
+<div id="syntax-5eb552ae5ac5862b012fe8915b615324" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="sy0">,</span> <span class="br0">&#91;</span> </div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        type<span class="sy0">:</span> <span class="st0">&quot;text&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        label<span class="sy0">:</span> <span class="st0">&quot;List 0&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        expanded<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            children<span class="sy0">:</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">                    <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                        type<span class="sy0">:</span> <span class="st0">&quot;text&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                        label<span class="sy0">:</span> <span class="st0">&quot;List 0-0&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">                        expanded<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                        children<span class="sy0">:</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">                            <span class="st0">&quot;item 0-0-0&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                            <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                                type<span class="sy0">:</span> <span class="st0">&quot;text&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">                                target<span class="sy0">:</span> <span class="st0">&quot;_new&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                                href<span class="sy0">:</span> <span class="st0">&quot;www.elsewhere.com&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                                title<span class="sy0">:</span> <span class="st0">&quot;go elsewhere&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                                label<span class="sy0">:</span> <span class="st0">&quot;elsewhere&quot;</span></div></li><li class="li1"><div class="de1">                            <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">                    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">            <span class="br0">&#93;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        type<span class="sy0">:</span> <span class="st0">&quot;text&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        label<span class="sy0">:</span> <span class="st0">&quot;List 1&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        children<span class="sy0">:</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">            <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                type<span class="sy0">:</span> <span class="st0">&quot;text&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                label<span class="sy0">:</span> <span class="st0">&quot;List 1-0&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">                children<span class="sy0">:</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">                    <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                        type<span class="sy0">:</span> <span class="st0">&quot;DateNode&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                        label<span class="sy0">:</span> <span class="st0">&quot;02/01/2009&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                        <span class="st0">&quot;editable&quot;</span><span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li2"><div class="de2">                    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                        type<span class="sy0">:</span> <span class="st0">&quot;text&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                        label<span class="sy0">:</span> <span class="st0">&quot;item &lt;strong&gt;1-1-0&lt;/strong&gt;&quot;</span></div></li><li class="li1"><div class="de1">                    <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">                <span class="br0">&#93;</span></div></li><li class="li1"><div class="de1">            <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#93;</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#93;</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="sy0">,</span> <span class="br0">&#91;</span> 
+    <span class="br0">&#123;</span>
+        type<span class="sy0">:</span> <span class="st0">&quot;text&quot;</span><span class="sy0">,</span>
+        label<span class="sy0">:</span> <span class="st0">&quot;List 0&quot;</span><span class="sy0">,</span>
+        expanded<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+            children<span class="sy0">:</span> <span class="br0">&#91;</span>
+                    <span class="br0">&#123;</span>
+                        type<span class="sy0">:</span> <span class="st0">&quot;text&quot;</span><span class="sy0">,</span>
+                        label<span class="sy0">:</span> <span class="st0">&quot;List 0-0&quot;</span><span class="sy0">,</span>
+                        expanded<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+                        children<span class="sy0">:</span> <span class="br0">&#91;</span>
+                            <span class="st0">&quot;item 0-0-0&quot;</span><span class="sy0">,</span>
+                            <span class="br0">&#123;</span>
+                                type<span class="sy0">:</span> <span class="st0">&quot;text&quot;</span><span class="sy0">,</span>
+                                target<span class="sy0">:</span> <span class="st0">&quot;_new&quot;</span><span class="sy0">,</span>
+                                href<span class="sy0">:</span> <span class="st0">&quot;www.elsewhere.com&quot;</span><span class="sy0">,</span>
+                                title<span class="sy0">:</span> <span class="st0">&quot;go elsewhere&quot;</span><span class="sy0">,</span>
+                                label<span class="sy0">:</span> <span class="st0">&quot;elsewhere&quot;</span>
+                            <span class="br0">&#125;</span>
+                    <span class="br0">&#125;</span>
+            <span class="br0">&#93;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span>
+        type<span class="sy0">:</span> <span class="st0">&quot;text&quot;</span><span class="sy0">,</span>
+        label<span class="sy0">:</span> <span class="st0">&quot;List 1&quot;</span><span class="sy0">,</span>
+        children<span class="sy0">:</span> <span class="br0">&#91;</span>
+            <span class="br0">&#123;</span>
+                type<span class="sy0">:</span> <span class="st0">&quot;text&quot;</span><span class="sy0">,</span> 
+                label<span class="sy0">:</span> <span class="st0">&quot;List 1-0&quot;</span><span class="sy0">,</span> 
+                children<span class="sy0">:</span> <span class="br0">&#91;</span>
+                    <span class="br0">&#123;</span>
+                        type<span class="sy0">:</span> <span class="st0">&quot;DateNode&quot;</span><span class="sy0">,</span>
+                        label<span class="sy0">:</span> <span class="st0">&quot;02/01/2009&quot;</span><span class="sy0">,</span>
+                        <span class="st0">&quot;editable&quot;</span><span class="sy0">:</span> <span class="kw2">true</span>
+                    <span class="br0">&#125;</span><span class="sy0">,</span>
+                    <span class="br0">&#123;</span>
+                        type<span class="sy0">:</span> <span class="st0">&quot;text&quot;</span><span class="sy0">,</span>
+                        label<span class="sy0">:</span> <span class="st0">&quot;item &lt;strong&gt;1-1-0&lt;/strong&gt;&quot;</span>
+                    <span class="br0">&#125;</span>
+                <span class="br0">&#93;</span>
+            <span class="br0">&#125;</span>
+        <span class="br0">&#93;</span><span class="br0">&#125;</span>
+    <span class="br0">&#93;</span><span class="br0">&#125;</span>
+<span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-5eb552ae5ac5862b012fe8915b615324-plain">var tree = new YAHOO.widget.TreeView("treeDiv1", [ 
+    {
+        type: "text",
+        label: "List 0",
+        expanded: true,
+            children: [
+                    {
+                        type: "text",
+                        label: "List 0-0",
+                        expanded: true,
+                        children: [
+                            "item 0-0-0",
+                            {
+                                type: "text",
+                                target: "_new",
+                                href: "www.elsewhere.com",
+                                title: "go elsewhere",
+                                label: "elsewhere"
+                            }
+                    }
+            ]
+    },
+    {
+        type: "text",
+        label: "List 1",
+        children: [
+            {
+                type: "text", 
+                label: "List 1-0", 
+                children: [
+                    {
+                        type: "DateNode",
+                        label: "02/01/2009",
+                        "editable": true
+                    },
+                    {
+                        type: "text",
+                        label: "item <strong>1-1-0</strong>"
+                    }
+                ]
+            }
+        ]}
+    ]}
+]);
+tree.render();
+</textarea></div><p>The last <code>item 1-1-0</code>, which the HTML parser would have created as an HTMLNode node, 
+unable as it is to tell appart text with simple formatting from more complex HTML,
+is created as a TextNode in this example, and the &lt;span&gt; was omitted since it 
+was there for the sake of the parser.</p>
+
+    <p>
+    Once the tree object has been created you can begin to add its nodes, 
+    if not already done via existing markup or object literal.
+      The HTML code for the tree is not inserted into the host element until
+    you call the <code>render</code> method, so any nodes you add prior to 
+    calling the <code>render</code> method will be present when it is rendered. 
+    (the <code>draw</code> method, now deprecated, has been kept for backward compatibility)</p>
+
+
+<div id="syntax-c187f48db54f44c2db6dca3ff444d884" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> tree<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// if required, add nodes here</span></div></li><li class="li2"><div class="de2">    tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> tree<span class="sy0">;</span>
+<span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="co1">// if required, add nodes here</span>
+    tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-c187f48db54f44c2db6dca3ff444d884-plain">var tree;
+function treeInit() {
+    tree = new YAHOO.widget.TreeView("treeDiv1");
+    // if required, add nodes here
+    tree.render();
+}
+</textarea></div>
+    <h3>Adding Nodes </h3>
+    <p>
+    When the tree is created, a root node is generated automatically.  The constructor for a new node
+    takes the parent node as an argument. You can get a reference to the tree's root node to build the first
+    level of the tree with the <code>getRoot()</code> method:
+    </p>
+
+<div id="syntax-87c0161cfe9936ca1fc2c474a6e1857d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> tree<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> root <span class="sy0">=</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="st0">&quot;mylabel&quot;</span><span class="sy0">,</span> root<span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> tree<span class="sy0">;</span>
+<span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> root <span class="sy0">=</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="st0">&quot;mylabel&quot;</span><span class="sy0">,</span> root<span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-87c0161cfe9936ca1fc2c474a6e1857d-plain">var tree;
+function treeInit() {
+    tree = new YAHOO.widget.TreeView("treeDiv1");
+    var root = tree.getRoot();
+    var tmpNode = new YAHOO.widget.TextNode("mylabel", root, false);
+
+    tree.render();
+}
+</textarea></div>
+    <p>
+    The above example appends a text node to the root of
+    the tree with <code>"mylabel"</code> as the label. The last, now deprecated, parameter
+    is a boolean that indicates whether or not the new node should be expanded when
+    the HTML for the tree is generated.  The same node can be created with the following instruction:
+    </p>
+<div id="syntax-a0eeac86a676238200ebe383abc5c15e" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    label<span class="sy0">:</span> <span class="st0">&quot;mylabel&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    expanded<span class="sy0">:</span> <span class="kw2">false</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">,</span> root<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    label<span class="sy0">:</span> <span class="st0">&quot;mylabel&quot;</span><span class="sy0">,</span>
+    expanded<span class="sy0">:</span> <span class="kw2">false</span>
+<span class="br0">&#125;</span><span class="sy0">,</span> root<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-a0eeac86a676238200ebe383abc5c15e-plain">var tmpNode = new YAHOO.widget.TextNode({
+    label: "mylabel",
+    expanded: false
+}, root);
+</textarea></div><p>Any public property of the node can be set in the same way 
+which is the preferred way instead of using the optional constructor arguments.
+(see also: <a href="#customproperties">Custom Properties in nodes</a> below)</p>
+    <p>
+    The new node you created (<code>tmpNode</code>) can now be used as the parent for other nodes.
+    </p>
+
+<div id="syntax-28bd13dac7ebffc80018550a3d5260fd" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> tree<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> root <span class="sy0">=</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        label<span class="sy0">:</span> <span class="st0">&quot;mylabel1&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        expanded<span class="sy0">:</span> <span class="kw2">false</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span> root<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> tmpNode2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        label<span class="sy0">:</span> <span class="st0">&quot;mylabel1-1&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">        expanded<span class="sy0">:</span> <span class="kw2">false</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span> tmpNode<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">   tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> tree<span class="sy0">;</span>
+<span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> root <span class="sy0">=</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+        label<span class="sy0">:</span> <span class="st0">&quot;mylabel1&quot;</span><span class="sy0">,</span>
+        expanded<span class="sy0">:</span> <span class="kw2">false</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span> root<span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> tmpNode2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+        label<span class="sy0">:</span> <span class="st0">&quot;mylabel1-1&quot;</span><span class="sy0">,</span> 
+        expanded<span class="sy0">:</span> <span class="kw2">false</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span> tmpNode<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+   tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-28bd13dac7ebffc80018550a3d5260fd-plain">var tree;
+function treeInit() {
+    tree = new YAHOO.widget.TreeView("treeDiv1");
+    var root = tree.getRoot();
+    var tmpNode = new YAHOO.widget.TextNode({
+        label: "mylabel1",
+        expanded: false
+    }, root);
+    var tmpNode2 = new YAHOO.widget.TextNode({
+        label: "mylabel1-1", 
+        expanded: false
+    }, tmpNode);
+
+   tree.render();
+}
+</textarea></div>
+<h3>Removing Nodes </h3>
+<p> Nodes can be removed with the <code>removeNode</code> method.  The removed node's
+descendants are also deleted.</p>
+<div id="syntax-093727e735d97ea75d71313b84b9352c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">tree.<span class="me1">removeNode</span><span class="br0">&#40;</span>nodeToRemove<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">tree.<span class="me1">removeNode</span><span class="br0">&#40;</span>nodeToRemove<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-093727e735d97ea75d71313b84b9352c-plain">tree.removeNode(nodeToRemove);
+</textarea></div>
+<p>The TreeView instance's <code>popNode</code> method can be used to remove a node from a tree while preserving the
+node's child collection.  You can also use the Node object's <code>appendTo</code>, <code>insertBefore</code>, 
+and <code>insertAfter</code> methods to move the popped node to a new location within the Tree.</p>
+<div id="syntax-ccbef8e47f1f2704edb73b4ae3228517" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// remove the node and insert it before another node</span></div></li><li class="li1"><div class="de1">tree.<span class="me1">popNode</span><span class="br0">&#40;</span>nodeToPop<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">nodeToPop.<span class="me1">insertBefore</span><span class="br0">&#40;</span>anotherNode<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">anotherNode.<span class="me1">parent</span>.<span class="me1">refresh</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// remove the node and append it to another node</span></div></li><li class="li1"><div class="de1">tree.<span class="me1">popNode</span><span class="br0">&#40;</span>nodeToPop<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">nodeToPop.<span class="me1">appendTo</span><span class="br0">&#40;</span>anotherNode<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">anotherNode.<span class="me1">refresh</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// remove the node and insert it before another node</span>
+tree.<span class="me1">popNode</span><span class="br0">&#40;</span>nodeToPop<span class="br0">&#41;</span><span class="sy0">;</span>
+nodeToPop.<span class="me1">insertBefore</span><span class="br0">&#40;</span>anotherNode<span class="br0">&#41;</span><span class="sy0">;</span>
+anotherNode.<span class="me1">parent</span>.<span class="me1">refresh</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// remove the node and append it to another node</span>
+tree.<span class="me1">popNode</span><span class="br0">&#40;</span>nodeToPop<span class="br0">&#41;</span><span class="sy0">;</span>
+nodeToPop.<span class="me1">appendTo</span><span class="br0">&#40;</span>anotherNode<span class="br0">&#41;</span><span class="sy0">;</span>
+anotherNode.<span class="me1">refresh</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-ccbef8e47f1f2704edb73b4ae3228517-plain">// remove the node and insert it before another node
+tree.popNode(nodeToPop);
+nodeToPop.insertBefore(anotherNode);
+anotherNode.parent.refresh();
+
+// remove the node and append it to another node
+tree.popNode(nodeToPop);
+nodeToPop.appendTo(anotherNode);
+anotherNode.refresh();
+</textarea></div>
+  <p>See the examples below in <a href="#using">Using TreeView</a> or the <a href="../docs/module_treeview.html">API Documentation</a> for more details.</p>
+
+<h2>Using TreeView<a name="using"></a></h2>
+
+  <p>This section describes several common uses and customizations of TreeView and contains these sections: </p>
+  <ul>
+  <li><a href="#style">Setting Up your Style Definitions</a></li>
+  <li><a href="#customproperties">Keeping Custom Properties in Node References</a></li>
+  <li><a href="#changehref">Changing the Behavior for the Label of a Text Node</a></li>
+  <li><a href="#events">Responding to Events </a></li>
+  <li><a href="#editing">Editing the contents of a Node</a></li>
+  <li><a href="#dynamicloading">Loading Your Data Dynamically</a></li>
+  <li><a href="#customtypes">Creating Custom Node Types</a></li>
+  </ul>
+
+<h3>Setting Up your Style Definitions <a name="style"></a></h3>
+<p>
+The TreeView component makes use of several CSS classes to style the tree.  You
+  can either use the CSS provided in the download source, or you can create your
+  own. If you create your own, you'll need to follow TreeView's naming conventions for its CSS classes.
+</p>
+
+<p>Icon styles:</p>
+<ul>
+    <li><strong>ygtvtn:</strong> First or middle sibling, no children</li>
+    <li><strong>ygtvtm:</strong> First or middle sibling, collapsible</li>
+    <li><strong>ygtvtmh:</strong> First or middle sibling, collapsible, hover state</li>
+    <li><strong>ygtvtp:</strong> First or middle sibling, expandable</li>
+    <li><strong>ygtvtph:</strong> First or middle sibling, expandable, hover state</li>
+    <li><strong>ygtvln:</strong> Last sibling, no children</li>
+    <li><strong>ygtvlm:</strong> Last sibling, collapsible</li>
+    <li><strong>ygtvlmh:</strong> Last sibling, collapsible, hover state</li>
+    <li><strong>ygtvlp:</strong> Last sibling, expandable</li>
+    <li><strong>ygtvlph:</strong> Last sibling, expandable, hover state</li>
+    <li><strong>ygtloading:</strong> Loading dynamic data indicator</li>
+</ul>
+
+<p>Depth spacer styles:</p>
+<ul>
+    <li><strong>ygtvdepth<em>N</em>:</strong> to all nodes, where <em>N</em> is the depth of the node</li>
+    <li><strong>ygtvdepthcell:</strong> Node's ancestor at the current depth has a next sibling</li>
+    <li><strong>ygtvblankdepthcell:</strong> Node's ancestor at the current depth does not have a next sibling </li>
+</ul>
+
+<p>Container styles:</p>
+<ul>
+    <li><strong>ygtvitem:</strong> The node's container element</li>
+    <li><strong>ygtvchildren:</strong> The container around each node's collection of children</li>
+    <li><strong>ygtvcontent:</strong> The container around each node's content (label, anchor, HTML)</li>
+</ul>
+
+<p>Text styles:</p>
+<ul>
+    <li><strong>ygtvlabel[link,visited,hover]:</strong> The style of the text label/href when using TextNode</li>
+    <p>Due to a bug in the font smoothing algorithm in Internet Explorer, these styles define a white background for 
+    the labels thus, TreeViews have to be drawn over a white background or the background-color definition of these
+    styles adjusted to match your background.</p>
+</ul>
+<p>Focused/highlighted elements</p>
+<ul>
+    <li><strong>ygtvfocus</strong>: The style added to any of the above to highlight the node having the focus</li>
+    <li><strong>ygtv-highlight0</strong>: The style of a node with no highlight</li>
+    <li><strong>ygtv-highlight1</strong>: The style of a highlighted node</li>
+    <li><strong>ygtv-highlight2</strong>: The style of a node that have some but not all children hightlighted</li>
+</ul>
+<p>Label editor</p>
+<ul>
+    <li><strong>ygtvok</strong>: The style of the Ok button</li>
+    <li><strong>ygtvcancel</strong>: The style of the Cancel button</li>
+    <li><strong>ygtv-label-editor</strong>: The generic style of the popup window</li>
+    <li><strong>ygtv-edit-</strong><i>Xxxx</i><strong>Node</strong>: 
+    The style of the popup window for each specific node type (i.e.: ygtv-edit-TextNode).</li>
+</ul>
+
+<p>You can review the current CSS definitions for TreeView by looking at the CSS file that accompanies 
+TreeView in the <a href="http://yui.github.io/yui2/">YUI download</a> or by reviewing the current production CSS:</p>
+
+<ul>
+    <li><a href="http://yui.yahooapis.com/2.9.0/build/treeview/assets/skins/sam/treeview.css">http://yui.yahooapis.com/2.9.0/build/treeview/assets/skins/sam/treeview.css</a></li>
+</ul>
+
+<h4 id="mutipletrees">Multiple trees with different styles</h4>
+<p>You can configure multiple different presentation styles for multiple
+trees on the same page by defining the additional styles using id selectors
+on the element containing the tree. An <a href="../examples/treeview/index.html">example</a>
+of this technique is provided.
+</p>
+<p>The built-in CSS definitions for TreeView do not support skinning (except for highlighting as noted below). 
+The styles will be applied regardless of whether there is a skin definition (<code>yui-skin-sam</code>) or not.
+If two or more style sheets are loaded, the last one will override the rest.
+Providing for skinning at this point would break existing implementations with no skin selector defined.
+Should skinning be required, implementors might take the non-minified 
+<a href="http://yui.yahooapis.com/2.9.0/build/treeview/assets/skins/sam/treeview-skin.css">treeview-skin.css</a>
+and prefix all selectors with the chosen skin name (i.e.: <code>.ygtvtm</code> would turn into <code>.yui-skin-sam .ygtvtm</code>).
+</p>
+
+<h3>Keeping Custom Properties in Node References<a name="customproperties"></a></h3>
+<p>
+The TreeView control accepts objects as the first argument of the node constructor.
+  This provides an opportunity for setting additional properties and 
+  for storing metadata about the node in its object.
+  TreeView will store all Node properties it doesn't know about in the <code>data</code> member of the node object.
+  For each property, it will first check if there is an existing property by that name 
+  and if so it will assign it its value, if not, it will go into the object in the <code>data</code> property.
+ This feature can
+  be useful when handling events passed to you by the TreeView Control (See
+  <a href="#events">Responding to Events</a>, below, for an example of this use).</p>
+
+<div id="syntax-9da3bb78add7e84e0b04408e6c0ad914" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> tree<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> root <span class="sy0">=</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="kw2">var</span> myobj <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        label<span class="sy0">:</span> <span class="st0">&quot;mylabel1&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">        myNodeId<span class="sy0">:</span> <span class="st0">&quot;myid1&quot;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> root<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">   tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> tree<span class="sy0">;</span>
+<span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> root <span class="sy0">=</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> myobj <span class="sy0">=</span> <span class="br0">&#123;</span>
+        label<span class="sy0">:</span> <span class="st0">&quot;mylabel1&quot;</span><span class="sy0">,</span> 
+        myNodeId<span class="sy0">:</span> <span class="st0">&quot;myid1&quot;</span>
+    <span class="br0">&#125;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> root<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+   tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-9da3bb78add7e84e0b04408e6c0ad914-plain">var tree;
+function treeInit() {
+    tree = new YAHOO.widget.TreeView("treeDiv1");
+    var root = tree.getRoot();
+    var myobj = {
+        label: "mylabel1", 
+        myNodeId: "myid1"
+    };
+    var tmpNode = new YAHOO.widget.TextNode(myobj, root);
+
+   tree.render();
+}
+</textarea></div>
+<h3>Changing the Behavior for the Label of a Text Node<a name="changehref"></a> </h3>
+<p>
+By default, clicking the text label of a node  expands or collapses it.  You
+  can change this behavior to a URL by using a custom object to instantiate
+  your node and providing an <code>href</code> property:</p>
+
+<div id="syntax-c9a2775dae487b9e5dbd73a0493fa8fb" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> tree<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> root <span class="sy0">=</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="kw2">var</span> myobj <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        label<span class="sy0">:</span> <span class="st0">&quot;mylabel1&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">        href<span class="sy0">:</span><span class="st0">&quot;http://www.yahoo.com&quot;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> root<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> tree<span class="sy0">;</span>
+<span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> root <span class="sy0">=</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> myobj <span class="sy0">=</span> <span class="br0">&#123;</span>
+        label<span class="sy0">:</span> <span class="st0">&quot;mylabel1&quot;</span><span class="sy0">,</span> 
+        href<span class="sy0">:</span><span class="st0">&quot;http://www.yahoo.com&quot;</span>
+    <span class="br0">&#125;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> root<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-c9a2775dae487b9e5dbd73a0493fa8fb-plain">var tree;
+function treeInit() {
+    tree = new YAHOO.widget.TreeView("treeDiv1");
+    var root = tree.getRoot();
+    var myobj = {
+        label: "mylabel1", 
+        href:"http://www.yahoo.com"
+    };
+    var tmpNode = new YAHOO.widget.TextNode(myobj, root);
+
+    tree.render();
+}
+</textarea></div>
+<p>The HTML for such a TextNode includes a link (&lt;a href="..."&gt;)
+  with the contents of the <code>href</code> property and <code>target</code> and <code>title</code> properties, if present.</p>
+<h3>Responding to Events <a name="events"></a> </h3>
+<p>
+The TreeView component supports event callbacks for when a node is expanded or collapsed.
+The callback function gets a reference to the node that was expanded/collapsed, and that callback can be
+used to dynamically alter the presentation of the node.
+</p>
+<div id="syntax-52302ba6b2d72dafcf795360435f5ae2" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> tree<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="kw2">var</span> root <span class="sy0">=</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> myobj <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        label<span class="sy0">:</span> <span class="st0">&quot;mylabel1&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">        myNodeId<span class="sy0">:</span><span class="st0">&quot;myid1&quot;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> root<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    myobj <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        label<span class="sy0">:</span> <span class="st0">&quot;mylabel2&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">        myNodeId<span class="sy0">:</span> <span class="st0">&quot;myid2&quot;</span> </div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> tmpNode2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> tmpNode<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    myobj <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        label<span class="sy0">:</span> <span class="st0">&quot;mylabel3&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">        myNodeId<span class="sy0">:</span> <span class="st0">&quot;myid3&quot;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> tmpNode3 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> tmpNode<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="co1">// Expand and collapse happen prior to the actual expand/collapse,</span></div></li><li class="li1"><div class="de1">    <span class="co1">// and can be used to cancel the operation</span></div></li><li class="li1"><div class="de1">    tree.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;expand&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>node<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw3">alert</span><span class="br0">&#40;</span>node.<span class="me1">data</span>.<span class="me1">myNodeId</span> <span class="sy0">+</span> <span class="st0">&quot; was expanded&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="co1">// return false; // return false to cancel the expand</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    tree.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;collapse&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>node<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw3">alert</span><span class="br0">&#40;</span>node.<span class="me1">data</span>.<span class="me1">myNodeId</span> <span class="sy0">+</span> <span class="st0">&quot; was collapsed&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// By default, trees with TextNodes will fire an event for when the label is clicked:</span></div></li><li class="li1"><div class="de1">    tree.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;labelClick&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>node<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw3">alert</span><span class="br0">&#40;</span>node.<span class="me1">data</span>.<span class="me1">myNodeId</span> <span class="sy0">+</span> <span class="st0">&quot; label was clicked&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> tree<span class="sy0">;</span>
+<span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="kw2">var</span> root <span class="sy0">=</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="kw2">var</span> myobj <span class="sy0">=</span> <span class="br0">&#123;</span>
+        label<span class="sy0">:</span> <span class="st0">&quot;mylabel1&quot;</span><span class="sy0">,</span> 
+        myNodeId<span class="sy0">:</span><span class="st0">&quot;myid1&quot;</span>
+    <span class="br0">&#125;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> root<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    myobj <span class="sy0">=</span> <span class="br0">&#123;</span>
+        label<span class="sy0">:</span> <span class="st0">&quot;mylabel2&quot;</span><span class="sy0">,</span> 
+        myNodeId<span class="sy0">:</span> <span class="st0">&quot;myid2&quot;</span> 
+    <span class="br0">&#125;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> tmpNode2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> tmpNode<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    myobj <span class="sy0">=</span> <span class="br0">&#123;</span>
+        label<span class="sy0">:</span> <span class="st0">&quot;mylabel3&quot;</span><span class="sy0">,</span> 
+        myNodeId<span class="sy0">:</span> <span class="st0">&quot;myid3&quot;</span>
+    <span class="br0">&#125;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> tmpNode3 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> tmpNode<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Expand and collapse happen prior to the actual expand/collapse,</span>
+    <span class="co1">// and can be used to cancel the operation</span>
+    tree.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;expand&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>node<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw3">alert</span><span class="br0">&#40;</span>node.<span class="me1">data</span>.<span class="me1">myNodeId</span> <span class="sy0">+</span> <span class="st0">&quot; was expanded&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="co1">// return false; // return false to cancel the expand</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    tree.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;collapse&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>node<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw3">alert</span><span class="br0">&#40;</span>node.<span class="me1">data</span>.<span class="me1">myNodeId</span> <span class="sy0">+</span> <span class="st0">&quot; was collapsed&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// By default, trees with TextNodes will fire an event for when the label is clicked:</span>
+    tree.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;labelClick&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>node<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw3">alert</span><span class="br0">&#40;</span>node.<span class="me1">data</span>.<span class="me1">myNodeId</span> <span class="sy0">+</span> <span class="st0">&quot; label was clicked&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-52302ba6b2d72dafcf795360435f5ae2-plain">var tree;
+function treeInit() {
+    tree = new YAHOO.widget.TreeView("treeDiv1");
+
+    var root = tree.getRoot();
+
+    var myobj = {
+        label: "mylabel1", 
+        myNodeId:"myid1"
+    };
+    var tmpNode = new YAHOO.widget.TextNode(myobj, root);
+
+    myobj = {
+        label: "mylabel2", 
+        myNodeId: "myid2" 
+    };
+    var tmpNode2 = new YAHOO.widget.TextNode(myobj, tmpNode);
+
+    myobj = {
+        label: "mylabel3", 
+        myNodeId: "myid3"
+    };
+    var tmpNode3 = new YAHOO.widget.TextNode(myobj, tmpNode);
+
+    // Expand and collapse happen prior to the actual expand/collapse,
+    // and can be used to cancel the operation
+    tree.subscribe("expand", function(node) {
+        alert(node.data.myNodeId + " was expanded");
+        // return false; // return false to cancel the expand
+    });
+
+    tree.subscribe("collapse", function(node) {
+        alert(node.data.myNodeId + " was collapsed");
+    });
+
+    // By default, trees with TextNodes will fire an event for when the label is clicked:
+    tree.subscribe("labelClick", function(node) {
+        alert(node.data.myNodeId + " label was clicked");
+    });
+
+    tree.render();
+}
+</textarea></div>
+<p>The following events have been added in this version of TreeView:</p>
+<ul>
+<li><strong>enterKeyPressed</strong>: Fired when the Enter key is pressed when focus is on a node.</li>
+<li><strong>clickEvent</strong>:  Fired on clicking on a node, except for the toggle 
+icon which expands or collapses the node and triggers the corresponding events.</li>
+<li><strong>dblClickEvent</strong>: As the previous, for double clicks.</li>
+</ul>
+
+<h3>Editing the contents of a Node<a name="editing"></a></h3>
+<p>The contents of a node can be edited in-line.  
+The programmer can pop-up the content editor by calling method <code>editNode</code>.  
+Nodes must have an editor defined and property <code>editable</code> has to be true.</p>
+<p>The editor can also be shown by listening to events <code>clickEvent</code>, 
+<code>dblClickEvent</code> or <code>enterKeyPressed</code>.  
+Method <code>onEventEditNode</code> has been provided so that it can be associated
+with any of them.</p>
+<div id="syntax-e67c7fe08448d95d5908158162b16012" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">tree.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;dblClickEvent&quot;</span><span class="sy0">,</span>tree.<span class="me1">onEventEditNode</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">tree.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;dblClickEvent&quot;</span><span class="sy0">,</span>tree.<span class="me1">onEventEditNode</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-e67c7fe08448d95d5908158162b16012-plain">tree.subscribe("dblClickEvent",tree.onEventEditNode);
+</textarea></div>
+
+<p>Node types TextNode, MenuNode and DateNode have editors defined.  
+DateNode uses the <a href="../calendar/index.html">YUI Calendar Control</a>.
+A DateNode inherits from TextNode and has only the methods associated with 
+providing the editing functionality changed so it can be used as an example for other 
+node types requiring specific editors.</p>
+</p>
+
+
+<h3>Loading your data dynamically<a name="dynamicloading"></a> </h3>
+<p>The TreeView component supports dynamic data loading.  To enable this feature,
+  you must provide a callback function that populates the child nodes for a given
+  node when that node is expanded for the first time. Dynamic loading can be
+  defined for the entire tree or for individual nodes. The callback function
+  receives a reference to the node that is being expanded and a callback function
+  that must be executed once you are finished creating the child nodes.</p>
+
+<div id="syntax-286746a8d0c9686150166601eee78fff" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> tree<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    tree.<span class="me1">setDynamicLoad</span><span class="br0">&#40;</span>loadDataForNode<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> root <span class="sy0">=</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> myobj <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        label<span class="sy0">:</span> <span class="st0">&quot;mylabel1&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">        id<span class="sy0">:</span> <span class="st0">&quot;myid1&quot;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> root<span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    myobj <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        label<span class="sy0">:</span> <span class="st0">&quot;mylabel2&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">        id<span class="sy0">:</span> <span class="st0">&quot;myid2&quot;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> tmpNode2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> tmpNode<span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    myobj <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        label<span class="sy0">:</span> <span class="st0">&quot;mylabel3&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">        id<span class="sy0">:</span> <span class="st0">&quot;myid3&quot;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> tmpNode3 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> tmpNode<span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">function</span> loadDataForNode<span class="br0">&#40;</span>node<span class="sy0">,</span> onCompleteCallback<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    <span class="kw2">var</span> id<span class="sy0">=</span> node.<span class="me1">data</span>.<span class="me1">id</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// -- code to get your data, possibly using Connect --</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>id <span class="sy0">+</span> <span class="st0">&quot;label1&quot;</span><span class="sy0">,</span> node<span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>id <span class="sy0">+</span> <span class="st0">&quot;label2&quot;</span><span class="sy0">,</span> node<span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="co1">// Be sure to notify the TreeView component when the data load is complete</span></div></li><li class="li1"><div class="de1">    onCompleteCallback<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> tree<span class="sy0">;</span>
+<span class="kw2">function</span> treeInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    tree <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treeDiv1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    tree.<span class="me1">setDynamicLoad</span><span class="br0">&#40;</span>loadDataForNode<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="kw2">var</span> root <span class="sy0">=</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="kw2">var</span> myobj <span class="sy0">=</span> <span class="br0">&#123;</span>
+        label<span class="sy0">:</span> <span class="st0">&quot;mylabel1&quot;</span><span class="sy0">,</span> 
+        id<span class="sy0">:</span> <span class="st0">&quot;myid1&quot;</span>
+    <span class="br0">&#125;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> root<span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    myobj <span class="sy0">=</span> <span class="br0">&#123;</span>
+        label<span class="sy0">:</span> <span class="st0">&quot;mylabel2&quot;</span><span class="sy0">,</span> 
+        id<span class="sy0">:</span> <span class="st0">&quot;myid2&quot;</span>
+    <span class="br0">&#125;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> tmpNode2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> tmpNode<span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    myobj <span class="sy0">=</span> <span class="br0">&#123;</span>
+        label<span class="sy0">:</span> <span class="st0">&quot;mylabel3&quot;</span><span class="sy0">,</span> 
+        id<span class="sy0">:</span> <span class="st0">&quot;myid3&quot;</span>
+    <span class="br0">&#125;</span><span class="sy0">;</span>
+    <span class="kw2">var</span> tmpNode3 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>myobj<span class="sy0">,</span> tmpNode<span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    tree.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="kw2">function</span> loadDataForNode<span class="br0">&#40;</span>node<span class="sy0">,</span> onCompleteCallback<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> id<span class="sy0">=</span> node.<span class="me1">data</span>.<span class="me1">id</span><span class="sy0">;</span>
+    <span class="co1">// -- code to get your data, possibly using Connect --</span>
+    <span class="kw2">var</span> tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>id <span class="sy0">+</span> <span class="st0">&quot;label1&quot;</span><span class="sy0">,</span> node<span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    tmpNode <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span>id <span class="sy0">+</span> <span class="st0">&quot;label2&quot;</span><span class="sy0">,</span> node<span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Be sure to notify the TreeView component when the data load is complete</span>
+    onCompleteCallback<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-286746a8d0c9686150166601eee78fff-plain">var tree;
+function treeInit() {
+    tree = new YAHOO.widget.TreeView("treeDiv1");
+    tree.setDynamicLoad(loadDataForNode);
+
+    var root = tree.getRoot();
+
+    var myobj = {
+        label: "mylabel1", 
+        id: "myid1"
+    };
+    var tmpNode = new YAHOO.widget.TextNode(myobj, root, false);
+
+    myobj = {
+        label: "mylabel2", 
+        id: "myid2"
+    };
+    var tmpNode2 = new YAHOO.widget.TextNode(myobj, tmpNode, false);
+
+    myobj = {
+        label: "mylabel3", 
+        id: "myid3"
+    };
+    var tmpNode3 = new YAHOO.widget.TextNode(myobj, tmpNode, false);
+
+    tree.render();
+}
+
+function loadDataForNode(node, onCompleteCallback) {
+    var id= node.data.id;
+    // -- code to get your data, possibly using Connect --
+    var tmpNode = new YAHOO.widget.TextNode(id + "label1", node, false);
+    tmpNode = new YAHOO.widget.TextNode(id + "label2", node, false);
+
+    // Be sure to notify the TreeView component when the data load is complete
+    onCompleteCallback();
+}
+</textarea></div>
+<h3>Reloading Dynamic Nodes<a name="reloading"></a> </h3>
+<p>Dynamically loaded nodes only invoke the data loader the first
+time they node are expanded.  The widget has a utility method that will
+clear out the node's collection of children and reset the node so
+that the next time it is expanded it will call the data loader again.
+</p>
+<div id="syntax-11065740bff301e624c0225531948cbc" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">tree.<span class="me1">removeChildren</span><span class="br0">&#40;</span>nodeToReset<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">tree.<span class="me1">removeChildren</span><span class="br0">&#40;</span>nodeToReset<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-11065740bff301e624c0225531948cbc-plain">tree.removeChildren(nodeToReset);
+</textarea></div>
+<h3>Creating Custom Node Types<a name="customtypes"></a> </h3>
+<p>
+The TreeView widget provides a number of node types that differ in
+behavior and presentation:</p>
+  <ul>
+    <li>
+      YAHOO.widget.TextNode: Provides the default tree presentation.  The
+      node label is a plain text that will expand/collapse the node by
+      default.  If the <code>href</code> property is set, the text will be
+      rendered as an anchor element. 
+      It is possible to override this so the a click on the label
+      does something else.
+    </li>
+    <li>
+      YAHOO.widget.MenuNode: Similar to TextNode, except two sibling nodes
+      cannot be expanded at once.  This lets you create navigation menus that
+      only show the sub-destinations for the current selection.
+    </li>
+    <li>
+      YAHOO.widget.HTMLNode: Does not create the node with default behavior
+      like TextNode does.  Instead, it allows you to pass in arbritrary HTML that
+      will be inserted into the node verbatim.
+    </li>
+    <li>
+      YAHOO.widget.DateNode:   
+      It is a plain TextNode that uses YUI's Calendar widget for label editing.
+    </li>
+  </ul>
+
+<p>It is also possible to subclass one of these nodes to provide custom features. 
+Check out the <a href="../examples/treeview/tasklist.html">task list example</a> to learn how to do this.
+</p>
+<h3>Highlighting Nodes </h3>
+<p>Clicking on a node will highlight it to show it has the focus, but that highlighting is not persistent as it will blur
+as soon as another element gets the focus.  TreeView provides a persistent highlighting.  
+The implementor has to define which UI event will produce the higlighting, by attaching the highlighting listener to
+the chosen event:</p>
+<div id="syntax-96d63abf5453c1a9f5b40f1801c8b856" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myTreeView.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;clickEvent&quot;</span><span class="sy0">,</span>myTreeView.<span class="me1">onEventToggleHighlight</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myTreeView.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;clickEvent&quot;</span><span class="sy0">,</span>myTreeView.<span class="me1">onEventToggleHighlight</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-96d63abf5453c1a9f5b40f1801c8b856-plain">myTreeView.subscribe("clickEvent",myTreeView.onEventToggleHighlight);
+</textarea></div><p>By default, TreeView is set for simple highlighting. 
+Highlighting can be set off for any node by setting its <code>enableHighlight</code> property to false.</p>
+<p>
+Any node can be set to propagate the highlighting up to its parents or down to its children.
+When propagating down, all child nodes will copy the highlighted state of their parent.
+When propagating up, each parent will check the highlight state of its children and will be
+fully highlighted if all its children are highlighted, not highlighted if none are and partially
+highlighted otherwise.  Propagation will cease on nodes with <code>enableHighlight</code> set to false.</p>
+<div id="syntax-e850b87d8d0878164938b27949105bba" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myTreeView.<span class="me1">setNodesProperty</span><span class="br0">&#40;</span><span class="st0">&quot;propagateHighlightUp&quot;</span><span class="sy0">,</span><span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myTreeView.<span class="me1">setNodesProperty</span><span class="br0">&#40;</span><span class="st0">&quot;propagateHighlightDown&quot;</span><span class="sy0">,</span><span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myTreeView.<span class="me1">setNodesProperty</span><span class="br0">&#40;</span><span class="st0">&quot;propagateHighlightUp&quot;</span><span class="sy0">,</span><span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myTreeView.<span class="me1">setNodesProperty</span><span class="br0">&#40;</span><span class="st0">&quot;propagateHighlightDown&quot;</span><span class="sy0">,</span><span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-e850b87d8d0878164938b27949105bba-plain">myTreeView.setNodesProperty("propagateHighlightUp",true);
+myTreeView.setNodesProperty("propagateHighlightDown",true);
+</textarea></div><p>The built-in CSS style sheet provides two styles of highlighting or 'skins'.  
+To select either one, the container for the TreeView needs to add the corresponding 'skin' name,
+either <code>ygtv-highlight</code> which will highlight nodes in 
+whilte text over blue background, suitable for simple highlighting
+or <code>ygtv-checkbox</code>, suitable for both simple and propagating highlighting.
+If no 'skin' is selected, the highlighting will operate but it will not be visible to the user.
+To set the tree to use the 'checkbox' highlighting, define the container to hold the tree thus:</p>
+<div id="syntax-6697be582049294f93273c759626182e" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;treeDiv1&quot;</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;ygtv-checkbox&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;treeDiv1&quot;</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;ygtv-checkbox&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-6697be582049294f93273c759626182e-plain"><div id="treeDiv1" class="ygtv-checkbox"></div>
+</textarea></div>
+<h2 id="knownissues">Known Issues</h2>
+<p>Internet Explorer sometimes has trouble rendering deeply nested nodes (It has
+been reported that this problem surfaces at about 38 levels deep).  A future release
+will have a different markup pattern that may fix this issue.</p>
+
+<h2 id="mobile">YUI on Mobile: Using TreeView Control with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>
+<p>TreeView is functional in the target mobile browsers.  However, deeply nested nodes may cause horizontal scrolling and may be a sub-optimal user experience.</p>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+        </div>
+         <div class="yui-u">
+            
+            <div id="cheatsheet">
+                <h3>TreeView Control Cheat Sheet:</h3>
+                
+                <a href="http://yuiblog.com/assets/pdf/cheatsheets/treeview.pdf"><img src="http://us.i1.yimg.com/us.yimg.com/i/ydn/yuiweb/img/cheatsheet-images/treeview.gif" width="178" height="134" alt="Cheat Sheet for the TreeView Control."></a>
+                
+                <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+            </div>
+            
+            <div id="examples">
+<h3>TreeView Control Examples:</h3>
+
+<ul>
+<li><a href='../examples/treeview/default_tree.html'>Default TreeView</a></li>
+<li><a href='../examples/treeview/dynamic_tree.html'>Dynamically Loading Node Data</a></li>
+<li><a href='../examples/treeview/folder_style.html'>Folder-Style TreeView Design</a></li>
+<li><a href='../examples/treeview/menu_style.html'>Menu-Style TreeView Design</a></li>
+<li><a href='../examples/treeview/customicons.html'>Using TreeView with Custom Icons</a></li>
+<li><a href='../examples/treeview/tv_tooltip.html'>TreeView with Tooltips</a></li>
+<li><a href='../examples/treeview/tv_markup.html'>Three Ways to Define a TreeView: Markup (Progressive Enhancement), Existing TreeView Instance, and Object Literal </a></li>
+<li><a href='../examples/treeview/tv_edit.html'>Inline Editing of TreeView Node Labels</a></li>
+<li><a href='../examples/treeview/tv_highlight.html'>Treeview Node Selection and Checkbox Example</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the TreeView Control:</h4>
+
+<ul>
+<li><a href='../examples/menu/treeviewcontextmenu.html'>Adding A Context Menu To A TreeView</a> (included with examples for the <a href='../menu/index.html'>Menu Family</a>)</li>
+</ul>		
+           </div>
+     
+            <div id="morereading">
+                <h3>More Reading about the YUI TreeView Control:</h3>
+                
+                <ul>
+                  <li><a href="http://yuiblog.com/blog/2006/08/02/dynamic_loading/">Dynamic Loading and Rendering with YUI's Menu and TreeView Controls</a>, by Eric Miraglia</li>
+                  <li><a href="http://yuiblog.com/sandbox/yui/v0113/examples/treeview/dyn_ld.php">TreeView Example: Dynamic Load, Using <code>node.onLabelClick</code> and <code>node.data</code></a>, by the YUI Team</li>
+                  <li><a href="http://yuiblog.com/sandbox/yui/v0121/examples/treeview/scrolling.php">TreeView Example: TreeView and Horizontal Scrolling</a>, by the YUI Team</li>
+               </ul>
+           </div>
+           
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Ftreeview%2F--><h3 id="delicious">YUI TreeView on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/treeview/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/web" class="tag-size-1">web</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/tree" class="tag-size-1">tree</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/framework" class="tag-size-1">framework</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ui" class="tag-size-1">ui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/treeview" class="tag-size-1">treeview</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/ac544b608b36a54a318415701e9ef9ef" class="saved-by">saved by <span>116</span>  people</a></p>
+   </div></div>
+
+         </div>
+      </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="selected "><a title="The YUI TreeView Control" href="index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:05 PDT 2013 -->
+
+<!-- Localized -->

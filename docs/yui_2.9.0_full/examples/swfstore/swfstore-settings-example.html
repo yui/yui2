@@ -1,0 +1,328 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: SWFStore Utility: SWFStore Settings Example</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/cookie/cookie-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/swf/swf-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/swfstore/swfstore-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+
+#controls label  
+{
+	clear: left;
+	float: left;
+	width: 13em; 
+} 
+
+fieldset
+{
+	border: 1px;
+}
+
+input[type="text"]
+{
+	padding-bottom: 2px;
+}
+
+
+</style>
+
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: SWFStore Utility: SWFStore Settings Example</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>SWFStore Utility: SWFStore Settings Example</h1>
+	
+	<div class="exampleIntro">
+    <p><strong>This example has been deprecated and will no longer be supported.</strong> Please note that the functionality of the SWFStore Utility requires that you host swfstore.swf on your own servers. YUI 2 is now in maintenance mode, so no future updates are planned and only critical fixes will be considered. For more information, please refer to the following blog posts:
+<ul>
+<li><a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/</a></li>
+<li><a href="http://www.yuiblog.com/blog/2010/12/17/yui-2-9-0-release-update/">http://www.yuiblog.com/blog/2010/12/17/yui-2-9-0-release-update/</a></li>
+</ul>
+</p>
+	<p>This example shows what can happen if storage capacity is exceeded, and how to deal with it effectively. By default, you're allowed 100k per domain. If a larger amount of data is attempted to be stored, an exception will occur. This shows how to deal with that exception and how to enable more storage.</p>
+	</div>	
+					
+	<div class="example-container module  newWindow">
+			<div id="example-canvas" class="bd">
+	
+		<p class="newWindowButton yui-skin-sam"><span id="newWindowLink"><span class="first-child"><a href="swfstore-settings-example_source.html" target="_blank">View example in new window.</a></span></span>		
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2>Setting up the Example</h2>
+<p>The first step is to instantiate a SWFStore and set up listeners, once the page is ready. We also disable all of the Buttons at first.</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+	 function initialize()
+	 {
+		var useCompression = compressionCheckbox.get("checked");
+
+		saveButton.set("disabled", true); 
+		purgeButton.set("disabled", true);  
+		compressionCheckbox.set("disabled", true); 
+		resizeButton.set("disabled", true); 
+		setsizeButton.set("disabled", true); 
+
+		//the swfstore instance
+		swfstore = new YAHOO.util.SWFStore("swfstoreContainer", false, useCompression); 
+		
+		//some basic listeners for user feedback
+		swfstore.addListener("save", onSave);
+		swfstore.addListener("error", onError);
+		swfstore.addListener("contentReady", onContentReady);
+		swfstore.addListener("inadequateDimensions", onInadequateDimensions);
+		swfstore.addListener("securityError", onError);
+	}
+</textarea>
+
+<p>Once SWFStore is ready, it will dispatch a <code>contentReady</code> event. We can then enable the Buttons.</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+	function onContentReady(event)
+	{
+		saveButton.set("disabled", false); 
+		purgeButton.set("disabled", false);  
+		compressionCheckbox.set("disabled", false); 
+		displayButton.set("disabled", false); 
+		setsizeButton.set("disabled", false); 
+		resizeButton.set("disabled", false); 
+	}
+
+	
+
+</textarea>
+<h2>Exceeding Storage Capacity</h2>
+<p>Unless the user has disabled storage altogether, or set it below the default, you will generally have 100kb per domain. If you expect that you'll need additional storage, you should call the <code>setSize</code> method in advance, passing in an amount greater than you expect to use. Don't worry about requesting too much, as it's only an allotted amount and no hard drive space will be taken up until it's filled with data. Plus, Flash Player is set up to round off values -- 0kb, 10kb, 100kb, 1mb, 10mb, and unlimited. For instance, if you expect to store no more than 300kb, you might as well ask for more as Flash Player's request dialog will actually ask for 1mb.</p>
+<p>If the storage amount requested exceeds what is currently set as the maximum available storage, whether through calling <code>setSize(amount)</code> or by attempting to store an item that is larger than the available space, a <code>quotaExceededError</code> is dispatched and the item will <i>not</i> save. Flash Player will attempt to display a dialog requesting additional storage. However, since the SWF we've embedded is <code>0px</code> x <code>0px</code>, the dialog has insufficient space to display. We can detect this in advance via <code>swfstore.hasAdequateDimensions()</code>. The SWF itself will therefore detect whether it's large enough--if not, we can then simply resize the SWF's container and try again. Here we've done just that, using the Animation utility to make the resize more apparent. We check the size of the SWF first, and if it's not large enough we resize it and tell the Animation utility to call the function again once the resize is complete. This is necessary because the dialogs will not render if the SWF is too small--thus you cannot simply resize after invoking the dialog, you must check the SWF's dimensions in advance.</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+	function setStorageAmount() 
+	{ 
+		if(swfstore.hasAdequateDimensions())
+		{
+			anim.onComplete.unsubscribe(setStorageAmount); 
+			swfstore.setSize(parseInt(YAHOO.util.Dom.get('storageAmount').value));
+		}
+		
+		else
+		{
+			//swf is not large enough to display the storage request panel, so resize it
+			//have it try again when the animation is finished
+			anim.onComplete.subscribe(setStorageAmount);
+			resizeSWF();
+		}
+		
+	}
+</textarea>
+<p>The settings panel can also be invoked manually. You can try this in this example by clicking the Display Settings button and adjusting the slider in the dialog that displays--or even turn off storage altogether. This is accomplished in code by calling <code>swfstore.displaySettings()</code>. Here we've done so in the <code>showSettings</code> function below. Again we've used the Animation utility to resize the SWF if necessary. It is set up to call <code>showSettings()</code> again once it's finished its animation, thereby ensuring display of the dialog. Note that the required space for these SWF dialogs is 215px wide by 138px high, but it's better to set it a bit higher due to CSS padding or other factors which may decrease its true dimensions. 300x300 is a nice starting point.
+</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+	function showSettings() 
+	{ 
+		if(swfstore.hasAdequateDimensions())
+		{
+			anim.onComplete.unsubscribe(showSettings); 
+			swfstore.displaySettings();
+		}
+		
+		else
+		{
+			anim.onComplete.subscribe(showSettings);
+			resizeSWF();
+		}
+	}
+</textarea>
+<h2>Avoiding the Problem Altogether</h2>
+<p>If you try storing a larger amount of data than the allotted storage available, such as trying to store the full text of <a href="assets/hamlet.txt" target="_blank">Shakespeare's <i>Hamlet</i></a>, about 180kb, in the default 100kb of space, the save will fail as I've mentioned. Try copying and pasting that text and saving. A way to increase the amount of data you can store without requiring the dialogs is by compressing your data. This is accomplished via the <code>useCompression</code> parameter of SWFStore (off by default). Try turning on compression by clicking the Use Compression button. This should compress the 180kb down to about 70kb, and it should save properly. Be sure to purge out the data when you're done to avoid taking up precious hard drive space. </p>
+
+
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+					
+				
+					<div id="examples">
+						<h3 class='firstContent'>SWFStore Utility Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='swfstore-advanced-example.html'>SWFStore Advanced Example</a></li><li class='selected'><a href='swfstore-settings-example.html'>SWFStore Settings Example</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More SWFStore Utility Resources:</h3>
+						<ul>
+							<li><a href="../../swfstore/index.html">User's Guide</a></li>
+						<li><a href="../../docs/module_swfstore.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/swfstore.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:09 PDT 2013 -->
+
+<!-- Localized -->

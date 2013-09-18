@@ -1,0 +1,426 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: DataTable Control: Complex Example of Multiple Features</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/paginator/assets/skins/sam/paginator.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/datatable/assets/skins/sam/datatable.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event-delegate/event-delegate-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datatable/datatable-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: DataTable Control: Complex Example of Multiple Features</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>DataTable Control: Complex Example of Multiple Features</h1>
+	
+	<div class="exampleIntro">
+	<p>A demonstration of several DataTable features combined in one instance. The
+features implemented in this example require the Drag and Drop and Animation
+utilities.</p>
+			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="dt_complex_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<div id="complex"></div>
+
+<script type="text/javascript" src="assets/js/data.js"></script>
+<script type="text/javascript">
+YAHOO.util.Event.addListener(window, "load", function() {
+    YAHOO.example.MultipleFeatures = function() {
+        // Custom sort handler to sort by state and then by areacode
+        // where a and b are Record instances to compare
+        var sortStates = function(a, b, desc) {
+            // Deal with empty values
+            if(!YAHOO.lang.isValue(a)) {
+                return (!YAHOO.lang.isValue(b)) ? 0 : 1;
+            }
+            else if(!YAHOO.lang.isValue(b)) {
+                return -1;
+            }
+
+            // First compare by state
+            var comp = YAHOO.util.Sort.compare;
+            var compState = comp(a.getData("state"), b.getData("state"), desc);
+
+            // If states are equal, then compare by areacode
+            return (compState !== 0) ? compState : comp(a.getData("areacode"), b.getData("areacode"), desc);
+        };
+
+        var myColumnDefs = [
+            {key:"areacode",label:"Area Codes",width:100,resizeable:true,sortable:true},
+            {key:"state",label:"States",width:250,resizeable:true,sortable:true,
+                    sortOptions:{sortFunction:sortStates}},
+            {key:"notes",label:"Notes (editable)",editor:"textbox",resizeable:true,sortable:true}
+        ];
+
+        var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
+        myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+        myDataSource.responseSchema = {
+            fields: ["areacode","state"]
+        };
+
+        var myConfigs = {
+            sortedBy:{key:"areacode",dir:"asc"},
+            paginator: new YAHOO.widget.Paginator({
+                rowsPerPage: 25,
+                template: YAHOO.widget.Paginator.TEMPLATE_ROWS_PER_PAGE,
+                rowsPerPageOptions: [10,25,50,100],
+                pageLinks: 5
+            }),
+            draggableColumns:true
+        }
+
+        var myDataTable = new YAHOO.widget.DataTable("complex", myColumnDefs, myDataSource, myConfigs);
+        myDataTable.subscribe("rowClickEvent",myDataTable.onEventSelectRow);
+        myDataTable.subscribe("cellDblclickEvent",myDataTable.onEventShowCellEditor);
+        myDataTable.subscribe("editorBlurEvent", myDataTable.onEventSaveCellEditor);
+
+        // When cell is edited, pulse the color of the row yellow
+        var onCellEdit = function(oArgs) {
+            var elCell = oArgs.editor.getTdEl();
+            var oOldData = oArgs.oldData;
+            var oNewData = oArgs.newData;
+
+            // Grab the row el and the 2 colors
+            var elRow = this.getTrEl(elCell);
+            var origColor = YAHOO.util.Dom.getStyle(elRow.cells[0], "backgroundColor");
+            var pulseColor = "#ff0";
+
+            // Create a temp anim instance that nulls out when anim is complete
+            var rowColorAnim = new YAHOO.util.ColorAnim(elRow.cells, {
+                    backgroundColor:{to:origColor, from:pulseColor}, duration:2});
+            var onComplete = function() {
+                rowColorAnim = null;
+                YAHOO.util.Dom.setStyle(elRow.cells, "backgroundColor", "");
+            }
+            rowColorAnim.onComplete.subscribe(onComplete);
+            rowColorAnim.animate();
+        }
+        myDataTable.subscribe("editorSaveEvent", onCellEdit);
+        
+        return {
+            oDS: myDataSource,
+            oDT: myDataTable
+        };
+    }();
+});
+</script>
+	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Sample Code for this Example</h2>
+
+<p>Data:</p>
+
+<textarea name="code" class="HTML" cols="60" rows="1">YAHOO.example.Data = {
+    areacodes: [
+        {areacode: "201", state: "New Jersey"},
+        {areacode: "202", state: "Washington, DC"},
+        {areacode: "203", state: "Connecticut"},
+        ...
+    ]
+}
+</textarea>
+
+<p>CSS:</p>
+
+<textarea name="code" class="CSS" cols="60" rows="1">/* No custom CSS */</textarea>
+
+<p>Markup:</p>
+
+<textarea name="code" class="HTML" cols="60" rows="1">&lt;div id="complex"&gt;&lt;/div&gt;
+</textarea>
+
+<p>JavaScript:</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">YAHOO.util.Event.addListener(window, "load", function() {
+    YAHOO.example.MultipleFeatures = function() {
+        // Custom sort handler to sort by state and then by areacode
+        // where a and b are Record instances to compare
+        var sortStates = function(a, b, desc) {
+            // Deal with empty values
+            if(!YAHOO.lang.isValue(a)) {
+                return (!YAHOO.lang.isValue(b)) ? 0 : 1;
+            }
+            else if(!YAHOO.lang.isValue(b)) {
+                return -1;
+            }
+
+            // First compare by state
+            var comp = YAHOO.util.Sort.compare;
+            var compState = comp(a.getData("state"), b.getData("state"), desc);
+
+            // If states are equal, then compare by areacode
+            return (compState !== 0) ? compState : comp(a.getData("areacode"), b.getData("areacode"), desc);
+        };
+
+        var myColumnDefs = [
+            {key:"areacode",label:"Area Codes",width:100,resizeable:true,sortable:true},
+            {key:"state",label:"States",width:250,resizeable:true,sortable:true,
+                    sortOptions:{sortFunction:sortStates}},
+            {key:"notes",label:"Notes (editable)",editor:"textbox",resizeable:true,sortable:true}
+        ];
+
+        var myDataSource = new YAHOO.util.DataSource(YAHOO.example.Data.areacodes);
+        myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+        myDataSource.responseSchema = {
+            fields: ["areacode","state"]
+        };
+
+        var myConfigs = {
+            sortedBy:{key:"areacode",dir:"asc"},
+            paginator: new YAHOO.widget.Paginator({
+                rowsPerPage: 25,
+                template: YAHOO.widget.Paginator.TEMPLATE_ROWS_PER_PAGE,
+                rowsPerPageOptions: [10,25,50,100],
+                pageLinks: 5
+            }),
+            draggableColumns:true
+        }
+
+        var myDataTable = new YAHOO.widget.DataTable("complex", myColumnDefs, myDataSource, myConfigs);
+        myDataTable.subscribe("rowClickEvent",myDataTable.onEventSelectRow);
+        myDataTable.subscribe("cellDblclickEvent",myDataTable.onEventShowCellEditor);
+        myDataTable.subscribe("editorBlurEvent", myDataTable.onEventSaveCellEditor);
+
+        // When cell is edited, pulse the color of the row yellow
+        var onCellEdit = function(oArgs) {
+            var elCell = oArgs.editor.getTdEl();
+            var oOldData = oArgs.oldData;
+            var oNewData = oArgs.newData;
+
+            // Grab the row el and the 2 colors
+            var elRow = this.getTrEl(elCell);
+            var origColor = YAHOO.util.Dom.getStyle(elRow.cells[0], "backgroundColor");
+            var pulseColor = "#ff0";
+
+            // Create a temp anim instance that nulls out when anim is complete
+            var rowColorAnim = new YAHOO.util.ColorAnim(elRow.cells, {
+                    backgroundColor:{to:origColor, from:pulseColor}, duration:2});
+            var onComplete = function() {
+                rowColorAnim = null;
+                YAHOO.util.Dom.setStyle(elRow.cells, "backgroundColor", "");
+            }
+            rowColorAnim.onComplete.subscribe(onComplete);
+            rowColorAnim.animate();
+        }
+        myDataTable.subscribe("editorSaveEvent", onCellEdit);
+        
+        return {
+            oDS: myDataSource,
+            oDT: myDataTable
+        };
+    }();
+});
+</textarea>
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerGloss"><p><strong>Note:</strong> Logging and debugging is currently turned off for this example.</p> 
+							<p class="loggerButton"><span id="loggerLink"><span class="first-child"><a href="dt_complex_log.html">Reload with logging<br />
+	 and debugging enabled.</a></span></span></p></div>
+	
+						</div>
+					
+				
+					<div id="examples">
+						<h3>DataTable Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='dt_basic.html'>Basic Example</a></li><li><a href='dt_enhanced.html'>Progressive Enhancement</a></li><li><a href='dt_formatting.html'>Custom Cell Formatting</a></li><li><a href='dt_row_coloring.html'>Conditional row coloring</a></li><li><a href='dt_nestedheaders.html'>Nested Headers</a></li><li><a href='dt_xhrjson.html'>JSON Data Over XHR</a></li><li><a href='dt_xhrpostxml.html'>XML Data Over XHR With POST</a></li><li><a href='dt_xpath.html'>XML Data with XPath</a></li><li><a href='dt_xhrtext.html'>Textual Data Over XHR</a></li><li><a href='dt_polling.html'>Polling the DataSource</a></li><li><a href='dt_rowdatamod.html'>Adding, Updating, and Deleting Rows</a></li><li><a href='dt_clientpagination.html'>Client-side Pagination</a></li><li><a href='dt_clientsorting.html'>Client-side Sorting</a></li><li><a href='dt_dynamicdata.html'>Server-side Pagination and Sorting for Dynamic Data</a></li><li><a href='dt_bhm.html'>Integrating Browser History Manager with Server-side Pagination and Sorting</a></li><li><a href='dt_fixedscroll.html'>XY-scrolling, Y-scrolling, and X-scrolling</a></li><li><a href='dt_rowselect.html'>Row Selection</a></li><li><a href='dt_cellselect.html'>Cell Selection</a></li><li><a href='dt_cellediting.html'>Inline Cell Editing</a></li><li><a href='dt_colshowhide.html'>Showing, Hiding, and Reordering Columns.</a></li><li><a href='dt_highlighting.html'>Highlighting Cells, Rows, or Columns</a></li><li><a href='dt_ddrows.html'>Reorder Rows with Drag and Drop</a></li><li><a href='dt_quickedit.html'>Quick Edit</a></li><li><a href='dt_rowexp_basic.html'>Row Expansion</a></li><li><a href='dt_contextmenu.html'>Context Menu Integration</a></li><li><a href='../paginator/pag_configuration.html'>Configuring the Paginator (included with examples for Paginator)</a></li><li><a href='dt_tabview.html'>TabView Integration</a></li><li class='selected'><a href='dt_complex.html'>Complex Example of Multiple Features</a></li><li><a href='dt_localfilter.html'>Client-side Filtering of Local Data</a></li><li><a href='dt_dynamicfilter.html'>Filtering of Dynamic Data</a></li><li><a href='dt_autocomplete.html'>Datatable with Autocomplete</a></li><li><a href='dt_skinning.html'>Skinning Model</a></li><li><a href='../progressbar/pb_ratings.html'>Ratings (included with examples for ProgressBar Control)</a></li><li><a href='../datasource/datasource_yql.html'>YQLDataSource (included with examples for DataSource Utility)</a></li><li><a href='../layout/adv_layout.html'>Complex Application (included with examples for Layout Manager)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More DataTable Control Resources:</h3>
+						<ul>
+							<li><a href="../../datatable/index.html">User's Guide</a></li>
+						<li><a href="../../docs/module_datatable.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/datatable.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:26 PDT 2013 -->
+
+<!-- Localized -->

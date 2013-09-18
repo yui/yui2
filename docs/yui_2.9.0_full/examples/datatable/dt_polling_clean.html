@@ -1,0 +1,107 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Polling the DataSource</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/datatable/assets/skins/sam/datatable.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event-delegate/event-delegate-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datatable/datatable-min.js"></script>
+
+<!--there is no custom header content for this example-->
+
+</head>
+
+<body class="yui-skin-sam">
+
+
+<h1>Polling the DataSource</h1>
+
+<div class="exampleIntro">
+	<p>This DataTable polls for data from its DataSource every 5 seconds. Due to browser limitations, implementers should use this feature to replace existing data, rather than continuously add data to the page.</p>
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<div id="polling"></div>
+
+<script type="text/javascript" src="assets/js/data.js"></script>
+<script type="text/javascript">
+YAHOO.util.Event.addListener(window, "load", function() {
+    YAHOO.example.Polling = function() {
+        var counter = 0;
+        var dataIncrementer = function() {
+            counter++;
+            return [{
+                count:counter, 
+                description:"At the tone the time will be: ", 
+                time: YAHOO.util.Date.format(new Date(), {format:"%I:%M:%S %p"})
+            }];
+        };
+
+        var myColumnDefs = [
+            {key: "count"},
+            {key: "description"},
+            {key: "time"}
+        ];
+
+        var myDataSource = new YAHOO.util.DataSource(dataIncrementer);
+        myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+        myDataSource.responseSchema = {
+            fields: ["count", "description", "time"]
+        };
+
+        var myDataTable = new YAHOO.widget.DataTable("polling",
+                myColumnDefs, myDataSource);
+                
+        // Set up polling
+        var myCallback = {
+            success: myDataTable.onDataReturnInitializeTable,
+            failure: function() {
+                YAHOO.log("Polling failure", "error");
+            },
+            scope: myDataTable
+        };
+        myDataSource.setInterval(5000, null, myCallback);
+                
+        return {
+            oDS: myDataSource,
+            oDT: myDataTable
+        };
+    }();
+});
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+
+<!--MyBlogLog instrumentation-->
+<script type="text/javascript" src="http://track2.mybloglog.com/js/jsserv.php?mblID=2007020704011645"></script>
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:39 PDT 2013 -->

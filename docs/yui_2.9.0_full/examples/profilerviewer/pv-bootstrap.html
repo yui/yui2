@@ -1,0 +1,349 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: ProfilerViewer Control: Using Profiler and ProfilerViewer to Profile non-YUI Code</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/profiler/profiler-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: ProfilerViewer Control: Using Profiler and ProfilerViewer to Profile non-YUI Code</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>ProfilerViewer Control: Using Profiler and ProfilerViewer to Profile non-YUI Code</h1>
+	
+	<div class="exampleIntro">
+	<p>The <a href="../../profilerviewer/index.html">ProfilerViewer Control</a> (and the <a href="../../profiler/index.html">Profiler</a> that drives it) is code-agnostic: It can be used as easily to profile your own code or third-party code as it can to profile YUI modules.  In this example, we use Profiler and ProfilerViewer to profile the <a href="http://code.google.com/p/syntaxhighlighter/">DP Syntax Highlighter</a> script that the YUI Project uses for code highlighting on our website.</p>
+<p>To lighten the initial YUI footprint on the page (and minimize the impact of YUI on the script being profiled), this example takes the following steps:</p>
+<ol><li><a href="../../yuiloader/index.html">YUI Loader</a> and Profiler are loaded first, along with the script being profiled. By putting only a tiny amount of YUI code on the page, we should be able to run DP Syntax Highlighter without its performance being impacted much by YUI.</li>
+  <li>Once DP Syntax Highlighter has run, a button allows you to actuate ProfilerViewer, loading its dependencies on-demand in the process.</li>
+</ol>			
+	</div>	
+					
+	<div class="example-container module  newWindow">
+			<div id="example-canvas" class="bd">
+	
+		<p class="newWindowButton yui-skin-sam"><span id="newWindowLink"><span class="first-child"><a href="pv-bootstrap_source.html" target="_blank">View example in new window.</a></span></span>		
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Profiling non-YUI Code with Minimal YUI Dependencies</h2>
+
+<p>In the introduction to this example, we note that the goal here is to profile non-YUI code while loading (at the outset) only the bare minimum of YUI components (YUI Loader and Profiler, in this case).  By keeping the initial YUI footprint small, we can be sure that YUI iteslf is having the smallest possible impact on the code were looking at.  So, in this example we load that minimal footprint, profile the code we want to test, and only then bring in YUI ProfilerViewer and its other YUI dependencies.  This approach is a good one to take when you're profiling projects that are not based on YUI or where you want to minimize the impact ProfilerViewer could have on your profiling data.</p>
+
+<p>Here's how we accomplish the steps outlined above.  (Note: It's the script-based code-highlighting used below that's being profiled in this example.)</p>
+
+<p>First, we load the minimal dependencies for profiling code with YUI Profiler.  To that, we add the DP Syntax Highlighter code (ie, the code that we'll be profiling).</p>
+
+<textarea name="code" class="HTML" cols="60" rows="1"><link rel="stylesheet" type="text/css" href="assets/dpSyntaxHighlighter.css"> 
+
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/profiler/profiler-min.js"></script>
+<script type="text/javascript" src="assets/dpSyntaxHighlighter.js"></script></textarea>
+
+
+<p>Next, we set up a simple initialization function that (a) sets up the code we want to profile then (b) executes the code:</p>
+
+
+<textarea name="code" class="CSS" cols="60" rows="1">YAHOO.example.pv.init = function() {
+
+	//profile the Syntax Highlighter; note: we want to register the
+	//object for profiling before we execute the highlighting code:
+	YAHOO.tool.Profiler.registerConstructor("dp.sh.Highlighter");
+	YAHOO.tool.Profiler.registerObject("dpSyntaxHighlighter", dp, true);
+
+	//Highlight code:
+	dp.SyntaxHighlighter.HighlightAll('code');
+
+};
+
+YAHOO.example.pv.init();</textarea>
+
+<p>At this point, we've told Profiler what parts of Syntax Highlighter we want profiled and we've then run Syntax Highlighter, capturing data about its performance.  And we've done all this with the smallest possible amount of YUI code on the page.  <em>Note that Profiler is loaded now, but ProfilerViewer and all of the YUI infrastructure it leverages &mdash; like Element, DataTable and Charts &mdash; is still absent.</em></p>
+
+<p>Now it's time to set up a button that brings in the YUI ProfilerViewer and all of its dependencies.  That button executes the following code:</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">//When the showProfile button is clicked, use YUI Loader to get all required
+//dependencies and then show the profile:
+YAHOO.example.pv.showProfilerViewer = function() {
+
+	//disable the button once it's clicked:
+	document.getElementById("showProfile").onclick = "";
+	document.getElementById("showProfile").className += " disabled";
+	
+	//private function renders the viewer once dependencies are loaded:
+	var showViewer = function() {
+
+		//instantiate ProfilerViewer with desired options:
+		var pv = new YAHOO.widget.ProfilerViewer("", {
+			visible: true, //expand the viewer mmediately after instantiation
+			showChart: true,
+			base:"http://yui.yahooapis.com/2.9.0/build/",
+			swfUrl: "http://yui.yahooapis.com/2.9.0/build/charts/assets/charts.swf"
+		});
+	};
+
+	//private function gets dependencies for ProfilerViewer:
+	var getProfilerViewer = function() {
+		var loader = new YAHOO.util.YUILoader({
+			base: "http://yui.yahooapis.com/2.9.0/build/",
+			require: ["profilerviewer"], //YUI Loader will handle all dependencies
+									  //for us. Nice!
+			onSuccess: showViewer
+		});
+		loader.insert();
+	};
+	
+	//fire getProfilerViewer to trigger the loading and display of the viewer
+	//console:
+	getProfilerViewer();
+
+};</textarea>
+
+<p>You can use similar strategies to leverage YUI's Profiler and ProfilerViewer on your projects &mdash; even those that aren't based on YUI.</p>
+
+<p>The full script souce for this example follows:</p>
+	
+<textarea name="code" class="JScript" cols="60" rows="1">YAHOO.namespace("example.pv");
+
+YAHOO.example.pv.init = function() {
+
+	//profile the Syntax Highlighter; note: we want to register the
+	//object for profiling before we execute the highlighting code:
+	YAHOO.tool.Profiler.registerConstructor("dp.sh.Highlighter");
+	YAHOO.tool.Profiler.registerObject("dpSyntaxHighlighter", dp, true);
+
+	//Highlight code:
+	dp.SyntaxHighlighter.HighlightAll('code');
+
+};
+
+//When the showProfile button is clicked, use YUI Loader to get all required
+//dependencies and then show the profile:
+YAHOO.example.pv.showProfilerViewer = function() {
+
+	//disable button:
+	document.getElementById("showProfile").onclick = "";
+	document.getElementById("showProfile").className += " disabled";
+	
+	//private function renders the viewer once dependencies are loaded:
+	var showViewer = function() {
+
+		//instantiate ProfilerViewer with desired options:
+		var pv = new YAHOO.widget.ProfilerViewer("", {
+			visible: true, //expand the viewer mmediately after instantiation
+			showChart: true,
+			base:"http://yui.yahooapis.com/2.9.0/build/",
+			swfUrl: "http://yui.yahooapis.com/2.9.0/build/charts/assets/charts.swf"
+		});
+	};
+
+	//private function gets dependencies for ProfilerViewer:
+	var getProfilerViewer = function() {
+		var loader = new YAHOO.util.YUILoader({
+			base: "http://yui.yahooapis.com/2.9.0/build/",
+			require: ["profilerviewer"], //YUI Loader will handle all dependencies
+									  //for us. Nice!
+			onSuccess: showViewer
+		});
+		loader.insert();
+	};
+	
+	//fire getProfilerViewer to trigger the loading and display of the viewer
+	//console:
+	getProfilerViewer();
+
+};
+
+YAHOO.example.pv.init();</textarea>
+
+</script>
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+					
+				
+					<div id="examples">
+						<h3 class='firstContent'>ProfilerViewer Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='pv-basic.html'>Simple Profiling</a></li><li><a href='pv-api.html'>Using the ProfilerViewer API while Profiling the YUI Menu Control</a></li><li class='selected'><a href='pv-bootstrap.html'>Using Profiler and ProfilerViewer to Profile non-YUI Code</a></li><li><a href='pv-skin.html'>Skinning the ProfilerViewer Control</a></li><li><a href='pv-spanish.html'>ProfilerViewer Internationalization: Spanish</a></li><li><a href='pv-german.html'>ProfilerViewer Internationalization: German</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More ProfilerViewer Control Resources:</h3>
+						<ul>
+							<li><a href="../../profilerviewer/index.html">User's Guide</a></li>
+						<li><a href="../../docs/module_profilerviewer.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/profilerviewer.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:24 PDT 2013 -->
+
+<!-- Localized -->

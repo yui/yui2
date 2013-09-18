@@ -1,0 +1,958 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: YUI Loader Utility</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: YUI Loader Utility</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+      
+  <div id="promo" class="component">
+      <h1>YUI 2: YUI Loader Utility</h1>
+
+<p>The YUI Loader Utility is a client-side JavaScript component that allows you to load specific YUI components and their dependencies into your page via script.  YUI Loader can operate as a holistic solution by loading all of your necessary YUI components, or it can be used to add one or more components to a page on which some YUI content already exists.</p>
+
+<p>YUI Loader adds value in the following ways:</p>
+<ol>
+  <li><strong>Reliable, sorted loading of dependencies:</strong> YUI comprises more than two-dozen components, many of which work together to provide the best possible compromise between compartmentalization and code reuse. Because of this, YUI components often need to load with specific dependencies in a specific order. YUI Loader understands which components depend on one another, and based on this knowledge it ensures that the right resources are loaded in the right order.</li>
+  <li><strong>Safe, efficient mechanism for adding new components to a page on which YUI may already be present.</strong> Often as developers we write modules that can live in many contexts. In writing a module, we may need to support a variety of scenarios — the module may be introduced into a page on which all of its YUI dependencies are already present, a page on which some but not all are present, or a page on which no YUI content exists at all. YUI Loader looks at the environment as it exists on the page and pulls in only the additional files your module needs to function.</li>
+  <li><strong>Automatic use of rolled-up files.</strong> YUI Loader knows about all of the built-in rollup files that ship with YUI — like the yahoo-dom-event.js file that contains the <a href="../yahoo/index.html">Yahoo Global Object</a>, the <a href="../dom/index.html">Dom Collection</a>, and the <a href="../event/index.html">Event Utility</a>, three components that are commonly used together. By automatically using rolled-up files when it makes sense to do so, the YUI Loader helps you <a href="http://yuiblog.com/blog/2006/11/28/performance-research-part-1/">reduce HTTP requests</a> and thereby keep your page as efficient as possible.</li>
+</ol>
+
+<p>As you think about how you want to load YUI on the page, you may find it useful to refer to this overview of some of the most common loading strategies and their relative merits:</p>
+<ul>
+      <li>"<a href="http://yuiblog.com/blog/2008/10/17/loading-yui/">Loading YUI: Seeds, Core, and Combo-handling</a>", by Eric Miraglia on <a href="http://yuiblog.com/">YUIBlog</a></li>
+</ul>
+
+<p><strong>Note: </strong>It's important to emphasize that any client-side loading utility is expected to be somewhat less performant than solutions that write <code>&lt;script&gt;</code> and <code>&lt;link&gt;</code> elements directly to the page. The use of dynamic <code>&lt;script&gt;</code> and <code>&lt;link&gt;</code> nodes provides good performance and a useful mechanism for bringing in additional JavaScript or CSS after the page has loaded, but for optimal performance you may still wish to write CSS <code>&lt;link&gt;</code> elements to the head of the page and JavaScript <code>&lt;script&gt;</code> elements to the bottom of the page during its initial load.</p>
+
+<div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#using">Simple Use Case: Adding YUI Components to the Page with the <code>insert()</code> Method</a> </li>
+      <li><a href="#sandbox">Load a Private Version of YUI with the <code>sandbox()</code> Method</a> </li>
+      <li><a href="#config">Configuration Options</a> </li>
+      <li><a href="#usingskins">Using Skins with YUI Loader</a>
+      <li><a href="#addmodule">Using <code>addModule</code> to Add Non-YUI Content with YUI Loader</a></li>
+      <li><a href="#modulenames">YUI Module Names</a>
+      <li><a href="#migrating">Migration from 2.3.x</a>
+      <li><a href="#knownissues">Known Issues</a>
+      <li><a href="#mobile">YUI on Mobile Devices</a></li>
+      <li><a href="#support">Support &amp; Community</a></li>
+      <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/yuiloader/index.html">Examples</a>: Explore examples of the YUI Loader Utility in action.</li>
+      <li><a href="../docs/module_yuiloader.html">API Documentation</a>: View the full API documentation for the YUI Loader Utility.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.yuiloader">Release Notes</a>: Detailed change log for the YUI Loader Utility.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the YUI Loader Utility as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>    
+  </div>
+
+  <h2 class="first" id="start">Getting Started</h2>
+  
+<p>To use the YUI Loader Utility, insert its script file into the page.  Note that, unlike all other YUI components, the YUI Loader Utility does <em>not</em> require that the <a href="../yahoo/index.html">Yahoo Global Object</a> be present on the page prior to loading &mdash; in fact, the YUI Loader Utility <em>includes</em> the Yahoo Global Object (so you should not load both packages on the same page).  The YUI Loader Utility also includes the <a href="../get/index.html">YUI Get Utility</a>; again, if you are using YUI Loader you should not load Get separately.</p>
+    
+<div id="syntax-244645af9a354f75531e0b4cf2113a4e" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-244645af9a354f75531e0b4cf2113a4e-plain"><script src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+</textarea></div>
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+</p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<h2 id="using">Simple Use Case: Adding YUI Components to the Page with the <code>insert()</code> Method</h2>
+
+<p>YUI Loader makes it a simple thing to get started using YUI components. Place the YUI Loader script on the page, tell it what you want to load, and let it sort out all of the dependencies on your behalf: </p>
+
+<div id="syntax-d01f57ddb03388a3e17ce0ad9423e0ca" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Load the YUI Loader script: --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Load the YUI Loader script: --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-d01f57ddb03388a3e17ce0ad9423e0ca-plain"><!-- Load the YUI Loader script: -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+</textarea></div><div id="syntax-43e99fec72eeba2b2f75ff012686659a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Instantiate and configure Loader:</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> loader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">YUILoader</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Identify the components you want to load.  Loader will automatically identify</span></div></li><li class="li2"><div class="de2">    <span class="co1">// any additional dependencies required for the specified components.</span></div></li><li class="li1"><div class="de1">    require<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">&quot;colorpicker&quot;</span><span class="sy0">,</span> <span class="st0">&quot;treeview&quot;</span><span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Configure loader to pull in optional dependencies.  For example, animation</span></div></li><li class="li1"><div class="de1">    <span class="co1">// is an optional dependency for slider.</span></div></li><li class="li2"><div class="de2">    loadOptional<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// The function to call when all script/css resources have been loaded</span></div></li><li class="li1"><div class="de1">    onSuccess<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="co1">//this is your callback function; you can use</span></div></li><li class="li2"><div class="de2">        <span class="co1">//this space to call all of your instantiation</span></div></li><li class="li1"><div class="de1">        <span class="co1">//logic for the components you just loaded.</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Configure the Get utility to timeout after 10 seconds for any given node insert</span></div></li><li class="li2"><div class="de2">    timeout<span class="sy0">:</span> <span class="nu0">10000</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Combine YUI files into a single request (per file type) by using the Yahoo! CDN combo service.</span></div></li><li class="li1"><div class="de1">    combine<span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Load the files using the insert() method. The insert method takes an optional</span></div></li><li class="li1"><div class="de1"><span class="co1">// configuration object, and in this case we have configured everything in</span></div></li><li class="li1"><div class="de1"><span class="co1">// the constructor, so we don't need to pass anything to insert().</span></div></li><li class="li1"><div class="de1">loader.<span class="me1">insert</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Instantiate and configure Loader:</span>
+<span class="kw2">var</span> loader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">YUILoader</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+&nbsp;
+    <span class="co1">// Identify the components you want to load.  Loader will automatically identify</span>
+    <span class="co1">// any additional dependencies required for the specified components.</span>
+    require<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">&quot;colorpicker&quot;</span><span class="sy0">,</span> <span class="st0">&quot;treeview&quot;</span><span class="br0">&#93;</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// Configure loader to pull in optional dependencies.  For example, animation</span>
+    <span class="co1">// is an optional dependency for slider.</span>
+    loadOptional<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// The function to call when all script/css resources have been loaded</span>
+    onSuccess<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="co1">//this is your callback function; you can use</span>
+        <span class="co1">//this space to call all of your instantiation</span>
+        <span class="co1">//logic for the components you just loaded.</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// Configure the Get utility to timeout after 10 seconds for any given node insert</span>
+    timeout<span class="sy0">:</span> <span class="nu0">10000</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// Combine YUI files into a single request (per file type) by using the Yahoo! CDN combo service.</span>
+    combine<span class="sy0">:</span> <span class="kw2">true</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Load the files using the insert() method. The insert method takes an optional</span>
+<span class="co1">// configuration object, and in this case we have configured everything in</span>
+<span class="co1">// the constructor, so we don't need to pass anything to insert().</span>
+loader.<span class="me1">insert</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-43e99fec72eeba2b2f75ff012686659a-plain">// Instantiate and configure Loader:
+var loader = new YAHOO.util.YUILoader({
+
+    // Identify the components you want to load.  Loader will automatically identify
+    // any additional dependencies required for the specified components.
+    require: ["colorpicker", "treeview"],
+
+    // Configure loader to pull in optional dependencies.  For example, animation
+    // is an optional dependency for slider.
+    loadOptional: true,
+
+    // The function to call when all script/css resources have been loaded
+    onSuccess: function() {
+        //this is your callback function; you can use
+        //this space to call all of your instantiation
+        //logic for the components you just loaded.
+    },
+
+    // Configure the Get utility to timeout after 10 seconds for any given node insert
+    timeout: 10000,
+
+    // Combine YUI files into a single request (per file type) by using the Yahoo! CDN combo service.
+    combine: true
+});
+
+// Load the files using the insert() method. The insert method takes an optional
+// configuration object, and in this case we have configured everything in
+// the constructor, so we don't need to pass anything to insert().
+loader.insert();
+</textarea></div>
+<p>In the example above, the YUI Loader script will load from Yahoo servers, calculate the full merged dependency list for the <a href="../colorpicker/index.html">Color Picker</a> and <a href="../treeview/index.html">TreeView</a> Controls, load the dependencies on the page by inserting dynamic <code>&lt;link&gt;</code> and <code>&lt;script&gt;</code> nodes, and then execute your callback logic (in which you can make use of Color Picker and TreeView).</p>
+
+<h2 id="sandbox">Load a Private Copy of YUI with the <code>sandbox()</code> Method</h2>
+
+<p>
+Different versions of the same library can sometimes conflict with each other.  When you insert YUI onto a page that may have another
+version of the library on it already, it is sometimes preferable to use a privately-scoped copy of YUI
+rather than sharing it globally with the entire page.  YUI Loader's <code>sandbox</code> method provides a way to
+do this.
+</p>
+
+<p><code>sandbox()</code> uses the <a href="../connection/index.html">YUI Connection Manager</a> to fetch the script source, evaluates
+it inside of an anonymous function, and returns a reference to a well-known local variable that
+can be used without risk of having it overwritten by other code on the page.  The code that is
+evaluated looks like this:</p>
+
+<div id="syntax-493c9b74381433f2a861bc7c220ae1bd" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> <span class="kw4">YAHOO</span> <span class="sy0">=</span> <span class="br0">&#91;</span>YUI library source<span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="kw1">return</span> <span class="kw4">YAHOO</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+    <span class="kw2">var</span> <span class="kw4">YAHOO</span> <span class="sy0">=</span> <span class="br0">&#91;</span>YUI library source<span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="kw1">return</span> <span class="kw4">YAHOO</span><span class="sy0">;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-493c9b74381433f2a861bc7c220ae1bd-plain">(function() {
+
+    var YAHOO = [YUI library source];
+
+    return YAHOO;
+
+})();
+</textarea></div>
+<p>Setting up a sandbox:</p>
+<div id="syntax-d01f57ddb03388a3e17ce0ad9423e0ca" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Load the YUI Loader script: --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Load the YUI Loader script: --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-d01f57ddb03388a3e17ce0ad9423e0ca-plain"><!-- Load the YUI Loader script: -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+</textarea></div><div id="syntax-1318df6e2e81524b7908f6946643464f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> loader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">YUILoader</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">loader.<span class="me1">sandbox</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    require<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">&quot;treeview&quot;</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="co1">// what to load</span></div></li><li class="li1"><div class="de1">    base<span class="sy0">:</span> <span class="st0">'http://yui.yahooapis.com/2.9.0/build/'</span><span class="sy0">,</span> <span class="co1">// where on my local domain the library lives</span></div></li><li class="li2"><div class="de2">    loadOptional<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> <span class="co1">// pull in optional components</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Executed once the sandbox is successfully created</span></div></li><li class="li1"><div class="de1">    onSuccess<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="co1">// o.reference is our sandboxed YAHOO object</span></div></li><li class="li2"><div class="de2">        <span class="kw2">var</span> ref <span class="sy0">=</span> o.<span class="me1">reference</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;new ref is equal to YAHOO? &quot;</span> <span class="sy0">+</span> <span class="br0">&#40;</span>ref <span class="sy0">===</span> <span class="kw4">YAHOO</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="co1">// TreeView can now be used.  Note that YAHOO.widget.TreeView does</span></div></li><li class="li1"><div class="de1">        <span class="co1">// *not* exist, because it was included only on the sandboxed YAHOO</span></div></li><li class="li2"><div class="de2">        <span class="co1">// object.</span></div></li><li class="li1"><div class="de1">        ref.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onAvailable</span><span class="br0">&#40;</span><span class="st0">&quot;treediv&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                <span class="kw2">var</span> tree <span class="sy0">=</span> <span class="kw2">new</span> ref.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treediv&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">                <span class="kw2">var</span> n <span class="sy0">=</span> <span class="kw2">new</span> ref.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="st0">&quot;node 1&quot;</span><span class="sy0">,</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">                <span class="kw2">new</span> ref.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="st0">&quot;node 2&quot;</span><span class="sy0">,</span> n<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">                <span class="kw2">new</span> ref.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="st0">&quot;node 3&quot;</span><span class="sy0">,</span> n<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">                tree.<span class="me1">draw</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="co1">// Each time a resource is retrieved, onProgress will be executed</span></div></li><li class="li1"><div class="de1">    onProgress<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        log<span class="br0">&#40;</span><span class="st0">&quot;progress:&quot;</span> <span class="sy0">+</span> o.<span class="kw3">name</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="co1">// Executed if the the utility failed to create the sandbox</span></div></li><li class="li1"><div class="de1">    onFailure<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>msg<span class="sy0">,</span> xhrobj<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> m <span class="sy0">=</span> <span class="st0">&quot;LOAD FAILED: &quot;</span> <span class="sy0">+</span> msg<span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="co1">// if the failure was from the Connection Manager, the object</span></div></li><li class="li1"><div class="de1">        <span class="co1">// returned by that utility will be provided.</span></div></li><li class="li2"><div class="de2">        <span class="kw1">if</span> <span class="br0">&#40;</span>xhrobj<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            m <span class="sy0">+=</span> <span class="st0">&quot;, &quot;</span> <span class="sy0">+</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">dump</span><span class="br0">&#40;</span>xhrobj<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">        <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span>m<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// varName: &quot;YAHOO&quot;, // What reference should be returned? YAHOO is the default</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// filter: 'debug' // load the debug version of the library</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> loader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">YUILoader</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+loader.<span class="me1">sandbox</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    require<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">&quot;treeview&quot;</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="co1">// what to load</span>
+    base<span class="sy0">:</span> <span class="st0">'http://yui.yahooapis.com/2.9.0/build/'</span><span class="sy0">,</span> <span class="co1">// where on my local domain the library lives</span>
+    loadOptional<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> <span class="co1">// pull in optional components</span>
+&nbsp;
+    <span class="co1">// Executed once the sandbox is successfully created</span>
+    onSuccess<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="co1">// o.reference is our sandboxed YAHOO object</span>
+        <span class="kw2">var</span> ref <span class="sy0">=</span> o.<span class="me1">reference</span><span class="sy0">;</span>
+        <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;new ref is equal to YAHOO? &quot;</span> <span class="sy0">+</span> <span class="br0">&#40;</span>ref <span class="sy0">===</span> <span class="kw4">YAHOO</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span>
+&nbsp;
+        <span class="co1">// TreeView can now be used.  Note that YAHOO.widget.TreeView does</span>
+        <span class="co1">// *not* exist, because it was included only on the sandboxed YAHOO</span>
+        <span class="co1">// object.</span>
+        ref.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onAvailable</span><span class="br0">&#40;</span><span class="st0">&quot;treediv&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+                <span class="kw2">var</span> tree <span class="sy0">=</span> <span class="kw2">new</span> ref.<span class="me1">widget</span>.<span class="me1">TreeView</span><span class="br0">&#40;</span><span class="st0">&quot;treediv&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+                <span class="kw2">var</span> n <span class="sy0">=</span> <span class="kw2">new</span> ref.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="st0">&quot;node 1&quot;</span><span class="sy0">,</span> tree.<span class="me1">getRoot</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+                <span class="kw2">new</span> ref.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="st0">&quot;node 2&quot;</span><span class="sy0">,</span> n<span class="br0">&#41;</span><span class="sy0">;</span>
+                <span class="kw2">new</span> ref.<span class="me1">widget</span>.<span class="me1">TextNode</span><span class="br0">&#40;</span><span class="st0">&quot;node 3&quot;</span><span class="sy0">,</span> n<span class="br0">&#41;</span><span class="sy0">;</span>
+                tree.<span class="me1">draw</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+            <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span> 
+&nbsp;
+    <span class="co1">// Each time a resource is retrieved, onProgress will be executed</span>
+    onProgress<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        log<span class="br0">&#40;</span><span class="st0">&quot;progress:&quot;</span> <span class="sy0">+</span> o.<span class="kw3">name</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// Executed if the the utility failed to create the sandbox</span>
+    onFailure<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>msg<span class="sy0">,</span> xhrobj<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw2">var</span> m <span class="sy0">=</span> <span class="st0">&quot;LOAD FAILED: &quot;</span> <span class="sy0">+</span> msg<span class="sy0">;</span>
+        <span class="co1">// if the failure was from the Connection Manager, the object</span>
+        <span class="co1">// returned by that utility will be provided.</span>
+        <span class="kw1">if</span> <span class="br0">&#40;</span>xhrobj<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            m <span class="sy0">+=</span> <span class="st0">&quot;, &quot;</span> <span class="sy0">+</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">dump</span><span class="br0">&#40;</span>xhrobj<span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span>
+        <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span>m<span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">// varName: &quot;YAHOO&quot;, // What reference should be returned? YAHOO is the default</span>
+&nbsp;
+    <span class="co1">// filter: 'debug' // load the debug version of the library</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-1318df6e2e81524b7908f6946643464f-plain">var loader = new YAHOO.util.YUILoader();
+loader.sandbox({
+    require: ["treeview"], // what to load
+    base: 'http://yui.yahooapis.com/2.9.0/build/', // where on my local domain the library lives
+    loadOptional: true, // pull in optional components
+
+    // Executed once the sandbox is successfully created
+    onSuccess: function(o) {
+        // o.reference is our sandboxed YAHOO object
+        var ref = o.reference;
+        YAHOO.log("new ref is equal to YAHOO? " + (ref === YAHOO)); // false
+
+        // TreeView can now be used.  Note that YAHOO.widget.TreeView does
+        // *not* exist, because it was included only on the sandboxed YAHOO
+        // object.
+        ref.util.Event.onAvailable("treediv", function() {
+                var tree = new ref.widget.TreeView("treediv");
+                var n = new ref.widget.TextNode("node 1", tree.getRoot());
+                new ref.widget.TextNode("node 2", n);
+                new ref.widget.TextNode("node 3", n);
+                tree.draw();
+            });
+    }, 
+
+    // Each time a resource is retrieved, onProgress will be executed
+    onProgress: function(o) {
+        log("progress:" + o.name);
+    },
+
+    // Executed if the the utility failed to create the sandbox
+    onFailure: function(msg, xhrobj) {
+        var m = "LOAD FAILED: " + msg;
+        // if the failure was from the Connection Manager, the object
+        // returned by that utility will be provided.
+        if (xhrobj) {
+            m += ", " + YAHOO.lang.dump(xhrobj);
+        }
+        YAHOO.log(m);
+    },
+
+    // varName: "YAHOO", // What reference should be returned? YAHOO is the default
+
+    // filter: 'debug' // load the debug version of the library
+});
+</textarea></div>
+<p>This feature can be used with other JavaScript libraries as long as they conform to a pattern
+   similiar to YUI's in which all functionality resides within a variable <em>that is not forced into the global namespace</em> (e.g.,
+   uses <code>var LIBRARY</code> instead of <code>LIBRARY</code> or <code>window.LIBRARY</code>).  To sandbox something other
+   than YUI, use the <code>varName</code> config to specify the reference that should be returned to the
+   <code>onSuccess</code> handler.
+</p>
+
+<p>
+<strong>Note:</strong> since the <code>sandbox</code> method uses <a href="../connection/index.html">Connection Manager</a> to fetch the script source, it is limited
+by the <a href="http://en.wikipedia.org/wiki/Same_origin_policy">"same origin" domain restrictions</a> common to all XHR connections.  To use the sandbox feature, you will
+need to serve the YUI files from the domain of the page that will use the sandbox or set up
+a proxy on the local domain to fetch the remote resource.</p>
+
+<h2 id="config">Configuration Options</h2>
+
+<p>The following configuration options are supported by the YUI Loader Utility.
+These can be set in the YUI Loader constructor, set individually on a YUI
+Loader instance, or provided to <code>insert()</code>, <code>calculate()</code>
+or <code>sandbox()</code>:</p>
+
+<div class="apisummary">
+<table>
+    <thead>
+        <tr>
+            <th>Configuration Option</th>
+            <th>Purpose</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="odd">
+            <td>allowRollup</td>
+            <td>(boolean) Should Loader use aggregate files (like <code>yahoo-dom-event.js</code> or <code>utilities.js</code>) that combine several YUI components in a single HTTP request?  Default: true.</td>
+        </tr>
+        <tr>
+            <td>base</td>
+            <td>(string) Allows you to specify a different location (as a full or relative filepath) for the YUI build directory. By default, YUI Loader will <a href="#">serve files from Yahoo's servers</a>.</td>
+        </tr>
+        <tr class="odd">
+            <td>charset</td>
+            <td>(string) The charset attribute for inserted nodes.</td>
+        </tr>
+        <tr>
+            <td>combine</td>
+            <td>(boolean) If set to true, YUI files will be combined into a single request using the combo service provided on the Yahoo! CDN</td>
+        </tr>
+        <tr class="odd">
+            <td class="odd">comboBase</td>
+            <td>(string) The base path to the Yahoo! CDN service.  Ex: http://yui.yahooapis.com/combo?</td>
+        </tr>
+        <tr>
+            <td>data</td>
+            <td>(any) Data payload that will be provided to all callbacks.</td>
+        </tr>
+        <tr class="odd">
+            <td>filter</td>
+            <td>
+         (string or object) A filter to apply to result urls.  This filter will modify the default
+         path for all modules.  The default path for the YUI library is the
+         minified version of the files (e.g., event-min.js).  The filter property
+         can be a predefined filter or a custom filter.  The valid predefined 
+         filters are:
+         <dl>
+          <dt>DEBUG</dt>
+          <dd>Selects the debug versions of the library (e.g., event-debug.js).
+              This option will automatically include the logger widget</dd>
+          <dt>RAW</dt>
+          <dd>Selects the non-minified version of the library (e.g., event.js).
+         </dl>
+         You can also define a custom filter, which must be an object literal 
+         containing a search expression and a replace string:
+         <pre>
+          myFilter: &#123; 
+              'searchExp': "-min\\.js", 
+              'replaceStr': "-debug.js"
+          &#125;
+         </pre>
+            </td>
+        </tr>
+
+        <tr>
+            <td>force</td>
+            <td>(array) A list of modules that should always be loaded when required, even if already present on the page</td>
+        </tr>
+        <tr class="odd">
+            <td>ignore</td>
+            <td>(array) A list of modules that should never be dynamically loaded.</td>
+        </tr>
+        <tr>
+            <td>insertBefore</td>
+            <td>(HTMLElement or string) Node or id for a node that should be used as the insertion point for new nodes.</td>
+        </tr>
+        <tr class="odd">
+            <td>loadOptional</td>
+            <td>(boolean) Should loader load optional dependencies for the components you're requesting? (Note: If you only want <em>some</em> but not <em>all</em> optional dependencies, you can list out the dependencies you want as part of your <code>required</code> list.) Default: false.</td>
+        </tr>
+        <tr>
+            <td>onSuccess</td>
+            <td>(function) The code you want to run once your required YUI components are fully loaded.</td>
+        </tr>
+        <tr class="odd">
+            <td>onFailure</td>
+            <td>(function) The code you want to run if the insert fails.</td>
+        </tr>
+        <tr>
+            <td>onProgress</td>
+            <td>(function) The code to execute each time an individual module is loaded.</td>
+        </tr>
+        <tr class="odd">
+            <td>onTimeout</td>
+            <td>(function) The code to execute if the Get utility detects a timeout.</td>
+        </tr>
+
+        <tr>
+            <td>require (method)</td>
+            <td>(array) Sets the list of YUI components that you require.  Each member of an array should be a string referencing the component's module name.  The list of <a href="#modulenames">module names for YUI components</a> is listed below.  This is a property if passed in the configuration, but it is a method
+on an instance.  Each subsequent call to require appends the new requirements rather than overwriting
+the old ones.</td>
+        </tr>
+
+        <tr class="odd">
+            <td>root</td>
+            <td>(string) The root path to prepend to module names for the combo service. Ex: 2.5.2/build/.</td>
+        </tr>
+        <tr>
+            <td>scope</td>
+            <td>(object) The execution context for all callbacks.</td>
+        </tr>
+
+        <tr class="odd">
+            <td>skin</td>
+            <td>(object) Configures default skin for added components <em>and</em> allows specification of additional or override skins for specific components.  See the <a href="#usingskins">skinning section</a> below for more details.  By default, YUI Loader will set <code>skin-sam</code> as the default skin for loaded components.</td>
+        </tr>
+        <tr>
+            <td>varName</td>
+            <td>(string) <strong>For loading non-YUI scripts: </strong>This is the name of a variable that
+            the utility will poll for in order to determine when the script is loaded.  This is
+            necessary in order to support loading non-YUI scripts in Safari 2.x.  <strong>For <code>sandbox()</code>:</strong> specifies the name of a
+            variable that should be present once the sandboxed script is available.  A
+            reference to this variable will be returned to the <code>onSuccess</code>
+            handler (the <code>reference</code> field)</td> </tr>
+ 
+    </tbody> </table> </div>
+
+
+<h2 id="usingskins">Using Skins with YUI Loader</h2>
+
+<p>YUI as of version 2.3.0 moved to a skinning model for controlling the presentation of UI controls.  With that release, a default skin, <code>sam</code>, was introduced.  By default, YUI Loader will bring in the <code>sam</code> assets for any YUI component you require for which a skin exists.</p>
+
+<p>As we go forward, the YUI ecosystem will grow to support a number of different skins for various components.  As this occurs, you'll want to be able to specify which skin you wish to use for a given component.  YUI Loader allows you to specify both a global default skin (which defaults to <code>sam</code> unless you specify otherwise) and one or more alternative skins for each component you require.  You control this using the <code>skin</code> property of your Loader instance.</p>
+
+<p>Returning to our simple use case, here's how we might configure TreeView to use an alternative skin, <code>myTVSkin</code>, and Color Picker to use a skin called <code>myCPSkin</code>.</p>
+
+<div id="syntax-d01f57ddb03388a3e17ce0ad9423e0ca" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Load the YUI Loader script: --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Load the YUI Loader script: --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-d01f57ddb03388a3e17ce0ad9423e0ca-plain"><!-- Load the YUI Loader script: -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+</textarea></div><div id="syntax-861728c781e8c4a3af7ef1cbaba3b3aa" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">loader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">YUILoader</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    require<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">&quot;colorpicker&quot;</span><span class="sy0">,</span> <span class="st0">&quot;treeview&quot;</span><span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">//Set your skins member here:</span></div></li><li class="li2"><div class="de2">    skin<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="co1">// Specifies the location of the skin relative to the build</span></div></li><li class="li1"><div class="de1">        <span class="co1">// directory for the skinnable component.</span></div></li><li class="li1"><div class="de1">        base<span class="sy0">:</span> <span class="st0">'assets/skins/'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="co1">// The default skin, which is automatically applied if not</span></div></li><li class="li1"><div class="de1">        <span class="co1">// overriden by a component-specific skin definition.</span></div></li><li class="li1"><div class="de1">        <span class="co1">// Change this in to apply a different skin globally </span></div></li><li class="li1"><div class="de1">        defaultSkin<span class="sy0">:</span> <span class="st0">'sam'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="co1">// Any component-specific overrides can be specified here,</span></div></li><li class="li1"><div class="de1">        <span class="co1">// making it possible to load different skins for different</span></div></li><li class="li1"><div class="de1">        <span class="co1">// components. It is possible to load more than one skin</span></div></li><li class="li1"><div class="de1">        <span class="co1">// for a given component as well.</span></div></li><li class="li2"><div class="de2">        overrides<span class="sy0">:</span> <span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">            colorpicker<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">'myCPSkin'</span><span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            treeview<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">'myTVSkin'</span><span class="br0">&#93;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    onSuccess<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="co1">//callback logic goes here</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">loader.<span class="me1">insert</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">loader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">YUILoader</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    require<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">&quot;colorpicker&quot;</span><span class="sy0">,</span> <span class="st0">&quot;treeview&quot;</span><span class="br0">&#93;</span><span class="sy0">,</span>
+&nbsp;
+    <span class="co1">//Set your skins member here:</span>
+    skin<span class="sy0">:</span> <span class="br0">&#123;</span>
+&nbsp;
+        <span class="co1">// Specifies the location of the skin relative to the build</span>
+        <span class="co1">// directory for the skinnable component.</span>
+        base<span class="sy0">:</span> <span class="st0">'assets/skins/'</span><span class="sy0">,</span>
+&nbsp;
+        <span class="co1">// The default skin, which is automatically applied if not</span>
+        <span class="co1">// overriden by a component-specific skin definition.</span>
+        <span class="co1">// Change this in to apply a different skin globally </span>
+        defaultSkin<span class="sy0">:</span> <span class="st0">'sam'</span><span class="sy0">,</span>
+&nbsp;
+        <span class="co1">// Any component-specific overrides can be specified here,</span>
+        <span class="co1">// making it possible to load different skins for different</span>
+        <span class="co1">// components. It is possible to load more than one skin</span>
+        <span class="co1">// for a given component as well.</span>
+        overrides<span class="sy0">:</span> <span class="br0">&#123;</span> 
+            colorpicker<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">'myCPSkin'</span><span class="br0">&#93;</span><span class="sy0">,</span>
+            treeview<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">'myTVSkin'</span><span class="br0">&#93;</span>
+        <span class="br0">&#125;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+    onSuccess<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="co1">//callback logic goes here</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+loader.<span class="me1">insert</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-861728c781e8c4a3af7ef1cbaba3b3aa-plain">loader = new YAHOO.util.YUILoader({
+    require: ["colorpicker", "treeview"],
+
+    //Set your skins member here:
+    skin: {
+
+        // Specifies the location of the skin relative to the build
+        // directory for the skinnable component.
+        base: 'assets/skins/',
+
+        // The default skin, which is automatically applied if not
+        // overriden by a component-specific skin definition.
+        // Change this in to apply a different skin globally 
+        defaultSkin: 'sam',
+
+        // Any component-specific overrides can be specified here,
+        // making it possible to load different skins for different
+        // components. It is possible to load more than one skin
+        // for a given component as well.
+        overrides: { 
+            colorpicker: ['myCPSkin'],
+            treeview: ['myTVSkin']
+        }
+    },
+
+    onSuccess: function(o) {
+        //callback logic goes here
+    }
+});
+
+loader.insert();
+</textarea></div>
+<p>Much more information about skinning and creating custom skins can be found <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">in the article entitled "Skinning YUI."</a></p>
+
+<h2 id="addmodule">Using <code>addModule</code> to Add Non-YUI Content with YUI Loader</h2>
+
+<p>YUI Loader knows all YUI components and their required and optional dependencies.  When you build applications on top of YUI, you can tell YUI Loader about your own custom components and their dependencies as well using YUI Loader's <code>addModule</code> method.</p>
+
+<p><code>addModule</code> is called from a YUI Loader instance and takes as its argument a configuration object that defines the metadata associated with the module you are adding.  The configuration object's members include:</p>
+
+<div class="apisummary">
+<table>
+    <thead>
+        <tr><th>Member (type)</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+        <tr class="odd">
+            <td>name (string)</td>
+            <td>The unique module name for this component; must not match any <a href="#modulenames">YUI module name</a> nor any other module name you've used within the current page.</td>
+        </tr>
+        <tr>
+            <td>type (string)</td>
+            <td>The type of resource comprised by this component; must be either "js" or "css".</td>
+        </tr>
+        <tr class="odd">
+            <td>path (string)</td>
+            <td>The path to the file; will be concatenated with the <code>base</code> path if you've defined a <code>base</code> configuration in your YUI Loader instance.  This path should include the filename itself (e.g. "json/json-min.js").</td>
+        </tr>
+        <tr>
+            <td>fullpath (string)</td>
+            <td>Overrides path if path is defined and is used as a full URI to the component's source file (e.g. "http://www.json.org/json.js").</td>
+        </tr>
+        <tr class="odd">
+            <td>requires (array)</td>
+            <td>An array of module names designating required dependencies for this component; can be mixture of YUI and custom components (e.g. <code>['yahoo', 'dom', 'event']</code>).</td>
+        </tr>
+
+        <tr>
+            <td>optional (array)</td>
+            <td>An array of module names designating optional dependencies for this component; can be mixture of YUI and custom components (e.g. <code>['animation', 'dragdrop']</code>).</td>
+        </tr>   
+
+        <tr class="odd">
+            <td>after (array)</td>
+            <td>
+An array of module names that are not dependencies, but need to be included above this component if they are present.
+            </td>
+        </tr>   
+
+
+        <!--
+        <tr class="odd">
+            <td>skinnable (b)</td>
+            <td>Indicates whether this component is skinnable.  If so, YUI Loader will attempt to load the correct skin CSS file based on its current <code>base</code> path, the current <code>defaultSkin</code> (modified by any <code>overrides</code>), and the component's modulename.  If the component requires a CSS file that does not fit the skinning structure, add that file as a separate module and list it as a dependency via the <code>requires</code> member.</td>
+</tr>   
+-->
+            <tr class="">
+            <td>varName (s)</td>
+            <td>A variable that will be available once an external script reference is fully loaded.</td>
+        </tr>   
+    </tbody>
+</table>
+</div>
+
+<div id="syntax-1d22c9fb499484d70e0aad9bd103c343" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//Add the module to YUILoader</span></div></li><li class="li1"><div class="de1">loader.<span class="me1">addModule</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;json&quot;</span><span class="sy0">,</span> <span class="co1">//module name; must be unique</span></div></li><li class="li1"><div class="de1">    type<span class="sy0">:</span> <span class="st0">&quot;js&quot;</span><span class="sy0">,</span> <span class="co1">//can be &quot;js&quot; or &quot;css&quot;</span></div></li><li class="li2"><div class="de2">    fullpath<span class="sy0">:</span> <span class="st0">&quot;http://www.json.org/json2.js&quot;</span><span class="sy0">,</span> <span class="co1">//can use a path instead, extending base path</span></div></li><li class="li1"><div class="de1">    varName<span class="sy0">:</span> <span class="st0">&quot;JSON&quot;</span> <span class="co1">// a variable that will be available when the script is loaded.  Needed</span></div></li><li class="li1"><div class="de1">                    <span class="co1">// in order to act on the script immediately in Safari 2.x and below.</span></div></li><li class="li1"><div class="de1">    <span class="co1">//requires: ['yahoo', 'event'] //if this module had dependencies, we could define here</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//Add the module to YUILoader</span>
+loader.<span class="me1">addModule</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;json&quot;</span><span class="sy0">,</span> <span class="co1">//module name; must be unique</span>
+    type<span class="sy0">:</span> <span class="st0">&quot;js&quot;</span><span class="sy0">,</span> <span class="co1">//can be &quot;js&quot; or &quot;css&quot;</span>
+    fullpath<span class="sy0">:</span> <span class="st0">&quot;http://www.json.org/json2.js&quot;</span><span class="sy0">,</span> <span class="co1">//can use a path instead, extending base path</span>
+    varName<span class="sy0">:</span> <span class="st0">&quot;JSON&quot;</span> <span class="co1">// a variable that will be available when the script is loaded.  Needed</span>
+                    <span class="co1">// in order to act on the script immediately in Safari 2.x and below.</span>
+    <span class="co1">//requires: ['yahoo', 'event'] //if this module had dependencies, we could define here</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-1d22c9fb499484d70e0aad9bd103c343-plain">//Add the module to YUILoader
+loader.addModule({
+    name: "json", //module name; must be unique
+    type: "js", //can be "js" or "css"
+    fullpath: "http://www.json.org/json2.js", //can use a path instead, extending base path
+    varName: "JSON" // a variable that will be available when the script is loaded.  Needed
+                    // in order to act on the script immediately in Safari 2.x and below.
+    //requires: ['yahoo', 'event'] //if this module had dependencies, we could define here
+});
+</textarea></div>
+
+<p>
+
+
+When loading external scripts that you do not control, specify a <code>varName</code> property.  YUI Loader will determine when the script is fully loaded by polling for this property.  This is only needed in order to support external scripts in Safari 2.x.  All other <a href="http://yuilibrary.com/yui/docs/tutorials/gbs/">A-Grade browsers</a> will work correctly without specifying a <code>varName</code>.
+See the <a href="../examples/yuiloader/yl-addmodule.html"><code>addModule</code> example</a> and its accompanying tutorial for more information about using <code>varName</code> properties.</p>
+
+<p>When you <em>do</em> control the the content, and when that content is meant to be used with YUI, the best way to notify YUI Loader that loading is complete is to use the <code>YAHOO.register</code> method.  <code>YAHOO.register</code> is the same method that YUI components use to register themselves with the <code>YAHOO</code> object and record information about themselves in the <code>YAHOO.env</code> registry.</p>
+
+<p><code>YAHOO.register</code> takes three arguments:</p>
+<ol>
+  <li><strong>module name</strong>: (string) must be unique, not duplicating any <a href="#modulenames">YUI module names</a> or any other custom module names you may have used;</li>
+  <li><strong>core class or object</strong>: a reference to the core class for this component (e.g., <code>YAHOO.util.Anim</code> would be the core class for the <a href="../animation/index.html">Animation Utility</a>);</li>
+  <li><strong>environment object</strong>: (object) an object containing a version member and a build member indicating the current version and build information for the component.  </li>
+</ol>
+
+<p>For example, the <a href="../animation/index.html">Animation Utility</a> in version 2.2.2 registered itself with the following code:</p>
+
+<div id="syntax-9203096a8873fb9a9e5b3ef3a19004da" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">register</span><span class="br0">&#40;</span><span class="st0">&quot;animation&quot;</span><span class="sy0">,</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    version<span class="sy0">:</span> <span class="st0">&quot;2.9.0&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    build<span class="sy0">:</span> <span class="st0">&quot;204&quot;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">register</span><span class="br0">&#40;</span><span class="st0">&quot;animation&quot;</span><span class="sy0">,</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    version<span class="sy0">:</span> <span class="st0">&quot;2.9.0&quot;</span><span class="sy0">,</span>
+    build<span class="sy0">:</span> <span class="st0">&quot;204&quot;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-9203096a8873fb9a9e5b3ef3a19004da-plain">YAHOO.register("animation", YAHOO.util.Anim, {
+    version: "2.9.0",
+    build: "204"
+});
+</textarea></div>
+<p><strong>Reminder:</strong> Use of <code>YAHOO.register</code> obviates the need for a <code>varName</code> property when loading external scripts.</p>
+
+<h2 id="overrideskins">Overriding skins</h2>
+<p>In version 2.4.1 of the YUILoader, defining modules that override existing YUI
+skins requires that you load them in two phases: 1) The YUI component, 2) The custom component:</p>
+
+<div id="syntax-7a57ad1dc05d26cf96e8de089780a33b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// first load treeview</span></div></li><li class="li1"><div class="de1"><span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">YUILoader</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    require<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">'treeview'</span><span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    onSuccess<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        <span class="co1">// when treeview is finished loading, define and load the custom tree modules</span></div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> loader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">YUILoader</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="co1">// define the css module that overrides the default treeview css</span></div></li><li class="li1"><div class="de1">        loader.<span class="me1">addModule</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">          <span class="kw3">name</span><span class="sy0">:</span><span class="st0">'customtreecss'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">          type<span class="sy0">:</span><span class="st0">'css'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">          fullpath<span class="sy0">:</span><span class="st0">'http://domain/customtree.css'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">          requires<span class="sy0">:</span><span class="br0">&#91;</span><span class="st0">'treeview'</span><span class="br0">&#93;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span> </div></li><li class="li1"><div class="de1">        <span class="co1">// define the script module that extends treeview</span></div></li><li class="li2"><div class="de2">        loader.<span class="me1">addModule</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">          <span class="kw3">name</span><span class="sy0">:</span><span class="st0">'customtree'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">          type<span class="sy0">:</span><span class="st0">'js'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">          fullpath<span class="sy0">:</span><span class="st0">'http://domain/customtree.js'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">          <span class="co1">// make the css file a requirement for the script</span></div></li><li class="li2"><div class="de2">          requires<span class="sy0">:</span><span class="br0">&#91;</span><span class="st0">'customtreecss'</span><span class="br0">&#93;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span> </div></li><li class="li1"><div class="de1">        loader.<span class="me1">onSuccess</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            <span class="co1">// build the custom tree</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">        loader.<span class="me1">insert</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="me1">insert</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// insert the treeview component immediately</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// first load treeview</span>
+<span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">YUILoader</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    require<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">'treeview'</span><span class="br0">&#93;</span><span class="sy0">,</span>
+    onSuccess<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="co1">// when treeview is finished loading, define and load the custom tree modules</span>
+        <span class="kw2">var</span> loader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">YUILoader</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="co1">// define the css module that overrides the default treeview css</span>
+        loader.<span class="me1">addModule</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+          <span class="kw3">name</span><span class="sy0">:</span><span class="st0">'customtreecss'</span><span class="sy0">,</span>
+          type<span class="sy0">:</span><span class="st0">'css'</span><span class="sy0">,</span>
+          fullpath<span class="sy0">:</span><span class="st0">'http://domain/customtree.css'</span><span class="sy0">,</span>
+          requires<span class="sy0">:</span><span class="br0">&#91;</span><span class="st0">'treeview'</span><span class="br0">&#93;</span>
+        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span> 
+        <span class="co1">// define the script module that extends treeview</span>
+        loader.<span class="me1">addModule</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+          <span class="kw3">name</span><span class="sy0">:</span><span class="st0">'customtree'</span><span class="sy0">,</span>
+          type<span class="sy0">:</span><span class="st0">'js'</span><span class="sy0">,</span>
+          fullpath<span class="sy0">:</span><span class="st0">'http://domain/customtree.js'</span><span class="sy0">,</span>
+          <span class="co1">// make the css file a requirement for the script</span>
+          requires<span class="sy0">:</span><span class="br0">&#91;</span><span class="st0">'customtreecss'</span><span class="br0">&#93;</span>
+        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span> 
+        loader.<span class="me1">onSuccess</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            <span class="co1">// build the custom tree</span>
+        <span class="br0">&#125;</span><span class="sy0">;</span>
+        loader.<span class="me1">insert</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="me1">insert</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// insert the treeview component immediately</span>
+&nbsp;</pre></div><textarea id="syntax-7a57ad1dc05d26cf96e8de089780a33b-plain">// first load treeview
+new YAHOO.util.YUILoader({
+    require: ['treeview'],
+    onSuccess: function() {
+        // when treeview is finished loading, define and load the custom tree modules
+        var loader = new YAHOO.util.YUILoader();
+        // define the css module that overrides the default treeview css
+        loader.addModule({
+          name:'customtreecss',
+          type:'css',
+          fullpath:'http://domain/customtree.css',
+          requires:['treeview']
+        }); 
+        // define the script module that extends treeview
+        loader.addModule({
+          name:'customtree',
+          type:'js',
+          fullpath:'http://domain/customtree.js',
+          // make the css file a requirement for the script
+          requires:['customtreecss']
+        }); 
+        loader.onSuccess = function() {
+            // build the custom tree
+        };
+        loader.insert();
+    }
+}).insert(); // insert the treeview component immediately
+</textarea></div>
+<h2 id="modulenames">YUI Module Names</h2>
+
+<p>Each YUI component has a corresponding module name that is used as a unique identifier within YUI scripts.  For example, the <a href="../event/index.html">Event Utility</a> is internally referred to as <code>"event"</code>.  YUI Loader loads components based on these unique module names.  Here is the full list of YUI module names.  All except YUI Loader itself can be loaded via the Loader component.</p>
+
+<div class="apisummary">
+<table><thead><tr><th>YUI Component</th><th>Module Name</th></tr></thead><tbody><tr><td><a href='../animation/index.html'>Animation Utility</a></td><td>animation</td></tr><tr class='odd'><td><a href='../autocomplete/index.html'>AutoComplete Control</a></td><td>autocomplete</td></tr><tr><td><a href='../base/index.html'>Base CSS Style Foundation</a></td><td>base</td></tr><tr class='odd'><td><a href='../button/index.html'>Button Control</a></td><td>button</td></tr><tr><td><a href='../calendar/index.html'>Calendar Control</a></td><td>calendar</td></tr><tr class='odd'><td><a href='../carousel/index.html'>Carousel Control</a></td><td>carousel</td></tr><tr><td><a href='../charts/index.html'>Charts Control</a></td><td>charts</td></tr><tr class='odd'><td><a href='../colorpicker/index.html'>Color Picker Control</a></td><td>colorpicker</td></tr><tr><td><a href='../connection/index.html'>Connection Manager</a></td><td>connection</td></tr><tr class='odd'><td><a href='../cookie/index.html'>Cookie Utility</a></td><td>cookie</td></tr><tr><td><a href='../container/index.html'>Container Family Core (Module, Overlay)</a></td><td>containercore</td></tr><tr class='odd'><td><a href='../container/index.html'>Container Family (Module, Overlay Panel, Tooltip, Dialog, SimpleDialog)</a></td><td>container</td></tr><tr><td><a href='../datasource/index.html'>DataSource Utility</a></td><td>datasource</td></tr><tr class='odd'><td><a href='../datatable/index.html'>DataTable Control</a></td><td>datatable</td></tr><tr><td><a href='../dom/index.html'>Dom Collection</a></td><td>dom</td></tr><tr class='odd'><td><a href='../dragdrop/index.html'>Drag &amp; Drop Utility</a></td><td>dragdrop</td></tr><tr><td><a href='../editor/index.html'>Rich Text Editor</a></td><td>editor</td></tr><tr class='odd'><td><a href='../element/index.html'>Element Utility</a></td><td>element</td></tr><tr><td><a href='../event/index.html'>Event Utility</a></td><td>event</td></tr><tr class='odd'><td><a href='../fonts/index.html'>Fonts CSS</a></td><td>fonts</td></tr><tr><td><a href='../get/index.html'>Get Utility</a></td><td>get</td></tr><tr class='odd'><td><a href='../grids/index.html'>Grids CSS Kit</a></td><td>grids</td></tr><tr><td><a href='../history/index.html'>Browser History Manager</a></td><td>history</td></tr><tr class='odd'><td><a href='../imageloader/index.html'>ImageLoader Utility</a></td><td>imageloader</td></tr><tr><td><a href='../imagecropper/index.html'>ImageCropper Control</a></td><td>imagecropper</td></tr><tr class='odd'><td><a href='../json/index.html'>JSON Utility</a></td><td>json</td></tr><tr><td><a href='../layout/index.html'>Layout Manager</a></td><td>layout</td></tr><tr class='odd'><td><a href='../logger/index.html'>Logger Control</a></td><td>logger</td></tr><tr><td><a href='../menu/index.html'>Menu Control</a></td><td>menu</td></tr><tr class='odd'><td><a href='../paginator/index.html'>Paginator</a></td><td>paginator</td></tr><tr><td><a href='../profiler/index.html'>Profiler</a></td><td>profiler</td></tr><tr class='odd'><td><a href='../profilerviewer/index.html'>ProfilerViewer Control</a></td><td>profilerviewer</td></tr><tr><td><a href='../progressbar/index.html'>ProgressBar Control</a></td><td>progressbar</td></tr><tr class='odd'><td><a href='../resize/index.html'>Resize Utility</a></td><td>resize</td></tr><tr><td><a href='../reset/index.html'>Reset CSS</a></td><td>reset</td></tr><tr class='odd'><td><a href='../selector/index.html'>Selector Utility</a></td><td>selector</td></tr><tr><td><a href='../editor/index.html'>Simple Editor</a></td><td>simpleeditor</td></tr><tr class='odd'><td><a href='../slider/index.html'>Slider Control</a></td><td>slider</td></tr><tr><td><a href='../storage/index.html'>Storage Utility</a></td><td>storage</td></tr><tr class='odd'><td><a href='../swf/index.html'>Swf Utility</a></td><td>swf</td></tr><tr><td><a href='../swf/index.html'>SwfDetect Utility</a></td><td>swfdetect</td></tr><tr class='odd'><td><a href='../swfstore/index.html'>SwfStore Utility</a></td><td>swfstore</td></tr><tr><td><a href='../stylesheet/index.html'>StyleSheet Utility</a></td><td>stylesheet</td></tr><tr class='odd'><td><a href='../tabview/index.html'>TabView Control</a></td><td>tabview</td></tr><tr><td><a href='../treeview/index.html'>TreeView Control</a></td><td>treeview</td></tr><tr class='odd'><td><a href='../uploader/index.html'>Uploader Control</a></td><td>uploader</td></tr><tr><td><a href='../yahoo/index.html'>YAHOO Global Object</a></td><td>yahoo</td></tr><tr class='odd'><td><a href='index.html'>YUI Loader Utility</a></td><td>yuiloader</td></tr><tr><td><a href='../yuitest/index.html'>YUI Test</a></td><td>yuitest</td></tr></tbody></table></div>
+
+<p>YUI ships with some aggregate or "rollup" files, each comprising two or more modules, to help you reduce the number of HTTP requests you make while loading YUI content.  Each aggregate file has its own module name.</p>
+
+<p>Moreover, some modules provide the functionality of one or more modules in the above list &mdash; for example, YUI Loader includes the <a href="../get/index.html">Get Utility</a>.</p>
+
+<p>When you choose to <code><a href="../docs/YAHOO.util.YUILoader.html#property_allowRollup">allowRollup</a></code>s, YUI Loader will choose the most appropriate set of files to meet your requirements while using the smallest number of included files. You can also specify an aggregate file directly as a requirement by requesting it by its own module name.  The following is a list of modules that aggregate or include multiple modules:</p>
+
+<div class="apisummary">
+<table><thead><tr><th>YUI Rollup</th><th>Provides</th></tr></thead><tbody><tr><td>container</td><td>containercore</td></tr><tr class='odd'><td>editor</td><td>simpleeditor</td></tr><tr><td>reset-fonts</td><td>reset, fonts</td></tr><tr class='odd'><td>reset-fonts-grids</td><td>reset, fonts, grids, reset-fonts</td></tr><tr><td>utilities</td><td>yahoo, event, dragdrop, animation, dom, connection, element, get, yuiloader, yahoo-dom-event</td></tr><tr class='odd'><td>yahoo-dom-event</td><td>yahoo, dom, event</td></tr><tr><td>yuiloader</td><td>yahoo, get</td></tr><tr class='odd'><td>yuiloader-dom-event</td><td>yahoo, dom, event, get, yuiloader, yahoo-dom-event</td></tr></tbody></table></div>
+
+
+<h2 id="migrating">Migrating from 2.3.x to 2.4+</h2>
+
+<p>YUI Loader's API changed, and its implementation simplified in the 2.4.0 release.  2.3.x implementations
+that use <code>YAHOO.util.YUILoader</code> instances will require changing the <code>onLoadComplete</code> property
+to <code>onSuccess</code>.  <code>YAHOO_config</code> is no longer supported for loading YUI components.  Implementations
+that used <code>YAHOO_config</code> will need to be reworked to use a <code>YAHOO.util.YUILoader</code> instance.</p>
+<p>The <code>verifier</code> function is no longer supported for loading external scripts.  Instead you must specify a <code>varName</code> property to support Safari 2.x when the script doesn't use YUI's register functionality.
+
+<p>If you are attempting to implement a version of YUI Loader earlier than 2.4.0, refer to the
+API documentation and examples in the distribution for that release.  Older releases are archived
+on <a href="http://yuilibrary.com/downloads/#yui2">YUILibrary.com</a>.
+
+<h2 id="knownissues">Known Issues</h2>
+
+<p>Unlike other properties, the filter property can't be set directly on an instance.  It must 
+be set by passing a configuration object to either the YUILoader constructor or the 
+insert/sandbox method.</p>
+
+<p>In 2.4.1 Defining custom modules that override existing YUI skins requires a specific syntax.  See
+the <a href="#overrideskins">addModule</a> section for details.</p>
+
+<h2 id="mobile">YUI on Mobile: Using YUI Loader Utility with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>  
+<p>The YUI Loader is fully supported on Apple's iPhone and the Nokia N-Series browsers; you can expect it to perform identically on those browsers relative to the supported <a href="http://yuilibrary.com/yui/docs/tutorials/gbs/">A-Grade browsers</a>.</p>
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+    </div>
+         <div class="yui-u">
+            
+            <div id="cheatsheet">
+                <h3>YUI Loader Utility Cheat Sheet:</h3>
+                
+                <a href="http://yuiblog.com/assets/pdf/cheatsheets/yuiloader.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/yuiloader2.gif" width="178" height="134" alt="Cheat Sheet for the YUI Loader Utility."></a>
+                
+                <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+            </div>
+
+<div id="examples">
+
+<h3>YUI Loader Utility Examples:</h3>
+
+<ul>
+<li><a href='../examples/yuiloader/yl-basic.html'>Using YUI Loader to Load the Calendar Control</a></li>
+<li><a href='../examples/yuiloader/yl-insert.html'>Using YUI Loader to Place Additional Components on a Page</a></li>
+<li><a href='../examples/yuiloader/yl-addmodule.html'>Using addModule to Add Custom (Non-YUI) Content with YUILoader</a></li>
+<li><a href='../examples/yuiloader/yl-list.html'>Use YUILoader to list requirements for a set of components.</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the YUI Loader Utility:</h4>
+
+<ul>
+<li><a href='../examples/event/event-focus-blur.html'>Skinning via Progressive Enhancement using the Event Utility and the YUILoader</a> (included with examples for the <a href='../event/index.html'>Event Utility</a>)</li>
+<li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
+</ul>		
+
+</div>
+
+<div id="morereading">
+    <h3>More Reading about the YUI Loader Utility:</h3>
+    
+    <ul>
+      <li>"<a href="http://yuiblog.com/blog/2008/10/17/loading-yui/">Loading YUI: Seeds, Core, and Combo-handling</a>", by Eric Miraglia on <a href="http://yuiblog.com/">YUIBlog</a></li>
+      <li><a href="http://www.dmxzone.dmxzone.com/ShowDetail.asp?NewsId=16232">Intelligent YUI Resource Loading with YUI Loader</a>, by Dan Wellman ($3.20 download from DMXZone)</li>
+      <li><a href="http://ericmiraglia.com/yui/demos/mapswithloader.php">Loading the Yahoo Maps Ajax API via YUI Loader</a>, by Eric Miraglia</li>
+   </ul>
+</div>
+
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fyuiloader%2F--><h3 id="delicious">YUI YUI Loader Utility on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/yuiloader/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/loading" class="tag-size-1">loading</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/programming" class="tag-size-1">programming</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/js" class="tag-size-1">js</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yuiloader" class="tag-size-1">yuiloader</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/loader" class="tag-size-1">loader</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/css" class="tag-size-1">css</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/993ff681cb15ebf341a0e96cc9a4e528" class="saved-by">saved by <span>20</span>  people</a></p>
+   </div></div>
+
+         </div>
+  </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="selected "><a title="The YUI Loader Utility" href="index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:11 PDT 2013 -->
+
+<!-- Localized -->

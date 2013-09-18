@@ -1,0 +1,938 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: YAHOO Global Object</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: YAHOO Global Object</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+
+<div id="promo" class="component">
+  <h1>YUI 2: YAHOO Global Object</h1>
+    <p>The YAHOO Global Object provides a single global namespace within which all YUI Library code resides.  It must be included on every page that utilizes the YUI Library, and it must appear before any of the other YUI component.</p>
+
+    <p>The YAHOO Global Object also contains a number of methods that are used throughout
+    the library.</p>
+	
+    <div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#using">Using the Utility Methods in YAHOO</a> </li>
+      <li><a href="#support">Support &amp; Community</a></li><li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+  
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/yahoo/index.html">Examples</a>: Explore examples of the YAHOO Global Object in action.</li>
+      <li><a href="../docs/module_yahoo.html">API Documentation</a>: View the full API documentation for the YAHOO Global Object.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.yahoo">Release Notes</a>: Detailed change log for the YAHOO Global Object.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the YAHOO Global Object as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>    
+  </div>
+
+  <h2 class="first">Getting Started<a name="start"></a></h2>
+  <p>The YAHOO Global Object must be included before any of the other script files
+  that are part of YUI: </p>
+  
+<div id="syntax-748ae25c05df11d75010bbdab268026a" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- YAHOO Global Object source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/javascript&quot;</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Additional source files go here --&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- YAHOO Global Object source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/javascript&quot;</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Additional source files go here --&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-748ae25c05df11d75010bbdab268026a-plain"><!-- YAHOO Global Object source file -->
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+
+<!-- Additional source files go here -->
+</textarea></div>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  
+  <strong>Note:</strong> If you are loading components via the <a href="../yuiloader/index.html">YUI Loader</a>, this component <em>is included in the YUI Loader package</em> &mdash; you do not need to load it separately. If YUI Loader is on the page, so is the YAHOO Global Object.
+  
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<h2 id="using">Using the Utility Methods in YAHOO</h2>
+<ul>
+<li> <a href="#namespace">YAHOO.namespace</a></li>
+<li> <a href="#lang">YAHOO.lang</a></li>
+<li> <a href="#hasOwnProperty">YAHOO.lang.hasOwnProperty</a></li>
+<li> <a href="#extend">YAHOO.lang.extend</a></li>
+<li> <a href="#augment">YAHOO.lang.augment</a></li>
+<li> <a href="#log">YAHOO.log</a></li>
+<li> <a href="#config">YAHOO_config and YAHOO.env</a></li>
+<li> <a href="#modulenames">YUI Module Names</a></li>
+</ul>
+
+<h3 id="namespace">YAHOO.namespace</h3>
+<p>The YAHOO Object automatically generates namespaces for 
+   <code>YAHOO.util</code>, 
+   <code>YAHOO.widget</code>, 
+   <code>YAHOO.env</code>, 
+   <code>YAHOO.tool</code>, 
+   and <code>YAHOO.example</code>.  These namespaces are reserved for script 
+   that is included in the YUI release.  Additional namespaces can be created
+   to contain custom applications built upon the library:</p>
+<div id="syntax-27868f2c112f0b57acca617197733f15" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Creates a namespace for &quot;myproduct1&quot;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="kw2">namespace</span><span class="br0">&#40;</span><span class="st0">&quot;myproduct1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">myproduct1</span>.<span class="me1">Class1</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Creates a namespace for &quot;myproduct2&quot;, and for &quot;mysubproject1&quot;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="kw2">namespace</span><span class="br0">&#40;</span><span class="st0">&quot;myproduct2.mysubproject1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">myproduct2</span>.<span class="me1">mysubproject1</span>.<span class="me1">Class1</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    <span class="kw3">alert</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Creates a namespace for &quot;myproduct1&quot;</span>
+<span class="kw4">YAHOO</span>.<span class="kw2">namespace</span><span class="br0">&#40;</span><span class="st0">&quot;myproduct1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">myproduct1</span>.<span class="me1">Class1</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Creates a namespace for &quot;myproduct2&quot;, and for &quot;mysubproject1&quot;</span>
+<span class="kw4">YAHOO</span>.<span class="kw2">namespace</span><span class="br0">&#40;</span><span class="st0">&quot;myproduct2.mysubproject1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">myproduct2</span>.<span class="me1">mysubproject1</span>.<span class="me1">Class1</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-27868f2c112f0b57acca617197733f15-plain">// Creates a namespace for "myproduct1"
+YAHOO.namespace("myproduct1");
+YAHOO.myproduct1.Class1 = function(info) {
+    alert(info);
+};
+
+// Creates a namespace for "myproduct2", and for "mysubproject1"
+YAHOO.namespace("myproduct2.mysubproject1");
+YAHOO.myproduct2.mysubproject1.Class1 = function(info) {
+    alert(info);
+};
+</textarea></div>
+<h3 id="lang">YAHOO.lang</h3>
+<p><code>YAHOO.lang</code> contains javascript language utilities and extensions that are used in the YUI library.  
+
+<div id="syntax-9255147ea25b380a3c052546e665492f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// true, an array literal is an array</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isArray</span><span class="br0">&#40;</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// false, an object literal is not an array</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isArray</span><span class="br0">&#40;</span><span class="br0">&#123;</span><span class="st0">&quot;one&quot;</span><span class="sy0">:</span> <span class="st0">&quot;two&quot;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// however, when declared as an array, it is true</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> a <span class="sy0">=</span> <span class="kw2">new</span> Array<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    a<span class="br0">&#91;</span><span class="st0">&quot;one&quot;</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">&quot;two&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">return</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isArray</span><span class="br0">&#40;</span>a<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// false, a collection of elements is like an array, but isn't</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isArray</span><span class="br0">&#40;</span>document.<span class="me1">getElementsByTagName</span><span class="br0">&#40;</span><span class="st0">&quot;body&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// true, false is a boolean</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isBoolean</span><span class="br0">&#40;</span><span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">// false, 1 and the string &quot;true&quot; are not booleans</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isBoolean</span><span class="br0">&#40;</span><span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isBoolean</span><span class="br0">&#40;</span><span class="st0">&quot;true&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// null is null, but false, undefined and &quot;&quot; are not</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNull</span><span class="br0">&#40;</span><span class="kw2">null</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// true</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNull</span><span class="br0">&#40;</span>undefined<span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNull</span><span class="br0">&#40;</span><span class="st0">&quot;&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// a function is a function, but an object is not</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isFunction</span><span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#123;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// true</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isFunction</span><span class="br0">&#40;</span><span class="br0">&#123;</span>foo<span class="sy0">:</span> <span class="st0">&quot;bar&quot;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// true, ints and floats are numbers</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNumber</span><span class="br0">&#40;</span><span class="nu0">0</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNumber</span><span class="br0">&#40;</span><span class="nu0">123.123</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// false, strings that can be cast to numbers aren't really numbers</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNumber</span><span class="br0">&#40;</span><span class="st0">&quot;123.123&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">// false, undefined numbers and infinity are not numbers we want to use</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNumber</span><span class="br0">&#40;</span><span class="nu0">1</span><span class="sy0">/</span><span class="nu0">0</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// true, objects, functions, and arrays are objects</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isObject</span><span class="br0">&#40;</span><span class="br0">&#123;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isObject</span><span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#123;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isObject</span><span class="br0">&#40;</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="sy0">,</span><span class="nu0">2</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// false, primitives are not objects</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isObject</span><span class="br0">&#40;</span><span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isObject</span><span class="br0">&#40;</span><span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isObject</span><span class="br0">&#40;</span><span class="st0">&quot;{}&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// strings</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isString</span><span class="br0">&#40;</span><span class="st0">&quot;{}&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// true</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isString</span><span class="br0">&#40;</span><span class="br0">&#123;</span>foo<span class="sy0">:</span> <span class="st0">&quot;bar&quot;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isString</span><span class="br0">&#40;</span><span class="nu0">123</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isString</span><span class="br0">&#40;</span><span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// undefined is undefined, but null and false are not</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isUndefined</span><span class="br0">&#40;</span>undefined<span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// true</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isUndefined</span><span class="br0">&#40;</span><span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isUndefined</span><span class="br0">&#40;</span><span class="kw2">null</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// true, an array literal is an array</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isArray</span><span class="br0">&#40;</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// false, an object literal is not an array</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isArray</span><span class="br0">&#40;</span><span class="br0">&#123;</span><span class="st0">&quot;one&quot;</span><span class="sy0">:</span> <span class="st0">&quot;two&quot;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// however, when declared as an array, it is true</span>
+<span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> a <span class="sy0">=</span> <span class="kw2">new</span> Array<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    a<span class="br0">&#91;</span><span class="st0">&quot;one&quot;</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">&quot;two&quot;</span><span class="sy0">;</span>
+    <span class="kw1">return</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isArray</span><span class="br0">&#40;</span>a<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// false, a collection of elements is like an array, but isn't</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isArray</span><span class="br0">&#40;</span>document.<span class="me1">getElementsByTagName</span><span class="br0">&#40;</span><span class="st0">&quot;body&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// true, false is a boolean</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isBoolean</span><span class="br0">&#40;</span><span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// false, 1 and the string &quot;true&quot; are not booleans</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isBoolean</span><span class="br0">&#40;</span><span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isBoolean</span><span class="br0">&#40;</span><span class="st0">&quot;true&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// null is null, but false, undefined and &quot;&quot; are not</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNull</span><span class="br0">&#40;</span><span class="kw2">null</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// true</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNull</span><span class="br0">&#40;</span>undefined<span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNull</span><span class="br0">&#40;</span><span class="st0">&quot;&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span>
+&nbsp;
+<span class="co1">// a function is a function, but an object is not</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isFunction</span><span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#123;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// true</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isFunction</span><span class="br0">&#40;</span><span class="br0">&#123;</span>foo<span class="sy0">:</span> <span class="st0">&quot;bar&quot;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span>
+&nbsp;
+<span class="co1">// true, ints and floats are numbers</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNumber</span><span class="br0">&#40;</span><span class="nu0">0</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNumber</span><span class="br0">&#40;</span><span class="nu0">123.123</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// false, strings that can be cast to numbers aren't really numbers</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNumber</span><span class="br0">&#40;</span><span class="st0">&quot;123.123&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// false, undefined numbers and infinity are not numbers we want to use</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isNumber</span><span class="br0">&#40;</span><span class="nu0">1</span><span class="sy0">/</span><span class="nu0">0</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// true, objects, functions, and arrays are objects</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isObject</span><span class="br0">&#40;</span><span class="br0">&#123;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isObject</span><span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#123;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isObject</span><span class="br0">&#40;</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="sy0">,</span><span class="nu0">2</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// false, primitives are not objects</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isObject</span><span class="br0">&#40;</span><span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isObject</span><span class="br0">&#40;</span><span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isObject</span><span class="br0">&#40;</span><span class="st0">&quot;{}&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// strings</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isString</span><span class="br0">&#40;</span><span class="st0">&quot;{}&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// true</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isString</span><span class="br0">&#40;</span><span class="br0">&#123;</span>foo<span class="sy0">:</span> <span class="st0">&quot;bar&quot;</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isString</span><span class="br0">&#40;</span><span class="nu0">123</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isString</span><span class="br0">&#40;</span><span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span>
+&nbsp;
+<span class="co1">// undefined is undefined, but null and false are not</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isUndefined</span><span class="br0">&#40;</span>undefined<span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// true</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isUndefined</span><span class="br0">&#40;</span><span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isUndefined</span><span class="br0">&#40;</span><span class="kw2">null</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// false</span>
+&nbsp;</pre></div><textarea id="syntax-9255147ea25b380a3c052546e665492f-plain">// true, an array literal is an array
+YAHOO.lang.isArray([1, 2]);
+
+// false, an object literal is not an array
+YAHOO.lang.isArray({"one": "two"});
+
+// however, when declared as an array, it is true
+function() {
+    var a = new Array();
+    a["one"] = "two";
+    return YAHOO.lang.isArray(a);
+}();
+
+// false, a collection of elements is like an array, but isn't
+YAHOO.lang.isArray(document.getElementsByTagName("body"));
+
+// true, false is a boolean
+YAHOO.lang.isBoolean(false);
+
+// false, 1 and the string "true" are not booleans
+YAHOO.lang.isBoolean(1);
+YAHOO.lang.isBoolean("true");
+
+// null is null, but false, undefined and "" are not
+YAHOO.lang.isNull(null); // true
+YAHOO.lang.isNull(undefined); // false
+YAHOO.lang.isNull(""); // false
+
+// a function is a function, but an object is not
+YAHOO.lang.isFunction(function(){}); // true
+YAHOO.lang.isFunction({foo: "bar"}); // false
+
+// true, ints and floats are numbers
+YAHOO.lang.isNumber(0);
+YAHOO.lang.isNumber(123.123);
+
+// false, strings that can be cast to numbers aren't really numbers
+YAHOO.lang.isNumber("123.123");
+
+// false, undefined numbers and infinity are not numbers we want to use
+YAHOO.lang.isNumber(1/0);
+
+// true, objects, functions, and arrays are objects
+YAHOO.lang.isObject({});
+YAHOO.lang.isObject(function(){});
+YAHOO.lang.isObject([1,2]);
+
+// false, primitives are not objects
+YAHOO.lang.isObject(1);
+YAHOO.lang.isObject(true);
+YAHOO.lang.isObject("{}");
+
+// strings
+YAHOO.lang.isString("{}"); // true
+YAHOO.lang.isString({foo: "bar"}); // false
+YAHOO.lang.isString(123); // false
+YAHOO.lang.isString(true); // false
+ 
+// undefined is undefined, but null and false are not
+YAHOO.lang.isUndefined(undefined); // true
+YAHOO.lang.isUndefined(false); // false
+YAHOO.lang.isUndefined(null); // false
+</textarea></div>
+<h3 id="hasOwnProperty">YAHOO.lang.hasOwnProperty</h3>
+<p><code>YAHOO.lang.hasOwnProperty</code> can be used to filter out properties that
+were added to the Object prototype when iterating over an object
+that is being used as a hash table.  This feature is natively 
+supported across all current A-Grade browsers, but it wasn't added 
+to Safari until recently; all internal usage of the <code>hasOwnProperty</code>
+test within YUI will use the version in <code>YAHOO.lang</code> for the
+forseeable future, and we recommend that you do the same in your own 
+implementations.  <code>YAHOO.lang.hasOwnProperty</code> will use
+the native browser function unless it isn't available.
+<div id="syntax-1e7a93e5418810a10a82ba79c3fff2f6" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// this is what we are protecting against</span></div></li><li class="li1"><div class="de1">Object.<span class="me1">prototype</span>.<span class="me1">myCustomFunction</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>x<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span>x<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> o <span class="sy0">=</span> <span class="br0">&#123;</span><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">o<span class="br0">&#91;</span><span class="st0">&quot;foo&quot;</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">&quot;bar&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">o<span class="br0">&#91;</span><span class="st0">&quot;marco&quot;</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">&quot;polo&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">// this is where we need the protection</span></div></li><li class="li1"><div class="de1"><span class="kw1">for</span> <span class="br0">&#40;</span><span class="kw2">var</span> i <span class="kw1">in</span> o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">hasOwnProperty</span><span class="br0">&#40;</span>o<span class="sy0">,</span> i<span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;good key: &quot;</span> <span class="sy0">+</span> i<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;bad key: &quot;</span> <span class="sy0">+</span> i<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// this is what we are protecting against</span>
+Object.<span class="me1">prototype</span>.<span class="me1">myCustomFunction</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>x<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span>x<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="kw2">var</span> o <span class="sy0">=</span> <span class="br0">&#123;</span><span class="br0">&#125;</span><span class="sy0">;</span>
+o<span class="br0">&#91;</span><span class="st0">&quot;foo&quot;</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">&quot;bar&quot;</span><span class="sy0">;</span>
+o<span class="br0">&#91;</span><span class="st0">&quot;marco&quot;</span><span class="br0">&#93;</span> <span class="sy0">=</span> <span class="st0">&quot;polo&quot;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// this is where we need the protection</span>
+<span class="kw1">for</span> <span class="br0">&#40;</span><span class="kw2">var</span> i <span class="kw1">in</span> o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">hasOwnProperty</span><span class="br0">&#40;</span>o<span class="sy0">,</span> i<span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;good key: &quot;</span> <span class="sy0">+</span> i<span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span>
+        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;bad key: &quot;</span> <span class="sy0">+</span> i<span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-1e7a93e5418810a10a82ba79c3fff2f6-plain">// this is what we are protecting against
+Object.prototype.myCustomFunction = function(x) {
+    alert(x);
+}
+
+var o = {};
+o["foo"] = "bar";
+o["marco"] = "polo";
+
+// this is where we need the protection
+for (var i in o) {
+    if (YAHOO.lang.hasOwnProperty(o, i)) {
+        alert("good key: " + i);
+    } else {
+        alert("bad key: " + i);
+    }
+}
+</textarea></div>
+<h3 id="extend">YAHOO.lang.extend</h3>
+<p><code>YAHOO.lang.extend</code> provides a simple mechanism for setting up the prototype, constructor, 
+   and superclass properties for objects that are extending other objects.
+   It also prevents the constructor of the extended object (ie, the superclass) from being
+   executed twice.  <code>YAHOO.lang.extend</code> was relocated into the <code>YAHOO.lang</code> package in version 2.9.0.
+   <code>YAHOO.extend</code> is a deprecated alias for <code>YAHOO.lang.extend</code>.
+</p>
+<div id="syntax-dced3bc8d294c9513196adb824352f07" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="kw2">namespace</span><span class="br0">&#40;</span><span class="st0">&quot;test&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class1</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Class1: &quot;</span> <span class="sy0">+</span> info<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class1</span>.<span class="me1">prototype</span>.<span class="me1">testMethod</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Class1: &quot;</span> <span class="sy0">+</span> info<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class2</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// chain the constructors</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class2</span>.<span class="me1">superclass</span>.<span class="me1">constructor</span>.<span class="me1">call</span><span class="br0">&#40;</span><span class="kw1">this</span><span class="sy0">,</span> info<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Class2: &quot;</span> <span class="sy0">+</span> info<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Class2 extends Class1.  Must be done immediately after the Class2 constructor</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">extend</span><span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class2</span><span class="sy0">,</span> <span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class1</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class2</span>.<span class="me1">prototype</span>.<span class="me1">testMethod</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// chain the method</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class2</span>.<span class="me1">superclass</span>.<span class="me1">testMethod</span>.<span class="me1">call</span><span class="br0">&#40;</span><span class="kw1">this</span><span class="sy0">,</span> info<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Class2: &quot;</span> <span class="sy0">+</span> info<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> class2Instance <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class2</span><span class="br0">&#40;</span><span class="st0">&quot;constructor executed&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">class2Instance.<span class="me1">testMethod</span><span class="br0">&#40;</span><span class="st0">&quot;testMethod invoked&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="kw2">namespace</span><span class="br0">&#40;</span><span class="st0">&quot;test&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class1</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Class1: &quot;</span> <span class="sy0">+</span> info<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class1</span>.<span class="me1">prototype</span>.<span class="me1">testMethod</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Class1: &quot;</span> <span class="sy0">+</span> info<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class2</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">// chain the constructors</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class2</span>.<span class="me1">superclass</span>.<span class="me1">constructor</span>.<span class="me1">call</span><span class="br0">&#40;</span><span class="kw1">this</span><span class="sy0">,</span> info<span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Class2: &quot;</span> <span class="sy0">+</span> info<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Class2 extends Class1.  Must be done immediately after the Class2 constructor</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">extend</span><span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class2</span><span class="sy0">,</span> <span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class1</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class2</span>.<span class="me1">prototype</span>.<span class="me1">testMethod</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">// chain the method</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class2</span>.<span class="me1">superclass</span>.<span class="me1">testMethod</span>.<span class="me1">call</span><span class="br0">&#40;</span><span class="kw1">this</span><span class="sy0">,</span> info<span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Class2: &quot;</span> <span class="sy0">+</span> info<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> class2Instance <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class2</span><span class="br0">&#40;</span><span class="st0">&quot;constructor executed&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+class2Instance.<span class="me1">testMethod</span><span class="br0">&#40;</span><span class="st0">&quot;testMethod invoked&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-dced3bc8d294c9513196adb824352f07-plain">YAHOO.namespace("test");
+
+YAHOO.test.Class1 = function(info) {
+    alert("Class1: " + info);
+};
+
+YAHOO.test.Class1.prototype.testMethod = function(info) {
+    alert("Class1: " + info);
+};
+
+YAHOO.test.Class2 = function(info) {
+    // chain the constructors
+    YAHOO.test.Class2.superclass.constructor.call(this, info);
+    alert("Class2: " + info);
+};
+
+// Class2 extends Class1.  Must be done immediately after the Class2 constructor
+YAHOO.lang.extend(YAHOO.test.Class2, YAHOO.test.Class1);
+
+YAHOO.test.Class2.prototype.testMethod = function(info) {
+    // chain the method
+    YAHOO.test.Class2.superclass.testMethod.call(this, info);
+    alert("Class2: " + info);
+};
+
+var class2Instance = new YAHOO.test.Class2("constructor executed");
+class2Instance.testMethod("testMethod invoked");
+</textarea></div>
+
+
+<h3 id="augment">YAHOO.lang.augment</h3>
+<p><code>YAHOO.lang.augment</code> provides a way to reuse code by applying some or 
+all of the prototype properties in one object to another object.  <code>YAHOO.augment</code> is
+a deprecated alias for <code>YAHOO.lang.augment</code>.
+</p>
+<div id="syntax-d2b07ec97a4c25ec1b993816249728cd" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- debugger output for environments without &quot;console&quot; --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;consoleelement&quot;</span>&gt;</span><span class="sc1">&amp;nbsp;</span><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- debugger output for environments without &quot;console&quot; --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;consoleelement&quot;</span>&gt;</span><span class="sc1">&amp;nbsp;</span><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-d2b07ec97a4c25ec1b993816249728cd-plain"><!-- debugger output for environments without "console" -->
+<div id="consoleelement">&nbsp;</div>
+</textarea></div><div id="syntax-558c782cb170eb9e1c530dd203731c2f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">////////////////////////////////////////////////////////////////////////////</span></div></li><li class="li1"><div class="de1"><span class="co1">// The ConsoleProvider example will log to the console if available, or a </span></div></li><li class="li1"><div class="de1"><span class="co1">// div with id=&quot;consoleelement&quot; if the console is not available</span></div></li><li class="li1"><div class="de1"><span class="co1">////////////////////////////////////////////////////////////////////////////</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">ConsoleProvider</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">ConsoleProvider</span>.<span class="me1">prototype</span> <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    log<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>msg<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="co1">// use the error console if available (FF+FireBug or Safari)</span></div></li><li class="li1"><div class="de1">        <span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw1">typeof</span> console <span class="sy0">!=</span> <span class="st0">&quot;undefined&quot;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">            console.<span class="me1">log</span><span class="br0">&#40;</span>msg<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="co1">// write the msg to a well-known div element</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            <span class="kw2">var</span> el <span class="sy0">=</span> document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">&quot;consoleelement&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            <span class="kw1">if</span> <span class="br0">&#40;</span>el<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">                el.<span class="me1">innerHTML</span> <span class="sy0">+=</span> <span class="st0">&quot;&lt;p&gt;&quot;</span> <span class="sy0">+</span> msg <span class="sy0">+</span> <span class="st0">&quot;&lt;/p&gt;&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">////////////////////////////////////////////////////////////////////////////</span></div></li><li class="li1"><div class="de1"><span class="co1">// Define a class that should be able to write debug messages</span></div></li><li class="li1"><div class="de1"><span class="co1">////////////////////////////////////////////////////////////////////////////</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">ClassWithLogging</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">augment</span><span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">ClassWithLogging</span><span class="sy0">,</span> <span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">ConsoleProvider</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">////////////////////////////////////////////////////////////////////////////</span></div></li><li class="li1"><div class="de1"><span class="co1">// Try it out</span></div></li><li class="li1"><div class="de1"><span class="co1">////////////////////////////////////////////////////////////////////////////</span></div></li><li class="li2"><div class="de2"><span class="kw2">var</span> c <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">ClassWithLogging</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">c.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;worked&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">////////////////////////////////////////////////////////////////////////////</span>
+<span class="co1">// The ConsoleProvider example will log to the console if available, or a </span>
+<span class="co1">// div with id=&quot;consoleelement&quot; if the console is not available</span>
+<span class="co1">////////////////////////////////////////////////////////////////////////////</span>
+<span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">ConsoleProvider</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="br0">&#125;</span><span class="sy0">;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">ConsoleProvider</span>.<span class="me1">prototype</span> <span class="sy0">=</span> <span class="br0">&#123;</span>
+    log<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>msg<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="co1">// use the error console if available (FF+FireBug or Safari)</span>
+        <span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw1">typeof</span> console <span class="sy0">!=</span> <span class="st0">&quot;undefined&quot;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            console.<span class="me1">log</span><span class="br0">&#40;</span>msg<span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="co1">// write the msg to a well-known div element</span>
+        <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span>
+            <span class="kw2">var</span> el <span class="sy0">=</span> document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">&quot;consoleelement&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+            <span class="kw1">if</span> <span class="br0">&#40;</span>el<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+                el.<span class="me1">innerHTML</span> <span class="sy0">+=</span> <span class="st0">&quot;&lt;p&gt;&quot;</span> <span class="sy0">+</span> msg <span class="sy0">+</span> <span class="st0">&quot;&lt;/p&gt;&quot;</span><span class="sy0">;</span>
+            <span class="br0">&#125;</span>
+        <span class="br0">&#125;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">////////////////////////////////////////////////////////////////////////////</span>
+<span class="co1">// Define a class that should be able to write debug messages</span>
+<span class="co1">////////////////////////////////////////////////////////////////////////////</span>
+<span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">ClassWithLogging</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="br0">&#125;</span><span class="sy0">;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">augment</span><span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">ClassWithLogging</span><span class="sy0">,</span> <span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">ConsoleProvider</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">////////////////////////////////////////////////////////////////////////////</span>
+<span class="co1">// Try it out</span>
+<span class="co1">////////////////////////////////////////////////////////////////////////////</span>
+<span class="kw2">var</span> c <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">ClassWithLogging</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+c.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;worked&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+&nbsp;</pre></div><textarea id="syntax-558c782cb170eb9e1c530dd203731c2f-plain">////////////////////////////////////////////////////////////////////////////
+// The ConsoleProvider example will log to the console if available, or a 
+// div with id="consoleelement" if the console is not available
+////////////////////////////////////////////////////////////////////////////
+YAHOO.example.ConsoleProvider = function() { };
+YAHOO.example.ConsoleProvider.prototype = {
+    log: function(msg) {
+        // use the error console if available (FF+FireBug or Safari)
+        if (typeof console != "undefined") {
+            console.log(msg);
+        // write the msg to a well-known div element
+        } else {
+            var el = document.getElementById("consoleelement");
+            if (el) {
+                el.innerHTML += "<p>" + msg + "</p>";
+            }
+        }
+    }
+};
+
+////////////////////////////////////////////////////////////////////////////
+// Define a class that should be able to write debug messages
+////////////////////////////////////////////////////////////////////////////
+YAHOO.example.ClassWithLogging = function() { };
+YAHOO.lang.augment(YAHOO.example.ClassWithLogging, YAHOO.example.ConsoleProvider);
+
+////////////////////////////////////////////////////////////////////////////
+// Try it out
+////////////////////////////////////////////////////////////////////////////
+var c = new YAHOO.example.ClassWithLogging();
+c.log("worked");
+
+</textarea></div>
+<h3 id="log">YAHOO.log</h3>
+<p><code>YAHOO.log</code> is included in the <a href="index.html">Yahoo Global Object</a> so that logging code can be
+included anywhere in YUI code (or in your own code) even if the <a href="../logger/index.html">YUI Logger Control</a> is not on the page; this prevents errors from appearing as you begin removing debugging instrumentation from your project.  <code>YAHOO.log</code> executes <code>YAHOO.widget.Logger.log</code> if the Logger Control
+is available; otherwise, it does nothing.  See <a href="../logger/index.html">the documentation for
+the Logger Control</a> for more information about how to make use of it in your work.</p>
+
+<div id="syntax-ab2ccb7519651f0a696a5894edfc031f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="kw2">namespace</span><span class="br0">&#40;</span><span class="st0">&quot;test&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class1</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Class1: &quot;</span> <span class="sy0">+</span> info<span class="sy0">,</span> <span class="st0">&quot;error&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Class1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="kw2">namespace</span><span class="br0">&#40;</span><span class="st0">&quot;test&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw4">YAHOO</span>.<span class="me1">test</span>.<span class="me1">Class1</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>info<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Class1: &quot;</span> <span class="sy0">+</span> info<span class="sy0">,</span> <span class="st0">&quot;error&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Class1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-ab2ccb7519651f0a696a5894edfc031f-plain">YAHOO.namespace("test");
+
+YAHOO.test.Class1 = function(info) {
+    YAHOO.log("Class1: " + info, "error", "Class1");
+};
+</textarea></div>
+<h3 id="config">YAHOO_config and YAHOO.env</h3>
+<p><code>YAHOO.env</code> contains information the browsing environment. In particular, it
+contains information about all of the YUI components that have been loaded on
+the page.  This data is accessible by any component by using <code><a href="../docs/YAHOO.env.html#getVersion">YAHOO.env.getVersion</a></code>, 
+but it is especially useful for environments where the library is dynamically loaded.  </p>
+<p>Instead of using polling techniques to determine when <code>YAHOO</code> and the rest of the YUI 
+Library is loaded, you can define within <code>YAHOO_config</code> a callback method that will be invoked every time a new YUI module is
+inserted into the page.  Your callback method, defined as <code>YAHOO_config.listener</code>, will receive as an argument an information object containing the following information:
+
+</p>
+
+<div class="apisummary">
+<table>
+  <tr>
+    <th>property</th>
+	<th>type</th>
+    <th>description</th>
+  </tr>
+  <tr class="odd">
+    <td><code>name</code></td>
+	<td>string</td>
+    <td>The name of the YUI component that has just loaded.  The name is an arbitrary string corresponding to a YUI component.  Current YUI component names can be found <a href="#modulenames">in the YUI Module Names section below</a>.
+</td>
+  </tr>
+  <tr>
+  	<td><code>version</code></td>
+	<td>string</td>
+	<td>The version in use (e.g., "2.9.0").</td>
+  </tr>
+  <tr class="odd">
+  	<td><code>build</code></td>
+	<td>number</td>
+	<td>The build number of the current version.  This is a continuously incremented integer that will grow larger with each version of the library.
+	</td>
+  </tr>
+  <tr>
+  	<td><code>versions</code></td>
+	<td>array</td>
+	<td>An array containing the string version information for all versions of this component that have been registered during the current page session.  This can help identify issues that were the result of multiple versions of a module on the page.</td>
+  </tr>
+  <tr class="odd">
+  	<td><code>builds</code></td>
+	<td>array</td>
+	<td>An array containing the numeric build information for all versions of this component that have been registered during the current page session.</td>
+  </tr>
+  <tr>
+  	<td><code>mainClass</code></td>
+	<td>object</td>
+	<td>The principal object/class for the registered component. This object will have been stamped with its current version and build information. If <code>mainClass.VERSION != version</code> or <code>mainClass.BUILD != build</code>, multiple versions of pieces of the library have been loaded, potentially causing issues.</td>
+  </tr>
+</table>
+</div>
+
+<p>In the extended code sample below, the <code>YAHOO_config</code> object is used to register a listener that fires when YUI components are loaded:</p>
+
+<div id="syntax-3b18fad464921e1d68f8d3e2ab07e07f" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">html</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">head</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/javascript&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">// will be called each time a module is loaded</div></li><li class="li1"><div class="de1">function mycallback(info) {</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    // see the table in the documentation above for</div></li><li class="li1"><div class="de1">	// the contents of the info object passed in here</div></li><li class="li2"><div class="de2">	// as your argument. </div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    alert(info.name + &quot; loaded&quot;);</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    // once the logger is on the page we can get to work</div></li><li class="li2"><div class="de2">    if (info.name == &quot;logger&quot;) {</div></li><li class="li1"><div class="de1">        YAHOO.widget.Logger.enableBrowserConsole() </div></li><li class="li1"><div class="de1">        var l = new YAHOO.widget.LogWriter(&quot;(&quot;);</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        YAHOO.example.EnvTest = function() {</div></li><li class="li2"><div class="de2">            function log(msg,cat) {</div></li><li class="li1"><div class="de1">                var c=c||&quot;info&quot;;</div></li><li class="li1"><div class="de1">                YAHOO.log(msg,c,&quot;LangTest&quot;);</div></li><li class="li1"><div class="de1">            }</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">            return { </div></li><li class="li1"><div class="de1">                init: function() {</div></li><li class="li1"><div class="de1">                    new YAHOO.widget.LogReader(&quot;logoutput&quot;);</div></li><li class="li1"><div class="de1">                    log(&quot;init&quot;);</div></li><li class="li1"><div class="de1">                },</div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">                showInfo: function(e, module){</div></li><li class="li1"><div class="de1">                    // YAHOO.env.getVersion returns the same data</div></li><li class="li1"><div class="de1">                    // object that YAHOO_config.listener receives</div></li><li class="li1"><div class="de1">                    var info = YAHOO.env.getVersion(module);</div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">                    log(&quot;name: &quot; + info.name);</div></li><li class="li1"><div class="de1">                    log(&quot;version: &quot; + info.version);</div></li><li class="li1"><div class="de1">                    log(&quot;build: &quot; + info.build);</div></li><li class="li1"><div class="de1">                    log(&quot;versions: &quot; + info.versions);</div></li><li class="li2"><div class="de2">                    log(&quot;builds: &quot; + info.builds);</div></li><li class="li1"><div class="de1">                    log(&quot;mainClass version: &quot; + info.mainClass.VERSION);</div></li><li class="li1"><div class="de1">                }</div></li><li class="li1"><div class="de1">            };</div></li><li class="li1"><div class="de1">        } ();</div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">        YAHOO.util.Event.addListener(window, &quot;load&quot;, YAHOO.example.EnvTest.init);</div></li><li class="li1"><div class="de1">        YAHOO.util.Event.addListener(&quot;showeventbutton&quot;, &quot;click&quot;, YAHOO.example.EnvTest.showInfo, &quot;event&quot;);</div></li><li class="li1"><div class="de1">    }</div></li><li class="li1"><div class="de1">}</div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">YAHOO_config = {</div></li><li class="li1"><div class="de1">    listener: mycallback</div></li><li class="li1"><div class="de1">};</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;../src/js/YAHOO.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event/event.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dom/dom.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/logger/logger.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/logger/assets/logger.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">style</span>&gt;</span> #logoutput {float: right}<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">style</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">head</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;showeventbutton&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;show event version&quot;</span> <span class="sy0">/</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;logoutput&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">body</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">html</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">html</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">head</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/javascript&quot;</span>&gt;</span>
+&nbsp;
+// will be called each time a module is loaded
+function mycallback(info) {
+&nbsp;
+    // see the table in the documentation above for
+	// the contents of the info object passed in here
+	// as your argument. 
+&nbsp;
+    alert(info.name + &quot; loaded&quot;);
+&nbsp;
+    // once the logger is on the page we can get to work
+    if (info.name == &quot;logger&quot;) {
+        YAHOO.widget.Logger.enableBrowserConsole() 
+        var l = new YAHOO.widget.LogWriter(&quot;(&quot;);
+&nbsp;
+        YAHOO.example.EnvTest = function() {
+            function log(msg,cat) {
+                var c=c||&quot;info&quot;;
+                YAHOO.log(msg,c,&quot;LangTest&quot;);
+            }
+&nbsp;
+            return { 
+                init: function() {
+                    new YAHOO.widget.LogReader(&quot;logoutput&quot;);
+                    log(&quot;init&quot;);
+                },
+&nbsp;
+                showInfo: function(e, module){
+                    // YAHOO.env.getVersion returns the same data
+                    // object that YAHOO_config.listener receives
+                    var info = YAHOO.env.getVersion(module);
+&nbsp;
+                    log(&quot;name: &quot; + info.name);
+                    log(&quot;version: &quot; + info.version);
+                    log(&quot;build: &quot; + info.build);
+                    log(&quot;versions: &quot; + info.versions);
+                    log(&quot;builds: &quot; + info.builds);
+                    log(&quot;mainClass version: &quot; + info.mainClass.VERSION);
+                }
+            };
+        } ();
+&nbsp;
+        YAHOO.util.Event.addListener(window, &quot;load&quot;, YAHOO.example.EnvTest.init);
+        YAHOO.util.Event.addListener(&quot;showeventbutton&quot;, &quot;click&quot;, YAHOO.example.EnvTest.showInfo, &quot;event&quot;);
+    }
+}
+&nbsp;
+YAHOO_config = {
+    listener: mycallback
+};
+&nbsp;
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;../src/js/YAHOO.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event/event.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dom/dom.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/logger/logger.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/logger/assets/logger.css&quot;</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">style</span>&gt;</span> #logoutput {float: right}<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">style</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">head</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">body</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;showeventbutton&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;show event version&quot;</span> <span class="sy0">/</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;logoutput&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">body</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">html</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-3b18fad464921e1d68f8d3e2ab07e07f-plain"><html>
+<head>
+<script type="text/javascript">
+
+// will be called each time a module is loaded
+function mycallback(info) {
+
+    // see the table in the documentation above for
+	// the contents of the info object passed in here
+	// as your argument. 
+ 
+    alert(info.name + " loaded");
+
+    // once the logger is on the page we can get to work
+    if (info.name == "logger") {
+        YAHOO.widget.Logger.enableBrowserConsole() 
+        var l = new YAHOO.widget.LogWriter("(");
+
+        YAHOO.example.EnvTest = function() {
+            function log(msg,cat) {
+                var c=c||"info";
+                YAHOO.log(msg,c,"LangTest");
+            }
+
+            return { 
+                init: function() {
+                    new YAHOO.widget.LogReader("logoutput");
+                    log("init");
+                },
+                
+                showInfo: function(e, module){
+                    // YAHOO.env.getVersion returns the same data
+                    // object that YAHOO_config.listener receives
+                    var info = YAHOO.env.getVersion(module);
+
+                    log("name: " + info.name);
+                    log("version: " + info.version);
+                    log("build: " + info.build);
+                    log("versions: " + info.versions);
+                    log("builds: " + info.builds);
+                    log("mainClass version: " + info.mainClass.VERSION);
+                }
+            };
+        } ();
+
+        YAHOO.util.Event.addListener(window, "load", YAHOO.example.EnvTest.init);
+        YAHOO.util.Event.addListener("showeventbutton", "click", YAHOO.example.EnvTest.showInfo, "event");
+    }
+}
+
+YAHOO_config = {
+    listener: mycallback
+};
+
+</script>
+<script src = "http://developer.yahoo.com/yui/src/js/YAHOO.js" ></script>
+<script src = "http://developer.yahoo.com/build/event/event.js" ></script>
+<script src = "http://developer.yahoo.com/build/dom/dom.js" ></script>
+<script src = "http://developer.yahoo.com/build/dragdrop/dragdrop.js" ></script>
+<script src = "http://developer.yahoo.com/build/logger/logger.js" ></script>
+<link rel="stylesheet" type="text/css" href="http://developer.yahoo.com/build/logger/assets/logger.css">
+<style> #logoutput {float: right}</style>
+</head>
+<body>
+<input type="button" id="showeventbutton" value="show event version" />
+<div id="logoutput"></div>
+</body>
+</html>
+</textarea></div>
+<h2 id="modulenames">YUI Module Names</h2>
+
+<p>Each YUI component has a corresponding module name that is used as a unique identifier within YUI scripts.  For example, the <a href="../event/index.html">Event Utility</a> is internally referred to as <code>"event"</code>.  The Yahoo Global Object and other components (such as the <a href="../yuiloader/index.html">YUILoader Utility</a>) make use of these unique module names.  Here is the full list of YUI module names.</p>
+
+<div class="apisummary">
+<table><thead><tr><th>YUI Component</th><th>Module Name</th></tr></thead><tbody><tr><td><a href='../animation/index.html'>Animation Utility</a></td><td>animation</td></tr><tr class='odd'><td><a href='../autocomplete/index.html'>AutoComplete Control</a></td><td>autocomplete</td></tr><tr><td><a href='../base/index.html'>Base CSS Style Foundation</a></td><td>base</td></tr><tr class='odd'><td><a href='../button/index.html'>Button Control</a></td><td>button</td></tr><tr><td><a href='../calendar/index.html'>Calendar Control</a></td><td>calendar</td></tr><tr class='odd'><td><a href='../carousel/index.html'>Carousel Control</a></td><td>carousel</td></tr><tr><td><a href='../charts/index.html'>Charts Control</a></td><td>charts</td></tr><tr class='odd'><td><a href='../colorpicker/index.html'>Color Picker Control</a></td><td>colorpicker</td></tr><tr><td><a href='../connection/index.html'>Connection Manager</a></td><td>connection</td></tr><tr class='odd'><td><a href='../cookie/index.html'>Cookie Utility</a></td><td>cookie</td></tr><tr><td><a href='../container/index.html'>Container Family Core (Module, Overlay)</a></td><td>containercore</td></tr><tr class='odd'><td><a href='../container/index.html'>Container Family (Module, Overlay Panel, Tooltip, Dialog, SimpleDialog)</a></td><td>container</td></tr><tr><td><a href='../datasource/index.html'>DataSource Utility</a></td><td>datasource</td></tr><tr class='odd'><td><a href='../datatable/index.html'>DataTable Control</a></td><td>datatable</td></tr><tr><td><a href='../dom/index.html'>Dom Collection</a></td><td>dom</td></tr><tr class='odd'><td><a href='../dragdrop/index.html'>Drag &amp; Drop Utility</a></td><td>dragdrop</td></tr><tr><td><a href='../editor/index.html'>Rich Text Editor</a></td><td>editor</td></tr><tr class='odd'><td><a href='../element/index.html'>Element Utility</a></td><td>element</td></tr><tr><td><a href='../event/index.html'>Event Utility</a></td><td>event</td></tr><tr class='odd'><td><a href='../fonts/index.html'>Fonts CSS</a></td><td>fonts</td></tr><tr><td><a href='../get/index.html'>Get Utility</a></td><td>get</td></tr><tr class='odd'><td><a href='../grids/index.html'>Grids CSS Kit</a></td><td>grids</td></tr><tr><td><a href='../history/index.html'>Browser History Manager</a></td><td>history</td></tr><tr class='odd'><td><a href='../imageloader/index.html'>ImageLoader Utility</a></td><td>imageloader</td></tr><tr><td><a href='../imagecropper/index.html'>ImageCropper Control</a></td><td>imagecropper</td></tr><tr class='odd'><td><a href='../json/index.html'>JSON Utility</a></td><td>json</td></tr><tr><td><a href='../layout/index.html'>Layout Manager</a></td><td>layout</td></tr><tr class='odd'><td><a href='../logger/index.html'>Logger Control</a></td><td>logger</td></tr><tr><td><a href='../menu/index.html'>Menu Control</a></td><td>menu</td></tr><tr class='odd'><td><a href='../paginator/index.html'>Paginator</a></td><td>paginator</td></tr><tr><td><a href='../profiler/index.html'>Profiler</a></td><td>profiler</td></tr><tr class='odd'><td><a href='../profilerviewer/index.html'>ProfilerViewer Control</a></td><td>profilerviewer</td></tr><tr><td><a href='../progressbar/index.html'>ProgressBar Control</a></td><td>progressbar</td></tr><tr class='odd'><td><a href='../resize/index.html'>Resize Utility</a></td><td>resize</td></tr><tr><td><a href='../reset/index.html'>Reset CSS</a></td><td>reset</td></tr><tr class='odd'><td><a href='../selector/index.html'>Selector Utility</a></td><td>selector</td></tr><tr><td><a href='../editor/index.html'>Simple Editor</a></td><td>simpleeditor</td></tr><tr class='odd'><td><a href='../slider/index.html'>Slider Control</a></td><td>slider</td></tr><tr><td><a href='../storage/index.html'>Storage Utility</a></td><td>storage</td></tr><tr class='odd'><td><a href='../swf/index.html'>Swf Utility</a></td><td>swf</td></tr><tr><td><a href='../swf/index.html'>SwfDetect Utility</a></td><td>swfdetect</td></tr><tr class='odd'><td><a href='../swfstore/index.html'>SwfStore Utility</a></td><td>swfstore</td></tr><tr><td><a href='../stylesheet/index.html'>StyleSheet Utility</a></td><td>stylesheet</td></tr><tr class='odd'><td><a href='../tabview/index.html'>TabView Control</a></td><td>tabview</td></tr><tr><td><a href='../treeview/index.html'>TreeView Control</a></td><td>treeview</td></tr><tr class='odd'><td><a href='../uploader/index.html'>Uploader Control</a></td><td>uploader</td></tr><tr><td><a href='index.html'>YAHOO Global Object</a></td><td>yahoo</td></tr><tr class='odd'><td><a href='../yuiloader/index.html'>YUI Loader Utility</a></td><td>yuiloader</td></tr><tr><td><a href='../yuitest/index.html'>YUI Test</a></td><td>yuitest</td></tr></tbody></table></div>
+
+<h2 id="mobile">YUI on Mobile: Using YAHOO Global Object with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>
+<p>The YAHOO global works without known issues in tested mobile environments.  In a future release
+of the library, YAHOO.env.ua will be expanded to include detection for certain 
+"A-Grade" mobile browsers.  Until then, you can use the following code to detect a 
+number of interesting mobile browsers:</p>
+
+<div id="syntax-464da5b7f115755181f83cc941be6ba6" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> mobile <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">,</span> ua <span class="sy0">=</span> navigator.<span class="me1">userAgent</span><span class="sy0">,</span> m<span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">env</span>.<span class="me1">ua</span>.<span class="me1">webkit</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">if</span> <span class="br0">&#40;</span><span class="co2">/ Mobile\//</span>.<span class="me1">test</span><span class="br0">&#40;</span>ua<span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        mobile <span class="sy0">=</span> <span class="st0">&quot;iPhone&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        m<span class="sy0">=</span>ua.<span class="me1">match</span><span class="br0">&#40;</span><span class="co2">/NokiaN[^\/]*/</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">if</span> <span class="br0">&#40;</span>m<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            mobile <span class="sy0">=</span> m<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">// Nokia N-series, ex: NokiaN95</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span> <span class="kw1">else</span> <span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">env</span>.<span class="me1">ua</span>.<span class="me1">opera</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    m<span class="sy0">=</span>ua.<span class="me1">match</span><span class="br0">&#40;</span><span class="co2">/Opera Mini[^;]*/</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">if</span> <span class="br0">&#40;</span>m<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        mobile <span class="sy0">=</span> m<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">// ex: Opera Mini/2.0.4509/1316</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw1">if</span> <span class="br0">&#40;</span><span class="sy0">!</span>mobile<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    <span class="co1">// code here won't execute in the detected mobile browsers</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> mobile <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">,</span> ua <span class="sy0">=</span> navigator.<span class="me1">userAgent</span><span class="sy0">,</span> m<span class="sy0">;</span>
+&nbsp;
+<span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">env</span>.<span class="me1">ua</span>.<span class="me1">webkit</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">if</span> <span class="br0">&#40;</span><span class="co2">/ Mobile\//</span>.<span class="me1">test</span><span class="br0">&#40;</span>ua<span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        mobile <span class="sy0">=</span> <span class="st0">&quot;iPhone&quot;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span>
+        m<span class="sy0">=</span>ua.<span class="me1">match</span><span class="br0">&#40;</span><span class="co2">/NokiaN[^\/]*/</span><span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="kw1">if</span> <span class="br0">&#40;</span>m<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            mobile <span class="sy0">=</span> m<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">// Nokia N-series, ex: NokiaN95</span>
+        <span class="br0">&#125;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span> <span class="kw1">else</span> <span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">env</span>.<span class="me1">ua</span>.<span class="me1">opera</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    m<span class="sy0">=</span>ua.<span class="me1">match</span><span class="br0">&#40;</span><span class="co2">/Opera Mini[^;]*/</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw1">if</span> <span class="br0">&#40;</span>m<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        mobile <span class="sy0">=</span> m<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">// ex: Opera Mini/2.0.4509/1316</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="kw1">if</span> <span class="br0">&#40;</span><span class="sy0">!</span>mobile<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">// code here won't execute in the detected mobile browsers</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-464da5b7f115755181f83cc941be6ba6-plain">var mobile = false, ua = navigator.userAgent, m;
+
+if (YAHOO.env.ua.webkit) {
+    if (/ Mobile\//.test(ua)) {
+        mobile = "iPhone";
+    } else {
+        m=ua.match(/NokiaN[^\/]*/);
+        if (m) {
+            mobile = m[0]; // Nokia N-series, ex: NokiaN95
+        }
+    }
+} else if (YAHOO.env.ua.opera) {
+    m=ua.match(/Opera Mini[^;]*/);
+    if (m) {
+        mobile = m[0]; // ex: Opera Mini/2.0.4509/1316
+    }
+}
+
+if (!mobile) {
+    // code here won't execute in the detected mobile browsers
+}
+</textarea></div>
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+  </div>
+         <div class="yui-u">
+		 	
+			<div id="cheatsheet">
+				<h3>Cheat Sheet for the YAHOO Global Object:</h3>
+				
+				<a href="http://yuiblog.com/assets/pdf/cheatsheets/yahoo.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/yahoo.gif" width="178" height="135" alt="Cheat Sheet for the YAHOO Global Object."></a>
+				
+				<p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+			</div>
+
+<div id="examples">
+<h3>YAHOO Global Object Examples:</h3>
+
+<ul>
+<li><a href='../examples/yahoo/yahoo_type_checking.html'>Type-Checking Your Data</a></li>
+<li><a href='../examples/yahoo/yahoo_ua_detection.html'>User Agent Detection</a></li>
+<li><a href='../examples/yahoo/yahoo_extend.html'>Creating Class Hierarchies with <code>YAHOO.lang.extend</code></a></li>
+<li><a href='../examples/yahoo/yahoo_augment_proto.html'>Creating a Composition-Based Class Structure Using <code>YAHOO.lang.augmentProto</code></a></li>
+<li><a href='../examples/yahoo/yahoo_augment_object.html'>Add Behavior to Objects or Static Classes with <code>YAHOO.lang.augmentObject</code></a></li>
+<li><a href='../examples/yahoo/yahoo_merge.html'>Combining Simple Data Sets with <code>YAHOO.lang.merge</code></a></li>
+</ul>
+
+
+		
+</div>	
+
+			<div id="morereading">
+				<h3>More Reading about the YAHOO Global Object:</h3>
+				
+				<ul>
+				  <li><a href="http://plankdesign.com/en/blog/posts/langs_little_gems">Lang's little gems</a>, by Mitch at PlankDesign.com</li>
+			   </ul>
+		   </div>
+	 
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fyahoo%2F--><h3 id="delicious">YUI YAHOO Global Object on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/yahoo/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/start" class="tag-size-1">start</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/mobile" class="tag-size-1">mobile</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/framework" class="tag-size-1">framework</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/tutorial" class="tag-size-1">tutorial</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/css" class="tag-size-1">css</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/5081b24a6d46ea2f5e04882dae89607e" class="saved-by">saved by <span>24</span>  people</a></p>
+   </div></div>	 
+
+		 </div>
+      </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="selected "><a title="The YUI YAHOO Global Object" href="index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:16 PDT 2013 -->
+
+<!-- Localized -->

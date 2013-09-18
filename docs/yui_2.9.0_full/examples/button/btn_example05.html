@@ -1,0 +1,415 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Button Control: Submit Buttons</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+
+    #button-example-form fieldset, 
+    #button-example-form fieldset div {
+
+        border: 2px groove #ccc;
+        margin: .5em;
+        padding: .5em;
+
+    }
+
+    #button-example-form-postdata {
+    
+        border: dashed 1px #666;
+        background-color: #ccc;
+        padding: 1em;
+    
+    }
+
+    #button-example-form-postdata h2 {
+    
+        margin: 0 0 .5em 0;
+        padding: 0;
+        border: none;
+    
+    }
+
+</style>
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: Button Control: Submit Buttons</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Button Control: Submit Buttons</h1>
+	
+	<div class="exampleIntro">
+	<p>This example demonstrates different ways to create a Button that functions like an HTML submit button (<code>&#60;input type="submit"/&#62;</code> and <code>&#60;button type="submit"/&#62;</code>).</p>			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="btn_example05_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<script type="text/javascript">
+
+    YAHOO.example.init = function () {
+
+        // "contentready" event handler for the "submitbuttonsfrommarkup" <fieldset>
+        
+        YAHOO.util.Event.onContentReady("submitbuttonsfrommarkup", function () {
+
+            // Create a Button using an existing <input> element as a data source
+
+            var oSubmitButton1 = new YAHOO.widget.Button("submitbutton1", { value: "submitbutton1value" });
+
+            // Create a Button using an existing <button> element as a data source
+
+            var oSubmitButton2 = new YAHOO.widget.Button("submitbutton2");
+
+            // Create a Button using the YUI Button markup
+
+            var oSubmitButton3 = new YAHOO.widget.Button("submitbutton3", { value: "submitbutton3value" });
+            
+            var oSubmitButton4 = new YAHOO.widget.Button("submitbutton4", { type: "submit", value:  "submitbutton4value" });        
+        
+        });
+        
+
+        // Create a Button without using existing markup
+
+        var oSubmitButton5 = new YAHOO.widget.Button({ type: "submit", label: "Submit Form", id: "submitbutton5", name: "submitbutton5", value:  "submitbutton5value", container: "submitbuttonsfromjavascript" });
+
+        function onExampleSubmit(p_oEvent) {
+
+            var bSubmit = window.confirm("Are you sure you want to submit this form?");
+
+            if(!bSubmit) {
+            
+                YAHOO.util.Event.preventDefault(p_oEvent);
+            
+            }
+
+        }
+
+        YAHOO.util.Event.on("button-example-form", "submit", onExampleSubmit);
+
+    } ();
+
+</script>
+
+
+<form id="button-example-form" name="button-example-form" method="post">
+
+    <fieldset>
+        <legend>Info</legend>
+
+        <label for="firstname">First Name: </label><input type="text" id="firstname" name="firstname" value="">
+        <label for="lastname">Last Name: </label><input type="text" id="lastname" name="lastname" value="">
+
+        <div>
+            <label for="male">Gender: </label>
+            
+            <label for="male">Male </label>
+            <input type="radio" id="male" name="gender" value="male" checked>
+            
+            <label for="female">Female </label>
+            <input type="radio" id="female" name="gender" value="female">
+        </div>
+
+        <div>
+            <label for="month">Birthday: </label>
+            <select id="month" name="month"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option></select>
+            <select name="day"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option><option value="10">10</option><option value="11">11</option><option value="12">12</option><option value="13">13</option><option value="14">14</option><option value="15">15</option><option value="16">16</option><option value="17">17</option><option value="18">18</option><option value="19">19</option><option value="20">20</option><option value="21">21</option><option value="22">22</option><option value="23">23</option><option value="24">24</option><option value="25">25</option><option value="26">26</option><option value="27">27</option><option value="28">28</option><option value="29">29</option><option value="30">30</option><option value="31">31</option></select>
+            <input type="text" name="year" value="">
+        </div>
+
+    </fieldset>
+
+    <fieldset id="submitbuttons">
+        <legend>Submit Buttons</legend>
+
+        <fieldset id="submitbuttonsfrommarkup">
+            <legend>From Markup</legend>
+
+            <div>
+                <input id="submitbutton1" type="submit" name="submitfield1" value="Submit Form">
+                <button id="submitbutton2" type="submit" name="submitfield2" value="submitfield2value">Submit Form</button>            
+            </div>
+
+            <div>
+                <span id="submitbutton3" class="yui-button yui-submit-button"><span class="first-child"><input type="submit" name="submitfield3" value="Submit Form"></span></span>
+                <span id="submitbutton4" class="yui-button yui-submit-button"><span class="first-child"><button type="button" name="submitfield4">Submit Form</button></span></span>
+            </div>
+
+        </fieldset>
+
+        <fieldset id="submitbuttonsfromjavascript">
+            <legend>From JavaScript</legend>
+        </fieldset>
+
+    </fieldset>
+
+</form>	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Creating Submit Buttons</h2>
+
+<p>A Submit Button can be instantiated three different ways:</p>
+<ul>
+    <li><a href="#buildingfromdatasource">Using an existing <code>&#60;input type="submit"/&#62;</code> or <code>&#60;button type="submit"/&#62;</code> element</a></li>
+    <li><a href="#buildingfromtemplate">Using pre-defined Button Control HTML</a></li>
+    <li><a href="#buildingfromjavascript">Using no existing HTML</a></li>
+</ul>
+
+
+<h3 id="buildingfromdatasource">Using an existing <code>&#60;input type="submit"/&#62;</code> or <code>&#60;button type="submit"/&#62;</code> element</h3>
+<p>A Submit Button can be created using an existing <code>&#60;input type="submit"/&#62;</code> or <code>&#60;button type="submit"/&#62;</code> element as a source element, the attributes of which are captured and used for the creation of a new element that replaces the source element inline.</p>
+<textarea name="code" class="HTML" cols="60" rows="1">
+<input id="submitbutton1" type="submit" name="submitfield1" value="Submit Form">
+<button id="submitbutton2" type="submit" name="submitfield2" value="submitfield2value">
+    Submit Form
+</button>
+</textarea>
+<p>Pass the id of the source element as the first argument to the Button's constructor.  Additional <a href="../../button/index.html#buttonconfigreference">configuration attributes</a> for a Button can be set at instantiation time by specifying them in an object literal that is passed as the second argument to the Button's constructor.  <em>Note: the value of <a href="../../button/index.html#buttonconfigreference">configuration attributes</a> passed to the Button constructor will trump those of the corresponding HTML attributes of the original source element.</em></p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+// Create a Button using an existing <input> element as a data source
+
+var oSubmitButton1 = new YAHOO.widget.Button("submitbutton1", { value: "submitbutton1value" });
+
+// Create a Button using an existing <button> element as a data source
+
+var oSubmitButton2 = new YAHOO.widget.Button("submitbutton2");
+</textarea>
+
+
+<h3 id="buildingfromtemplate">Using pre-defined Button Control HTML</h3>
+<p>A Submit Button can also be instantiated using pre-defined Button Control HTML: An element with a class of "yui-button" and "yui-submit-button" containing a element with a class of "first-child" containing either a <code>&#60;input type="submit"/&#62;</code> or <code>&#60;button type="button"/&#62;</code> element:</p>
+<textarea name="code" class="HTML" cols="60" rows="1">
+<span id="submitbutton3" class="yui-button yui-submit-button">
+    <span class="first-child">
+        <input type="submit" name="submitfield3" value="Submit Form">
+    </span>
+</span>
+<span id="submitbutton4" class="yui-button yui-submit-button">
+    <span class="first-child">
+        <button type="button" name="submitfield4">Submit Form</button>
+    </span>
+</span>
+</textarea>
+<p>To instantiate a Submit Button using the Button Control HTML, pass the id of the Button's root element (the element with the classes "yui-button" and "yui-submit-button" applied) as the first argument to constructor and any additional <a href="../../button/index.html#buttonconfigreference">configuration attributes</a> as the second argument via an object literal.</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+var oSubmitButton3 = new YAHOO.widget.Button("submitbutton3", { value: "submitbutton3value" });
+
+var oSubmitButton4 = new YAHOO.widget.Button("submitbutton4", { type: "submit", value:  "submitbutton4value" });        
+</textarea>
+
+
+<h3 id="buildingfromjavascript">Using no existing HTML</h3>
+<p>To build a Submit Button without any existing HTML, pass a set of <a href="../../button/index.html#buttonconfigreference">configuration attributes</a> as a single argument to the constructor using an object literal.</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+var oSubmitButton5 = new YAHOO.widget.Button({ 
+                                type: "submit", 
+                                label: "Submit Form", 
+                                id: "submitbutton5", 
+                                name: "submitbutton5", 
+                                value: "submitbutton5value", 
+                                container: "submitbuttonsfromjavascript" });
+</textarea>
+<p>In most cases, it is necessary to specify the button's id, type, label and container (the HTML element that the button should be appended to once created).  If an id is not specified for the button, one will be generated using the <code><a href="../../docs/YAHOO.util.Dom.html#generateId">generateId</a></code> method of the <a href="../../docs/module_dom.html">Dom utility</a>.  Similarly, if the "type" attribute is omitted, the default type of "button" will be applied.</p>
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerGloss"><p><strong>Note:</strong> Logging and debugging is currently turned off for this example.</p> 
+							<p class="loggerButton"><span id="loggerLink"><span class="first-child"><a href="btn_example05_log.html">Reload with logging<br />
+	 and debugging enabled.</a></span></span></p></div>
+	
+						</div>
+					
+				
+					<div id="examples">
+						<h3>Button Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='btn_example01.html'>Push Buttons</a></li><li><a href='btn_example02.html'>Link Buttons</a></li><li><a href='btn_example03.html'>Checkbox Buttons</a></li><li><a href='btn_example04.html'>Radio Buttons</a></li><li class='selected'><a href='btn_example05.html'>Submit Buttons</a></li><li><a href='btn_example06.html'>Reset Buttons</a></li><li><a href='btn_example07.html'>Menu Buttons</a></li><li><a href='btn_example08.html'>Split Buttons</a></li><li><a href='btn_example09.html'>Simple Calendar Menu Button</a></li><li><a href='btn_example10.html'>Calendar Menu Button with Date on Button Face</a></li><li><a href='btn_example11.html'>Color Picker Button</a></li><li><a href='btn_example12.html'>Fixed Width Menu Button</a></li><li><a href='btn_example13.html'>Glowing Button</a></li><li><a href='btn_example14.html'>Slider Button</a></li><li><a href='button-ariaplugin.html'>Using the Button ARIA Plugin</a></li><li><a href='button-menu-select.html'>Using A Menu Button To Replace A &#60;select&#62; Element</a></li><li><a href='button-menu-swap.html'>Replacing the content of a Button's Menu</a></li><li><a href='../autocomplete/ac_combobox.html'>Combobox, with CSS for Multiple Stacked Instances (included with examples for AutoComplete Control)</a></li><li><a href='../datatable/dt_colshowhide.html'>Showing, Hiding, and Reordering Columns. (included with examples for DataTable Control)</a></li><li><a href='../layout/adv_layout.html'>Complex Application (included with examples for Layout Manager)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Button Control Resources:</h3>
+						<ul>
+							<li><a href="../../button/index.html">User's Guide</a></li>
+						<li><a href="../../docs/module_button.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/button.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:16 PDT 2013 -->
+
+<!-- Localized -->

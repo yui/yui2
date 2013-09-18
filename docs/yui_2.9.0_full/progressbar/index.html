@@ -1,0 +1,652 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: ProgressBar</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: ProgressBar</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+  <div class="yui-b">
+    <div class="yui-ge">
+      <div class="yui-u first">
+        <div id="promo" class="component">
+          <h1>YUI 2: ProgressBar</h1>
+
+            <p>The YUI ProgressBar Control provides a visual means of showing progress of an ongoing operation.
+            The ProgressBar can be enhanced via CSS styles to provide different colors, shapes and textures.
+            The bar can move horizontally or vertically, forward or reverse.  The movement can be enhanced by using the Animation utility.
+            A textual representation of the bar can be displayed, which is also available for WAI-ARIA screen readers.</p>
+
+
+          <div>
+            <h4>On This Page:</h4>
+            <ul>
+              <li><a href="#start">Getting Started</a></li>
+              <li><a href="#using">Using ProgressBar</a> </li>
+              <li><a href="#knownissues">Known Issues</a></li>
+              <li><a href="#mobile">YUI on Mobile Devices</a></li>
+              <li><a href="#support">Support &amp; Community</a></li><li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+            </ul>
+          </div>
+            <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/progressbar/index.html">Examples</a>: Explore examples of the ProgressBar Control in action.</li>
+      <li><a href="../docs/module_progressbar.html">API Documentation</a>: View the full API documentation for the ProgressBar Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.progressbar">Release Notes</a>: Detailed change log for the ProgressBar Control.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the ProgressBar Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>        </div>
+                
+        <h2 id="start" class="first">Getting Started</h2>
+        <p>The ProgressBar code must be included before any control can use it:</p>
+<div id="syntax-fbb9e8e46ca9adf6212656b928d11539" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Required CSS --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/progressbar/assets/skins/sam/progressbar.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependency source file --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom.event.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Optional dependency source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/javascript&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- ProgressBar source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/progressbar/progressbar-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Required CSS --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/progressbar/assets/skins/sam/progressbar.css&quot;</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Dependency source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom.event.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc-1">&lt;!-- Optional dependency source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/javascript&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- ProgressBar source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/progressbar/progressbar-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-fbb9e8e46ca9adf6212656b928d11539-plain"><!-- Required CSS -->
+<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.9.0/build/progressbar/assets/skins/sam/progressbar.css">
+
+<!-- Dependency source file -->
+<script src = "http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom.event.js" ></script>
+<script src = "http://yui.yahooapis.com/2.9.0/build/element/element-min.js" ></script>
+<!-- Optional dependency source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js" type="text/javascript"></script>
+
+<!-- ProgressBar source file -->
+<script src = "http://yui.yahooapis.com/2.9.0/build/progressbar/progressbar-min.js" ></script>
+</textarea></div>
+        
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>progressbar</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+  <p>The ProgressBar control is defined by YAHOO.widget.ProgressBar, which extends YAHOO.util.Element.
+    Create a progress bar by instantiating ProgressBar with optional configuration attributes and then
+    rendering into the element that will contain it:
+    </p>
+
+<div id="syntax-8d832d313074d1ffc6b06b91b47aef21" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">progressBar.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;pbContainer&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+progressBar.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;pbContainer&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-8d832d313074d1ffc6b06b91b47aef21-plain">var progressBar = new YAHOO.widget.ProgressBar();
+progressBar.render("pbContainer");
+</textarea></div>
+    <p>
+    You can supply initial configuration attributes and call the render method in one step:
+    </p>
+
+<div id="syntax-5719c34316f3928955188b5b6d37cd4b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    width<span class="sy0">:</span> <span class="st0">&quot;300px&quot;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;pbContainer&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    width<span class="sy0">:</span> <span class="st0">&quot;300px&quot;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;pbContainer&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-5719c34316f3928955188b5b6d37cd4b-plain">var progressBar = new YAHOO.widget.ProgressBar({
+    width: "300px"
+}).render("pbContainer");
+</textarea></div>
+<p>
+The ProgressBar defaults to a simple blue bar moving from left to right.
+If the "Sam" skin is used it will show a color scheme compatible with other YUI components.
+The direction of movement can be changed up to the moment it is rendered.
+It can also go from right to left or vertically from top to bottom or bottom to top.
+To create a ProgressBar moving from bottom to top, either of the following two snippets can be used:
+</p>
+
+<div id="syntax-b565456f7289dd7ce523a891e3e0859d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    direction<span class="sy0">:</span> <span class="st0">&quot;btt&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    height<span class="sy0">:</span> <span class="st0">&quot;150px&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    width<span class="sy0">:</span> <span class="st0">&quot;30px&quot;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;pbContainer&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// or...</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">progressBar.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;direction&quot;</span><span class="sy0">,</span><span class="st0">&quot;btt&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">progressBar.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;height&quot;</span><span class="sy0">,</span><span class="st0">&quot;150px&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">progressBar.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;width&quot;</span><span class="sy0">,</span><span class="st0">&quot;30px&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">progressBar.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;pbContainer&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    direction<span class="sy0">:</span> <span class="st0">&quot;btt&quot;</span><span class="sy0">,</span>
+    height<span class="sy0">:</span> <span class="st0">&quot;150px&quot;</span><span class="sy0">,</span>
+    width<span class="sy0">:</span> <span class="st0">&quot;30px&quot;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;pbContainer&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// or...</span>
+&nbsp;
+<span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+progressBar.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;direction&quot;</span><span class="sy0">,</span><span class="st0">&quot;btt&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+progressBar.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;height&quot;</span><span class="sy0">,</span><span class="st0">&quot;150px&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+progressBar.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;width&quot;</span><span class="sy0">,</span><span class="st0">&quot;30px&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+progressBar.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;pbContainer&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-b565456f7289dd7ce523a891e3e0859d-plain">var progressBar = new YAHOO.widget.ProgressBar({
+    direction: "btt",
+    height: "150px",
+    width: "30px"
+}).render("pbContainer");
+
+// or...
+
+var progressBar = new YAHOO.widget.ProgressBar();
+progressBar.set("direction","btt");
+progressBar.set("height","150px");
+progressBar.set("width","30px");
+progressBar.render("pbContainer");
+</textarea></div>
+
+<p>See the examples below in <a href="#using">Using ProgressBar</a> or the <a href="../docs/module_progressbar.html">API Documentation</a> for more details.</p>
+
+<h2>Using ProgressBar<a name="using"></a></h2>
+
+  <p>This section describes several common uses and customizations of ProgressBar and contains these sections: </p>
+  <ul>
+  <li><a href="#moving">Moving the Bar</a></li>
+  <li><a href="#animation">Animating the Bar</a></li>
+  <li><a href="#style">Setting Up your Style Definitions</a></li>
+  <li><a href="#events">Responding to Events </a></li>
+  <li><a href="#caption">Captioning</a></li>
+  <li><a href="#aria">WAI-ARIA support</a></li>
+  <li><a href="#mask">Scaling of the mask</a></li>
+  </ul>
+
+<h3>Moving the Bar <a name="moving"></a></h3>
+<p>The length of the bar represents the value of the <code>value</code> configuration attribute.
+It is scaled so that the initial edge of the bar (i.e., on a bar with <code>direction</code> set to <code>'ltr'</code> it would be the left edge)
+represents the value held in the <code>minValue</code> attribute and the end edge is set to <code>maxValue</code>.
+The <code>value</code>, <code>minValue</code> and <code>maxValue</code> attributes are plain numbers in arbitrary units,
+the ProgressBar scales them to and from actual pixel values.
+
+<div id="syntax-72ebebcf1a56c1195c13cc8097244a9f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// This would be half way progressed</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    minValue<span class="sy0">:</span> <span class="nu0">60</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    maxValue<span class="sy0">:</span> <span class="nu0">90</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    value<span class="sy0">:</span> <span class="nu0">75</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    height<span class="sy0">:</span> <span class="nu0">150</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    width<span class="sy0">:</span> <span class="nu0">30</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;pbContainer&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">// This would move it one third progressed</span></div></li><li class="li1"><div class="de1">progressBar.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">'value'</span><span class="sy0">,</span><span class="nu0">70</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// This is out of range, it will be ignored</span></div></li><li class="li1"><div class="de1">progressBar.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">'value'</span><span class="sy0">,</span><span class="nu0">100</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// value is still 70</span></div></li><li class="li1"><div class="de1"><span class="kw3">alert</span><span class="br0">&#40;</span>progressBar.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'value'</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>  <span class="co1">// should show 70</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// This would be half way progressed</span>
+<span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    minValue<span class="sy0">:</span> <span class="nu0">60</span><span class="sy0">,</span>
+    maxValue<span class="sy0">:</span> <span class="nu0">90</span><span class="sy0">,</span>
+    value<span class="sy0">:</span> <span class="nu0">75</span><span class="sy0">,</span>
+    height<span class="sy0">:</span> <span class="nu0">150</span><span class="sy0">,</span>
+    width<span class="sy0">:</span> <span class="nu0">30</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">&quot;pbContainer&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// This would move it one third progressed</span>
+progressBar.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">'value'</span><span class="sy0">,</span><span class="nu0">70</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// This is out of range, it will be ignored</span>
+progressBar.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">'value'</span><span class="sy0">,</span><span class="nu0">100</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// value is still 70</span>
+<span class="kw3">alert</span><span class="br0">&#40;</span>progressBar.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'value'</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>  <span class="co1">// should show 70</span>
+&nbsp;</pre></div><textarea id="syntax-72ebebcf1a56c1195c13cc8097244a9f-plain">// This would be half way progressed
+var progressBar = new YAHOO.widget.ProgressBar({
+    minValue: 60,
+    maxValue: 90,
+    value: 75,
+    height: 150,
+    width: 30
+}).render("pbContainer");
+
+// This would move it one third progressed
+progressBar.set('value',70);
+
+// This is out of range, it will be ignored
+progressBar.set('value',100);
+
+// value is still 70
+alert(progressBar.get('value'));  // should show 70
+</textarea></div>
+<h3>Animating the Bar<a name="animation"></a></h3>
+<p>If the <a href="../animation/index.html">Animation utility</a>
+is loaded, the ProgressBar can use it to move the bar by enabling the <code>anim</code> configuration attribute.
+This attribute accepts either a boolean to enable/disable animation or an instance of
+<code>YAHOO.util.Anim</code>.   When read, <code>anim</code> will return the instance
+of the Animation object created or <code>null</code> if there is none.
+The properties of the Animation object can then be accessed directly to set the behavior of the bar,
+usually with <code>duration</code> and the <code>easing</code> method. Note that any easing
+affect is visual in nature only and the underlying value itself does not have any easing
+applied to it. As a side affect, the bar may be rendered outside the bounds of its container
+during easing. The following code makes the movement
+last for 3 seconds and bounce both at the start and end of the movement.</p>
+<div id="syntax-b5c5e6a931518a9453b5e8b3cfe61e43" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    anim<span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">'pbContainer'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="kw2">var</span> anim <span class="sy0">=</span> progressBar.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'anim'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">anim.<span class="me1">duration</span> <span class="sy0">=</span> <span class="nu0">3</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">anim.<span class="me1">method</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Easing</span>.<span class="me1">bounceBoth</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    anim<span class="sy0">:</span> <span class="kw2">true</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">'pbContainer'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> anim <span class="sy0">=</span> progressBar.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'anim'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+anim.<span class="me1">duration</span> <span class="sy0">=</span> <span class="nu0">3</span><span class="sy0">;</span>
+anim.<span class="me1">method</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Easing</span>.<span class="me1">bounceBoth</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-b5c5e6a931518a9453b5e8b3cfe61e43-plain">var progressBar = new YAHOO.widget.ProgressBar({
+    anim: true
+}).render('pbContainer');
+
+var anim = progressBar.get('anim');
+anim.duration = 3;
+anim.method = YAHOO.util.Easing.bounceBoth;
+</textarea></div>
+
+
+<h3>Setting Up Your Style Definitions <a name="style"></a></h3>
+<p>
+The ProgressBar component makes use of several CSS classes to style the bar.  You
+  can either use the "Sam" skin CSS provided by default, or you can create your
+  own. If you create your own, you'll need to use the class names the ProgressBar assigns to its elements.
+</p>
+
+<div class="apisummary">
+<table>
+<tr><th>Selector</th><th>Attribute</th><th>Description</th></tr>
+<tr><td style="white-space:nowrap;">.yui-pb</td><td>width<br/>height</td><td>Overall size of the ProgressBar.  It can also be set via the <code>width</code> and <code>height</code> configuration settings.</td></tr>
+<tr><td style="white-space:nowrap;">.yui-pb</td><td>background-image<br/>background-color</td><td>Background to be used on the area the bar is not covering.</td></tr>
+<tr><td style="white-space:nowrap;">.yui-pb</td><td>border</td><td>Border around the component.</td></tr>
+<tr><td style="white-space:nowrap;">.yui-pb-bar</td><td>background-image<br/>background-color</td><td>Image or color to use for the bar itself.</td></tr>
+<tr><td style="white-space:nowrap;">.yui-pb-bar</td><td>margin</td><td>Offset from the edge of the ProgressBar to where the transparency of the mask starts.</td></tr>
+<tr><td style="white-space:nowrap;">.yui-pb .yui-pb-anim</td><td>background-image<br/>background-color</td><td>Image or color to use for the bar while it is moving.</td></tr>
+<tr><td style="white-space:nowrap;">.yui-pb-mask div</td><td>background-image</td><td>Mask with transparencies to allow the bar to show through.</td></tr>
+<tr><td style="white-space:nowrap;">.yui-pb-caption</td><td>font and others</td><td>This style is not actually used by the ProgressBar,
+        but is is defined in the "Sam" skin to be used to display the value of the bar.</td></tr>
+<tr><td style="white-space:nowrap;">.yui-pb-range</td><td>font and others</td><td>This style is not actually used by the ProgressBar,
+        but is is defined in the "Sam" skin to be used to display the end values of the bar</td></tr>
+</table>
+</div>
+
+<p>The DOM elements that constitute the ProgressBar are stacked one on top of the other.
+They are accessible through read-only configuration attributes which allows further styling, even at runtime.
+The following table enumerates the three layers, their class names and attribute names:</p>
+
+<div class="apisummary">
+<table>
+<tr><th>className</th><th>Attribute Name</th><th>Description</th><th>z-index</th></tr>
+<tr><td>yui-pb</td><td>element</td><td>the container of the ProgressBar itself</td><td>0 (bottom)</td></tr>
+<tr><td>yui-pb-bar</td><td>barEl</td><td>the moveable bar</td><td>1</td></tr>
+<tr><td>yui-pb-mask</td><td>maskEl</td><td>the mask that may partially cover the bar</td><td>2</td></tr>
+</table>
+</div>
+
+<p>To let the bar be seen through the mask that covers it, mask image needs to support transparencies, such as a PNG or a GIF.
+Since the opaque areas of the mask will hide some areas of the ProgressBar, when using masks that take some space at either end, set the margins on the bar itself (<code>.yui-pb-bar</code>) to keep the bar within the transparent section.</p>
+
+<p>Since the ProgressBar derives from Element, all the methods inherited from Element apply to the main container for the widget.
+If we were to set the color of the background and the bar via code, we can do it like this:</p>
+
+<div id="syntax-b1da6e8c4bd2cf9de29f67f53fde7bfa" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// background, using Element's method</span></div></li><li class="li1"><div class="de1">progressBar.<span class="me1">setStyle</span><span class="br0">&#40;</span><span class="st0">'backgroundColor'</span><span class="sy0">,</span><span class="st0">'green'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">// or accessing the DOM element first and using regular methods</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span>progressBar.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'element'</span><span class="br0">&#41;</span><span class="sy0">,</span><span class="st0">'backgroundColor'</span><span class="sy0">,</span><span class="st0">'green'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// bar, not an Element, regular methods have to be used</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span>progressBar.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'barEl'</span><span class="br0">&#41;</span><span class="sy0">,</span><span class="st0">'backgroundColor'</span><span class="sy0">,</span><span class="st0">'yellow'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// background, using Element's method</span>
+progressBar.<span class="me1">setStyle</span><span class="br0">&#40;</span><span class="st0">'backgroundColor'</span><span class="sy0">,</span><span class="st0">'green'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">// or accessing the DOM element first and using regular methods</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span>progressBar.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'element'</span><span class="br0">&#41;</span><span class="sy0">,</span><span class="st0">'backgroundColor'</span><span class="sy0">,</span><span class="st0">'green'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// bar, not an Element, regular methods have to be used</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span>progressBar.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'barEl'</span><span class="br0">&#41;</span><span class="sy0">,</span><span class="st0">'backgroundColor'</span><span class="sy0">,</span><span class="st0">'yellow'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-b1da6e8c4bd2cf9de29f67f53fde7bfa-plain">// background, using Element's method
+progressBar.setStyle('backgroundColor','green');
+// or accessing the DOM element first and using regular methods
+YAHOO.util.Dom.setStyle(progressBar.get('element'),'backgroundColor','green');
+
+// bar, not an Element, regular methods have to be used
+YAHOO.util.Dom.setStyle(progressBar.get('barEl'),'backgroundColor','yellow');
+</textarea></div>
+<p>The ProgressBar has a predefined style for the "Sam" skin (<code>yui-skin-sam</code>).  Since this style is often set
+at the document body, if you want to customize a particular ProgressBar while retaining the skin for other elements in the page,
+these are the style definitions that will cancel those preset styles where <code>#myProgressBar1</code> represents the id
+of the ProgressBar that is to be styled differently.</p>
+
+<div id="syntax-8bb0bee1df455b2169b2b717a4be4616" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="re0">#myProgressBar1</span> <span class="re1">.yui-pb</span>  <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">background-color</span><span class="sy0">:</span> <span class="kw2">transparent</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">background-image</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">border</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">#myProgressBar1</span> <span class="re1">.yui-pb-bar</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">background-color</span><span class="sy0">:</span> <span class="kw2">transparent</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">background-image</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">#myProgressBar1</span> <span class="re1">.yui-pb-mask</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">border</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">margin</span><span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="re0">#myProgressBar1</span> <span class="re1">.yui-pb</span>  <span class="br0">&#123;</span>
+    <span class="kw1">background-color</span><span class="sy0">:</span> <span class="kw2">transparent</span><span class="sy0">;</span>
+    <span class="kw1">background-image</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span>
+    <span class="kw1">border</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#myProgressBar1</span> <span class="re1">.yui-pb-bar</span> <span class="br0">&#123;</span>
+    <span class="kw1">background-color</span><span class="sy0">:</span> <span class="kw2">transparent</span><span class="sy0">;</span>
+    <span class="kw1">background-image</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#myProgressBar1</span> <span class="re1">.yui-pb-mask</span> <span class="br0">&#123;</span>
+    <span class="kw1">border</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span>
+    <span class="kw1">margin</span><span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-8bb0bee1df455b2169b2b717a4be4616-plain">#myProgressBar1 .yui-pb  {
+    background-color: transparent;
+    background-image: none;
+    border: none;
+}
+
+#myProgressBar1 .yui-pb-bar {
+    background-color: transparent;
+    background-image: none;
+}
+
+#myProgressBar1 .yui-pb-mask {
+    border: none;
+    margin: 0;
+}
+</textarea></div>
+
+<h3>Responding to Events <a name="events"></a> </h3>
+<p>The ProgressBar inherits from the Element utility, which exposes the before and after change events for
+configuration attributes. Thus there are, for example, <code>beforeMinValueChange</code> and <code>minValueChange</code> events.
+The before event listeners can return false to reject the change.  They both receive the old and new values
+for the corresponding attribute.</p>
+
+<p>The ProgressBar adds three events that signal the movement of the bar.  The <code>start</code> event
+will be fired right before the bar is about to move.  The <code>progress</code> event fires at least
+once while the bar is moved.  If animation is enabled, it will fire as many times as the Animation
+fires its own <code>onTween</code> event but it will scale the pixel value of the bar to a value
+in whichever units the implementer has set.  Finally, the <code>complete</code> event
+fires when the bar reaches its set value.  Handlers for all three events receive as its single argument the actual
+value that the bar represents at the instant they fire. The <code>progress</code> event
+will fire only once when animation is not enabled.</p>
+
+<h3>Captioning<a name="caption"></a></h3>
+<p>The ProgressBar does not directly handle captioning, however using the attribute change or <code>start</code>/<code>progress</code>/<code>complete</code> events,
+any appropriate value can be shown in any container.  For a consistent look when using the "Sam" skin,
+the class names <code>yui-pb-caption</code> and <code>yui-pb-range</code> have been defined to be used
+in the containers for the current value and the min/max values respectively. The following code shows
+how the current, possibly changing <code>value</code> and the <code>minValue</code> can be shown in respective containers:</p>
+
+<div id="syntax-9b3588e67b933d371c16ba0169c3e51b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">progressBar.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'progress'</span><span class="sy0">,</span><span class="kw2">function</span> <span class="br0">&#40;</span>value<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'valueContainer'</span><span class="br0">&#41;</span>.<span class="me1">innerHTML</span> <span class="sy0">=</span> value<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">progressBar.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'minValueChange'</span><span class="sy0">,</span><span class="kw2">function</span><span class="br0">&#40;</span>oArgs<span class="br0">&#41;</span>  <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'minValueContainer'</span><span class="br0">&#41;</span>.<span class="me1">innerHTML</span> <span class="sy0">=</span> oArgs.<span class="me1">newValue</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">progressBar.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'progress'</span><span class="sy0">,</span><span class="kw2">function</span> <span class="br0">&#40;</span>value<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'valueContainer'</span><span class="br0">&#41;</span>.<span class="me1">innerHTML</span> <span class="sy0">=</span> value<span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+progressBar.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'minValueChange'</span><span class="sy0">,</span><span class="kw2">function</span><span class="br0">&#40;</span>oArgs<span class="br0">&#41;</span>  <span class="br0">&#123;</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'minValueContainer'</span><span class="br0">&#41;</span>.<span class="me1">innerHTML</span> <span class="sy0">=</span> oArgs.<span class="me1">newValue</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-9b3588e67b933d371c16ba0169c3e51b-plain">progressBar.on('progress',function (value) {
+    YAHOO.util.Dom.get('valueContainer').innerHTML = value;
+});
+
+progressBar.on('minValueChange',function(oArgs)  {
+    YAHOO.util.Dom.get('minValueContainer').innerHTML = oArgs.newValue;
+});
+</textarea></div>
+
+<h3>WAI-ARIA support<a name="aria"></a></h3>
+<p>The ProgressBar supports WAI-ARIA as specified for the "progressbar" role (see the <a href="http://www.w3.org/TR/wai-aria/#progressbar">W3C specification</a>).
+The ProgressBar container has <code>tabIndex="0"</code> and has <code>role</code> and role-specific settings as described in the specification.</p>
+<p>Since the ProgressBar cannot know what unit the value corresponds to, it cannot on its own provide a meaningful <code>aria-valuetext</code>
+value.  The <code>ariaTextTemplate</code> configuration attribute allows the implementer to set the template to be used for that value.</p>
+<div id="syntax-11659a389c6fd9d7e95df59c88756f68" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    ariaTextTemplate<span class="sy0">:</span><span class="st0">'We are at {value} in between {minValue} and {maxValue}'</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">'progressBarContainer'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> progressBar <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ProgressBar</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    ariaTextTemplate<span class="sy0">:</span><span class="st0">'We are at {value} in between {minValue} and {maxValue}'</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span>.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">'progressBarContainer'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-11659a389c6fd9d7e95df59c88756f68-plain">var progressBar = new YAHOO.widget.ProgressBar({
+    ariaTextTemplate:'We are at {value} in between {minValue} and {maxValue}'
+}).render('progressBarContainer');
+</textarea></div>
+
+<p>The ProgressBar will produce a text assembled via YAHOO.lang.substitute from the template in the <code>ariaTextTemplate</code> configuration attribute.
+The ProgressBar makes the values of the <code>value</code>, <code>minValue</code> and <code>maxValue</code> available as tokens for <code>substitute</code>
+to replace in the template.</p>
+
+<h3>Scaling of the Mask<a name="mask"></a></h3>
+
+<p>The normal mechanism for scaling images in a browser is not acceptable for scaling the mask.
+Masks are usually thin frames around the bar, often with small single pixel-wide features.
+With normal scaling, these features might be lost. Instead, the ProgressBar cuts the mask into
+four quadrants.</p>
+
+<div style="clear:both;float:left;margin:1em;"><img src="maskdiag.png" /></div>
+<p>This set of diagrams shows how the mask image is used.
+In the top two images, the blue sections enclosed in red represent masks of very different sizes, both made of the very same base image,
+which is shown as the third imagex.</p>
+<p>The red line outlines the container used to hold the mask which is of the same size as the overall ProgressBar.
+The container holds four quadrants, marked by the yellow lines.</p>
+
+<p>The same mask image is set as the background for each of the four individual quadrants but instead of letting it tile normally,
+we use the <code>background-position</code> CSS attribute so each is aligned to its own external corner.  The blue area shows the corner section of the mask image that
+is visible in each quadrant, enclosed in between the ProgressBar edge in red and the edges of the quadrants in yellow,
+the light blue areas are the parts of the same image that fall outside of the quadrants and are invisible.</p>
+<p>If the top ProgressBar were to be stretched a little more, the now invisible edges opposite each visible corner would start to show.
+On the other hand, if the lower ProgressBar were to be reduced, the yellow lines would start eating into the rounded inner corners and
+the inner contour would not blend but meet at an angle.</p>
+<p>If we call <b>A</b> the length of the straight section of each edge and
+<b>B</b> the length of the section from the edge until the rounded inner corner meets the straight section so that
+the width of the original mask is <b>A + 2 *  B</b>, we can use that image as a mask for any ProgressBar that is at
+least <b>2 * B</b> on the side (no straight section visible) to <b>2 * A + 2 * B</b> (the straight sections are seen twice, once
+in each contiguous cell).</p>
+
+
+
+<h2 id="knownissues">Known Issues</h2>
+
+<p>ProgressBar only works correctly if width is specified in pixels (<a href="http://yuilibrary.com/projects/yui2/ticket/2529310">bug 2529310</a>).</p>
+
+<p>A ProgressBar in a ScrollingDataTable is rendered and visible even if the bar is outside the viewable scrolling area (<a href="http://yuilibrary.com/projects/yui2/ticket/2529072">bug 2529072</a>). The following CSS can be applied as a workaround:</p>
+
+<div id="syntax-2e5544d86991773444f43d7709005648" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">.<span class="me1">yui</span><span class="sy0">-</span>dt<span class="sy0">-</span>scrollable .<span class="me1">yui</span><span class="sy0">-</span>dt<span class="sy0">-</span>bd <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">overflow<span class="sy0">:</span>auto<span class="sy0">;</span></div></li><li class="li1"><div class="de1">position<span class="sy0">:</span>relative<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">.<span class="me1">yui</span><span class="sy0">-</span>dt<span class="sy0">-</span>scrollable .<span class="me1">yui</span><span class="sy0">-</span>dt<span class="sy0">-</span>bd <span class="br0">&#123;</span>
+overflow<span class="sy0">:</span>auto<span class="sy0">;</span>
+position<span class="sy0">:</span>relative<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-2e5544d86991773444f43d7709005648-plain">.yui-dt-scrollable .yui-dt-bd {
+overflow:auto;
+position:relative;
+}
+</textarea></div>
+<p>The ProgressBar is affected by the bug: <a href="https://bugs.webkit.org/show_bug.cgi?id=27161">"JS positioned elements get misplaced on zooming"</a>
+on Safari 4 and other recent WebKit derivatives.</p>
+
+<p>The "rtl" direction is not supported in IE6.</p>
+
+<h2 id="mobile">YUI on Mobile: Using ProgressBar Control with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>
+<p>ProgressBar is functional in the target mobile browsers.</p>
+
+        	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+      </div>
+      <div class="yui-u">
+
+            <div id="cheatsheet">
+                <h3>ProgressBar Control Cheat Sheet:</h3>
+                
+                <a href="http://yuiblog.com/assets/pdf/cheatsheets/progressbar.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/progressbar.gif" width="178" height="126" alt="Cheat Sheet for the ProgressBar Control."></a>
+                
+                <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+            </div>
+
+
+            <div id="examples">
+<h3>ProgressBar Control Examples:</h3>
+
+<ul>
+<li><a href='../examples/progressbar/pb_basic.html'>Basic Features</a></li>
+<li><a href='../examples/progressbar/pb_events.html'>Events</a></li>
+<li><a href='../examples/progressbar/pb_ratings.html'>Ratings</a></li>
+<li><a href='../examples/progressbar/pb_vumeter.html'>VU Meters</a></li>
+</ul>
+
+
+		
+           </div>
+      
+      
+        <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fprogressbar%2F-->        <h3 id="delicious">YUI ProgressBar on del.icio.us:</h3>
+        <div class="delicious">
+          <div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/progressbar/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/YUI" class="tag-size-1">YUI</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/progressbar" class="tag-size-1">progressbar</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/4f1389bc89f3a9eb788d0125030e1533" class="saved-by">saved by <span>3</span>  people</a></p>
+   </div>        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="selected "><a title="The YUI ProgressBar Control" href="index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:27 PDT 2013 -->
+
+<!-- Localized -->

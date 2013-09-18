@@ -1,0 +1,316 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Container Family: SimpleDialog Quickstart Example</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/container/container-debug.js"></script>
+
+<!--there is no custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	<div id="ygma"><a href="/"><img src="http://l.yimg.com/a/i/brand/purplelogo/uh/us/ydn.gif" width="266" height="34" border="0"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: Container Family: SimpleDialog Quickstart Example</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Container Family: SimpleDialog Quickstart Example</h1>
+	
+	<div class="exampleIntro">
+	<p>Use the SimpleDialog Control when you want to solicit very simple (usually binary) information from your users &mdash; ok/cancel, yes/no are the classic examples of this sort of interaction.  Use the button below to show a SimpleDialog instance; if you click "yes", that choice will be echoed back to you by script.</p>			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="simpledialog-quickstart_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<style>
+#container { height:12em; }
+</style>
+
+<script>
+YAHOO.namespace("example.container");
+
+function init() {
+	
+	// Define various event handlers for Dialog
+	var handleYes = function() {
+		alert("You clicked yes!");
+		this.hide();
+	};
+	var handleNo = function() {
+		this.hide();
+	};
+
+	// Instantiate the Dialog
+	YAHOO.example.container.simpledialog1 = new YAHOO.widget.SimpleDialog("simpledialog1", 
+																			 { width: "300px",
+																			   fixedcenter: true,
+																			   visible: false,
+																			   draggable: false,
+																			   close: true,
+																			   text: "Do you want to continue?",
+																			   icon: YAHOO.widget.SimpleDialog.ICON_HELP,
+																			   constraintoviewport: true,
+																			   buttons: [ { text:"Yes", handler:handleYes, isDefault:true },
+																						  { text:"No",  handler:handleNo } ]
+																			 } );
+	YAHOO.example.container.simpledialog1.setHeader("Are you sure?");
+	
+	// Render the Dialog
+	YAHOO.example.container.simpledialog1.render("container");
+
+	YAHOO.util.Event.addListener("show", "click", YAHOO.example.container.simpledialog1.show, YAHOO.example.container.simpledialog1, true);
+	YAHOO.util.Event.addListener("hide", "click", YAHOO.example.container.simpledialog1.hide, YAHOO.example.container.simpledialog1, true);
+
+}
+
+YAHOO.util.Event.addListener(window, "load", init);
+</script>
+
+
+<div id="container">
+<button id="show">Show simpledialog1</button> 
+<button id="hide">Hide simpledialog1</button>
+</div>	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Setting up the SimpleDialog</h2>
+
+<p>The <a href="http://developer.yahoo.com/yui/container/simpledialog/">SimpleDialog Control</a> is an extension of <a href="http://developer.yahoo.com/yui/container/dialog/">Dialog</a> that reproduces the behavior of a simple dialog box (but without using an actual browser popup window); its primary use is to elicit binary decisions from the user (yes/no, okay/cancel, etc.). SimpleDialog makes it easy to implement this kind of interaction. In this tutorial, we will create a SimpleDialog with "Yes"/"No" choices, and display an alert if the user clicks "Yes".</p>
+
+<p>SimpleDialog defines two new properties:</p>
+<ol>
+<li> <strong>icon</strong>: defines which of six standard icons will be displayed in the SimpleDialog;</li>
+<li><strong>text</strong>: used to specify a small amount of text to display in the SimpleDialog.</li>
+</ol>
+<p> The "buttons" property is inherited from Dialog, and uses the same familiar array-of-object literals syntax as demonstrated in the following constructor:</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+// Instantiate the Dialog
+YAHOO.example.container.simpledialog1 = 
+	new YAHOO.widget.SimpleDialog("simpledialog1", 
+			 { width: "300px",
+			   fixedcenter: true,
+			   visible: false,
+			   draggable: false,
+			   close: true,
+			   text: "Do you want to continue?",
+			   icon: YAHOO.widget.SimpleDialog.ICON_HELP,
+			   constraintoviewport: true,
+			   buttons: [ { text:"Yes", handler:handleYes, isDefault:true },
+						  { text:"No",  handler:handleNo } ]
+			 } );
+</textarea>
+
+<p>Next, we'll define the handlers for our buttons. Clicking "Yes" will cause an alert to be displayed, whereas the "No" button will simply dismiss the SimpleDialog:</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+
+// Define various event handlers for Dialog
+var handleYes = function() {
+	alert("You clicked yes!");
+	this.hide();
+};
+
+var handleNo = function() {
+	this.hide();
+};
+
+</textarea>
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerDiv"></div>
+							<div id="loggerGloss">
+								<p><strong>Note:</strong> You are viewing this example in debug mode with logging enabled.  This can significantly slow performance.</p>
+	
+								<p class="loggerButton"><span id="loggerLink"><span class="first-child"><a href="simpledialog-quickstart.html">Reload with logging<br />and debugging disabled.</a></span></span></p>
+							</div>
+						</div>
+					
+				
+					<div id="examples">
+						<h3>Container Family Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='../container/module.html'>The Module Control</a></li><li><a href='../container/overlay.html'>Creating and Positioning an Overlay</a></li><li><a href='../container/tooltip.html'>Simple Tooltip Example</a></li><li><a href='../container/tooltip-multi.html'>One Tooltip, Many Context Elements</a></li><li><a href='../container/panel.html'>Simple Panel Example</a></li><li><a href='../container/panelskin1.html'>Skinning a Panel with Custom CSS: Introduction</a></li><li><a href='../container/panelskin2.html'>Skinning a Panel with Custom CSS: Advanced</a></li><li><a href='../container/panel-loading.html'>Creating a Modal "Loading" Panel</a></li><li><a href='../container/panel-resize.html'>Creating a Resizable Panel</a></li><li><a href='../container/dialog-quickstart.html'>Dialog Quickstart Example</a></li><li class='selected'><a href='../container/simpledialog-quickstart.html'>SimpleDialog Quickstart Example</a></li><li><a href='../container/container-effect.html'>Using ContainerEffect Transitions</a></li><li><a href='../container/overlaymanager.html'>Using the Overlay Manager to Manage Multiple Panels</a></li><li><a href='../container/keylistener.html'>Implementing Container Keyboard Shortcuts with KeyListener</a></li><li><a href='../button/button-ariaplugin.html'>Using the Button ARIA Plugin (included with examples for Button Control)</a></li><li><a href='../container/container-ariaplugin.html'>Using the Container ARIA Plugin</a></li><li><a href='../button/button-menu-select.html'>Using A Menu Button To Replace A &#60;select&#62; Element (included with examples for Button Control)</a></li><li><a href='../button/button-menu-swap.html'>Replacing the content of a Button's Menu (included with examples for Button Control)</a></li><li><a href='../colorpicker/colorpicker-dialog-from-script.html'>Example of Color Picker Built in a Dialog via JavaScript (included with examples for Color Picker Control)</a></li><li><a href='../layout/panel_layout.html'>Layout inside a resizable Panel (included with examples for Layout Manager)</a></li><li><a href='../editor/dialog_editor.html'>Editor in a Dialog Control (included with examples for Rich Text Editor)</a></li><li><a href='../button/btn_example07.html'>Menu Buttons (included with examples for Button Control)</a></li><li><a href='../calendar/calcontainer.html'>Popup Calendar - Advanced (included with examples for Calendar Control)</a></li><li><a href='../datatable/dt_colshowhide.html'>Showing, Hiding, and Reordering Columns. (included with examples for DataTable Control)</a></li><li><a href='../button/btn_example08.html'>Split Buttons (included with examples for Button Control)</a></li><li><a href='../button/btn_example09.html'>Simple Calendar Menu Button (included with examples for Button Control)</a></li><li><a href='../button/btn_example10.html'>Calendar Menu Button with Date on Button Face (included with examples for Button Control)</a></li><li><a href='../button/btn_example11.html'>Color Picker Button (included with examples for Button Control)</a></li><li><a href='../button/btn_example12.html'>Fixed Width Menu Button (included with examples for Button Control)</a></li><li><a href='../menu/programsmenu.html'>OS-Style Programs Menu (included with examples for Menu Family)</a></li><li><a href='../menu/applicationmenubar.html'>Application Menubar (included with examples for Menu Family)</a></li><li><a href='../button/btn_example14.html'>Slider Button (included with examples for Button Control)</a></li><li><a href='../layout/adv_layout.html'>Complex Application (included with examples for Layout Manager)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Container Family Resources:</h3>
+						<ul>
+							
+						<li><a href="../../docs/module_container.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/container.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="/yui/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="/yui/3/">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="/yui/license.html">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- proven and robust." href="/yui/2/">YUI 2</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="/yui/examples/">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="/yui/docs/">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="item"><a title="Configure your YUI implementation; serve YUI source files from Yahoo! -- free, fast, and simple" href="/yui/articles/hosting/">Dependency Configurator</a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="/yui/animation/">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="/yui/autocomplete/">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="/yui/history/">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="/yui/button/">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="/yui/calendar/">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="/yui/carousel/">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="/yui/charts/">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="/yui/colorpicker/">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="/yui/connection/">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="/yui/container/">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="/yui/cookie/">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="/yui/datasource/">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="/yui/datatable/">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="/yui/dom/">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="/yui/dragdrop/">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="/yui/element/">Element</a></li><li class="item"><a title="The YUI Event Utility" href="/yui/event/">Event</a></li><li class="item"><a title="The YUI Get Utility" href="/yui/get/">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="/yui/imagecropper/">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="/yui/imageloader/">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="/yui/json/">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="/yui/layout/">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="/yui/logger/">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="/yui/menu/">Menu</a></li><li class="item"><a title="The YUI Paginator" href="/yui/paginator/">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="/yui/profiler/">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="/yui/profilerviewer/">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="/yui/progressbar/">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="/yui/resize/">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="/yui/editor/">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="/yui/selector/">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="/yui/slider/">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="/yui/storage/">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="/yui/stylesheet/">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="/yui/swf/">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="/yui/swfstore/">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="/yui/tabview/">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="/yui/treeview/">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="/yui/uploader/">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="/yui/yahoo/">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="/yui/yuiloader/">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="/yui/yuitest/">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="/yui/reset/">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="/yui/base/">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="/yui/fonts/">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="/yui/grids/">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:48 PDT 2013 -->

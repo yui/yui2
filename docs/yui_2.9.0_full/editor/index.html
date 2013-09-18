@@ -1,0 +1,1081 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Rich Text Editor</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Rich Text Editor</h1></div>
+</div>
+<div id="bd">
+
+
+<style>
+li.new, li.new code {
+    color: #639;
+}
+</style>
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+      
+      
+<div id="promo" class="component">
+  <h1>YUI 2: Rich Text Editor</h1>
+  <p><img src="assets/editor.png" alt="The Rich Text Editor interface with the default YUI Sam Skin applied." width="350" height="225" class="example">The Rich Text Editor is a UI control that replaces a standard HTML textarea; it allows for the rich formatting of text content, including common structural treatments like lists, formatting treatments like bold and italic text, and drag-and-drop inclusion and sizing of images.  The Rich Text Editor's toolbar is extensible via a plugin architecture so that advanced implementations can achieve a high degree of customization.</p>
+  
+  <p>In order to give you the greatest possible control over the size and performance of the Rich Text Editor codebase, we provide two versions of the Editor module and two versions of the buttons that live on the Toolbar:</p>
+  
+  <ul>
+    <li><strong>Editor:</strong> Editor contains all features described on this page;</li>
+    <li><strong>SimpleEditor:</strong> SimpleEditor contains a subset of Editor's features. (See &quot;<a href="#choosing">Choosing Between Editor and SimpleEditor</a>&quot; for more details.)</li>
+    <li><strong>ToolbarButtonAdvanced: </strong>The advanced Toolbar buttons are based on YUI Buttons; they are more richly featured at the cost of more dependencies.</li>
+    <li><strong>ToolbarButton: </strong>The more simple Toolbar buttons have fewer dependencies and so are lighter on the page; they do not support progressive enhancement nor menu-button functionality. (See "<a href="#toolbar">Changing the Toolbar</a>" for more about your Toolbar choices.)</li>
+    </ul>
+  <p>Choose the right combination of features in your Editor and Toolbar to get the right tradeoff between size and richness for your application.</p>
+
+  <div>
+    <h4>On This Page:</h4>
+    <ul>
+        <li><a href="#start">Getting Started</a></li>
+        <li><a href="#using">Using the Rich Text Editor</a></li>
+        <li><a href="#mobile">YUI on Mobile Devices</a></li>
+        <li><a href="#support">Support &amp; Community</a></li>
+        <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/editor/index.html">Examples</a>: Explore examples of the Rich Text Editor in action.</li>
+      <li><a href="../docs/module_editor.html">API Documentation</a>: View the full API documentation for the Rich Text Editor.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.editor">Release Notes</a>: Detailed change log for the Rich Text Editor.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Rich Text Editor as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+</div>
+
+<h2 class="first" id="video">Video: Rich Text Editing with YUI</h2>
+<p>In this 36 minute video, YUI Rich Text Editor author Dav Glass takes you on a guided tour of the component, including both how to use and how to extend the base functionality. [<a href="http://us.dl1.yimg.com/download.yahoo.com/dl/ydn/yui/theater/glass-rte.m4v">iPod/iPhone compatible download also available</a>.]</p>
+
+<object width="512" height="323"><param name="movie" value="http://l.yimg.com/ht/yep/YV_YEP.swf?ver=2.1.12" /><param name="allowFullScreen" value="true" /><param name="flashVars" value="id=7378948&vid=2359450&lang=en-us&intl=us&thumbUrl=http://l.yimg.com/a/p/i/bcst/videosearch/2719/62261130.jpeg" /><embed src="http://l.yimg.com/ht/yep/YV_YEP.swf?ver=2.1.12" type="application/x-shockwave-flash" width="512" height="323" allowFullScreen="true" flashVars="id=7378948&vid=2359450&lang=en-us&intl=us&thumbUrl=http://l.yimg.com/a/p/i/bcst/videosearch/2719/62261130.jpeg" ></embed></object>
+
+<h2 id="start">Getting Started</h2>
+<p>To use the Editor, include the following source files in your web page:</p>
+<div id="syntax-18e5f5dd5eb8490bc329480ba6e11299" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Skin CSS file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Utility Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> </div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Needed for Menus, Buttons and Overlays used in the Toolbar --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/button/button-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Source file for Rich Text Editor--&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/editor/editor-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Skin CSS file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css&quot;</span>&gt;</span>
+<span class="sc-1">&lt;!-- Utility Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
+<span class="sc-1">&lt;!-- Needed for Menus, Buttons and Overlays used in the Toolbar --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/button/button-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc-1">&lt;!-- Source file for Rich Text Editor--&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/editor/editor-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-18e5f5dd5eb8490bc329480ba6e11299-plain"><!-- Skin CSS file -->
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css">
+<!-- Utility Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script> 
+<!-- Needed for Menus, Buttons and Overlays used in the Toolbar -->
+<script src="http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+<!-- Source file for Rich Text Editor-->
+<script src="http://yui.yahooapis.com/2.9.0/build/editor/editor-min.js"></script>
+</textarea></div>
+<p>To use the SimpleEditor, include the following source files in your web page:</p>
+<div id="syntax-6a28a97cb83053a14e0eaf0b9e0a94aa" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Skin CSS file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Utility Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> </div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Needed for Menus, Buttons and Overlays used in the Toolbar --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file for Rich Text Editor--&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/editor/simpleeditor-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Skin CSS file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css&quot;</span>&gt;</span>
+<span class="sc-1">&lt;!-- Utility Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
+<span class="sc-1">&lt;!-- Needed for Menus, Buttons and Overlays used in the Toolbar --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc-1">&lt;!-- Source file for Rich Text Editor--&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/editor/simpleeditor-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-6a28a97cb83053a14e0eaf0b9e0a94aa-plain"><!-- Skin CSS file -->
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/skin.css">
+<!-- Utility Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script> 
+<!-- Needed for Menus, Buttons and Overlays used in the Toolbar -->
+<script src="http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js"></script>
+<!-- Source file for Rich Text Editor-->
+<script src="http://yui.yahooapis.com/2.9.0/build/editor/simpleeditor-min.js"></script>
+</textarea></div>
+
+
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
+in which the Rich Text Editor lives.  You can usually accomplish this simply by putting the class on the 
+<code>&#60;body&#62;</code> tag:</p>
+<div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
+</textarea></div>
+<p class="lastP">For more information on skinning YUI components and making use of default skins, 
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+article here on the website.</p>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>editor</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<h2 id="using">Using the Rich Text Editor</h2>
+<p>This section describes several common uses of the Rich Text Editor. It contains these subsections:</p>
+<ul>
+<li><a href="#choosing">Choosing Between Editor and SimpleEditor</a></li>
+<li><a href="#rendering">Rendering the Editor</a></li>
+<li><a href="#renderingsimple">Rendering the SimpleEditor</a></li>
+<li><a href="#getdata">Getting the data from the Editor</a></li>
+<li><a href="#toolbar">Changing the Toolbar</a></li>
+<li><a href="#events">Listening for Events</a></li>
+<li><a href="#dynamic_events">Dynamic Events</a></li>
+<li><a href="#plugins">Plugins</a></li>
+<li><a href="#overrides">Overriding execCommands</a></li>
+<li><a href="#toolbar_moments">Toolbar Interactions</a></li>
+<li><a href="#showhide">Showing and Hiding</a></li>
+<li><a href="#skinning">Skinning the Editor</a></li>
+</ul>
+
+<h3 id="choosing">Choosing Between Editor and SimpleEditor</h3>
+<p>The SimpleEditor Control is a smaller more basic version of the Editor Control. Most of the editing features found in the main Editor Control exist in the SimpleEditor version. However a few were removed:</p>
+<ul>
+    <li>Advanced Image editing &mdash; replaced with a simple Javascript prompt</li>
+    <li>Advanced Link editing &mdash; replaced with a simple Javascript prompt</li>
+    <li>Advanced Drop Down Menus &mdash; replaced with standard HTML Select Elements</li>
+    <li>Header editing</li>
+    <li>Removing of Format</li>
+    <li>Superscript &amp; Subscript</li>
+    <li>Indenting &amp; Outdenting</li>
+    <li>No support for <code>YAHOO.widget.EditorWindow</code> &mdash; The floating panels used for image and link editing</li>
+</ul>
+<p>The major difference between the two editors are their dependencies.</p>
+<div class="yui-g">
+    <div class="yui-u first">
+        <p>SimpleEditor's dependencies are:</p>
+        <ul>
+            <li><a href="../yahoo/index.html">YAHOO</a></li>
+            <li><a href="../dom/index.html">Dom</a></li>
+            <li><a href="../event/index.html">Event</a></li>
+            <li><a href="../element/index.html">Element</a></li>
+            <li><a href="../container/index.html">Container Core</a> (optional)</li>
+            <li><a href="../animation/index.html">Animation</a> (optional)</li>
+            <li><a href="../dragdrop/index.html">DragDrop</a> (optional)</li>
+            <li><a href="../resize/index.html">Resize</a> (optional)</li>
+        </ul>
+    </div>
+    <div class="yui-u">
+        <p>Editor's dependencies are:</p>
+        <ul>
+            <li><a href="../yahoo/index.html">YAHOO</a></li>
+            <li><a href="../dom/index.html">Dom</a></li>
+            <li><a href="../event/index.html">Event</a></li>
+            <li><a href="../element/index.html">Element</a></li>
+            <li><a href="../container/index.html">Container Core</a></li>
+            <li><a href="../menu/index.html">Menu</a></li>
+            <li><a href="../button/index.html">Button</a></li>
+            <li><a href="../animation/index.html">Animation</a> (optional)</li>
+            <li><a href="../dragdrop/index.html">DragDrop</a> (optional)</li>
+            <li><a href="../resize/index.html">Resize</a> (optional)</li>
+        </ul>
+    </div>
+</div>
+
+<h3 id="rendering">Rendering the Editor</h3>
+<p>The Rich Text Editor is designed to replace an existing HTML <code>&lt;textarea&gt;</code> control.  Users whose browsers do not support JavaScript will therefore see a standard <code>&lt;textarea&gt;</code> in place of the Rich Text Editor.  The base markup for this approach is as follows:</p>
+
+
+<div id="syntax-ddf4c715231073c94176ddea20340cae" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">textarea</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;msgpost&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;msgpost&quot;</span> <span class="kw3">cols</span><span class="sy0">=</span><span class="st0">&quot;50&quot;</span> <span class="kw3">rows</span><span class="sy0">=</span><span class="st0">&quot;10&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">strong</span>&gt;</span>Your<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">strong</span>&gt;</span> HTML <span class="sc2">&lt;<span class="kw2">em</span>&gt;</span>code<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;</span> goes here.<span class="sc2">&lt;<span class="kw2">br</span>&gt;</span></div></li><li class="li1"><div class="de1">    This text will be pre-loaded in the editor when it is rendered.</div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">textarea</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">body</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">textarea</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;msgpost&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;msgpost&quot;</span> <span class="kw3">cols</span><span class="sy0">=</span><span class="st0">&quot;50&quot;</span> <span class="kw3">rows</span><span class="sy0">=</span><span class="st0">&quot;10&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">strong</span>&gt;</span>Your<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">strong</span>&gt;</span> HTML <span class="sc2">&lt;<span class="kw2">em</span>&gt;</span>code<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;</span> goes here.<span class="sc2">&lt;<span class="kw2">br</span>&gt;</span>
+    This text will be pre-loaded in the editor when it is rendered.
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">textarea</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">body</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-ddf4c715231073c94176ddea20340cae-plain"><body class="yui-skin-sam">
+<textarea name="msgpost" id="msgpost" cols="50" rows="10">
+    <strong>Your</strong> HTML <em>code</em> goes here.<br>
+    This text will be pre-loaded in the editor when it is rendered.
+</textarea>
+</body>
+</textarea></div>
+<p>With this markup in place, the JavaScript to instantiate the Rich Text Editor involves a simple constructor to which is passed a configuration object.  Once instantiated, you use the <code>render</code> method to place the Rich Text Editor on the page:</p>
+
+<div id="syntax-f10e56bc4adb6344c51749d32826f58f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myEditor <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Editor</span><span class="br0">&#40;</span><span class="st0">'msgpost'</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    height<span class="sy0">:</span> <span class="st0">'300px'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    width<span class="sy0">:</span> <span class="st0">'522px'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    dompath<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> <span class="co1">//Turns on the bar at the bottom</span></div></li><li class="li2"><div class="de2">    animate<span class="sy0">:</span> <span class="kw2">true</span> <span class="co1">//Animates the opening, closing and moving of Editor windows</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myEditor.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myEditor <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Editor</span><span class="br0">&#40;</span><span class="st0">'msgpost'</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    height<span class="sy0">:</span> <span class="st0">'300px'</span><span class="sy0">,</span>
+    width<span class="sy0">:</span> <span class="st0">'522px'</span><span class="sy0">,</span>
+    dompath<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> <span class="co1">//Turns on the bar at the bottom</span>
+    animate<span class="sy0">:</span> <span class="kw2">true</span> <span class="co1">//Animates the opening, closing and moving of Editor windows</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myEditor.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-f10e56bc4adb6344c51749d32826f58f-plain">var myEditor = new YAHOO.widget.Editor('msgpost', {
+    height: '300px',
+    width: '522px',
+    dompath: true, //Turns on the bar at the bottom
+    animate: true //Animates the opening, closing and moving of Editor windows
+});
+myEditor.render();
+</textarea></div>
+<p>The full list of configuration options that you can pass in your constructor can be found in the <a href="../docs/YAHOO.widget.Editor.html#animate">API documentation</a>.</p>
+
+<p>With the simple markup and script above, and including the skin stylesheet for Rich Text Editor, you will see rendered to your page a rich control that looks like this:</p>
+
+<img src="assets/screenshot.jpg" alt="The Rich Text Editor Control" border="0" height="497" width="545"/>
+
+<h3 id="renderingsimple">Rendering the SimpleEditor</h3>
+
+<p>You render the SimpleEditor Control the same as the Editor Control, only you call the <code>SimpleEditor</code> constructor instead.</p>
+
+<div id="syntax-3708e76de91d4c4851b0b8507a470069" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myEditor <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">SimpleEditor</span><span class="br0">&#40;</span><span class="st0">'msgpost'</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    height<span class="sy0">:</span> <span class="st0">'300px'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    width<span class="sy0">:</span> <span class="st0">'522px'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    dompath<span class="sy0">:</span> <span class="kw2">true</span> <span class="co1">//Turns on the bar at the bottom</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myEditor.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myEditor <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">SimpleEditor</span><span class="br0">&#40;</span><span class="st0">'msgpost'</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    height<span class="sy0">:</span> <span class="st0">'300px'</span><span class="sy0">,</span>
+    width<span class="sy0">:</span> <span class="st0">'522px'</span><span class="sy0">,</span>
+    dompath<span class="sy0">:</span> <span class="kw2">true</span> <span class="co1">//Turns on the bar at the bottom</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myEditor.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-3708e76de91d4c4851b0b8507a470069-plain">var myEditor = new YAHOO.widget.SimpleEditor('msgpost', {
+    height: '300px',
+    width: '522px',
+    dompath: true //Turns on the bar at the bottom
+});
+myEditor.render();
+</textarea></div>
+<p>With the simple markup and script above, and including the skin stylesheet for Rich Text Editor, you will see rendered to your page a rich control that looks like this:</p>
+
+<img src="assets/screenshot-simple.jpg" alt="The Simple Rich Text Editor Control" border="0" height="411" width="542"/>
+
+
+<h3 id="getdata">Getting the data from the Editor</h3>
+
+<p>There are a couple of ways to get the data from the editor. The first way is to let the Editor do it for you by setting the <code>handleSubmit</code> configuration option.</p>
+<p>Setting the <code>handleSubmit</code> configuration option, the Editor will attempt to attach itself to its parent form's submit event. Then it will call its <code>saveHTML</code> method, then proceed with the form submission.</p>
+
+<p>The manual way, is to call the <code>saveHTML</code> method yourself. Like this:</p>
+<div id="syntax-dad90ab8c225cf1a47477876b05761f2" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myEditor <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Editor</span><span class="br0">&#40;</span><span class="st0">'msgpost'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myEditor.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//Inside an event handler after the Editor is rendered</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'somebutton'</span><span class="sy0">,</span> <span class="st0">'click'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//Put the HTML back into the text area</span></div></li><li class="li1"><div class="de1">    myEditor.<span class="me1">saveHTML</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">//The var html will now have the contents of the textarea</span></div></li><li class="li2"><div class="de2">    <span class="kw2">var</span> html <span class="sy0">=</span> myEditor.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'element'</span><span class="br0">&#41;</span>.<span class="me1">value</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myEditor <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Editor</span><span class="br0">&#40;</span><span class="st0">'msgpost'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myEditor.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//Inside an event handler after the Editor is rendered</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'somebutton'</span><span class="sy0">,</span> <span class="st0">'click'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">//Put the HTML back into the text area</span>
+    myEditor.<span class="me1">saveHTML</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">//The var html will now have the contents of the textarea</span>
+    <span class="kw2">var</span> html <span class="sy0">=</span> myEditor.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'element'</span><span class="br0">&#41;</span>.<span class="me1">value</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-dad90ab8c225cf1a47477876b05761f2-plain">var myEditor = new YAHOO.widget.Editor('msgpost');
+myEditor.render();
+
+//Inside an event handler after the Editor is rendered
+YAHOO.util.Event.on('somebutton', 'click', function() {
+    //Put the HTML back into the text area
+    myEditor.saveHTML();
+
+    //The var html will now have the contents of the textarea
+    var html = myEditor.get('element').value;
+});
+</textarea></div>
+<h3 id="toolbar">Changing the toolbar</h3>
+
+<p>The default toolbar included with the editor makes every currently supported feature available by default. You can override this config before the editor is rendered by passing in an object literal of a new toolbar to the constructor.</p>
+
+<p>See this <a href="../examples/editor/toolbar_editor.html">example for the full toolbar config</a></p>
+
+<div id="syntax-1798c4d57efb060c8ed27622ae4d1b2d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myEditor <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Editor</span><span class="br0">&#40;</span><span class="st0">'msgpost'</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    height<span class="sy0">:</span> <span class="st0">'200px'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    width<span class="sy0">:</span> <span class="st0">'385px'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    dompath<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    animate<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    toolbar<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        titlebar<span class="sy0">:</span> <span class="st0">'My Editor'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        buttons<span class="sy0">:</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">            <span class="br0">&#123;</span> group<span class="sy0">:</span> <span class="st0">'textstyle'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Font Style'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">                buttons<span class="sy0">:</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Bold'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'bold'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Italic'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'italic'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Underline'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'underline'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'separator'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'select'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Arial'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'fontname'</span><span class="sy0">,</span> disabled<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                        menu<span class="sy0">:</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Arial'</span><span class="sy0">,</span> checked<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Arial Black'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Comic Sans MS'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Courier New'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Lucida Console'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Tahoma'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Times New Roman'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Trebuchet MS'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Verdana'</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">                        <span class="br0">&#93;</span></div></li><li class="li1"><div class="de1">                    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'spin'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'13'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'fontsize'</span><span class="sy0">,</span> range<span class="sy0">:</span> <span class="br0">&#91;</span> <span class="nu0">9</span><span class="sy0">,</span> <span class="nu0">75</span> <span class="br0">&#93;</span><span class="sy0">,</span> disabled<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'separator'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'color'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Font Color'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'forecolor'</span><span class="sy0">,</span> disabled<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'color'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Background Color'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'backcolor'</span><span class="sy0">,</span> disabled<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">                <span class="br0">&#93;</span></div></li><li class="li1"><div class="de1">            <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#93;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myEditor.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myEditor <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Editor</span><span class="br0">&#40;</span><span class="st0">'msgpost'</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    height<span class="sy0">:</span> <span class="st0">'200px'</span><span class="sy0">,</span>
+    width<span class="sy0">:</span> <span class="st0">'385px'</span><span class="sy0">,</span>
+    dompath<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span>
+    animate<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+    toolbar<span class="sy0">:</span> <span class="br0">&#123;</span>
+        titlebar<span class="sy0">:</span> <span class="st0">'My Editor'</span><span class="sy0">,</span>
+        buttons<span class="sy0">:</span> <span class="br0">&#91;</span>
+            <span class="br0">&#123;</span> group<span class="sy0">:</span> <span class="st0">'textstyle'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Font Style'</span><span class="sy0">,</span>
+                buttons<span class="sy0">:</span> <span class="br0">&#91;</span>
+                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Bold'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'bold'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Italic'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'italic'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Underline'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'underline'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'separator'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'select'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Arial'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'fontname'</span><span class="sy0">,</span> disabled<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+                        menu<span class="sy0">:</span> <span class="br0">&#91;</span>
+                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Arial'</span><span class="sy0">,</span> checked<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Arial Black'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Comic Sans MS'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Courier New'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Lucida Console'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Tahoma'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Times New Roman'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Trebuchet MS'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                            <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">'Verdana'</span> <span class="br0">&#125;</span>
+                        <span class="br0">&#93;</span>
+                    <span class="br0">&#125;</span><span class="sy0">,</span>
+                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'spin'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'13'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'fontsize'</span><span class="sy0">,</span> range<span class="sy0">:</span> <span class="br0">&#91;</span> <span class="nu0">9</span><span class="sy0">,</span> <span class="nu0">75</span> <span class="br0">&#93;</span><span class="sy0">,</span> disabled<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'separator'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'color'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Font Color'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'forecolor'</span><span class="sy0">,</span> disabled<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+                    <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'color'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Background Color'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'backcolor'</span><span class="sy0">,</span> disabled<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span>
+                <span class="br0">&#93;</span>
+            <span class="br0">&#125;</span>
+        <span class="br0">&#93;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myEditor.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-1798c4d57efb060c8ed27622ae4d1b2d-plain">var myEditor = new YAHOO.widget.Editor('msgpost', {
+    height: '200px',
+    width: '385px',
+    dompath: false,
+    animate: true,
+    toolbar: {
+        titlebar: 'My Editor',
+        buttons: [
+            { group: 'textstyle', label: 'Font Style',
+                buttons: [
+                    { type: 'push', label: 'Bold', value: 'bold' },
+                    { type: 'push', label: 'Italic', value: 'italic' },
+                    { type: 'push', label: 'Underline', value: 'underline' },
+                    { type: 'separator' },
+                    { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
+                        menu: [
+                            { text: 'Arial', checked: true },
+                            { text: 'Arial Black' },
+                            { text: 'Comic Sans MS' },
+                            { text: 'Courier New' },
+                            { text: 'Lucida Console' },
+                            { text: 'Tahoma' },
+                            { text: 'Times New Roman' },
+                            { text: 'Trebuchet MS' },
+                            { text: 'Verdana' }
+                        ]
+                    },
+                    { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true },
+                    { type: 'separator' },
+                    { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
+                    { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true }
+                ]
+            }
+        ]
+    }
+});
+myEditor.render();
+</textarea></div>
+<p>The Editor's Toolbar supports 2 types of buttons: <code>advanced</code> and <code>basic</code>.</p>
+
+<p><strong>Note</strong>: To use the <code>advanced</code> button type you will need to make sure you include the <a href="../menu/index.html">Menu</a> and <a href="../button/index.html">Button</a> Controls.</p>
+
+<p>The following are advanced button types:</p>
+<ul>
+    <li><strong>Push</strong>: Push buttons are provided via the <a href="../button/index.html">YUI Button Control</a>.</li>
+    <li><strong>Menu</strong>: Menu buttons are provided via the <a href="../button/index.html">YUI Button Control</a>.</li>
+    <li><strong>Select</strong>: The Select button is a hybrid of the menu button that mimics an HTML <code>&lt;select&gt;</code> element.</li>
+    <li><strong>Color</strong>: The Color button is another hybrid menu button that contains an interactive color picker; note that this color picker is not an implementation of the <a href="../colorpicker/index.html">YUI Color Picker Control</a> but rather a dedicated text-editing control optimized for styling text.</li>
+    <li><strong>Spin</strong>: The Spin button is a hybrid of a Push button that adds a pair of up and down arrows to the side of the button. It is generally used to allow the user to select a value from a range of numeric values. Selecting one of the buttons causes the value to "spin" up and down the range of possible values.</li>
+    <li><strong>Separator</strong>: The Separator button gives you a way to place a bar ("|") in between two buttons. The separator bar is also given a unique classname so you can use it to style the toolbar as needed.</li>
+</ul>
+
+<p>The following are basic button types:</p>
+<ul>
+    <li><strong>Push</strong>: Push buttons are provided via the default toolbar.</li>
+    <li><strong>Menu</strong>: Menu buttons are provided via the default toolbar.</li>
+    <li><strong>Select</strong>: The Select button is an HTML <code>&lt;select&gt;</code> element.</li>
+    <li><strong>Color</strong>: The Color button is a hybrid menu button that contains an interactive color picker; note that this color picker is not an implementation of the <a href="../colorpicker/index.html">YUI Color Picker Control</a> but rather a dedicated text-editing control optimized for styling text.</li>
+    <li><strong>Spin</strong>: The Spin button is a hybrid of a Push button that adds a pair of up and down arrows to the side of the button. It is generally used to allow the user to select a value from a range of numeric values. Selecting one of the buttons causes the value to "spin" up and down the range of possible values.</li>
+    <li><strong>Separator</strong>: The Separator button gives you a way to place a bar ("|") in between two buttons. The separator bar is also given a unique classname so you can use it to style the toolbar as needed.</li>
+</ul>
+
+<p>Example code for each of these button types is <a href="#toolbar">included in the toolbar section above</a>. You can also see a few examples of using the different button types in the <a href="../examples/editor/index.html">Editor's example section</a>.</p>
+
+<p>With the above code you would get an Editor that looked like this:</p>
+<img src="assets/screenshot2.jpg" alt="Rich Text Editor Screenshot" width="400" height="292">
+
+<h3 id="events">Events</h3>
+<p>The Rich Text Editor and the Toolbar are both loaded with Custom Events to which you can subscribe as you customize the editor's behavior to suit the specific needs of your application.</p>
+<p>Some of the more common Rich Text Editor events include the following; for a full list, including the arguments passed to each event, see the <a href="../docs/module_editor.html">API documentation</a> for Rich Text Editor:</p>
+<div class="yui-g">
+    <div class="yui-u first">
+        <p>SimpleEditor Events</p>
+        <ul>
+            <li>Editor Render Events
+                <ul>
+                    <li><code>toolbarLoaded</code></li>
+                    <li><code>afterRender</code></li>
+                    <li><code>editorContentLoaded</code></li>
+                </ul>
+            </li>
+            <li>Editor HTML Event Mapping
+                <ul>
+                    <li><code>editorMouseUp</code></li>
+                    <li><code>editorMouseDown</code></li>
+                    <li><code>editorDoubleClick</code></li>
+                    <li><code>editorKeyUp</code></li>
+                    <li><code>editorKeyPress</code></li>
+                    <li><code>editorKeyDown</code></li>
+                </ul>
+            </li>
+            <li>Editor Command Execution Events
+                <ul>
+                    <li><code>beforeNodeChange</code></li>
+                    <li><code>afterNodeChange</code></li>
+                    <li><code>beforeExecCommand</code></li>
+                    <li><code>afterExecCommand</code></li>
+                </ul>
+            </li>
+            <li>Toolbar Events (accessed via <code>EditorObj.toolbar.on()</code>)
+                <ul>
+                    <li><code>toolbarExpanded</code></li>
+                    <li><code>toolbarCollapsed</code></li>
+                    <li><code>colorPickerClicked</code></li>
+                    <li><code>cmdClick</code> (dynamic event)</li>
+                    <li><code>menucmdClick</code> (dynamic event)</li>
+                    <li><code>buttonClick</code></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="yui-u">
+        <p>Editor Events</p>
+        <ul>
+            <li>Editor Render Events
+                <ul>
+                    <li><code>toolbarLoaded</code></li>
+                    <li><code>afterRender</code></li>
+                    <li><code>editorContentLoaded</code></li>
+                </ul>
+            </li>
+            <li>Editor HTML Event Mapping
+                <ul>
+                    <li><code>beforeEditorMouseUp</code></li>
+                    <li><code>editorMouseUp</code></li>
+                    <li><code>beforeEditorMouseDown</code></li>
+                    <li><code>editorMouseDown</code></li>
+                    <li><code>beforeEditorClick</code></li>
+                    <li><code>editorClick</code></li>
+                    <li><code>beforeEditorDoubleClick</code></li>
+                    <li><code>editorDoubleClick</code></li>
+                    <li><code>beforeEditorKeyUp</code></li>
+                    <li><code>editorKeyUp</code></li>
+                    <li><code>beforeEditorKeyPress</code></li>
+                    <li><code>editorKeyPress</code></li>
+                    <li><code>beforeEditorKeyDown</code></li>
+                    <li><code>editorKeyDown</code></li>
+                </ul>
+            </li>
+            <li>Editor Command Execution Events
+                <ul>
+                    <li><code>beforeNodeChange</code></li>
+                    <li><code>afterNodeChange</code></li>
+                    <li><code>beforeExecCommand</code></li>
+                    <li><code>afterExecCommand</code></li>
+                </ul>
+            </li>
+            <li class="new">Editor Window Events
+                <ul>
+                    <li><code>beforeOpenWindow</code></li>
+                    <li><code>afterOpenWindow</code></li>
+                    <li><code>closeWindow</code></li>
+                    <li><code>windowCMDOpen</code> (dynamic event)</li>
+                    <li><code>windowCMDClose</code> (dynamic event)</li>
+                    <li><code>windowRender</code></li>
+                    <li><code>windowInsertImageRender</code></li>
+                    <li><code>windowCreateLinkRender</code></li>
+                </ul>
+            </li>
+            <li>Toolbar Events (accessed via <code>EditorObj.toolbar.on()</code>)
+                <ul>
+                    <li><code>toolbarExpanded</code></li>
+                    <li><code>toolbarCollapsed</code></li>
+                    <li><code>colorPickerClicked</code></li>
+                    <li><code>cmdClick</code> (dynamic event)</li>
+                    <li><code>menucmdClick</code> (dynamic event)</li>
+                    <li><code>buttonClick</code></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<h3 id="dynamic_events">Dynamic Events</h3>
+<p>Dynamic Events are special CustomEvent's that are dynamically created based on the value of a button in the Toolbar.</p>
+<p>For example, if you had a button called "bold" you will be able to listen for the "boldClick" event or if you had a button called "foo", you would be able to listen for the "fooClick" event.</p>
+<p>These events are best described with the following code:</p>
+<div id="syntax-83d445b76deebbdc78e6d01a5d3584cd" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myEditor <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Editor</span><span class="br0">&#40;</span><span class="st0">'msgpost'</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//Snippet from button config</span></div></li><li class="li1"><div class="de1">    buttons<span class="sy0">:</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Bold'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'bold'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'My Button 1'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'mybutton1'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'My Button 2'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'mybutton2'</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#93;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">myEditor.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'toolbarLoaded'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//Using the Dynamic Event cmdClick where cmd is the value of the button above</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'boldClick'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">'Bold Button was clicked'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="co1">//Using the Dynamic Event cmdClick where cmd is the value of the button above</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'mybutton1Click'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">'mybutton1 was clicked'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//Standard Custom Event fired for all button clicks</span></div></li><li class="li2"><div class="de2">    <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'buttonClick'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">switch</span><span class="br0">&#40;</span>o.<span class="me1">button</span>.<span class="me1">value</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            <span class="kw1">case</span> <span class="st0">'bold'</span><span class="sy0">:</span></div></li><li class="li1"><div class="de1">                <span class="co1">//Bold Code Here</span></div></li><li class="li1"><div class="de1">                <span class="kw1">break</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">            <span class="kw1">case</span> <span class="st0">'mybutton1'</span><span class="sy0">:</span></div></li><li class="li1"><div class="de1">                <span class="co1">//My Button 1 Code Here</span></div></li><li class="li1"><div class="de1">                <span class="kw1">break</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            <span class="kw1">case</span> <span class="st0">'mybutton2'</span><span class="sy0">:</span></div></li><li class="li1"><div class="de1">                <span class="co1">//My Button 2 Code Here</span></div></li><li class="li2"><div class="de2">                <span class="kw1">break</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">,</span> myEditor<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">myEditor.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myEditor <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Editor</span><span class="br0">&#40;</span><span class="st0">'msgpost'</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    <span class="co1">//Snippet from button config</span>
+    buttons<span class="sy0">:</span> <span class="br0">&#91;</span>
+        <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'Bold'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'bold'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'My Button 1'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'mybutton1'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span> type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span> label<span class="sy0">:</span> <span class="st0">'My Button 2'</span><span class="sy0">,</span> value<span class="sy0">:</span> <span class="st0">'mybutton2'</span> <span class="br0">&#125;</span>
+    <span class="br0">&#93;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+myEditor.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'toolbarLoaded'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">//Using the Dynamic Event cmdClick where cmd is the value of the button above</span>
+    <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'boldClick'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">'Bold Button was clicked'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="co1">//Using the Dynamic Event cmdClick where cmd is the value of the button above</span>
+    <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'mybutton1Click'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">'mybutton1 was clicked'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="co1">//Standard Custom Event fired for all button clicks</span>
+    <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'buttonClick'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw1">switch</span><span class="br0">&#40;</span>o.<span class="me1">button</span>.<span class="me1">value</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            <span class="kw1">case</span> <span class="st0">'bold'</span><span class="sy0">:</span>
+                <span class="co1">//Bold Code Here</span>
+                <span class="kw1">break</span><span class="sy0">;</span>
+            <span class="kw1">case</span> <span class="st0">'mybutton1'</span><span class="sy0">:</span>
+                <span class="co1">//My Button 1 Code Here</span>
+                <span class="kw1">break</span><span class="sy0">;</span>
+            <span class="kw1">case</span> <span class="st0">'mybutton2'</span><span class="sy0">:</span>
+                <span class="co1">//My Button 2 Code Here</span>
+                <span class="kw1">break</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">,</span> myEditor<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+myEditor.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-83d445b76deebbdc78e6d01a5d3584cd-plain">var myEditor = new YAHOO.widget.Editor('msgpost', {
+    //Snippet from button config
+    buttons: [
+        { type: 'push', label: 'Bold', value: 'bold' },
+        { type: 'push', label: 'My Button 1', value: 'mybutton1' },
+        { type: 'push', label: 'My Button 2', value: 'mybutton2' }
+    ]
+});
+
+myEditor.on('toolbarLoaded', function() {
+    //Using the Dynamic Event cmdClick where cmd is the value of the button above
+    this.toolbar.on('boldClick', function(o) {
+        alert('Bold Button was clicked');
+    });
+    //Using the Dynamic Event cmdClick where cmd is the value of the button above
+    this.toolbar.on('mybutton1Click', function(o) {
+        alert('mybutton1 was clicked');
+    });
+    //Standard Custom Event fired for all button clicks
+    this.toolbar.on('buttonClick', function(o) {
+        switch(o.button.value) {
+            case 'bold':
+                //Bold Code Here
+                break;
+            case 'mybutton1':
+                //My Button 1 Code Here
+                break;
+            case 'mybutton2':
+                //My Button 2 Code Here
+                break;
+        }
+    });
+}, myEditor, true);
+
+myEditor.render();
+</textarea></div>
+<p>Please refer to the <a href="../docs/module_editor.html">API documentation</a> for a full list of Custom Events that are available for the Rich Text Editor.</p>
+
+<h3 id="plugins">Plugins</h3>
+
+<p>The Rich Text Editor's toolbar has a flexible plugin architecture that allows you to customize the editor's behavior for the purposes of your own application.</p>
+
+<p>The example below will add a new button to the default toolbar. When this custom button is clicked it will insert the following HTML: "<code>&lt;b&gt;This is the text to insert.&lt;/b&gt;</code>"  But the button will only be enabled if the user has focused a <code>&lt;div&gt;</code>, so this text will never be inserted into an element within the editor other than a <code>&lt;div&gt;</code>.</p>
+
+<div id="syntax-1e8152b07d77e7a8610f6cea3745cbf4" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//Start with the constructor for our RTE:</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myEditor <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Editor</span><span class="br0">&#40;</span><span class="st0">'msgpost'</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    height<span class="sy0">:</span> <span class="st0">'300px'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    width<span class="sy0">:</span> <span class="st0">'522px'</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//Use the toolbarLoaded Custom Event; when that event fires,</span></div></li><li class="li1"><div class="de1"><span class="co1">//we will execute a function that adds or custom button:</span></div></li><li class="li1"><div class="de1">myEditor.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'toolbarLoaded'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    <span class="co1">//Simple button config</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> button <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        label<span class="sy0">:</span> <span class="st0">'My Button 3'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        value<span class="sy0">:</span> <span class="st0">'mybutton3'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        disabled<span class="sy0">:</span> <span class="kw2">false</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">//Add the button to the toolbar; &quot;this&quot;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//refers to myEditor, our RTE instance:</span></div></li><li class="li2"><div class="de2">    <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">addButton</span><span class="br0">&#40;</span>button<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">//Now listen for the new buttons click and do something with it.</span></div></li><li class="li1"><div class="de1">    <span class="co1">//Note that &quot;mybutton3Click&quot; is an event synthesized for us</span></div></li><li class="li1"><div class="de1">    <span class="co1">//automatically because that's the value we gave our button</span></div></li><li class="li2"><div class="de2">    <span class="co1">//above:</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'mybutton3Click'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">this</span>.<span class="me1">execCommand</span><span class="br0">&#40;</span><span class="st0">'inserthtml'</span><span class="sy0">,</span> <span class="st0">'&lt;b&gt;This is the text to insert.&lt;/b&gt;'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span> myEditor<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="co1">//Setup the button to be enabled, disabled or selected</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'afterNodeChange'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="co1">//Get the selected element</span></div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw1">this</span>._getSelectedElement<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">        <span class="co1">//Get the button we want to manipulate</span></div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> button <span class="sy0">=</span> <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">getButtonByValue</span><span class="br0">&#40;</span><span class="st0">'mybutton3'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="kw1">if</span> <span class="br0">&#40;</span>el <span class="sy0">&amp;&amp;</span> el.<span class="me1">tagName</span> <span class="sy0">==</span> <span class="st0">'div'</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">enableButton</span><span class="br0">&#40;</span>button<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span> <span class="kw1">this</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">,</span> myEditor<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">myEditor.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//Start with the constructor for our RTE:</span>
+<span class="kw2">var</span> myEditor <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Editor</span><span class="br0">&#40;</span><span class="st0">'msgpost'</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    height<span class="sy0">:</span> <span class="st0">'300px'</span><span class="sy0">,</span>
+    width<span class="sy0">:</span> <span class="st0">'522px'</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//Use the toolbarLoaded Custom Event; when that event fires,</span>
+<span class="co1">//we will execute a function that adds or custom button:</span>
+myEditor.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'toolbarLoaded'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">//Simple button config</span>
+    <span class="kw2">var</span> button <span class="sy0">=</span> <span class="br0">&#123;</span>
+        type<span class="sy0">:</span> <span class="st0">'push'</span><span class="sy0">,</span>
+        label<span class="sy0">:</span> <span class="st0">'My Button 3'</span><span class="sy0">,</span>
+        value<span class="sy0">:</span> <span class="st0">'mybutton3'</span><span class="sy0">,</span>
+        disabled<span class="sy0">:</span> <span class="kw2">false</span>
+    <span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">//Add the button to the toolbar; &quot;this&quot;</span>
+    <span class="co1">//refers to myEditor, our RTE instance:</span>
+    <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">addButton</span><span class="br0">&#40;</span>button<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">//Now listen for the new buttons click and do something with it.</span>
+    <span class="co1">//Note that &quot;mybutton3Click&quot; is an event synthesized for us</span>
+    <span class="co1">//automatically because that's the value we gave our button</span>
+    <span class="co1">//above:</span>
+    <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'mybutton3Click'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw1">this</span>.<span class="me1">execCommand</span><span class="br0">&#40;</span><span class="st0">'inserthtml'</span><span class="sy0">,</span> <span class="st0">'&lt;b&gt;This is the text to insert.&lt;/b&gt;'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span> myEditor<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">//Setup the button to be enabled, disabled or selected</span>
+    <span class="kw1">this</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'afterNodeChange'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="co1">//Get the selected element</span>
+        <span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw1">this</span>._getSelectedElement<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+        <span class="co1">//Get the button we want to manipulate</span>
+        <span class="kw2">var</span> button <span class="sy0">=</span> <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">getButtonByValue</span><span class="br0">&#40;</span><span class="st0">'mybutton3'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+        <span class="kw1">if</span> <span class="br0">&#40;</span>el <span class="sy0">&amp;&amp;</span> el.<span class="me1">tagName</span> <span class="sy0">==</span> <span class="st0">'div'</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            <span class="kw1">this</span>.<span class="me1">toolbar</span>.<span class="me1">enableButton</span><span class="br0">&#40;</span>button<span class="br0">&#41;</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span> <span class="kw1">this</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">,</span> myEditor<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+myEditor.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-1e8152b07d77e7a8610f6cea3745cbf4-plain">//Start with the constructor for our RTE:
+var myEditor = new YAHOO.widget.Editor('msgpost', {
+    height: '300px',
+    width: '522px'
+});
+
+//Use the toolbarLoaded Custom Event; when that event fires,
+//we will execute a function that adds or custom button:
+myEditor.on('toolbarLoaded', function() {
+    //Simple button config
+    var button = {
+        type: 'push',
+        label: 'My Button 3',
+        value: 'mybutton3',
+        disabled: false
+    };
+    
+    //Add the button to the toolbar; "this"
+    //refers to myEditor, our RTE instance:
+    this.toolbar.addButton(button);
+
+    //Now listen for the new buttons click and do something with it.
+    //Note that "mybutton3Click" is an event synthesized for us
+    //automatically because that's the value we gave our button
+    //above:
+    this.toolbar.on('mybutton3Click', function(o) {
+        this.execCommand('inserthtml', '<b>This is the text to insert.</b>');
+    }, myEditor, true);
+
+    //Setup the button to be enabled, disabled or selected
+    this.on('afterNodeChange', function(o) {
+        //Get the selected element
+        var el = this._getSelectedElement();
+
+        //Get the button we want to manipulate
+        var button = this.toolbar.getButtonByValue('mybutton3');
+
+        if (el && el.tagName == 'div') {
+            this.toolbar.enableButton(button);
+        }
+    }, this, true);
+}, myEditor, true);
+
+myEditor.render();
+</textarea></div>
+
+<h3 id="overrides">Overriding execCommands</h3>
+
+<p>The Rich Text Editor uses a method based approach for applying <code>execCommand</code> commands on selected text/elements. For example, when you call <code>myEditor.execCommand('forecolor', 'FF0000');</code>, the editor actually calls an internal method called <code>cmd_forecolor</code>.
+This method will then process the command and act on it. It will return an array telling the <code>execCommand</code> method whether it should or should not execute the <code>document.execCommand</code> method.</p>
+
+<p>Below is an example of the <code>cmd_forecolor</code> method.</p>
+
+<div id="syntax-db089c718f1438cd5e18cf729cbc60a0" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">cmd_forecolor<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>value<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> exec <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        el <span class="sy0">=</span> <span class="kw1">this</span>._getSelectedElement<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">        <span class="kw1">if</span> <span class="br0">&#40;</span><span class="sy0">!</span><span class="kw1">this</span>._isElement<span class="br0">&#40;</span>el<span class="sy0">,</span> <span class="st0">'body'</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            Dom.<span class="me1">setStyle</span><span class="br0">&#40;</span>el<span class="sy0">,</span> <span class="st0">'color'</span><span class="sy0">,</span> value<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            <span class="kw1">this</span>._selectNode<span class="br0">&#40;</span>el<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            exec <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">            <span class="kw1">this</span>._createCurrentElement<span class="br0">&#40;</span><span class="st0">'span'</span><span class="sy0">,</span> <span class="br0">&#123;</span> color<span class="sy0">:</span> value <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            <span class="kw1">this</span>._selectNode<span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">currentElement</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            exec <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">return</span> <span class="br0">&#91;</span>exec<span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">cmd_forecolor<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>value<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> exec <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">,</span>
+        el <span class="sy0">=</span> <span class="kw1">this</span>._getSelectedElement<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+        <span class="kw1">if</span> <span class="br0">&#40;</span><span class="sy0">!</span><span class="kw1">this</span>._isElement<span class="br0">&#40;</span>el<span class="sy0">,</span> <span class="st0">'body'</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            Dom.<span class="me1">setStyle</span><span class="br0">&#40;</span>el<span class="sy0">,</span> <span class="st0">'color'</span><span class="sy0">,</span> value<span class="br0">&#41;</span><span class="sy0">;</span>
+            <span class="kw1">this</span>._selectNode<span class="br0">&#40;</span>el<span class="br0">&#41;</span><span class="sy0">;</span>
+            exec <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span>
+            <span class="kw1">this</span>._createCurrentElement<span class="br0">&#40;</span><span class="st0">'span'</span><span class="sy0">,</span> <span class="br0">&#123;</span> color<span class="sy0">:</span> value <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+            <span class="kw1">this</span>._selectNode<span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">currentElement</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+            exec <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+        <span class="br0">&#125;</span>
+        <span class="kw1">return</span> <span class="br0">&#91;</span>exec<span class="br0">&#93;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;</pre></div><textarea id="syntax-db089c718f1438cd5e18cf729cbc60a0-plain">cmd_forecolor: function(value) {
+    var exec = true,
+        el = this._getSelectedElement();
+
+        if (!this._isElement(el, 'body')) {
+            Dom.setStyle(el, 'color', value);
+            this._selectNode(el);
+            exec = false;
+        } else {
+            this._createCurrentElement('span', { color: value });
+            this._selectNode(this.currentElement[0]);
+            exec = false;
+        }
+        return [exec];
+},
+</textarea></div>
+<p>Using this technique, you can add support for your own <code>execCommands</code>, or change the way that the Editor handles them.</p>
+
+<h3 id="toolbar_moments">Toolbar Interactions and the nodeChange Event</h3>
+
+<p>If you're intereseted in extending the Toolbar with custom buttons (see the Flickr and Calendar examples that do this), the following section contains important information.</p>
+
+<p>The <code>nodeChange</code> event is your way of knowing when an interesting moment occurs inside of the Editor.  Keep in mind that the editing canvas itself (the place where the user is inputting rich text) is, under the hood, an HTML document loaded within an <code>iframe</code> with <code>designMode</code> turned on &mdash; which is to say it has a DOM full of nodes. When the user is typing, she is adding to a single DOM node.  But when she mouses to a new location, selects new texts, or performs any other action that changes the cursor's current position in the DOM, the <code>nodeChange</code> event fires to let you know that the user appears to be performing an interesting action.  Common user actions that can fire <code>nodeChange</code> include mousedown, mouseup, arrow keys and other keypress events. </p>
+
+<p>
+    When a <code>nodeChange</code> event is fired off via an internal editor event (or by manually calling <code>myEditor.nodeChange()</code> in your own script), all of the Toolbar's buttons need to update their status to reflect the new state of the user's editor.  All of the buttons that ship with the Rich Text Editor fall into one of three groups:</p>
+<ol>
+  <li><strong>Can be enabled or disabled depending on the state of the editor.</strong> This group is enabled when the user has selected content in the editor and disabled when the user is merely typing.</li>
+  <li><strong>Always enabled. </strong>The &quot;show hidden elements&quot; button, for example, is always enabled.</li>
+  <li><strong>Always disabled.</strong> By default, there are no buttons that are always disabled; under some specific circumstances, there may be times when you want to place a custom button in this category (eg, if you've added a feature that is not always available to all users). </li>
+</ol>
+<p>The Toolbar goes through the following states in updating its buttons:</p>
+
+    <ul>
+        <li>Loop through the <code>_disabled</code> array (that is, the list of buttons that should be disabled when there is no selected content in the editor) and...</li>
+        <ol>
+            <li>...if there is <strong>no selection</strong> then:
+                <ul>
+                    <li>Disable all buttons in the array.</li>
+                </ul>
+            </li>
+            <li>If there <strong>is a selection</strong> then:
+                <ul>
+                    <li>Enable each button NOT in the <code>_alwaysDisabled</code> object.</li>
+                    <li>If a button is NOT in the <code>_alwaysEnabled</code> object, it will deselect the button.</li>
+                </ul>
+            </li>
+        </ol>
+    </ul>
+    <p>For custom buttons that you add to the Editor, it is best practice to subscribe to the <code>afterNodeChange</code> event and update your button's enabled/disabled state at that time.  See the Calendar example for sample code that allows you to do this.
+</p>
+
+<div id="syntax-06029ad9cf5936a59928fac94116853f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/* These are the overrides to manipulate to control the behavior of the toolbar */</span></div></li><li class="li1"><div class="de1">_disabled<span class="sy0">:</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">    <span class="st0">'createlink'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="st0">'forecolor'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    <span class="st0">'backcolor'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="st0">'fontname'</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">    <span class="st0">'fontsize'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="st0">'superscript'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="st0">'subscript'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    <span class="st0">'removeformat'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="st0">'heading'</span></div></li><li class="li1"><div class="de1"><span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">_alwaysDisabled<span class="sy0">:</span> <span class="br0">&#123;</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">_alwaysEnabled<span class="sy0">:</span> <span class="br0">&#123;</span> hiddenelements<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="coMULTI">/* These are the overrides to manipulate to control the behavior of the toolbar */</span>
+_disabled<span class="sy0">:</span> <span class="br0">&#91;</span>
+    <span class="st0">'createlink'</span><span class="sy0">,</span>
+    <span class="st0">'forecolor'</span><span class="sy0">,</span>
+    <span class="st0">'backcolor'</span><span class="sy0">,</span>
+    <span class="st0">'fontname'</span><span class="sy0">,</span> 
+    <span class="st0">'fontsize'</span><span class="sy0">,</span>
+    <span class="st0">'superscript'</span><span class="sy0">,</span>
+    <span class="st0">'subscript'</span><span class="sy0">,</span>
+    <span class="st0">'removeformat'</span><span class="sy0">,</span>
+    <span class="st0">'heading'</span>
+<span class="br0">&#93;</span><span class="sy0">,</span>
+_alwaysDisabled<span class="sy0">:</span> <span class="br0">&#123;</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+_alwaysEnabled<span class="sy0">:</span> <span class="br0">&#123;</span> hiddenelements<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-06029ad9cf5936a59928fac94116853f-plain">/* These are the overrides to manipulate to control the behavior of the toolbar */
+_disabled: [
+    'createlink',
+    'forecolor',
+    'backcolor',
+    'fontname', 
+    'fontsize',
+    'superscript',
+    'subscript',
+    'removeformat',
+    'heading'
+],
+_alwaysDisabled: { },
+_alwaysEnabled: { hiddenelements: true }
+</textarea></div>
+<h3 id="showhide">Showing and Hiding the Editor</h3>
+<p>The Rich Text Editor includes two convenience methods used when showing and hiding the editor. The methods are <code>show()</code> and <code>hide()</code>.</p>
+<p>These methods <strong>do not</strong> control the display properties of the editor. They are designed to plugin to an event given by the editor's parent container. See the <a href="../examples/editor/tabview_editor.html">Editor inside a TabView control example here</a> for more information.</p>
+<p>By setting the editor's container or a parent element of the editor to display none, the editor can become un-responsive. So using the show method will allow the editor to fix itself and start behaving again. On the other hand, you don't want the editor doing any processing when it is hidden. So calling the hide method will close all open editor windows and stop all background processes and timers.</p>
+<p>A simple example of using the show and hide events on a Container Control</p>
+<div id="syntax-0df8daec123b158dcb977dfddd12adf4" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//panel in a reference to a Container Control (Panel/Overlay/Dialog)</span></div></li><li class="li1"><div class="de1"><span class="co1">//myEditor is a reference to your Editor instance</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//Setup the show event</span></div></li><li class="li2"><div class="de2">panel.<span class="me1">showEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>myEditor.<span class="me1">show</span><span class="sy0">,</span> myEditor<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//Setup the hide event</span></div></li><li class="li1"><div class="de1">panel.<span class="me1">hideEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>myEditor.<span class="me1">hide</span><span class="sy0">,</span> myEditor<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//panel in a reference to a Container Control (Panel/Overlay/Dialog)</span>
+<span class="co1">//myEditor is a reference to your Editor instance</span>
+&nbsp;
+<span class="co1">//Setup the show event</span>
+panel.<span class="me1">showEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>myEditor.<span class="me1">show</span><span class="sy0">,</span> myEditor<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//Setup the hide event</span>
+panel.<span class="me1">hideEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>myEditor.<span class="me1">hide</span><span class="sy0">,</span> myEditor<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-0df8daec123b158dcb977dfddd12adf4-plain">//panel in a reference to a Container Control (Panel/Overlay/Dialog)
+//myEditor is a reference to your Editor instance
+
+//Setup the show event
+panel.showEvent.subscribe(myEditor.show, myEditor, true);
+
+//Setup the hide event
+panel.hideEvent.subscribe(myEditor.hide, myEditor, true);
+</textarea></div>
+<h3 id="skinning">Skinning the Editor</h3>
+<p>The Rich Text Editor comes with a default presentation or "skin," part of the "Sam Skin" visual treatment that accompanies most YUI controls. You can read more about the general approach to skinning YUI components <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">in this in-depth article</a>.</p>
+
+<p>The CSS provided with the Rich Text Editor is comprised of core, functional CSS as well as the Sam Skin visual treatment.</p>
+
+<p><img src="assets/screenshot.jpg" alt="The Rich Text Editor Control" border="0" height="497" width="545"/></p>
+
+<p>To explore the CSS which controls the Rich Text Editor's presentation, please review <a href="../examples/editor/skinning_editor.html">the Rich Text Editor's Skinning Example</a> wherein the full CSS for the control is displayed.</p>
+
+<p>For your convenience we have provided the Rich Text Editor's sprite PSD file in a <a href="assets/rte-skinning.zip">zip available here</a>.</p>
+
+
+<h2 id="mobile">YUI on Mobile: Using Rich Text Editor with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>
+<p>The YUI Rich Text Editor does not currently support the iPhone or the Nokia N95. Due to the interaction model (specifically, the inability to make a selection), the Editor will not function as expected. In our tests, it appears that the Apple and Nokia Webkit implementations don't event recognize the Editor as an editing field &mdash; meaning that these browsers are, at present, deliberately not supporting the use of an iframe in design mode.</p>
+
+<p>The best way to get around this is to not render the Editor when you come across one of these browsers. Take a look at <a href="../yahoo/index.html#mobile">this example of browser detection in the Yahoo Global Object for ways of doing that</a>.</p>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+        </div>
+         <div class="yui-u">
+            
+            <div id="cheatsheet">
+                <h3>Rich Text Editor Cheat Sheet:</h3>
+                
+                <a href="http://yuiblog.com/assets/pdf/cheatsheets/editor.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/editor.gif" width="178" height="136" alt="Cheat Sheet for the Rich Text Editor."></a>
+                
+                <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+            </div>
+            
+            <div id="examples">
+<h3>Rich Text Editor Examples:</h3>
+
+<ul>
+<li><a href='../examples/editor/flickr_editor.html'>Flickr Image Search</a></li>
+<li><a href='../examples/editor/cal_editor.html'>Calendar Plugin</a></li>
+<li><a href='../examples/editor/icon_editor.html'>Icon Insertion</a></li>
+<li><a href='../examples/editor/switch_editor.html'>Plain Text Switcher</a></li>
+<li><a href='../examples/editor/post_editor.html'>Editor Data Post with Connection Manager</a></li>
+<li><a href='../examples/editor/skinning_editor.html'>Skinning the Editor</a></li>
+<li><a href='../examples/editor/toolbar_editor.html'>Default Toolbar Config</a></li>
+<li><a href='../examples/editor/code_editor.html'>Code Editor</a></li>
+<li><a href='../examples/editor/tabview_editor.html'>Editor inside a Tabview Control</a></li>
+<li><a href='../examples/editor/multi_editor.html'>One Editor, Multiple Edit Areas</a></li>
+<li><a href='../examples/editor/imagebrowser_editor.html'>Editor with Custom Image Browser</a></li>
+<li><a href='../examples/editor/simple_editor.html'>Simple Editor &mdash; Basic Buttons</a></li>
+<li><a href='../examples/editor/simple_adv_editor.html'>Simple Editor &mdash; Advanced Buttons</a></li>
+<li><a href='../examples/editor/editor_adv_editor.html'>Editor &mdash; Basic Buttons</a></li>
+<li><a href='../examples/editor/autoheight_editor.html'>Editor Auto Adjusting Height</a></li>
+<li><a href='../examples/editor/dialog_editor.html'>Editor in a Dialog Control</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Rich Text Editor:</h4>
+
+<ul>
+<li><a href='../examples/resize/rte_resize.html'>Custom resizing for the Rich Text Editor</a> (included with examples for the <a href='../resize/index.html'>Resize Utility</a>)</li>
+<li><a href='../examples/layout/calrte_layout.html'>Simple Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
+<li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
+</ul>		
+           </div>
+           <div id="morereading">
+            <h3>More Reading about the YUI Rich Text Editor</h3>
+            <ul>
+                <li><a href="http://ericmiraglia.com/yui/demos/editor-dialog.php">Example: Editor in a Dialog Control</a></li>
+                <li><a href="http://drupal.org/project/yui_editor">YUI Rich Text Editor for Drupal</a>, by Jeff C. Decker (and others)</li>
+                <li><a href="http://yuiblog.com/blog/2007/08/13/rte-notes/">Some Notes on the YUI Rich Text Editor</a>, by RTE author <a href="http://blog.davglass.com/">Dav Glass</a></li>
+                <li><a href="http://williamduff.name/YahooPages/">Yahoo! Pages</a> - <a href="http://williamduff.name/">William Duff - (UICU) Univerisity Hack Day Winner</a></li>
+                <li><a href="http://www.niallkennedy.com/blog/2007/08/yui-rich-text-editor.html">YUI Rich Text Editor for blog comments</a>, by <a href="http://www.niallkennedy.com/">Niall Kennedy</a></li>
+                <li><a href="http://www.builderau.com.au/program/html/soa/Support-rich-text-with-the-Yahoo-User-Interface-Library/0,339028420,339284662,00.htm">Support rich text with the Yahoo! User Interface Library</a>, by <a href="http://www.builderau.com.au/">Tony Patton, TechRepublic</a></li>
+                <li><a href="http://allmybrain.com/2007/10/16/an-image-upload-extension-for-yui-rich-text-editor/">An Image Upload Extension for YUI Rich Text Editor</a>. by <a href="http://allmybrain.com/">Dennis Muhlestein</a></li>
+            </ul>
+           </div>
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Feditor%2F--><h3 id="delicious">YUI Rich Text Editor on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/editor/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/development" class="tag-size-1">development</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/web" class="tag-size-1">web</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/wysiwyg" class="tag-size-1">wysiwyg</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/editor" class="tag-size-1">editor</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdev" class="tag-size-1">webdev</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/7a7b8f3c8855a98bf122ad25a136f14e" class="saved-by">saved by <span>501</span>  people</a></p>
+   </div></div>
+
+         </div>
+      </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="selected "><a title="The YUI Rich Text Editor" href="index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:05 PDT 2013 -->
+
+<!-- Localized -->

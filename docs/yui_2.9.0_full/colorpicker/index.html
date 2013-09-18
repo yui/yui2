@@ -1,0 +1,699 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Color Picker Control</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Color Picker Control</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+	  
+  <div id="promo" class="component">
+    <h1>YUI 2: Color Picker Control</h1>
+
+<p>The Color Picker Control provides a rich visual interface for color selection.  The interaction is a familiar one from the desktop paradigm: Color range and saturation are adjusted via sliders while the technical details of the current color are displayed in RGB, hex, and/or HSV formats.</p>
+
+<p>The Color Picker Control can be used inline or displayed within a popup <a href="../container/dialog/index.html">Dialog</a>; you'll find examples of both of these implementations in the <a href="../examples/colorpicker/index.html">examples section</a>.</p>
+ 
+    
+    <div>
+    <h4>On This Page:</h4>
+    <ul>
+        <li><a href="#start">Getting Started</a></li>
+        <li><a href="#using">Using the Color Picker Control</a> </li>
+        <li><a href="#config">Configuring a Color Picker Control Intance</a> </li>
+        <li><a href="#events">Custom Events in Color Picker</a></li>
+        <li><a href="#api">API Methods in Color Picker</a></li>
+        <li><a href="#customIds">Customizing Color Picker Element IDs</a></li>
+        <li><a href="#intl">Internationalizing the Color Picker UI</a></li>
+        <li><a href="#formdata">Making Use of Color Picker's Form Data</a></li>
+        <li><a href="#skinning">Skinning the Color Picker</a></li>
+        <li><a href="#knownissues">Known Issues</a></li>
+        <li><a href="#support">Support &amp; Community</a></li>
+	    <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/colorpicker/index.html">Examples</a>: Explore examples of the Color Picker Control in action.</li>
+      <li><a href="../docs/module_colorpicker.html">API Documentation</a>: View the full API documentation for the Color Picker Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.colorpicker">Release Notes</a>: Detailed change log for the Color Picker Control.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Color Picker Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>    
+  </div>
+
+  <h2 class="first">Getting Started<a name="start"></a></h2>
+  <p>To use the Color Picker Control, include the following source
+  files in your web page with the <code>&lt;script&gt;</code> and <code>&lt;link&gt;</code> tags.  It is recommended that you use the <code>utilities.js</code> rollup of all the YUI Utilities when using Color Picker.  Color Picker's richest user experience requires the <a href="../animation/index.html">Animation Utility</a>, and when used within a <a href="../container/dialog/index.html">Dialog Control</a> the Color Picker commonly uses <a href="../connection/index.html">Connection Manager</a> to save values back to the server.  Using <code>utilities.js</code> gives you all the potential power of Color Picker's optional dependencies in addition to its required ones &mdash; and all in a single file.  (The minimum requirements for Color Picker are <a href="../yahoo/index.html">Yahoo</a>, <a href="../dom/index.html">Dom</a>, <a href="../event/index.html">Event</a>, <a href="../element/index.html">Element</a>, <a href="../dragdrop/index.html">Drag and Drop</a>, and <a href="../slider/index.html">Slider</a>.)</p>
+  
+<div id="syntax-108b9210c1f7d055f15c1323423e91b3" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/utilities/utilities.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/slider/slider-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Color Picker source files for CSS and JavaScript --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/colorpicker/assets/skins/sam/colorpicker.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/colorpicker/colorpicker-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/utilities/utilities.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/slider/slider-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Color Picker source files for CSS and JavaScript --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/colorpicker/assets/skins/sam/colorpicker.css&quot;</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/colorpicker/colorpicker-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-108b9210c1f7d055f15c1323423e91b3-plain"><!-- Dependencies --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/utilities/utilities.js" ></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/slider/slider-min.js" ></script>
+
+<!-- Color Picker source files for CSS and JavaScript -->
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/colorpicker/assets/skins/sam/colorpicker.css">
+<script src="http://yui.yahooapis.com/2.9.0/build/colorpicker/colorpicker-min.js" ></script>
+</textarea></div>Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
+in which the Color Picker Control lives.  You can usually accomplish this simply by putting the class on the 
+<code>&#60;body&#62;</code> tag:</p>
+<div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
+</textarea></div>
+<p class="lastP">For more information on skinning YUI components and making use of default skins, 
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+article here on the website.</p>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>colorpicker</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<h2 id="using">Basic Setup: Instantiating a Color Picker via Script</h2>
+
+<p>The simplest way to use Color Picker is to create a container element on the page &mdash; say, an empty <code>&lt;div&gt;</code> &mdash; and let Color Picker automatically create its DOM structure for you on the fly. You might find yourself doing this when you already are providing accessible form fields on the page for color-value entry that don't require a JavaScript-enabled browser; in that case, Color Picker becomes a useful augmentation of the user's experience without closing the door to devices or browsers that don't support JavaScript.</p>
+
+<p>In this simple case, you begin with markup for the containing element: </p>
+
+<div id="syntax-847d490deaa31c1bbf11e5b38ae9a6af" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-847d490deaa31c1bbf11e5b38ae9a6af-plain"><div id="container"></div>
+</textarea></div>
+<p>With your container in place, you can now instantiate your Color Picker and pass into its constructor any special configuration values you wish to use for this instance.</p>
+
+<div id="syntax-e448a2e0a8f710bd578aa4e6576be37a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> picker <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColorPicker</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	showhsvcontrols<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">	showhexcontrols<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">	images<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">		PICKER_THUMB<span class="sy0">:</span> <span class="st0">&quot;picker_thumb.png&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		HUE_THUMB<span class="sy0">:</span> <span class="st0">&quot;hue_thumb.png&quot;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> picker <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColorPicker</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+	showhsvcontrols<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+	showhexcontrols<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+	images<span class="sy0">:</span> <span class="br0">&#123;</span>
+		PICKER_THUMB<span class="sy0">:</span> <span class="st0">&quot;picker_thumb.png&quot;</span><span class="sy0">,</span>
+		HUE_THUMB<span class="sy0">:</span> <span class="st0">&quot;hue_thumb.png&quot;</span>
+	<span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-e448a2e0a8f710bd578aa4e6576be37a-plain">var picker = new YAHOO.widget.ColorPicker("container", {
+	showhsvcontrols: true,
+	showhexcontrols: true,
+	images: {
+		PICKER_THUMB: "picker_thumb.png",
+		HUE_THUMB: "hue_thumb.png"
+	}
+});
+</textarea></div>
+<p>If you are hosting the YUI files on your server, you'll also need to add a bit of CSS for IE6 to allow the transparency in the color gradient mask to apply.  The <code>AlphaImageLoader</code> filter's <code>src</code> path needs to be set relative to the <em>page url</em>, not the stylesheet url, as is the norm for other CSS property paths.  See the <a href="#knownissues">Known Issues</a> section for more detail.</p>
+
+<div id="syntax-cbf56e20eed39f73a4ff58578bf0b673" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/* Assumes YUI files are installed in the assets/yui</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* subdirectory from the web root */</span></div></li><li class="li1"><div class="de1"><span class="sy0">*</span>html <span class="re1">.yui-picker-bg</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">background-image</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="kw1">filter</span><span class="re2">:progid</span><span class="re2">:DXImageTransform</span><span class="re1">.Microsoft</span>.AlphaImageLoader<span class="br0">&#40;</span>src<span class="sy0">=</span><span class="st0">'/assets/yui/build/colorpicker/assets/picker_mask.png'</span><span class="sy0">,</span> sizingMethod<span class="sy0">=</span><span class="st0">'scale'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="coMULTI">/* Assumes YUI files are installed in the assets/yui
+ * subdirectory from the web root */</span>
+<span class="sy0">*</span>html <span class="re1">.yui-picker-bg</span> <span class="br0">&#123;</span>
+    <span class="kw1">background-image</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span>
+    <span class="kw1">filter</span><span class="re2">:progid</span><span class="re2">:DXImageTransform</span><span class="re1">.Microsoft</span>.AlphaImageLoader<span class="br0">&#40;</span>src<span class="sy0">=</span><span class="st0">'/assets/yui/build/colorpicker/assets/picker_mask.png'</span><span class="sy0">,</span> sizingMethod<span class="sy0">=</span><span class="st0">'scale'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span></pre></div><textarea id="syntax-cbf56e20eed39f73a4ff58578bf0b673-plain">/* Assumes YUI files are installed in the assets/yui
+ * subdirectory from the web root */
+*html .yui-picker-bg {
+    background-image: none;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/assets/yui/build/colorpicker/assets/picker_mask.png', sizingMethod='scale');
+}</textarea></div>
+<p>(<strong>Note:</strong> As is always the case with <a href="../slider/index.html">Slider Control</a> implementations, you achieve best performance by referencing draggable "thumb" images directly rather than using CSS background images.  By default, Color Picker will load these images from Yahoo! servers.  As exemplified above, it is easy to customize the location of the thumb images being used.)</p>
+
+<p>With the above script on the page, the Color Picker renders itself immediately and automatically, yielding a visual control that looks like this:</p>
+
+<p><a href="../examples/colorpicker/colorpicker-fromscript.html"><img src="../docs/assets/colorpicker.jpg" alt="The Color Picker Control" width="410" height="212" border="0" /></a></p>
+
+<p>If your containing element (the <code>&lt;div&gt;</code> with the id of <code>container</code> in the above example) is wrapped in a form, all of the form field values that appear as part of the Color Picker's interface will be submitted along with any other form fields contained within the form.</p>
+
+<h2 id="config">Configuring a Color Picker Control Intance</h2>
+
+<p>In the <a href="#using">simple example above</a>, three configuration options are shown: <code>showhsvcontrols</code>, <code>showhexcontrols</code>, and <code>images</code>.  The second argument of the Color Picker constructor is the right place to specify all your configurations.</p>
+
+<p>Some of the common configuration options include:</p>
+
+<div class="apisummary">
+<table>
+    <thead>
+		<tr>
+			<th>Configuration Option</th>
+			<th>Purpose</th>
+		</tr>
+    </thead>
+	<tbody>
+        <tr class="odd">
+            <td>showcontrols</td>
+            <td>(boolean) Hide/show the entire set of controls.  Default: true.</td>
+        </tr>
+        <tr>
+            <td>showhexcontrols</td>
+            <td>(boolean) Hide/show the hex controls.  Default: true.</td>
+        </tr>
+        <tr class="odd">
+            <td>showhexsummary</td>
+            <td>(boolean) Hide/show the hex summary.  Default: true.</td>
+        </tr>
+        <tr>
+            <td>showhsvcontrols</td>
+            <td>(boolean) Hide/show the HSV controls.  Default: false.</td>
+        </tr>
+
+        <tr class="odd">
+            <td>showrgbcontrols</td>
+            <td>(boolean) Hide/show the RGB controls.  Default: true.</td>
+        </tr>
+		
+        <tr>
+            <td>showwebsafe</td>
+            <td>(boolean) Hide/show the websafe-color swatch.  Default: true.</td>
+        </tr>
+
+	</tbody>
+</table>
+</div>
+
+<p>Refer to <a href="../docs/YAHOO.widget.ColorPicker.html">the API documentation</a> for all of the configuration options that can be set for a Color Picker instance.</p>
+
+
+<h2 id="events">Custom Events in Color Picker</h2>
+
+<p>The Color Picker Control exposes one "interesting moment" in its interaction, and that moment is when the Color Picker's color value changes.  This event is the <code>rgbChange</code> event, and you subscribe to using the following syntax (assuming you've instantiated Color Picker and assigned it to the variable <code>picker</code>):</p>
+
+<div id="syntax-bf02900c077559a0ad4cdd77d551a798" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//a listener for logging RGB color changes;</span></div></li><li class="li1"><div class="de1"><span class="co1">//this will only be visible if logger is enabled:</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> onRgbChange <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="coMULTI">/*o is an object</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">		{ newValue: (array of R, G, B values),</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">		  prevValue: (array of R, G, B values),</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">		  type: &quot;rgbChange&quot;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">		 }</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">	*/</span></div></li><li class="li2"><div class="de2">	<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;The new color value is &quot;</span> <span class="sy0">+</span> o.<span class="me1">newValue</span><span class="sy0">,</span> <span class="st0">&quot;info&quot;</span><span class="sy0">,</span> <span class="st0">&quot;example&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//subscribe to the rgbChange event;</span></div></li><li class="li1"><div class="de1">picker.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;rgbChange&quot;</span><span class="sy0">,</span> onRgbChange<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//a listener for logging RGB color changes;</span>
+<span class="co1">//this will only be visible if logger is enabled:</span>
+<span class="kw2">var</span> onRgbChange <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="coMULTI">/*o is an object
+		{ newValue: (array of R, G, B values),
+		  prevValue: (array of R, G, B values),
+		  type: &quot;rgbChange&quot;
+		 }
+	*/</span>
+	<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;The new color value is &quot;</span> <span class="sy0">+</span> o.<span class="me1">newValue</span><span class="sy0">,</span> <span class="st0">&quot;info&quot;</span><span class="sy0">,</span> <span class="st0">&quot;example&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="co1">//subscribe to the rgbChange event;</span>
+picker.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;rgbChange&quot;</span><span class="sy0">,</span> onRgbChange<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-bf02900c077559a0ad4cdd77d551a798-plain">//a listener for logging RGB color changes;
+//this will only be visible if logger is enabled:
+var onRgbChange = function(o) {
+	/*o is an object
+		{ newValue: (array of R, G, B values),
+		  prevValue: (array of R, G, B values),
+		  type: "rgbChange"
+		 }
+	*/
+	YAHOO.log("The new color value is " + o.newValue, "info", "example");
+}
+
+//subscribe to the rgbChange event;
+picker.on("rgbChange", onRgbChange);
+</textarea></div>
+<p>Note that <code>rgbChange</code> fires any time the user updates the color value by interacting with the Color Picker.  The event may also change when a script calls the picker's <code>setValue</code> method; that method will fire <code>rgbChange</code> by default, but you can also call <code>setValue</code> silently and suppress the <code>rgbChange</code> event that would otherwise result.</p>
+
+<h2 id="api">API Methods in Color Picker</h2>
+
+<p>Color Picker offers only one commonly-used API method: <code>setValue</code>.  <code>setValue</code> updates the currently displayed color in the picker instance and optionally suppresses the resulting <code>rgbChange</code> event. <code>setValue</code> takes two arguments:</p>
+<ol>
+  <li><strong>New RGB value:</strong> an array containing the new RGB value to which the Color Picker should be set.</li>
+  <li><strong>Silent flag: </strong>if true, the value will be set silently and no <code>rgbChange</code> event will fire.</li>
+</ol>
+
+<p>Here's a simple example of how you might use <code>setValue</code> to reset a Color Picker instance to white, assuming you had instantiated a Color Picker and assigned it to the variable <code>picker</code>:</p>
+
+<div id="syntax-f63bf6db04254733ced17dbff6f5d96d" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">button</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;reset&quot;</span>&gt;</span>Reset Color to White<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">button</span>&gt;</span> </div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">button</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;reset&quot;</span>&gt;</span>Reset Color to White<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">button</span>&gt;</span> 
+&nbsp;</pre></div><textarea id="syntax-f63bf6db04254733ced17dbff6f5d96d-plain"><button id="reset">Reset Color to White</button> 
+</textarea></div><div id="syntax-8979f4d78bd1f1dcf348d552bfee5739" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//use setValue to reset the value to white:</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;reset&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	myPicker.<span class="me1">setValue</span><span class="br0">&#40;</span><span class="br0">&#91;</span><span class="nu0">255</span><span class="sy0">,</span> <span class="nu0">255</span><span class="sy0">,</span> <span class="nu0">255</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">//false here means that rgbChange</span></div></li><li class="li1"><div class="de1">	                                            <span class="co1">//will fire; true would silence it</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//use setValue to reset the value to white:</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;reset&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	myPicker.<span class="me1">setValue</span><span class="br0">&#40;</span><span class="br0">&#91;</span><span class="nu0">255</span><span class="sy0">,</span> <span class="nu0">255</span><span class="sy0">,</span> <span class="nu0">255</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">//false here means that rgbChange</span>
+	                                            <span class="co1">//will fire; true would silence it</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-8979f4d78bd1f1dcf348d552bfee5739-plain">//use setValue to reset the value to white:
+YAHOO.util.Event.on("reset", "click", function(e) {
+	myPicker.setValue([255, 255, 255], false); //false here means that rgbChange
+	                                            //will fire; true would silence it
+});
+</textarea></div>
+<p><code>setValue</code> is the recommended approach for setting the initial value of your Color Picker instance (that is, you should instantiate your Color Picker and then immediately call <code>setValue</code> to set its initial value.</p>
+
+<h2 id="customIds">Customizing Color Picker Element IDs</h2>
+
+<p>Color Picker uses a static, predefined set of element IDs for the DOM elements it creates on the page. You can specify new IDs to use for Color Picker by passing a new set of IDs into the constructor.</p>
+
+<div id="syntax-87f7ec789bbd37f33451f0f9576b99f6" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//These are the default values.</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myPicker <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColorPicker</span><span class="br0">&#40;</span><span class="st0">&quot;yui-picker&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	ids<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		R<span class="sy0">:</span>              <span class="st0">&quot;yui-picker-r&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">		R_HEX<span class="sy0">:</span>          <span class="st0">&quot;yui-picker-rhex&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		G<span class="sy0">:</span>              <span class="st0">&quot;yui-picker-g&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		G_HEX<span class="sy0">:</span>          <span class="st0">&quot;yui-picker-ghex&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		B<span class="sy0">:</span>              <span class="st0">&quot;yui-picker-b&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		B_HEX<span class="sy0">:</span>          <span class="st0">&quot;yui-picker-bhex&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">		H<span class="sy0">:</span>              <span class="st0">&quot;yui-picker-h&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		S<span class="sy0">:</span>              <span class="st0">&quot;yui-picker-s&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">		V<span class="sy0">:</span>              <span class="st0">&quot;yui-picker-v&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		PICKER_BG<span class="sy0">:</span>      <span class="st0">&quot;yui-picker-bg&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		PICKER_THUMB<span class="sy0">:</span>	<span class="st0">&quot;yui-picker-thumb&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">		HUE_BG<span class="sy0">:</span> 		<span class="st0">&quot;yui-picker-hue-bg&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		HUE_THUMB<span class="sy0">:</span>      <span class="st0">&quot;yui-picker-hue-thumb&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">		HEX<span class="sy0">:</span>            <span class="st0">&quot;yui-picker-hex&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		SWATCH<span class="sy0">:</span> 		<span class="st0">&quot;yui-picker-swatch&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		WEBSAFE_SWATCH<span class="sy0">:</span> <span class="st0">&quot;yui-picker-websafe-swatch&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">		CONTROLS<span class="sy0">:</span>       <span class="st0">&quot;yui-picker-controls&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		RGB_CONTROLS<span class="sy0">:</span> 	<span class="st0">&quot;yui-picker-rgb-controls&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		HSV_CONTROLS<span class="sy0">:</span> 	<span class="st0">&quot;yui-picker-hsv-controls&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		HEX_CONTROLS<span class="sy0">:</span> 	<span class="st0">&quot;yui-picker-hex-controls&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		HEX_SUMMARY<span class="sy0">:</span> 	<span class="st0">&quot;yui-picker-hex-summary&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">		CONTROLS_LABEL<span class="sy0">:</span> <span class="st0">&quot;yui-picker-controls-label&quot;</span>	</div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//These are the default values.</span>
+<span class="kw2">var</span> myPicker <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColorPicker</span><span class="br0">&#40;</span><span class="st0">&quot;yui-picker&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+	ids<span class="sy0">:</span> <span class="br0">&#123;</span>
+		R<span class="sy0">:</span>              <span class="st0">&quot;yui-picker-r&quot;</span><span class="sy0">,</span>
+		R_HEX<span class="sy0">:</span>          <span class="st0">&quot;yui-picker-rhex&quot;</span><span class="sy0">,</span>
+		G<span class="sy0">:</span>              <span class="st0">&quot;yui-picker-g&quot;</span><span class="sy0">,</span>
+		G_HEX<span class="sy0">:</span>          <span class="st0">&quot;yui-picker-ghex&quot;</span><span class="sy0">,</span>
+		B<span class="sy0">:</span>              <span class="st0">&quot;yui-picker-b&quot;</span><span class="sy0">,</span>
+		B_HEX<span class="sy0">:</span>          <span class="st0">&quot;yui-picker-bhex&quot;</span><span class="sy0">,</span> 
+		H<span class="sy0">:</span>              <span class="st0">&quot;yui-picker-h&quot;</span><span class="sy0">,</span>
+		S<span class="sy0">:</span>              <span class="st0">&quot;yui-picker-s&quot;</span><span class="sy0">,</span> 
+		V<span class="sy0">:</span>              <span class="st0">&quot;yui-picker-v&quot;</span><span class="sy0">,</span>
+		PICKER_BG<span class="sy0">:</span>      <span class="st0">&quot;yui-picker-bg&quot;</span><span class="sy0">,</span>
+		PICKER_THUMB<span class="sy0">:</span>	<span class="st0">&quot;yui-picker-thumb&quot;</span><span class="sy0">,</span>
+		HUE_BG<span class="sy0">:</span> 		<span class="st0">&quot;yui-picker-hue-bg&quot;</span><span class="sy0">,</span>
+		HUE_THUMB<span class="sy0">:</span>      <span class="st0">&quot;yui-picker-hue-thumb&quot;</span><span class="sy0">,</span> 
+		HEX<span class="sy0">:</span>            <span class="st0">&quot;yui-picker-hex&quot;</span><span class="sy0">,</span>
+		SWATCH<span class="sy0">:</span> 		<span class="st0">&quot;yui-picker-swatch&quot;</span><span class="sy0">,</span>
+		WEBSAFE_SWATCH<span class="sy0">:</span> <span class="st0">&quot;yui-picker-websafe-swatch&quot;</span><span class="sy0">,</span>
+		CONTROLS<span class="sy0">:</span>       <span class="st0">&quot;yui-picker-controls&quot;</span><span class="sy0">,</span>
+		RGB_CONTROLS<span class="sy0">:</span> 	<span class="st0">&quot;yui-picker-rgb-controls&quot;</span><span class="sy0">,</span>
+		HSV_CONTROLS<span class="sy0">:</span> 	<span class="st0">&quot;yui-picker-hsv-controls&quot;</span><span class="sy0">,</span>
+		HEX_CONTROLS<span class="sy0">:</span> 	<span class="st0">&quot;yui-picker-hex-controls&quot;</span><span class="sy0">,</span>
+		HEX_SUMMARY<span class="sy0">:</span> 	<span class="st0">&quot;yui-picker-hex-summary&quot;</span><span class="sy0">,</span>
+		CONTROLS_LABEL<span class="sy0">:</span> <span class="st0">&quot;yui-picker-controls-label&quot;</span>	
+	<span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-87f7ec789bbd37f33451f0f9576b99f6-plain">//These are the default values.
+var myPicker = new YAHOO.widget.ColorPicker("yui-picker", {
+	ids: {
+		R:              "yui-picker-r",
+		R_HEX:          "yui-picker-rhex",
+		G:              "yui-picker-g",
+		G_HEX:          "yui-picker-ghex",
+		B:              "yui-picker-b",
+		B_HEX:          "yui-picker-bhex", 
+		H:              "yui-picker-h",
+		S:              "yui-picker-s", 
+		V:              "yui-picker-v",
+		PICKER_BG:      "yui-picker-bg",
+		PICKER_THUMB:	"yui-picker-thumb",
+		HUE_BG: 		"yui-picker-hue-bg",
+		HUE_THUMB:      "yui-picker-hue-thumb", 
+		HEX:            "yui-picker-hex",
+		SWATCH: 		"yui-picker-swatch",
+		WEBSAFE_SWATCH: "yui-picker-websafe-swatch",
+		CONTROLS:       "yui-picker-controls",
+		RGB_CONTROLS: 	"yui-picker-rgb-controls",
+		HSV_CONTROLS: 	"yui-picker-hsv-controls",
+		HEX_CONTROLS: 	"yui-picker-hex-controls",
+		HEX_SUMMARY: 	"yui-picker-hex-summary",
+		CONTROLS_LABEL: "yui-picker-controls-label"	
+	}
+});
+</textarea></div>
+<h2 id="intl">Internationalizing the Color Picker UI</h2>
+
+<p>Just as you can customize the element ID strings used by Color Picker, you can also customize the text labels used within the interface &mdash; whether for purposes of internationalization or simply to give the UI your own flavor.  Here's the full constructor configuration syntax populated with the default values for Color Picker's text strings:</p>
+
+<div id="syntax-28bffd711c12bd9d1880abc059c6922a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//These are the default values.</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myPicker <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColorPicker</span><span class="br0">&#40;</span><span class="st0">&quot;yui-picker&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    txt<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        ILLEGAL_HEX<span class="sy0">:</span> 	<span class="st0">&quot;Illegal hex value entered&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        SHOW_CONTROLS<span class="sy0">:</span> 	<span class="st0">&quot;Show color details&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        HIDE_CONTROLS<span class="sy0">:</span> 	<span class="st0">&quot;Hide color details&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        CURRENT_COLOR<span class="sy0">:</span> 	<span class="st0">&quot;Currently selected color: {rgb}&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        CLOSEST_WEBSAFE<span class="sy0">:</span><span class="st0">&quot;Closest websafe color: {rgb}. Click to select.&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        R<span class="sy0">:</span>              <span class="st0">&quot;R&quot;</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">        G<span class="sy0">:</span>              <span class="st0">&quot;G&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        B<span class="sy0">:</span>              <span class="st0">&quot;B&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">        H<span class="sy0">:</span>              <span class="st0">&quot;H&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        S<span class="sy0">:</span>              <span class="st0">&quot;S&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        V<span class="sy0">:</span>              <span class="st0">&quot;V&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        HEX<span class="sy0">:</span>            <span class="st0">&quot;#&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        DEG<span class="sy0">:</span>            <span class="st0">&quot;<span class="es0">\u</span>00B0&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        PERCENT<span class="sy0">:</span>        <span class="st0">&quot;%&quot;</span>	</div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//These are the default values.</span>
+<span class="kw2">var</span> myPicker <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColorPicker</span><span class="br0">&#40;</span><span class="st0">&quot;yui-picker&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    txt<span class="sy0">:</span> <span class="br0">&#123;</span>
+        ILLEGAL_HEX<span class="sy0">:</span> 	<span class="st0">&quot;Illegal hex value entered&quot;</span><span class="sy0">,</span>
+        SHOW_CONTROLS<span class="sy0">:</span> 	<span class="st0">&quot;Show color details&quot;</span><span class="sy0">,</span>
+        HIDE_CONTROLS<span class="sy0">:</span> 	<span class="st0">&quot;Hide color details&quot;</span><span class="sy0">,</span>
+        CURRENT_COLOR<span class="sy0">:</span> 	<span class="st0">&quot;Currently selected color: {rgb}&quot;</span><span class="sy0">,</span>
+        CLOSEST_WEBSAFE<span class="sy0">:</span><span class="st0">&quot;Closest websafe color: {rgb}. Click to select.&quot;</span><span class="sy0">,</span>
+        R<span class="sy0">:</span>              <span class="st0">&quot;R&quot;</span><span class="sy0">,</span> 
+        G<span class="sy0">:</span>              <span class="st0">&quot;G&quot;</span><span class="sy0">,</span>
+        B<span class="sy0">:</span>              <span class="st0">&quot;B&quot;</span><span class="sy0">,</span> 
+        H<span class="sy0">:</span>              <span class="st0">&quot;H&quot;</span><span class="sy0">,</span>
+        S<span class="sy0">:</span>              <span class="st0">&quot;S&quot;</span><span class="sy0">,</span>
+        V<span class="sy0">:</span>              <span class="st0">&quot;V&quot;</span><span class="sy0">,</span>
+        HEX<span class="sy0">:</span>            <span class="st0">&quot;#&quot;</span><span class="sy0">,</span>
+        DEG<span class="sy0">:</span>            <span class="st0">&quot;<span class="es0">\u</span>00B0&quot;</span><span class="sy0">,</span>
+        PERCENT<span class="sy0">:</span>        <span class="st0">&quot;%&quot;</span>	
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-28bffd711c12bd9d1880abc059c6922a-plain">//These are the default values.
+var myPicker = new YAHOO.widget.ColorPicker("yui-picker", {
+    txt: {
+        ILLEGAL_HEX: 	"Illegal hex value entered",
+        SHOW_CONTROLS: 	"Show color details",
+        HIDE_CONTROLS: 	"Hide color details",
+        CURRENT_COLOR: 	"Currently selected color: {rgb}",
+        CLOSEST_WEBSAFE:"Closest websafe color: {rgb}. Click to select.",
+        R:              "R", 
+        G:              "G",
+        B:              "B", 
+        H:              "H",
+        S:              "S",
+        V:              "V",
+        HEX:            "#",
+        DEG:            "\u00B0",
+        PERCENT:        "%"	
+    }
+});
+</textarea></div>
+<p>If you are updating the text labels, you are required to supply values for
+all of the labels.  If you are only changing some of the labels, the easiest
+way to do this is to combine your new values with the default set with
+YAHOO.lang.merge:</p>
+
+<div id="syntax-ff81ea3e5fa30697de6f0dda763d138b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> txt <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">merge</span><span class="br0">&#40;</span></div></li><li class="li1"><div class="de1">        <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColorPicker</span>.<span class="me1">prototype</span>.<span class="me1">TXT</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                R<span class="sy0">:</span> <span class="st0">&quot;Red&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                G<span class="sy0">:</span> <span class="st0">&quot;Green&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">                B<span class="sy0">:</span> <span class="st0">&quot;Blue&quot;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myPicker <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColorPicker</span><span class="br0">&#40;</span><span class="st0">&quot;yui-picker&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    txt<span class="sy0">:</span> txt</div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> txt <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">merge</span><span class="br0">&#40;</span>
+        <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColorPicker</span>.<span class="me1">prototype</span>.<span class="me1">TXT</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+                R<span class="sy0">:</span> <span class="st0">&quot;Red&quot;</span><span class="sy0">,</span>
+                G<span class="sy0">:</span> <span class="st0">&quot;Green&quot;</span><span class="sy0">,</span>
+                B<span class="sy0">:</span> <span class="st0">&quot;Blue&quot;</span>
+        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> myPicker <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColorPicker</span><span class="br0">&#40;</span><span class="st0">&quot;yui-picker&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    txt<span class="sy0">:</span> txt
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-ff81ea3e5fa30697de6f0dda763d138b-plain">var txt = YAHOO.lang.merge(
+        YAHOO.widget.ColorPicker.prototype.TXT, {
+                R: "Red",
+                G: "Green",
+                B: "Blue"
+        });
+
+var myPicker = new YAHOO.widget.ColorPicker("yui-picker", {
+    txt: txt
+});
+</textarea></div>
+<h2 id="formdata">Making Use of Color Picker's Form Data</h2>
+
+<p>Depending on how you configure your Color Picker Control, there are three formats into which color information is encoded:</p>
+<ol>
+  <li><strong>RGB:</strong> In the RGB format, color is described in terms of red, green and blue values, with each value described as an integer between 0 and 255. An RGB value of [0,0,0] is black; a value of [255,255,255] is white. </li>
+  <li><strong>HSV</strong>: HSV is an alternative to RGB in which color is represented in terms of hue, saturation, and value (brightness).</li>
+  <li><strong>Hexadecimal</strong>: The hex value for a color comprises a hexadecimal encoding of the color's RGB value, with each of the three colors represented by its hexadecimal value; this is also known as a &quot;hex triplet&quot; because it runs together the three hex values into a single string. For example, the hex value for 255 is <code>FF</code>; hence, the color white in hexadecimal markup is represented as <code>FFFFFF</code>. In the HTML and CSS standards, we generally prefix hex values with the # sign: <code>#FFFFFF</code>. Hex color descriptions are important because they are the most common way to identify color in HTML and CSS documents.</li>
+  </ol>
+<p>Color Picker allows you to extract RGB, HSV and hexadecimal values from any color the user has selected. Optionally, you can allow the user to have direct access to RGB, HSV, and hexadecimal values via form fields. When the user updates the form fields, the Color Picker automatically updates to reflect the new value (assuming it is a valid value).</p>
+<p>When a form is submitted containing Color Picker data, you will find the following form fields: </p>
+
+<div class="apisummary">
+<table>
+    <thead>
+		<tr>
+			<th>Field Name </th>
+			<th>Contents</th>
+		</tr>
+    </thead>
+	<tbody>
+        <tr class="odd">
+            <td>yui-picker-r</td>
+            <td>Red value for RGB; 0-255. </td>
+        </tr>
+        <tr>
+            <td>yui-picker-g</td>
+            <td>Green value for RGB; 0-255. </td>
+        </tr>
+        <tr class="odd">
+            <td>yui-picker-b</td>
+            <td>Blue value for RGB; 0-255. </td>
+        </tr>
+        <tr>
+            <td>yui-picker-h</td>
+            <td>Hue value in HSV space; 0-360. </td>
+        </tr>
+
+        <tr class="odd">
+            <td>yui-picker-s</td>
+            <td>Saturation value in HSV space; 0-100 (%). </td>
+        </tr>
+        <tr>
+            <td>yui-picker-v</td>
+            <td>Value/brightness value in HSV space; 0-100 (%). </td>
+        </tr>
+        <tr class="odd">
+            <td>yui-picker-hex</td>
+            <td>Hexadecimal (hex triplet) value for the selected color ; 000000-FFFFFF. </td>
+        </tr>
+
+	</tbody>
+</table>
+</div>
+
+<p>These form fields can be passed to the server via a traditional form post or via Ajax using Connection Manager.  We've provided <a href="../examples/colorpicker/colorpicker-dialog-from-script.html">a detailed example of how to make use of Color Picker in a Dialog Control</a> while implementing Connection Manager to transport the data to the server.</p>
+
+<h2 id="skinning">Skinning the Color Picker Control</h2>
+
+<p>The Color Picker comes with a default presentation or "skin," part of the "Sam Skin" visual treatment that accompanies most YUI controls.  You can read more about the general approach to skinning YUI components <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">in this in-depth article</a>.</p>
+
+<p>In the case of the Color Picker Control, there is no "core" CSS treatment &mdash; which is to say that there is no CSS that is considered essential to the functioning of the control.  All of the CSS provided with Color Picker is part of the Sam Skin visual treatment.</p>
+
+<p><a href="../examples/colorpicker/colorpicker-fromscript.html"><img src="../docs/assets/colorpicker.jpg" alt="The Color Picker Control" width="410" height="212" border="0" /></a></p>
+
+<p>To explore the CSS which controls the Color Picker's presentation, please review <a href="../examples/colorpicker/colorpicker-skinning.html">the Color Picker Skinning Example</a> wherein the full CSS for the control is displayed.</p>
+
+<h2 id="knownissues">Known Issues</h2>
+<h4>Gradient doesn't display properly in Internet Explorer 6</h4>
+<img src="../docs/assets/colorpicker_mask_issue.png" alt="capture of gradient mask not showing">
+<p>ColorPicker uses a transparent png mask to create the gradient effect in the Saturation/Value portion of the ColorPicker.  For IE6, this mask is applied using a Microsoft proprietary <code>filter</code> in the included CSS.</p>
+<div id="syntax-ae863062ec26a98b61749cd03c262263" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/* snip */</span></div></li><li class="li1"><div class="de1"><span class="sy0">*</span>html <span class="re1">.yui-picker-bg</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">background-image</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">filter</span><span class="re2">:progid</span><span class="re2">:DXImageTransform</span><span class="re1">.Microsoft</span>.AlphaImageLoader<span class="br0">&#40;</span>src<span class="sy0">=</span><span class="st0">'http://yui.yahooapis.com/2.9.0/build/colorpicker/assets/picker_mask.png'</span><span class="sy0">,</span> sizingMethod<span class="sy0">=</span><span class="st0">'scale'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">/* snip */</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="coMULTI">/* snip */</span>
+<span class="sy0">*</span>html <span class="re1">.yui-picker-bg</span> <span class="br0">&#123;</span>
+    <span class="kw1">background-image</span><span class="sy0">:</span> <span class="kw2">none</span><span class="sy0">;</span>
+    <span class="kw1">filter</span><span class="re2">:progid</span><span class="re2">:DXImageTransform</span><span class="re1">.Microsoft</span>.AlphaImageLoader<span class="br0">&#40;</span>src<span class="sy0">=</span><span class="st0">'http://yui.yahooapis.com/2.9.0/build/colorpicker/assets/picker_mask.png'</span><span class="sy0">,</span> sizingMethod<span class="sy0">=</span><span class="st0">'scale'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+<span class="coMULTI">/* snip */</span>
+&nbsp;</pre></div><textarea id="syntax-ae863062ec26a98b61749cd03c262263-plain">/* snip */
+*html .yui-picker-bg {
+    background-image: none;
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='http://yui.yahooapis.com/2.9.0/build/colorpicker/assets/picker_mask.png', sizingMethod='scale');
+}
+/* snip */
+</textarea></div><p>However, AlphaImageLoader's src is resolved relative to the <em>page</em>, not the CSS file as is typical of CSS <code>url(...)</code> references.  This means that the path specified in YUI's sam skin will be incorrect unless your page is located on your server accordingly.  If you experience this issue, you can work around it by including the following CSS on your page in a <code>&lt;style&gt;</code> block or in another attached stylesheet:</p>
+<div id="syntax-80308b0566bec1f3c0b0cd0004f7ff34" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sy0">*</span>html <span class="re1">.yui-picker-bg</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">filter</span><span class="re2">:progid</span><span class="re2">:DXImageTransform</span><span class="re1">.Microsoft</span>.AlphaImageLoader<span class="br0">&#40;</span>src<span class="sy0">=</span><span class="st0">'PATH/FROM/THIS/PAGE/TO/build/colorpicker/assets/picker_mask.png'</span><span class="sy0">,</span> sizingMethod<span class="sy0">=</span><span class="st0">'scale'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="sy0">*</span>html <span class="re1">.yui-picker-bg</span> <span class="br0">&#123;</span>
+    <span class="kw1">filter</span><span class="re2">:progid</span><span class="re2">:DXImageTransform</span><span class="re1">.Microsoft</span>.AlphaImageLoader<span class="br0">&#40;</span>src<span class="sy0">=</span><span class="st0">'PATH/FROM/THIS/PAGE/TO/build/colorpicker/assets/picker_mask.png'</span><span class="sy0">,</span> sizingMethod<span class="sy0">=</span><span class="st0">'scale'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-80308b0566bec1f3c0b0cd0004f7ff34-plain">*html .yui-picker-bg {
+    filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='PATH/FROM/THIS/PAGE/TO/build/colorpicker/assets/picker_mask.png', sizingMethod='scale');
+}
+</textarea></div>
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+    </div>
+         <div class="yui-u">
+		 	
+			<div id="cheatsheet">
+				<h3>Color Picker Control Cheat Sheet:</h3>
+				
+				<a href="http://yuiblog.com/assets/pdf/cheatsheets/colorpicker.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/colorpicker.gif" width="178" height="135" alt="Cheat Sheet for the Color Picker Control."></a>
+				
+				<p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+			</div>
+
+<div id="examples">
+<h3>Color Picker Control Examples:</h3>
+
+<ul>
+<li><a href='../examples/colorpicker/colorpicker-fromscript.html'>Inline Color Picker Control from Script</a></li>
+<li><a href='../examples/colorpicker/colorpicker-dialog-from-script.html'>Example of Color Picker Built in a Dialog via JavaScript</a></li>
+<li><a href='../examples/colorpicker/colorpicker-dialog-from-markup.html'>Example of Color Picker Built in a Dialog from Markup</a></li>
+<li><a href='../examples/colorpicker/colorpicker-custom.html'>Example of Specifying Custom Labels and Element IDs for Color Picker</a></li>
+<li><a href='../examples/colorpicker/colorpicker-skinning.html'>Skinning Example</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Color Picker Control:</h4>
+
+<ul>
+<li><a href='../examples/button/btn_example11.html'>Color Picker Button</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
+</ul>		
+</div>
+
+
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fcolorpicker%2F--><h3 id="delicious">YUI Color Picker Control on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/colorpicker/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/picker" class="tag-size-1">picker</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/web" class="tag-size-1">web</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/colorpicker" class="tag-size-1">colorpicker</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/color" class="tag-size-1">color</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdesign" class="tag-size-1">webdesign</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/tools" class="tag-size-1">tools</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/15320cd21f3dfb69617d58bb9a6531ca" class="saved-by">saved by <span>31</span>  people</a></p>
+   </div></div>
+
+		 </div>
+  </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="selected "><a title="The YUI Color Picker Control" href="index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:19 PDT 2013 -->
+
+<!-- Localized -->

@@ -1,0 +1,576 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Browser History Manager</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Browser History Manager</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+  <div class="yui-b">
+    <div class="yui-ge">
+      <div class="yui-u first">
+        <div id="promo" class="component">
+          <h1>YUI 2: Browser History Manager</h1>
+          <p>
+            Client-side changes to a web page's content and structure are not recorded by the browser's
+            history engine. As a consequence, the navigation buttons (back/forward) we've learned to use as we traverse the World Wide Web of <em>documents</em> don't usually serve us well when we begin exploring the World Wide Web of <em>applications</em>.  Bookmarking, too, is problematic in web applications, as the application can change state hundreds of times through the course of a session without any change to the original document's URL.  These are significant problems in the current paradigm of web application development.</p>
+
+			<p>The YUI Browser History Manager is a utility designed to facilitate
+            the creation of web applications in which the navigation buttons
+            are fully functional and in which broad aspects of an application's state &mdash; what panels are open, what tabs are active, etc. &mdash; can be bookmarked.
+          </p>
+
+          <p><strong>Note:</strong> Opera is not supported by the Browser History Manager at this time. Please refer to the <a href="#limitations">Known Limitations</a> section for more information.</p>
+
+          <div>
+            <h4>On This Page:</h4>
+            <ul>
+              <li><a href="#start">Getting Started</a></li>
+              <li><a href="#using">Using the Browser History Manager</a></li>
+              <li><a href="#appstate">Application State Management</a></li>
+              <li><a href="#limitations">Known Limitations</a></li>
+              <li><a href="#support">Support &amp; Community</a></li>
+              <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+            </ul>
+          </div>
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/history/index.html">Examples</a>: Explore examples of the Browser History Manager in action.</li>
+      <li><a href="../docs/module_history.html">API Documentation</a>: View the full API documentation for the Browser History Manager.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.history">Release Notes</a>: Detailed change log for the Browser History Manager.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Browser History Manager as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>        </div>
+
+        <h2 class="first" id="start">Getting Started</h2>
+
+        <p>
+          To use the Browser History Manager, include the following source
+          files in your web page:
+        </p>
+<div id="syntax-0dce1735fa444f727966a666b53a5cf7" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event/event-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Browser History Manager source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/history/history-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event/event-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Browser History Manager source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/history/history-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-0dce1735fa444f727966a666b53a5cf7-plain"><!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+
+<!-- Browser History Manager source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/history/history-min.js"></script>
+</textarea></div>
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>history</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+        <h2 id="using">Using the Browser History Manager</h2>
+
+        <p>
+          This section describes the most common use of the Browser History Manager. It contains the following subsections:
+        </p>
+
+        <ul>
+          <li><a href="#req_markup">Required markup</a></li>
+          <li><a href="#mod_reg">Module registration</a></li>
+          <li><a href="#bhm_onload">Using the <code>onReady</code> method</a></li>
+          <li><a href="#bhm_init">Initializing the Browser History Manager</a></li>
+          <li><a href="#store_history_entry">Storing new history entries</a></li>
+        </ul>
+
+        <h3 id="req_markup">Required markup</h3>
+
+        <p>
+          The Browser History Manager requires the following in-page markup:
+        </p>
+
+<div id="syntax-2777d4e401ae53f02ac8267019c97402" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">iframe</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;yui-history-iframe&quot;</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;path-to-existing-asset&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">iframe</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;yui-history-field&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;hidden&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">iframe</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;yui-history-iframe&quot;</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;path-to-existing-asset&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">iframe</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;yui-history-field&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;hidden&quot;</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-2777d4e401ae53f02ac8267019c97402-plain"><iframe id="yui-history-iframe" src="path-to-existing-asset/index.html"></iframe>
+<input id="yui-history-field" type="hidden">
+</textarea></div>
+        <p>
+          <strong>Notes:</strong>
+          <ol><li>The IFrame is only used to support Internet Explorer. If the markup is dynamically generated
+              on the server (as a result of running a PHP script for example), you may want to create the IFrame
+              <em>only</em> for Internet Explorer (use server side user agent sniffing)</li>
+              <li>The asset loaded in the IFrame <em>must</em> be retrieved from the same domain as your page
+              (use a relative path for the <code>src</code> attribute to make sure of that)</li>
+              <li>The asset loaded in the IFrame does not have to be an HTML document. It can be an image for example.
+              This trick is useful to avoid an additional server round-trip, which would degrade the performance of
+              your site.</li>
+              <li>This markup should appear right after the opening <code>&lt;body&gt;</code> tag.</li></oL>
+        </p>
+
+        <p>Don't forget to hide the IFrame using the following CSS code:</p>
+
+<div id="syntax-43722e2df4bfb6e55800d89ce516ca65" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="re0">#yui-history-iframe</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">position</span><span class="sy0">:</span> <span class="kw2">absolute</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">top</span><span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">left</span><span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">  <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">1px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">height</span><span class="sy0">:</span> <span class="re3">1px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">  <span class="kw1">visibility</span><span class="sy0">:</span> <span class="kw2">hidden</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="re0">#yui-history-iframe</span> <span class="br0">&#123;</span>
+  <span class="kw1">position</span><span class="sy0">:</span> <span class="kw2">absolute</span><span class="sy0">;</span>
+  <span class="kw1">top</span><span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span>
+  <span class="kw1">left</span><span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span>
+  <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">1px</span><span class="sy0">;</span>
+  <span class="kw1">height</span><span class="sy0">:</span> <span class="re3">1px</span><span class="sy0">;</span>
+  <span class="kw1">visibility</span><span class="sy0">:</span> <span class="kw2">hidden</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-43722e2df4bfb6e55800d89ce516ca65-plain">#yui-history-iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  visibility: hidden;
+}
+</textarea></div>
+        <h3 id="mod_reg">Module registration</h3>
+
+        <p>
+          A user interface module is simply a visible item on your page with which the user can interact.
+          As such, modules are not immutable and their state is subject to change over time. If you
+          wish to record the history of states visited by a specific module during a single browser
+          session, to allow the user to navigate through that history using the browser's back/forward
+          button, and to bookmark the page with your module in a specific state, you must first
+          register it with the Browser History Manager.
+        </p>
+
+        <p>
+          In order to register a module, simply call the <code>YAHOO.util.History.register</code> method, passing in
+          the module identifier (a non-empty string that uniquely identifies your module), the initial state of
+          your module (i.e. the state of your module corresponding to the <em>earliest</em> history entry within
+          the current browser session) as a string, and a callback function that will be invoked by the Browser
+          History Manager every time your module changes state (so you can update the UI of your module
+          accordingly).
+        </p>
+
+        <p>
+          Getting the initial state of the module is the trickiest part of this process. Indeed, the user might have
+          previously visited your page and bookmarked it with your module in a specific state. If the
+          user later on goes to your page using the same bookmark, you will likely wish to restore your module in
+          the same state it was in when the page was bookmarked. To retrieve this "bookmarked state", simply
+          call <code>YAHOO.util.History.getBookmarkedState</code>, passing in your module identifier:
+        </p>
+
+<div id="syntax-3fb085a0f76027b85136b7b42a805b1c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myModuleBookmarkedState <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">History</span>.<span class="me1">getBookmarkedState</span><span class="br0">&#40;</span><span class="st0">&quot;myModule&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myModuleBookmarkedState <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">History</span>.<span class="me1">getBookmarkedState</span><span class="br0">&#40;</span><span class="st0">&quot;myModule&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-3fb085a0f76027b85136b7b42a805b1c-plain">var myModuleBookmarkedState = YAHOO.util.History.getBookmarkedState("myModule");
+</textarea></div>
+        <p>
+          Of course, you also need a "default state" for your module in case the user accessed
+          the page without using a bookmark. Having determined whether there is a bookmarked state in the code example above (<code>getBookmarkedState</code> will have returned <code>null</code> if there was no bookmarked state), the initial state of your module can be assigned as follows:
+        </p>
+
+<div id="syntax-1d9224313c5ba9d9e3725f2c23b0c8bc" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// If there is no bookmarked state, assign the default state:</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myModuleInitialState <span class="sy0">=</span> myModuleBookmarkedState <span class="sy0">||</span> <span class="st0">&quot;myModuleDefaultState&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// If there is no bookmarked state, assign the default state:</span>
+<span class="kw2">var</span> myModuleInitialState <span class="sy0">=</span> myModuleBookmarkedState <span class="sy0">||</span> <span class="st0">&quot;myModuleDefaultState&quot;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-1d9224313c5ba9d9e3725f2c23b0c8bc-plain">// If there is no bookmarked state, assign the default state:
+var myModuleInitialState = myModuleBookmarkedState || "myModuleDefaultState";
+</textarea></div>
+        <p>
+          The next step in configuring your module to use the YUI Browser History Manager is to define your module's <code>onStateChange</code> callback. This callback
+          will be called every time the Browser History Manager has detected that the state of your
+          module has changed (which may happen when the user triggers the browser's back/forward button,
+          for example).
+        </p>
+
+<div id="syntax-8837cd05c5ea7b565ea4a490c6d73839" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">function</span> myModuleStateChangeHandler <span class="br0">&#40;</span>state<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// Update the UI of your module according to the &quot;state&quot; parameter</span></div></li><li class="li1"><div class="de1">    <span class="co1">//...</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">function</span> myModuleStateChangeHandler <span class="br0">&#40;</span>state<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">// Update the UI of your module according to the &quot;state&quot; parameter</span>
+    <span class="co1">//...</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-8837cd05c5ea7b565ea4a490c6d73839-plain">function myModuleStateChangeHandler (state) {
+    // Update the UI of your module according to the "state" parameter
+    //...
+}
+</textarea></div>
+        <p>
+          Finally, complete your module registration by calling <code>YAHOO.util.History.register</code>:
+        </p>
+
+<div id="syntax-07a8b86b4cc3722713cd234533852c44" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">History</span>.<span class="me1">register</span><span class="br0">&#40;</span><span class="st0">&quot;myModule&quot;</span><span class="sy0">,</span> myModuleInitialState<span class="sy0">,</span> myModuleStateChangeHandler<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">History</span>.<span class="me1">register</span><span class="br0">&#40;</span><span class="st0">&quot;myModule&quot;</span><span class="sy0">,</span> myModuleInitialState<span class="sy0">,</span> myModuleStateChangeHandler<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-07a8b86b4cc3722713cd234533852c44-plain">YAHOO.util.History.register("myModule", myModuleInitialState, myModuleStateChangeHandler);
+</textarea></div>
+        <p>
+          <strong>Note:</strong> You may register as many modules as you want, but you must register
+          at least one module before initializing the Browser History Manager. Modules cannot be
+          registered once the Browser History Manager has been initialized.
+        </p>
+
+        <h3 id="bhm_onload">Using the <code>onReady</code> method</h3>
+
+        <p>
+          The Browser History Manager will initialize itself asynchronously and some of its methods
+          cannot be called until it is fully initialized. You may want to know when this event occurs.
+          In order to do that, you could subscribe to the Browser History Manager's <code>onLoad</code>
+          event. However, using this approach, and if the subscription happens after the Browser History
+          Manager has been initialized, the event never fires. Therefore, it is recommended to use the
+          <code>onReady</code> method instead.
+        </p>
+
+        <p>
+          One common task you'll find yourself executing in your Browser History Manager <code>onReady</code>
+          callback is retrieving the current state of your module and updating its UI accordingly. Why would
+          the current state of your module be different from its initial state? Remember that the "initial"
+          state of your module corresponds to the <em>earliest</em> history entry. The Browser History
+          Manager <code>onLoad</code> event will be fired every time the user visits the page. If the user
+          comes back to the page using the browser's back button, the state of your module will correspond
+          to the <em>latest</em> history entry &mdash; that is the last state of your module before the user left the
+          page. You can retrieve the current state of your module using <code>YAHOO.util.History.getCurrentState</code>,
+          passing in your module identifier:
+        </p>
+
+<div id="syntax-bbf9c1c6a1912ff6b4e7b1d3eb6bd7bc" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">History</span>.<span class="me1">onReady</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//...</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> myModuleCurrentState <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">History</span>.<span class="me1">getCurrentState</span><span class="br0">&#40;</span><span class="st0">&quot;myModule&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// Update the UI of your module according to &quot;myModuleCurrentState&quot;</span></div></li><li class="li2"><div class="de2">    <span class="co1">//...</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">History</span>.<span class="me1">onReady</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">//...</span>
+    <span class="kw2">var</span> myModuleCurrentState <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">History</span>.<span class="me1">getCurrentState</span><span class="br0">&#40;</span><span class="st0">&quot;myModule&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="co1">// Update the UI of your module according to &quot;myModuleCurrentState&quot;</span>
+    <span class="co1">//...</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-bbf9c1c6a1912ff6b4e7b1d3eb6bd7bc-plain">YAHOO.util.History.onReady(function () {
+    //...
+    var myModuleCurrentState = YAHOO.util.History.getCurrentState("myModule");
+    // Update the UI of your module according to "myModuleCurrentState"
+    //...
+});
+</textarea></div>
+        <h3 id="bhm_init">Initializing the Browser History Manager</h3>
+
+        <p>
+          The last step is to initialize the Browser History Manager, passing in a reference &mdash; or the id &mdash; of
+          the required HTML elements previously created:
+        </p>
+
+<div id="syntax-39d4623314294d3ed0e78ece427475fb" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">History</span>.<span class="me1">initialize</span><span class="br0">&#40;</span><span class="st0">&quot;yui-history-field&quot;</span><span class="sy0">,</span> <span class="st0">&quot;yui-history-iframe&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">History</span>.<span class="me1">initialize</span><span class="br0">&#40;</span><span class="st0">&quot;yui-history-field&quot;</span><span class="sy0">,</span> <span class="st0">&quot;yui-history-iframe&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-39d4623314294d3ed0e78ece427475fb-plain">YAHOO.util.History.initialize("yui-history-field", "yui-history-iframe");
+</textarea></div>
+        <p><strong>Note:</strong> An exception may be thrown when initializing the Browser History Manager
+            if the browser is not officially supported. Therefore, you may want to wrap this call within a
+            <code>try...catch</code> block.</p>
+
+        <h3 id="store_history_entry">Storing New History Entries</h3>
+
+        <p>
+          Call <code>YAHOO.util.History.navigate</code> to store a new state in the browser history,
+          passing in the identifier of the module which state has changed, and a string representing
+          the new state of the specified module:
+        </p>
+
+<div id="syntax-7f46cc796d7a5a11807f9f7fc2fe713b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">History</span>.<span class="kw3">navigate</span><span class="br0">&#40;</span><span class="st0">&quot;myModule&quot;</span><span class="sy0">,</span> <span class="st0">&quot;myModuleNewState&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">History</span>.<span class="kw3">navigate</span><span class="br0">&#40;</span><span class="st0">&quot;myModule&quot;</span><span class="sy0">,</span> <span class="st0">&quot;myModuleNewState&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-7f46cc796d7a5a11807f9f7fc2fe713b-plain">YAHOO.util.History.navigate("myModule", "myModuleNewState");
+</textarea></div>
+        <p>
+          The corresponding module <code>onStateChange</code> callback, specified at the time of the
+          module registration, will then be called asynchronously (up to 50 msec later), giving you
+          the opportunity to update the UI of your module. <strong>Note:</strong> The same callback
+          will be called when the state of your module has changed after the user triggered the
+          browser's back/forward button. There is no way to discriminate between these two situations.
+        </p>
+
+        <h2 id="appstate">Application State Management</h2>
+
+        <p>
+          The Browser History Manager only provides a way of storing/retrieving the history
+          of states visited by an application. It is up to the implementer to name and handle
+          each state appropriately.
+        </p>
+
+        <h2 id="limitations">Known Limitations</h2>
+
+        <ul>
+          <li>
+            <strong>The Browser History Manager uses the URL fragment identifier to store the history.</strong>
+            This means that there is a limit to how long the name of a state can be. Indeed,
+            each browser has a built-in limit to how long a URL can be and this limit is browser
+            dependent. For example, on Internet Explorer, this limit is 2083 characters. Also,
+            keep in mind that this limit applies to the entire URL, not just the fragment identifier.
+          </li>
+
+          <li>
+            <strong>A string is a one-dimensional way of saving state information.</strong> It is possible to save
+            multi-dimension state information (such as the collapsed/expanded state of each
+            node of a treeview) into a one-dimensional string. However, the maximum length of a
+            state identifier limits this to comparatively simple cases.
+          </li>
+
+          <li>
+            <strong>Web browsers never send the URL fragment identifier to the server.</strong> This means
+            that some client-side processing is required in order to handle bookmarks. It is important to
+            keep this amount of processing to a minimum in order not to degrade user experience. However,
+            if an additional HTTP request at startup is not an issue, it is possible to send the URL
+            fragment identifier back to the server and have the server do some processing instead
+            (such as generating the appropriate markup).
+          </li>
+
+          <li>
+            <strong>All browsers will forget part or all of the history if the page gets forcibly refreshed.</strong>
+            This will happen on Internet Explorer by pressing F5 (sometimes several times repeatedly),
+            and on Firefox by pressing Ctrl+F5 or Shift-Ctrl-R.
+          </li>
+
+          <li>
+            <strong>On Internet Explorer, the title of the documents added to the history, listed in the browser's
+            history drop down menu, is not correct.</strong> Instead of showing the title of each document, it shows
+            part of the URL of each page.
+          </li>
+
+          <li>
+            <strong>IE7's yellow 'Download File' bar doesn't preserve the hash fragment when reloading the page.</strong>
+            This may cause the current history state to be lost. See <a href="http://yuilibrary.com/projects/yui2/ticket/2527731">ticket #2527731</a>
+            for details.
+          </li>
+
+          <li>
+            <strong>Opera is not supported at this time.</strong> This is due to the fact that Opera does
+            not update the <code>location.hash</code> property when using the back/forward buttons. We
+            expect this regression to be corrected in a future version of the Opera web browser.
+          </li>
+
+          <li>
+            <strong>Safari 2.x seems to never stop loading a page that uses the Browser History Manager.</strong>
+            This problem does not appear with later versions of the Safari web browser.
+          </li>
+        </ul>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+      </div>
+      <div class="yui-u">
+        <div id="cheatsheet">
+          <h3>Browser History Manager Cheat Sheet:</h3>
+          <a href="http://yuiblog.com/assets/pdf/cheatsheets/history.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/history.gif" width="178" height="136" alt="Cheat Sheet for the Browser History Manager."></a>
+          <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+        </div>
+        <div id="examples">
+<h3>Browser History Manager Examples:</h3>
+
+<ul>
+<li><a href='../examples/history/history-navbar.html'>Simple Navigation Bar</a></li>
+<li><a href='../examples/history/history-tabview.html'>TabView Control</a></li>
+<li><a href='../examples/history/history-calendar.html'>Calendar Control</a></li>
+<li><a href='../examples/history/history-multiple.html'>Multiple Modules</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Browser History Manager:</h4>
+
+<ul>
+<li><a href='../examples/datatable/dt_bhm.html'>Integrating Browser History Manager with Server-side Pagination and Sorting</a> (included with examples for the <a href='../datatable/index.html'>DataTable Control</a>)</li>
+</ul>		
+        </div>
+        <div id="morereading">
+          <h3>More Reading about the YUI Browser History Manager:</h3>
+          <ul>
+            <li><a href="http://www.julienlecomte.net/blog/2007/12/37/">Adding Back Button and Bookmarking Support to Your DHTML Slide Show</a>, by Julien Lecomte</li>
+          </ul>
+
+          <h3>More Reading about History/Bookmark Management in DHTML Applications:</h3>
+          <ul>
+            <li><a href="http://yuiblog.com/blog/2007/02/21/browser-history-manager/">Building the YUI Browser History Manager</a>, by YUI Browser History Manager author Julien Lecomte</li>
+            <li><a href="http://codinginparadise.org/projects/dhtml_history/README.html">Really Simple History Framework</a>, by Brad Neuberg</li>
+            <li><a href="http://www.onjava.com/pub/a/onjava/2005/10/26/ajax-handling-bookmarks-and-back-button.html">AJAX: How to Handle Bookmarks and Back Buttons</a>, by Brad Neuberg</li>
+            <li><a href="http://www.contentwithstyle.co.uk/Articles/38/fixing-the-back-button-and-enabling-bookmarking-for-ajax-apps">Fixing the Back Button and Enabling Bookmarking for AJAX Apps</a>, by Mike Stenhouse</li>
+          </ul>
+        </div>
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fhistory%2F-->        <h3 id="delicious">YUI Browser History Manager on del.icio.us:</h3>
+        <div class="delicious">
+
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/history/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/web" class="tag-size-1">web</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/backbutton" class="tag-size-1">backbutton</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdev" class="tag-size-1">webdev</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/history" class="tag-size-1">history</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/browser" class="tag-size-1">browser</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/d72f6d99e1f73bbf910f8a429cb87234" class="saved-by">saved by <span>114</span>  people</a></p>
+   </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="selected "><a title="The YUI Browser History Manager" href="index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:16 PDT 2013 -->
+
+<!-- Localized -->

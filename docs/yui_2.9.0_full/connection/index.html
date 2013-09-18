@@ -1,0 +1,1809 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Connection Manager</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Connection Manager</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+
+  <div id="promo" class="component">
+    <h1>YUI 2: Connection Manager</h1>
+    <p>Connection Manager is a utility that enables you to make in-page HTTP requests through a simplified
+interface to the XMLHttpRequest object. XMLHttpRequest is the mechanism commonly referred to as "Ajax," allowing
+your scripts to communicate with the server without a page reload, persisting the user interface across many
+client-server interactions. Connection Manager handles cross-browser instantiation of XMLHttpRequest, negotiates
+the server response and uses a callback pattern to process the response data.</p>
+    <div>
+      <h4>On This Page:</h4>
+      <ul>
+        <li><a href="#start">Getting Started</a></li>
+        <li><a href="#using">Using Connection Manager</a></li>
+        <li><a href="#issues">Known Issues</a></li>
+        <li><a href="#support">Support &amp; Community</a></li>
+		<li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+      </ul>
+    </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/connection/index.html">Examples</a>: Explore examples of the Connection Manager in action.</li>
+      <li><a href="../docs/module_connection.html">API Documentation</a>: View the full API documentation for the Connection Manager.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.connection">Release Notes</a>: Detailed change log for the Connection Manager.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Connection Manager as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+  </div>
+  <h2 class="first"><a name="start"></a>Getting Started</h2>
+  <p>To use Connection Manager, include the source file and its dependency in your web page with the script tag:
+</p>
+<div id="syntax-bd137c5d2aa16faf6a9ca47b993ffded" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependency --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Used for Custom Events and event listener bindings --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event/event-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!--</span></div></li><li class="li1"><div class="de1"><span class="sc-1">	If you require only basic HTTP transaction support, use the</span></div></li><li class="li2"><div class="de2"><span class="sc-1">	connection_core.js file.</span></div></li><li class="li1"><div class="de1"><span class="sc-1">--&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!--</span></div></li><li class="li2"><div class="de2"><span class="sc-1">	Use the full connection.js if you require the following features:</span></div></li><li class="li1"><div class="de1"><span class="sc-1">	- Form serialization.</span></div></li><li class="li1"><div class="de1"><span class="sc-1">	- File Upload using the iframe transport.</span></div></li><li class="li1"><div class="de1"><span class="sc-1">	- Cross-domain(XDR) transactions.</span></div></li><li class="li1"><div class="de1"><span class="sc-1">--&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependency --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Used for Custom Events and event listener bindings --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event/event-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source file --&gt;</span>
+<span class="sc-1">&lt;!--</span>
+<span class="sc-1">	If you require only basic HTTP transaction support, use the</span>
+<span class="sc-1">	connection_core.js file.</span>
+<span class="sc-1">--&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!--</span>
+<span class="sc-1">	Use the full connection.js if you require the following features:</span>
+<span class="sc-1">	- Form serialization.</span>
+<span class="sc-1">	- File Upload using the iframe transport.</span>
+<span class="sc-1">	- Cross-domain(XDR) transactions.</span>
+<span class="sc-1">--&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-bd137c5d2aa16faf6a9ca47b993ffded-plain"><!-- Dependency -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+
+<!-- Used for Custom Events and event listener bindings -->
+<script src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+
+<!-- Source file -->
+<!--
+	If you require only basic HTTP transaction support, use the
+	connection_core.js file.
+-->
+<script src="http://yui.yahooapis.com/2.9.0/build/connection/connection_core-min.js"></script>
+
+<!--
+	Use the full connection.js if you require the following features:
+	- Form serialization.
+	- File Upload using the iframe transport.
+	- Cross-domain(XDR) transactions.
+-->
+<script src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
+</textarea></div>
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>connection</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+  <p>The following simple example initiates an asynchronous transaction using the Connection Manager utility.</p>
+<div id="syntax-0db5e970101d9ef25211b6332400e57d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> transaction <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> sUrl<span class="sy0">,</span> callback<span class="sy0">,</span> <span class="kw2">null</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> transaction <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> sUrl<span class="sy0">,</span> callback<span class="sy0">,</span> <span class="kw2">null</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-0db5e970101d9ef25211b6332400e57d-plain">var transaction = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback, null);
+</textarea></div>  <p>In this code:</p>
+  <ul>
+    <li>The YAHOO.util.Connect.asyncRequest method initiates an asynchronous transaction (using XMLHttpRequest)
+and returns a reference to that transaction.</li>
+    <li>The first argument of asyncRequest specifies the HTTP method; this transaction uses HTTP GET.  Other
+possible methods include: POST, HEAD, PUT, DELETE(HEAD, PUT and DELETE may not be supported by all A-Grade
+browsers ).</li>
+    <li>The second argument &mdash; variable sUrl &mdash; is a qualified URL.</li>
+    <li>The third argument &mdash; variable callback &mdash; is a reference to a defined callback object(or an
+object written inline), which handles the server response.</li>
+    <li>The fourth argument accommodates a POST message for POST transactions.
+      Because this example illustrates a GET transaction, the POST message argument can be ignored or set to
+      null. </li>
+  </ul>
+  <h2><a name="using"></a>Using Connection Manager</h2>
+  <p>This section describes several common uses of the Connection Manager.  It contains these subsections:</p>
+  <ul>
+   <li><a href="#async">Asynchronous Transactions and the Callback Object</a></li>
+<li> <a href="#cache">Override Caching</a></li>
+<li> <a href="#file">The Callback Object and File Upload </a></li>
+<li> <a href="#scope">The Callback Object and Scope </a></li>
+<li> <a href="#timeout">The Callback Object and Timeout </a></li>
+ <li> <a href="#success">Success Case</a></li>
+ <li> <a href="#failure">Failure Case</a></li>
+ <li> <a href="#upload">Upload Case</a></li>
+ <li> <a href="#forms">Forms and File Upload</a></li>
+ <li> <a href="#xdr">Cross-Domain Requests</a></li>
+ <li> <a href="#customevents">Custom Events</a></li>
+ <li> <a href="#requestsignatures">Request Signatures</a></li>
+ <li> <a href="#status">Transaction Status</a></li>
+
+  </ul>
+
+  <h3>Asynchronous Transactions and the Callback Object<a name="async"></a></h3>
+  <p>In an asynchronous transaction, you create a callback object to handle
+    the server response and its associated data. You may omit the callback object
+    if you don't care what information comes back from the server; all of the
+    callback object's members are optional. However, in most cases you should
+    supply at least three members in your callback object:</p>
+  <ul>
+    <li><strong>success</strong>: a function called when the server responds
+      with a valid HTTP response.</li>
+    <li><strong>failure</strong>: a function called when the server response
+      indicates that a problem, such as an HTTP 404 (file not found) error, has
+      occurred.</li>
+    <li><strong>argument</strong>: an object, string, number, or array containing data that your success and
+failure functions might need in order to successfully process the server response.</li>
+  </ul>
+  <p>When reconciling a transaction, Connection Manager will evaluate the HTTP code returned by the server to
+determine if the request was successful and will then call the appropriate callback handler (<code>success</code>
+or <code>failure</code>).  You can also define the callback object's <code>argument</code> member to pass an
+argument or collection of arguments to both the <code>success</code> and <code>failure</code> handler.</p>
+<div id="syntax-221ad89605fa00039c3e50503b2fd13c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* This is an example callback object with success</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* and failure members defined inline.  The argument</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* property demonstrates how to pass multiple values</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;* to the callback as an array.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*/</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  success<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span><span class="coMULTI">/*success handler code*/</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">  failure<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span><span class="coMULTI">/*failure handler code*/</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">  argument<span class="sy0">:</span> <span class="br0">&#91;</span>argument1<span class="sy0">,</span> argument2<span class="sy0">,</span> argument3<span class="br0">&#93;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="coMULTI">/*
+ * This is an example callback object with success
+ * and failure members defined inline.  The argument
+ * property demonstrates how to pass multiple values
+ * to the callback as an array.
+ */</span>
+<span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span>
+  success<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span><span class="coMULTI">/*success handler code*/</span><span class="br0">&#125;</span><span class="sy0">,</span>
+  failure<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span><span class="coMULTI">/*failure handler code*/</span><span class="br0">&#125;</span><span class="sy0">,</span>
+  argument<span class="sy0">:</span> <span class="br0">&#91;</span>argument1<span class="sy0">,</span> argument2<span class="sy0">,</span> argument3<span class="br0">&#93;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-221ad89605fa00039c3e50503b2fd13c-plain">/*
+ * This is an example callback object with success
+ * and failure members defined inline.  The argument
+ * property demonstrates how to pass multiple values
+ * to the callback as an array.
+ */
+var callback = {
+  success: function(o) {/*success handler code*/},
+  failure: function(o) {/*failure handler code*/},
+  argument: [argument1, argument2, argument3]
+};
+</textarea></div>  <p>The example that follows shows in more detail how to construct
+    a callback object with two members: success and failure, to handle the server
+    response. In this example, the <code>success</code> and <code>failure</code> members
+    are defined by the <code>responseSuccess</code> and <code>responseFailure</code>
+    functions respectively.
+    These handler functions accept the response object <code>o</code> from
+    Connection Manager.</p>
+<div id="syntax-3f12554a59a96dab6ca346830031c999" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Passing an example of array of arguments to both</span></div></li><li class="li1"><div class="de1"><span class="co1">// the success and failure callback handlers.</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> args <span class="sy0">=</span> <span class="br0">&#91;</span><span class="st0">'foo'</span><span class="sy0">,</span><span class="st0">'bar'</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="kw2">var</span> responseSuccess <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">/* Please see the Success Case section for more</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* details on the response object's properties.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* o.tId</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* o.status</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;* o.statusText</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* o.getResponseHeader[ ]</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* o.getAllResponseHeaders</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* o.responseText</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* o.responseXML</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;* o.argument</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*/</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> responseFailure <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2"><span class="co1">// Access the response object's properties in the</span></div></li><li class="li1"><div class="de1"><span class="co1">// same manner as listed in responseSuccess( ).</span></div></li><li class="li1"><div class="de1"><span class="co1">// Please see the Failure Case section and</span></div></li><li class="li1"><div class="de1"><span class="co1">// Communication Error sub-section for more details on the</span></div></li><li class="li1"><div class="de1"><span class="co1">// response object's properties.</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  success<span class="sy0">:</span>responseSuccess<span class="sy0">,</span></div></li><li class="li1"><div class="de1">  failure<span class="sy0">:</span>responseFailure<span class="sy0">,</span></div></li><li class="li2"><div class="de2">  argument<span class="sy0">:</span>args</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Passing an example of array of arguments to both</span>
+<span class="co1">// the success and failure callback handlers.</span>
+<span class="kw2">var</span> args <span class="sy0">=</span> <span class="br0">&#91;</span><span class="st0">'foo'</span><span class="sy0">,</span><span class="st0">'bar'</span><span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> responseSuccess <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+<span class="coMULTI">/* Please see the Success Case section for more
+ * details on the response object's properties.
+ * o.tId
+ * o.status
+ * o.statusText
+ * o.getResponseHeader[ ]
+ * o.getAllResponseHeaders
+ * o.responseText
+ * o.responseXML
+ * o.argument
+ */</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> responseFailure <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+<span class="co1">// Access the response object's properties in the</span>
+<span class="co1">// same manner as listed in responseSuccess( ).</span>
+<span class="co1">// Please see the Failure Case section and</span>
+<span class="co1">// Communication Error sub-section for more details on the</span>
+<span class="co1">// response object's properties.</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span>
+  success<span class="sy0">:</span>responseSuccess<span class="sy0">,</span>
+  failure<span class="sy0">:</span>responseFailure<span class="sy0">,</span>
+  argument<span class="sy0">:</span>args
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-3f12554a59a96dab6ca346830031c999-plain">// Passing an example of array of arguments to both
+// the success and failure callback handlers.
+var args = ['foo','bar'];
+
+var responseSuccess = function(o) {
+/* Please see the Success Case section for more
+ * details on the response object's properties.
+ * o.tId
+ * o.status
+ * o.statusText
+ * o.getResponseHeader[ ]
+ * o.getAllResponseHeaders
+ * o.responseText
+ * o.responseXML
+ * o.argument
+ */
+};
+
+var responseFailure = function(o) {
+// Access the response object's properties in the
+// same manner as listed in responseSuccess( ).
+// Please see the Failure Case section and
+// Communication Error sub-section for more details on the
+// response object's properties.
+};
+
+var callback = {
+  success:responseSuccess,
+  failure:responseFailure,
+  argument:args
+};
+</textarea></div>
+  <h3>Override Caching<a name="cache"></a></h3>
+  <p>
+  Connection Manager can append a timestamp parameter to an HTTP GET request querystring, configured through the
+callback object, to override the caching behavior of HTTP GET.  This will produce a key-value of <code>rnd=
+timestamp</code> in the querystring.  NOTE: By using this feature, HTTP GET requests become non-idempotent and
+and the presence of this key-value in the querystring may produce side effects.  Additionally, Web servers/
+services can respond with the appropriate HTTP responses headers to prevent the resource from being cached.
+  </p>
+<div id="syntax-0801771373e72777daa5c92bf2e40c8b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* Set callback.cache to false to override HTTP GET caching.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* A key-value of rnd=timestamp will be added to the</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* querystring.</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;*/</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  cache<span class="sy0">:</span><span class="kw2">false</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="coMULTI">/*
+ * Set callback.cache to false to override HTTP GET caching.
+ * A key-value of rnd=timestamp will be added to the
+ * querystring.
+ */</span>
+<span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span>
+  cache<span class="sy0">:</span><span class="kw2">false</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-0801771373e72777daa5c92bf2e40c8b-plain">/*
+ * Set callback.cache to false to override HTTP GET caching.
+ * A key-value of rnd=timestamp will be added to the
+ * querystring.
+ */
+var callback = {
+  cache:false
+};
+</textarea></div>
+<h3> The Callback Object and File Upload <a name="file"></a></h3>
+<p>
+When uploading files using <code>YAHOO.util.Connect.setForm</code>, the callback object will require an <code>
+upload</code> handler instead of
+<code>success</code> and, or <code>failure</code> handlers. (A transaction timeout will still use the failure
+handler.)  For more details, please see <a href="#upload">Upload Case</a> and <a href="#forms">Forms and File
+Upload</a>.</p>
+<div id="syntax-bfb15ecf8dd4494ff5566f4792e876e3" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* This is an example callback object with upload</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* and argument members defined inline.  The argument</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* property demonstrates how to pass multiple values</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;* to the upload handler as an array.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*/</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  upload<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span><span class="coMULTI">/*upload handler code*/</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">  argument<span class="sy0">:</span> <span class="br0">&#91;</span>argument1<span class="sy0">,</span> argument2<span class="sy0">,</span> argument3<span class="br0">&#93;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="coMULTI">/*
+ * This is an example callback object with upload
+ * and argument members defined inline.  The argument
+ * property demonstrates how to pass multiple values
+ * to the upload handler as an array.
+ */</span>
+<span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span>
+  upload<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span><span class="coMULTI">/*upload handler code*/</span><span class="br0">&#125;</span><span class="sy0">,</span>
+  argument<span class="sy0">:</span> <span class="br0">&#91;</span>argument1<span class="sy0">,</span> argument2<span class="sy0">,</span> argument3<span class="br0">&#93;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-bfb15ecf8dd4494ff5566f4792e876e3-plain">/*
+ * This is an example callback object with upload
+ * and argument members defined inline.  The argument
+ * property demonstrates how to pass multiple values
+ * to the upload handler as an array.
+ */
+var callback = {
+  upload: function(o) {/*upload handler code*/},
+  argument: [argument1, argument2, argument3]
+};
+</textarea></div>
+
+<h3> The Callback Object and Scope <a name="scope"></a></h3>
+  <p> When an object's method is used as the success or failure handler in a
+    callback, any usage of the <code>this</code> keyword in
+    the method loses scope. While this can be partially resolved by passing a
+    reference to the handler's parent object as a user-defined argument, it still
+  invalidates the use of <code>this</code> within the handler itself.  To use
+  an object's method as a callback handler and maintain scope within the member,
+  define the callback member <code>scope</code> with a value of <code>this</code>. </p>
+<div id="syntax-baf18a6c7d2cddc7f3f21fc7ffdcb2aa" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* AjaxObject is a hypothetical object that encapsulates the transaction</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*     request and callback logic.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;* handleSuccess( ) provides success case logic</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* handleFailure( ) provides failure case logic</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* processResult( ) displays the results of the response from both the</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* success and failure handlers</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* call( ) calling this member starts the transaction request.</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;*/</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> AjaxObject <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	handleSuccess<span class="sy0">:</span><span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">		<span class="co1">// This member handles the success response</span></div></li><li class="li1"><div class="de1">		<span class="co1">// and passes the response object o to AjaxObject's</span></div></li><li class="li1"><div class="de1">		<span class="co1">// processResult member.</span></div></li><li class="li1"><div class="de1">		<span class="kw1">this</span>.<span class="me1">processResult</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">	handleFailure<span class="sy0">:</span><span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		<span class="co1">// Failure handler</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	processResult<span class="sy0">:</span><span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		<span class="co1">// This member is called by handleSuccess</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	startRequest<span class="sy0">:</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	   <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'POST'</span><span class="sy0">,</span> <span class="st0">'php/post.php'</span><span class="sy0">,</span> callback<span class="sy0">,</span> <span class="st0">&quot;new=1&amp;old=2&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* Define the callback object for success and failure</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* handlers as well as object scope.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*/</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	success<span class="sy0">:</span>AjaxObject.<span class="me1">handleSuccess</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">	failure<span class="sy0">:</span>AjaxObject.<span class="me1">handleFailure</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">	scope<span class="sy0">:</span> AjaxObject</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">// Start the transaction.</span></div></li><li class="li1"><div class="de1">AjaxObject.<span class="me1">startRequest</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="coMULTI">/*
+ * AjaxObject is a hypothetical object that encapsulates the transaction
+ *     request and callback logic.
+ *
+ * handleSuccess( ) provides success case logic
+ * handleFailure( ) provides failure case logic
+ * processResult( ) displays the results of the response from both the
+ * success and failure handlers
+ * call( ) calling this member starts the transaction request.
+ */</span>
+&nbsp;
+<span class="kw2">var</span> AjaxObject <span class="sy0">=</span> <span class="br0">&#123;</span>
+&nbsp;
+	handleSuccess<span class="sy0">:</span><span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+		<span class="co1">// This member handles the success response</span>
+		<span class="co1">// and passes the response object o to AjaxObject's</span>
+		<span class="co1">// processResult member.</span>
+		<span class="kw1">this</span>.<span class="me1">processResult</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span><span class="sy0">;</span>
+	<span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+	handleFailure<span class="sy0">:</span><span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+		<span class="co1">// Failure handler</span>
+	<span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+	processResult<span class="sy0">:</span><span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+		<span class="co1">// This member is called by handleSuccess</span>
+	<span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+	startRequest<span class="sy0">:</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	   <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'POST'</span><span class="sy0">,</span> <span class="st0">'php/post.php'</span><span class="sy0">,</span> callback<span class="sy0">,</span> <span class="st0">&quot;new=1&amp;old=2&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+	<span class="br0">&#125;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="coMULTI">/*
+ * Define the callback object for success and failure
+ * handlers as well as object scope.
+ */</span>
+<span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span>
+	success<span class="sy0">:</span>AjaxObject.<span class="me1">handleSuccess</span><span class="sy0">,</span>
+	failure<span class="sy0">:</span>AjaxObject.<span class="me1">handleFailure</span><span class="sy0">,</span>
+	scope<span class="sy0">:</span> AjaxObject
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Start the transaction.</span>
+AjaxObject.<span class="me1">startRequest</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-baf18a6c7d2cddc7f3f21fc7ffdcb2aa-plain">/*
+ * AjaxObject is a hypothetical object that encapsulates the transaction
+ *     request and callback logic.
+ *
+ * handleSuccess( ) provides success case logic
+ * handleFailure( ) provides failure case logic
+ * processResult( ) displays the results of the response from both the
+ * success and failure handlers
+ * call( ) calling this member starts the transaction request.
+ */
+
+var AjaxObject = {
+
+	handleSuccess:function(o) {
+		// This member handles the success response
+		// and passes the response object o to AjaxObject's
+		// processResult member.
+		this.processResult(o);
+	},
+
+	handleFailure:function(o) {
+		// Failure handler
+	},
+
+	processResult:function(o) {
+		// This member is called by handleSuccess
+	},
+
+	startRequest:function() {
+	   YAHOO.util.Connect.asyncRequest('POST', 'php/post.php', callback, "new=1&old=2");
+	}
+
+};
+
+/*
+ * Define the callback object for success and failure
+ * handlers as well as object scope.
+ */
+var callback = {
+	success:AjaxObject.handleSuccess,
+	failure:AjaxObject.handleFailure,
+	scope: AjaxObject
+};
+
+// Start the transaction.
+AjaxObject.startRequest();
+</textarea></div>
+<h3>The Callback Object and Timeout <a name="timeout"></a></h3>
+  <p>
+     Each transaction can be defined with a time threshold and if the transaction has not completed by that
+threshold, it will automatically call <code>abort</code>.  If successful, the <code>failure</code> handler will
+be called.  Please see section Failure Case for more details on the response object signature in an abort
+scenario.
+  </p>
+<div id="syntax-2373df937d48728ab90a72386eeb4679" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">	<span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">	 * In this example, the callback object has a new property:</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">	 * timeout.  This property is defined with a value,</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">	 * in milliseconds, of 5000 as the abort threshold.  If</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">	 * the transaction has not completed by 5000ms, the</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">	 * transaction will abort.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">	 */</span></div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	  success<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span><span class="coMULTI">/*success handler code*/</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">	  failure<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span><span class="coMULTI">/*failure handler code*/</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">	  timeout<span class="sy0">:</span> <span class="nu0">5000</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">	  argument<span class="sy0">:</span> <span class="br0">&#91;</span>argument1<span class="sy0">,</span> argument2<span class="sy0">,</span> argument3<span class="br0">&#93;</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">	<span class="coMULTI">/*
+	 * In this example, the callback object has a new property:
+	 * timeout.  This property is defined with a value,
+	 * in milliseconds, of 5000 as the abort threshold.  If
+	 * the transaction has not completed by 5000ms, the
+	 * transaction will abort.
+	 */</span>
+	<span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span>
+	  success<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span><span class="coMULTI">/*success handler code*/</span><span class="br0">&#125;</span><span class="sy0">,</span>
+	  failure<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span><span class="coMULTI">/*failure handler code*/</span><span class="br0">&#125;</span><span class="sy0">,</span>
+	  timeout<span class="sy0">:</span> <span class="nu0">5000</span><span class="sy0">,</span>
+	  argument<span class="sy0">:</span> <span class="br0">&#91;</span>argument1<span class="sy0">,</span> argument2<span class="sy0">,</span> argument3<span class="br0">&#93;</span>
+	<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-2373df937d48728ab90a72386eeb4679-plain">	/*
+	 * In this example, the callback object has a new property:
+	 * timeout.  This property is defined with a value,
+	 * in milliseconds, of 5000 as the abort threshold.  If
+	 * the transaction has not completed by 5000ms, the
+	 * transaction will abort.
+	 */
+	var callback = {
+	  success: function(o) {/*success handler code*/},
+	  failure: function(o) {/*failure handler code*/},
+	  timeout: 5000,
+	  argument: [argument1, argument2, argument3]
+	};
+</textarea></div>
+  <h3>Success Case<a name="success"></a></h3>
+  <p> In a success case, a response object with the following properties is passed to the callback object's
+success handler: </p>
+   <div class="apisummary short"><table>
+    <tr>
+      <th>property</th>
+      <th>description</th>
+    </tr>
+    <tr class="odd">
+      <td>tId</td>
+      <td>The unique, incremented id for the transaction.</td>
+    </tr>
+    <tr>
+      <td>status</td>
+      <td>The HTTP status code of the resulting transaction.</td>
+    </tr>
+    <tr class="odd">
+      <td>statusText</td>
+      <td>The message associated with the HTTP status.</td>
+    </tr>
+    <tr>
+      <td>getResponseHeader[<em>label</em>]</td>
+      <td>Returns the string value of the specified header label.</td>
+    </tr>
+    <tr class="odd">
+      <td>getAllResponseHeaders</td>
+      <td>All returned HTTP headers available as a string.  Each label-value pair is delimited by "\n".</td>
+    </tr>
+    <tr>
+      <td>responseText</td>
+      <td>The server's response as a string.</td>
+    </tr>
+    <tr class="odd">
+      <td>responseXML</td>
+      <td>The server's response as a XML document.</td>
+    </tr>
+    <tr>
+      <td>argument</td>
+      <td>The user-defined argument or arguments as defined in the callback object.</td>
+    </tr>
+  </table></div>
+  <h3> Failure Case<a name="failure"></a></h3>
+  <p> If the server responds with an error or fails to respond at all, Connection
+    Manager tries to capture as much information as possible about the transaction
+  and pass an object to the callback object's <code>failure</code> handler.
+  The properties of this response object are the same as in a success case &mdash; Connection
+  Manager  populates all properties for which it can derive adequate information
+  from the server's response. </p>
+  <p> If the server cannot or does not respond to the HTTP request, however,
+    there may not be a readable response. If a transaction is terminated by the
+    server in such a way that no readable response is available, the callback
+    object's failure handler receives an object with the following properties:</p>
+  <div class="apisummary short"><table>
+    <tr class="odd">
+      <th>property</th>
+      <th>description</th>
+    </tr>
+    <tr>
+      <td>tId</td>
+      <td>The transaction id</td>
+    </tr>
+    <tr class="odd">
+      <td>status</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <td>statusText</td>
+      <td>"communication failure"</td>
+    </tr>
+    <tr class="odd">
+      <td>argument</td>
+      <td>The user-defined argument or arguments as defined as the callback object.</td>
+    </tr>
+  </table></div>
+
+  <p> If an <code>abort</code> occurred and the transaction was successfully cancelled, the callback object's
+failure handler receives an object with the following properties:</p>
+  <div class="apisummary short"><table>
+    <tr class="odd">
+      <th>property</th>
+      <th>description</th>
+    </tr>
+    <tr>
+      <td>tId</td>
+      <td>The transaction id</td>
+    </tr>
+    <tr class="odd">
+      <td>status</td>
+      <td>-1</td>
+    </tr>
+    <tr>
+      <td>statusText</td>
+      <td>"transaction aborted"</td>
+    </tr>
+    <tr class="odd">
+      <td>argument</td>
+      <td>The user-defined argument or arguments as defined as the callback object.</td>
+    </tr>
+  </table></div>
+
+  <h3> Upload Case<a name="upload"></a></h3>
+  <p>
+  	Since file uploading occurs through an iframe, traditional response data such as HTTP status codes are not
+directly available, and connection manager cannot reasonably discern success or failure (except a transaction
+timeout).  Instead, the callback's upload handler will receive a response object containing the body of the
+iframe document, as a string, when the transaction is complete.  Rather than enforce a document pattern, you can
+customize the upload response to contain the necessary markup and, or script.  In the event a transaction timeout
+is defined, and the timeout threshold is reached, the failure handler will be used.
+  </p>
+
+  <div class="apisummary short"><table>
+    <tr class="odd">
+      <th>property</th>
+      <th>description</th>
+    </tr>
+    <tr>
+      <td>tId</td>
+      <td>The transaction id</td>
+    </tr>
+    <tr class="odd">
+      <td>responseText</td>
+      <td>The markup, within the iframe document's body tag, as a string, if available</td>
+    </tr>
+    <tr>
+      <td>responseXML</td>
+      <td>The response data as an XML document, if available.</td>
+    </tr>
+    <tr class="odd">
+      <td>argument</td>
+      <td>The user-defined argument or arguments as defined as the callback object.</td>
+    </tr>
+  </table></div>
+
+  <h3><a name="forms"></a>Forms and File Upload</h3>
+  <p>Connection Manager can automatically harvest HTML form data and prepare
+    it for either a GET or POST request via the <code>setForm</code> method.
+    When you call this method before initiating the transaction, Connection Manager
+    constructs a GET querystring or a POST message from the form
+    and submits it to the specified URL. To use this functionality, your form
+    elements must have defined, non-empty string name attribute values.
+    </p>
+    <p>
+    <code>setForm</code> will encode each HTML form field's name and value using <code>encodeURIComponent</code>.
+This results in a string of UTF-8 encoded, name-value pairs.  NOTE: Setting an HTTP header of "Content-Type" with
+a different charset value will not change the encoding of the serialized data.
+    </p>
+   <p>
+   If the subsequent <code>asyncRequest</code> is HTTP GET and has a URI querystring, the querystring resulting
+from <code>setForm</code> will be concatenated onto the URI's existing querystring.
+   If the transaction is HTTP POST, and <code>asyncRequest</code> contains additional POST data -- as the fourth
+argument -- this data will be added to the form data to create the POST message.
+   </p>
+<div id="syntax-63ee14266c83b8ce2d8163092088429a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// argument formId can be the id or name attribute value of the</span></div></li><li class="li1"><div class="de1"><span class="co1">// HTML form, or an HTML form object.</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> formObject <span class="sy0">=</span> document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">'aForm'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">setForm</span><span class="br0">&#40;</span>formObject<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="co1">// This example facilitates a POST transaction.  The POST data(HTML form)</span></div></li><li class="li1"><div class="de1"><span class="co1">// are initialized when calling setForm(), and it is automatically</span></div></li><li class="li1"><div class="de1"><span class="co1">// included when calling asyncRequest.</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> cObj <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'POST'</span><span class="sy0">,</span> <span class="st0">'http://www.yahoo.com'</span><span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// argument formId can be the id or name attribute value of the</span>
+<span class="co1">// HTML form, or an HTML form object.</span>
+<span class="kw2">var</span> formObject <span class="sy0">=</span> document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">'aForm'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">setForm</span><span class="br0">&#40;</span>formObject<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">// This example facilitates a POST transaction.  The POST data(HTML form)</span>
+<span class="co1">// are initialized when calling setForm(), and it is automatically</span>
+<span class="co1">// included when calling asyncRequest.</span>
+<span class="kw2">var</span> cObj <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'POST'</span><span class="sy0">,</span> <span class="st0">'http://www.yahoo.com'</span><span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-63ee14266c83b8ce2d8163092088429a-plain">// argument formId can be the id or name attribute value of the
+// HTML form, or an HTML form object.
+var formObject = document.getElementById('aForm');
+YAHOO.util.Connect.setForm(formObject);
+// This example facilitates a POST transaction.  The POST data(HTML form)
+// are initialized when calling setForm(), and it is automatically
+// included when calling asyncRequest.
+var cObj = YAHOO.util.Connect.asyncRequest('POST', 'http://www.yahoo.com', callback);
+</textarea></div>   <p>
+   	<code>setForm</code> can also upload files, if form elements of <em>input type="file"</em> are present, as
+part of a form submission.  To enable file uploading, set the second argument of <code>setForm</code> to true.
+When the transaction is complete, the callback object's upload method will be called.
+   </p>
+<div id="syntax-11d4af2fa7dcfdeea74ad7fa4b076df8" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">   <span class="co1">// argument formId can be the id or name attribute value of the</span></div></li><li class="li1"><div class="de1">   <span class="co1">// HTML form, or an HTML form object.</span></div></li><li class="li1"><div class="de1">   <span class="kw2">var</span> formObject <span class="sy0">=</span> document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">'aForm'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">   <span class="co1">// the second argument is true to indicate file upload.</span></div></li><li class="li1"><div class="de1">   <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">setForm</span><span class="br0">&#40;</span>formObject<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">   <span class="kw2">var</span> cObj <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'POST'</span><span class="sy0">,</span> <span class="st0">'http://www.yahoo.com'</span><span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">   <span class="co1">// argument formId can be the id or name attribute value of the</span>
+   <span class="co1">// HTML form, or an HTML form object.</span>
+   <span class="kw2">var</span> formObject <span class="sy0">=</span> document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">'aForm'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+   <span class="co1">// the second argument is true to indicate file upload.</span>
+   <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">setForm</span><span class="br0">&#40;</span>formObject<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+   <span class="kw2">var</span> cObj <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'POST'</span><span class="sy0">,</span> <span class="st0">'http://www.yahoo.com'</span><span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-11d4af2fa7dcfdeea74ad7fa4b076df8-plain">   // argument formId can be the id or name attribute value of the
+   // HTML form, or an HTML form object.
+   var formObject = document.getElementById('aForm');
+
+   // the second argument is true to indicate file upload.
+   YAHOO.util.Connect.setForm(formObject, true);
+
+   var cObj = YAHOO.util.Connect.asyncRequest('POST', 'http://www.yahoo.com', callback);
+</textarea></div>
+   <p>
+     When uploading files in applications over SSL and using IE, set the third argument to <em>true</em> to
+prevent IE from throwing domain security errors.
+   </p>
+<div id="syntax-cd7b16d83911a3ac64944c6ccb9dd325" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// the third argument is set true to have Connection Manager</span></div></li><li class="li1"><div class="de1"><span class="co1">// set the iframe source to &quot;javascript:false&quot;.</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">setForm</span><span class="br0">&#40;</span>formObject<span class="sy0">,</span> <span class="kw2">true</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// the third argument is set true to have Connection Manager</span>
+<span class="co1">// set the iframe source to &quot;javascript:false&quot;.</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">setForm</span><span class="br0">&#40;</span>formObject<span class="sy0">,</span> <span class="kw2">true</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-cd7b16d83911a3ac64944c6ccb9dd325-plain">// the third argument is set true to have Connection Manager
+// set the iframe source to "javascript:false".
+YAHOO.util.Connect.setForm(formObject, true, true);
+</textarea></div>
+  <h3><a name="xdr"></a>Cross-Domain Requests</h3>
+  <p>
+Connection Manager can be configured to use Flash to make cross-domain(XDR), HTTP transactions.  The transport
+dependency "connection.swf" must be avaiable and initialized prior to making any XDR transactions. For each XDR
+transaction, the callback object's <code>xdr</code> property must be defined as <code>true</code>.  This will
+instruct Connection Manager to use the alternate transport instead of using XMLHttpRequest.
+  </p>
+  <p>
+The dependency connection.swf is written in ActionScript 3, so Flash Player 9 or better is required (version
+9.0.124 or better is recommended). Additionally, a cross-domain policy file must be deployed at the resource to
+grant the client access to the remote domain. A cross-domain request will not be successful without this policy
+file hosted at the resource. The following example file grants permissive access to the resource from all
+requests originating from yahoo.com:
+</p>
+<style>
+/**
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ */
+.xml  {font-family:monospace;}
+.xml .imp {font-weight: bold; color: red;}
+.xml .es0 {color: #000099; font-weight: bold;}
+.xml .br0 {color: #66cc66;}
+.xml .sy0 {color: #66cc66;}
+.xml .st0 {color: #ff0000;}
+.xml .sc-1 {color: #808080; font-style: italic;}
+.xml .sc0 {color: #00bbdd;}
+.xml .sc1 {color: #ddbb00;}
+.xml .sc2 {color: #339933;}
+.xml .sc3 {color: #009900;}
+.xml .re0 {color: #000066;}
+.xml .re1 {color: #000000; font-weight: bold;}
+.xml .re2 {color: #000000; font-weight: bold;}
+.xml span.xtra { display:block; }
+
+</style>
+<div id="syntax-a6333f2e764149fb8d066c16d9442201" class="yui-syntax-highlight"><div class="numbers"><pre class="xml" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc3"><span class="re1">&lt;?xml</span> <span class="re0">version</span>=<span class="st0">&quot;1.0&quot;</span><span class="re2">?&gt;</span></span></div></li><li class="li1"><div class="de1"><span class="sc0">&lt;!DOCTYPE cross-domain-policy SYSTEM</span></div></li><li class="li1"><div class="de1"><span class="sc0">&quot;http://www.adobe.com/xml/dtds/cross-domain-policy.dtd&quot;&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc3"><span class="re1">&lt;cross-domain-policy<span class="re2">&gt;</span></span></span></div></li><li class="li2"><div class="de2">	<span class="sc3"><span class="re1">&lt;allow-access-from</span> <span class="re0">domain</span>=<span class="st0">&quot;*.yahoo.com&quot;</span><span class="re2">/&gt;</span></span></div></li><li class="li1"><div class="de1"><span class="sc3"><span class="re1">&lt;/cross-domain-policy<span class="re2">&gt;</span></span></span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="xml" style="font-family:monospace;"><span class="sc3"><span class="re1">&lt;?xml</span> <span class="re0">version</span>=<span class="st0">&quot;1.0&quot;</span><span class="re2">?&gt;</span></span>
+<span class="sc0">&lt;!DOCTYPE cross-domain-policy SYSTEM</span>
+<span class="sc0">&quot;http://www.adobe.com/xml/dtds/cross-domain-policy.dtd&quot;&gt;</span>
+<span class="sc3"><span class="re1">&lt;cross-domain-policy<span class="re2">&gt;</span></span></span>
+	<span class="sc3"><span class="re1">&lt;allow-access-from</span> <span class="re0">domain</span>=<span class="st0">&quot;*.yahoo.com&quot;</span><span class="re2">/&gt;</span></span>
+<span class="sc3"><span class="re1">&lt;/cross-domain-policy<span class="re2">&gt;</span></span></span>
+&nbsp;</pre></div><textarea id="syntax-a6333f2e764149fb8d066c16d9442201-plain"><?xml version="1.0"?>
+<!DOCTYPE cross-domain-policy SYSTEM
+"http://www.adobe.com/xml/dtds/cross-domain-policy.dtd">
+<cross-domain-policy>
+	<allow-access-from domain="*.yahoo.com"/>
+</cross-domain-policy>
+</textarea></div><p>
+XDR transactions, using the Flash transport, provide a subset of the full response data in XMLHttpRequest object.
+Specifically, it does not reveal data such as HTTP headers and status, and only the responseText property is
+supported.
+</p>
+<div class="apisummary short">
+<table>
+  <tr class="odd">
+    <th>property</th>
+    <th>description</th>
+  </tr>
+  <tr>
+    <td>tId</td>
+    <td>The transaction id</td>
+  </tr>
+  <tr class="odd">
+    <td>responseText</td>
+    <td>The server's response as a string.</td>
+  </tr>
+  <tr>
+    <td>argument</td>
+    <td>The user-defined argument or arguments as defined as the callback object.</td>
+  </tr>
+</table>
+</div>
+<p>The following examples demonstrates a cross-domain transaction retrieving data from the Yahoo! Weather RSS
+feed at http://xml.weather.yahoo.com/:
+</p>
+<div id="syntax-e4e530164557a5a9873d1ff4a3fcce11" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> YCM <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">	<span class="co1">// The resource is Yahoo! Pipes, returning JSON data.</span></div></li><li class="li1"><div class="de1">	uri <span class="sy0">=</span> <span class="st0">&quot;http://pipes.yahooapis.com/pipes/pipe.run?_id=giWz8Vc33BG6rQEQo_NLYQ&amp;_render=json&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">	request<span class="sy0">,</span> callback<span class="sy0">,</span> responseSuccess<span class="sy0">,</span> responseFailure<span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">responseSuccess <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="sy0">*</span> The argument <span class="st0">'o'</span> <span class="kw1">is</span> the response object.  <span class="me1">Its</span></div></li><li class="li1"><div class="de1">  <span class="sy0">*</span> properties are<span class="sy0">:</span></div></li><li class="li1"><div class="de1">  <span class="sy0">*</span></div></li><li class="li2"><div class="de2">  <span class="sy0">*</span> <span class="sy0">-</span> tId</div></li><li class="li1"><div class="de1">  <span class="sy0">*</span> <span class="sy0">-</span> responseText</div></li><li class="li1"><div class="de1">  <span class="sy0">*</span> <span class="sy0">-</span> argument</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">responseFailure <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="co1">// See the comments for responseSuccess.</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Create a callback object that defines success and failure</span></div></li><li class="li2"><div class="de2"><span class="co1">// handlers, and instructs Connection Manager to use the</span></div></li><li class="li1"><div class="de1"><span class="co1">// Flash transport by defining the xdr property and setting</span></div></li><li class="li1"><div class="de1"><span class="co1">// it to true.</span></div></li><li class="li1"><div class="de1">callback <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  success<span class="sy0">:</span>responseSuccess<span class="sy0">,</span></div></li><li class="li2"><div class="de2">  failure<span class="sy0">:</span>responseFailure<span class="sy0">,</span></div></li><li class="li1"><div class="de1">  xdr<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> <span class="co1">// Use the Flash transport instead of XMLHttpRequest</span></div></li><li class="li1"><div class="de1">  argument<span class="sy0">:</span><span class="br0">&#91;</span><span class="st0">'foo'</span><span class="sy0">,</span> <span class="st0">'bar'</span><span class="br0">&#93;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="kw2">function</span> makeRequest<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="co1">// Send request to xml.weather.yahoo.com</span></div></li><li class="li1"><div class="de1">	request <span class="sy0">=</span> YCM.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> uri<span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">// Initialize the Flash transport for XDR</span></div></li><li class="li1"><div class="de1">YCM.<span class="me1">transport</span><span class="br0">&#40;</span><span class="st0">'connection.swf'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Subscribe to xdrReadyEvent, which is fired</span></div></li><li class="li1"><div class="de1"><span class="co1">// when connection.swf's finishes loading, and</span></div></li><li class="li2"><div class="de2"><span class="co1">// call function request().</span></div></li><li class="li1"><div class="de1">YCM.<span class="me1">xdrReadyEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>makeRequest<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> YCM <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span><span class="sy0">,</span>
+	<span class="co1">// The resource is Yahoo! Pipes, returning JSON data.</span>
+	uri <span class="sy0">=</span> <span class="st0">&quot;http://pipes.yahooapis.com/pipes/pipe.run?_id=giWz8Vc33BG6rQEQo_NLYQ&amp;_render=json&quot;</span><span class="sy0">,</span>
+	request<span class="sy0">,</span> callback<span class="sy0">,</span> responseSuccess<span class="sy0">,</span> responseFailure<span class="sy0">;</span>
+&nbsp;
+responseSuccess <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span><span class="br0">&#123;</span>
+  <span class="sy0">*</span> The argument <span class="st0">'o'</span> <span class="kw1">is</span> the response object.  <span class="me1">Its</span>
+  <span class="sy0">*</span> properties are<span class="sy0">:</span>
+  <span class="sy0">*</span>
+  <span class="sy0">*</span> <span class="sy0">-</span> tId
+  <span class="sy0">*</span> <span class="sy0">-</span> responseText
+  <span class="sy0">*</span> <span class="sy0">-</span> argument
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+responseFailure <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span><span class="br0">&#123;</span>
+  <span class="co1">// See the comments for responseSuccess.</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Create a callback object that defines success and failure</span>
+<span class="co1">// handlers, and instructs Connection Manager to use the</span>
+<span class="co1">// Flash transport by defining the xdr property and setting</span>
+<span class="co1">// it to true.</span>
+callback <span class="sy0">=</span> <span class="br0">&#123;</span>
+  success<span class="sy0">:</span>responseSuccess<span class="sy0">,</span>
+  failure<span class="sy0">:</span>responseFailure<span class="sy0">,</span>
+  xdr<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> <span class="co1">// Use the Flash transport instead of XMLHttpRequest</span>
+  argument<span class="sy0">:</span><span class="br0">&#91;</span><span class="st0">'foo'</span><span class="sy0">,</span> <span class="st0">'bar'</span><span class="br0">&#93;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">function</span> makeRequest<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="co1">// Send request to xml.weather.yahoo.com</span>
+	request <span class="sy0">=</span> YCM.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> uri<span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="co1">// Initialize the Flash transport for XDR</span>
+YCM.<span class="me1">transport</span><span class="br0">&#40;</span><span class="st0">'connection.swf'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Subscribe to xdrReadyEvent, which is fired</span>
+<span class="co1">// when connection.swf's finishes loading, and</span>
+<span class="co1">// call function request().</span>
+YCM.<span class="me1">xdrReadyEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>makeRequest<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-e4e530164557a5a9873d1ff4a3fcce11-plain">var YCM = YAHOO.util.Connect,
+	// The resource is Yahoo! Pipes, returning JSON data.
+	uri = "http://pipes.yahooapis.com/pipes/pipe.run?_id=giWz8Vc33BG6rQEQo_NLYQ&_render=json",
+	request, callback, responseSuccess, responseFailure;
+
+responseSuccess = function(o){
+  * The argument 'o' is the response object.  Its
+  * properties are:
+  *
+  * - tId
+  * - responseText
+  * - argument
+};
+
+responseFailure = function(o){
+  // See the comments for responseSuccess.
+};
+
+// Create a callback object that defines success and failure
+// handlers, and instructs Connection Manager to use the
+// Flash transport by defining the xdr property and setting
+// it to true.
+callback = {
+  success:responseSuccess,
+  failure:responseFailure,
+  xdr: true, // Use the Flash transport instead of XMLHttpRequest
+  argument:['foo', 'bar']
+};
+
+function makeRequest() {
+	// Send request to xml.weather.yahoo.com
+	request = YCM.asyncRequest('GET', uri, callback);
+}
+
+// Initialize the Flash transport for XDR
+YCM.transport('connection.swf');
+
+// Subscribe to xdrReadyEvent, which is fired
+// when connection.swf's finishes loading, and
+// call function request().
+YCM.xdrReadyEvent.subscribe(makeRequest);
+</textarea></div>
+<h3>Transactions and Custom Events<a name="customevents"></a></h3>
+<p>
+Connection Manager implements <code>YAHOO.util.CustomEvent</code> to provide a variety of custom events during
+the course of a transaction. The following table describes the list of Connection Manager's custom events:
+</p>
+   <div class="apisummary short"><table>
+    <tr>
+      <th>Custom Event</th>
+      <th>Description</th>
+    </tr>
+    <tr class="odd">
+      <td>startEvent</td>
+      <td>This event fires at the start of a transaction and passes the transaction's ID to its subscribed
+handler.</td>
+    </tr>
+    <tr>
+      <td>completeEvent</td>
+      <td>This event fires when a transaction response has completed and passes the transaction's ID to its
+subscribed handler.</td>
+    </tr>
+    <tr class="odd">
+      <td>successEvent</td>
+      <td>This event fires when a transaction response is complete and determined to be HTTP 2xx.  The response
+object is passed to successEvent's subscribed handler. This event is analogous to the callback success handler.
+NOTE: This event does not fire for file upload transactions.</td>
+    </tr>
+    <tr>
+      <td>failureEvent</td>
+      <td>This event fires when a transaction response is complete and determined to be HTTP 4xx/5xx or if an
+HTTP status is unavailable.  The response object is passed to failureEvent's subscribed handler. This event is
+analogous to the callback failure handler.</td>
+    </tr>
+    <tr class="odd">
+      <td>uploadEvent</td>
+      <td>This event fires when a file upload transaction is complete.  This event fires only for file upload
+transaction, in place of successEvent and failureEvent.  The response object is passed to the uploadEvent's
+subscribed handler.  This event is analogous to the callback upload handler.</td>
+    </tr>
+    <tr>
+      <td>abortEvent</td>
+      <td>This event fires when a transaction's <a href="#timeout">callback.timeout</a> triggers an abort or
+explicitly via <code>YAHOO.util.Connect.abort().</code></td>
+    </tr>
+  </table></div>
+
+<p>
+Connection Manager custom events are fired at the global level and can also fire at the transaction level.  One
+common use case for subscribing to global events is where a set of common event handlers are created to respond
+to all possible custom events.  In such a scenario, subscribing to global events is quite simple.  The following
+example demonstrate how to subscribe to global custom events:
+</p>
+
+<div id="syntax-1f0398187c6f02e3d69656b2b13b4823" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Create a shorthand for YAHOO.util.Connect</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> YUC <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;* Create an object to handle all of the Connection Manager custom events.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* NOTE: You can also choose to represent your event handlers as global</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* functions instead of object members, and omit the scope argument from</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* subscribe().</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;*/</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> handleEvents <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	start<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="co1">// do something when startEvent fires.</span></div></li><li class="li1"><div class="de1">	<span class="co1">// Argument eventType will have a string value of: startEvent</span></div></li><li class="li2"><div class="de2">	<span class="co1">// Argument args is an array, and the response object will be the</span></div></li><li class="li1"><div class="de1">    <span class="co1">// first element in the array.  The response object will have one</span></div></li><li class="li1"><div class="de1">    <span class="co1">// property: tId (the transaction ID).</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	complete<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="co1">// do something when completeEvent fires.</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	success<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	<span class="co1">// do something when successEvent fires.</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	failure<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="co1">// do something when failureEvent fires.</span></div></li><li class="li2"><div class="de2">	<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">// Define this event handler for file upload transactions *only*.</span></div></li><li class="li1"><div class="de1">	<span class="co1">// This handler will not be used for any other transaction cases.</span></div></li><li class="li1"><div class="de1">	upload<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	<span class="co1">// do something when uploadEvent fires.</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	abort<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="co1">// do something when abortEvent fires.</span></div></li><li class="li2"><div class="de2">	<span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* This example shows how to subscribe to all custom events fired at the</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;* Connection Manager level.  When subscribed, the custom event will fire</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* for all transactions.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*/</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Subscribe to all custom events fired by Connection Manager.</span></div></li><li class="li2"><div class="de2"><span class="co1">// Pass in the *globalEvents* object as the second argument to provide</span></div></li><li class="li1"><div class="de1"><span class="co1">// the necessary scope correction for any usage of the *this* keyword</span></div></li><li class="li1"><div class="de1"><span class="co1">// in any of the handler functions.</span></div></li><li class="li1"><div class="de1">YUC.<span class="me1">startEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>handleEvents.<span class="me1">start</span><span class="sy0">,</span> handleEvents<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">YUC.<span class="me1">completeEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>handleEvents.<span class="me1">complete</span><span class="sy0">,</span> handleEvents<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// This event will not fire for file upload transactions.  Instead,</span></div></li><li class="li1"><div class="de1"><span class="co1">// subscribe to the uploadEvent.</span></div></li><li class="li1"><div class="de1">YUC.<span class="me1">successEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>handleEvents.<span class="me1">success</span><span class="sy0">,</span> handleEvents<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">// This event will not fire for file upload transactions.  Instead,</span></div></li><li class="li1"><div class="de1"><span class="co1">// subscribe to the uploadEvent.</span></div></li><li class="li1"><div class="de1">YUC.<span class="me1">failureEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>handleEvents.<span class="me1">failure</span><span class="sy0">,</span> handleEvents<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// This event is fired only for file upload transactions in place of</span></div></li><li class="li2"><div class="de2"><span class="co1">// successEvent and failureEvent</span></div></li><li class="li1"><div class="de1">YUC.<span class="me1">uploadEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>handleEvents.<span class="me1">upload</span><span class="sy0">,</span> handleEvents<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">YUC.<span class="me1">abortEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>handleEvents.<span class="me1">abort</span><span class="sy0">,</span> handleEvents<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;* NOTE: You do not need to pass a callback object to asyncRequest()</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* since your handlers are already subscribed at the Connection</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* Manager level.  The callback object omits any success or failure</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* logic since those cases are already available and subscribed to as</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* custom events.  You can still include callback.success and</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;* callback.failure, and they will be processed; but, it will also be</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* a redundant action.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*/</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> transaction <span class="sy0">=</span> YUC.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> sUrl<span class="sy0">,</span> <span class="br0">&#123;</span> timeout<span class="sy0">:</span> <span class="nu0">3000</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Create a shorthand for YAHOO.util.Connect</span>
+<span class="kw2">var</span> YUC <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span><span class="sy0">;</span>
+&nbsp;
+<span class="coMULTI">/*
+ * Create an object to handle all of the Connection Manager custom events.
+ *
+ * NOTE: You can also choose to represent your event handlers as global
+ * functions instead of object members, and omit the scope argument from
+ * subscribe().
+ */</span>
+<span class="kw2">var</span> handleEvents <span class="sy0">=</span> <span class="br0">&#123;</span>
+	start<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="co1">// do something when startEvent fires.</span>
+	<span class="co1">// Argument eventType will have a string value of: startEvent</span>
+	<span class="co1">// Argument args is an array, and the response object will be the</span>
+    <span class="co1">// first element in the array.  The response object will have one</span>
+    <span class="co1">// property: tId (the transaction ID).</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+	complete<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="co1">// do something when completeEvent fires.</span>
+	<span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+	success<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="co1">// do something when successEvent fires.</span>
+	<span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+	failure<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="co1">// do something when failureEvent fires.</span>
+	<span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+	<span class="co1">// Define this event handler for file upload transactions *only*.</span>
+	<span class="co1">// This handler will not be used for any other transaction cases.</span>
+	upload<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="co1">// do something when uploadEvent fires.</span>
+	<span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+	abort<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="co1">// do something when abortEvent fires.</span>
+	<span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="coMULTI">/*
+ * This example shows how to subscribe to all custom events fired at the
+ * Connection Manager level.  When subscribed, the custom event will fire
+ * for all transactions.
+ */</span>
+&nbsp;
+<span class="co1">// Subscribe to all custom events fired by Connection Manager.</span>
+<span class="co1">// Pass in the *globalEvents* object as the second argument to provide</span>
+<span class="co1">// the necessary scope correction for any usage of the *this* keyword</span>
+<span class="co1">// in any of the handler functions.</span>
+YUC.<span class="me1">startEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>handleEvents.<span class="me1">start</span><span class="sy0">,</span> handleEvents<span class="br0">&#41;</span><span class="sy0">;</span>
+YUC.<span class="me1">completeEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>handleEvents.<span class="me1">complete</span><span class="sy0">,</span> handleEvents<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// This event will not fire for file upload transactions.  Instead,</span>
+<span class="co1">// subscribe to the uploadEvent.</span>
+YUC.<span class="me1">successEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>handleEvents.<span class="me1">success</span><span class="sy0">,</span> handleEvents<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// This event will not fire for file upload transactions.  Instead,</span>
+<span class="co1">// subscribe to the uploadEvent.</span>
+YUC.<span class="me1">failureEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>handleEvents.<span class="me1">failure</span><span class="sy0">,</span> handleEvents<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// This event is fired only for file upload transactions in place of</span>
+<span class="co1">// successEvent and failureEvent</span>
+YUC.<span class="me1">uploadEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>handleEvents.<span class="me1">upload</span><span class="sy0">,</span> handleEvents<span class="br0">&#41;</span><span class="sy0">;</span>
+YUC.<span class="me1">abortEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>handleEvents.<span class="me1">abort</span><span class="sy0">,</span> handleEvents<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="coMULTI">/*
+ * NOTE: You do not need to pass a callback object to asyncRequest()
+ * since your handlers are already subscribed at the Connection
+ * Manager level.  The callback object omits any success or failure
+ * logic since those cases are already available and subscribed to as
+ * custom events.  You can still include callback.success and
+ * callback.failure, and they will be processed; but, it will also be
+ * a redundant action.
+ */</span>
+&nbsp;
+<span class="kw2">var</span> transaction <span class="sy0">=</span> YUC.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> sUrl<span class="sy0">,</span> <span class="br0">&#123;</span> timeout<span class="sy0">:</span> <span class="nu0">3000</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-1f0398187c6f02e3d69656b2b13b4823-plain">// Create a shorthand for YAHOO.util.Connect
+var YUC = YAHOO.util.Connect;
+
+/*
+ * Create an object to handle all of the Connection Manager custom events.
+ *
+ * NOTE: You can also choose to represent your event handlers as global
+ * functions instead of object members, and omit the scope argument from
+ * subscribe().
+ */
+var handleEvents = {
+	start: function(eventType, args) {
+	// do something when startEvent fires.
+	// Argument eventType will have a string value of: startEvent
+	// Argument args is an array, and the response object will be the
+    // first element in the array.  The response object will have one
+    // property: tId (the transaction ID).
+    },
+
+	complete: function(eventType, args) {
+	// do something when completeEvent fires.
+	},
+
+	success: function(eventType, args) {
+	// do something when successEvent fires.
+	},
+
+	failure: function(eventType, args) {
+	// do something when failureEvent fires.
+	},
+
+	// Define this event handler for file upload transactions *only*.
+	// This handler will not be used for any other transaction cases.
+	upload: function(eventType, args) {
+	// do something when uploadEvent fires.
+	},
+
+	abort: function(eventType, args) {
+	// do something when abortEvent fires.
+	}
+};
+
+/*
+ * This example shows how to subscribe to all custom events fired at the
+ * Connection Manager level.  When subscribed, the custom event will fire
+ * for all transactions.
+ */
+
+// Subscribe to all custom events fired by Connection Manager.
+// Pass in the *globalEvents* object as the second argument to provide
+// the necessary scope correction for any usage of the *this* keyword
+// in any of the handler functions.
+YUC.startEvent.subscribe(handleEvents.start, handleEvents);
+YUC.completeEvent.subscribe(handleEvents.complete, handleEvents);
+
+// This event will not fire for file upload transactions.  Instead,
+// subscribe to the uploadEvent.
+YUC.successEvent.subscribe(handleEvents.success, handleEvents);
+
+// This event will not fire for file upload transactions.  Instead,
+// subscribe to the uploadEvent.
+YUC.failureEvent.subscribe(handleEvents.failure, handleEvents);
+
+// This event is fired only for file upload transactions in place of
+// successEvent and failureEvent
+YUC.uploadEvent.subscribe(handleEvents.upload, handleEvents);
+YUC.abortEvent.subscribe(handleEvents.abort, handleEvents);
+
+/*
+ * NOTE: You do not need to pass a callback object to asyncRequest()
+ * since your handlers are already subscribed at the Connection
+ * Manager level.  The callback object omits any success or failure
+ * logic since those cases are already available and subscribed to as
+ * custom events.  You can still include callback.success and
+ * callback.failure, and they will be processed; but, it will also be
+ * a redundant action.
+ */
+
+var transaction = YUC.asyncRequest('GET', sUrl, { timeout: 3000 });
+</textarea></div>
+<p>
+In additional to global custom events, the same events can be fired for specific transactions by defining custom
+event handlers in the <a href="#async">callback object</a>.  To subscribe to these custom events, create the
+member *customevents* in the callback object and create handlers for as many custom events as desired.  The
+following code example shows how to define <code>callback.customevents</code> and the callback signatures:
+</p>
+
+<div id="syntax-3a19325d2b10c26be8c656e30fd15c0b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	customevents<span class="sy0">:</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		onStart<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		  <span class="co1">// eventType has a string value of &quot;startEvent&quot;.</span></div></li><li class="li2"><div class="de2">		  <span class="co1">// args[0].tId is the integer transaction ID.</span></div></li><li class="li1"><div class="de1">		  <span class="co1">// args[1] contains the value of &lt;code&gt;callback.argument&lt;/code&gt;, if callback.argument is defined.</span></div></li><li class="li1"><div class="de1">		<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		onComplete<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		  <span class="co1">// eventType has a string value of &quot;completeEvent&quot;.</span></div></li><li class="li2"><div class="de2">		  <span class="co1">// args[0].tId is the integer transaction ID.</span></div></li><li class="li1"><div class="de1">		  <span class="co1">// args[1] contains the value of &lt;code&gt;callback.argument&lt;/code&gt;, if callback.argument is defined.</span></div></li><li class="li1"><div class="de1">		<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		onSuccess<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		  <span class="coMULTI">/*</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">		   * eventType has a string value of &quot;successEvent&quot;.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">		   * args[0] is the response object, which has the</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">		   * following properties:</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">		   *</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">		   * args[0].tId</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">		   * args[0].status</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">		   * args[0].statusText</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">		   * args[0].getResponseHeader[ ]</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">		   * args[0].getAllResponseHeaders</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">		   * args[0].responseText</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">		   * args[0].responseXML</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">		   * args[0].argument</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">		   */</span></div></li><li class="li1"><div class="de1">		<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		onFailure<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">		  <span class="co1">// eventType has a string value of &quot;failureEvent&quot;.</span></div></li><li class="li1"><div class="de1">		  <span class="co1">// args[0] is the response object.</span></div></li><li class="li1"><div class="de1">		<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="co1">// Define this event handler for file upload transactions *only*.</span></div></li><li class="li2"><div class="de2">        <span class="co1">// This handler will not be used for any other transaction cases.</span></div></li><li class="li1"><div class="de1">		onUpload<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		  <span class="co1">// eventType has a string value of &quot;uploadEvent&quot;.</span></div></li><li class="li1"><div class="de1">		  <span class="co1">// args[0] is the response object.</span></div></li><li class="li1"><div class="de1">		<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">		onAbort<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		  <span class="co1">// eventType has a string value of &quot;abortEvent&quot;.</span></div></li><li class="li1"><div class="de1">		  <span class="co1">// args[0].tId is the integer transaction ID.</span></div></li><li class="li1"><div class="de1">		  <span class="co1">// args[1] contains the value of &lt;code&gt;callback.argument&lt;/code&gt;, if callback.argument is defined.</span></div></li><li class="li1"><div class="de1">		<span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">	<span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span>
+	customevents<span class="sy0">:</span><span class="br0">&#123;</span>
+		onStart<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+		  <span class="co1">// eventType has a string value of &quot;startEvent&quot;.</span>
+		  <span class="co1">// args[0].tId is the integer transaction ID.</span>
+		  <span class="co1">// args[1] contains the value of &lt;code&gt;callback.argument&lt;/code&gt;, if callback.argument is defined.</span>
+		<span class="br0">&#125;</span><span class="sy0">,</span>
+		onComplete<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+		  <span class="co1">// eventType has a string value of &quot;completeEvent&quot;.</span>
+		  <span class="co1">// args[0].tId is the integer transaction ID.</span>
+		  <span class="co1">// args[1] contains the value of &lt;code&gt;callback.argument&lt;/code&gt;, if callback.argument is defined.</span>
+		<span class="br0">&#125;</span><span class="sy0">,</span>
+		onSuccess<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+		  <span class="coMULTI">/*
+		   * eventType has a string value of &quot;successEvent&quot;.
+		   * args[0] is the response object, which has the
+		   * following properties:
+		   *
+		   * args[0].tId
+		   * args[0].status
+		   * args[0].statusText
+		   * args[0].getResponseHeader[ ]
+		   * args[0].getAllResponseHeaders
+		   * args[0].responseText
+		   * args[0].responseXML
+		   * args[0].argument
+		   */</span>
+		<span class="br0">&#125;</span><span class="sy0">,</span>
+		onFailure<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+		  <span class="co1">// eventType has a string value of &quot;failureEvent&quot;.</span>
+		  <span class="co1">// args[0] is the response object.</span>
+		<span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+        <span class="co1">// Define this event handler for file upload transactions *only*.</span>
+        <span class="co1">// This handler will not be used for any other transaction cases.</span>
+		onUpload<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+		  <span class="co1">// eventType has a string value of &quot;uploadEvent&quot;.</span>
+		  <span class="co1">// args[0] is the response object.</span>
+		<span class="br0">&#125;</span><span class="sy0">,</span>
+		onAbort<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+		  <span class="co1">// eventType has a string value of &quot;abortEvent&quot;.</span>
+		  <span class="co1">// args[0].tId is the integer transaction ID.</span>
+		  <span class="co1">// args[1] contains the value of &lt;code&gt;callback.argument&lt;/code&gt;, if callback.argument is defined.</span>
+		<span class="br0">&#125;</span>
+	<span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-3a19325d2b10c26be8c656e30fd15c0b-plain">var callback = {
+	customevents:{
+		onStart: function(eventType, args) {
+		  // eventType has a string value of "startEvent".
+		  // args[0].tId is the integer transaction ID.
+		  // args[1] contains the value of <code>callback.argument</code>, if callback.argument is defined.
+		},
+		onComplete: function(eventType, args) {
+		  // eventType has a string value of "completeEvent".
+		  // args[0].tId is the integer transaction ID.
+		  // args[1] contains the value of <code>callback.argument</code>, if callback.argument is defined.
+		},
+		onSuccess: function(eventType, args) {
+		  /*
+		   * eventType has a string value of "successEvent".
+		   * args[0] is the response object, which has the
+		   * following properties:
+		   *
+		   * args[0].tId
+		   * args[0].status
+		   * args[0].statusText
+		   * args[0].getResponseHeader[ ]
+		   * args[0].getAllResponseHeaders
+		   * args[0].responseText
+		   * args[0].responseXML
+		   * args[0].argument
+		   */
+		},
+		onFailure: function(eventType, args) {
+		  // eventType has a string value of "failureEvent".
+		  // args[0] is the response object.
+		},
+
+        // Define this event handler for file upload transactions *only*.
+        // This handler will not be used for any other transaction cases.
+		onUpload: function(eventType, args) {
+		  // eventType has a string value of "uploadEvent".
+		  // args[0] is the response object.
+		},
+		onAbort: function(eventType, args) {
+		  // eventType has a string value of "abortEvent".
+		  // args[0].tId is the integer transaction ID.
+		  // args[1] contains the value of <code>callback.argument</code>, if callback.argument is defined.
+		}
+	}
+};
+</textarea></div>
+<p>
+The following example demonstrates the creation of a specific object to handle custom events, and the creation of
+the callback object used in the transaction:
+</p>
+
+<div id="syntax-4e2aa7c95cdd10d22f74762ccd111ab8" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* Create an event handler object to handle a transaction's custom events.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* NOTE: You can also choose to represent your event handlers as global</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;* functions instead of object members, and omit the scope argument from</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* the callback.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* This example demonstrates a non-file upload transaction, hence the</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* handler onUpload is not defined.</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;*/</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> handleEvent <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	start<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="co1">// do something when startEvent fires.</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">	complete<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="co1">// do something when completeEvent fires.</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	success<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="co1">// do something when successEvent fires.</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	failure<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	<span class="co1">// do something when failureEvent fires.</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	abort<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="co1">// do something when abortEvent fires.</span></div></li><li class="li2"><div class="de2">	<span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* This example shows how to subscribe to all custom events.</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;* Pass the *handleEvent* object as the second argument to provide</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* the necessary scope correction for any usage of the *this* keyword</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* in any of the handler functions.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* NOTE: All events are subscribed in this example, but you can choose</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;* to subscribe to any combination of custom events desired.  None are</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* mandatory.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*/</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Define the scope property with a value of *handleEvent* to provide</span></div></li><li class="li2"><div class="de2"><span class="co1">// the necessary scope correction for any usage of the *this* keyword</span></div></li><li class="li1"><div class="de1"><span class="co1">// in any of the handler functions.</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co2">/* Callback object with custom events defined */</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">	customevents<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">		onStart<span class="sy0">:</span> handleEvent.<span class="me1">start</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		onComplete<span class="sy0">:</span> handleEvent.<span class="me1">complete</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		onSuccess<span class="sy0">:</span> handleEvent.<span class="me1">success</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">		onFailure<span class="sy0">:</span> handleEvent.<span class="me1">failure</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">		onAbort<span class="sy0">:</span> handleEvent.<span class="me1">abort</span></div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">	scope<span class="sy0">:</span>handleEvent<span class="sy0">,</span></div></li><li class="li1"><div class="de1"> 	argument<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">&quot;foo&quot;</span><span class="sy0">,</span> <span class="st0">&quot;bar&quot;</span><span class="sy0">,</span> <span class="st0">&quot;baz&quot;</span><span class="br0">&#93;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> transaction <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> sUrl<span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="coMULTI">/*
+ * Create an event handler object to handle a transaction's custom events.
+ *
+ * NOTE: You can also choose to represent your event handlers as global
+ * functions instead of object members, and omit the scope argument from
+ * the callback.
+ *
+ * This example demonstrates a non-file upload transaction, hence the
+ * handler onUpload is not defined.
+ */</span>
+<span class="kw2">var</span> handleEvent <span class="sy0">=</span> <span class="br0">&#123;</span>
+	start<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="co1">// do something when startEvent fires.</span>
+	<span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+	complete<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="co1">// do something when completeEvent fires.</span>
+	<span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+	success<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="co1">// do something when successEvent fires.</span>
+	<span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+	failure<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="co1">// do something when failureEvent fires.</span>
+	<span class="br0">&#125;</span><span class="sy0">,</span>
+&nbsp;
+	abort<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span>eventType<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="co1">// do something when abortEvent fires.</span>
+	<span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="coMULTI">/*
+ * This example shows how to subscribe to all custom events.
+ * Pass the *handleEvent* object as the second argument to provide
+ * the necessary scope correction for any usage of the *this* keyword
+ * in any of the handler functions.
+ *
+ * NOTE: All events are subscribed in this example, but you can choose
+ * to subscribe to any combination of custom events desired.  None are
+ * mandatory.
+ */</span>
+&nbsp;
+<span class="co1">// Define the scope property with a value of *handleEvent* to provide</span>
+<span class="co1">// the necessary scope correction for any usage of the *this* keyword</span>
+<span class="co1">// in any of the handler functions.</span>
+&nbsp;
+<span class="co2">/* Callback object with custom events defined */</span>
+<span class="kw2">var</span> callback <span class="sy0">=</span> <span class="br0">&#123;</span>
+	customevents<span class="sy0">:</span> <span class="br0">&#123;</span>
+		onStart<span class="sy0">:</span> handleEvent.<span class="me1">start</span><span class="sy0">,</span>
+		onComplete<span class="sy0">:</span> handleEvent.<span class="me1">complete</span><span class="sy0">,</span>
+		onSuccess<span class="sy0">:</span> handleEvent.<span class="me1">success</span><span class="sy0">,</span>
+		onFailure<span class="sy0">:</span> handleEvent.<span class="me1">failure</span><span class="sy0">,</span>
+		onAbort<span class="sy0">:</span> handleEvent.<span class="me1">abort</span>
+	<span class="br0">&#125;</span><span class="sy0">,</span>
+	scope<span class="sy0">:</span>handleEvent<span class="sy0">,</span>
+ 	argument<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">&quot;foo&quot;</span><span class="sy0">,</span> <span class="st0">&quot;bar&quot;</span><span class="sy0">,</span> <span class="st0">&quot;baz&quot;</span><span class="br0">&#93;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> transaction <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> sUrl<span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-4e2aa7c95cdd10d22f74762ccd111ab8-plain">/*
+ * Create an event handler object to handle a transaction's custom events.
+ *
+ * NOTE: You can also choose to represent your event handlers as global
+ * functions instead of object members, and omit the scope argument from
+ * the callback.
+ *
+ * This example demonstrates a non-file upload transaction, hence the
+ * handler onUpload is not defined.
+ */
+var handleEvent = {
+	start: function(eventType, args) {
+	// do something when startEvent fires.
+	},
+
+	complete: function(eventType, args) {
+	// do something when completeEvent fires.
+	},
+
+	success: function(eventType, args) {
+	// do something when successEvent fires.
+	},
+
+	failure: function(eventType, args) {
+	// do something when failureEvent fires.
+	},
+
+	abort: function(eventType, args) {
+	// do something when abortEvent fires.
+	}
+};
+
+/*
+ * This example shows how to subscribe to all custom events.
+ * Pass the *handleEvent* object as the second argument to provide
+ * the necessary scope correction for any usage of the *this* keyword
+ * in any of the handler functions.
+ *
+ * NOTE: All events are subscribed in this example, but you can choose
+ * to subscribe to any combination of custom events desired.  None are
+ * mandatory.
+ */
+
+// Define the scope property with a value of *handleEvent* to provide
+// the necessary scope correction for any usage of the *this* keyword
+// in any of the handler functions.
+
+/* Callback object with custom events defined */
+var callback = {
+	customevents: {
+		onStart: handleEvent.start,
+		onComplete: handleEvent.complete,
+		onSuccess: handleEvent.success,
+		onFailure: handleEvent.failure,
+		onAbort: handleEvent.abort
+	},
+	scope:handleEvent,
+ 	argument: ["foo", "bar", "baz"]
+};
+
+var transaction = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+</textarea></div>
+  <h3>Using Request Signatures<a name="requestsignatures"></a></h3>
+  <p>
+  When using Connection Manager, there are some ways to ensure the transaction originated from your application
+instead of a forged request.  One practice involves the use of user-specific signatures in the transaction.  Your
+application server can generate a pre-computed signature for use when the client initiates a request.  The
+following example demonstrate the creation of signatures using PHP and MD5 hashing, and using YUI Connection
+Manager to initiate a transaction containing the signature.
+  </p>
+<style>
+/**
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ */
+.php  {font-family:monospace;}
+.php .imp {font-weight: bold; color: red;}
+.php .kw1 {color: #b1b100;}
+.php .kw2 {color: #000000; font-weight: bold;}
+.php .kw3 {color: #990000;}
+.php .co1 {color: #666666; font-style: italic;}
+.php .co2 {color: #666666; font-style: italic;}
+.php .co3 {color: #0000cc; font-style: italic;}
+.php .co4 {color: #009933; font-style: italic;}
+.php .coMULTI {color: #666666; font-style: italic;}
+.php .es0 {color: #000099; font-weight: bold;}
+.php .es1 {color: #000099; font-weight: bold;}
+.php .es2 {color: #660099; font-weight: bold;}
+.php .es3 {color: #660099; font-weight: bold;}
+.php .es4 {color: #006699; font-weight: bold;}
+.php .es5 {color: #006699; font-weight: bold; font-style: italic;}
+.php .es6 {color: #009933; font-weight: bold;}
+.php .es_h {color: #000099; font-weight: bold;}
+.php .br0 {color: #009900;}
+.php .sy0 {color: #339933;}
+.php .sy1 {color: #000000; font-weight: bold;}
+.php .st0 {color: #0000ff;}
+.php .st_h {color: #0000ff;}
+.php .nu0 {color: #cc66cc;}
+.php .nu8 {color: #208080;}
+.php .nu12 {color: #208080;}
+.php .nu19 {color:#800080;}
+.php .me1 {color: #004000;}
+.php .me2 {color: #004000;}
+.php .re0 {color: #000088;}
+.php span.xtra { display:block; }
+
+</style>
+<div id="syntax-7c451cf1ffc1f678ab865f35af3b9f98" class="yui-syntax-highlight"><div class="numbers"><pre class="php" style="font-family:monospace;"><ol><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// $deleteRecordToken can be any additional, random sequence concatenated onto $username.</span></div></li><li class="li1"><div class="de1"><span class="co1">// to salt the string which is converted to an MD5 hash.</span></div></li><li class="li1"><div class="de1"><span class="re0">$transaction_signature</span> <span class="sy0">=</span> <span class="kw3">md5</span><span class="br0">&#40;</span><span class="re0">$username</span> <span class="sy0">.</span> <span class="re0">$deleteRecordToken</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="php" style="font-family:monospace;">&nbsp;
+<span class="co1">// $deleteRecordToken can be any additional, random sequence concatenated onto $username.</span>
+<span class="co1">// to salt the string which is converted to an MD5 hash.</span>
+<span class="re0">$transaction_signature</span> <span class="sy0">=</span> <span class="kw3">md5</span><span class="br0">&#40;</span><span class="re0">$username</span> <span class="sy0">.</span> <span class="re0">$deleteRecordToken</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-7c451cf1ffc1f678ab865f35af3b9f98-plain">
+// $deleteRecordToken can be any additional, random sequence concatenated onto $username.
+// to salt the string which is converted to an MD5 hash.
+$transaction_signature = md5($username . $deleteRecordToken);
+</textarea></div><div id="syntax-385a26c623110f1176d40196966efc35" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* Create a custom header -- in this case &quot;X-Signature&quot; -- using</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* connection manager with the signature as its value, and initiate</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* the transaction.  The transaction is sent to &quot;/delete_record.php&quot;.</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;*/</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">initHeader</span><span class="br0">&#40;</span><span class="st0">'X-Signature'</span><span class="sy0">,</span> <span class="st0">'&lt;? echo $transaction_signature ?&gt;'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> request <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> <span class="st0">'/delete_record.php'</span><span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="coMULTI">/*
+ * Create a custom header -- in this case &quot;X-Signature&quot; -- using
+ * connection manager with the signature as its value, and initiate
+ * the transaction.  The transaction is sent to &quot;/delete_record.php&quot;.
+ */</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">initHeader</span><span class="br0">&#40;</span><span class="st0">'X-Signature'</span><span class="sy0">,</span> <span class="st0">'&lt;? echo $transaction_signature ?&gt;'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw2">var</span> request <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> <span class="st0">'/delete_record.php'</span><span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-385a26c623110f1176d40196966efc35-plain">/*
+ * Create a custom header -- in this case "X-Signature" -- using
+ * connection manager with the signature as its value, and initiate
+ * the transaction.  The transaction is sent to "/delete_record.php".
+ */
+YAHOO.util.Connect.initHeader('X-Signature', '<? echo $transaction_signature ?>');
+var request = YAHOO.util.Connect.asyncRequest('GET', '/delete_record.php', callback);
+</textarea></div>
+</script>
+<p>
+Upon receiving the request from the client, determine its authenticity by verifying the signature before taking
+action.  Perform the same hashing operation and compare it to the signature received.  If the signatures do not
+match, do not proceed with the intended operation.
+</p>
+<style>
+/**
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ */
+.php  {font-family:monospace;}
+.php .imp {font-weight: bold; color: red;}
+.php .kw1 {color: #b1b100;}
+.php .kw2 {color: #000000; font-weight: bold;}
+.php .kw3 {color: #990000;}
+.php .co1 {color: #666666; font-style: italic;}
+.php .co2 {color: #666666; font-style: italic;}
+.php .co3 {color: #0000cc; font-style: italic;}
+.php .co4 {color: #009933; font-style: italic;}
+.php .coMULTI {color: #666666; font-style: italic;}
+.php .es0 {color: #000099; font-weight: bold;}
+.php .es1 {color: #000099; font-weight: bold;}
+.php .es2 {color: #660099; font-weight: bold;}
+.php .es3 {color: #660099; font-weight: bold;}
+.php .es4 {color: #006699; font-weight: bold;}
+.php .es5 {color: #006699; font-weight: bold; font-style: italic;}
+.php .es6 {color: #009933; font-weight: bold;}
+.php .es_h {color: #000099; font-weight: bold;}
+.php .br0 {color: #009900;}
+.php .sy0 {color: #339933;}
+.php .sy1 {color: #000000; font-weight: bold;}
+.php .st0 {color: #0000ff;}
+.php .st_h {color: #0000ff;}
+.php .nu0 {color: #cc66cc;}
+.php .nu8 {color: #208080;}
+.php .nu12 {color: #208080;}
+.php .nu19 {color:#800080;}
+.php .me1 {color: #004000;}
+.php .me2 {color: #004000;}
+.php .re0 {color: #000088;}
+.php span.xtra { display:block; }
+
+</style>
+<div id="syntax-727fccd5ffadcd970c38c568c23928ce" class="yui-syntax-highlight"><div class="numbers"><pre class="php" style="font-family:monospace;"><ol><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">$transaction_signature</span> <span class="sy0">=</span> <span class="kw3">md5</span><span class="br0">&#40;</span><span class="re0">$username</span> <span class="sy0">.</span> <span class="re0">$deleteRecordToken</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw1">if</span> <span class="br0">&#40;</span><span class="re0">$_SERVER</span><span class="br0">&#91;</span><span class="st_h">'HTTP_X_SIGNATURE'</span><span class="br0">&#93;</span>  <span class="sy0">===</span> <span class="re0">$transaction_signature</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">  <span class="co1">// proceed with delete operation</span></div></li><li class="li1"><div class="de1">  <span class="co1">// ...</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="co1">// there is a problem</span></div></li><li class="li1"><div class="de1">  <span class="co1">// ...</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="php" style="font-family:monospace;">&nbsp;
+<span class="re0">$transaction_signature</span> <span class="sy0">=</span> <span class="kw3">md5</span><span class="br0">&#40;</span><span class="re0">$username</span> <span class="sy0">.</span> <span class="re0">$deleteRecordToken</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw1">if</span> <span class="br0">&#40;</span><span class="re0">$_SERVER</span><span class="br0">&#91;</span><span class="st_h">'HTTP_X_SIGNATURE'</span><span class="br0">&#93;</span>  <span class="sy0">===</span> <span class="re0">$transaction_signature</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+  <span class="co1">// proceed with delete operation</span>
+  <span class="co1">// ...</span>
+<span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span>
+  <span class="co1">// there is a problem</span>
+  <span class="co1">// ...</span>
+<span class="br0">&#125;</span>
+&nbsp;
+&nbsp;</pre></div><textarea id="syntax-727fccd5ffadcd970c38c568c23928ce-plain">
+$transaction_signature = md5($username . $deleteRecordToken);
+
+if ($_SERVER['HTTP_X_SIGNATURE']  === $transaction_signature) {
+  // proceed with delete operation
+  // ...
+} else {
+  // there is a problem
+  // ...
+}
+
+</textarea></div>
+
+<p>
+Signatures can also be use with GET requests, sent as a query string or part of a query string.
+</p>
+
+<style>
+/**
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ */
+.php  {font-family:monospace;}
+.php .imp {font-weight: bold; color: red;}
+.php .kw1 {color: #b1b100;}
+.php .kw2 {color: #000000; font-weight: bold;}
+.php .kw3 {color: #990000;}
+.php .co1 {color: #666666; font-style: italic;}
+.php .co2 {color: #666666; font-style: italic;}
+.php .co3 {color: #0000cc; font-style: italic;}
+.php .co4 {color: #009933; font-style: italic;}
+.php .coMULTI {color: #666666; font-style: italic;}
+.php .es0 {color: #000099; font-weight: bold;}
+.php .es1 {color: #000099; font-weight: bold;}
+.php .es2 {color: #660099; font-weight: bold;}
+.php .es3 {color: #660099; font-weight: bold;}
+.php .es4 {color: #006699; font-weight: bold;}
+.php .es5 {color: #006699; font-weight: bold; font-style: italic;}
+.php .es6 {color: #009933; font-weight: bold;}
+.php .es_h {color: #000099; font-weight: bold;}
+.php .br0 {color: #009900;}
+.php .sy0 {color: #339933;}
+.php .sy1 {color: #000000; font-weight: bold;}
+.php .st0 {color: #0000ff;}
+.php .st_h {color: #0000ff;}
+.php .nu0 {color: #cc66cc;}
+.php .nu8 {color: #208080;}
+.php .nu12 {color: #208080;}
+.php .nu19 {color:#800080;}
+.php .me1 {color: #004000;}
+.php .me2 {color: #004000;}
+.php .re0 {color: #000088;}
+.php span.xtra { display:block; }
+
+</style>
+<div id="syntax-356a7da7846974a643baa376611e59de" class="yui-syntax-highlight"><div class="numbers"><pre class="php" style="font-family:monospace;"><ol><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">$transaction_signature</span> <span class="sy0">=</span> <span class="kw3">md5</span><span class="br0">&#40;</span><span class="re0">$username</span> <span class="sy0">.</span> <span class="re0">$deleteRecordToken</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// $uri is the resource and the querystring includes the</span></div></li><li class="li2"><div class="de2"><span class="co1">// signature.</span></div></li><li class="li1"><div class="de1"><span class="re0">$uri</span> <span class="sy0">=</span> <span class="st_h">'/delete_record.php?signature='</span> <span class="sy0">.</span> <span class="re0">$transaction_signature</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="php" style="font-family:monospace;">&nbsp;
+<span class="re0">$transaction_signature</span> <span class="sy0">=</span> <span class="kw3">md5</span><span class="br0">&#40;</span><span class="re0">$username</span> <span class="sy0">.</span> <span class="re0">$deleteRecordToken</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// $uri is the resource and the querystring includes the</span>
+<span class="co1">// signature.</span>
+<span class="re0">$uri</span> <span class="sy0">=</span> <span class="st_h">'/delete_record.php?signature='</span> <span class="sy0">.</span> <span class="re0">$transaction_signature</span><span class="sy0">;</span>
+&nbsp;
+&nbsp;</pre></div><textarea id="syntax-356a7da7846974a643baa376611e59de-plain">
+$transaction_signature = md5($username . $deleteRecordToken);
+
+// $uri is the resource and the querystring includes the
+// signature.
+$uri = '/delete_record.php?signature=' . $transaction_signature;
+
+</textarea></div><div id="syntax-b37ae3a97a8380a83bd238d73ed3bc78" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> request <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> <span class="st0">'&lt;? echo $uri ?&gt;'</span><span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> request <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> <span class="st0">'&lt;? echo $uri ?&gt;'</span><span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-b37ae3a97a8380a83bd238d73ed3bc78-plain">var request = YAHOO.util.Connect.asyncRequest('GET', '<? echo $uri ?>', callback);
+</textarea></div>
+<p>
+With POST requests, the signature is sent as part of the data.
+</p>
+
+<style>
+/**
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ */
+.php  {font-family:monospace;}
+.php .imp {font-weight: bold; color: red;}
+.php .kw1 {color: #b1b100;}
+.php .kw2 {color: #000000; font-weight: bold;}
+.php .kw3 {color: #990000;}
+.php .co1 {color: #666666; font-style: italic;}
+.php .co2 {color: #666666; font-style: italic;}
+.php .co3 {color: #0000cc; font-style: italic;}
+.php .co4 {color: #009933; font-style: italic;}
+.php .coMULTI {color: #666666; font-style: italic;}
+.php .es0 {color: #000099; font-weight: bold;}
+.php .es1 {color: #000099; font-weight: bold;}
+.php .es2 {color: #660099; font-weight: bold;}
+.php .es3 {color: #660099; font-weight: bold;}
+.php .es4 {color: #006699; font-weight: bold;}
+.php .es5 {color: #006699; font-weight: bold; font-style: italic;}
+.php .es6 {color: #009933; font-weight: bold;}
+.php .es_h {color: #000099; font-weight: bold;}
+.php .br0 {color: #009900;}
+.php .sy0 {color: #339933;}
+.php .sy1 {color: #000000; font-weight: bold;}
+.php .st0 {color: #0000ff;}
+.php .st_h {color: #0000ff;}
+.php .nu0 {color: #cc66cc;}
+.php .nu8 {color: #208080;}
+.php .nu12 {color: #208080;}
+.php .nu19 {color:#800080;}
+.php .me1 {color: #004000;}
+.php .me2 {color: #004000;}
+.php .re0 {color: #000088;}
+.php span.xtra { display:block; }
+
+</style>
+<div id="syntax-231e58e502a8f30d299e260b8cb73b19" class="yui-syntax-highlight"><div class="numbers"><pre class="php" style="font-family:monospace;"><ol><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">$transaction_signature</span> <span class="sy0">=</span> <span class="kw3">md5</span><span class="br0">&#40;</span><span class="re0">$username</span> <span class="sy0">.</span> <span class="re0">$updateRecordToken</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="php" style="font-family:monospace;">&nbsp;
+<span class="re0">$transaction_signature</span> <span class="sy0">=</span> <span class="kw3">md5</span><span class="br0">&#40;</span><span class="re0">$username</span> <span class="sy0">.</span> <span class="re0">$updateRecordToken</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+&nbsp;</pre></div><textarea id="syntax-231e58e502a8f30d299e260b8cb73b19-plain">
+$transaction_signature = md5($username . $updateRecordToken);
+
+</textarea></div><div id="syntax-f549ffe54b7a6575b98dfcc1e2a04607" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// postData represents the data sent in the POST request,</span></div></li><li class="li1"><div class="de1"><span class="co1">// and the signature is sent as part of the POST message.</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> request <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'POST'</span><span class="sy0">,</span> <span class="st0">'/update_record.php'</span><span class="sy0">,</span> callback<span class="sy0">,</span> postData <span class="sy0">+</span></div></li><li class="li1"><div class="de1"><span class="st0">'&amp;signature=&lt;? echo $transaction_signature ?&gt;'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// postData represents the data sent in the POST request,</span>
+<span class="co1">// and the signature is sent as part of the POST message.</span>
+<span class="kw2">var</span> request <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'POST'</span><span class="sy0">,</span> <span class="st0">'/update_record.php'</span><span class="sy0">,</span> callback<span class="sy0">,</span> postData <span class="sy0">+</span>
+<span class="st0">'&amp;signature=&lt;? echo $transaction_signature ?&gt;'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-f549ffe54b7a6575b98dfcc1e2a04607-plain">// postData represents the data sent in the POST request,
+// and the signature is sent as part of the POST message.
+var request = YAHOO.util.Connect.asyncRequest('POST', '/update_record.php', callback, postData +
+'&signature=<? echo $transaction_signature ?>');
+</textarea></div>
+  <h3>Transaction Status<a name="status"></a></h3>
+  <p> The method <code>isCallInProgress</code> can be used to determine if an asynchronous transaction
+    has not yet completed. The method will return <code>true</code> if the transaction is still in progress. </p>
+<div id="syntax-33b8c2f2b6ed52ed2bda81397f9a9f19" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//Initiate an asynchronous transaction.</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> cObj <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span><span class="st0">'http://www.yahoo.com'</span><span class="sy0">,</span>callback<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//isCallInProgress will return true if the transaction has not been completed.</span></div></li><li class="li2"><div class="de2"><span class="kw2">var</span> callStatus <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">isCallInProgress</span><span class="br0">&#40;</span>cObj<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//Initiate an asynchronous transaction.</span>
+<span class="kw2">var</span> cObj <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span><span class="st0">'http://www.yahoo.com'</span><span class="sy0">,</span>callback<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//isCallInProgress will return true if the transaction has not been completed.</span>
+<span class="kw2">var</span> callStatus <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">isCallInProgress</span><span class="br0">&#40;</span>cObj<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-33b8c2f2b6ed52ed2bda81397f9a9f19-plain">//Initiate an asynchronous transaction.
+var cObj = YAHOO.util.Connect.asyncRequest('GET','http://www.yahoo.com',callback);
+
+//isCallInProgress will return true if the transaction has not been completed.
+var callStatus = YAHOO.util.Connect.isCallInProgress(cObj);
+</textarea></div>
+<p>  To explicitly cancel a transaction in progress, call the <code>abort</code> method and pass the connection
+  object &mdash; returned by <code>asyncRequest</code> &mdash; as an argument. <code>abort</code> will return
+true if the transaction was successfully aborted or false if the transaction has completed before the abort call.
+</p>
+
+<div id="syntax-f3c7eb54128cc39fa930343ecd0a6503" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//Initiate an asynchronous transaction.</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> cObj <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> sUrl<span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//Abort the transaction if it isn't completed in ten seconds.</span></div></li><li class="li2"><div class="de2">setTimeout<span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">abort</span><span class="br0">&#40;</span>cObj<span class="br0">&#41;</span> <span class="br0">&#125;</span><span class="sy0">,</span><span class="nu0">10000</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//Initiate an asynchronous transaction.</span>
+<span class="kw2">var</span> cObj <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">asyncRequest</span><span class="br0">&#40;</span><span class="st0">'GET'</span><span class="sy0">,</span> sUrl<span class="sy0">,</span> callback<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//Abort the transaction if it isn't completed in ten seconds.</span>
+setTimeout<span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">abort</span><span class="br0">&#40;</span>cObj<span class="br0">&#41;</span> <span class="br0">&#125;</span><span class="sy0">,</span><span class="nu0">10000</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-f3c7eb54128cc39fa930343ecd0a6503-plain">//Initiate an asynchronous transaction.
+var cObj = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
+
+//Abort the transaction if it isn't completed in ten seconds.
+setTimeout(function() { YAHOO.util.Connect.abort(cObj) },10000);
+</textarea></div>
+<p>To use the transaction's callback failure handler upon <code>abort</code>, add the callback object as the
+second argument.</p>
+
+<div id="syntax-d56ac36be3703d291f200d7beda12795" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* Abort the transaction if it isn't completed in ten seconds,</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* and pass the callback with a defined failure handler as the</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* second argument.  The failure callback will receive a response</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;* object with properties as described in the abort subsection of</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* Failure Case.</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* abort() will return true if the transaction was successfully</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;* aborted.  Otherwise, it will return false.</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;*/</span></div></li><li class="li1"><div class="de1">setTimeout<span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">abort</span><span class="br0">&#40;</span>cObj<span class="sy0">,</span> callback<span class="br0">&#41;</span> <span class="br0">&#125;</span><span class="sy0">,</span><span class="nu0">10000</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="coMULTI">/*
+ * Abort the transaction if it isn't completed in ten seconds,
+ * and pass the callback with a defined failure handler as the
+ * second argument.  The failure callback will receive a response
+ * object with properties as described in the abort subsection of
+ * Failure Case.
+ *
+ * abort() will return true if the transaction was successfully
+ * aborted.  Otherwise, it will return false.
+ *
+ */</span>
+setTimeout<span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">abort</span><span class="br0">&#40;</span>cObj<span class="sy0">,</span> callback<span class="br0">&#41;</span> <span class="br0">&#125;</span><span class="sy0">,</span><span class="nu0">10000</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-d56ac36be3703d291f200d7beda12795-plain">/*
+ * Abort the transaction if it isn't completed in ten seconds,
+ * and pass the callback with a defined failure handler as the
+ * second argument.  The failure callback will receive a response
+ * object with properties as described in the abort subsection of
+ * Failure Case.
+ *
+ * abort() will return true if the transaction was successfully
+ * aborted.  Otherwise, it will return false.
+ *
+ */
+setTimeout(function() { YAHOO.util.Connect.abort(cObj, callback) },10000);
+</textarea></div>
+<h2 id="issues">Known Issues</h2>
+
+<p>When using Firefox 3.0, all HTTP POST transactions automatically receive a <code>Content-Type</code> header of
+<code>application/x-www-form-urlencoded; charset=UTF-8</code>, effectively enforcing UTF-8 encoding for all POST
+transactions.</p>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+		</div>
+         <div class="yui-u">
+
+			<div id="cheatsheet">
+				<h3>Connection Manager Cheat Sheet:</h3>
+
+				<a href="http://yuiblog.com/assets/pdf/cheatsheets/connection.pdf"><img src=
+"http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/connection.gif" width="178" height="134" alt="Cheat Sheet
+for Connection Manager."></a>
+
+				<p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+			</div>
+
+			<div id="examples">
+<h3>Connection Manager Examples:</h3>
+
+<ul>
+<li><a href='../examples/connection/get.html'>Connection Manager GET Transaction</a></li>
+<li><a href='../examples/connection/post.html'>Connection Manager POST Transaction</a></li>
+<li><a href='../examples/connection/abort.html'>Connection Manager Transaction Timeout</a></li>
+<li><a href='../examples/connection/weather.html'>Retrieving a Yahoo! Weather RSS Feed</a></li>
+<li><a href='../examples/connection/xdr.html'>Cross-Domain Transactions with Connection Manager</a></li>
+<li><a href='../examples/connection/global_customevents.html'>Subscribing to Connection Manager Global Events</a></li>
+<li><a href='../examples/connection/callback_customevents.html'>Subscribing to Connection Manager's Custom Events via the Callback Object</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Connection Manager:</h4>
+
+<ul>
+<li><a href='../examples/imagecropper/conn_crop.html'>Connection Manager assisted image crop</a> (included with examples for the <a href='../imagecropper/index.html'>ImageCropper Control</a>)</li>
+<li><a href='../examples/treeview/dynamic_tree.html'>Dynamically Loading Node Data</a> (included with examples for the <a href='../treeview/index.html'>TreeView Control</a>)</li>
+<li><a href='../examples/editor/post_editor.html'>Editor Data Post with Connection Manager</a> (included with examples for the <a href='../editor/index.html'>Rich Text Editor</a>)</li>
+<li><a href='../examples/layout/calrte_layout.html'>Simple Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
+</ul>		
+		   </div>
+
+			<div id="morereading">
+				<h3>More Reading about the YUI Connection Manager:</h3>
+
+				<ul>
+				  <li><a href="http://yuiblog.com/assets/pdf/wellman-connectionmanager.pdf">Ajax and Connection
+Manager</a>, by Dan Wellman (PDF; 672KB); free excerpt from <em>Learning the Yahoo! User Interface Library</em>);
+this chapter includes two sample applications &mdash; a News Reader and a Login app</li>
+				  <li><a href="http://www.developer.com/lang/print.php/10924_3600611_3">The Yahoo! Connection
+Manager</a>, by Nicholas Zakas (PDF; 716KB; free excerpt from <em>Professional Ajax</em>)</li>
+				  <li><a href="http://www.developer.com/lang/print.php/10924_3600611_3">Ajax and the YUI
+Connection Manager</a>, by Nicholas Zakas</li>
+				  <li><a href="http://www.hedgerwow.com/360/dhtml/yui-connection-watcher/demo.php">DHTML Widget:
+Connection Manager Watcher</a>, by Hedger Wang</li>
+				  <li><a href=
+"http://www.whenpenguinsattack.com/2006/12/12/how-to-create-a-php-upload-progress-meter/">How to Create a PHP
+Upload Meter (Using YUI)</a>, by Justin Silverton</li>
+				  <li><a href="http://www.devchix.com/?s=connection+manager&Search.x=0&Search.y=0">Getting
+started with YUI's Connection Manager in Rails and PHP; or "All Happy Families Are Not Alike,"</a> by Desi McAdam
+</li>
+			   </ul>
+		   </div>
+
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fconnection%2F--><h3 id="delicious">YUI Connection Manager on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/connection/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/development" class="tag-size-1">development</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/xmlhttprequest" class="tag-size-1">xmlhttprequest</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/api" class="tag-size-1">api</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax%20yui" class="tag-size-1">ajax yui</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/38fa2867721e022dfab8c98fd14f9743" class="saved-by">saved by <span>88</span>  people</a></p>
+   </div></div>
+
+		 </div>
+      </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="selected "><a title="The YUI Connection Manager (AJAX)" href="index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:21 PDT 2013 -->
+
+<!-- Localized -->

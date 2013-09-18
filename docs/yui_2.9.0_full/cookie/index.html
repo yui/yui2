@@ -1,0 +1,562 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Cookie Utility</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Cookie Utility</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+
+<div id="promo" class="component">
+
+    <h1>YUI 2: Cookie Utility</h1>
+    <p>The YUI Cookie utility provides a simple API for interacting with cookies, including the creation and manipulation
+    of subcookies.</p>
+    <p><strong>Note about HTTPOnly Cookies:</strong> HTTPOnly cookies are cookies that may be set either by JavaScript or by the server but cannot be read from JavaScript.
+    The YUI Cookie utility does not provide support for setting HTTPOnly cookies because browser support is not well-established and there is no
+    fallback mechanism. Setting an HTTPOnly cookie on a browser that doesn't support it is the same as setting any other cookie (no error is thrown).
+    When all A-grade browsers support HTTPOnly cookies, we will revisit adding support for it in the Cookie utility.</p>
+    <div>
+        <h4>On This Page:</h4>
+        <ul>
+            <li><a href="#start">Getting Started</a></li>
+            <li><a href="#creatingcookies">Creating Cookies</a></li>
+            <li><a href="#readingcookies">Reading Cookies</a></li>
+            <li><a href="#deletingcookies">Deleting Cookies</a></li>
+            <li><a href="#subcookies">Subcookies</a></li>
+            <li><a href="#mobile">YUI on Mobile Devices</a></li>
+            <li><a href="#support">Support &amp; Community</a></li><li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+        </ul>
+        
+    </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/cookie/index.html">Examples</a>: Explore examples of the Cookie in action.</li>
+      <li><a href="../docs/module_cookie.html">API Documentation</a>: View the full API documentation for the Cookie.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.cookie">Release Notes</a>: Detailed change log for the Cookie.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Cookie as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>  
+</div>
+    
+<h2 id="start" class="first">Getting Started</h2>
+<p>To use the Cookie utility, include the following source files in your web page:</p>
+<div id="syntax-c72d6be0b2c4dd180e1b42df9303a79d" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source File --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/cookie/cookie-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source File --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/cookie/cookie-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-c72d6be0b2c4dd180e1b42df9303a79d-plain"><!-- Dependencies --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+
+<!-- Source File -->
+<script src="http://yui.yahooapis.com/2.9.0/build/cookie/cookie-min.js"></script>
+</textarea></div>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>cookie</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+<h2 id="creatingcookies">Creating Cookies</h2>
+<p>The simplest way to create a cookie is to provide a name and a value to the <code>set()</code> method:</p>
+
+<div id="syntax-faf7a3803ab07c0e49643f787f79b586" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;value&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;value&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-faf7a3803ab07c0e49643f787f79b586-plain">YAHOO.util.Cookie.set("name", "value");
+</textarea></div>
+
+<p>This example creates a cookie called &quot;name&quot; that has a value of &quot;value&quot;. Since
+this cookie is created with all of the default settings, it becomes a session cookie.</p>
+<p>There is a third argument for <code>set()</code>, which is an object containing additional settings for the cookie. 
+To create a persistent cookie, you can specify an expiration date by supplying a <code>Date</code> object:
+<div id="syntax-8d01c22cf5e296df4184cfa3bf60fd22" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;value&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    expires<span class="sy0">:</span> <span class="kw2">new</span> Date<span class="br0">&#40;</span><span class="st0">&quot;January 12, 2025&quot;</span><span class="br0">&#41;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;value&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    expires<span class="sy0">:</span> <span class="kw2">new</span> Date<span class="br0">&#40;</span><span class="st0">&quot;January 12, 2025&quot;</span><span class="br0">&#41;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-8d01c22cf5e296df4184cfa3bf60fd22-plain">YAHOO.util.Cookie.set("name", "value", {
+    expires: new Date("January 12, 2025")
+});
+</textarea></div>
+
+<p>By providing an &quot;expires&quot; option in the third argument, the cookie persists until the given date. In this example,
+the cookie will remain until January 12, 2025. The value for &quot;expires&quot; must be a <code>Date</code> object, otherwise
+it is ignored.</p>
+<p>It's possible to restrict access to a cookie by setting path and/or domain information. Setting a path on the cookie restricts
+access to pages that match that path; setting a domain restricts access to pages on a given domain (typically used to allow
+cookie access across subdomains). Both options can be easily set using the &quot;path&quot; and &quot;domain&quot; options:</p>
+
+
+<div id="syntax-5af13f01dd32e7cfc55860dfd0ed2190" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;value&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    path<span class="sy0">:</span> <span class="st0">&quot;/&quot;</span><span class="sy0">,</span>           <span class="co1">//all pages</span></div></li><li class="li1"><div class="de1">    domain<span class="sy0">:</span> <span class="st0">&quot;yahoo.com&quot;</span>   <span class="co1">//any subdomain of yahoo.com, including www.yahoo.com</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;value&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    path<span class="sy0">:</span> <span class="st0">&quot;/&quot;</span><span class="sy0">,</span>           <span class="co1">//all pages</span>
+    domain<span class="sy0">:</span> <span class="st0">&quot;yahoo.com&quot;</span>   <span class="co1">//any subdomain of yahoo.com, including www.yahoo.com</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-5af13f01dd32e7cfc55860dfd0ed2190-plain">YAHOO.util.Cookie.set("name", "value", {
+    path: "/",           //all pages
+    domain: "yahoo.com"   //any subdomain of yahoo.com, including www.yahoo.com
+});
+</textarea></div>
+
+<p>In this example, a cookie is created that can be accessed from all pages on a yahoo.com subdomain. This cookie would
+then be accessible from pages on <a href="http://sports.yahoo.com">sports.yahoo.com</a> as well as <a href="http://www.yahoo.com">www.yahoo.com</a>.
+The &quot;path&quot; and &quot;domain&quot; options need not be used together; they may be used independently as well.</p>
+<p>The last option is &quot;secure&quot;, which indicates that the cookie should only be accessible via SSL on a page
+using the HTTPS protocol. All other aspects of the cookie remain the same based on the other options provided. To set a
+secure cookie, use the &quot;secure&quot; option:</p>
+
+
+<div id="syntax-1ccc5620961ffebf8f29a13f599580ae" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;value&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    secure<span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;value&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    secure<span class="sy0">:</span> <span class="kw2">true</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-1ccc5620961ffebf8f29a13f599580ae-plain">YAHOO.util.Cookie.set("name", "value", {
+    secure: true
+});
+</textarea></div>
+
+<p>This code creates a secure cookie by setting the &quot;secure&quot; option to <code>true</code>. Note that this will only
+work if the page calling this code uses the HTTPS protocol, otherwise the cookie will be created with default options.</p>
+
+<h2 id="readingcookies">Reading Cookies</h2>
+<p>The <code>get()</code> method retrieves cookies that are accessible by the current page. If a cookie doesn't exist,
+<code>get()</code> returns <code>null</code>.</p>
+
+<div id="syntax-38316a17ac3ee26d2646a575cc953736" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> value <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> value <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-38316a17ac3ee26d2646a575cc953736-plain">var value = YAHOO.util.Cookie.get("name");
+</textarea></div>
+<p>This example retrieves the cookie called &quot;name&quot; and stores its value in the variable <code>value</code>. By default,
+values returned by <code>get()</code> are strings (if the cookie exists) or <code>null</code> (if the cookie doesn't exist). You
+can change the return value by providing a conversion function as the second argument. For example, to return a number,
+you can pass in the native <code>Number()</code> function:</p>
+
+<div id="syntax-51bc402eca7d1a0f31bb3880509754a0" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> value <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;age&quot;</span><span class="sy0">,</span> Number<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> value <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;age&quot;</span><span class="sy0">,</span> Number<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-51bc402eca7d1a0f31bb3880509754a0-plain">var value = YAHOO.util.Cookie.get("age", Number);
+</textarea></div>
+
+<p>In this code, the returned cookie value will be a number if the cookie exists (it will still be <code>null</code> if the cookie doesn't exist).
+Other native functions that convert values are <code>Boolean()</code> and <code>Date</code>, or you can define your own conversion function:</p>
+
+
+<div id="syntax-0e0716915e828f45b8fc69d6a9ee9dc4" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> value <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;code&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>stringValue<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//create a number from a hexadecimal code</span></div></li><li class="li1"><div class="de1">    <span class="kw1">return</span> parseInt<span class="br0">&#40;</span>stringValue<span class="sy0">,</span> <span class="nu0">16</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> value <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;code&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>stringValue<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">//create a number from a hexadecimal code</span>
+    <span class="kw1">return</span> parseInt<span class="br0">&#40;</span>stringValue<span class="sy0">,</span> <span class="nu0">16</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-0e0716915e828f45b8fc69d6a9ee9dc4-plain">var value = YAHOO.util.Cookie.get("code", function(stringValue) {
+    //create a number from a hexadecimal code
+    return parseInt(stringValue, 16);
+});
+</textarea></div>
+
+<p>Conversion functions accept a single argument, the string value of the cookie, and must return a value. In this example, the
+conversion function expects a hexadecimal code to be returned and passes it into <code>parseInt()</code> to convert the value
+into a number. Note that the conversion function is never called if the cookie doesn't exist (<code>get()</code> always returns
+<code>null</code> when the cookie doesn't exist).</p>
+<h3 id="deletingcookies">Deleting Cookies</h3>
+<p>When a cookie is no longer need, it can be removed from the browser by calling the <code>remove()</code> method. This method
+takes two arguments: the name of the cookie to remove and an optional cookie options object. A cookie created with specific
+options can only be deleted by specifying the same options. For instance, a cookie created with a <code>domain</code> property 
+of &quot;yahoo.com&quot; can only be deleted by also specifying the <code>domain</code> property as &quot;yahoo.com&quot;. Examples:</p>
+
+<div id="syntax-9b54c5fd1b86b67f318ec4bf593e0205" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//delete the cookie named &quot;code&quot;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">remove</span><span class="br0">&#40;</span><span class="st0">&quot;code&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//delete the cookie named &quot;info&quot; on the &quot;yahoo.com&quot; domain</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">remove</span><span class="br0">&#40;</span><span class="st0">&quot;info&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    domain<span class="sy0">:</span> <span class="st0">&quot;yahoo.com&quot;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//delete a secure cookie named &quot;username&quot;</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">remove</span><span class="br0">&#40;</span><span class="st0">&quot;username&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    secure<span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//delete the cookie named &quot;code&quot;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">remove</span><span class="br0">&#40;</span><span class="st0">&quot;code&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//delete the cookie named &quot;info&quot; on the &quot;yahoo.com&quot; domain</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">remove</span><span class="br0">&#40;</span><span class="st0">&quot;info&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    domain<span class="sy0">:</span> <span class="st0">&quot;yahoo.com&quot;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//delete a secure cookie named &quot;username&quot;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">remove</span><span class="br0">&#40;</span><span class="st0">&quot;username&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    secure<span class="sy0">:</span> <span class="kw2">true</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-9b54c5fd1b86b67f318ec4bf593e0205-plain">//delete the cookie named "code"
+YAHOO.util.Cookie.remove("code");
+
+//delete the cookie named "info" on the "yahoo.com" domain
+YAHOO.util.Cookie.remove("info", {
+    domain: "yahoo.com"
+});
+
+//delete a secure cookie named "username"
+YAHOO.util.Cookie.remove("username", {
+    secure: true
+});
+</textarea></div>
+
+<h3 id="subcookies">Subcookies</h3>
+<p>Each browser has a limit to the number of cookies that can be set per domain. These limits can be problematic for domains with
+different sites under different subdomains. Since cookie name-value pairs are rarely large enough to reach the byte limit for
+an individual cookie, it represents an opportunity to store multiple name-value pairs in a single cookie; these are called subcookies.</p>
+<p>A subcookie string looks similar to a URL and takes the following form:</p>
+<p><code>cookiename=name1=value1&amp;name2=value2&amp;name3=value3</code></p>
+<p>The Cookie utility supports this style of subcookies to allow multiple values to be stored in a single cookie. To set a subcookie
+value, use the <code>setSub()</code> method. This method accepts four arguments: the cookie name, the subcookie name, the subcookie value,
+and an optional options object. Note that the options object works on the entire cookie, it is not specific to the subcookie.</p>
+
+
+<div id="syntax-1991af2218fa72d15c7fa125b75b349a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//set a cookie named &quot;name&quot; with a subcookie named &quot;subname&quot; whose value is &quot;value&quot;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">setSub</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;subname&quot;</span><span class="sy0">,</span> <span class="st0">&quot;value&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//set a second subcookie on &quot;name&quot;, with a name of &quot;subname2&quot; and a value of &quot;value2&quot;</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">setSub</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;subname2&quot;</span><span class="sy0">,</span> <span class="st0">&quot;value2&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//set subcookie on the &quot;yahoo.com&quot; domain</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">setSub</span><span class="br0">&#40;</span><span class="st0">&quot;info&quot;</span><span class="sy0">,</span> <span class="st0">&quot;age&quot;</span><span class="sy0">,</span> <span class="nu0">22</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    domain<span class="sy0">:</span> <span class="st0">&quot;yahoo.com&quot;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//set subcookie to a secure cookie named &quot;user&quot;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">setSub</span><span class="br0">&#40;</span><span class="st0">&quot;user&quot;</span><span class="sy0">,</span> <span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;ace123&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    secure<span class="sy0">:</span><span class="kw2">true</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//set a cookie named &quot;name&quot; with a subcookie named &quot;subname&quot; whose value is &quot;value&quot;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">setSub</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;subname&quot;</span><span class="sy0">,</span> <span class="st0">&quot;value&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//set a second subcookie on &quot;name&quot;, with a name of &quot;subname2&quot; and a value of &quot;value2&quot;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">setSub</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;subname2&quot;</span><span class="sy0">,</span> <span class="st0">&quot;value2&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//set subcookie on the &quot;yahoo.com&quot; domain</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">setSub</span><span class="br0">&#40;</span><span class="st0">&quot;info&quot;</span><span class="sy0">,</span> <span class="st0">&quot;age&quot;</span><span class="sy0">,</span> <span class="nu0">22</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    domain<span class="sy0">:</span> <span class="st0">&quot;yahoo.com&quot;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//set subcookie to a secure cookie named &quot;user&quot;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">setSub</span><span class="br0">&#40;</span><span class="st0">&quot;user&quot;</span><span class="sy0">,</span> <span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;ace123&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    secure<span class="sy0">:</span><span class="kw2">true</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-1991af2218fa72d15c7fa125b75b349a-plain">//set a cookie named "name" with a subcookie named "subname" whose value is "value"
+YAHOO.util.Cookie.setSub("name", "subname", "value");
+
+//set a second subcookie on "name", with a name of "subname2" and a value of "value2"
+YAHOO.util.Cookie.setSub("name", "subname2", "value2");
+
+//set subcookie on the "yahoo.com" domain
+YAHOO.util.Cookie.setSub("info", "age", 22, {
+    domain: "yahoo.com"
+});
+
+//set subcookie to a secure cookie named "user"
+YAHOO.util.Cookie.setSub("user", "name", "ace123", {
+    secure:true
+});
+</textarea></div>
+
+<p>It's possible to set the entire contents of a subcookie by using the <code>setSubs()</code> method, which accepts three arguments:
+the name of the cookie, and object containing name-value pairs, and an optional cookie options object. For instance, this code
+sets three subcookies at once:</p>
+<div id="syntax-cf03564f21c197053095fcf24757f4c5" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oData <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;ace123&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    age<span class="sy0">:</span> <span class="nu0">22</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    track<span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//set a cookie named &quot;user&quot; with subcookies</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">setSubs</span><span class="br0">&#40;</span><span class="st0">&quot;user&quot;</span><span class="sy0">,</span> oData<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oData <span class="sy0">=</span> <span class="br0">&#123;</span>
+    <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;ace123&quot;</span><span class="sy0">,</span>
+    age<span class="sy0">:</span> <span class="nu0">22</span><span class="sy0">,</span>
+    track<span class="sy0">:</span> <span class="kw2">true</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//set a cookie named &quot;user&quot; with subcookies</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">setSubs</span><span class="br0">&#40;</span><span class="st0">&quot;user&quot;</span><span class="sy0">,</span> oData<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-cf03564f21c197053095fcf24757f4c5-plain">var oData = {
+    name: "ace123",
+    age: 22,
+    track: true
+};
+
+//set a cookie named "user" with subcookies
+YAHOO.util.Cookie.setSubs("user", oData);
+</textarea></div>
+
+<p>Note that calls to <code>setSubs()</code> will always completely overwrite the cookie.</p>
+<p>To retrieve subcookie values, there are two methods. The first is <code>getSub()</code>, which retrieves a single subcookie value.
+This method accepts three arguments: the cookie name, the subcookie name, and an optional converter function. As with <code>get()</code>,
+the converter function changes the data or type of data retrieved from the cookie before it's returned (and isn't called at all
+if the cookie or subcookie doesn't exist):</p>
+
+<div id="syntax-2399367fbaa272a9720bd7549448fb7a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//get subcookie</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> sValue <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">getSub</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;subname&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//get subcookie and convert to number</span></div></li><li class="li2"><div class="de2"><span class="kw2">var</span> nValue <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">getSub</span><span class="br0">&#40;</span><span class="st0">&quot;user&quot;</span><span class="sy0">,</span> <span class="st0">&quot;age&quot;</span><span class="sy0">,</span> Number<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//get subcookie and convert from hex code to decimal number</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> iValue <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">getSub</span><span class="br0">&#40;</span><span class="st0">&quot;settings&quot;</span><span class="sy0">,</span> <span class="st0">&quot;bgcolor&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>stringValue<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//create a number from a hexadecimal code</span></div></li><li class="li2"><div class="de2">    <span class="kw1">return</span> parseInt<span class="br0">&#40;</span>stringValue<span class="sy0">,</span> <span class="nu0">16</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//get subcookie</span>
+<span class="kw2">var</span> sValue <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">getSub</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;subname&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//get subcookie and convert to number</span>
+<span class="kw2">var</span> nValue <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">getSub</span><span class="br0">&#40;</span><span class="st0">&quot;user&quot;</span><span class="sy0">,</span> <span class="st0">&quot;age&quot;</span><span class="sy0">,</span> Number<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//get subcookie and convert from hex code to decimal number</span>
+<span class="kw2">var</span> iValue <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">getSub</span><span class="br0">&#40;</span><span class="st0">&quot;settings&quot;</span><span class="sy0">,</span> <span class="st0">&quot;bgcolor&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>stringValue<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">//create a number from a hexadecimal code</span>
+    <span class="kw1">return</span> parseInt<span class="br0">&#40;</span>stringValue<span class="sy0">,</span> <span class="nu0">16</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-2399367fbaa272a9720bd7549448fb7a-plain">//get subcookie
+var sValue = YAHOO.util.Cookie.getSub("name", "subname");
+
+//get subcookie and convert to number
+var nValue = YAHOO.util.Cookie.getSub("user", "age", Number);
+
+//get subcookie and convert from hex code to decimal number
+var iValue = YAHOO.util.Cookie.getSub("settings", "bgcolor", function (stringValue) {
+    //create a number from a hexadecimal code
+    return parseInt(stringValue, 16);
+});
+</textarea></div>
+
+
+<p>The second method to retrieve subcookies is <code>getSubs()</code>, which retrieves all subcookies and returns an object
+with name-value pairs for each subcookie. The <code>getSubs()</code> method takes a single argument, the name of the cookie
+containing subcookies to retrieve. The returned value is either an object or <code>null</code> if the cookie doesn't exist.</p>
+<div id="syntax-85b5523385cd49e818e8eb0e68aef422" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//get all subcookies</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> oData <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">getSubs</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> sSubValue <span class="sy0">=</span> oData.<span class="me1">subname</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">//get all subcookies</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> oUser <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">getSubs</span><span class="br0">&#40;</span><span class="st0">&quot;user&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> sUserName <span class="sy0">=</span> oUser.<span class="kw3">name</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//get all subcookies</span>
+<span class="kw2">var</span> oData <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">getSubs</span><span class="br0">&#40;</span><span class="st0">&quot;name&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw2">var</span> sSubValue <span class="sy0">=</span> oData.<span class="me1">subname</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//get all subcookies</span>
+<span class="kw2">var</span> oUser <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">getSubs</span><span class="br0">&#40;</span><span class="st0">&quot;user&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw2">var</span> sUserName <span class="sy0">=</span> oUser.<span class="kw3">name</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-85b5523385cd49e818e8eb0e68aef422-plain">//get all subcookies
+var oData = YAHOO.util.Cookie.getSubs("name");
+var sSubValue = oData.subname;
+
+//get all subcookies
+var oUser = YAHOO.util.Cookie.getSubs("user");
+var sUserName = oUser.name;
+</textarea></div>
+
+<p>Removing subcookies is accomplished using the <code>removeSub()</code> method. This method accepts three arguments: the cookie
+name, the subcookie name, and an optional cookie options object. The options object, if specified, must have the same options
+as when the cookie was originally created. Example:</p>
+
+
+
+<div id="syntax-765396bb7fcaf2ea69c94f6a6fec2633" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//set subcookie on the &quot;yahoo.com&quot; domain</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">setSub</span><span class="br0">&#40;</span><span class="st0">&quot;info&quot;</span><span class="sy0">,</span> <span class="st0">&quot;age&quot;</span><span class="sy0">,</span> <span class="nu0">22</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    domain<span class="sy0">:</span> <span class="st0">&quot;yahoo.com&quot;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//remove the subcookie</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">removeSub</span><span class="br0">&#40;</span><span class="st0">&quot;info&quot;</span><span class="sy0">,</span> <span class="st0">&quot;age&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    domain<span class="sy0">:</span> <span class="st0">&quot;yahoo.com&quot;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//set subcookie on the &quot;yahoo.com&quot; domain</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">setSub</span><span class="br0">&#40;</span><span class="st0">&quot;info&quot;</span><span class="sy0">,</span> <span class="st0">&quot;age&quot;</span><span class="sy0">,</span> <span class="nu0">22</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    domain<span class="sy0">:</span> <span class="st0">&quot;yahoo.com&quot;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//remove the subcookie</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Cookie</span>.<span class="me1">removeSub</span><span class="br0">&#40;</span><span class="st0">&quot;info&quot;</span><span class="sy0">,</span> <span class="st0">&quot;age&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    domain<span class="sy0">:</span> <span class="st0">&quot;yahoo.com&quot;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-765396bb7fcaf2ea69c94f6a6fec2633-plain">//set subcookie on the "yahoo.com" domain
+YAHOO.util.Cookie.setSub("info", "age", 22, {
+    domain: "yahoo.com"
+});
+
+//remove the subcookie
+YAHOO.util.Cookie.removeSub("info", "age", {
+    domain: "yahoo.com"
+});
+</textarea></div>
+
+<p>Removing a subcookie keeps all other subcookies for that cookie intact. If you want to remove all subcookies, it's easiest
+to use <code>remove()</code> to remove the entire cookie.</p>
+
+<h2 id="mobile">YUI on Mobile: Using Cookie with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>
+<p>The Cookie utility works without any major issues on the Nokia N95 and Apple iPhone default browsers and we'd expect similar behavior on other A-Grade-based mobile browsers.</p>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+      </div>
+         <div class="yui-u">
+            
+            <div id="cheatsheet">
+                <h3>Cookie Utility Cheat Sheet:</h3>
+                
+                <a href="http://yuiblog.com/assets/pdf/cheatsheets/cookie.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/cookie.gif" width="178" height="132" alt="Cheat Sheet for the YUI Cookie utility"></a>
+                
+                <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+            </div>
+            
+            <div id="examples">
+<h3>Cookie Utility Examples:</h3>
+
+<ul>
+<li><a href='../examples/cookie/cookie-simple-example.html'>Simple Cookie Example</a></li>
+<li><a href='../examples/cookie/cookie-advanced-example.html'>Advanced Cookie Example</a></li>
+<li><a href='../examples/cookie/cookie-subcookie-example.html'>Subcookie Example</a></li>
+</ul>
+
+
+		
+           </div>
+
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fcookie%2F--><h3 id="delicious">The YUI Cookie Utility on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/cookie/" class="bookmark">bookmark on del.icio.us</a></p>
+            <p class="be-first">be the first to bookmark this page!</a></p>
+   </div></div>
+         </div>
+    </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="selected "><a title="The YUI Cookie Utility" href="index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:16 PDT 2013 -->
+
+<!-- Localized -->

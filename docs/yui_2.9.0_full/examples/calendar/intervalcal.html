@@ -1,0 +1,748 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Calendar Control: Interval Selection Calendar</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/calendar/assets/skins/sam/calendar.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/calendar/calendar-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+    #dates {
+        float:left;
+        border: 1px solid #000;
+        background-color: #ccc;
+        padding:10px;
+        margin:10px;
+    }
+
+    #dates p {
+        clear:both;
+    }
+
+    #dates label {
+        float:left;
+        display:block;
+        width:7em;
+        font-weight:bold;
+    }
+</style>
+
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: Calendar Control: Interval Selection Calendar</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+            <cite class="byline">The <code>IntervalCalendar</code> class and example is based on the <a target="_blank" href="http://blogs.whardy.com/john/2008/05/27/interval-calendar-control/"><code>iCalendarGroup</code></a> class, graciously contributed to YUI by John Peloquin, of <a target="_blank" href="http://www.whardy.com/">W. Hardy Interactive, Inc.</a>.</cite>
+    
+	<div class="promo">
+	<h1>Calendar Control: Interval Selection Calendar</h1>
+	
+	<div class="exampleIntro">
+	<p>The Calendar widget is commonly used to select pairs of dates, representing the start and end dates of an interval, for example flight departure and return dates, or hotel check-in and check-out dates.</p>
+
+<p>This example defines a custom <code>IntervalCalendar</code> class, based on CalendarGroup, which is designed specifically for this use case.</p>
+			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="intervalcal_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<div id="cal1Container"></div>
+<div id="dates">
+    <p><label for="in">Check In:</label><input type="text" name="in" id="in"></p>
+    <p><label for="out">Check Out:</label><input type="text" name="out" id="out"></p>
+</div>
+
+<script type="text/javascript">
+
+(function() {
+
+    /**
+    * IntervalCalendar is an extension of the CalendarGroup designed specifically
+    * for the selection of an interval of dates.
+    *
+    * @namespace YAHOO.example.calendar
+    * @module calendar
+    * @since 2.5.2
+    * @requires yahoo, dom, event, calendar
+    */
+
+    /**
+    * IntervalCalendar is an extension of the CalendarGroup designed specifically
+    * for the selection of an interval of dates, as opposed to a single date or
+    * an arbitrary collection of dates.
+    * <p>
+    * <b>Note:</b> When using IntervalCalendar, dates should not be selected or
+    * deselected using the 'selected' configuration property or any of the
+    * CalendarGroup select/deselect methods. Doing so will corrupt the internal
+    * state of the control. Instead, use the provided methods setInterval and
+    * resetInterval.
+    * </p>
+    * <p>
+    * Similarly, when handling select/deselect/etc. events, do not use the
+    * dates passed in the arguments to attempt to keep track of the currently
+    * selected interval. Instead, use getInterval.
+    * </p>
+    *
+    * @namespace YAHOO.example.calendar
+    * @class IntervalCalendar
+    * @extends YAHOO.widget.CalendarGroup
+    * @constructor
+    * @param {String | HTMLElement} container The id of, or reference to, an HTML DIV element which will contain the control.
+    * @param {Object} cfg optional The initial configuration options for the control.
+    */
+    function IntervalCalendar(container, cfg) {
+        /**
+        * The interval state, which counts the number of interval endpoints that have
+        * been selected (0 to 2).
+        * 
+        * @private
+        * @type Number
+        */
+        this._iState = 0;
+
+        // Must be a multi-select CalendarGroup
+        cfg = cfg || {};
+        cfg.multi_select = true;
+
+        // Call parent constructor
+        IntervalCalendar.superclass.constructor.call(this, container, cfg);
+
+        // Subscribe internal event handlers
+        this.beforeSelectEvent.subscribe(this._intervalOnBeforeSelect, this, true);
+        this.selectEvent.subscribe(this._intervalOnSelect, this, true);
+        this.beforeDeselectEvent.subscribe(this._intervalOnBeforeDeselect, this, true);
+        this.deselectEvent.subscribe(this._intervalOnDeselect, this, true);
+    }
+
+    /**
+    * Default configuration parameters.
+    * 
+    * @property IntervalCalendar._DEFAULT_CONFIG
+    * @final
+    * @static
+    * @private
+    * @type Object
+    */
+    IntervalCalendar._DEFAULT_CONFIG = YAHOO.widget.CalendarGroup._DEFAULT_CONFIG;
+
+    YAHOO.lang.extend(IntervalCalendar, YAHOO.widget.CalendarGroup, {
+
+        /**
+        * Returns a string representation of a date which takes into account
+        * relevant localization settings and is suitable for use with
+        * YAHOO.widget.CalendarGroup and YAHOO.widget.Calendar methods.
+        * 
+        * @method _dateString
+        * @private
+        * @param {Date} d The JavaScript Date object of which to obtain a string representation.
+        * @return {String} The string representation of the JavaScript Date object.
+        */
+        _dateString : function(d) {
+            var a = [];
+            a[this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.MDY_MONTH_POSITION.key)-1] = (d.getMonth() + 1);
+            a[this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.MDY_DAY_POSITION.key)-1] = d.getDate();
+            a[this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.MDY_YEAR_POSITION.key)-1] = d.getFullYear();
+            var s = this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.DATE_FIELD_DELIMITER.key);
+            return a.join(s);
+        },
+
+        /**
+        * Given a lower and upper date, returns a string representing the interval
+        * of dates between and including them, which takes into account relevant
+        * localization settings and is suitable for use with
+        * YAHOO.widget.CalendarGroup and YAHOO.widget.Calendar methods.
+        * <p>
+        * <b>Note:</b> No internal checking is done to ensure that the lower date
+        * is in fact less than or equal to the upper date.
+        * </p>
+        * 
+        * @method _dateIntervalString
+        * @private
+        * @param {Date} l The lower date of the interval, as a JavaScript Date object.
+        * @param {Date} u The upper date of the interval, as a JavaScript Date object.
+        * @return {String} The string representing the interval of dates between and
+        *                   including the lower and upper dates.
+        */
+        _dateIntervalString : function(l, u) {
+            var s = this.cfg.getProperty(IntervalCalendar._DEFAULT_CONFIG.DATE_RANGE_DELIMITER.key);
+            return (this._dateString(l)
+                    + s + this._dateString(u));
+        },
+
+        /**
+        * Returns the lower and upper dates of the currently selected interval, if an
+        * interval is selected.
+        * 
+        * @method getInterval
+        * @return {Array} An empty array if no interval is selected; otherwise an array
+        *                 consisting of two JavaScript Date objects, the first being the
+        *                 lower date of the interval and the second being the upper date.
+        */
+        getInterval : function() {
+            // Get selected dates
+            var dates = this.getSelectedDates();
+            if(dates.length > 0) {
+                // Return lower and upper date in array
+                var l = dates[0];
+                var u = dates[dates.length - 1];
+                return [l, u];
+            }
+            else {
+                // No dates selected, return empty array
+                return [];
+            }
+        },
+
+        /**
+        * Sets the currently selected interval by specifying the lower and upper
+        * dates of the interval (in either order).
+        * <p>
+        * <b>Note:</b> The render method must be called after setting the interval
+        * for any changes to be seen.
+        * </p>
+        * 
+        * @method setInterval
+        * @param {Date} d1 A JavaScript Date object.
+        * @param {Date} d2 A JavaScript Date object.
+        */
+        setInterval : function(d1, d2) {
+            // Determine lower and upper dates
+            var b = (d1 <= d2);
+            var l = b ? d1 : d2;
+            var u = b ? d2 : d1;
+            // Update configuration
+            this.cfg.setProperty('selected', this._dateIntervalString(l, u), false);
+            this._iState = 2;
+        },
+
+        /**
+        * Resets the currently selected interval.
+        * <p>
+        * <b>Note:</b> The render method must be called after resetting the interval
+        * for any changes to be seen.
+        * </p>
+        * 
+        * @method resetInterval
+        */
+        resetInterval : function() {
+            // Update configuration
+            this.cfg.setProperty('selected', [], false);
+            this._iState = 0;
+        },
+
+        /**
+        * Handles beforeSelect event.
+        * 
+        * @method _intervalOnBeforeSelect
+        * @private
+        */
+        _intervalOnBeforeSelect : function(t,a,o) {
+            // Update interval state
+            this._iState = (this._iState + 1) % 3;
+            if(this._iState == 0) {
+                // If starting over with upcoming selection, first deselect all
+                this.deselectAll();
+                this._iState++;
+            }
+        },
+
+        /**
+        * Handles selectEvent event.
+        * 
+        * @method _intervalOnSelect
+        * @private
+        */
+        _intervalOnSelect : function(t,a,o) {
+            // Get selected dates
+            var dates = this.getSelectedDates();
+            if(dates.length > 1) {
+                /* If more than one date is selected, ensure that the entire interval
+                    between and including them is selected */
+                var l = dates[0];
+                var u = dates[dates.length - 1];
+                this.cfg.setProperty('selected', this._dateIntervalString(l, u), false);
+            }
+            // Render changes
+            this.render();
+        },
+
+        /**
+        * Handles beforeDeselect event.
+        * 
+        * @method _intervalOnBeforeDeselect
+        * @private
+        */
+        _intervalOnBeforeDeselect : function(t,a,o) {
+            if(this._iState != 0) {
+                /* If part of an interval is already selected, then swallow up
+                    this event because it is superfluous (see _intervalOnDeselect) */
+                return false;
+            }
+        },
+
+        /**
+        * Handles deselectEvent event.
+        *
+        * @method _intervalOnDeselect
+        * @private
+        */
+        _intervalOnDeselect : function(t,a,o) {
+            if(this._iState != 0) {
+                // If part of an interval is already selected, then first deselect all
+                this._iState = 0;
+                this.deselectAll();
+
+                // Get individual date deselected and page containing it
+                var d = a[0][0];
+                var date = YAHOO.widget.DateMath.getDate(d[0], d[1] - 1, d[2]);
+                var page = this.getCalendarPage(date);
+                if(page) {
+                    // Now (re)select the individual date
+                    page.beforeSelectEvent.fire();
+                    this.cfg.setProperty('selected', this._dateString(date), false);
+                    page.selectEvent.fire([d]);
+                }
+                // Swallow up since we called deselectAll above
+                return false;
+            }
+        }
+    });
+
+    YAHOO.namespace("example.calendar");
+    YAHOO.example.calendar.IntervalCalendar = IntervalCalendar;
+})();
+
+YAHOO.util.Event.onDOMReady(function() {
+
+    var inTxt = YAHOO.util.Dom.get("in"),
+        outTxt = YAHOO.util.Dom.get("out"),
+        inDate, outDate, interval;
+
+    inTxt.value = "";
+    outTxt.value = "";
+
+    var cal = new YAHOO.example.calendar.IntervalCalendar("cal1Container", {pages:2});
+
+    cal.selectEvent.subscribe(function() {
+        interval = this.getInterval();
+
+        if (interval.length == 2) {
+            inDate = interval[0];
+            inTxt.value = (inDate.getMonth() + 1) + "/" + inDate.getDate() + "/" + inDate.getFullYear();
+
+            if (interval[0].getTime() != interval[1].getTime()) {
+                outDate = interval[1];
+                outTxt.value = (outDate.getMonth() + 1) + "/" + outDate.getDate() + "/" + outDate.getFullYear();
+            } else {
+                outTxt.value = "";
+            }
+        }
+    }, cal, true);
+    
+    cal.render();
+});
+</script>
+
+<div style="clear:both" ></div>
+	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">The Interval Selection Calendar</h2>
+
+<p>The <code>IntervalCalendar</code> class, defined in this example, allows users to select pairs of dates representing the start and end of a date interval. Applications which require interval selection, for example a hotel check-in/check-out date selector, frequently display separate calendar instances to select the beginning and ending dates of the interval. The IntervalCalendar provides an alternate solution, by allowing the selection of both dates within the same calendar instance. It's most suitable for applications in which the beginning and ending dates fall within the span of a few days, so that the entire range falls within the calendar's visible set of months.</p>
+
+<h3>The <code>IntervalCalendar</code> Class</h3>
+
+<p>The <code>IntervalCalendar</code> class extends the <code>CalendarGroup</code> class, so that it can support a multi-page view. A two page view would probably be the most common use case for the Interval Calendar.</p>
+
+<p>We start by defining the constructor for the <code>IntervalCalendar</code> class:</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+    function IntervalCalendar(container, cfg) {
+        /**
+         * The interval state, which counts the number of interval endpoints that have
+         * been selected (0 to 2).
+         */
+        this._iState = 0;
+
+        // Must be a multi-select CalendarGroup
+        cfg = cfg || {};
+        cfg.multi_select = true;
+
+        // Call parent constructor
+        IntervalCalendar.superclass.constructor.call(this, container, cfg);
+
+        // Subscribe internal event handlers
+        this.beforeSelectEvent.subscribe(this._intervalOnBeforeSelect, this, true);
+        this.selectEvent.subscribe(this._intervalOnSelect, this, true);
+        this.beforeDeselectEvent.subscribe(this._intervalOnBeforeDeselect, this, true);
+        this.deselectEvent.subscribe(this._intervalOnDeselect, this, true);
+    }
+
+    YAHOO.lang.extend(IntervalCalendar, YAHOO.widget.CalendarGroup, {
+        ...
+    });
+</textarea>
+
+<p>By default Calendar and CalendarGroup are designed to allow open ended selection of dates, which don't neccessarily need to form a continuous date range. However the Interval Calendar needs to constrain the selection behavior, to limit selection to a maximum of two date values - the beginning and ending dates for the interval. The Interval Calendar enforces the interval selection state, using two main code constructs; the <code>_iState</code> property and a set of event listeners for CalendarGroup's selection related events - <code>beforeSelect</code>, <code>select</code>, <code>beforeDeselect</code> and <code>deselect</code>.</p>
+
+<h4>The <code>_iState</code> Property</h4>
+
+<p>The <code>_iState</code> property is used to determine which of 3 "modes" Interval Calendar date selection is currently in - no dates selected, one date selected or two dates selected. Since internally, CalendarGroup maintains an array for all of its selected dates (that is, the start date, the end date and any dates in between), the Interval Calendar does not rely on the length of the <code>"selected"</code> dates array to determine which selection "mode" the Interval Calendar is in. Instead it maintains its own state using the <code>_iState</code> property.</p>
+
+<h4>The Event Listeners</h4>
+
+<p>The default select and deselect events that CalendarGroup fires when the user selects or deselects a date are used to maintain the value of the <code>_iState</code> property discussed above. This allows the Interval Calendar implementation to provide custom interval selection behavior without having to re-implement large portions of the Calendar or CalendarGroup date selection code.</p>
+
+<p>
+All the logic required to provide the custom selection functionality is wrapped up neatly in 4 event listener methods: <code>_intervalOnBeforeSelect</code>, <code>_intervalOnSelect</code>, <code>_intervalOnBeforeDeselect</code> and <code>_intervalOnDeselect</code> all of which work with the existing CalendarGroup selection API and the <code>_iState</code> property to ensure the user doesn't select more than two dates at any given time:</p>
+</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+    /**
+     * Handles beforeSelect event.
+     */
+    _intervalOnBeforeSelect : function(t,a,o) {
+        // Update interval state
+        this._iState = (this._iState + 1) % 3;
+        if(this._iState == 0) {
+            // If starting over with upcoming selection, first deselect all
+            this.deselectAll();
+            this._iState++;
+        }
+    },
+
+    /**
+     * Handles selectEvent event.
+     */
+    _intervalOnSelect : function(t,a,o) {
+        // Get selected dates
+        var dates = this.getSelectedDates();
+        if(dates.length > 1) {
+            /* If more than one date is selected, ensure that the entire interval
+                between and including them is selected */
+            var l = dates[0];
+            var u = dates[dates.length - 1];
+            this.cfg.setProperty('selected', this._dateIntervalString(l, u), false);
+        }
+        // Render changes
+        this.render();
+    },
+
+    /**
+     * Handles beforeDeselect event.
+     */
+    _intervalOnBeforeDeselect : function(t,a,o) {
+        if(this._iState != 0) {
+            /* If part of an interval is already selected, then swallow up
+                this event because it is superfluous (see _intervalOnDeselect) */
+            return false;
+        }
+    }
+
+    /**
+     * Handles deselectEvent event.
+     */
+    _intervalOnDeselect : function(t,a,o) {
+        if(this._iState != 0) {
+
+            // If part of an interval is already selected, then first deselect all
+            this._iState = 0;
+            this.deselectAll();
+
+            // Get individual date deselected and page containing it
+            var d = a[0][0];
+            var date = YAHOO.widget.DateMath.getDate(d[0], d[1] - 1, d[2]);
+            var page = this.getCalendarPage(date);
+            if(page) {
+                // Now (re)select the individual date
+                page.beforeSelectEvent.fire();
+                this.cfg.setProperty('selected', this._dateString(date), false);
+                page.selectEvent.fire([d]);
+            }
+
+            // Swallow up since we called deselectAll above
+            return false;
+        }
+    }
+</textarea>
+
+<h4>Supporting Selection  Methods</h4>
+
+<p>The constructor code, along with the above 4 methods provide the backbone for interval selection state handling. Additionally <code>IntervalCalendar</code> provides a few supporting selection methods, to make it easier to work with intervals:</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+    /**
+    * Returns the lower and upper dates of the currently selected interval, if an
+    * interval is selected.
+    */
+    getInterval : function() {
+        // Get selected dates
+        var dates = this.getSelectedDates();
+        if(dates.length > 0) {
+            // Return lower and upper date in array
+            var l = dates[0];
+            var u = dates[dates.length - 1];
+            return [l, u];
+        }
+        else {
+            // No dates selected, return empty array
+            return [];
+        }
+    },
+
+    /**
+     * Sets the currently selected interval by specifying the lower and upper
+     * dates of the interval (in either order).
+     */
+    setInterval : function(d1, d2) {
+        // Determine lower and upper dates
+        var b = (d1 <= d2);
+        var l = b ? d1 : d2;
+        var u = b ? d2 : d1;
+        // Update configuration
+        this.cfg.setProperty('selected', this._dateIntervalString(l, u), false);
+        this._iState = 2;
+    },
+
+    /**
+     * Resets the currently selected interval.
+     */
+    resetInterval : function() {
+        // Update configuration
+        this.cfg.setProperty('selected', [], false);
+        this._iState = 0;
+    }
+</textarea>
+
+<p>Since Calendar and CalendarGroup's underlying selection model is designed to allow you to select multiple, not neccessarily adjacent dates, the default selection methods and properties don't enforce the date selection constraints required by IntervalCalendar. The <code>IntervalCalendar</code> class provides the <code>setInterval</code>, <code>getInterval</code> and <code>resetInterval</code> methods as alternative selection methods, which follow the selection definitions required by the Interval Calendar, setting and returning dates as part of a continuous date range.</p>
+
+<p><strong>NOTE:</strong> For the purposes of this example, Interval Calendar doesn't go out of it's way to prevent developers from using the default <code>select</code> method or <code>select</code> configuration property, to select arbitrary dates outside of the currently selected interval, but it could override the corresponding methods to protect against such use if desired</p>
+
+<h3>Using The <code>IntervalCalendar</code> Class</h3>
+
+<p>Using the <code>IntervalCalendar</code> class is straightforward. It's instantiated in the same way as the CalenderGroup, providing a container id and a configuration object, and <code>render</code> is invoked to display it:</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+    var iCal = new YAHOO.example.calendar.IntervalCalendar("cal1Container", {pages:2});
+    iCal.render();
+</textarea>
+
+<h3>Setting Up The Select Event Listener</h3>
+
+<p>The example also registers a listener for the normal select event fired by the CalendarGroup, and uses the <code>IntervalCalendar's</code> <code>getInterval</code> method to populate text input elements representing beginning and ending dates for the interval selected:</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+   cal.selectEvent.subscribe(function() {
+        interval = this.getInterval();
+
+        if (interval.length == 2) {
+            inDate = interval[0];
+            inTxt.value = (inDate.getMonth() + 1) + "/" + inDate.getDate() + "/" + inDate.getFullYear();
+
+            if (interval[0].getTime() != interval[1].getTime()) {
+                outDate = interval[1];
+                outTxt.value = (outDate.getMonth() + 1) + "/" + outDate.getDate() + "/" + outDate.getFullYear();
+            } else {
+                outTxt.value = "";
+            }
+
+        }
+    }, cal, true);
+</textarea>
+
+<p>The select event listener relies on the fact that <code>getInterval</code> will either return an empty array if no dates have been selected, or a two element array with the first element representing the start date of the interval and the second element representing the end date of the interval. If only one date has been selected, the start date and end date will be the same.<p/>
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+					
+				
+					<div id="examples">
+						<h3 class='firstContent'>Calendar Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='quickstart.html'>Quickstart Tutorial</a></li><li><a href='multi.html'>Multi-Select Calendar</a></li><li><a href='calgrp.html'>Multi-Page Calendar</a></li><li><a href='minmax.html'>Minimum/Maximum Dates</a></li><li><a href='calnavigator.html'>Calendar Navigator</a></li><li><a href='events.html'>Handling Calendar Events</a></li><li><a href='formtxt.html'>Calendar and Text Fields</a></li><li><a href='formsel.html'>Calendar and Select Fields</a></li><li><a href='render.html'>Using the Render Stack</a></li><li><a href='popup.html'>Popup Calendar - Basic</a></li><li><a href='calcontainer.html'>Popup Calendar - Advanced</a></li><li class='selected'><a href='intervalcal.html'>Interval Selection Calendar</a></li><li><a href='germany.html'>Localization - Germany</a></li><li><a href='japan.html'>Localization - Japan</a></li><li><a href='taiwan.html'>Localization - Taiwan (Year Offset)</a></li><li><a href='calskin.html'>Skinning The Calendar</a></li><li><a href='../editor/cal_editor.html'>Calendar Plugin (included with examples for Rich Text Editor)</a></li><li><a href='../datatable/dt_cellediting.html'>Inline Cell Editing (included with examples for DataTable Control)</a></li><li><a href='../yuiloader/yl-basic.html'>Using YUI Loader to Load the Calendar Control (included with examples for YUI Loader Utility)</a></li><li><a href='../button/btn_example09.html'>Simple Calendar Menu Button (included with examples for Button Control)</a></li><li><a href='../button/btn_example10.html'>Calendar Menu Button with Date on Button Face (included with examples for Button Control)</a></li><li><a href='../layout/calrte_layout.html'>Simple Application (included with examples for Layout Manager)</a></li><li><a href='../layout/adv_layout.html'>Complex Application (included with examples for Layout Manager)</a></li><li><a href='../profilerviewer/pv-basic.html'>Simple Profiling (included with examples for ProfilerViewer Control)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Calendar Control Resources:</h3>
+						<ul>
+							<li><a href="../../calendar/index.html">User's Guide</a></li>
+						<li><a href="../../docs/module_calendar.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/calendar.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:11 PDT 2013 -->
+
+<!-- Localized -->

@@ -1,0 +1,362 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Calendar</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Calendar</h1></div>
+</div>
+<div id="bd">
+
+
+<div id="yui-main">
+<div class="yui-b">
+<div id="promo" class="component">
+	<h1>YUI 2: Calendar 0.12 Upgrade Guide </h1>
+	<p>As of the 0.12 release, the Calendar component has undergone significant API changes to make the control easier to configure. If using the default constructor (only specifying HTML IDs for rendering the Calendar), no changes are required in order to get up and running with the new version. However, any implementations using custom configuration properties such as pre-selected dates and localization must be adapted in order to function properly.</p>
+	<p>This guide will provide examples of common usage scenarios and how to migrate them to take advantage of the new configuration features of Calendar 0.12.</p>
+	<p><strong>Note:</strong> The full documentation for Calendar's 0.12 version is provided on <a href="index.html">the main Calendar documentation page</a> and in <a href="../docs/calendar/index.html">the API documents for Calendar</a>; this page is intended solely to help you make a transition from an earlier version of the control.  If you're just getting started with Calendar, please refer to <a href="index.html">the 0.12 documentation</a>.</p>
+	<div>
+    <h4>Topics:</h4>
+    <ul>
+      <li><a href="#instantiating">Instantiating the Calendar </a></li>
+      <li><a href="#config">Configuration Properties</a></li>
+      <li><a href="#multi">Multi-Page Calendars Using CalendarGroup</a></li>
+      <li><a href="#render">Styling and Customizing Calendar Cells</a></li>
+      <li><a href="#localization">Localization</a></li>
+      <li><a href="#events">Handling Events</a></li>
+    </ul>
+  </div>
+</div>
+<h2 id="instantiating" class="first">Instantiating the Calendar</h2>
+ 
+<p>In Calendar 0.12, the configuration properties formerly known as <code>monthyear</code> and <code>selected</code> have been moved to take advantage of the new <code>config</code> argument that can be passed to the constructor. If these properties are not being set, it is not necessary to change the Calendar code at all. Previously, the Calendar was constructed like this:</p>
+<div id="syntax-fb75a0e8f6926fb37e7a8fd609ec3daa" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> cal1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Calendar</span><span class="br0">&#40;</span><span class="st0">&quot;cal1&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                                     <span class="st0">&quot;cal1Container&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                                     <span class="st0">&quot;5/2007&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                                     <span class="st0">&quot;5/5/2007-5/27/2007,5/30/2007&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> cal1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Calendar</span><span class="br0">&#40;</span><span class="st0">&quot;cal1&quot;</span><span class="sy0">,</span>
+                                     <span class="st0">&quot;cal1Container&quot;</span><span class="sy0">,</span>
+                                     <span class="st0">&quot;5/2007&quot;</span><span class="sy0">,</span>
+                                     <span class="st0">&quot;5/5/2007-5/27/2007,5/30/2007&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-fb75a0e8f6926fb37e7a8fd609ec3daa-plain">var cal1 = new YAHOO.widget.Calendar("cal1",
+                                     "cal1Container",
+                                     "5/2007",
+                                     "5/5/2007-5/27/2007,5/30/2007");
+</textarea></div><p>The new constructor, which adds the <code>config</code> argument (see lines 3 and 4 below), allows the currently displayed calendar page and selected dates to be specified as a part of this new configuration argument, rather than as arguments of the constructor:</p>
+<div id="syntax-4f86fbe99ca20b909aa142004390e7e8" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> cal1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Calendar</span><span class="br0">&#40;</span><span class="st0">&quot;cal1&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                                     <span class="st0">&quot;cal1Container&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                                    <span class="br0">&#123;</span> pagedate<span class="sy0">:</span> <span class="st0">&quot;5/2007&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                                      selected<span class="sy0">:</span> <span class="st0">&quot;5/5/2007-5/27/2007,5/30/2007&quot;</span> <span class="br0">&#125;</span> <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> cal1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Calendar</span><span class="br0">&#40;</span><span class="st0">&quot;cal1&quot;</span><span class="sy0">,</span>
+                                     <span class="st0">&quot;cal1Container&quot;</span><span class="sy0">,</span>
+                                    <span class="br0">&#123;</span> pagedate<span class="sy0">:</span> <span class="st0">&quot;5/2007&quot;</span><span class="sy0">,</span>
+                                      selected<span class="sy0">:</span> <span class="st0">&quot;5/5/2007-5/27/2007,5/30/2007&quot;</span> <span class="br0">&#125;</span> <span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-4f86fbe99ca20b909aa142004390e7e8-plain">var cal1 = new YAHOO.widget.Calendar("cal1",
+                                     "cal1Container",
+                                    { pagedate: "5/2007",
+                                      selected: "5/5/2007-5/27/2007,5/30/2007" } );
+</textarea></div><p>The <code>config</code> argument can also be used to set other configuration properties, which will be covered in the next section.</p>
+<h2 id="config">Configuration Properties</h2>
+
+<p>Previous versions of Calendar required that configuration options be set using the <code>Options</code> and <code>Locale</code> objects prior to rendering. Calendar 0.12 provides the ability to configure the Calendar during instantiation or at runtime using the Calendar's new <code>cfg</code> object. Previously, setting the <code>MULTI_SELECT</code> property was accomplished by changing the value in the <code>Options</code> object:</p>
+<div id="syntax-e402c581c43c9d6564bdb686306bab27" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">cal1.<span class="me1">Options</span>.<span class="me1">MULTI_SELECT</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">cal1.<span class="me1">Options</span>.<span class="me1">MULTI_SELECT</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-e402c581c43c9d6564bdb686306bab27-plain">cal1.Options.MULTI_SELECT = true;
+</textarea></div><p>The most common ways to configure properties in Calendar 0.12 are via the constructor or by using the <code>cfg</code> object's <code>setProperty</code> method:</p>
+<div id="syntax-43e1290ff3e217c2cb543cdaf970e281" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// In the constructor, via an object literal:</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> cal1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Calendar</span><span class="br0">&#40;</span><span class="st0">&quot;myCalendar&quot;</span><span class="sy0">,</span> <span class="st0">&quot;myCalendarContainer&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> MULTI_SELECT<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">// Via &quot;setProperty&quot;, at runtime, after the Calendar has been rendered</span></div></li><li class="li1"><div class="de1">myCalendar.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MULTI_SELECT&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// In the constructor, via an object literal:</span>
+<span class="kw2">var</span> cal1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Calendar</span><span class="br0">&#40;</span><span class="st0">&quot;myCalendar&quot;</span><span class="sy0">,</span> <span class="st0">&quot;myCalendarContainer&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> MULTI_SELECT<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">// Via &quot;setProperty&quot;, at runtime, after the Calendar has been rendered</span>
+myCalendar.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MULTI_SELECT&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-43e1290ff3e217c2cb543cdaf970e281-plain">// In the constructor, via an object literal:
+var cal1 = new YAHOO.widget.Calendar("myCalendar", "myCalendarContainer", { MULTI_SELECT: true });
+// Via "setProperty", at runtime, after the Calendar has been rendered
+myCalendar.cfg.setProperty("MULTI_SELECT", true);
+</textarea></div>
+<h2>Multi-Page Calendars using CalendarGroup <a name="multi"></a></h2>
+<p>In Calendar 0.11.x, instantiating a multi-page calendar required the use of the <code>Calendar2up</code> class. For Calendar 0.12, the default multi-page calendar is called <code>CalendarGroup</code>. Previously, the <code>pages</code> array had to be manipulated directly in order to make changes to a multi-page calendar's individual configuration properties. In Calendar 0.12, the configuration interfaces have been synchronized to allow a CalendarGroup to be configured directly in the same way as the Calendar.</p>
+<div id="syntax-842d273ab2284e885040d9cc9ce4dcff" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// The previous Calendar2up object's configuration was set by </span></div></li><li class="li1"><div class="de1"><span class="co1">// manipulating the pages separately</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> calOld <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Calendar2up</span><span class="br0">&#40;</span><span class="st0">&quot;cal&quot;</span><span class="sy0">,</span> <span class="st0">&quot;calContainer&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">calOld.<span class="me1">pages</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>.<span class="me1">Options</span>.<span class="me1">MULTI_SELECT</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">calOld.<span class="me1">pages</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span>.<span class="me1">Options</span>.<span class="me1">MULTI_SELECT</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">// Now, CalendarGroup allows direct manipulation of configuration properties.</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> calNew <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">CalendarGroup</span><span class="br0">&#40;</span><span class="st0">&quot;cal1&quot;</span><span class="sy0">,</span> <span class="st0">&quot;calContainer1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">calNew.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MULTI_SELECT&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// The previous Calendar2up object's configuration was set by </span>
+<span class="co1">// manipulating the pages separately</span>
+<span class="kw2">var</span> calOld <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Calendar2up</span><span class="br0">&#40;</span><span class="st0">&quot;cal&quot;</span><span class="sy0">,</span> <span class="st0">&quot;calContainer&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+calOld.<span class="me1">pages</span><span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>.<span class="me1">Options</span>.<span class="me1">MULTI_SELECT</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+calOld.<span class="me1">pages</span><span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span>.<span class="me1">Options</span>.<span class="me1">MULTI_SELECT</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+<span class="co1">// Now, CalendarGroup allows direct manipulation of configuration properties.</span>
+<span class="kw2">var</span> calNew <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">CalendarGroup</span><span class="br0">&#40;</span><span class="st0">&quot;cal1&quot;</span><span class="sy0">,</span> <span class="st0">&quot;calContainer1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+calNew.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MULTI_SELECT&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-842d273ab2284e885040d9cc9ce4dcff-plain">// The previous Calendar2up object's configuration was set by 
+// manipulating the pages separately
+var calOld = new YAHOO.widget.Calendar2up("cal", "calContainer");
+calOld.pages[0].Options.MULTI_SELECT = true;
+calOld.pages[1].Options.MULTI_SELECT = true;
+// Now, CalendarGroup allows direct manipulation of configuration properties.
+var calNew = new YAHOO.widget.CalendarGroup("cal1", "calContainer1");
+calNew.cfg.setProperty("MULTI_SELECT", true);
+</textarea></div><p>CalendarGroup also introduces a new argument, <code>pages</code>, that can be set using the configuration methods described above. This argument is set to 2 by default, meaning that a CalendarGroup will display 2 pages at a time. Setting this argument to a higher number will increase the number of pages displayed simultaneously. However, it should be noted that performance may decrease when the <code>pages</code> property is set to an unusually high number.</p>
+<h2>Styling and Customizing Calendar Cells <a name="render"></a></h2>
+<p>The familiar interface for <code>addRenderer</code> that Calendar 0.11.x used for adding renderer functions to a Calendar instance remains unchanged for Calendar 0.12. However, a new styling mechanism has been implemented that allows cells to be styled more easily using CSS rules. Meaningful class names have been applied to the Calendar's various elements, making it easy to style specific dates:</p>
+<table width="672">
+  <tbody>
+    <tr class="odd">
+      <th width="21%"> Field </th>
+      <th width="21%">Class Identifier </th>
+      <th width="29%" style="width:25%">Format</th>
+      <th width="29%">Example</th>
+    </tr>
+    <tr>
+      <td> Year </td>
+      <td> y </td>
+      <td> yyyy (full year) </td>
+      <td> .y2006 </td>
+    </tr>
+    <tr class="odd">
+      <td> Month </td>
+      <td> m </td>
+      <td>mm (month, 1-12) </td>
+      <td>.m7</td>
+    </tr>
+    <tr>
+      <td>Week Number </td>
+      <td> w </td>
+      <td> ww (week number, 1-52) </td>
+      <td> .w6 </td>
+    </tr>
+    <tr class="odd">
+      <td> Weekday </td>
+      <td> wd </td>
+      <td> w (weekday number, 0-6) </td>
+      <td> .wd4 </td>
+    </tr>
+    <tr>
+      <td> Day of Month </td>
+      <td> d </td>
+      <td> dd (day of month, 1-31) </td>
+      <td> .d22 </td>
+    </tr>
+  </tbody>
+</table>
+<p>For instance, the class selector <code>.y2006 .m8 .d22</code> would allow the styling of 8/22/2006 through CSS:</p>
+<div id="syntax-80737c72124d3765b29f9db0bf153c9d" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="re1">.y2006</span> <span class="re1">.m8</span> <span class="re1">.d22</span> <span class="br0">&#123;</span> <span class="kw1">background-color</span><span class="sy0">:</span><span class="kw2">yellow</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="re1">.y2006</span> <span class="re1">.m8</span> <span class="re1">.d22</span> <span class="br0">&#123;</span> <span class="kw1">background-color</span><span class="sy0">:</span><span class="kw2">yellow</span> <span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-80737c72124d3765b29f9db0bf153c9d-plain">.y2006 .m8 .d22 { background-color:yellow }
+</textarea></div>
+<p>The <code>addRenderer</code> function can still be used to customize the contents of cells for both Calendar and CalendarGroup.</p>
+<h2 id="localization">Localization</h2>
+<p>Localization now takes advantage of the same configuration mechanism used by other properties in Calendar 0.12. Instead of setting locale properties against the <code>Locale</code> object, the properties can be set directly using the same familiar names from 0.11.x. In the code sample below, all references to <code>cal.Locale</code> have been modififed to use <code>cfg.setProperty</code>:</p>
+<div id="syntax-3be138fb2e715a81c469736663a8ff6d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> cal1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Calendar</span><span class="br0">&#40;</span><span class="st0">&quot;cal1&quot;</span><span class="sy0">,</span><span class="st0">&quot;cal1Container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">// Correct formats for Germany: dd.mm.yyyy, dd.mm, mm.yyyy</span></div></li><li class="li1"><div class="de1">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;DATE_FIELD_DELIMITER&quot;</span><span class="sy0">,</span> <span class="st0">&quot;.&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MDY_DAY_POSITION&quot;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MDY_MONTH_POSITION&quot;</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MDY_YEAR_POSITION&quot;</span><span class="sy0">,</span> <span class="nu0">3</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MD_DAY_POSITION&quot;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MD_MONTH_POSITION&quot;</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">// Date labels for German locale</span></div></li><li class="li2"><div class="de2">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MONTHS_SHORT&quot;</span><span class="sy0">,</span>   <span class="br0">&#91;</span><span class="st0">&quot;Jan&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Feb&quot;</span><span class="sy0">,</span> <span class="st0">&quot;M<span class="es0">\u</span>00E4r&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Apr&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mai&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Jun&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Jul&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Aug&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Sep&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Okt&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Nov&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Dez&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MONTHS_LONG&quot;</span><span class="sy0">,</span>    <span class="br0">&#91;</span><span class="st0">&quot;Januar&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Februar&quot;</span><span class="sy0">,</span> <span class="st0">&quot;M<span class="es0">\u</span>00E4rz&quot;</span><span class="sy0">,</span> <span class="st0">&quot;April&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mai&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Juni&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Juli&quot;</span><span class="sy0">,</span> <span class="st0">&quot;August&quot;</span><span class="sy0">,</span> <span class="st0">&quot;September&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Oktober&quot;</span><span class="sy0">,</span> <span class="st0">&quot;November&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Dezember&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;WEEKDAYS_1CHAR&quot;</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="st0">&quot;S&quot;</span><span class="sy0">,</span> <span class="st0">&quot;M&quot;</span><span class="sy0">,</span> <span class="st0">&quot;D&quot;</span><span class="sy0">,</span> <span class="st0">&quot;M&quot;</span><span class="sy0">,</span> <span class="st0">&quot;D&quot;</span><span class="sy0">,</span> <span class="st0">&quot;F&quot;</span><span class="sy0">,</span> <span class="st0">&quot;S&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;WEEKDAYS_SHORT&quot;</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="st0">&quot;So&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mo&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Di&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mi&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Do&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Fr&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Sa&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;WEEKDAYS_MEDIUM&quot;</span><span class="sy0">,</span><span class="br0">&#91;</span><span class="st0">&quot;Son&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mon&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Die&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mit&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Don&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Fre&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Sam&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;WEEKDAYS_LONG&quot;</span><span class="sy0">,</span>  <span class="br0">&#91;</span><span class="st0">&quot;Sonntag&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Montag&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Dienstag&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mittwoch&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Donnerstag&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Freitag&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Samstag&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">cal1.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> cal1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Calendar</span><span class="br0">&#40;</span><span class="st0">&quot;cal1&quot;</span><span class="sy0">,</span><span class="st0">&quot;cal1Container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">// Correct formats for Germany: dd.mm.yyyy, dd.mm, mm.yyyy</span>
+cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;DATE_FIELD_DELIMITER&quot;</span><span class="sy0">,</span> <span class="st0">&quot;.&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MDY_DAY_POSITION&quot;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span>
+cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MDY_MONTH_POSITION&quot;</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span>
+cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MDY_YEAR_POSITION&quot;</span><span class="sy0">,</span> <span class="nu0">3</span><span class="br0">&#41;</span><span class="sy0">;</span>
+cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MD_DAY_POSITION&quot;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span>
+cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MD_MONTH_POSITION&quot;</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">// Date labels for German locale</span>
+cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MONTHS_SHORT&quot;</span><span class="sy0">,</span>   <span class="br0">&#91;</span><span class="st0">&quot;Jan&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Feb&quot;</span><span class="sy0">,</span> <span class="st0">&quot;M<span class="es0">\u</span>00E4r&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Apr&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mai&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Jun&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Jul&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Aug&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Sep&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Okt&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Nov&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Dez&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;MONTHS_LONG&quot;</span><span class="sy0">,</span>    <span class="br0">&#91;</span><span class="st0">&quot;Januar&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Februar&quot;</span><span class="sy0">,</span> <span class="st0">&quot;M<span class="es0">\u</span>00E4rz&quot;</span><span class="sy0">,</span> <span class="st0">&quot;April&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mai&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Juni&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Juli&quot;</span><span class="sy0">,</span> <span class="st0">&quot;August&quot;</span><span class="sy0">,</span> <span class="st0">&quot;September&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Oktober&quot;</span><span class="sy0">,</span> <span class="st0">&quot;November&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Dezember&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;WEEKDAYS_1CHAR&quot;</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="st0">&quot;S&quot;</span><span class="sy0">,</span> <span class="st0">&quot;M&quot;</span><span class="sy0">,</span> <span class="st0">&quot;D&quot;</span><span class="sy0">,</span> <span class="st0">&quot;M&quot;</span><span class="sy0">,</span> <span class="st0">&quot;D&quot;</span><span class="sy0">,</span> <span class="st0">&quot;F&quot;</span><span class="sy0">,</span> <span class="st0">&quot;S&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;WEEKDAYS_SHORT&quot;</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="st0">&quot;So&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mo&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Di&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mi&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Do&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Fr&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Sa&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;WEEKDAYS_MEDIUM&quot;</span><span class="sy0">,</span><span class="br0">&#91;</span><span class="st0">&quot;Son&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mon&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Die&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mit&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Don&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Fre&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Sam&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;WEEKDAYS_LONG&quot;</span><span class="sy0">,</span>  <span class="br0">&#91;</span><span class="st0">&quot;Sonntag&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Montag&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Dienstag&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Mittwoch&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Donnerstag&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Freitag&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Samstag&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+cal1.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-3be138fb2e715a81c469736663a8ff6d-plain">var cal1 = new YAHOO.widget.Calendar("cal1","cal1Container");
+// Correct formats for Germany: dd.mm.yyyy, dd.mm, mm.yyyy
+cal1.cfg.setProperty("DATE_FIELD_DELIMITER", ".");
+cal1.cfg.setProperty("MDY_DAY_POSITION", 1);
+cal1.cfg.setProperty("MDY_MONTH_POSITION", 2);
+cal1.cfg.setProperty("MDY_YEAR_POSITION", 3);
+cal1.cfg.setProperty("MD_DAY_POSITION", 1);
+cal1.cfg.setProperty("MD_MONTH_POSITION", 2);
+// Date labels for German locale
+cal1.cfg.setProperty("MONTHS_SHORT",   ["Jan", "Feb", "M\u00E4r", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]);
+cal1.cfg.setProperty("MONTHS_LONG",    ["Januar", "Februar", "M\u00E4rz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"]);
+cal1.cfg.setProperty("WEEKDAYS_1CHAR", ["S", "M", "D", "M", "D", "F", "S"]);
+cal1.cfg.setProperty("WEEKDAYS_SHORT", ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"]);
+cal1.cfg.setProperty("WEEKDAYS_MEDIUM",["Son", "Mon", "Die", "Mit", "Don", "Fre", "Sam"]);
+cal1.cfg.setProperty("WEEKDAYS_LONG",  ["Sonntag", "Montag", "Dienstag", "Mittwoch", "Donnerstag", "Freitag", "Samstag"]);
+cal1.render();
+</textarea></div><p>In addition, specifying which set of labels to use has become easier, thanks to the <code>LOCALE_MONTHS</code> and <code>LOCALE_WEEKDAYS</code> properties:</p>
+  <table>
+    <tbody>
+      <tr>
+        <th> Name </th>
+        <th>Type</th>
+        <th>Default</th>
+        <th>Description</th>
+      </tr>
+      <tr>
+        <td> LOCALE_MONTHS </td>
+        <td> String </td>
+        <td>&quot;long&quot; </td>
+        <td>The format of the month title to be displayed. Possible values are &quot;short&quot;, &quot;medium&quot;, and &quot;long&quot;. </td>
+      </tr>
+      <tr class="odd">
+        <td> LOCALE_WEEKDAYS </td>
+        <td> String </td>
+        <td>&quot;short&quot; </td>
+        <td>The format of the weekday title to be displayed. Possible values are &quot;1char&quot;, &quot;short&quot;, &quot;medium&quot;, and &quot;long&quot;. </td>
+      </tr>
+	</tbody>
+  </table>
+<p>These properties can be set using the same configuration syntax used by other properties:</p>
+<div id="syntax-0591d9f45212952049f8c1d765423b12" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;LOCALE_MONTHS&quot;</span><span class="sy0">,</span> <span class="st0">&quot;short&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;LOCALE_WEEKDAYS&quot;</span><span class="sy0">,</span> <span class="st0">&quot;medium&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;LOCALE_MONTHS&quot;</span><span class="sy0">,</span> <span class="st0">&quot;short&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+cal1.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;LOCALE_WEEKDAYS&quot;</span><span class="sy0">,</span> <span class="st0">&quot;medium&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-0591d9f45212952049f8c1d765423b12-plain">cal1.cfg.setProperty("LOCALE_MONTHS", "short");
+cal1.cfg.setProperty("LOCALE_WEEKDAYS", "medium");
+</textarea></div><h2 id="events">Handling Events</h2>
+<p>Prior to Calendar 0.12, events were defined as functions, such as <code>onSelect</code> and <code>onDeselect</code>. To achieve custom behaviors, these prototypal functions could be overridden on your Calendar instance:</p>
+<div id="syntax-a391362a5d925652cdcf84ca5615e769" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//0.11.x syntax:</span></div></li><li class="li1"><div class="de1">cal1.<span class="me1">onSelect</span> <span class="sy0">=</span> myFunction<span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//0.11.x syntax:</span>
+cal1.<span class="me1">onSelect</span> <span class="sy0">=</span> myFunction<span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-a391362a5d925652cdcf84ca5615e769-plain">//0.11.x syntax:
+cal1.onSelect = myFunction;
+</textarea></div><p>In Calendar 0.12, all event functions have been replaced with Custom Event objects (see the <a href="../event/index.html">Event Utility</a> for more details), allowing event handlers to subscribe to these events dynamically. This provides added flexibility to allow more than one event handler to be subscribed to any given event.  But this added flexibility comes at the cost of a a syntax change:</p>
+<div id="syntax-2750bdea4521f70c2fdca864cb33eede" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//new 0.12 syntax for custom event subscription:</span></div></li><li class="li1"><div class="de1">cal1.<span class="me1">selectEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>myFunction<span class="sy0">,</span> cal1<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//new 0.12 syntax for custom event subscription:</span>
+cal1.<span class="me1">selectEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>myFunction<span class="sy0">,</span> cal1<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-2750bdea4521f70c2fdca864cb33eede-plain">//new 0.12 syntax for custom event subscription:
+cal1.selectEvent.subscribe(myFunction, cal1, true);
+</textarea></div><p>The second argument in the above code snippet is the scope in which to execute the function, and the third argument indicates that the scope should be corrected so that <code>this</code> refers to <code>cal1</code> (in this case, the Calendar instance).</p>
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+</div>
+</div>
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="selected "><a title="The YUI Calendar Control" href="index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:11 PDT 2013 -->
+
+<!-- Localized -->

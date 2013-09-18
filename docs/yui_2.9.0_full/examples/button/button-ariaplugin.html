@@ -1,0 +1,456 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Button Control: Using the Button ARIA Plugin</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/menu/assets/skins/sam/menu.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+
+    #button-example-form fieldset {
+        border: 2px groove #ccc;
+        margin: .5em;
+        padding: .5em;
+    }
+
+	/*
+		The Menu ARIA Plugin removes the "href" attribute from the <A> element of each MenuItem
+		if the value of the "href" is set to "#", resulting in the focus outline no longer be 
+		rendered in Gecko-based browsers when the <A> element is focused.  For this reason, 
+		it is necessary to restore the focus outline for the <A>. 
+	*/
+	a[role=menuitem]:focus {
+		outline: dotted 1px #000;
+	}
+	
+</style>
+
+<script type="text/javascript" src="../container/assets/containerariaplugin.js"></script>
+<script type="text/javascript" src="../menu/assets/menuariaplugin.js"></script>
+<script type="text/javascript" src="assets/buttonariaplugin.js"></script>
+
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: Button Control: Using the Button ARIA Plugin</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Button Control: Using the Button ARIA Plugin</h1>
+	
+	<div class="exampleIntro">
+	<p>
+The Button ARIA Plugin makes it easy to use the 
+<a href="http://www.w3.org/TR/wai-aria/">WAI-ARIA Roles and States</a> with the Button
+and ButtonGroup controls.
+Using the ARIA plugin, Buttons are more interoperable with assistive technologies (AT),
+such as screen readers, making them more accessible to users with disabilities.
+</p>
+<p>
+<a href="http://video.yahoo.com/watch/3608716/9955201">Watch a screen cast of this example 
+running in Firefox 3 with the NVDA screen reader</a>, to see immediately the benefits that 
+ARIA provides, or 
+<a href="http://www.nvda-project.org/wiki/Snapshots">download the latest development snapshot of 
+NVDA</a> to test this example for yourself.
+</p>			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="button-ariaplugin_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<script type="text/javascript">
+
+    (function () {
+    	
+    	var Event = YAHOO.util.Event,
+    		Button = YAHOO.widget.Button,
+    		UA = YAHOO.env.ua;
+
+		Event.onContentReady("checkboxbutton-example", function () {		
+
+			var oCheckButton1 = new Button("checkbutton1", { label: "Cheese" });
+			var oCheckButton2 = new Button("checkbutton2", { label: "Mushrooms" });
+			var oCheckButton3 = new Button("checkbutton3", { label: "Pepperoni" });
+			var oCheckButton4 = new Button("checkbutton4", { label: "Olives" });
+		
+		});
+
+		Event.onContentReady("radiobutton-example", function () {
+
+			//	Only apply the WAI-ARIA Roles and States for FF 3 and IE 8 since those
+			//	are the only browsers that currently support ARIA.
+		
+			if ((UA.gecko && UA.gecko >= 1.9) || (UA.ie && UA.ie >= 8)) {
+
+				// Remove the "for" attribute in favor of using the aria-labelledby attribute
+				YAHOO.util.Dom.get("buttongroup-label").removeAttribute(YAHOO.env.ua.ie ? "htmlFor" : "for");
+
+			}
+
+			var oButtonGroup = new YAHOO.widget.ButtonGroup("buttongroup", { labelledby: "buttongroup-label" });
+		
+		});
+
+		Event.onContentReady("menubutton-example", function () {
+
+			var oMenuButton = new Button("menubutton-1", { type: "menu", menu: "menubutton-1-menu" });
+		
+		});
+
+		Event.onContentReady("splitbutton-example", function () {
+
+			var oMenuButton = new Button("splitbutton-1", { type: "split", menu: "splitbutton-1-menu" });
+		
+		});
+
+    }());
+
+</script>
+
+<form id="button-example-form" name="button-example-form" method="post">
+
+	<fieldset id="checkboxbutton-example">
+		<legend>Pizza Toppings</legend>
+
+		<input id="checkbutton1" type="checkbox" name="checkboxfield1" value="1" checked>
+		<input id="checkbutton2" type="checkbox" name="checkboxfield1" value="2">
+		<input id="checkbutton3" type="checkbox" name="checkboxfield1" value="3">
+		<input id="checkbutton4" type="checkbox" name="checkboxfield1" value="4">
+		
+	</fieldset>
+
+	<fieldset id="radiobutton-example">
+		<legend>Radio Buttons</legend>
+
+		<div id="buttongroup" class="yui-buttongroup">
+			<label for="radio1" id="buttongroup-label">Size</label>
+			<input id="radio1" type="radio" name="radiofield1" value="Small" checked>
+			<input id="radio2" type="radio" name="radiofield1" value="Medium">
+			<input id="radio3" type="radio" name="radiofield1" value="Large">
+		</div>		
+
+	</fieldset>
+
+	<fieldset id="menubutton-example">
+		<legend>Menu Button</legend>
+		<input type="button" id="menubutton-1" name="menubutton-1" value="Move To">
+		<select id="menubutton-1-menu" name="menubutton-1-menu">
+			<option value="0">Archive</option>
+			<option value="1">Favorites</option>
+			<option value="2">Trash</option>                
+		</select>
+	</fieldset>
+
+	<fieldset id="splitbutton-example">
+		<legend>Split Button</legend>	
+		<input type="button" id="splitbutton-1" name="splitbutton-1" value="Reply">
+		<select id="splitbutton-1-menu" name="splitbutton-1-menu">
+			<option value="0">Reply To Sender</option>
+			<option value="1">Reply To All</option> 
+		</select>
+	</fieldset>
+
+</form>	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2>Getting Started</h2>
+<p>
+Using the Button ARIA Plugin is easy.  Simply include the source file(s) for the ARIA plugin after 
+the Button source files as indicated on the Button landing page.
+</p>
+<textarea name="code" class="HTML" cols="60" rows="1">
+<!-- Source file -->
+<script type="text/javascript" src="assets/buttonariaplugin.js"></script>
+
+<!-- OPTIONAL: Menu and Container ARIA Plugin files (required for creating Buttons of type "menu" and "split") -->
+<script type="text/javascript" src="../container/assets/containerariaplugin.js"></script>
+<script type="text/javascript" src="../menu/assets/menuariaplugin.js"></script>
+</textarea>
+
+<p>
+All YUI ARIA Plugins require the user's browser and AT support the WAI-ARIA Roles and States.  
+Currently only <a href="http://www.mozilla.com/en-US/firefox/">Firefox 3</a> and 
+<a href="http://www.microsoft.com/windows/products/winfamily/ie/ie8/getitnow.mspx">Internet Explorer
+8</a> have support for ARIA, and are supported by several screen readers for 
+Windows that also offer support for ARIA.  For this reason the YUI ARIA Plugins are only enabled 
+by default for these browsers.  To enable the ARIA plugin for other browsers, simply the set 
+the <code>usearia</code> attribute to <code>true</code>.  For example:
+</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+var oButton = new YAHOO.widget.Button({ 
+	type: "checkbox",
+	usearia: true,
+	label: "A Checkbox", 
+	name: "checkbox-1", 
+	value: "1", 
+	container: document.body });
+</textarea>
+
+<p>The same is true of the <code>ButtonGroup</code> widget:</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+var oButtonGroup = new YAHOO.widget.ButtonGroup({  
+						name:  "radiogroup-1", 
+						container:  document.body, 
+						usearia: true });
+
+oButtonGroup.addButtons([
+	{ label: "Radio 1", value: "1" checked: true },
+	{ label: "Radio 2", value: "2" }, 
+	{ label: "Radio 3", value: "3" }, 
+	{ label: "Radio 4", value: "4" }
+]);
+</textarea>
+
+<h2>Plugin Features</h2>
+<h3>More Accessible Radio Buttons and Checkboxes</h3>
+<p>
+All Buttons (with the exception of those of type <code>link</code>) created using the Button 
+widget are represented in HTML using the <code>&#60;button&#62;</code> element.  While this element 
+suits most applications, it doesn't convey the correct role information for Buttons of type
+<code>checkbox</code> and <code>radio</code>.  For this reason the Button ARIA Plugin 
+sets the ARIA <code>role</code> attribute of each Button to either <code>checkbox</code> and 
+<code>radio</code>, and the ARIA <code>role</code> attribute for the root element of a 
+ButtonGroup to 
+<a href="http://www.w3.org/TR/wai-aria/#radiogroup"><code>radiogroup</code></a>.
+Lastly, for Buttons of type
+<code>checkbox</code> and <code>radio</code>, the Button ARIA Plugin automatically toggles the 
+<a href="http://www.w3.org/TR/wai-aria/#checked"><code>aria-checked</code></a> attribute as the 
+Button's <code>checked</code> attribute changes.
+</p>
+
+<h3>The <code>labelledby</code> and <code>describedby</code> Attributes.</h3>
+<p>
+The Button ARIA Plugin adds a <code>labelledby</code> and <code>describedby</code>
+attribute to the ButtonGroup class, each of which maps back to their respective ARIA property of 
+<a href="http://www.w3.org/TR/wai-aria/#labelledby"><code>aria-labelledby</code></a> and 
+<a href="http://www.w3.org/TR/wai-aria/#describedby"><code>aria-describedby</code></a>.
+</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+var oButtonGroup = new YAHOO.widget.ButtonGroup("buttongroup", { labelledby: "buttongroup-label" });
+</textarea>
+
+<h3>More Accessible Split Buttons and Menu Buttons</h3>
+<p>
+As indicated above, Buttons of type <code>menu</code> and <code>split</code> require the  
+Container and Menu ARIA Plugins.  No additional configuration of a Button's Menu is required.  
+Setting the <code>usearia</code> attribute to <code>true</code> for a Button will automatically set
+the corresponding property on its Menu.  Additionally, the 
+<a href="http://www.w3.org/TR/wai-aria/#haspopup"><code>aria-haspop</code></a> attribute
+will automatically be set to <code>true</code> for each Button's <code>&#60;button&#62;</code> 
+element so that users of AT know that the Button has a corresponding Menu.  The Menu's 
+<code>labelledby</code> configuration property will automatically be set to the id of the 
+Button, to further associate the Menu with its corresponding Button for users of AT.
+</p>
+
+
+<h2>Screen Reader Testing</h2>
+<p>
+Two of the leading screen readers for Windows, 
+<a href="http://www.freedomscientific.com/fs_products/software_jaws.asp">JAWS</a> and 
+<a href="http://www.gwmicro.com/Window-Eyes/">Window-Eyes</a>, support ARIA.  Free, trial 
+versions of both are available for download, but require Windows be restarted every 40 minutes.
+The open-source 
+<a href="http://www.nvda-project.org/">NVDA Screen Reader</a> is the best option for developers as 
+it is both free and provides excellent support for ARIA.
+</p>
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerGloss"><p><strong>Note:</strong> Logging and debugging is currently turned off for this example.</p> 
+							<p class="loggerButton"><span id="loggerLink"><span class="first-child"><a href="button-ariaplugin_log.html">Reload with logging<br />
+	 and debugging enabled.</a></span></span></p></div>
+	
+						</div>
+					
+				
+					<div id="examples">
+						<h3>Button Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='btn_example01.html'>Push Buttons</a></li><li><a href='btn_example02.html'>Link Buttons</a></li><li><a href='btn_example03.html'>Checkbox Buttons</a></li><li><a href='btn_example04.html'>Radio Buttons</a></li><li><a href='btn_example05.html'>Submit Buttons</a></li><li><a href='btn_example06.html'>Reset Buttons</a></li><li><a href='btn_example07.html'>Menu Buttons</a></li><li><a href='btn_example08.html'>Split Buttons</a></li><li><a href='btn_example09.html'>Simple Calendar Menu Button</a></li><li><a href='btn_example10.html'>Calendar Menu Button with Date on Button Face</a></li><li><a href='btn_example11.html'>Color Picker Button</a></li><li><a href='btn_example12.html'>Fixed Width Menu Button</a></li><li><a href='btn_example13.html'>Glowing Button</a></li><li><a href='btn_example14.html'>Slider Button</a></li><li class='selected'><a href='button-ariaplugin.html'>Using the Button ARIA Plugin</a></li><li><a href='button-menu-select.html'>Using A Menu Button To Replace A &#60;select&#62; Element</a></li><li><a href='button-menu-swap.html'>Replacing the content of a Button's Menu</a></li><li><a href='../autocomplete/ac_combobox.html'>Combobox, with CSS for Multiple Stacked Instances (included with examples for AutoComplete Control)</a></li><li><a href='../datatable/dt_colshowhide.html'>Showing, Hiding, and Reordering Columns. (included with examples for DataTable Control)</a></li><li><a href='../layout/adv_layout.html'>Complex Application (included with examples for Layout Manager)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Button Control Resources:</h3>
+						<ul>
+							<li><a href="../../button/index.html">User's Guide</a></li>
+						<li><a href="../../docs/module_button.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/button.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:16 PDT 2013 -->
+
+<!-- Localized -->

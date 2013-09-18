@@ -1,0 +1,671 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Button Control: Color Picker Button</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/slider/assets/skins/sam/slider.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/colorpicker/assets/skins/sam/colorpicker.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/menu/assets/skins/sam/menu.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/slider/slider-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/colorpicker/colorpicker-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-debug.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+
+    /*
+        Set the "zoom" property to "normal" since it is set to "1" by the 
+        ".example-container .bd" rule in yui.css and this causes a Menu
+        instance's width to expand to 100% of the browser viewport.
+    */
+    
+    div.yuimenu .bd {
+    
+        zoom: normal;
+    
+    }
+
+    #button-container {
+    
+        padding: .5em;
+    
+    }
+
+	#color-picker-button {
+
+		vertical-align: baseline;
+	
+	}
+
+    #color-picker-button button {
+    
+        outline: none;  /* Safari */
+        line-height: 1.5;
+
+    }
+
+
+    /*
+        Style the Button instance's label as a square whose background color 
+        represents the current value of the ColorPicker instance.
+    */
+
+    #current-color {
+
+        display: block;
+        display: inline-block;
+        *display: block;    /* For IE */
+        margin-top: .5em;
+        *margin: .25em 0;    /* For IE */
+        width: 1em;
+        height: 1em;
+        overflow: hidden;
+        text-indent: 1em;
+        background-color: #fff;
+        white-space: nowrap;
+        border: solid 1px #000;
+
+    }
+
+
+    /* Hide default colors for the ColorPicker instance. */
+
+    #color-picker-container .yui-picker-controls,
+    #color-picker-container .yui-picker-swatch,
+    #color-picker-container .yui-picker-websafe-swatch {
+    
+        display: none;
+    
+    }
+
+
+    /*
+        Size the body element of the Menu instance to match the dimensions of 
+        the ColorPicker instance.
+    */
+            
+    #color-picker-menu .bd {
+
+        width: 220px;    
+        height: 190px;
+    
+    }
+
+	#photo {
+	
+		background: #fff url(../button/assets/ggbridge.png) top left no-repeat;
+		
+		/*
+			Hide the alpha PNG from IE 6 and make the background image transparent via the use of 
+			the AlphaImageLoader that is applied by the filter property.
+		*/
+
+		_background-image: none;
+		_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../button/assets/ggbridge.png', sizingMethod='image');;
+
+		border: solid 1px #000;
+		width: 400px;
+		height: 300px;
+		
+		_width: 398px;	/* For IE 6 */
+		_height: 298px;	/* For IE 6 */
+	
+	}
+
+	#button-container {
+	
+        border-top: solid 1px #000;
+        padding: .5em .25em;
+        margin-top: .5em;
+	
+	}
+
+</style>
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	<div id="ygma"><a href="/"><img src="http://l.yimg.com/a/i/brand/purplelogo/uh/us/ydn.gif" width="266" height="34" border="0"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: Button Control: Color Picker Button</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Button Control: Color Picker Button</h1>
+	
+	<div class="exampleIntro">
+	<p>
+This example demonstrates how to render a Color Picker into the Menu of a Split Button.
+Use the Color Picker Button below to create a duotone by selecting the background color 
+that should be applied to the image.
+</p>			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="btn_example11_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<script type="text/javascript">
+
+    YAHOO.util.Event.onContentReady("button-container", function () {
+
+        function onButtonOption() {
+
+            /*
+                 Create a new ColorPicker instance, placing it inside the body 
+                 element of the Menu instance.
+            */
+
+            var oColorPicker = new YAHOO.widget.ColorPicker(oColorPickerMenu.body.id, {
+                                    showcontrols: false,
+                                    images: {
+                                        PICKER_THUMB: "http://yui.yahooapis.com/2.9.0/build/colorpicker/assets/picker_thumb.png",
+                                        HUE_THUMB: "http://yui.yahooapis.com/2.9.0/build/colorpicker/assets/hue_thumb.png"
+                                    }
+                                });
+
+
+            /*
+                Add a listener for the ColorPicker instance's "rgbChange" event
+                to update the background color and text of the Button's 
+                label to reflect the change in the value of the ColorPicker.
+            */
+
+            oColorPicker.on("rgbChange", function (p_oEvent) {
+
+                var sColor = "#" + this.get("hex");
+                
+                oButton.set("value", sColor);
+
+                YAHOO.util.Dom.setStyle("current-color", "backgroundColor", sColor);
+                YAHOO.util.Dom.get("current-color").innerHTML = "Current color is " + sColor;
+            
+            });
+            
+
+            // Remove this event listener so that this code runs only once
+
+            this.unsubscribe("option", onButtonOption);
+        
+        }
+
+
+        // Create a Menu instance to house the ColorPicker instance
+
+        var oColorPickerMenu = new YAHOO.widget.Menu("color-picker-menu");
+
+
+        // Create a Button instance of type "split"
+
+        var oButton = new YAHOO.widget.Button({ 
+                                            type: "split", 
+                                            id: "color-picker-button", 
+                                            label: "<em id=\"current-color\">Current color is #FFFFFF.</em>", 
+                                            menu: oColorPickerMenu, 
+                                            container: "button-container" });
+        
+        
+        oButton.on("appendTo", function () {
+        
+			/*
+				Create an empty body element for the Menu instance in order to 
+				reserve space to render the ColorPicker instance into.
+			*/
+	
+			oColorPickerMenu.setBody("&#32;");
+	
+			oColorPickerMenu.body.id = "color-picker-container";
+	
+	
+	
+			// Render the Menu into the Button instance's parent element
+	
+			oColorPickerMenu.render(this.get("container"));
+        
+        });
+        
+        
+        /*
+            Add a listener for the "option" event.  This listener will be
+            used to defer the creation the ColorPicker instance until the 
+            first time the Button's Menu instance is requested to be displayed
+            by the user.
+        */
+        
+        oButton.on("option", onButtonOption);
+        
+
+		/*
+			Add a listener for the "click" event.  This listener will be used to apply the 
+			the background color to the photo.
+		*/
+
+        oButton.on("click", function () {
+        
+        	YAHOO.util.Dom.setStyle("photo", "backgroundColor", this.get("value"));
+        
+        });
+    
+    });
+
+</script>
+
+<div id="photo"></div>
+<div id="button-container"><label for="color-picker-button">Background Color: </label></div>	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<p>
+Begin by creating a Menu instance that will house the ColorPicker instance. 
+Next, instantiate a new Button of type "split," setting its "menu" attribute 
+to the Menu instance.
+</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+// Create a Menu instance to house the ColorPicker instance
+
+var oColorPickerMenu = new YAHOO.widget.Menu("color-picker-menu");
+
+
+// Create a Button instance of type "split"
+
+var oButton = new YAHOO.widget.Button({ 
+									type: "split", 
+									id: "color-picker-button", 
+									label: "<em id=\"current-color\">Current color is #FFFFFF.</em>", 
+									menu: oColorPickerMenu, 
+									container: this });
+</textarea>
+
+<p>
+Once the new Button is created, add a listener for its "appendTo" event that 
+will be used to render its Menu instance into the same DOM element specified as the 
+containing element for the Button.
+</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+oButton.on("appendTo", function () {
+
+	/*
+		Create an empty body element for the Menu instance in order to 
+		reserve space to render the ColorPicker instance into.
+	*/
+
+	oColorPickerMenu.setBody("&#32;");
+
+	oColorPickerMenu.body.id = "color-picker-container";
+
+
+
+	// Render the Menu into the Button instance's parent element
+
+	oColorPickerMenu.render(this.get("container"));
+
+});
+</textarea>
+
+<p>
+Once the new Button is created, add a listener for its "option" event that will be used to create a 
+new ColorPicker instance.  (Defering the creation of the ColorPicker until the firing of the 
+"option" event improves the intial load time of the Button instance.)
+</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+function onButtonOption() {
+
+	/*
+		 Create a new ColorPicker instance, placing it inside the body 
+		 element of the Menu instance.
+	*/
+
+	var oColorPicker = new YAHOO.widget.ColorPicker(oColorPickerMenu.body.id, {
+							showcontrols: false,
+							images: {
+								PICKER_THUMB: "http://yui.yahooapis.com/2.9.0/build/colorpicker/assets/picker_thumb.png",
+								HUE_THUMB: "http://yui.yahooapis.com/2.9.0/build/colorpicker/assets/hue_thumb.png"
+							}
+						});
+
+
+	/*
+		Add a listener for the ColorPicker instance's "rgbChange" event
+		to update the background color and text of the Button's 
+		label to reflect the change in the value of the ColorPicker.
+	*/
+
+	oColorPicker.on("rgbChange", function (p_oEvent) {
+
+		var sColor = "#" + this.get("hex");
+		
+		oButton.set("value", sColor);
+
+		YAHOO.util.Dom.setStyle("current-color", "backgroundColor", sColor);
+		YAHOO.util.Dom.get("current-color").innerHTML = "Current color is " + sColor;
+	
+	});
+	
+
+	// Remove this event listener so that this code runs only once
+
+	this.unsubscribe("option", onButtonOption);
+
+}
+
+
+/*
+	Add a listener for the "option" event.  This listener will be
+	used to defer the creation the ColorPicker instance until the 
+	first time the Button's Menu instance is requested to be displayed
+	by the user.
+*/
+
+oButton.on("option", onButtonOption);
+
+
+/*
+	Add a listener for the "click" event.  This listener will be used to apply the 
+	the background color to the photo.
+*/
+
+oButton.on("click", function () {
+
+	YAHOO.util.Dom.setStyle("photo", "backgroundColor", this.get("value"));
+
+});
+</textarea>
+
+<p>
+Lastly, add some styles that customize both the Button's text label and 
+the ColorPicker instance.
+</p>
+
+<textarea name="code" class="CSS" cols="60" rows="1">
+#button-container {
+
+	padding: .5em;
+
+}
+
+#color-picker-button {
+
+	vertical-align: baseline;
+
+}
+
+#color-picker-button button {
+
+	outline: none;  /* Safari */
+	line-height: 1.5;
+
+}
+
+
+/*
+	Style the Button instance's label as a square whose background color 
+	represents the current value of the ColorPicker instance.
+*/
+
+#current-color {
+
+	display: block;
+	display: inline-block;
+	*display: block;    /* For IE */
+	margin-top: .5em;
+	*margin: .25em 0;    /* For IE */
+	width: 1em;
+	height: 1em;
+	overflow: hidden;
+	text-indent: 1em;
+	background-color: #fff;
+	white-space: nowrap;
+	border: solid 1px #000;
+
+}
+
+
+/* Hide default colors for the ColorPicker instance. */
+
+#color-picker-container .yui-picker-controls,
+#color-picker-container .yui-picker-swatch,
+#color-picker-container .yui-picker-websafe-swatch {
+
+	display: none;
+
+}
+
+
+/*
+	Size the body element of the Menu instance to match the dimensions of 
+	the ColorPicker instance.
+*/
+		
+#color-picker-menu .bd {
+
+	width: 220px;    
+	height: 190px;
+
+}
+
+#photo {
+
+	background: #fff url(../button/assets/ggbridge.png) top left no-repeat;
+	
+	/*
+		Hide the alpha PNG from IE 6 and make the background image transparent via the use of 
+		the AlphaImageLoader that is applied by the filter property.
+	*/
+
+	_background-image: none;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='../button/assets/ggbridge.png', sizingMethod='image');;
+
+	border: solid 1px #000;
+	width: 400px;
+	height: 300px;
+	
+	_width: 398px;	/* For IE 6 */
+	_height: 298px;	/* For IE 6 */
+
+}
+
+#button-container {
+
+	border-top: solid 1px #000;
+	padding: .5em .25em;
+	margin-top: .5em;
+
+}
+</textarea>
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerDiv"></div>
+							<div id="loggerGloss">
+								<p><strong>Note:</strong> You are viewing this example in debug mode with logging enabled.  This can significantly slow performance.</p>
+	
+								<p class="loggerButton"><span id="loggerLink"><span class="first-child"><a href="btn_example11.html">Reload with logging<br />and debugging disabled.</a></span></span></p>
+							</div>
+						</div>
+					
+				
+					<div id="examples">
+						<h3>Button Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='../button/btn_example01.html'>Push Buttons</a></li><li><a href='../button/btn_example02.html'>Link Buttons</a></li><li><a href='../button/btn_example03.html'>Checkbox Buttons</a></li><li><a href='../button/btn_example04.html'>Radio Buttons</a></li><li><a href='../button/btn_example05.html'>Submit Buttons</a></li><li><a href='../button/btn_example06.html'>Reset Buttons</a></li><li><a href='../button/btn_example07.html'>Menu Buttons</a></li><li><a href='../button/btn_example08.html'>Split Buttons</a></li><li><a href='../button/btn_example09.html'>Simple Calendar Menu Button</a></li><li><a href='../button/btn_example10.html'>Calendar Menu Button with Date on Button Face</a></li><li class='selected'><a href='../button/btn_example11.html'>Color Picker Button</a></li><li><a href='../button/btn_example12.html'>Fixed Width Menu Button</a></li><li><a href='../button/btn_example13.html'>Glowing Button</a></li><li><a href='../button/btn_example14.html'>Slider Button</a></li><li><a href='../button/button-ariaplugin.html'>Using the Button ARIA Plugin</a></li><li><a href='../button/button-menu-select.html'>Using A Menu Button To Replace A &#60;select&#62; Element</a></li><li><a href='../button/button-menu-swap.html'>Replacing the content of a Button's Menu</a></li><li><a href='../autocomplete/ac_combobox.html'>Combobox, with CSS for Multiple Stacked Instances (included with examples for AutoComplete Control)</a></li><li><a href='../datatable/dt_colshowhide.html'>Showing, Hiding, and Reordering Columns. (included with examples for DataTable Control)</a></li><li><a href='../layout/adv_layout.html'>Complex Application (included with examples for Layout Manager)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Button Control Resources:</h3>
+						<ul>
+							
+						<li><a href="../../docs/module_button.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/button.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="/yui/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="/yui/3/">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="/yui/license.html">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- proven and robust." href="/yui/2/">YUI 2</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="/yui/examples/">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="/yui/docs/">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="item"><a title="Configure your YUI implementation; serve YUI source files from Yahoo! -- free, fast, and simple" href="/yui/articles/hosting/">Dependency Configurator</a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="/yui/animation/">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="/yui/autocomplete/">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="/yui/history/">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="/yui/button/">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="/yui/calendar/">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="/yui/carousel/">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="/yui/charts/">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="/yui/colorpicker/">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="/yui/connection/">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="/yui/container/">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="/yui/cookie/">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="/yui/datasource/">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="/yui/datatable/">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="/yui/dom/">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="/yui/dragdrop/">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="/yui/element/">Element</a></li><li class="item"><a title="The YUI Event Utility" href="/yui/event/">Event</a></li><li class="item"><a title="The YUI Get Utility" href="/yui/get/">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="/yui/imagecropper/">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="/yui/imageloader/">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="/yui/json/">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="/yui/layout/">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="/yui/logger/">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="/yui/menu/">Menu</a></li><li class="item"><a title="The YUI Paginator" href="/yui/paginator/">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="/yui/profiler/">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="/yui/profilerviewer/">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="/yui/progressbar/">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="/yui/resize/">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="/yui/editor/">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="/yui/selector/">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="/yui/slider/">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="/yui/storage/">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="/yui/stylesheet/">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="/yui/swf/">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="/yui/swfstore/">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="/yui/tabview/">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="/yui/treeview/">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="/yui/uploader/">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="/yui/yahoo/">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="/yui/yuiloader/">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="/yui/yuitest/">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="/yui/reset/">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="/yui/base/">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="/yui/fonts/">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="/yui/grids/">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:46 PDT 2013 -->

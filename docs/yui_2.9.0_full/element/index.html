@@ -1,0 +1,573 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Element Utility</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Element Utility</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+	  
+	  
+<div id="promo" class="component">
+  <h1>YUI 2: Element Utility</h1>
+  <p><a href="http://yuiblog.com/blog/2008/06/24/buildingwidgets"><img src="assets/widgetarticle.png" alt="Satyam's YUIBlog article on Building Widgets with YUI is a great place to start as you learn about the role of the Element Utility in YUI.." width="270" height="251" class="example"></a>The Element class provides a wrapper for <a href="http://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-882764350">HTMLElements</a> in the DOM and makes simpler common tasks such as adding listeners, manipulating the DOM, and setting and getting attributes.  The Element Utility provides a wrapper so that these actions can be performed directly on an  Element instance.</p>
+  
+<p>While this User's Guide and <a href="../docs/module_element.html">the API docs</a> are helpful in understanding the role of the Element Utility within YUI, the most extensive guide to creating Element-based components of your own is found in Satyam's article <a href="http://yuiblog.com/blog/2008/06/24/buildingwidgets">"Building Your Own Widget Library with YUI"</a>. Satyam explores the full pattern of using Element, and through it <a href="../docs/YAHOO.util.EventProvider.html">EventProvider</a> and <a href="../docs/YAHOO.util.AttributeProvider.html">AttributeProvider</a>, to create YUI-style component interfaces.  If you're interested in Element because you're interested in building YUI-based widgets or extending YUI-based widgets built on this pattern, Satyam's article is a must-read.</p>
+  
+  <div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#using">Using Element</a></li>
+      <li><a href="#support">Support &amp; Community</a></li>
+	  <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../docs/module_element.html">API Documentation</a>: View the full API documentation for the Element Utility.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.element">Release Notes</a>: Detailed change log for the Element Utility.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Element Utility as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+</div>
+<h2 class="first" id="start">Getting Started</h2>
+<p>To use the Element Utility, include the following source files in your web page with the &lt;script&gt; tag:</p>
+<div id="syntax-0cdd77f060fec53e254ebdc0a3d5f921" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-0cdd77f060fec53e254ebdc0a3d5f921-plain"><!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+
+<!-- Source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+</textarea></div>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>element</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<h3>Basic Element</h3>
+<p>To create a new Element instance, pass either the ID of the element or a reference to the HTMLElement to the Element constructor:</p>
+<div id="syntax-d11ee40a9062bc85adbe5472ca0203e7" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-d11ee40a9062bc85adbe5472ca0203e7-plain">var el = new YAHOO.util.Element('foo');
+</textarea></div>
+<p>In this example, a new instance of <code>YAHOO.util.Element</code> is created for an element whose <code>id</code> is <code>foo</code>.  If <code>foo</code> is not yet available in the document, event listeners may still be added, and attibutes may be set; the Element Utility will automatically defer those actions until the element becomes available.  Be aware, however, that true manipulation of the element's DOM may not be performed until the <code>contentReady</code> event has fired. (<strong>Note: </strong><code><a href="../event/index.html#onavailable">onContentReady</a></code> is a YUI construct supported by the <a href="../event/index.html">YUI Event Utility</a>.)</p>
+
+<p>Let's look at these steps in a code example:</p>
+
+<div id="syntax-599923534238b0a2c8698fc0597480e0" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//create a new instance of Element wrapping </span></div></li><li class="li1"><div class="de1"><span class="co1">//'foo', which isn' yet on the page</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">//add a click event handler to 'foo'</span></div></li><li class="li1"><div class="de1">el.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'click'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">'clicked'</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//when 'foo' is loaded on the page, we'll fire</span></div></li><li class="li1"><div class="de1"><span class="co1">//an anonymous function that alerts the</span></div></li><li class="li2"><div class="de2"><span class="co1">//number of list items in 'foo', which is a </span></div></li><li class="li1"><div class="de1"><span class="co1">//&lt;ul&gt; element:</span></div></li><li class="li1"><div class="de1">el.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'contentReady'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> items <span class="sy0">=</span> el.<span class="me1">getElementsByTagName</span><span class="br0">&#40;</span><span class="st0">'li'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span>items.<span class="me1">length</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//create a new instance of Element wrapping </span>
+<span class="co1">//'foo', which isn' yet on the page</span>
+<span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//add a click event handler to 'foo'</span>
+el.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'click'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">'clicked'</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//when 'foo' is loaded on the page, we'll fire</span>
+<span class="co1">//an anonymous function that alerts the</span>
+<span class="co1">//number of list items in 'foo', which is a </span>
+<span class="co1">//&lt;ul&gt; element:</span>
+el.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'contentReady'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> items <span class="sy0">=</span> el.<span class="me1">getElementsByTagName</span><span class="br0">&#40;</span><span class="st0">'li'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span>items.<span class="me1">length</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-599923534238b0a2c8698fc0597480e0-plain">//create a new instance of Element wrapping 
+//'foo', which isn' yet on the page
+var el = new YAHOO.util.Element('foo');
+
+//add a click event handler to 'foo'
+el.on('click', function(e) { alert('clicked'); });
+
+//when 'foo' is loaded on the page, we'll fire
+//an anonymous function that alerts the
+//number of list items in 'foo', which is a 
+//<ul> element:
+el.on('contentReady', function() {
+    var items = el.getElementsByTagName('li');
+    alert(items.length);
+});
+</textarea></div>
+<div id="syntax-504aa4eb662aa5a6520470a75eafb62a" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!--markup for foo--&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;foo&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>lorem<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li2"><div class="de2">        <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>ipsum<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>dolor<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>sit<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!--markup for foo--&gt;</span>
+<span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;foo&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>lorem<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>ipsum<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>dolor<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span>&gt;</span>sit<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-504aa4eb662aa5a6520470a75eafb62a-plain"><!--markup for foo-->
+<div id="foo">
+    <ul>
+        <li>lorem</li>
+        <li>ipsum</li>
+        <li>dolor</li>
+        <li>sit</li>
+    </ul>
+</div>
+</textarea></div>
+<h2 id="using">Using Element</h2>
+<p>This section describes several common uses of Element. It contains these subsections:</p>
+<ul>
+<li><a href="#events">Using Element to Attach Event Listeners</a></li>
+<li><a href="#attributes">Attributes and Properties</a></li>
+<li><a href="#dom">Manipulating Dom</a></li>
+<li><a href="#styling">Accessing Styles</a></li>
+</ul>
+
+<h3 id="events">Using Element to Attach Event Listeners</h3>
+<p>All Element events are applied using the <code>addListener</code> method (alised as <code>on</code> and can be removed with <code>removeListener</code>.</p>
+
+<div id="syntax-6405296d228e79f0703ae1c72da6c037" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//create an Element instance wrapping 'foo':</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//create an event listener:</span></div></li><li class="li2"><div class="de2"><span class="kw2">var</span> handleClick <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span>el.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'id'</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">' clicked'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">	<span class="co1">//remove this listener, so that</span></div></li><li class="li1"><div class="de1">	<span class="co1">//it only fires on the firs click:</span></div></li><li class="li1"><div class="de1">    el.<span class="me1">removeListener</span><span class="br0">&#40;</span>handleClick<span class="br0">&#41;</span><span class="sy0">;</span> </div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//assign an event listener using 'on';</span></div></li><li class="li1"><div class="de1"><span class="co1">//el.addListener and el.on are identical here:</span></div></li><li class="li1"><div class="de1">el.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'click'</span><span class="sy0">,</span> handleClick<span class="br0">&#41;</span><span class="sy0">;</span> </div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//create an Element instance wrapping 'foo':</span>
+<span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//create an event listener:</span>
+<span class="kw2">var</span> handleClick <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span>el.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'id'</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">' clicked'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+	<span class="co1">//remove this listener, so that</span>
+	<span class="co1">//it only fires on the firs click:</span>
+    el.<span class="me1">removeListener</span><span class="br0">&#40;</span>handleClick<span class="br0">&#41;</span><span class="sy0">;</span> 
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//assign an event listener using 'on';</span>
+<span class="co1">//el.addListener and el.on are identical here:</span>
+el.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'click'</span><span class="sy0">,</span> handleClick<span class="br0">&#41;</span><span class="sy0">;</span> 
+&nbsp;</pre></div><textarea id="syntax-6405296d228e79f0703ae1c72da6c037-plain">//create an Element instance wrapping 'foo':
+var el = new YAHOO.util.Element('foo');
+
+//create an event listener:
+var handleClick = function(e) {
+    alert(el.get('id') + ' clicked');
+	//remove this listener, so that
+	//it only fires on the firs click:
+    el.removeListener(handleClick); 
+};
+
+//assign an event listener using 'on';
+//el.addListener and el.on are identical here:
+el.on('click', handleClick); 
+</textarea></div>
+<p>The above example invokes the <code>handleClick</code> function when the element whose id attribute is <code>foo</code> is clicked.  The handler then removes the listener, so subsequent clicks will not fire the event.</p>
+
+
+<h4 id="delegate">Using the <code>delegate</code> Method</h4>
+<p>
+Event delegation is a technique whereby you use a single event handler on a 
+parent element to listen for interactions that affect the parent's descendant 
+elements; because events on the descendant elements will bubble up to the 
+parent, this can be a reliable and extremely efficient mitigation strategy for 
+reducing the number of resource-consuming event handlers you have on any given 
+page. (You can read more about Event Delegation in 
+<a href="http://yuiblog.com/blog/2007/01/17/event-plan/">this YUIBlog article</a>.)
+</p>
+<p>
+The Element Utility makes using event delegation easy by providing a 
+<code>delegate</code> method that enables the use of CSS selector 
+syntax to define the descendants of the delegation container for which the 
+event listener should be called.</p>
+
+<p>Element's delegation functionality
+is packaged separately in an element-delegate module, which itself requires  
+the event-delegate module and Selector Utility.  Therefore, to use Element's
+delegation functionality include the dependancies as follows:</p>
+</p>
+<div id="syntax-25d5406df24d849833cd3172867a4e49" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Element source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Selector source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/selector/selector-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Event Delegation Module source file --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event-delegate/event-delegate-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Element Event Delegation Module source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element-delegate/element-delegate-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Element source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Selector source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/selector/selector-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Event Delegation Module source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event-delegate/event-delegate-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Element Event Delegation Module source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element-delegate/element-delegate-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-25d5406df24d849833cd3172867a4e49-plain"><script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+
+<!-- Element source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+
+<!-- Selector source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/selector/selector-min.js"></script>
+
+<!-- Event Delegation Module source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/event-delegate/event-delegate-min.js"></script>
+
+<!-- Element Event Delegation Module source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/element-delegate/element-delegate-min.js"></script>
+</textarea></div>
+<h4 id="creatingdelegatelistener">Creating A Delegated Event Listener</h4>
+<p>Consider the following HTML.</p>
+<div id="syntax-f677a92e3721245a264015cd3b3f4747" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">	<span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1">		<span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;item-1&quot;</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type One<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">		<span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;item-2&quot;</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type Two<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li2"><div class="de2">		<span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;item-3&quot;</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">	<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;</span>
+	<span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span>
+		<span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;item-1&quot;</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type One<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+		<span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;item-2&quot;</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type Two<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+		<span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;item-3&quot;</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+	<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-f677a92e3721245a264015cd3b3f4747-plain"><div id="container">
+	<ul>
+		<li id="item-1"><em>Item Type One</em></li>
+		<li id="item-2"><em>Item Type Two</em></li>
+		<li id="item-3"><em>Item Type Three</em></li>
+	</ul>
+</div>
+</textarea></div>
+<p>
+To use the <code>delegate</code> method, pass the type of event you want to 
+delegate, the event listener, and a CSS selector that defines the descendant 
+elements that must match the target of the event in order for the listener to 
+be called.
+</p>
+<p>
+The following example will bind a single <code>click</code> event listener to 
+the container (<code>&#60;div id="container"&#62;</code>) but that listener will 
+only be called if the target of the event is an <code>&#60;li&#62;</code>.
+</p>
+<div id="syntax-1ffb9cc515de52d605f3a8d3c3d9d36d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> container <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'container'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">container.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="sy0">,</span> matchedEl<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">	<span class="co1">//	The list item that matched the provided selector is the default scope</span></div></li><li class="li1"><div class="de1">	<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Default scope: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//	The list item that matched the provided selector is also passed </span></div></li><li class="li1"><div class="de1">	<span class="co1">//	as the second argument in case the scope of the listener </span></div></li><li class="li2"><div class="de2">	<span class="co1">//	is adjusted</span></div></li><li class="li1"><div class="de1">	<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Clicked list item: &quot;</span> <span class="sy0">+</span> matchedEl.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">//	The actual click target, which could be the matched item or a</span></div></li><li class="li1"><div class="de1">    <span class="co1">//	descendant of it.</span></div></li><li class="li2"><div class="de2">	<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Event target: &quot;</span> <span class="sy0">+</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">getTarget</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>	</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">	<span class="co1">//	The delegation container is passed as a third argument</span></div></li><li class="li1"><div class="de1">	<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Delegation container: &quot;</span> <span class="sy0">+</span> container.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">,</span> <span class="st0">&quot;li&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> container <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'container'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+container.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="sy0">,</span> matchedEl<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+	<span class="co1">//	The list item that matched the provided selector is the default scope</span>
+	<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Default scope: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+	<span class="co1">//	The list item that matched the provided selector is also passed </span>
+	<span class="co1">//	as the second argument in case the scope of the listener </span>
+	<span class="co1">//	is adjusted</span>
+	<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Clicked list item: &quot;</span> <span class="sy0">+</span> matchedEl.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">//	The actual click target, which could be the matched item or a</span>
+    <span class="co1">//	descendant of it.</span>
+	<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Event target: &quot;</span> <span class="sy0">+</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">getTarget</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>	
+&nbsp;
+	<span class="co1">//	The delegation container is passed as a third argument</span>
+	<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Delegation container: &quot;</span> <span class="sy0">+</span> container.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="sy0">,</span> <span class="st0">&quot;li&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-1ffb9cc515de52d605f3a8d3c3d9d36d-plain">var container = new YAHOO.util.Element('container');
+
+container.delegate("click", function(e, matchedEl) {
+
+	//	The list item that matched the provided selector is the default scope
+	YAHOO.log("Default scope: " + this.id);
+
+	//	The list item that matched the provided selector is also passed 
+	//	as the second argument in case the scope of the listener 
+	//	is adjusted
+	YAHOO.log("Clicked list item: " + matchedEl.id);
+
+    //	The actual click target, which could be the matched item or a
+    //	descendant of it.
+	YAHOO.log("Event target: " + YAHOO.util.Event.getTarget(e));	
+
+	//	The delegation container is passed as a third argument
+	YAHOO.log("Delegation container: " + container.id);
+
+}, "li");
+</textarea></div>
+
+
+<h3 id="attributes">Attributes and Properties</h3>
+<p>All of the attributes and properties of the HTMLElement can be accessed via the <code>set</code> and <code>get</code> methods of Element.  Additionally, the actual HTMLElement bound to the Element instance can be retrieved via <code>get('element')</code>.</p>
+
+<div id="syntax-8a063648b4f775b7c2206152f615c5c0" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//create an Element instance wrapping 'foo':</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">//we can now use the instane's get method to retrieve</span></div></li><li class="li1"><div class="de1"><span class="co1">//attributes and properties of 'foo':</span></div></li><li class="li2"><div class="de2"><span class="kw3">alert</span><span class="br0">&#40;</span>el.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'id'</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">' has '</span> <span class="sy0">+</span> el.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'childNodes'</span><span class="br0">&#41;</span>.<span class="me1">length</span> <span class="sy0">+</span> <span class="st0">' children'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//create an Element instance wrapping 'foo':</span>
+<span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">//we can now use the instane's get method to retrieve</span>
+<span class="co1">//attributes and properties of 'foo':</span>
+<span class="kw3">alert</span><span class="br0">&#40;</span>el.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'id'</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">' has '</span> <span class="sy0">+</span> el.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'childNodes'</span><span class="br0">&#41;</span>.<span class="me1">length</span> <span class="sy0">+</span> <span class="st0">' children'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-8a063648b4f775b7c2206152f615c5c0-plain">//create an Element instance wrapping 'foo':
+var el = new YAHOO.util.Element('foo');
+//we can now use the instane's get method to retrieve
+//attributes and properties of 'foo':
+alert(el.get('id') + ' has ' + el.get('childNodes').length + ' children');
+</textarea></div>
+<p>The above example alerts the element's <code>id</code> attribute and the number of <code>childNodes</code> owned by that element.</p>  
+
+<p>If the element is not yet available, you will need to defer accessing the HTMLElement until the <code>contentReady</code> event fires.  You can write deferral code as follows:</p>
+
+<div id="syntax-9a37bedccbbb0066794a6ed56c04613a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//create an Element instance wrapping 'foo';</span></div></li><li class="li1"><div class="de1"><span class="co1">//'foo' is not yet on the page.</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">//When 'foo' becomes available, we want to alert</span></div></li><li class="li1"><div class="de1"><span class="co1">//its id and show the number childNodes; we tell the</span></div></li><li class="li1"><div class="de1"><span class="co1">//Element instance to do this when the contentReady</span></div></li><li class="li1"><div class="de1"><span class="co1">//event fires:</span></div></li><li class="li1"><div class="de1">el.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'contentReady'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">   <span class="kw3">alert</span><span class="br0">&#40;</span>el.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'id'</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">' has '</span> <span class="sy0">+</span> el.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'childNodes'</span><span class="br0">&#41;</span>.<span class="me1">length</span> <span class="sy0">+</span> <span class="st0">' children'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//create an Element instance wrapping 'foo';</span>
+<span class="co1">//'foo' is not yet on the page.</span>
+<span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//When 'foo' becomes available, we want to alert</span>
+<span class="co1">//its id and show the number childNodes; we tell the</span>
+<span class="co1">//Element instance to do this when the contentReady</span>
+<span class="co1">//event fires:</span>
+el.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'contentReady'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+   <span class="kw3">alert</span><span class="br0">&#40;</span>el.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'id'</span><span class="br0">&#41;</span> <span class="sy0">+</span> <span class="st0">' has '</span> <span class="sy0">+</span> el.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'childNodes'</span><span class="br0">&#41;</span>.<span class="me1">length</span> <span class="sy0">+</span> <span class="st0">' children'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-9a37bedccbbb0066794a6ed56c04613a-plain">//create an Element instance wrapping 'foo';
+//'foo' is not yet on the page.
+var el = new YAHOO.util.Element('foo');
+
+//When 'foo' becomes available, we want to alert
+//its id and show the number childNodes; we tell the
+//Element instance to do this when the contentReady
+//event fires:
+el.on('contentReady', function() {
+   alert(el.get('id') + ' has ' + el.get('childNodes').length + ' children');
+});
+</textarea></div>
+<h3 id="dom">Manipulating Dom</h3>
+
+<p>Most common Dom methods can be applied directy to the Element instance itself:</p>
+
+<div id="syntax-eaa5ab3fe0517f9e970a64d596e72968" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">//We can access the Dom property hasChildNodes</span></div></li><li class="li1"><div class="de1"><span class="co1">//directly on the Element instance:</span></div></li><li class="li1"><div class="de1"><span class="kw1">if</span> <span class="br0">&#40;</span>el.<span class="me1">hasChildNodes</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    el.<span class="me1">removeChild</span><span class="br0">&#40;</span>el.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'firstChild'</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span> </div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">//We can access the Dom property hasChildNodes</span>
+<span class="co1">//directly on the Element instance:</span>
+<span class="kw1">if</span> <span class="br0">&#40;</span>el.<span class="me1">hasChildNodes</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    el.<span class="me1">removeChild</span><span class="br0">&#40;</span>el.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'firstChild'</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span> 
+&nbsp;</pre></div><textarea id="syntax-eaa5ab3fe0517f9e970a64d596e72968-plain">var el = new YAHOO.util.Element('foo');
+//We can access the Dom property hasChildNodes
+//directly on the Element instance:
+if (el.hasChildNodes()) {
+    el.removeChild(el.get('firstChild'));
+} 
+</textarea></div>
+<h3 id="styling">Accessing Styles</h3>
+
+<p>Element instances can be styled directly via the <code>setStyle</code> method; style properties can be retrieved via <code>getStyle</code>:</p>
+
+<div id="syntax-10d2ae4fc50a7327726dbec8429a1abd" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//set the color style property of 'foo'</span></div></li><li class="li1"><div class="de1"><span class="co1">//using the Element instance:</span></div></li><li class="li2"><div class="de2">el.<span class="me1">setStyle</span><span class="br0">&#40;</span><span class="st0">'color'</span><span class="sy0">,</span> <span class="st0">'#f00'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//set an event handler using the Element</span></div></li><li class="li1"><div class="de1"><span class="co1">//instance to alert the value of the </span></div></li><li class="li1"><div class="de1"><span class="co1">//color style property when 'foo' is clicked:</span></div></li><li class="li2"><div class="de2">el.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'click'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">getStyle</span><span class="br0">&#40;</span><span class="st0">'color'</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Element</span><span class="br0">&#40;</span><span class="st0">'foo'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//set the color style property of 'foo'</span>
+<span class="co1">//using the Element instance:</span>
+el.<span class="me1">setStyle</span><span class="br0">&#40;</span><span class="st0">'color'</span><span class="sy0">,</span> <span class="st0">'#f00'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//set an event handler using the Element</span>
+<span class="co1">//instance to alert the value of the </span>
+<span class="co1">//color style property when 'foo' is clicked:</span>
+el.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'click'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">getStyle</span><span class="br0">&#40;</span><span class="st0">'color'</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-10d2ae4fc50a7327726dbec8429a1abd-plain">var el = new YAHOO.util.Element('foo');
+
+//set the color style property of 'foo'
+//using the Element instance:
+el.setStyle('color', '#f00');
+
+//set an event handler using the Element
+//instance to alert the value of the 
+//color style property when 'foo' is clicked:
+el.on('click', function() {
+    alert(this.getStyle('color'));
+});
+</textarea></div>
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+		</div>
+         <div class="yui-u">
+         
+			<div id="morereading">
+				<h3>More Reading about the YUI Element Utility:</h3>
+				
+			  <ul> 
+			  	  <li><a href="http://yuiblog.com/blog/2008/06/24/buildingwidgets">Building Your Own Widget Library with YUI</a>: This article by Satyam explores the creation and extension of YUI components using core YUI tools.</li>
+		      </ul>
+		   </div>
+         
+
+			
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Felement%2F--><h3 id="delicious">YUI Element on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/element/" class="bookmark">bookmark on del.icio.us</a></p>
+            <p class="be-first">be the first to bookmark this page!</a></p>
+   </div></div>
+
+		 </div>
+      </div>
+
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="selected "><a title="The YUI Element Utility" href="index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:16 PDT 2013 -->
+
+<!-- Localized -->

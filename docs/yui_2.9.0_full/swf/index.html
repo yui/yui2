@@ -1,0 +1,392 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: SWF Utility</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: SWF Utility</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+
+<div id="promo" class="component">
+  <h1>YUI 2: SWF Utility</h1>
+
+<p>SWF Utility is a lightweight tool for programmatically embedding Flash applications in web pages. Specifically, SWF Utility:
+<ol>
+<li> Detects the version of Flash Player running on the user's machine.</li>
+<li> Allows the configuration of various parameters of the embedded Flash player.</li>
+<li> Allows passing initial variables (known as Flashvars) to the Flash application.</li>
+<li> Creates the appropriate <code>&lt;object&gt;</code> tag-based markup needed to embed the Flash content based on the particular browser being used.</li>
+<li> Allows calling methods on the Flash application if they have been exposed via the ExternalInterface</li>
+<li> Fires a <code>SWFReady</code> event and allows other custom events to be fired from within Flash, if a corresponding YUIBridge utility is used within the Flash application. </li>
+</ol>
+
+  <p><strong>Important usage notes:</strong></p>
+
+  <ul>
+    <li>The SWF Utility uses only <code>&lt;object&gt;</code> tag-based markup for embedding Flash content, which is only properly supported in A-grade browsers.</li>
+    <li>While the SWF Utility supports embedding Flash content for Flash Player 6 and above, the ExternalInterface communication is available starting in Flash Player 8 and above.</li>
+  </ul>
+  
+
+  <div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#attributes">SWF Utility Attributes</a></li>
+      <li><a href="#knownissues">Known Issues</a></li>
+      <li><a href="#support">Support &amp; Community</a></li>
+      <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/swf/index.html">Examples</a>: Explore examples of the SWF Utility in action.</li>
+      <li><a href="../docs/module_swf.html">API Documentation</a>: View the full API documentation for the SWF Utility.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.swf">Release Notes</a>: Detailed change log for the SWF Utility.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the SWF Utility as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+</div>
+
+<h2 id="start" class="first">Getting Started</h2>
+<p>To use the SWF Utility, include the following source files in your web page:</p>
+<div id="syntax-2b8f285da7f6730d13243ca340e1648e" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Source files --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/swf/swf-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source files --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/swf/swf-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-2b8f285da7f6730d13243ca340e1648e-plain"><!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+
+<!-- Source files -->
+<script src="http://yui.yahooapis.com/2.9.0/build/swf/swf-min.js"></script>
+</textarea></div>
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>swf</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<p>To get started with the SWF Utility, begin by placing it on the page.  Create a <code>&lt;div&gt;</code> into which you'll render your SWF instance. </p>
+<p>The width and height of the container should be set to the size that you want the instance of the SWF to be.</p>
+
+<div id="syntax-e7092678a40d5598caa5f1fd6e54dfdc" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;swfContainer&quot;</span> <span class="kw3">style</span><span class="sy0">=</span><span class="st0">&quot;width:500px; height:400px&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;swfContainer&quot;</span> <span class="kw3">style</span><span class="sy0">=</span><span class="st0">&quot;width:500px; height:400px&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-e7092678a40d5598caa5f1fd6e54dfdc-plain"><div id="swfContainer" style="width:500px; height:400px"></div>
+</textarea></div>
+<p>Now, set the necessary configuration parameters for the SWF.</p>
+
+<div id="syntax-8bb52d696e1b25ee971f5c5e3b611528" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> params <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    version<span class="sy0">:</span> <span class="nu0">9.115</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    useExpressInstall<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    fixedAttributes<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        allowScriptAccess<span class="sy0">:</span> <span class="st0">&quot;always&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        allowNetworking<span class="sy0">:</span> <span class="st0">&quot;all&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        width<span class="sy0">:</span> <span class="nu0">50</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    flashVars<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        flashvar1<span class="sy0">:</span> <span class="st0">&quot;One word&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">        flashvar2<span class="sy0">:</span> <span class="st0">&quot;A word &amp; another&quot;</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">        flashvar3<span class="sy0">:</span> <span class="st0">&quot;Three words - 100% done &amp; done&quot;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span> </div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> params <span class="sy0">=</span> <span class="br0">&#123;</span>
+    version<span class="sy0">:</span> <span class="nu0">9.115</span><span class="sy0">,</span>
+    useExpressInstall<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span>
+    fixedAttributes<span class="sy0">:</span> <span class="br0">&#123;</span>
+        allowScriptAccess<span class="sy0">:</span> <span class="st0">&quot;always&quot;</span><span class="sy0">,</span>
+        allowNetworking<span class="sy0">:</span> <span class="st0">&quot;all&quot;</span><span class="sy0">,</span>
+        width<span class="sy0">:</span> <span class="nu0">50</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+    flashVars<span class="sy0">:</span> <span class="br0">&#123;</span>
+        flashvar1<span class="sy0">:</span> <span class="st0">&quot;One word&quot;</span><span class="sy0">,</span> 
+        flashvar2<span class="sy0">:</span> <span class="st0">&quot;A word &amp; another&quot;</span><span class="sy0">,</span> 
+        flashvar3<span class="sy0">:</span> <span class="st0">&quot;Three words - 100% done &amp; done&quot;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span> 
+&nbsp;</pre></div><textarea id="syntax-8bb52d696e1b25ee971f5c5e3b611528-plain">var params = {
+    version: 9.115,
+    useExpressInstall: false,
+    fixedAttributes: {
+        allowScriptAccess: "always",
+        allowNetworking: "all",
+        width: 50
+    },
+    flashVars: {
+        flashvar1: "One word", 
+        flashvar2: "A word & another", 
+        flashvar3: "Three words - 100% done & done"
+    }
+}; 
+</textarea></div>
+<p>The parameters are all optional, and are as follows:
+    <ul>
+    <li><code>version</code> - specifies the minimum Flash player version necessary to run your content. Passed as a float, where the integer part is the major version of the player, and the decimal part is the revision (so, for example, "Flash Player 9.0.5" would be 9.005, and "Flash Player 9.0.124" would be 9.124). If the minimum version is not installed on the user's machine, and <code>useExpressInstall</code> option is not set to <code>true</code>, then the content of the container div is not overwritten.</li>
+    <li><code>useExpressInstall</code> - if set to <code>true</code>, this option will check the Flash player version, and if it is lower than that required, the utility will attempt to load a SWF that will use the express install capability to offer the user to upgrade to the latest version of Flash. Express install is not supported in all old versions of Flash, and if it fails, it will display a link to a separate upgrade page.</li>
+    <li><code>fixedAttributes</code> - this is a set of key-value pairs containing various configuration attributes for the player. The full list of these parameters with explanations of their use is at the end of this page.</li>
+    <li><code>flashVars</code> - this is a set of arbitrary key-value pairs that will be passed to the Flash application and will be available in the Flash application at initialization time. These could be used to bring external initialization data into the Flash app for configuration and customization purposes.</li>
+    </ul>
+</p>
+<p> Next, we create an instance of the SWF utility: </p>
+<div id="syntax-8c169efb66d824b048a58e151c0a674a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> newswf <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">SWF</span><span class="br0">&#40;</span><span class="st0">&quot;swfContainer&quot;</span><span class="sy0">,</span> <span class="st0">&quot;example.swf&quot;</span><span class="sy0">,</span> params<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> newswf <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">SWF</span><span class="br0">&#40;</span><span class="st0">&quot;swfContainer&quot;</span><span class="sy0">,</span> <span class="st0">&quot;example.swf&quot;</span><span class="sy0">,</span> params<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-8c169efb66d824b048a58e151c0a674a-plain">var newswf = new YAHOO.widget.SWF("swfContainer", "example.swf", params);
+</textarea></div>
+
+<p>Note that we pass the name (or a reference) of the container in which the SWF will be placed, the URL of the SWF (in this case, relative to this page), and the set of parameters specified above.</p>
+
+<p>If the SWF uses a YUIBridge utility for interacting with JavaScript (see the corresponding example), then we would also be able to subscribe to an event that is dispatched when the SWF is ready for communication:</p>
+
+<div id="syntax-a8e93350224a7ae304f52afedd0a6393" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">newswf.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;swfReady&quot;</span><span class="sy0">,</span> swfReadyHandler<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">newswf.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;swfReady&quot;</span><span class="sy0">,</span> swfReadyHandler<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-a8e93350224a7ae304f52afedd0a6393-plain">newswf.addListener("swfReady", swfReadyHandler);
+</textarea></div>
+<h2 id="attributes">Possible SWF Attributes and Their Values</h2>
+
+<p>As shown in the example above, the Flash application being embedded via the SWF utility has a number of configuration parameters. These parameters are passed as a set of key-value pairs named <code>fixedAttributes</code> and are as follows:</p>
+<ul>
+    <li><code>play</code> - Possible values: <code>true, false</code>. If true, the loaded SWF will begin playing as soon as it is loaded (e.g. in cases where frame-based animation is present in the SWF). The default value is true.</li>
+
+  <li><code>loop</code> - Possible values: <code>true, false</code>. In movies with frame-based animation, specifies whether the SWF repeats or stops when it reaches the last frame. The default value is true.</li>
+
+    <li><code>menu</code> - Possible values: <code>true, false</code>. If true, the full context menu is displayed when the SWF is right-clicked. If false, the context menu will contain only the 'Settings' option and the 'About Flash' option.</li>
+
+    <li><code>quality</code> - Possible values: <code>low, high, autolow, autohigh, best</code>. <code>low</code> never uses anti-aliasing in rendering vector or bitmap elements. <code>autolow</code> improves appearance whenever possible. Anti-aliasing is initially turned off, but enhanced progressively as the Flash player detects whether the user's machine can handle it. <code>autohigh</code> balances speed and appearance, but prefers speed to appearance when necessary. Anti-aliasing is initially on, but if the actual frame rate drops below the specified frame rate, anti-aliasing is turned off. <code>medium</code> applies some anti-aliasing, but does not smooth bitmaps. It results in a better visual appearance than the Low setting, but worse visual appearance than the High setting. <code>high</code> provides better appearance but will sacrifice playback speed to always apply anti-aliasing. If the movie is not animated, bitmaps are anti-aliased; if the movie is animated, bitmaps are not anti-aliased. <code>best</code> results in the best display quality and does not look at playback speed as a factor. All visuals are anti-aliased.</li>
+
+    <li><code>scale</code> - Possible values: <code>showall, noborder, exactfit</code>. <code>showall</code>, which is the default value, makes the entire Flash application visible in the specified area without distortion, while keeping the original aspect ratio of the application. Depending on the width and height set for the SWF, this may cause borders to be visible on the sides of the application. <code>noorder</code> resizes the application to fill the specified area, without distortion but with a possibility of cropping. The original aspect ratio of the application is preserved. <code>exactfit</code> allow the entire application to be visible in the specified area, and does not preserve the original aspect ratio, which may result in distortion.</li>
+
+    <li><code>align</code> - Possible values: <code>l, t, r, b</code> - which stand for left, top, right and bottom respectively. If not set, the SWF is centered in its container and cropped if the container is smaller than the SWF; if specified, the SWF is aligned to the corresponding edge of its container.</li>
+
+  <li><code>salign</code> - Possible values: <code>l, t, r, b, tl, tr, bl, br</code> - which stand for left, top, right, bottom, top-left, top-right, bottom-left, and bottom-right, respectively. These specify the alignment of the content of the SWF within the Flash player viewport.</li>
+
+    <li><code>wmode</code> - Possible values: window, opaque, transparent. Modifies the transparency setting of the Flash application. If set to <code>window</code> (default value), the SWF is contained in its own space within the webpage. If set to <code>opaque</code>, the SWF obscures everything on the page behind it. If set to <code>transparent</code>, the HTML content shows through all transparent portions of the movie. The latter option is associated with reduced performance for animation.</li>
+
+    <li><code>bgcolor</code> - a hexadecimal string in the format #RRGGBB. Sets the background color of the SWF. This attribute will override the setting inside the SWF file.</li>
+
+    <li><code>base</code> - a string specifying the URL prepended to all relative paths in the Flash application. By the default resolves to ".", which is the same path as the SWF itself.</li>
+    
+    <li><code>allowScriptAccess</code> - a parameter that can have one of three possible values: <code>always, sameDomain, never.</code> If set to <code>always</code>, the communication with the Javascript on the page is fully allowed. If set to <code>sameDomain</code>, the communication with the Javascript on the page is only allowed if the SWF is loaded from the same domain as the page containing it. If set to <code>never</code>, the communication with the Javascript is not allowed.</li>
+    
+    <li><code>allowNetworking</code> - a parameter with possible values of <code>all, internal, none</code>. If set to <code>all</code>, all networking APIs (loading data, opening new browser windows, etc.) are permitted in the SWF. If set to <code>internal</code>, the SWF cannot use browser navigation or interaction, but can use its own network APIs to load and send data. If set to <code>none</code>, the SWF cannot use any networking APIs, including SWF-to-SWF networking.</li>
+    
+    <li><code>allowFullScreen</code> - a parameter with possible values of <code>true or false</code>. If <code>true</code>, the SWF is allowed to expand to full screen; otherwise, it is not.</li>
+</ul>
+
+<h3>SWF Utility examples <a name="examples"></a></h3>
+
+<p>For further exploration of the SWF utility component, take a look at <a href="../examples/swf/index.html">its example files</a>.</p>
+
+<h2 id="knownissues">Known Issues</h2>
+    <h4>A JavaScript error occurs when the required Flash Player is not present.</h4>
+    <p>When the required Flash Player is not installed on the client's machine, a JavaScript error will accompany the displayed warning message. To review the ticket which includes information on the latest release that addresses this issue, go <a href="http://yuilibrary.com/projects/yui2/ticket/2528465">here</a>.</p>
+
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+    </div>
+         <div class="yui-u">
+<div id="examples">
+<h3>SWF Utility Examples:</h3>
+
+<ul>
+<li><a href='../examples/swf/swf-simple.html'>Simple SWF Utility Example</a></li>
+<li><a href='../examples/swf/swf-advanced.html'>Advanced SWF Utility Example With Flashvars and Javascript interaction</a></li>
+</ul>
+
+
+		
+</div>
+
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fswf%2F--><h3 id="delicious">YUI SWF Utility on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/swf/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/development" class="tag-size-1">development</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/web" class="tag-size-1">web</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/flash" class="tag-size-1">flash</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/swf" class="tag-size-1">swf</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/opensource" class="tag-size-1">opensource</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/js" class="tag-size-1">js</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/cf076b02d57a246ca9312387951c794d" class="saved-by">saved by <span>6</span>  people</a></p>
+   </div></div>
+
+         </div>
+      </div>
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="selected "><a title="The YUI Swf Utility" href="index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:17 PDT 2013 -->
+
+<!-- Localized -->

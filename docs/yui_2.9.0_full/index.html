@@ -1,0 +1,464 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2 &mdash; Yahoo! User Interface Library</title>
+
+
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.8.0r4/build/button/assets/skins/sam/button.css">
+<style type="text/css">
+p#compressor {margin-top:0.2em;}
+#index-main #promo li {list-style-type:disc; font-size:100%; margin-top:.2em; margin-left:1em;}
+#index-main #promo ul {margin:0;}
+#index-main #promo .yui-gb .yui-u {width:31%;}
+#promo-links {clear:left;}
+
+#download {
+	clear:left;
+}
+
+.yuiDownloads h3 {
+	line-height:auto;
+}
+
+.yuiDownloadsOption label {
+	cursor:pointer;
+}
+
+.yuiDownloads div.yuiDownloadsButton, .yuiDownloads div.yuiDownloadsOption {
+	float:left;
+	padding:0 0 0 1em;
+	position:relative;
+	max-width:24%;
+}
+
+.yuiDownloads div.yuiDownloadsButton {
+	padding:0;
+	min-width:12em;
+}
+
+.yuiDownloadsOption .yuiDownloadOptionControl {
+	float:left;
+}
+
+.yuiDownloadsOption .yuiDownloadOptionDescription {
+	margin-left:1.7em;
+}
+
+.yuiDownloadsOption .yuiDownloadOptionDescription h3 {
+	margin:0;
+	color:black;
+	font-family:Arial;
+	font-weight:bold;
+	font-size:13px;
+}
+
+.yuiDownloadsOption .yuiDownloadOptionDescription p {
+	color:#666;
+	font-weight:bold;
+	font-size:11px;
+	margin-top: .2em;
+}
+
+.yui-skin-sam .yui-button {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent url(http://l.yimg.com/a/i/reg/btn_gry_midgrad.gif) repeat scroll left center;
+border-color:#B9B9B9;
+margin-bottom:12px;
+margin-left:1px;
+}
+.yui-skin-sam .yui-button .first-child a {
+border-color:#FFFFFF;
+color:#000000;
+font-size:113%;
+font-weight:bold;
+padding:0 1em;
+}
+.yui-skin-sam .yui-button .first-child button {
+border-color:#FFFFFF;
+color:#000000;
+font-family:arial,helvetica,clean,sans-serif;
+font-size:113%;
+font-weight:bold;
+padding:0 1em;
+}
+.yui-skin-sam .yui-button .yui-link-button {
+border-color:#B9B9B9;
+}
+.yui-skin-sam .yui-button .first-child {
+border-color:#B9B9B9;
+}
+.yui-skin-sam .yui-button.yui-button-hover a:hover {
+text-decoration:none;
+}
+.yui-skin-sam .yui-button.yui-button-hover {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent url(http://l.yimg.com/a/i/reg/btn_rlvr_midgrad.gif) repeat scroll left center;
+border-color:#A7CC25;
+}
+.yui-skin-sam .yui-button.yui-button-hover .first-child {
+border-color:#A7CC25;
+}
+.yui-skin-sam .yui-button.yui-button-hover .yui-link-button {
+border-color:#A7CC25;
+}
+.yui-skin-sam .yui-button.actionButton {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent url(http://l.yimg.com/a/i/reg/btn_orng_midgrad.gif) repeat scroll left center;
+border-color:#F0B962;
+margin-left:1px;
+}
+.yui-skin-sam .yui-button.actionButton .first-child a {
+border-color:#FFFFFF;
+color:#000000;
+font-size:113%;
+font-weight:bold;
+padding:0 1em;
+}
+.yui-skin-sam .yui-button.actionButton .first-child button {
+border-color:#FFFFFF;
+color:#000000;
+font-size:113%;
+font-weight:bold;
+padding:0 1em;
+}
+.yui-skin-sam .yui-button.actionButton .yui-link-button {
+border-color:#F0B962;
+}
+.yui-skin-sam .yui-button.actionButton .first-child {
+border-color:#F0B962;
+}
+.yui-skin-sam .yui-button.actionButton.yui-button-hover a:hover {
+text-decoration:none;
+}
+.yui-skin-sam .yui-button.actionButton.yui-button-hover {
+-moz-background-clip:border;
+-moz-background-inline-policy:continuous;
+-moz-background-origin:padding;
+background:transparent url(http://l.yimg.com/a/i/reg/btn_rlvr_midgrad.gif) repeat scroll left center;
+border-color:#A7CC25;
+}
+.yui-skin-sam .yui-button.actionButton.yui-button-hover .first-child {
+border-color:#A7CC25;
+}
+.yui-skin-sam .yui-button.actionButton.yui-button-hover .yui-link-button {
+border-color:#A7CC25;
+}
+
+ol.gettingstarted li {
+	padding-bottom:.8em;
+}
+</style>
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+
+	<div id="pagetitle"><h1>YUI 2 &mdash; Yahoo! User Interface Library</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+
+
+	<div>
+	<div id="promo">
+		<h1>YUI 2 &mdash; Yahoo! User Interface Library</h1>
+
+<p><strong>YUI 2 is a JavaScript and CSS library with more than 30 unique components including low-level DOM utilities and high-level user-interface widgets.</strong>  Currently at version 2.9.0, YUI 2 is robust, proven, time-tested, and extensively documented. Choose from the download options below or configure your implementation using the <a href="#">Dependency Configurator</a>.</p>
+
+<p><strong>Note: All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1. If you host an a YUI 2.4.0-2.8.1 distribution, you need to take action — review <a href="http://yuilibrary.com/support/2.8.2/">the bulletin</a> for full details.</strong></p>
+
+
+
+		<div class="yui-gb" id="promo-links">
+			<div class="yui-u first">
+			<h4>Using YUI 2:</h4>
+			<ul>
+				<li><a href="http://yuilibrary.com/yui/docs/tutorials/faq/">FAQ</a></li>
+				<li><a href="#start">Getting Started</a></li>
+				<li><a href="#license">Licensing</a></li>
+				<li><a href="#support">Support &amp; Community</a></li>
+				<li><a href="#filingbugs">Filing Bugs &amp; Feature Requests</a></li>
+			</ul>
+
+			<h4>Searchable API Documentation:</h4>
+
+			<ul id="api"><li><a href="../docs/index.html">Browse and search the complete YUI API</a>.</li></ul>
+
+            <h4>YUI 2 Developer Tools:</h4>
+
+			<ul>
+				<li><a href="../logger/index.html">Logger Control</a></li>
+			    <li><a href="../profiler/index.html">Profiler</a> (client-side, cross-browser profiling)</li>
+				<li><a href="../profilerviewer/index.html">ProfilerViewer Control</a></li>
+				<li><a href="../yuitest/index.html">YUI Test Utility</a></li>
+			</ul>
+
+			<h4>YUI 2 CSS Tools:</h4>
+			<ul>
+				<li><a href="../reset/index.html">CSS Reset</a> (neutralizes browser CSS styles)</li>
+				<li><a href="../base/index.html">CSS Base</a> (applies consistent style foundation for common elements)</li>
+				<li><a href="../fonts/index.html">CSS Fonts</a> (foundation for typography and font-sizing)</li>
+				<li><a href="../grids/index.html">CSS Grids</a> (more than 1,000 CSS-driven wireframes in a 4KB file)</li>
+			</ul>
+
+			</div>
+			<div class="yui-u">
+
+			<h4>YUI 2 Core:</h4>
+
+			<ul>
+				<li><a href="../yahoo/index.html">The YAHOO Global Object</a> (base requirement for all YUI components)</li>
+			    <li><a href="../dom/index.html">DOM Collection</a> (convenience methods for DOM interactions)</li>
+				<li><a href="../event/index.html">Event Utility</a> (event normalization and custom events)</li>
+			</ul>
+
+			<h4>YUI 2 Utilities:</h4>
+			<ul>
+			    <li><a href="../animation/index.html">Animation Utility</a></li>
+				<li><a href="../history/index.html">Browser History Manager</a></li>
+			    <li><a href="../connection/index.html">Connection Manager</a> (for XHR/Ajax)</li>
+				<li><a href="../cookie/index.html">Cookie Utility</a></li>
+				<li><a href="../datasource/index.html">DataSource Utility</a></li>
+			    <li><a href="../dragdrop/index.html">Drag and Drop Utility</a></li>
+				<li><a href="../element/index.html">Element Utility</a></li>
+				<li><a href="../get/index.html">Get Utility</a> (dynamic script/css loading)</li>
+				<li><a href="../imageloader/index.html">ImageLoader Utility</a></li>
+				<li><a href="../json/index.html">JSON Utility</a></li>
+				<li><a href="../resize/index.html">Resize Utility</a></li>
+				<li><a href="../selector/index.html">Selector Utility</a></li>
+				<li><a href="../storage/index.html">Storage Utility</a> </li>
+				<li><a href="../swfstore/index.html">SWFStore Utility</a></li>
+				<li><a href="../swf/index.html">SWF Utility</a></li>
+				<li><a href="../stylesheet/index.html">StyleSheet Utility</a></li>
+				<li><a href="../yuiloader/index.html">The YUI Loader Utility</a></li>
+			</ul>
+		 	</div>
+
+			 <div class="yui-u">
+
+			<h4>YUI 2 Widgets:</h4>
+			<ul>
+				<li><a href="../autocomplete/index.html">AutoComplete</a></li>
+				<li><a href="../button/index.html">Button</a></li>
+				<li><a href="../calendar/index.html">Calendar</a></li>
+				<li><a href="../carousel/index.html">Carousel</a> </li>
+				<li><a href="../charts/index.html">Charts</a> </li>
+				<li><a href="../colorpicker/index.html">Color Picker</a></li>
+				<li><a href="../container/index.html">Container</a> (including <a href="../container/module/index.html">Module</a>, <a href="../container/overlay/index.html">Overlay</a>, <a href="../container/panel/index.html">Panel</a>, <a href="../container/tooltip/index.html">Tooltip</a>, <a href="../container/dialog/index.html">Dialog</a>, <a href="../container/simpledialog/index.html">SimpleDialog</a>) </li>
+				<li><a href="../datatable/index.html">DataTable</a></li>
+				<li><a href="../imagecropper/index.html">ImageCropper</a></li>
+				<li><a href="../layout/index.html">Layout Manager</a></li>
+				<li><a href="../menu/index.html">Menu</a></li>
+				<li><a href="../paginator/index.html">Paginator</a></li>
+				<li><a href="../progressbar/index.html">Progress Bar</a></li>
+ 				<li><a href="../editor/index.html">Rich Text Editor</a></li>
+				<li><a href="../slider/index.html">Slider</a></li>
+				<li><a href="../tabview/index.html">TabView</a></li>
+				<li><a href="../treeview/index.html">TreeView</a></li>
+				<li><a href="../uploader/index.html">Uploader</a></li>
+			</ul>
+
+		 	</div>
+		</div>
+
+
+	</div>
+
+
+<h2 id="start" class="first">Getting Started</h2>
+
+<ol class="gettingstarted">
+  <li><strong>Check out the examples of YUI in action.</strong> We recommend starting with the <a href="../examples/event/index.html">Event Utility</a> and <a href="../examples/dom/index.html">Dom Collection</a> examples; Event and Dom are part of the YUI Core (along with the <a href="../yahoo/index.html">YAHOO Global Object</a>) and provide an important foundation for JavaScript developers using YUI. Once you've reviewed those  foundational pieces, go on to explore utilities like <a href="../examples/dragdrop/index.html">Drag and Drop</a> and <a href="../examples/animation/index.html">Animation</a> or UI controls like <a href="../examples/button/index.html">Button</a>, <a href="../examples/calendar/index.html">Calendar</a> and <a href="../examples/tabview/index.html">TabView</a>. If you're interested in YUI's CSS components, read through the examples for <a href="../examples/reset/index.html">Reset</a>, <a href="../examples/base/index.html">Base</a>, <a href="../examples/fonts/index.html">Fonts</a>, and <a href="../examples/grids/index.html">Grids</a> in that order.</li>
+  <li><strong>Remember that there are full user's guides</strong> for each component here on the website. If you have any questions about a component as you play with the examples, check out the component's user's guide (by following any of the links along the left side of the page) or the <a href="../docs/index.html">searchable API documentation</a>.</li>
+  <li><a href="https://www.packtpub.com/yahoo-user-interface-yui-2-8-learning-library/book"><img align="right" src="http://yuiblog.com/assets/satyam-book-small-20100809-120823.jpg" width="106" height="132" hspace=20></a><strong><a href="https://www.packtpub.com/yahoo-user-interface-yui-2-8-learning-library/book" title="Author Notes: Writing YUI 2.8: Learning the Library, the New YUI 2 Book from Packt &raquo; Yahoo! User Interface Blog (YUIBlog)">YUI 2.8: Learning the Library</a></strong> from Packt provides an excellent introduction to YUI 2.  Written by one of the most active members of the YUI community, it is an excellent reference for newcomers and experts alike.</li>
+  <li><strong>Articles:</strong> Check out "<a href="http://www.insideria.com/2008/05/writing-your-first-yui-applica.html">Writing Your First YUI Application</a>," an article designed to help you get up and running with YUI, and "<a href="http://yuiblog.com/blog/2008/10/17/loading-yui/">Loading YUI: Seeds, Core, and Combo-handling</a>," an article that explores the three most common strategies for including YUI on the page.</li>
+  <li><strong>Start building.</strong> You can include YUI scripts and CSS from <a href="http://yui.github.io/yui2/">the YUI download</a> (in the download's <code>/build</code> directory) or <a href="#">directly from Yahoo! servers</a>. <a href="../yuiloader/index.html">The YUI Loader Utility</a> is a client-side loading package that can dynamically pull in YUI scripts as needed, whether from your servers or from ours.  And the <a href="#">YUI Dependency Configurator</a> is a great way to calculate an optimized list of script/css includes for your particular implementation.</li>
+  <li><strong>Become a member of the YUI community.</strong> YUI developers and implementers share thoughts and solutions and provide a helping hand <a href="http://yuilibrary.com/forum/">in our forums</a>. YUI developers also contribute to <a href="http://yuiblog.com/">the YUIBlog</a>, where you'll find in-depth articles, videos and other great content about YUI and the world of frontend engineering.</li>
+</ol>
+
+	<h2 id="license">Licensing</h2>
+	<p>All of the YUI Library components are provided free of charge under a liberal <a href="http://yuilibrary.com/license/">BSD license</a>.</p>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="selected "><a title="YUI 2 -- proven and robust." href="http://developer.yahoo.com/yui/2/">YUI 2</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+
+
+<script type='text/javascript'>
+	// Instantiate and configure YUI Loader:
+	(function() {
+	    var loader = new YAHOO.util.YUILoader({
+	        require: ['button'],
+	        loadOptional: false,
+	        combine: true,
+	        allowRollup: false,
+	        onSuccess: function() {
+	           YAHOO.util.Event.onDOMReady(function() {
+					new YAHOO.widget.Button('yui2DownloadSubmit');
+				});
+	        }
+	    });
+
+	// Load the files using the insert() method.
+	loader.insert();
+	})();
+</script>
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:14 PDT 2013 -->
+
+<!-- Localized -->

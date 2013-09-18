@@ -1,0 +1,632 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Logger</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Logger</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+
+<div id="promo" class="component">
+  <h1>YUI 2: Logger</h1>
+  <p><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/logger.gif" width="225" height="209" class="example" alt="Image: The Logger's optional UI.">The Logger Control provides a simple way to read or write log messages with
+  a single line of code. With this control, you can tap into the rich
+  event-driven messages included with the YUI Library's debug files; This
+  messaging allows you to get a fuller picture of the inner workings of any YUI
+  Library component. The Logger Control provides a simple messaging interface
+  that allows you to filter, pause, resume, and clear log messages on your
+  screen.  Whether or not you invoke this UI, you can monitor log output via the
+  FireBug extension for Firefox or via the Safari JavaScript console. The Logger Control supports
+  logging messages with customizable categories and
+  sources. Adventurous developers can extend Logger to build their own
+  implementations to suit any requirement.</p>
+  <div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#using">Using Logger</a></li>
+      <li><a href="#skinning">Skinning Logger</a></li>
+      <li><a href="#mobile">YUI on Mobile Devices</a></li>
+      <li><a href="#support">Support &amp; Community</a></li><li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/logger/index.html">Examples</a>: Explore examples of the Logger Control in action.</li>
+      <li><a href="../docs/module_logger.html">API Documentation</a>: View the full API documentation for the Logger Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.logger">Release Notes</a>: Detailed change log for the Logger Control.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Logger Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+</div>
+<h2 class="first">Getting Started<a name="start"></a></h2>
+<p>To use the Logger component, include the following source files in your
+  web page with the script tag:</p>
+<div id="syntax-6b3840932c4e13109d77462bb135faeb" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!--CSS file (default YUI Sam Skin) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: Drag and Drop (not required if not enabling drag and drop) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!--CSS file (default YUI Sam Skin) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css&quot;</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: Drag and Drop (not required if not enabling drag and drop) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-6b3840932c4e13109d77462bb135faeb-plain"><!--CSS file (default YUI Sam Skin) -->
+<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css">
+
+<!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+
+<!-- OPTIONAL: Drag and Drop (not required if not enabling drag and drop) -->
+<script src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+
+<!-- Source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js"></script>
+</textarea></div>
+
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
+in which the Logger Control lives.  You can usually accomplish this simply by putting the class on the 
+<code>&#60;body&#62;</code> tag:</p>
+<div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
+</textarea></div>
+<p class="lastP">For more information on skinning YUI components and making use of default skins, 
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+article here on the website.</p>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>logger</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<h3>Reading Log Messages</h3>
+<p>Instantiate a LogReader to display log messages on your web page:</p>
+<div id="syntax-7e28e93160b5ed99408c4c9f9393d31c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myLogReader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LogReader</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myLogReader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LogReader</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-7e28e93160b5ed99408c4c9f9393d31c-plain">var myLogReader = new YAHOO.widget.LogReader();
+</textarea></div>
+<p>Attach a LogReader to a specific HTML element by passing the element's ID to Logger's constructor:</p>
+<div id="syntax-1253e4a3e64fc5d776a755214cf50b2d" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myLogger&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myLogger&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-1253e4a3e64fc5d776a755214cf50b2d-plain"><div id="myLogger"></div>
+</textarea></div><div id="syntax-8f7beed6b6f91532774c2202937cad4b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myLogReader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LogReader</span><span class="br0">&#40;</span><span class="st0">&quot;myLogger&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myLogReader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LogReader</span><span class="br0">&#40;</span><span class="st0">&quot;myLogger&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-8f7beed6b6f91532774c2202937cad4b-plain">var myLogReader = new YAHOO.widget.LogReader("myLogger");
+</textarea></div>
+<p>Attach a LogReader to a specific HTML element by passing an element reference to Logger's constructor:</p>
+<div id="syntax-329256d649a696fce14f569aea80a453" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myContainer <span class="sy0">=</span> document.<span class="me1">body</span>.<span class="me1">appendChild</span><span class="br0">&#40;</span>document.<span class="me1">createElement</span><span class="br0">&#40;</span><span class="st0">&quot;div&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myLogReader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LogReader</span><span class="br0">&#40;</span>myContainer<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myContainer <span class="sy0">=</span> document.<span class="me1">body</span>.<span class="me1">appendChild</span><span class="br0">&#40;</span>document.<span class="me1">createElement</span><span class="br0">&#40;</span><span class="st0">&quot;div&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw2">var</span> myLogReader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LogReader</span><span class="br0">&#40;</span>myContainer<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-329256d649a696fce14f569aea80a453-plain">var myContainer = document.body.appendChild(document.createElement("div"));
+var myLogReader = new YAHOO.widget.LogReader(myContainer);
+</textarea></div>
+<h3>Writing Log Messages</h3>
+<p>Use the <code>YAHOO.log()</code> function, part of the <a href="../yahoo/index.html">Yahoo Global Object</a>, to write log messages from anywhere in your code:</p>
+<div id="syntax-63833bfc8df96eaa9f44fd8844526b24" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Assigns default category &quot;info&quot; and default source &quot;global&quot;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;My log message&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Assigns default category &quot;info&quot; and default source &quot;global&quot;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;My log message&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-63833bfc8df96eaa9f44fd8844526b24-plain">// Assigns default category "info" and default source "global"
+YAHOO.log("My log message");
+</textarea></div>
+<p>Assign a category to your log message:</p>
+<div id="syntax-3de6570e330cf6a132a1e1a3de5e8c75" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Assigns the category &quot;source&quot;, which has a pre-defined style</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;My log message&quot;</span><span class="sy0">,</span> <span class="st0">&quot;warn&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Assigns the category &quot;source&quot;, which has a pre-defined style</span>
+<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;My log message&quot;</span><span class="sy0">,</span> <span class="st0">&quot;warn&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-3de6570e330cf6a132a1e1a3de5e8c75-plain">// Assigns the category "source", which has a pre-defined style
+YAHOO.log("My log message", "warn");
+</textarea></div>
+<p>Assign a custom category to your log message:</p>
+<div id="syntax-54c484c260fb63bfef8071ae06533957" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/* customize a color */</span></div></li><li class="li1"><div class="de1"><span class="re1">.yui-log</span> <span class="re1">.mycategory</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">background-color</span><span class="sy0">:</span> <span class="re0">#7B0099</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="coMULTI">/* customize a color */</span>
+<span class="re1">.yui-log</span> <span class="re1">.mycategory</span> <span class="br0">&#123;</span>
+    <span class="kw1">background-color</span><span class="sy0">:</span> <span class="re0">#7B0099</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-54c484c260fb63bfef8071ae06533957-plain">/* customize a color */
+.yui-log .mycategory {
+    background-color: #7B0099;
+}
+</textarea></div><div id="syntax-fb8a99d13ad971046e3f56d872e50b4c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Assigns a custom, case-insensitive category &quot;mycategory&quot;, which will</span></div></li><li class="li1"><div class="de1"><span class="co1">// be styled by the custom CSS you define with the same string</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;My log message&quot;</span><span class="sy0">,</span> <span class="st0">&quot;mycategory&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Assigns a custom, case-insensitive category &quot;mycategory&quot;, which will</span>
+<span class="co1">// be styled by the custom CSS you define with the same string</span>
+<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;My log message&quot;</span><span class="sy0">,</span> <span class="st0">&quot;mycategory&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-fb8a99d13ad971046e3f56d872e50b4c-plain">// Assigns a custom, case-insensitive category "mycategory", which will
+// be styled by the custom CSS you define with the same string
+YAHOO.log("My log message", "mycategory");
+</textarea></div>
+<p>Assign a category and a source to your log message:</p>
+<div id="syntax-1d81be5d525874180b00a846c9284764" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;My log message&quot;</span><span class="sy0">,</span> <span class="st0">&quot;error&quot;</span><span class="sy0">,</span> <span class="st0">&quot;buggyscript.js&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;My log message&quot;</span><span class="sy0">,</span> <span class="st0">&quot;error&quot;</span><span class="sy0">,</span> <span class="st0">&quot;buggyscript.js&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-1d81be5d525874180b00a846c9284764-plain">YAHOO.log("My log message", "error", "buggyscript.js");
+</textarea></div>
+<h2>Using Logger <a name="using"></a></h2>
+<p>This section describes in more detail the Logger, LogReader, and LogWriter classes, as well as some common configuration cases.</p>
+
+<h3>The Logger Class</h3>
+<p><code>YAHOO.widget.Logger</code> is a singleton class that manages incoming log messages and makes them
+available for output to LogReader instances. By setting the Logger property
+<code>maxStackEntries</code>, you can cap the number of log messages the Logger will manage.
+Once the limit is reached, the oldest log message will be evicted to make room
+for the newer entry.</p>
+
+<p>Some browsers have implemented a
+global <code>console.log()</code> method which can serve various functionalities. For instance,
+if you have the FireBug extension to Firefox installed, or the Safari JavaScript
+console enabled, logging messages to <code>console.log()</code> will output to browser-specific components.
+By default, the YUI Logger does not call this method, but you may wish
+enable this feature by calling <code>YAHOO.widget.Logger.enableBrowserConsole()</code>. Once enabled,
+calling <code>YAHOO.widget.Logger.disableBrowserConsole()</code> will disable this feature.</p>
+
+<p>The Logger class also allows you to clear out all previous log messages:</p>
+
+<div id="syntax-dffbea54c3550af5ac14261f02743a4d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Clears internal array of log message objects and clears all previous</span></div></li><li class="li1"><div class="de1"><span class="co1">// log messages from any LogReaders.</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Logger</span>.<span class="me1">reset</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Clears internal array of log message objects and clears all previous</span>
+<span class="co1">// log messages from any LogReaders.</span>
+<span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Logger</span>.<span class="me1">reset</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-dffbea54c3550af5ac14261f02743a4d-plain">// Clears internal array of log message objects and clears all previous
+// log messages from any LogReaders.
+YAHOO.widget.Logger.reset();
+</textarea></div>
+<h3>The LogReader Class</h3>
+<p><code>YAHOO.widget.LogReader</code> class creates a standalone UI control on
+a web page to easily display Logger messages included with debug builds of the YUI
+Library. LogReaders allow you to take full advantage of features like filtration
+by category and by source. The LogReader interface also allows you to pause and
+resume logging during script execution. Although LogReader has been
+pre-defined with a modestly configurable look and feel, advanced implementers
+may fully customize LogReader's CSS or subclass LogReader entirely for a
+customized experience.</p>
+
+<p>Visibility of the LogReader UI is controlled using calls to <code>show()</code> and <code>hide()</code>.  By default, the LogReader is visible.</p>
+
+<div id="syntax-c25e72f011afdbfeddc32027577aaf29" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Hide the Log Reader UI (no loss of log messages)</span></div></li><li class="li1"><div class="de1">myLogReader.<span class="me1">hide</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Show the Log Reader UI</span></div></li><li class="li2"><div class="de2">myLogReader.<span class="me1">show</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Hide the Log Reader UI (no loss of log messages)</span>
+myLogReader.<span class="me1">hide</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Show the Log Reader UI</span>
+myLogReader.<span class="me1">show</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-c25e72f011afdbfeddc32027577aaf29-plain">// Hide the Log Reader UI (no loss of log messages)
+myLogReader.hide();
+
+// Show the Log Reader UI
+myLogReader.show();
+</textarea></div>
+<h4>Common Configurations</h4>
+<p>The following properties are configurable using an object literal to set values
+in the constructor:</p>
+
+<dl>
+<dt>width</dt>
+<dd>Width of console</dd>
+<dt>height</dt>
+<dd>Height of container</dd>
+<dt>left/top/right/bottom</dt>
+<dd>Position from edge of viewport</dd>
+<dt>footerEnabled</dt>
+<dd>If false, hides the footer</dd>
+<dt>logReaderEnabled</dt>
+<dd>If false, LogReader is paused</dd>
+<dt>thresholdMax</dt>
+<dd>Maximum number of messages to show in the console</dd>
+<dt>thresholdMin</dt>
+<dd>How many messages to keep displayed when thresholdMax is reached and console
+is cleared</dd>
+<dt>draggable</dt>
+<dd>If false, disables LogReader draggability, otherwise console is draggable
+(requires Drag and Drop Utility)</dd>
+<dt>outputBuffer</dt>
+<dd>Size of output buffer in milliseconds -- higher values will enhance performance</dd>
+<dt>newestOnTop</dt>
+<dd>If false, new entries will be added below previous entries</dd>
+<dt>verboseOutput</dt>
+<dd>If false, log entries will be printed in a more compact format</dd>
+<dt>entryFormat</dt>
+<dd>innerHTML template to customize the printed log entries</dd>
+</dl>
+
+<div id="syntax-d22a8793232565cc5c2cb8cda1601b8e" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myConfigs <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    width<span class="sy0">:</span> <span class="st0">&quot;20px&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    height<span class="sy0">:</span> <span class="st0">&quot;30em&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    newestOnTop<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    footerEnabled<span class="sy0">:</span> <span class="kw2">false</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myContainer <span class="sy0">=</span> <span class="kw2">null</span><span class="sy0">;</span> <span class="co1">// LogReader will create markup from scratch</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myLogReader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LogReader</span><span class="br0">&#40;</span>myContainer<span class="sy0">,</span> myConfigs<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myConfigs <span class="sy0">=</span> <span class="br0">&#123;</span>
+    width<span class="sy0">:</span> <span class="st0">&quot;20px&quot;</span><span class="sy0">,</span>
+    height<span class="sy0">:</span> <span class="st0">&quot;30em&quot;</span><span class="sy0">,</span>
+    newestOnTop<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span>
+    footerEnabled<span class="sy0">:</span> <span class="kw2">false</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+<span class="kw2">var</span> myContainer <span class="sy0">=</span> <span class="kw2">null</span><span class="sy0">;</span> <span class="co1">// LogReader will create markup from scratch</span>
+<span class="kw2">var</span> myLogReader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LogReader</span><span class="br0">&#40;</span>myContainer<span class="sy0">,</span> myConfigs<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-d22a8793232565cc5c2cb8cda1601b8e-plain">var myConfigs = {
+    width: "20px",
+    height: "30em",
+    newestOnTop: false,
+    footerEnabled: false
+};
+var myContainer = null; // LogReader will create markup from scratch
+var myLogReader = new YAHOO.widget.LogReader(myContainer, myConfigs);
+</textarea></div>
+<h4>Customizing Output</h4>
+<p>The LogReader class allows you to customize the output format of log messages in three ways:</p>
+<ol>
+    <li>The config <code>verboseOutput</code> toggles between the default verbose and compact formats</li>
+    <li>The config <code>entryFormat</code> assigns a format template used to generate the entries' innerHTML strings</li>
+    <li>The LogReader's <code>formatMsg</code> method can be overridden with custom code</li>
+</ol>
+
+<h5><code>entryFormat</code> Templates</h5>
+<div id="syntax-4aacc867048bfe73793fff76bb4fa525" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Customize the formatting of output to LogReader</span></div></li><li class="li1"><div class="de1">myLogReader.<span class="me1">formatMsg</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oLogMsg<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">   <span class="kw2">var</span> category <span class="sy0">=</span> oLogMsg.<span class="me1">category</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">   <span class="kw1">return</span> <span class="st0">'&lt;p&gt;&lt;span class=&quot;'</span><span class="sy0">+</span>category<span class="sy0">+</span><span class="st0">'&quot;&gt;'</span><span class="sy0">+</span>category<span class="sy0">+</span><span class="st0">'&lt;/span&gt; '</span><span class="sy0">+</span> oLogMsg.<span class="me1">msg</span><span class="sy0">+</span><span class="st0">'&lt;/p&gt;'</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Customize the formatting of output to LogReader</span>
+myLogReader.<span class="me1">formatMsg</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oLogMsg<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+   <span class="kw2">var</span> category <span class="sy0">=</span> oLogMsg.<span class="me1">category</span><span class="sy0">;</span>
+   <span class="kw1">return</span> <span class="st0">'&lt;p&gt;&lt;span class=&quot;'</span><span class="sy0">+</span>category<span class="sy0">+</span><span class="st0">'&quot;&gt;'</span><span class="sy0">+</span>category<span class="sy0">+</span><span class="st0">'&lt;/span&gt; '</span><span class="sy0">+</span> oLogMsg.<span class="me1">msg</span><span class="sy0">+</span><span class="st0">'&lt;/p&gt;'</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-4aacc867048bfe73793fff76bb4fa525-plain">// Customize the formatting of output to LogReader
+myLogReader.formatMsg = function(oLogMsg) {
+   var category = oLogMsg.category;
+   return '<p><span class="'+category+'">'+category+'</span> '+ oLogMsg.msg+'</p>';
+};
+</textarea></div>
+<p><code>entryFormat</code> templates can contain markup as well as any of the following bracketed placeholders:</p>
+<ul>
+    <li>category</li>
+    <li>label</li>
+    <li>sourceAndDetail</li>
+    <li>message</li>
+    <li>localTime</li>
+    <li>elapsedTime</li>
+    <li>totalTime</li>
+</ul>
+
+<p>For example, the template used for verbose log entries (the default setting), is:</p>
+<div id="syntax-b96f4c87594afb0fa919f4de1e6acb1e" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LogReader</span>.<span class="me1">VERBOSE_TEMPLATE</span> <span class="sy0">=</span></div></li><li class="li1"><div class="de1">    <span class="st0">&quot;&lt;span class='{category}'&gt;{label}&lt;/span&gt;{totalTime}ms (+{elapsedTime}) {localTime}:&lt;/p&gt;&lt;p&gt;{sourceAndDetail}&lt;/p&gt;&lt;p&gt;{message}&lt;/p&gt;&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LogReader</span>.<span class="me1">VERBOSE_TEMPLATE</span> <span class="sy0">=</span>
+    <span class="st0">&quot;&lt;span class='{category}'&gt;{label}&lt;/span&gt;{totalTime}ms (+{elapsedTime}) {localTime}:&lt;/p&gt;&lt;p&gt;{sourceAndDetail}&lt;/p&gt;&lt;p&gt;{message}&lt;/p&gt;&quot;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-b96f4c87594afb0fa919f4de1e6acb1e-plain">YAHOO.widget.LogReader.VERBOSE_TEMPLATE =
+    "<span class='{category}'>{label}</span>{totalTime}ms (+{elapsedTime}) {localTime}:</p><p>{sourceAndDetail}</p><p>{message}</p>";
+</textarea></div>
+<h5>Customizing <code>formatMsg</code></h5>
+<div id="syntax-4aacc867048bfe73793fff76bb4fa525" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Customize the formatting of output to LogReader</span></div></li><li class="li1"><div class="de1">myLogReader.<span class="me1">formatMsg</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oLogMsg<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">   <span class="kw2">var</span> category <span class="sy0">=</span> oLogMsg.<span class="me1">category</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">   <span class="kw1">return</span> <span class="st0">'&lt;p&gt;&lt;span class=&quot;'</span><span class="sy0">+</span>category<span class="sy0">+</span><span class="st0">'&quot;&gt;'</span><span class="sy0">+</span>category<span class="sy0">+</span><span class="st0">'&lt;/span&gt; '</span><span class="sy0">+</span> oLogMsg.<span class="me1">msg</span><span class="sy0">+</span><span class="st0">'&lt;/p&gt;'</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Customize the formatting of output to LogReader</span>
+myLogReader.<span class="me1">formatMsg</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oLogMsg<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+   <span class="kw2">var</span> category <span class="sy0">=</span> oLogMsg.<span class="me1">category</span><span class="sy0">;</span>
+   <span class="kw1">return</span> <span class="st0">'&lt;p&gt;&lt;span class=&quot;'</span><span class="sy0">+</span>category<span class="sy0">+</span><span class="st0">'&quot;&gt;'</span><span class="sy0">+</span>category<span class="sy0">+</span><span class="st0">'&lt;/span&gt; '</span><span class="sy0">+</span> oLogMsg.<span class="me1">msg</span><span class="sy0">+</span><span class="st0">'&lt;/p&gt;'</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-4aacc867048bfe73793fff76bb4fa525-plain">// Customize the formatting of output to LogReader
+myLogReader.formatMsg = function(oLogMsg) {
+   var category = oLogMsg.category;
+   return '<p><span class="'+category+'">'+category+'</span> '+ oLogMsg.msg+'</p>';
+};
+</textarea></div>
+<h3>The LogWriter Class</h3>
+<p>The <code>YAHOO.widget.LogWriter</code> class provides a shortcut for implementers who are logging many
+messages from the same source. For instance, if you are debugging a class
+written in JavaScript, you may want to instantiate a single LogWriter to write
+logs for the entire class:</p>
+
+<div id="syntax-1fba8292182cb595171118117566ebba" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> MyClass <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// Define a toString() for your class that can</span></div></li><li class="li1"><div class="de1">    <span class="co1">// identify the class and any instance information</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="me1">toString</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        <span class="kw1">return</span> <span class="st0">&quot;MyClass instance data&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Instantiate a LogWriter</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="me1">logger</span> <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LogWriter</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">toString</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Now you can write log messages from your LogWriter</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="me1">logger</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;A new MyClass has been created&quot;</span><span class="sy0">,</span><span class="st0">&quot;info&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">// Every instance of your class can have its own LogWriter</span></div></li><li class="li1"><div class="de1">MyClass.<span class="me1">prototype</span>.<span class="me1">logger</span> <span class="sy0">=</span> <span class="kw2">null</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// This will log a message that is filterable by category and by source</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myInstance <span class="sy0">=</span> <span class="kw2">new</span> MyClass<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> MyClass <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#123;</span>
+    <span class="co1">// Define a toString() for your class that can</span>
+    <span class="co1">// identify the class and any instance information</span>
+    <span class="kw1">this</span>.<span class="me1">toString</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw1">return</span> <span class="st0">&quot;MyClass instance data&quot;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Instantiate a LogWriter</span>
+    <span class="kw1">this</span>.<span class="me1">logger</span> <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LogWriter</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">toString</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Now you can write log messages from your LogWriter</span>
+    <span class="kw1">this</span>.<span class="me1">logger</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;A new MyClass has been created&quot;</span><span class="sy0">,</span><span class="st0">&quot;info&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Every instance of your class can have its own LogWriter</span>
+MyClass.<span class="me1">prototype</span>.<span class="me1">logger</span> <span class="sy0">=</span> <span class="kw2">null</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// This will log a message that is filterable by category and by source</span>
+<span class="kw2">var</span> myInstance <span class="sy0">=</span> <span class="kw2">new</span> MyClass<span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-1fba8292182cb595171118117566ebba-plain">var MyClass = function(){
+    // Define a toString() for your class that can
+    // identify the class and any instance information
+    this.toString() = function() {
+        return "MyClass instance data";
+    };
+    
+    // Instantiate a LogWriter
+    this.logger = new YAHOO.widget.LogWriter(this.toString());
+
+    // Now you can write log messages from your LogWriter
+    this.logger.log("A new MyClass has been created","info");
+};
+
+// Every instance of your class can have its own LogWriter
+MyClass.prototype.logger = null;
+
+// This will log a message that is filterable by category and by source
+var myInstance = new MyClass();
+</textarea></div>
+<p>Note that when you supply a space-delimited string to the LogWriter
+constructor, the first word of the string will be used to assign a source to the
+log message, and the rest of the string will be prepended to the log message for
+supplementary detail. LogReader will parse the string at the first empty space
+character. If there are no empty spaces in the string, the entire string will be
+used to assign a source to the log message.</p>
+
+<h2>Skinning Logger <a name="skinning"></a></h2>
+<p>The Logger comes with a default presentation or "skin," part of the
+"Sam Skin" visual treatment that accompanies most YUI controls. You can read
+more about the general approach to skinning YUI components
+<a href="http://yuilibrary.com/yui/docs/tutorials/skins/">in this in-depth article</a>.</p>
+
+<p>In the case of the Logger Control, there is no "core" CSS treatment —
+which is to say that there is no CSS that is considered essential to the
+functioning of the control. All of the CSS provided with Logger is part of
+the Sam Skin visual treatment.</p>
+
+<p><img src="../docs/assets/logger.gif" alt="The Logger Control" width="225" height="209" border="0" /></p>
+
+<p>To explore the CSS which controls the Logger's presentation, please
+review <a href="../examples/logger/log_skinning.html">the Logger
+Skinning Example</a> wherein the full CSS for the control is displayed.</p>
+
+<h2 id="mobile">YUI on Mobile: Using Logger Control with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>
+<p>The Logger control has been tested on several high-end smart phones without
+any major known issues. It is meant primarily as a development tool, and therefore
+it is not recommended in production environments. Due to the inherent limitations
+found in mobile platforms, implementers should take into account the following
+preliminary list of known issues:</p>
+
+<ul>
+<li>The LogReader console may take up precious real estate.</li>
+<li>Output to the LogReader may experience delays due to the high-latency environment.</li>
+<li>Support for the native browser <code>console.log()</code> function may be unreliable at
+best or altogether non-existent.</li>
+</ul>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+        </div>
+         <div class="yui-u">
+            
+            <div id="cheatsheet">
+                <h3>Logger Control Cheat Sheet:</h3>
+                
+                <a href="http://yuiblog.com/assets/pdf/cheatsheets/logger.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/logger.gif" width="178" height="132" alt="Cheat Sheet for the Logger Control."></a>
+                
+                <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+            </div>
+            
+            <div id="examples">
+<h3>Logger Control Examples:</h3>
+
+<ul>
+<li><a href='../examples/logger/log_basic.html'>Basic Logging</a></li>
+<li><a href='../examples/logger/log_reading.html'>Configuring LogReader</a></li>
+<li><a href='../examples/logger/log_writing.html'>Using LogWriter</a></li>
+<li><a href='../examples/logger/log_autocomplete.html'>Logger Integration with YUI Components</a></li>
+<li><a href='../examples/logger/log_skinning.html'>Skinning Model</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Logger Control:</h4>
+
+<ul>
+<li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
+</ul>		
+           </div>
+
+            <div id="morereading">
+                <h3>More Reading about the YUI Logger Control:</h3>
+                
+                <ul>
+                    <li><a href="http://codebetter.com/blogs/jay.kimble/archive/2007/02/22/JavaScript-API_2700_s-and-Debugging.aspx">JavaScript API's and Debugging</a>, by Jay Kimble (reviews several JavaScript debugging controls)</li>
+                </ul>
+           </div>
+
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Flogger%2F--><h3 id="delicious">YUI Logger on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/logger/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/development" class="tag-size-1">development</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/debugging" class="tag-size-1">debugging</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/logging" class="tag-size-1">logging</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/debug" class="tag-size-1">debug</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdev" class="tag-size-1">webdev</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/logger" class="tag-size-1">logger</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/f81b1316730e4d29d26502cca7b24c4b" class="saved-by">saved by <span>37</span>  people</a></p>
+   </div></div>
+
+         </div>
+      </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="selected "><a title="The YUI Logger Control" href="index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:13 PDT 2013 -->
+
+<!-- Localized -->

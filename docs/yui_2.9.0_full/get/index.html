@@ -1,0 +1,556 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Get Utility</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Get Utility</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+      
+  <div id="promo" class="component">
+    <h1>YUI 2: Get Utility</h1>
+
+<p>The Get Utility provides a mechanism for attaching script and css resources &mdash; including cross-domain resources &mdash; to the DOM after the page has loaded.</p>
+
+<p>There are two common use cases for the Get Utility:</p>
+
+<ol>
+  <li><strong>Cross-site data retrieval:</strong> Because XMLHttpRequest (and <a href="../connection/index.html">YUI Connection Manager</a>, which uses XMLHttpRequest) adheres to a strict <a href="http://en.wikipedia.org/wiki/Same_origin_policy">same-origin policy</a>, the retrieval of third-party data via XHR requires a server-side proxy.  Where you control or absolutely trust a cross-domain source, you can eliminate the server-side proxy by loading a script file directly from the external domain; that script file, which would typically contain JSON-formatted data, is executed immediately upon load. It is crucial to understand that if there is malicious code present in the loaded script there is no safe way to innoculate your users from that malicious code...the browser will execute the code with full privileges.  <strong>Never expose your users to JavaScript whose source is not absolutely trustworthy.</strong></li>
+  <li><strong>Progressive loading of functionality:</strong> In rich web applications, it's often useful to load some script and CSS resources only when they become necessary (based on user action).  The Get Utility provides a flexible mechanism for bringing additional resources on-demand.  (<strong>Note:</strong> If you're loading YUI resources specifically, use <a href="../yuiloader/index.html">the YUI Loader Utility</a>; the YUI Loader employs the Get Utility under the hood to bring in YUI components and has an intrinsic understanding of the YUI dependency tree.)</li>
+</ol>
+
+<h3>What Is the Difference Between the Get Utility and the Connection Manager?</h3>
+
+<p>The Get Utility inserts new content into a window by creating new nodes and supplying a <code>src</code> attribute.  Files inserted into the window in this manner are processed (and, in the case of scripts, executed) immediately upon load.  While querystring parameters can be passed in the <code>src</code> attribute URL, no data can be sent to the server via HTTP POST using this method.  The Get Utility can only make HTTP GET requests.  It can, however, interact with disparate domains. As noted above, the Get Utility is ideal for  loading your own scripts or CSS progressively (lazy-loading) or for retrieving cross-domain JSON data from sources in which you have total trust.</p>
+
+<p>The <a href="../connection/index.html">YUI Connection Manager</a>, by contrast, uses the XMLHttpRequest object to interact with the server.  XMLHttpRequest is limited by a strict <a href="http://en.wikipedia.org/wiki/Same_origin_policy">same origin policy</a>, but it supports a greater range of HTTP methods (including POST).  Moreover, script data retrieved via XMLHttpRequest can be validated on the server side or in JavaScript (using, for example, the <a href="../json/index.html">JSON Utility</a>) prior to being executed. As a result, Connection Manager is a more appropriate choice for rich two-way communication between browser and server and gives you more control over data before it's processed within the browser.</p>
+<div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#config">Configuring a Get Utility Transaction</a> </li>
+      <li><a href="#args">Making Use of Arguments Supplied to Your Callback</a> </li>
+      <li><a href="#script">Using the Get Utility to Insert Script Nodes</a> </li>
+      <li><a href="#css">Using the Get Utilty to Insert CSS Files</a></li>
+      <li><a href="#mobile">YUI on Mobile Devices</a></li>
+      <li><a href="#knownissues">Known Issues</a></li>
+      <li><a href="#support">Support &amp; Community</a></li>
+      <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/get/index.html">Examples</a>: Explore examples of the Get Utility in action.</li>
+      <li><a href="../docs/module_get.html">API Documentation</a>: View the full API documentation for the Get Utility.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.get">Release Notes</a>: Detailed change log for the Get Utility.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Get Utility as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>    
+  </div>
+
+  <h2 class="first">Getting Started<a name="start"></a></h2>
+  <p>The Get Utility's only dependency is <a href="../yahoo/index.html">the Yahoo Global Object</a>.  To use the Get Utility, include the following source
+  files in your web page:</p>
+  
+<div id="syntax-4665c785a2cec1479e94f21cf7cfe6a0" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/get/get-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/get/get-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-4665c785a2cec1479e94f21cf7cfe6a0-plain"><!-- Dependencies --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js" ></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/get/get-min.js" ></script>
+</textarea></div>
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  
+  <strong>Note:</strong> If you are loading components via the <a href="../yuiloader/index.html">YUI Loader</a>, this component <em>is included in the YUI Loader package</em> &mdash; you do not need to load it separately. If YUI Loader is on the page, so is the Get Utility.
+  
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<p>With the Get Utility present, you can make use of it to fetch script (<code>YAHOO.util.Get.script()</code>) and/or CSS (<code>YAHOO.util.Get.css()</code>) resources to the page.  The <code>script</code> and <code>css</code> methods each take the following arguments:</p>
+
+<ol>
+  <li><strong>URL(s):</strong> A string or an array of strings designating the URL(s) you wish to load into the page;</li>
+  <li><strong>options:</strong> An optional object containing configuration information for the transaction; see the <a href="#config">Configuring a Get Utility Transaction section</a> below for the full list of configuraton members you can include here.</li>
+</ol>
+
+<p>A sample request for a file might look like this:</p>
+
+<div id="syntax-8013533adb24373203d6e5e03f3154e2" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> objTransaction <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Get</span>.<span class="me1">script</span><span class="br0">&#40;</span><span class="st0">&quot;http://json.org/json.js&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">    onSuccess<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;file loaded&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">//objTransaction will be an object with a single field, tId, </span></div></li><li class="li1"><div class="de1"><span class="co1">//which is a unique identifier of the transaction following the pattern</span></div></li><li class="li1"><div class="de1"><span class="co1">//&quot;q0&quot;, &quot;q1&quot;, &quot;q2&quot;...&quot;qn&quot;.</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> objTransaction <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Get</span>.<span class="me1">script</span><span class="br0">&#40;</span><span class="st0">&quot;http://json.org/json.js&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> 
+    onSuccess<span class="sy0">:</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;file loaded&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">//objTransaction will be an object with a single field, tId, </span>
+<span class="co1">//which is a unique identifier of the transaction following the pattern</span>
+<span class="co1">//&quot;q0&quot;, &quot;q1&quot;, &quot;q2&quot;...&quot;qn&quot;.</span>
+&nbsp;</pre></div><textarea id="syntax-8013533adb24373203d6e5e03f3154e2-plain">var objTransaction = YAHOO.util.Get.script("http://json.org/json.js", { 
+    onSuccess: function() {
+        alert("file loaded");
+    }
+});
+//objTransaction will be an object with a single field, tId, 
+//which is a unique identifier of the transaction following the pattern
+//"q0", "q1", "q2"..."qn".
+</textarea></div>
+
+<h2 id="config">Configuring a Get Utility Transaction</h2>
+
+<p>The Get Utility is configured via the second argument to the <code>script</code> or <code>css</code> method.  This optional argument comprises an object containing one or more of the following fields:</p>
+
+<div class="apisummary">
+
+<table>
+    <thead>
+        <tr>
+            <th>Configuration Option</th>
+            <th>Purpose</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr >
+            <td>onSuccess</td>
+            <td>(function) Callback method invoked by Get Utility when the requested file(s) have loaded successfully.</td>
+        </tr>
+        <tr class="odd">
+            <td>onFailure</td>
+            <td>(function) Callback method invoked by Get Utility when an error is detected or <code>abort</code> is called.</td>
+        </tr>
+        <tr>
+            <td>onProgress</td>
+            <td>(function) Callback method invoked by Get Utility after each node is inserted.</td>
+        </tr>
+        <tr class="odd">
+            <td>onTimeout</td>
+            <td>(function) Callback method invoked by Get Utility if a timeout is detected.</td>
+        </tr>
+        <tr >
+            <td>win</td>
+            <td>(obj) The <code>window</code> into which the loaded resource(s) will be inserted.  Default: the current <code>window</code>.</td>
+        </tr>
+        <tr class="odd">
+            <td>scope</td>
+            <td>(object) The execution scope in which the <code>onSuccess</code> or <code>onFailure</code> callback will run.  Default: the current <code>window</code>.</td>
+        </tr>
+
+        <tr >
+            <td>data</td>
+            <td>(any) Data to pass as an argument to <code>onSuccess</code> or <code>onFailure</code> callbacks.  Default: <code>null</code>.</td>
+        </tr>
+        <tr  class="odd">
+            <td>autopurge</td>
+            <td>(boolean) If set to true, script nodes will automatically be
+            removed every 20 transactions (this number is globally configurable
+            via the <code>Y.Get.PURGE_THRESH</code> property); script
+            nodes can be safely removed in most cases, as their contents
+            (having executed) remain available. CSS nodes should not have this
+            set to true as it will remove the CSS rules. Default:
+            <code>true</code> for script nodes, <code>false</code> for CSS
+            nodes.</td> </tr> 
+         <tr > 
+            <td>timeout</td> 
+            <td>(int) Number of milliseconds to wait for a script to finish loading before timing out</td> 
+         </tr>
+            </tbody>
+
+</table>
+</div>
+
+<h2 id="args">Making Use of Arguments Supplied to Your Callback</h2>
+
+<p>As noted <a href="#config">in the section above</a>, your callback method (whether <code>onSuccess</code> or <code>onFailure</code>) will have access to the <code>data</code> member supplied in the configuration object, assuming you provided one.  But the <code>data</code> member is just one of several fields included in the object passed to your callback.  Here's a summary of the fields contained in that argument object:</p>
+
+<div class="apisummary">
+<table>
+    <thead>
+        <tr>
+            <th>Field</th>
+            <th>Contents</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="odd">
+            <td>tId</td>
+            <td>(string) The unique identifier for this transaction; this string is available as the <code>tId</code> member of the object returned to you upon calling the <code>script</code> or <code>css</code> method.</td>
+        </tr>        
+        <tr>
+            <td>data</td>
+            <td>(any) The <code>data</code> field you passed in your configuration object when the <code>script</code> or <code>css</code> method was called. Default: <code>null</code>.</td>
+        </tr>
+        <tr class="odd">
+            <td>nodes</td>
+            <td>(array) An array containing references to node(s) created in processing the transaction.  These will be script nodes for JavaScript and link nodes for CSS.</td>
+        </tr>
+        <tr>
+            <td>win</td>
+            <td>(obj) The window object in which the nodes were created.</td>
+        </tr>
+        <tr class="odd">
+            <td>purge()</td>
+            <td>(function) Calling the returned <code>purge()</code> method will immediately remove the created nodes. This is safe and prudent for JavaScript nodes, which do not need to persist.  If CSS nodes are purged, the rules they contain are no longer available and the page will repaint accordingly.</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<p>All of these fields are accessible on the object passed to your <code>onSuccess</code> callback:</p>
+
+<div id="syntax-b96559d262d925843b7cc32f71be8bfa" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> successHandler <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//Here, o contains all of the fields described in the table</span></div></li><li class="li1"><div class="de1">    <span class="co1">//above:</span></div></li><li class="li1"><div class="de1">    o.<span class="me1">purge</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">//removes the script node immediately after executing;</span></div></li><li class="li2"><div class="de2">    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span>o.<span class="me1">data</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">//the data you passed in your configuration</span></div></li><li class="li1"><div class="de1">                       <span class="co1">//object</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> objTransaction <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Get</span>.<span class="me1">script</span><span class="br0">&#40;</span><span class="st0">&quot;http://json.org/json.js&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> </div></li><li class="li2"><div class="de2">    onSuccess<span class="sy0">:</span> successHandler<span class="sy0">,</span></div></li><li class="li1"><div class="de1">    data<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        field1<span class="sy0">:</span> value1<span class="sy0">,</span></div></li><li class="li1"><div class="de1">        field2<span class="sy0">:</span> value2</div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> successHandler <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">//Here, o contains all of the fields described in the table</span>
+    <span class="co1">//above:</span>
+    o.<span class="me1">purge</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">//removes the script node immediately after executing;</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span>o.<span class="me1">data</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">//the data you passed in your configuration</span>
+                       <span class="co1">//object</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="kw2">var</span> objTransaction <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Get</span>.<span class="me1">script</span><span class="br0">&#40;</span><span class="st0">&quot;http://json.org/json.js&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> 
+    onSuccess<span class="sy0">:</span> successHandler<span class="sy0">,</span>
+    data<span class="sy0">:</span> <span class="br0">&#123;</span>
+        field1<span class="sy0">:</span> value1<span class="sy0">,</span>
+        field2<span class="sy0">:</span> value2
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-b96559d262d925843b7cc32f71be8bfa-plain">var successHandler = function(o) {
+    //Here, o contains all of the fields described in the table
+    //above:
+    o.purge(); //removes the script node immediately after executing;
+    YAHOO.log(o.data); //the data you passed in your configuration
+                       //object
+}
+
+var objTransaction = YAHOO.util.Get.script("http://json.org/json.js", { 
+    onSuccess: successHandler,
+    data: {
+        field1: value1,
+        field2: value2
+    }
+});
+</textarea></div>
+<h2 id="script">Using the Get Utility to Insert Script Nodes</h2>
+
+<p>When you use the <code>YAHOO.util.Get.script()</code> method to add one or more script nodes to the page, the Get Utility implements the following steps:</p>
+
+<ol>
+  <li>A script node is appended to the target <code>window</code> for the first script file requested;</li>
+  <li>the <code>src</code> attribute of the new script node is set to the specified URL;</li>
+  <li>the script, in a successful transaction, is loaded and executed;</li>
+  <li>the script node's <code>load</code> event fires;</li>
+  <li>the Get Utility checks to see if more URLs remain to be loaded; if so, it recurses to step 1;</li>
+  <li>if this was the last of the URLs specified for this transaction, the Get Utility invokes the <code>onSuccess</code> callback (if one has been specified);</li>
+</ol>
+
+<p>The following is the general code pattern used to get scripts:</p>
+
+<div id="syntax-be2d13f0aec41091d56dd25562135227" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> handlerData <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//data you wish to pass to your success or failure</span></div></li><li class="li1"><div class="de1">    <span class="co1">//handlers.</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> successHandler <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oData<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">//code to execute when all requested scripts have been</span></div></li><li class="li1"><div class="de1">    <span class="co1">//loaded; this code can make use of the contents of those</span></div></li><li class="li1"><div class="de1">    <span class="co1">//scripts, whether it's functional code or JSON data.</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> aURLs <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">    <span class="st0">&quot;/url1.js&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="st0">&quot;/url2.js&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    <span class="st0">&quot;/url3.js&quot;</span> <span class="co1">//and so on</span></div></li><li class="li1"><div class="de1"><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Get</span>.<span class="me1">script</span><span class="br0">&#40;</span>aURLs<span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    onSuccess<span class="sy0">:</span> successHandler<span class="sy0">,</span></div></li><li class="li2"><div class="de2">    data<span class="sy0">:</span>      handlerData</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> handlerData <span class="sy0">=</span> <span class="br0">&#123;</span>
+    <span class="co1">//data you wish to pass to your success or failure</span>
+    <span class="co1">//handlers.</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> successHandler <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oData<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">//code to execute when all requested scripts have been</span>
+    <span class="co1">//loaded; this code can make use of the contents of those</span>
+    <span class="co1">//scripts, whether it's functional code or JSON data.</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> aURLs <span class="sy0">=</span> <span class="br0">&#91;</span>
+    <span class="st0">&quot;/url1.js&quot;</span><span class="sy0">,</span>
+    <span class="st0">&quot;/url2.js&quot;</span><span class="sy0">,</span>
+    <span class="st0">&quot;/url3.js&quot;</span> <span class="co1">//and so on</span>
+<span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Get</span>.<span class="me1">script</span><span class="br0">&#40;</span>aURLs<span class="sy0">,</span> <span class="br0">&#123;</span>
+    onSuccess<span class="sy0">:</span> successHandler<span class="sy0">,</span>
+    data<span class="sy0">:</span>      handlerData
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-be2d13f0aec41091d56dd25562135227-plain">var handlerData = {
+    //data you wish to pass to your success or failure
+    //handlers.
+};
+
+var successHandler = function(oData) {
+    //code to execute when all requested scripts have been
+    //loaded; this code can make use of the contents of those
+    //scripts, whether it's functional code or JSON data.
+};
+
+var aURLs = [
+    "/url1.js",
+    "/url2.js",
+    "/url3.js" //and so on
+];
+
+YAHOO.util.Get.script(aURLs, {
+    onSuccess: successHandler,
+    data:      handlerData
+});
+</textarea></div>
+<h2 id="script">Using the Get Utility to Insert CSS Files</h2>
+
+<p>When you use the <code>YAHOO.util.Get.css()</code> method to add one or more
+CSS files to the page, the Get Utility follows the same steps described above
+for scripts.  Generally speaking, the same code pattern holds as well.  Note
+    that Firefox and Safari at present do not support the load event on link nodes, so
+    it is possible for CSS requests to load out of order in those browsers.  This
+    can result in a different progressive display of styled in Firefox and Safari versus
+    other browsers during CSS loading.</p>
+
+
+
+<h2 id="mobile">YUI on Mobile: Using Get Utility with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>  
+<p>The Get Utility is fully supported on Apple's iPhone and the Nokia N-Series browsers; you can expect functional parity between their implementation and those on the supported <a href="http://yuilibrary.com/yui/docs/tutorials/gbs/">A-Grade browsers</a>.</p>
+
+<h2 id="knownissues">Known Issues</h2>
+<h4>Cross domain restriction when operating in an iframe in Internet Explorer 6</h4>
+<p>Internet Explorer 6 will not evaluate script content if the page initiating the request is in an iframe, if the source of the script is from a different domain.</p>
+
+<h4>Limited failure detection</h4>
+<p>Most browsers do not consider a 404 error when inserting a node a failure, and will fire the onSuccess handler in this case rather than the onFailure handler.</p>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+    </div>
+         <div class="yui-u">
+            
+            <div id="cheatsheet">
+                <h3>Get Utility Cheat Sheet:</h3>
+                
+                <a href="http://yuiblog.com/assets/pdf/cheatsheets/get.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/get.gif" width="178" height="132" alt="Cheat Sheet for the Get Utility."></a>
+                
+                <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+            </div>
+
+<div id="examples">
+<h3>Get Utility Examples:</h3>
+
+<ul>
+<li><a href='../examples/get/get-script-simple.html'>Quickstart Example: Getting a Script File with YUI Get</a></li>
+<li><a href='../examples/get/get-script-basic.html'>Getting a Script Node with JSON Data from a Web Service</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Get Utility:</h4>
+
+<ul>
+<li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
+</ul>		
+</div>
+
+<div id="morereading">
+    <h3>More Reading about the Get Utility:</h3>
+    
+    <ul>
+      <li><a href="http://www.dmxzone.com/ShowDetail.asp?NewsId=16174">Getting Resources with YUI Get</a>, by Dan Wellman ($3.20 download from DMXZone)</li>
+   </ul>
+</div>
+
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fget%2F--><h3 id="delicious">YUI Get Utility on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/get/" class="bookmark">bookmark on del.icio.us</a></p>
+            <p class="be-first">be the first to bookmark this page!</a></p>
+   </div></div>
+
+         </div>
+  </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="selected "><a title="The YUI Get Utility" href="index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:16 PDT 2013 -->
+
+<!-- Localized -->

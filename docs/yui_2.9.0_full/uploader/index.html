@@ -1,0 +1,512 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Uploader</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Uploader</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+
+<div id="promo" class="component">
+  <h1>YUI 2: Uploader</h1>
+
+<p>YUI Uploader provides file upload functionality that goes beyond the basic browser-based methods. Specifically, the YUI Uploader allows for:
+<ol>
+<li> Multiple file selection in a single "Open File" dialog.</li>
+<li> File extension filters to facilitate the user's selection.</li>
+<li> Progress tracking for file uploads.</li>
+<li> A range of available file metadata: filename, size, date created, date modified, and author.</li>
+<li> A set of events dispatched on various aspects of the file upload process: file selection, upload progress, upload completion, etc.</li>
+<li> Inclusion of additional data in the file upload POST request.</li>
+<li> Faster file upload on broadband connections due to the modified SEND buffer size.</li>
+<li> Same-page server response upon completion of the file upload.</li>
+</ol>
+		
+  <p><strong>Important usage notes:</strong></p><ul>
+	<li>Because of security changes in Flash Player 10, the UI for invoking the "Browse" dialog has to be contained within the Flash player. Because of that, this version of the Uploader is <strong>NOT BACKWARDS COMPATIBLE</strong> with the code written to work with versions 2.7 and below (it is, however, compatible with Flash Player 9). Do not upgrade to this version without carefully reading the documentation and reviewing the new examples.</li>
+  	<li>The Uploader Control should always be served from an HTTP server due to Flash Player's restricted local security model.</li>
+  	<li>The Uploader Control requires Flash Player 9.0.45 or higher. The latest version of Flash Player is available at the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.</li>
+  </ul>
+  
+
+  <div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#using">Using the Uploader</a></li>
+      <li><a href="#support">Support &amp; Community</a></li>
+      <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/uploader/index.html">Examples</a>: Explore examples of the YUI Uploader Control in action.</li>
+      <li><a href="../docs/module_uploader.html">API Documentation</a>: View the full API documentation for the YUI Uploader Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.uploader">Release Notes</a>: Detailed change log for the YUI Uploader Control.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the YUI Uploader Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+</div>
+
+<h2 id="start" class="first">Getting Started</h2>
+<p>To use the Uploader Control, include the following source files in your web page:</p>
+<div id="syntax-294d32f9d19ce11bb2c20e429e95ba92" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Source files --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/uploader/uploader-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source files --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/uploader/uploader-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-294d32f9d19ce11bb2c20e429e95ba92-plain"><!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+
+<!-- Source files -->
+<script src="http://yui.yahooapis.com/2.9.0/build/uploader/uploader-min.js"></script>
+</textarea></div>
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>uploader</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<p>By default, the file <code>uploader.swf</code> is expected in the <code>assets</code> directory relative to the location of the HTML page in which a Uploader Control instance will appear. If you wish use <code>uploader.swf</code> from <code>yui.yahooapis.com</code>, or if you'd like to place <code>uploader.swf</code> in a different location on your own server, you may specify a path (relative to the page or absolute) by setting the following variable:</p>
+
+<div id="syntax-3daff84b8b4b06c0bd9eb19030f4f403" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Uploader</span>.<span class="me1">SWFURL</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/uploader/assets/uploader.swf&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Uploader</span>.<span class="me1">SWFURL</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/uploader/assets/uploader.swf&quot;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-3daff84b8b4b06c0bd9eb19030f4f403-plain">YAHOO.widget.Uploader.SWFURL = "http://yui.yahooapis.com/2.9.0/build/uploader/assets/uploader.swf";
+</textarea></div>
+<p>To get started with the Uploader Control, begin by placing it on the page.  Create a <code>&lt;div&gt;</code> (or other container element) placeholder into which you'll render your Uploader instance. The Uploader UI (an equivalent of the "Browse..." button) can be rendered in one of two ways: you can either pass a URL of a button sprite to the constructor, in which case the uploader will render as a button; if the URL argument is omitted, the uploader will render as a transparent layer that dispatches mouse events (see the examples), and it will be your responsibility to create the visual UI below it.</p>
+<p>Note that the invocation of the &quot;Browse&quot; dialog is the only UI task reserved to the uploader. All other methods of the uploader (configuration methods, upload call, etc.) need to be called by your UI.</p>
+<p>The width and height of the container should be set to the size that you want the uploader to be.</p>
+
+<div id="syntax-f7c26ef3b818088fdf6cfba5be1be897" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;uploaderContainer&quot;</span> <span class="kw3">style</span><span class="sy0">=</span><span class="st0">&quot;width:120px; height:50px&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;uploaderContainer&quot;</span> <span class="kw3">style</span><span class="sy0">=</span><span class="st0">&quot;width:120px; height:50px&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-f7c26ef3b818088fdf6cfba5be1be897-plain"><div id="uploaderContainer" style="width:120px; height:50px"></div>
+</textarea></div>
+<p>Let's render the uploader as a button. To do that, we will instantiate the Uploader by passing the <code>id</code> of the container <code>&lt;div&gt;</code> to it, and the URL of the button sprite:</p>
+
+<div id="syntax-09966f58720297109ef0b62a2bbb6f9f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> uploader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Uploader</span><span class="br0">&#40;</span> <span class="st0">&quot;uploaderContainer&quot;</span><span class="sy0">,</span> <span class="st0">&quot;assets/buttonSprite.jpg&quot;</span> <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> uploader <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Uploader</span><span class="br0">&#40;</span> <span class="st0">&quot;uploaderContainer&quot;</span><span class="sy0">,</span> <span class="st0">&quot;assets/buttonSprite.jpg&quot;</span> <span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-09966f58720297109ef0b62a2bbb6f9f-plain">var uploader = new YAHOO.widget.Uploader( "uploaderContainer", "assets/buttonSprite.jpg" );
+</textarea></div>
+<p>The button sprite image has to be structured as follows: it should be four equal-sized button skins (each of the size corresponding to the size of the container div), stacked vertically, in the following order from top to bottom: the <strong>mouse-up</strong> skin, the <strong>mouse-over</strong> skin, the <strong>mouse-down</strong> skin, and the <strong>control-disabled</strong> skin.</p>
+
+<h2 id="using">Using the Uploader</h2>
+
+<p>The Uploader has a number of methods that allow the developer to manage the file queuing and upload process. The Uploader also dispatches various events for different aspects of the upload process.</p>
+
+<ul>
+    <li><a href="#events">Listening for events</a></li>
+    <li><a href="#methods">Uploader methods</a></li>
+    <li><a href="#server">Handling uploads on the server</a></li>
+    <li><a href="#examples">Uploader examples</a></li>
+</ul>
+
+<h3 id="events">Listening for events</h3>
+<p> In order to receive events from the Uploader, you need to add event listeners. For example, to add a listener for a <code>fileSelect</code> event, do the following:</p>
+
+<div id="syntax-6d763a066afcf3c6fa14ee70db7aec65" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">uploader.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">'fileSelect'</span><span class="sy0">,</span>onFileSelect<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">uploader.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">'fileSelect'</span><span class="sy0">,</span>onFileSelect<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-6d763a066afcf3c6fa14ee70db7aec65-plain">uploader.addListener('fileSelect',onFileSelect);
+</textarea></div>
+<p> This means that when the user selects the files using the &quot;Open File&quot; dialog, the <code>onFileSelect</code>function will be called and an <code>event</code> object will be passed to it. The following events are dispatched by the Uploader:</p>
+<p>
+<ul>
+<li> <strong>contentReady</strong>: dispatched when the Uploader Flash file has successfully initialized. No event object is passed to the listener function. <strong>Note:</strong> do not call any methods on the Uploader until this event fires. Until this event is dispatched, the uploader is not read to accept function calls.</li>
+<li> <strong>fileSelect</strong>: dispatched when the user has finished selecting the files in the "Open File" dialog. Event object contains the following variables: <ul>
+
+<li> <em>type</em>: "fileSelect"</li> <li> <em>fileList</em>: an array of objects with the following file information: <ul>
+<li> <em>size</em>: file size in bytes</li> <li> <em>cDate</em>: creation date
+</li> <li> <em>mDate</em>: modification date
+
+</li> <li> <em>name</em>: file name (no full path is available)
+</li> <li> <em>id</em>: unique file id, used for referencing the file when managing the upload or getting upload progress.
+</li></ul>
+</li></ul>
+</li> <li> <strong>uploadStart</strong>: dispatched when the upload of a specific file has started. The event object contains the following variables: <ul>
+<li> <em>type</em>: "uploadStart"</li> <li> <em>id</em>: the unique id of the file that's started to upload.
+</li></ul>
+</li>
+<li> <strong>uploadProgress</strong>: dispatched when new information on the upload progress of a specific file is available. The event object contains the following variables:
+  <ul>
+<li> <em>type</em>: "uploadProgress"</li> <li> <em>id</em>: The unique id of the file being uploaded.
+
+</li> <li> <em>bytesLoaded</em>: the number of bytes of the file uploaded so far
+</li> <li> <em>bytesTotal</em>: the total size of the file
+</li></ul>
+</li>
+<li> <strong>uploadCancel</strong>: dispatched when a particular file upload is canceled. The event object contains the following variables:
+  <ul>
+<li> <em>type</em>: "uploadCancel"</li> <li> <em>id</em>: the unique id of the file whose upload has been canceled.
+</li></ul>
+</li>
+<li> <strong>uploadComplete</strong>: dispatched when the upload of a particular file is complete. The event object contains the following variables:
+  <ul>
+<li> <em>type</em>: "uploadComplete"</li> <li> <em>id</em>: the unique id of the file whose upload has been completed.
+
+</li></ul>
+</li>
+<li> <strong>uploadCompleteData</strong>: dispatched when the server returns data in response to the completed upload. The event object contains the following variables:
+  <ul>
+<li> <em>type</em>: "uploadCompleteData"</li> <li> <em>id</em>: the unique id of the file that was uploaded.
+</li> <li> <em>data</em>: the raw data returned by the server in response to the upload
+
+</li></ul>
+</li>
+<li> <strong>uploadError</strong>: dispatched when an error occurs in the upload process. The event object contains the following variables:
+  <ul>
+<li> <em>type</em>: "uploadError"</li>
+<li><em>id</em>: the id of the file whose upload resulted in the error.</li>
+<li> <em>status</em>: The status message associated with the error</li></ul>
+</li></ul></p>
+
+<h3 id="methods">Uploader methods</h3>
+<p>The Uploader Control supports the following methods: </p><p>
+<ul>
+
+
+	<li> <strong>setAllowLogging (allowLogging:Boolean)</strong> : Turns logging output on or off. If on, the uploader dispatches log messages to the YUI logger if one is available, and to the Flash trace file. If off, the uploader stays silent. <ul>
+	<li> <em>allowLogging:Boolean</em> : if true, logging is turned on; if false, logging is turned off. By default, logging is turned off.
+	</li></ul>
+	</li>
+
+	<li> <strong>setAllowMultipleFiles (allowMultipleFiles:Boolean)</strong> : Allows the user to select multiple files when browsing. The result of the file selection is the same independent of whether the user is allowed to select a single file or multiple ones; in case of a single file, the returned file list simply contains a single element. If multiple files are allowed, then after every browsing dialog, newly selected files are added to the existing file list. If multiple files are prohibited, the file list is reset every time the user browses and select a new file. <ul>
+	<li> <em>allowMultipleFiles:Boolean</em> : if true, multiple file selection is allowed; if false, multiple file selection is turned off. By default, multiple file selection is turned off.
+	</li></ul>
+	</li>
+
+	<li> <strong>setSimUploadLimit (simUploadLimit:int)</strong> : Sets the number of simultaneous uploads if automatic queue management with uploadAll() is used. <ul>
+	<li> <em>simUploadLimit:int</em> : an integer between 1 and 5 specifying the number of simultaneous uploads. Uploading more than 5 files is not recommended and isn't possible under automatic queue management.
+	</li></ul>
+	</li>
+
+	<li> <strong>setFileFilters (fileFilters:Array)</strong> : Sets filters on the file extensions that the user is allowed to select. On Windows, this is not a strict filter: the user can override it by entering "*.*" in the file name input field. For that reason, if it's important to you that file types are restricted, you should check them after selection on the client side, and after upload on the server side.<ul>
+	<li> <em>fileFilters:Array</em> : An array consisting of sets of key value pairs, of the form: {extensions: "extensionString", description:"DescriptionString", [optional]macType:"macTypeString" }. The extension string should be a comma-delimited list of the string formatted as "*.xxx". For example, the following is a valid element of the fileFilters array: {extensions:"*.jpg;*.gif;*.png", description:"Images"}.
+	</li></ul>
+	</li>
+<li> <strong>upload (fileID:String, uploadScriptPath:String, method:String, vars:Object, fieldName:String)</strong> : triggers the upload of a specific file <ul>
+<li> <em>fileID:String</em> : the id of the file to start uploading</li> <li> <em>uploadScriptPath:String</em> : the URL of the upload script
+</li> <li> <em>method:String</em> : An optional string argument specifying the HTTP request method for uploading accompanying variables, either "GET" or "POST" ("GET" by default).
+</li> <li> <em>vars:Object</em> : An optional argument, containing variables to be passed in the POST request along with the upload. (e.g. {var1: "value1", var2: "value2"}).
+</li> <li> <em>fieldName:String</em> : An optional string argument, containing the name of the variable with the uploaded file data. The name is "Filedata" by default.
+</li></ul>
+</li> <li> <strong>uploadAll (uploadScriptPath:String, method:String, vars:Object, fieldName:String)</strong> : upload all selected files. The queue management is automatic, with the number of simultaneous uploads specified by setSimUploadLimit().<ul>
+<li> <em>uploadScriptPath:String</em> : the URL of the upload script
+</li> <li> <em>method:String</em> : An optional string argument specifying the HTTP request method for uploading accompanying variables, either "GET" or "POST" ("GET" by default).
+</li> <li> <em>vars:Object</em> : An optional argument, containing variables to be passed in the POST request along with the upload. (e.g. {var1: "value1", var2: "value2"}).
+</li> <li> <em>fieldName:String</em> : An optional string argument, containing the name of the variable with the uploaded file data. The name is "Filedata" by default.
+</li></ul>
+</li> <li> <strong>cancel (fileID:String)</strong> : cancel the ongoing file upload. <ul>
+<li> <em>fileID:String</em> : the id of the file whose upload should be canceled. If no argument is passed, then all ongoing file uploads are canceled.</li></ul>
+
+<li> <strong>enable ()</strong> : enables the uploader UI (enabled by default). If the uploader is rendered as a button, the button responds to clicks and changes visual state. If the uploader is rendered as a transparent overlay, it dispatches events to JS when mouse actions occur.
+</li>
+
+<li> <strong>disable ()</strong> : disables the uploader UI (enabled by default). If the uploader is rendered as a button, the button stops respondin to hover and clicks and switches to the "disabled" skin in the button sprite.If the uploader is rendered as a transparent overlay, it stops dispatching events to JS when mouse actions occur.
+</li>
+
+</li> <li> <strong>clearFileList ()</strong> : clears the upload queue. When multiple file selection is disallowed, the file list is cleared between each invocation of the "Browse" dialog.
+</li> <li> <strong>removeFile (fileID:String)</strong> : remove a file with a specific file id from the queue. <ul>
+<li> <em>fileID:String</em> : the id of the file to remove from the queue</li></ul>
+</li></ul>
+</p>
+
+<h3 id="server">Handling uploads on the server</h3>
+<p>There are many ways of handling the request on the server. The following example uses PHP to write submissions from an HTTP POST request to the same directory as the directory the script lives in. Note that this requires write permissions to that directory. Always consider security implications when setting such permissions.</p>
+
+
+<style>
+/**
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ */
+.php  {font-family:monospace;}
+.php .imp {font-weight: bold; color: red;}
+.php .kw1 {color: #b1b100;}
+.php .kw2 {color: #000000; font-weight: bold;}
+.php .kw3 {color: #990000;}
+.php .co1 {color: #666666; font-style: italic;}
+.php .co2 {color: #666666; font-style: italic;}
+.php .co3 {color: #0000cc; font-style: italic;}
+.php .co4 {color: #009933; font-style: italic;}
+.php .coMULTI {color: #666666; font-style: italic;}
+.php .es0 {color: #000099; font-weight: bold;}
+.php .es1 {color: #000099; font-weight: bold;}
+.php .es2 {color: #660099; font-weight: bold;}
+.php .es3 {color: #660099; font-weight: bold;}
+.php .es4 {color: #006699; font-weight: bold;}
+.php .es5 {color: #006699; font-weight: bold; font-style: italic;}
+.php .es6 {color: #009933; font-weight: bold;}
+.php .es_h {color: #000099; font-weight: bold;}
+.php .br0 {color: #009900;}
+.php .sy0 {color: #339933;}
+.php .sy1 {color: #000000; font-weight: bold;}
+.php .st0 {color: #0000ff;}
+.php .st_h {color: #0000ff;}
+.php .nu0 {color: #cc66cc;}
+.php .nu8 {color: #208080;}
+.php .nu12 {color: #208080;}
+.php .nu19 {color:#800080;}
+.php .me1 {color: #004000;}
+.php .me2 {color: #004000;}
+.php .re0 {color: #000088;}
+.php span.xtra { display:block; }
+
+</style>
+<div id="syntax-ac2d3d0f329a87991541f7a90fd870ce" class="yui-syntax-highlight"><div class="numbers"><pre class="php" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw1">foreach</span> <span class="br0">&#40;</span><span class="re0">$_FILES</span> <span class="kw1">as</span> <span class="re0">$fieldName</span> <span class="sy0">=&gt;</span> <span class="re0">$file</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">move_uploaded_file</span><span class="br0">&#40;</span><span class="re0">$file</span><span class="br0">&#91;</span><span class="st_h">'tmp_name'</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="st0">&quot;./&quot;</span> <span class="sy0">.</span> <span class="kw3">strip_tags</span><span class="br0">&#40;</span><span class="kw3">basename</span><span class="br0">&#40;</span><span class="re0">$file</span><span class="br0">&#91;</span><span class="st_h">'name'</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">echo</span> <span class="br0">&#40;</span><span class="st0">&quot; &quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="php" style="font-family:monospace;"><span class="kw1">foreach</span> <span class="br0">&#40;</span><span class="re0">$_FILES</span> <span class="kw1">as</span> <span class="re0">$fieldName</span> <span class="sy0">=&gt;</span> <span class="re0">$file</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw3">move_uploaded_file</span><span class="br0">&#40;</span><span class="re0">$file</span><span class="br0">&#91;</span><span class="st_h">'tmp_name'</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="st0">&quot;./&quot;</span> <span class="sy0">.</span> <span class="kw3">strip_tags</span><span class="br0">&#40;</span><span class="kw3">basename</span><span class="br0">&#40;</span><span class="re0">$file</span><span class="br0">&#91;</span><span class="st_h">'name'</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw3">echo</span> <span class="br0">&#40;</span><span class="st0">&quot; &quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+&nbsp;</pre></div><textarea id="syntax-ac2d3d0f329a87991541f7a90fd870ce-plain">foreach ($_FILES as $fieldName => $file) {
+    move_uploaded_file($file['tmp_name'], "./" . strip_tags(basename($file['name'])));
+    echo (" ");
+}
+
+</textarea></div>
+<h3 id="limitations">Uploader limitations</h3>
+<ul>
+<li>The Uploader can only send data to servers in the same security sandbox as the <code>uploader.swf</code> file. If <code>uploader.swf</code> hosted by <code>yui.yahooapis.com</code> is used, then the server must contain a cross-domain permissions file allowing <code>yui.yahooapis.com </code>to upload files.&nbsp; By default, Uploader looks for <code>uploader.swf</code> in the assets directory in the same path as <code>uploader.js</code>, so if you&rsquo;re loading Uploader from <code>yui.yahooapis.com</code> you will be affected by this issue.</li>
+<li>The intended behavior of the uploader is not to send any cookies with its requests. Due to a limitation of the Windows networking library, when running in IE, the uploader sends the cookies with the upload. However, you cannot rely on this behavior for authentication, because it's absent in other browsers. As a workaround, we suggest either using a cookieless upload method or appending <code>document.cookie</code> to the upload request.</li>
+<li>There are some known issues around keyboard interaction with the uploader. In particular, when the uploader is rendered as a transparent layer, it does not respond to keyboard presses - only mouse functionality is available. When the uploader is rendered as an image, it receives "Space" and "Enter" key presses as triggers, but only if the focus is on the uploader component itself. Keyboard tabbing to the component behaves differently in different browsers. </li>
+<li>Because of Flash limitations, the uploader does not support basic authentication.</li>
+<li>Because of Flash limitations, the uploader behavior when working through a proxy server is inconsistent and unreliable.</li>
+<li>When uploading to HTTPS servers, be aware that Flash does not support self-signed certificates. You would need to obtain certificates from a recognized certificate authority.</li>
+</ul>
+
+<h3>Uploader examples <a name="examples"></a></h3>
+
+<p>For further exploration of the uploader components, take a look at <a href="../examples/uploader/index.html">its example files</a>. Note that in order to run these examples, you will need to copy them to your own web space and have a server capable of accepting uploads.</p>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+    </div>
+         <div class="yui-u">
+
+			<div id="cheatsheet">
+				<h3>YUI Uploader Control Cheat Sheet:</h3>
+
+				<a href="http://yuiblog.com/assets/pdf/cheatsheets/uploader.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/uploader.gif" width="178" height="132" alt="Cheat Sheet for the YUI Uploader Control."></a>
+
+				<p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+			</div>
+
+<div id="examples">
+<h3>Uploader Control Examples:</h3>
+
+<ul>
+<li><a href='../examples/uploader/uploader-simple-button.html'>Simple Uploader Example With Button UI</a></li>
+<li><a href='../examples/uploader/uploader-advanced-postvars.html'>Advanced Uploader Example With Additional POST Variables and Server Data Return</a></li>
+<li><a href='../examples/uploader/uploader-advanced-cookie.html'>Advanced Uploader Example With Cookie Submission as a POST variable</a></li>
+<li><a href='../examples/uploader/uploader-advanced-queue.html'>Advanced Uploader Example With Transparent UI and Automatic Queue Management</a></li>
+</ul>
+
+
+		
+</div>
+
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fuploader%2F--><h3 id="delicious">YUI Uploader on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/uploader/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/development" class="tag-size-1">development</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/web" class="tag-size-1">web</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/flash" class="tag-size-1">flash</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/upload" class="tag-size-1">upload</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdesign" class="tag-size-1">webdesign</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/uploader" class="tag-size-1">uploader</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/576eca6758be2cd99edc9f89698cba23" class="saved-by">saved by <span>184</span>  people</a></p>
+   </div></div>
+
+		 </div>
+      </div>
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="selected "><a title="The YUI Uploader Control" href="index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:21 PDT 2013 -->
+
+<!-- Localized -->

@@ -1,0 +1,852 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Charts</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Charts</h1></div>
+</div>
+<div id="bd">
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+<div id="promo" class="component">
+  <h1>YUI 2: Charts</h1>
+  <p>The YUI Charts Control visualizes tabular data on a web page in several possible formats including vertical columns, horizontal bars, lines, and pies. Notable features include support for the <a href="../datasource/index.html">DataSource Utility</a>, customizable series and axes, a customizable mouse-over datatip, combination charts, and skinning.</p>
+  <p><strong>Important:</strong></p>
+  <ul>
+  	<li>The Charts Control should always be served from an HTTP server due to Flash Player's restricted local security model.</li>
+  	<li>The Charts Control requires Flash Player 9.0.45 or higher. The latest version of Flash Player is available at the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.</li>
+  </ul>
+
+  <div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#using">Using Charts</a></li>
+      <li><a href="#knownissues">Known Issues</a></li>
+      <li><a href="#support">Support &amp; Community</a></li>
+      <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/charts/index.html">Examples</a>: Explore examples of the YUI Charts Control in action.</li>
+      <li><a href="../docs/module_charts.html">API Documentation</a>: View the full API documentation for the YUI Charts Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.charts">Release Notes</a>: Detailed change log for the YUI Charts Control.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the YUI Charts Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div></div>
+<h2 id="start" class="first">Getting Started</h2>
+<p>To use the Charts Control, include the following source files in your web page:</p>
+<div id="syntax-e0c539d2425bea1e66a6cba7dc1e1e6c" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/json/json-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/swf/swf-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: Connection (enables XHR) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source files --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/charts/charts-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/json/json-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/swf/swf-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc-1">&lt;!-- OPTIONAL: Connection (enables XHR) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc-1">&lt;!-- Source files --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/charts/charts-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-e0c539d2425bea1e66a6cba7dc1e1e6c-plain"><!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/json/json-min.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/swf/swf-min.js"></script>
+<!-- OPTIONAL: Connection (enables XHR) -->
+<script src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
+<!-- Source files -->
+<script src="http://yui.yahooapis.com/2.9.0/build/charts/charts-min.js"></script>
+</textarea></div><p><strong>Note:</strong> YUI 2.8.0 introduces a new dependency for the Charts. <a href="../swf/index.html">YUI SWF Utility</a> is required to load the chart control.</a></p>
+<p>By default, the file <code>charts.swf</code> is expected in the <code>assets</code> directory relative to the location of the HTML page in which a Charts Control instance will appear. If you wish use <code>charts.swf</code> from <code>yui.yahooapis.com</code>, or if you'd like to place <code>charts.swf</code> in a different location on your own server, you may specify a path (relative to the page or absolute) by setting the following variable:</p>
+<p><strong>Note:</strong> The <code>charts.swf</code> is a component of Charts Control and is not intended to be used independently. If you do use the <code>charts.swf</code> separately from the Charts Control, check the Release Notes when upgrading for changes that may affect your application.</p>
+<div id="syntax-7339641001c226502cdc2ad95e3818d8" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Chart</span>.<span class="me1">SWFURL</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/charts/assets/charts.swf&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Chart</span>.<span class="me1">SWFURL</span> <span class="sy0">=</span> <span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/charts/assets/charts.swf&quot;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-7339641001c226502cdc2ad95e3818d8-plain">YAHOO.widget.Chart.SWFURL = "http://yui.yahooapis.com/2.9.0/build/charts/assets/charts.swf";
+</textarea></div>
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>charts</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+<p>The Charts Control includes six different chart types:</p>
+<ul>
+	<li><code>YAHOO.widget.LineChart</code></li>
+	<li><code>YAHOO.widget.BarChart</code></li>
+	<li><code>YAHOO.widget.ColumnChart</code></li>
+	<li><code>YAHOO.widget.PieChart</code></li>
+	<li><code>YAHOO.widget.StackedBarChart</code></li>
+	<li><code>YAHOO.widget.StackedColumnChart</code></li>
+</ul>
+<p>For the following example, we'll be using <code>YAHOO.widget.ColumnChart</code>.</p>
+<h3>Instantiating a DataSource</h3>
+<p>Just like the <a href="../datatable/index.html">YUI DataTable Control</a>, we use a <a href="../datasource/index.html">DataSource</a> object to structure the data that will populate the chart. In this example, the data for this chart lives in local memory within a JavaScript array:</p>
+<div id="syntax-94551dde54f8f281cd6b48336d09eddf" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">puppies</span> <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Ashley&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;German Shepherd&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">12</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Dirty Harry&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;Norwich Terrier&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">5</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Emma&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;Labrador Retriever&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">9</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Oscar&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;Yorkshire Terrier&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">6</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Riley&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;Golden Retriever&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">6</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Shannon&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;Greyhound&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">12</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Washington&quot;</span> <span class="sy0">,</span>breed<span class="sy0">:</span> <span class="st0">&quot;English Bulldog&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">8</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Zoe&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;Labrador Retriever&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">3</span> <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">puppies</span> <span class="sy0">=</span> <span class="br0">&#91;</span>
+   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Ashley&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;German Shepherd&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">12</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Dirty Harry&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;Norwich Terrier&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">5</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Emma&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;Labrador Retriever&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">9</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Oscar&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;Yorkshire Terrier&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">6</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Riley&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;Golden Retriever&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">6</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Shannon&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;Greyhound&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">12</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Washington&quot;</span> <span class="sy0">,</span>breed<span class="sy0">:</span> <span class="st0">&quot;English Bulldog&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">8</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+   <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Zoe&quot;</span><span class="sy0">,</span> breed<span class="sy0">:</span> <span class="st0">&quot;Labrador Retriever&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">3</span> <span class="br0">&#125;</span>
+<span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-94551dde54f8f281cd6b48336d09eddf-plain">YAHOO.example.puppies = [
+   { name: "Ashley", breed: "German Shepherd", age: 12 },
+   { name: "Dirty Harry", breed: "Norwich Terrier", age: 5 },
+   { name: "Emma", breed: "Labrador Retriever", age: 9 },
+   { name: "Oscar", breed: "Yorkshire Terrier", age: 6 },
+   { name: "Riley", breed: "Golden Retriever", age: 6 },
+   { name: "Shannon", breed: "Greyhound", age: 12 },
+   { name: "Washington" ,breed: "English Bulldog", age: 8 },
+   { name: "Zoe", breed: "Labrador Retriever", age: 3 }
+];
+</textarea></div><p>Pass in the array reference <code>YAHOO.example.puppies</code> to the DataSource constructor and set the <code>responseType</code> to be JavaScript array. Next, define the known data fields for the puppy objects &mdash; these fields will map to the keys you define for the axes and optionally to the series that you define.</p>
+<div id="syntax-bce04840353fa352acab7d8939d67ce6" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myDataSource <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DataSource</span><span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">puppies</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myDataSource.<span class="me1">responseType</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DataSource</span>.<span class="me1">TYPE_JSARRAY</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myDataSource.<span class="me1">responseSchema</span> <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    fields<span class="sy0">:</span> <span class="br0">&#91;</span> <span class="st0">&quot;name&quot;</span><span class="sy0">,</span><span class="st0">&quot;breed&quot;</span><span class="sy0">,</span><span class="st0">&quot;age&quot;</span> <span class="br0">&#93;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myDataSource <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DataSource</span><span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">puppies</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myDataSource.<span class="me1">responseType</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DataSource</span>.<span class="me1">TYPE_JSARRAY</span><span class="sy0">;</span>
+myDataSource.<span class="me1">responseSchema</span> <span class="sy0">=</span> <span class="br0">&#123;</span>
+    fields<span class="sy0">:</span> <span class="br0">&#91;</span> <span class="st0">&quot;name&quot;</span><span class="sy0">,</span><span class="st0">&quot;breed&quot;</span><span class="sy0">,</span><span class="st0">&quot;age&quot;</span> <span class="br0">&#93;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-bce04840353fa352acab7d8939d67ce6-plain">var myDataSource = new YAHOO.util.DataSource(YAHOO.example.puppies);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+myDataSource.responseSchema = {
+    fields: [ "name","breed","age" ]
+};
+</textarea></div><h3 id="instantiating">Instantiating a ColumnChart</h3>
+<p>Now you are ready to instantiate your ColumnChart by passing in
+    <ol>
+        <li>the ID string or element reference of a container DIV element,</li>
+        <li>your DataSource instance, and</li>
+        <li>a set of configuration parameters, including the fields used by each axis to retrieve information from the DataSource.</li>
+    </ol></p>
+<p>Make sure the container DIV element is available in the DOM before instantiating your ColumnChart, either by placing the script in the HTML body after the markup has been rendered, or by using the <a href="../event/index.html#onavailable">Event Utility's <code>onAvailable</code> method</a> to programmatically create your ColumnChart as soon as the container DIV element is available.</p>
+<div id="syntax-352203eb830b36ab2b931113c7e27ae1" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myChart <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColumnChart</span><span class="br0">&#40;</span> <span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myDataSource<span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    xField<span class="sy0">:</span> <span class="st0">&quot;name&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    yField<span class="sy0">:</span> <span class="st0">&quot;age&quot;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myChart <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColumnChart</span><span class="br0">&#40;</span> <span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myDataSource<span class="sy0">,</span> <span class="br0">&#123;</span>
+    xField<span class="sy0">:</span> <span class="st0">&quot;name&quot;</span><span class="sy0">,</span>
+    yField<span class="sy0">:</span> <span class="st0">&quot;age&quot;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-352203eb830b36ab2b931113c7e27ae1-plain">var myChart = new YAHOO.widget.ColumnChart( "myContainer", myDataSource, {
+    xField: "name",
+    yField: "age"
+});
+</textarea></div><h2>Using Charts <a name="using"></a></h2>
+<p>The Charts Control provides many optional configuration parameters that help control how the your chart looks and behaves.</p>
+<ul>
+    <li><a href="#series">Defining Multiple Series</a></li>
+    <li><a href="#bounds">Specifying NumericAxis Bounds</a></li>
+    <li><a href="#axislabels">Customizing Axis Labels</a></li>
+    <li><a href="#datatip">Custom Data Tip Text</a></li>
+    <li><a href="#basicstyles">Basic Styling</a></li>
+    <li><a href="#seriesstyles">Styling Series and Markers</a></li>
+    <li><a href="#advancedskins">Advanced Skinning</a></li>
+</ul>
+<h3 id="series">Defining Multiple Series</h3>
+<p>The first example above displayed a single series. Take a look at a more complex DataSource where we can extract more than one series to show in a chart.</p>
+<div id="syntax-9e312b07babd526084982c56f9dfaec2" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">monthlyExpenses</span> <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> month<span class="sy0">:</span> <span class="st0">&quot;January&quot;</span><span class="sy0">,</span> rent<span class="sy0">:</span> <span class="nu0">880.00</span><span class="sy0">,</span> utilities<span class="sy0">:</span> <span class="nu0">894.68</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> month<span class="sy0">:</span> <span class="st0">&quot;February&quot;</span><span class="sy0">,</span> rent<span class="sy0">:</span> <span class="nu0">880.00</span><span class="sy0">,</span> utilities<span class="sy0">:</span> <span class="nu0">901.35</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> month<span class="sy0">:</span> <span class="st0">&quot;March&quot;</span><span class="sy0">,</span> rent<span class="sy0">:</span> <span class="nu0">880.00</span><span class="sy0">,</span> utilities<span class="sy0">:</span> <span class="nu0">889.32</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#123;</span> month<span class="sy0">:</span> <span class="st0">&quot;April&quot;</span><span class="sy0">,</span> rent<span class="sy0">:</span> <span class="nu0">880.00</span><span class="sy0">,</span> utilities<span class="sy0">:</span> <span class="nu0">884.71</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> month<span class="sy0">:</span> <span class="st0">&quot;May&quot;</span><span class="sy0">,</span> rent<span class="sy0">:</span> <span class="nu0">910.00</span><span class="sy0">,</span> utilities<span class="sy0">:</span> <span class="nu0">879.811</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> month<span class="sy0">:</span> <span class="st0">&quot;June&quot;</span><span class="sy0">,</span> rent<span class="sy0">:</span> <span class="nu0">910.00</span><span class="sy0">,</span> utilities<span class="sy0">:</span> <span class="nu0">897.95</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myDataSource <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DataSource</span><span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">monthlyExpenses</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">myDataSource.<span class="me1">responseType</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DataSource</span>.<span class="me1">TYPE_JSARRAY</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myDataSource.<span class="me1">responseSchema</span> <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    fields<span class="sy0">:</span> <span class="br0">&#91;</span> <span class="st0">&quot;month&quot;</span><span class="sy0">,</span> <span class="st0">&quot;rent&quot;</span><span class="sy0">,</span> <span class="st0">&quot;utilities&quot;</span> <span class="br0">&#93;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">monthlyExpenses</span> <span class="sy0">=</span> <span class="br0">&#91;</span>
+    <span class="br0">&#123;</span> month<span class="sy0">:</span> <span class="st0">&quot;January&quot;</span><span class="sy0">,</span> rent<span class="sy0">:</span> <span class="nu0">880.00</span><span class="sy0">,</span> utilities<span class="sy0">:</span> <span class="nu0">894.68</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span> month<span class="sy0">:</span> <span class="st0">&quot;February&quot;</span><span class="sy0">,</span> rent<span class="sy0">:</span> <span class="nu0">880.00</span><span class="sy0">,</span> utilities<span class="sy0">:</span> <span class="nu0">901.35</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span> month<span class="sy0">:</span> <span class="st0">&quot;March&quot;</span><span class="sy0">,</span> rent<span class="sy0">:</span> <span class="nu0">880.00</span><span class="sy0">,</span> utilities<span class="sy0">:</span> <span class="nu0">889.32</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span> month<span class="sy0">:</span> <span class="st0">&quot;April&quot;</span><span class="sy0">,</span> rent<span class="sy0">:</span> <span class="nu0">880.00</span><span class="sy0">,</span> utilities<span class="sy0">:</span> <span class="nu0">884.71</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span> month<span class="sy0">:</span> <span class="st0">&quot;May&quot;</span><span class="sy0">,</span> rent<span class="sy0">:</span> <span class="nu0">910.00</span><span class="sy0">,</span> utilities<span class="sy0">:</span> <span class="nu0">879.811</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span> month<span class="sy0">:</span> <span class="st0">&quot;June&quot;</span><span class="sy0">,</span> rent<span class="sy0">:</span> <span class="nu0">910.00</span><span class="sy0">,</span> utilities<span class="sy0">:</span> <span class="nu0">897.95</span> <span class="br0">&#125;</span>
+<span class="br0">&#93;</span><span class="sy0">;</span>
+<span class="kw2">var</span> myDataSource <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DataSource</span><span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">monthlyExpenses</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myDataSource.<span class="me1">responseType</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DataSource</span>.<span class="me1">TYPE_JSARRAY</span><span class="sy0">;</span>
+myDataSource.<span class="me1">responseSchema</span> <span class="sy0">=</span> <span class="br0">&#123;</span>
+    fields<span class="sy0">:</span> <span class="br0">&#91;</span> <span class="st0">&quot;month&quot;</span><span class="sy0">,</span> <span class="st0">&quot;rent&quot;</span><span class="sy0">,</span> <span class="st0">&quot;utilities&quot;</span> <span class="br0">&#93;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-9e312b07babd526084982c56f9dfaec2-plain">YAHOO.example.monthlyExpenses = [
+    { month: "January", rent: 880.00, utilities: 894.68 },
+    { month: "February", rent: 880.00, utilities: 901.35 },
+    { month: "March", rent: 880.00, utilities: 889.32 },
+    { month: "April", rent: 880.00, utilities: 884.71 },
+    { month: "May", rent: 910.00, utilities: 879.811 },
+    { month: "June", rent: 910.00, utilities: 897.95 }
+];
+var myDataSource = new YAHOO.util.DataSource(YAHOO.example.monthlyExpenses);
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+myDataSource.responseSchema = {
+    fields: [ "month", "rent", "utilities" ]
+};
+</textarea></div><p>By creating a set of <em>series definitions</em>, you can display multiple series in a single chart; moreover, each series can be individually customized. In particular, the series type, display name, styles, and the keys it uses to access data from the DataSource can be modified.</p>
+<div id="syntax-dddb58d5b7f33a24b859d3dd71fd6e12" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> seriesDef <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> displayName<span class="sy0">:</span> <span class="st0">&quot;Rent&quot;</span><span class="sy0">,</span> yField<span class="sy0">:</span> <span class="st0">&quot;rent&quot;</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> displayName<span class="sy0">:</span> <span class="st0">&quot;Utilities&quot;</span><span class="sy0">,</span> yField<span class="sy0">:</span> <span class="st0">&quot;utilities&quot;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> seriesDef <span class="sy0">=</span> <span class="br0">&#91;</span>
+    <span class="br0">&#123;</span> displayName<span class="sy0">:</span> <span class="st0">&quot;Rent&quot;</span><span class="sy0">,</span> yField<span class="sy0">:</span> <span class="st0">&quot;rent&quot;</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span> displayName<span class="sy0">:</span> <span class="st0">&quot;Utilities&quot;</span><span class="sy0">,</span> yField<span class="sy0">:</span> <span class="st0">&quot;utilities&quot;</span> <span class="br0">&#125;</span>
+<span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-dddb58d5b7f33a24b859d3dd71fd6e12-plain">var seriesDef = [
+    { displayName: "Rent", yField: "rent" },
+    { displayName: "Utilities", yField: "utilities" }
+];
+</textarea></div><p>To pass a series definition to the chart, use the <code>series</code> attribute. Attributes may be set using the configuration hash in the constructor or by using the <code>set()</code> function.</p>
+<div id="syntax-6ff4052caa6d3305165fb14257ae94d8" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LineChart</span><span class="br0">&#40;</span> <span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myDataSource<span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    xField<span class="sy0">:</span> <span class="st0">&quot;month&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    series<span class="sy0">:</span> seriesDef</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LineChart</span><span class="br0">&#40;</span> <span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myDataSource<span class="sy0">,</span> <span class="br0">&#123;</span>
+    xField<span class="sy0">:</span> <span class="st0">&quot;month&quot;</span><span class="sy0">,</span>
+    series<span class="sy0">:</span> seriesDef
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-6ff4052caa6d3305165fb14257ae94d8-plain">new YAHOO.widget.LineChart( "myContainer", myDataSource, {
+    xField: "month",
+    series: seriesDef
+});
+</textarea></div><h3 id="bounds">Specifying <code>NumericAxis</code> Bounds</h3>
+<p>By default, charts with x and y axes automatically determine the minimum and maximum values based on the data that is being displayed. However, at times you might desire specific bounds on an axis. An axis object can be created and passed to the chart using either the <code>xAxis</code> or <code>yAxis</code> attributes, repectively.</p>
+<div id="syntax-f2c8cf4f26db382b82953140597f405d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> axisWithMinimum <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">NumericAxis</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">axisWithMinimum.<span class="me1">minimum</span> <span class="sy0">=</span> <span class="nu0">800</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myChart.<span class="me1">set</span><span class="br0">&#40;</span> <span class="st0">&quot;yAxis&quot;</span><span class="sy0">,</span> axisWithMinimum <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> axisWithMinimum <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">NumericAxis</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+axisWithMinimum.<span class="me1">minimum</span> <span class="sy0">=</span> <span class="nu0">800</span><span class="sy0">;</span>
+myChart.<span class="me1">set</span><span class="br0">&#40;</span> <span class="st0">&quot;yAxis&quot;</span><span class="sy0">,</span> axisWithMinimum <span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-f2c8cf4f26db382b82953140597f405d-plain">var axisWithMinimum = new YAHOO.widget.NumericAxis();
+axisWithMinimum.minimum = 800;
+myChart.set( "yAxis", axisWithMinimum );
+</textarea></div><h3 id="axislabels">Customizing Axis Labels</h3>
+<p>An axis exposes the ability to customize the text that appears in each label that appears along its length. This is exposed through the <code>labelFunction</code> property.</p>
+<div id="syntax-27d39bec0b881af6303726351dc62ddb" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> currencyAxis <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">NumericAxis</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">currencyAxis.<span class="me1">labelFunction</span> <span class="sy0">=</span> <span class="st0">&quot;formatCurrencyAxisLabel&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> formatCurrencyAxisLabel<span class="br0">&#40;</span>value<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">return</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Number</span>.<span class="me1">format</span><span class="br0">&#40;</span>value<span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        prefix<span class="sy0">:</span> <span class="st0">&quot;$&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        thousandsSeparator<span class="sy0">:</span> <span class="st0">&quot;,&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        decimalPlaces<span class="sy0">:</span> <span class="nu0">2</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">myChart.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;yAxis&quot;</span><span class="sy0">,</span> currencyAxis<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> currencyAxis <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">NumericAxis</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+currencyAxis.<span class="me1">labelFunction</span> <span class="sy0">=</span> <span class="st0">&quot;formatCurrencyAxisLabel&quot;</span><span class="sy0">;</span>
+<span class="kw2">function</span> formatCurrencyAxisLabel<span class="br0">&#40;</span>value<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">return</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Number</span>.<span class="me1">format</span><span class="br0">&#40;</span>value<span class="sy0">,</span> <span class="br0">&#123;</span>
+        prefix<span class="sy0">:</span> <span class="st0">&quot;$&quot;</span><span class="sy0">,</span>
+        thousandsSeparator<span class="sy0">:</span> <span class="st0">&quot;,&quot;</span><span class="sy0">,</span>
+        decimalPlaces<span class="sy0">:</span> <span class="nu0">2</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+myChart.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;yAxis&quot;</span><span class="sy0">,</span> currencyAxis<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-27d39bec0b881af6303726351dc62ddb-plain">var currencyAxis = new YAHOO.widget.NumericAxis();
+currencyAxis.labelFunction = "formatCurrencyAxisLabel";
+function formatCurrencyAxisLabel(value) {
+    return YAHOO.util.Number.format(value, {
+        prefix: "$",
+        thousandsSeparator: ",",
+        decimalPlaces: 2
+    });
+}
+myChart.set("yAxis", currencyAxis);
+</textarea></div><p><strong>Note:</strong> This function may be passed by name as a String or as a function reference.</p>
+<h3 id="datatip">Custom Data Tip Text</h3>
+<p>By default, the mouse-over data tip displays the name of the series the item appears within (if present), and the item data for each axis. Data tips on PieCharts also includes percentage information. If an axis has a <code>labelFunction</code>, the same function will be called to receive formatting.</p>
+<p>With a <code>dataTipFunction</code>, developers have full control over the text that appears within the data tip.</p>
+<div id="syntax-e17675aabe18bc1a9cf08b79ca6cf075" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">function</span> getDataTipText<span class="br0">&#40;</span> <span class="kw1">item</span><span class="sy0">,</span> index<span class="sy0">,</span> series <span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> toolTipText <span class="sy0">=</span> series.<span class="me1">displayName</span> <span class="sy0">+</span> <span class="st0">&quot; for &quot;</span> <span class="sy0">+</span> <span class="kw1">item</span>.<span class="me1">month</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    toolTipText <span class="sy0">+=</span> <span class="st0">&quot;<span class="es0">\n</span>&quot;</span> <span class="sy0">+</span> formatCurrencyAxisLabel<span class="br0">&#40;</span> <span class="kw1">item</span><span class="br0">&#91;</span>series.<span class="me1">yField</span><span class="br0">&#93;</span> <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">return</span> toolTipText<span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">chart.<span class="me1">set</span><span class="br0">&#40;</span> <span class="st0">&quot;dataTipFunction&quot;</span><span class="sy0">,</span> getDataTipText <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">function</span> getDataTipText<span class="br0">&#40;</span> <span class="kw1">item</span><span class="sy0">,</span> index<span class="sy0">,</span> series <span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> toolTipText <span class="sy0">=</span> series.<span class="me1">displayName</span> <span class="sy0">+</span> <span class="st0">&quot; for &quot;</span> <span class="sy0">+</span> <span class="kw1">item</span>.<span class="me1">month</span><span class="sy0">;</span>
+    toolTipText <span class="sy0">+=</span> <span class="st0">&quot;<span class="es0">\n</span>&quot;</span> <span class="sy0">+</span> formatCurrencyAxisLabel<span class="br0">&#40;</span> <span class="kw1">item</span><span class="br0">&#91;</span>series.<span class="me1">yField</span><span class="br0">&#93;</span> <span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw1">return</span> toolTipText<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+chart.<span class="me1">set</span><span class="br0">&#40;</span> <span class="st0">&quot;dataTipFunction&quot;</span><span class="sy0">,</span> getDataTipText <span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-e17675aabe18bc1a9cf08b79ca6cf075-plain">function getDataTipText( item, index, series ) {
+    var toolTipText = series.displayName + " for " + item.month;
+    toolTipText += "\n" + formatCurrencyAxisLabel( item[series.yField] );
+    return toolTipText;
+}
+chart.set( "dataTipFunction", getDataTipText );
+</textarea></div><p><strong>Note:</strong> This function may be passed by name as a String or as a function reference.</p>
+<h3>Basic Styling <a name="basicstyles"></a></h3>
+<p>Because the Charts Control is powered by Flash Player, standard browser CSS is not available for styling individual subcomponents of a chart. Instead, styleable properties are exposed through a <code>style</code> attribute on the chart itself. This hash accepts a standardized set of style values for things like border, background, fonts, padding, axis styles, and datatip styles.</p>
+<div id="syntax-c63d7b65783a994adf2c0585e7a54b05" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LineChart</span><span class="br0">&#40;</span><span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myDataSource<span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    xField<span class="sy0">:</span> <span class="st0">&quot;month&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    series<span class="sy0">:</span> seriesDef<span class="sy0">,</span></div></li><li class="li1"><div class="de1">    style<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        padding<span class="sy0">:</span> <span class="nu0">20</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        animationEnabled<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        border<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            color<span class="sy0">:</span> 0x995566<span class="sy0">,</span></div></li><li class="li1"><div class="de1">            size<span class="sy0">:</span> <span class="nu0">2</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        font<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Verdana&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            color<span class="sy0">:</span> 0x995566<span class="sy0">,</span></div></li><li class="li1"><div class="de1">            size<span class="sy0">:</span> <span class="nu0">12</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">LineChart</span><span class="br0">&#40;</span><span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myDataSource<span class="sy0">,</span> <span class="br0">&#123;</span>
+    xField<span class="sy0">:</span> <span class="st0">&quot;month&quot;</span><span class="sy0">,</span>
+    series<span class="sy0">:</span> seriesDef<span class="sy0">,</span>
+    style<span class="sy0">:</span> <span class="br0">&#123;</span>
+        padding<span class="sy0">:</span> <span class="nu0">20</span><span class="sy0">,</span>
+        animationEnabled<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span>
+        border<span class="sy0">:</span> <span class="br0">&#123;</span>
+            color<span class="sy0">:</span> 0x995566<span class="sy0">,</span>
+            size<span class="sy0">:</span> <span class="nu0">2</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span>
+        font<span class="sy0">:</span> <span class="br0">&#123;</span>
+            <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Verdana&quot;</span><span class="sy0">,</span>
+            color<span class="sy0">:</span> 0x995566<span class="sy0">,</span>
+            size<span class="sy0">:</span> <span class="nu0">12</span>
+        <span class="br0">&#125;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-c63d7b65783a994adf2c0585e7a54b05-plain">new YAHOO.widget.LineChart("myContainer", myDataSource, {
+    xField: "month",
+    series: seriesDef,
+    style: {
+        padding: 20,
+        animationEnabled: false,
+        border: {
+            color: 0x995566,
+            size: 2
+        },
+        font: {
+            name: "Verdana",
+            color: 0x995566,
+            size: 12
+        }
+    }
+});
+</textarea></div><p>The following section describes each of the top-level chart styles along with any substyles that may be available.</p>
+<h4>padding</h4>
+<p>A numeric value that specifies the spacing around the edge of the chart's contents. Unlike CSS padding in HTML, the chart's padding does not increase the dimensions of the chart.</p>
+<h4>animationEnabled</h4>
+<p>A Boolean value that specifies whether marker animations are enabled or not. The default value is <code>true</code>, meaning that markers will animate when data changes.</p>
+<h4>font<a name="fontsubstyles"></a></h4>
+<p>One may declare a <code>font</code> style to customize the default axis text, including the font name, size, color and more. It is represented as an Object value that contains several substyles.</p>
+<dl>
+    <dt><code>name</code></dt>
+        <dd>Accepts a String that is either the name of the font or a list of comma-delimited font names, similar to the way font-family works in CSS.</dd>
+    <dt><code>color</code></dt>
+        <dd>Accepts a hex-formatted string or number value like <code>"#ff0000"</code>, <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
+    <dt><code>size</code></dt>
+        <dd>Accepts a numeric value for the point size. No other font size units are available.</dd>
+    <dt><code>bold</code></dt>
+        <dd>Boolean value to set if the font is displayed in bold.</dd>
+    <dt><code>italic</code></dt>
+        <dd>Boolean value to set if the font is displayed in italics.</dd>
+    <dt><code>underline</code></dt>
+        <dd>Boolean value to set if the font is displayed with an underline.</dd>
+</dl>
+<h4>border<a name="bordersubstyles"></a></h4>
+<p>The <code>border</code> style allows a developer to add a colored border around the chart. The chart itself will decrease in dimensions to accomodate the border. It is represented as an Object value that contains several substyles.</p>
+<dl>
+    <dt><code>color</code></dt>
+        <dd>Accepts a hex-formatted string or number value like <code>"#ff0000"</code>, <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
+    <dt><code>size</code></dt>
+        <dd>the border thickness in pixels</dd>
+</dl>
+<h4>background<a name="backgroundsubstyles"></a></h4>
+<p>The <code>background</code> style allows one to customize the background color or image. It is represented as an Object value that contains several substyles.</p>
+<dl>
+    <dt><code>color</code></dt>
+        <dd>Specifies the background fill color. If an image is present, this fill color will appear behind the image. Accepts a hex-formatted string or number value like <code>"#ff0000"</code>, <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
+    <dt><code>alpha</code></dt>
+        <dd>A value from <code>0.0</code> to <code>1.0</code> that refers to the transparency of the background color. This is most useful when used on the data tip background.</dd>
+    <dt><code>image</code></dt>
+        <dd>The URL of a JPG, PNG, GIF, or SWF image. May be relative or absolute. Relative URLs are relative to the HTML document in which the chart is embedded.</dd>
+    <dt><code>mode</code></dt>
+        <dd>The method used to display the background image. May be <code>"repeat"</code> (default), <code>"repeat-x"</code>, <code>"repeat-y"</code>, <code>"no-repeat"</code>, or <code>"stretch"</code>.</dd>
+</dl>
+<p>The <code>mode</code> value will be covered in more detail below in the <a href="#advancedskins">Advanced Skinning</a> section.</p>
+<h4>legend</h4>
+<p>The <code>legend</code> style lets a developer customize the appearance of the legend. It is represented as an Object value that contains several substyles.</p>
+<dl>
+    <dt><code>display</code></dt>
+        <dd>Specifies the location where the legend will be drawn. Accepted values include <code>"none"</code>, <code>"left"</code>, <code>"right"</code>, <code>"top"</code>, and <code>"bottom"</code>. The default value is <code>"none"</code>.</dd>
+    <dt><code>spacing</code></dt>
+        <dd>A value that specifies the number of pixels between each of the items displayed in the legend.</dd>
+    <dt><code>padding</code></dt>
+        <dd>A numeric value that specifies the spacing around the edge of the <code>legend</code>'s contents. Unlike CSS padding in HTML, the <code>legend</code>'s padding does not increase the dimensions of the <code>legend</code>.</dd>
+    <dt><code>border</code></dt>
+        <dd>Same as the <code>border</code> style described above.</dd>
+        <dd>Border for the <code>legend</code>. Contains the same substyles as the <a href="#bordersubstyles"><code>border</code></a> style in the <a href="#basicstyles">Basic Styling Section</a>.
+    <dt><code>background</code></dt>
+        <dd>Background for the <code>legend</code>. Contains the same substyles as the <a href="#backgroundsubstyles"><code>background</code></a> style in the <a href="#basicstyles">Basic Styling Section</a>.
+    <dt><code>font</code></dt>
+        <dd>Object containing styles for the <code>legend</code> text. Contains the same substyles as the <a href="#fontsubstyles"><code>font</code></a> style in the <a href="#basicstyles">Basic Styling Section</a>.
+        Available only on a series of type <code>"pie"</code>.</dd>
+</dl>
+<h4>dataTip</h4>
+<p>The <code>dataTip</code> style lets a developer customize the appearance of the data tip. It is represented as an Object value that contains several substyles.</p>
+<dl>
+    <dt><code>padding</code></dt>
+        <dd>A numeric value that specifies the spacing around the edge of the <code>dataTip</code>'s contents. Unlike CSS padding in HTML, the <code>dataTip</code>'s padding does not increase the dimensions of the <code>dataTip</code>.</dd>
+    <dt><code>border</code></dt>
+        <dd>Border for the <code>dataTip</code>. Contains the same substyles as the <a href="#bordersubstyles"><code>border</code></a> style in the <a href="#basicstyles">Basic Styling Section</a>.
+    <dt><code>background</code></dt>
+        <dd>Background for the <code>dataTip</code>. Contains the same substyles as the <a href="#backgroundsubstyles"><code>background</code></a> style in the <a href="#basicstyles">Basic Styling Section</a>.
+    <dt><code>font</code></dt>
+        <dd>Object containing styles for the <code>dataTip</code> text. Contains the same substyles as the <a href="#fontsubstyles"><code>font</code></a> style in the <a href="#basicstyles">Basic Styling Section</a>.
+</dl>
+<h4>xAxis and yAxis</h4>
+<p>The <code>xAxis</code> and <code>yAxis</code> styles allow one to customize the appearance of either axis. They are represented as Object values that contain several substyles.</p>
+<dl>
+    <dt><code>color</code></dt>
+        <dd>The color of the axis itself. Accepts a hex-formatted string or number value like <code>"#ff0000"</code>, <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
+    <dt><code>size</code></dt>
+        <dd>A numeric value that represents the thickness of the axis itself. A value of <code>0</code> will hide the axis (but not the labels).</dd>
+    <dt><code>showLabels</code></dt>
+        <dd>If <code>true</code>, the labels are displayed. If <code>false</code>, they are hidden.</dd>
+    <dt><code>hideOverlappingLabels</code></dt>
+    	<dd>Indicates whether or not to hide overlapping labels. This style will be used on the Category Axis when <code>calculateCategoryCount</code> is <code>false</code>. The style will be used on the <code>TimeAxis</code> and <code>NumericAxis</code> when the user specifies the <code>majorUnit</code>. Otherwise, the axes will place the labels so that they do not overlap.</dd>
+    <dt><code>labelRotation</code></dt>
+    	<dd>Indicates the rotation of the labels on the axis. Acceptable values are <code>-90</code> through <code>90</code>. Labels will display most clearly when set to <code>90</code>, <code>-90</code> or <code>0</code>. The default value is <code>0</code>.</dd>
+    <dt><code>labelSpacing</code></dt>
+    	<dd>The distance, in pixels, between labels on an axis. The default value is <code>2</code>.</dd>
+    <dt><code>labelDistance</code></dt>
+    	<dd>The distance, in pixels, between a label and the axis. The default value is <code>2</code>.</dd>
+    <dt><code>titleRotation</code></dt>
+    	<dd>Indicates the rotation of the title on the axis.</dd>
+    <dt><code>titleDistance</code></dt>
+    	<dd>The distance, in pixels, between a title and the axis labels. The default value is <code>2</code>.</dd>
+    <dt><code>majorGridLines</code></dt>
+        <dd>Described below.</dd>
+    <dt><code>minorGridLines</code></dt>
+        <dd>Described below.</dd>
+         <dt><code>zeroGridLine</code></dt>
+        <dd>Described below.</dd>
+    <dt><code>majorTicks</code></dt>
+        <dd>Described below.</dd>
+    <dt><code>minorTicks</code></dt>
+        <dd>Described below.</dd>
+</dl>
+<h4>majorGridLines and minorGridLines</h4>
+<p>The <code>majorGridLines</code> and <code>minorGridLines</code> styles have a couple of substyles that need extra explanation. As shown above, <code>majorGridLines</code> and <code>minorGridLines</code> are substyles of the <code>xAxis</code> and <code>yAxis</code> styles.</p>
+<dl>
+    <dt><code>color</code></dt>
+        <dd>The color of the grid lines. Accepts a hex-formatted string or number value like <code>"#ff0000"</code>, <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
+    <dt><code>size</code></dt>
+        <dd>A numeric value that represents the thickness of the grid lines. To hide the grid lines, set the <code>size</code> substyle to <code>0</code> (zero). If the grid lines are hidden by default, a thickness greater than zero must be specified to show them.</dd>
+</dl>
+<h4>zeroGridLine</h4>
+<p>The <code>zeroGridLine</code> style allows for emphasis on the zero grid line when it falls beyond the origin of the axis. The <code>zeroGridLine</code> style has the following substyles:</p>
+<dl>
+	<dt><code>color</code></dt>
+		<dd>The color of the zero grid line. Accepts a hex-formatted string or number value like <code>"#ff0000"</code>, <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
+	<dt><code>size</code></dt>
+		<dd>A numeric value that represents the thickness of the zero grid line. To hide the grid line, set the <code>size</code> substyle to <code>0</code>.</dd>
+</dl>
+<h4>majorTicks and minorTicks</h4>
+<p>The <code>majorTicks</code> and <code>minorTicks</code> styles have a couple of substyles that need extra explanation. As shown above, <code>majorTicks</code> and <code>minorTicks</code> are substyles of the <code>xAxis</code> and <code>yAxis</code> styles.</p>
+<dl>
+    <dt><code>color</code></dt>
+        <dd>The color of the ticks. Accepts a hex-formatted string or number value like <code>"#ff0000"</code>, <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
+    <dt><code>size</code></dt>
+        <dd>A numeric value that represents the thickness of the ticks. This style may need to be set to a valid numeric value greater than zero if the ticks are not shown by default.</dd>
+    <dt><code>length</code></dt>
+        <dd>The number of pixels the ticks extend from the axis. This style may need to be set to a valid numeric value greater than zero if the ticks are not shown by default.</dd>
+    <dt><code>display</code></dt>
+        <dd>Specifies how the ticks are drawn. Accepted values include <code>"none"</code>, <code>"inside"</code>, <code>"outside"</code>, and <code>"cross"</code>. In many cases, <code>"none"</code> is the default.</dd>
+</dl>
+<p>Note: Under certain conditions, even if the <code>display</code> substyle for <code>minorTicks</code> is a value other than <code>"none"</code>, it is possible that no minor ticks will be drawn. The algorithm that calculates the minor divisions may determine that no minor divisions is the most ideal way to draw the chart.</p>
+<h3 id="seriesstyles">Styling Series and Markers</h3>
+<p>Each individual series defined in the chart's series definition may be customized with a <code>style</code> attribute. The following example code expands the series definition created previously.</p>
+<div id="syntax-b1875e983d26d8b42f7cd0a9c0a4cfd1" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> seriesDef <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        displayName<span class="sy0">:</span> <span class="st0">&quot;Rent&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        yField<span class="sy0">:</span> <span class="st0">&quot;rent&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        style<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            color<span class="sy0">:</span> 0xff0000<span class="sy0">,</span></div></li><li class="li1"><div class="de1">            size<span class="sy0">:</span> <span class="nu0">20</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        displayName<span class="sy0">:</span> <span class="st0">&quot;Utilities&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        yField<span class="sy0">:</span> <span class="st0">&quot;utilities&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        style<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            color<span class="sy0">:</span> 0x0000ff<span class="sy0">,</span></div></li><li class="li2"><div class="de2">            size<span class="sy0">:</span> <span class="nu0">30</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> seriesDef <span class="sy0">=</span> <span class="br0">&#91;</span>
+    <span class="br0">&#123;</span>
+        displayName<span class="sy0">:</span> <span class="st0">&quot;Rent&quot;</span><span class="sy0">,</span>
+        yField<span class="sy0">:</span> <span class="st0">&quot;rent&quot;</span><span class="sy0">,</span>
+        style<span class="sy0">:</span> <span class="br0">&#123;</span>
+            color<span class="sy0">:</span> 0xff0000<span class="sy0">,</span>
+            size<span class="sy0">:</span> <span class="nu0">20</span>
+        <span class="br0">&#125;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span>
+        displayName<span class="sy0">:</span> <span class="st0">&quot;Utilities&quot;</span><span class="sy0">,</span>
+        yField<span class="sy0">:</span> <span class="st0">&quot;utilities&quot;</span><span class="sy0">,</span>
+        style<span class="sy0">:</span> <span class="br0">&#123;</span>
+            color<span class="sy0">:</span> 0x0000ff<span class="sy0">,</span>
+            size<span class="sy0">:</span> <span class="nu0">30</span>
+        <span class="br0">&#125;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-b1875e983d26d8b42f7cd0a9c0a4cfd1-plain">var seriesDef = [
+    {
+        displayName: "Rent",
+        yField: "rent",
+        style: {
+            color: 0xff0000,
+            size: 20
+        }
+    },
+    {
+        displayName: "Utilities",
+        yField: "utilities",
+        style: {
+            color: 0x0000ff,
+            size: 30
+        }
+    }
+];
+</textarea></div><p>The styles defined above sets unique colors for each series, and the size of their markers.</p>
+<h4>Series Styles</h4>
+<p>The following styles are available for series definitions.</p>
+<dl>
+    <dt><code>color</code></dt>
+        <dd>The color of the markers (and lines, where applicable) that appear in the series. Accepts a hex-formatted string or number value like <code>"#ff0000"</code>, <code>"ff0000"</code> or <code>0xff0000</code>.</dd>
+    <dt><code>colors</code></dt>
+        <dd>An Array of color values formatted as described by the <code>color</code> style. <em>Used by the PieChart</em></dd>
+    <dt><code>size</code></dt>
+        <dd>A numeric value that represents the size of the markers in the series.</dd>
+    <dt><code>alpha</code></dt>
+    	<dd>A numeric value, <code>0.0</code> to <code>1.0</code>, that represents the alpha of the markers in the series.</dd>
+    <dt><code>borderColor</code></dt>
+    	<dd>The border color of the markers in a series. Accepts a hex-formatted string or number value like <code>"#ff0000"</code>, <code>"ff0000"</code> or <code>0xff0000</code>. If not specified, the marker border color is determined by the <code>color</code> style.</dd>
+    <dt><code>borderAlpha</code></dt>
+    	<dd>A numeric value, <code>0.0</code> to <code>1.0</code>, that represents the border alpha of the markers in the series.</dd>
+    <dt><code>fillColor</code></dt>
+    	<dd>The fill color of the markers in a series. Accepts a hex-formatted string or number value like <code>"#ff0000"</code>, <code>"ff0000"</code> or <code>0xff0000</code>. If not specified, the marker fill color is determined by the <code>color</code> style.</dd>
+    <dt><code>fillAlpha</code></dt>
+    	<dd>A numeric value, <code>0.0</code> to <code>1.0</code>, that represents the fill alpha of the markers in the series.</dd>
+    <dt><code>lineSize</code></dt>
+        <dd>A numeric value that represents the thickness of the lines in a line series. Available only on a series of type <code>"line"</code>.</dd>
+    <dt><code>lineColor</code></dt>
+    	<dd>The color of lines in a line series. Accepts a hex-formatted string or number value like <code>"#ff0000"</code>, <code>"ff0000"</code> or <code>0xff0000</code>. Available only on a series of type <code>"line"</code>.</dd>
+    <dt><code>lineAlpha</code></dt>
+    	<dd>A numeric value, <code>0.0</code> to <code>1.0</code>, that represents the alpha value of lines in a line series. Available only on a series of type <code>"line"</code>.
+    <dt><code>showAreaFill</code></dt>
+        <dd>Indicates whether to add an area fill to a line series. Available only on a series of type <code>"line"</code>.</dd>
+    <dt><code>areaFillAlpha</code></dt>
+    	<dd>A numeric value, <code>0.0</code> to <code>1.0</code>, that represents the alpha value of the area fill in a line series when <code>showAreaFill</code> is set to <code>true</code>. 
+        Available only on a series of type <code>"line"</code>.</dd>
+    <dt><code>image</code></dt>
+        <dd>The URL of a JPG, PNG, GIF, or SWF image. May be relative or absolute. Relative URLs are relative to the HTML document in which the chart is embedded.</dd>
+    <dt><code>images</code></dt>
+        <dd>An Array of image URLs formatted as described by the <code>image</code> style. <em>Used by the PieChart</em></dd>
+    <dt><code>mode</code></dt>
+        <dd>The method used to display the background image(s). May be <code>"repeat"</code> (default), <code>"repeat-x"</code>, <code>"repeat-y"</code>, <code>"no-repeat"</code>, or <code>"stretch"</code>.</dd>
+    <dt><code>connectPoints</code></dt>
+        <dd>A Boolean value that specifies whether lines are drawn between points on a line series. If false, a line series will only display markers, with no lines connecting those markers. Available only on a series of type <code>"line"</code>.</dd>
+    <dt><code>connectDiscontinuousPoints</code></dt>
+        <dd>When true, a dashed line is drawn between points appearing before and after bad data (generally <code>null</code> or <code>NaN</code> values). Available only on a series of type <code>"line"</code>.</dd>
+    <dt><code>discontinuousDashLength</code></dt>
+        <dd>A numeric value that represents the length of dashes on a discontinous line, in pixels. Available only on a series of type <code>"line"</code>.</dd>
+    <dt><code>skin</code></dt>
+        <dd>Allows for specifying a pre-defined marker shape for a series. Available skins are <code>CircleSkin</code>, <code>DiamondSkin</code>, <code>TriangleSkin</code> and <code>RectangleSkin</code>. Available only on a series of type <code>"line"</code>.</dd>
+    <dt><code>visibility</code></dt>
+        <dd>Allows a series to be hidden. Possible values are <code>hidden</code> and <code>visible</code>.</dd>
+    <dt><code>showInLegend</code></dt>
+        <dd>Indicates whether the series will appear in the Chart's legend. The default value is <code>true</code>. This style is not available for a series of type <code>pie</code>.</dd> 
+    <dt><code>showLabels</code></dt>
+        <dd>When set to <code>true</code>, value labels will appear in the wedges of a pie series. Available only on a series of type <code>"pie"</code>.</dd>
+    <dt><code>font</code></td>
+        <dd>Object containing styles for labels on a Pie Chart when <code>showLabels</code> is set to <code>true</code>. Contains the same substyles as the <a href="#fontsubstyles"><code>font</code></a> style in the <a href="#basicstyles">Basic Styling Section</a>.
+        Available only on a series of type <code>"pie"</code>.</dd>
+</dl>
+<p>For more information about using the image-related styles, see the <a href="#advancedskins">Advanced Skinning</a> section below.</p>
+<h3 id="advancedskins">Advanced Skinning</h3>
+<p>The Charts Control accepts image URLs for background image styles (supported filetypes include JPG, PNG, GIF, and SWF). In an effort to mimic browser background image behavior, several image modes are available, including <code>repeat</code>, <code>repeat-x</code>, <code>repeat-y</code>, and <code>no-repeat</code>. An additional mode named <code>stretch</code> will increase the image dimensions to fill the entire background area.</p>
+<div id="syntax-901753ecdc7db4b04a4be7755374e9b1" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">style<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    background<span class="sy0">:</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        image<span class="sy0">:</span> <span class="st0">&quot;images/tile.png&quot;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">        mode<span class="sy0">:</span> <span class="st0">&quot;repeat&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        color<span class="sy0">:</span> 0xcc9900</div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">style<span class="sy0">:</span> <span class="br0">&#123;</span>
+    background<span class="sy0">:</span>
+    <span class="br0">&#123;</span>
+        image<span class="sy0">:</span> <span class="st0">&quot;images/tile.png&quot;</span><span class="sy0">,</span>
+        mode<span class="sy0">:</span> <span class="st0">&quot;repeat&quot;</span><span class="sy0">,</span>
+        color<span class="sy0">:</span> 0xcc9900
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-901753ecdc7db4b04a4be7755374e9b1-plain">style: {
+    background:
+    {
+        image: "images/tile.png",
+        mode: "repeat",
+        color: 0xcc9900
+    }
+}
+</textarea></div><p><strong>Note:</strong> Due to the <a href="http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_14213">cross-domain restrictions</a> enforced by Adobe Flash Player, and the methods used to tile and layout background images, if you are loading the Charts Control from <code>yui.yahooapis.com</code>, the domain from which you load image assets must provide a <code>crossdomain.xml</code> to allow <code>yui.yahooapis.com</code> to load and manipulate image files. If no <code>crossdomain.xml</code> file is provided, your images will not be displayed. Again, this only applies if you are loading the Charts Control from <code>yui.yahooapis.com</code>. If the Charts Control is loaded from the same subdomain as the HTML page from which it is being used, cross-domain restrictions will not affect you.</p>
+<p>The following is an example of the minimal <code>crossdomain.xml</code> file required to allow <code>charts.swf</code> to load images from your domain.</p>
+<style>
+/**
+ * GeSHi (C) 2004 - 2007 Nigel McNie, 2007 - 2008 Benny Baumann
+ * (http://qbnz.com/highlighter/ and http://geshi.org/)
+ */
+.xml  {font-family:monospace;}
+.xml .imp {font-weight: bold; color: red;}
+.xml .es0 {color: #000099; font-weight: bold;}
+.xml .br0 {color: #66cc66;}
+.xml .sy0 {color: #66cc66;}
+.xml .st0 {color: #ff0000;}
+.xml .sc-1 {color: #808080; font-style: italic;}
+.xml .sc0 {color: #00bbdd;}
+.xml .sc1 {color: #ddbb00;}
+.xml .sc2 {color: #339933;}
+.xml .sc3 {color: #009900;}
+.xml .re0 {color: #000066;}
+.xml .re1 {color: #000000; font-weight: bold;}
+.xml .re2 {color: #000000; font-weight: bold;}
+.xml span.xtra { display:block; }
+
+</style>
+<div id="syntax-63ac70bd225ce38991ed652f4ba6778b" class="yui-syntax-highlight"><div class="numbers"><pre class="xml" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc3"><span class="re1">&lt;?xml</span> <span class="re0">version</span>=<span class="st0">&quot;1.0&quot;</span><span class="re2">?&gt;</span></span></div></li><li class="li1"><div class="de1"><span class="sc0">&lt;!DOCTYPE cross-domain-policy SYSTEM &quot;http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd&quot;&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc3"><span class="re1">&lt;cross-domain-policy<span class="re2">&gt;</span></span></span></div></li><li class="li1"><div class="de1">    <span class="sc3"><span class="re1">&lt;allow-access-from</span> <span class="re0">domain</span>=<span class="st0">&quot;yui.yahooapis.com&quot;</span><span class="re2">/&gt;</span></span></div></li><li class="li2"><div class="de2"><span class="sc3"><span class="re1">&lt;/cross-domain-policy<span class="re2">&gt;</span></span></span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="xml" style="font-family:monospace;"><span class="sc3"><span class="re1">&lt;?xml</span> <span class="re0">version</span>=<span class="st0">&quot;1.0&quot;</span><span class="re2">?&gt;</span></span>
+<span class="sc0">&lt;!DOCTYPE cross-domain-policy SYSTEM &quot;http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd&quot;&gt;</span>
+<span class="sc3"><span class="re1">&lt;cross-domain-policy<span class="re2">&gt;</span></span></span>
+    <span class="sc3"><span class="re1">&lt;allow-access-from</span> <span class="re0">domain</span>=<span class="st0">&quot;yui.yahooapis.com&quot;</span><span class="re2">/&gt;</span></span>
+<span class="sc3"><span class="re1">&lt;/cross-domain-policy<span class="re2">&gt;</span></span></span>
+&nbsp;</pre></div><textarea id="syntax-63ac70bd225ce38991ed652f4ba6778b-plain"><?xml version="1.0"?>
+<!DOCTYPE cross-domain-policy SYSTEM "http://www.macromedia.com/xml/dtds/cross-domain-policy.dtd">
+<cross-domain-policy>
+    <allow-access-from domain="yui.yahooapis.com"/>
+</cross-domain-policy>
+</textarea></div><h4 id="imagemodes">Image Modes</h4>
+<p>The following modes are accepted for background images used by the Charts control.</p>
+<dl>
+    <dt><code>repeat</code></dt>
+        <dd>The image is tiled vertically and horizontally to cover the entire background area.</dd>
+    <dt><code>repeat-x</code></dt>
+        <dd>The image is tiled in one row horizontally.</dd>
+    <dt><code>repeat-y</code></dt>
+        <dd>The image is tiled in one column vertically.</dd>
+    <dt><code>no-repeat</code></dt>
+        <dd>The image is displayed once in the top-left corner.</dd>
+    <dt><code>stretch</code></dt>
+        <dd>The image is stretched to fill the entire background area. When using <code>stretch</code>, the image may distort if the aspect ratio of the Charts Control is different than that of the image.</dd>
+</dl>
+<p>If the image mode is set to <code>repeat-x</code> or <code>repeat-y</code>, or the background image contains transparency, the background color will be displayed through the areas that are not covered by the image.</p>
+<p>For futher exploration of skinning the Charts control, please review the Charts Skinning Example.</p>
+<h2 id="knownissues">Known Issues</h2>
+<ul>
+    <li>
+        <h4>Issue with using YUI2 Charts in YUI3</h4>
+        <p>The underlying charts swf needs a global object to communicate with the DOM. As a result, the YAHOO global object needs to be declared outside of the YUI3 use statement.</p>
+<div id="syntax-1ab45408e7901576a5de3ace7bbcd408" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> <span class="kw4">YAHOO</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">'node'</span><span class="sy0">,</span> <span class="st0">'yui2-utilities'</span><span class="sy0">,</span> <span class="st0">'yui2-datasource'</span><span class="sy0">,</span> <span class="st0">'yui2-json'</span><span class="sy0">,</span> <span class="st0">'yui2-swf'</span><span class="sy0">,</span> <span class="st0">'yui2-charts'</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span> <span class="sy0">=</span> Y.<span class="me1">YUI2</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    ...</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> <span class="kw4">YAHOO</span><span class="sy0">;</span>
+&nbsp;
+YUI<span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="kw2">use</span><span class="br0">&#40;</span><span class="st0">'node'</span><span class="sy0">,</span> <span class="st0">'yui2-utilities'</span><span class="sy0">,</span> <span class="st0">'yui2-datasource'</span><span class="sy0">,</span> <span class="st0">'yui2-json'</span><span class="sy0">,</span> <span class="st0">'yui2-swf'</span><span class="sy0">,</span> <span class="st0">'yui2-charts'</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>Y<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw4">YAHOO</span> <span class="sy0">=</span> Y.<span class="me1">YUI2</span><span class="sy0">;</span>
+    ...
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-1ab45408e7901576a5de3ace7bbcd408-plain">var YAHOO;
+
+YUI().use('node', 'yui2-utilities', 'yui2-datasource', 'yui2-json', 'yui2-swf', 'yui2-charts', function (Y) {
+    YAHOO = Y.YUI2;
+    ...
+});</textarea></div>    </li>
+    <li>
+        <h4>Charts appear on top of other content</h4>
+        <p>When other page content (such as <a href="../menu/index.html">Menu</a> controls) overlap the Charts control, the Charts control may always appear on top in IE and Gecko-based browsers. To fix this problem, set the "wmode" of the Flash movie to either "transparent" or "opaque" using the <code>wmode</code> initialization attribute:</p>
+<div id="syntax-0a1284cf0142ba2d7357983eb2e52c85" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myChart <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColumnChart</span><span class="br0">&#40;</span><span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myDataSource<span class="sy0">,</span> <span class="br0">&#123;</span> wmode<span class="sy0">:</span> <span class="st0">&quot;opaque&quot;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myChart <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColumnChart</span><span class="br0">&#40;</span><span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myDataSource<span class="sy0">,</span> <span class="br0">&#123;</span> wmode<span class="sy0">:</span> <span class="st0">&quot;opaque&quot;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-0a1284cf0142ba2d7357983eb2e52c85-plain">var myChart = new YAHOO.widget.ColumnChart("myContainer", myDataSource, { wmode: "opaque" });
+</textarea></div>    </li>
+
+    <li>
+        <h4>Hyphens cannot be used in DataSource field names</h4>
+        <p>Due to a bug in Adobe Flash Player's ExternalInterface, fields retrieved from the DataSource used by the chart may not contain hyphens. In the following example, the "dateofbirth" field is valid, but the "first-name" and "last-name" fields will cause errors.</p>
+
+<div id="syntax-0ef830024d57d85e59ae562851fdc771" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myDataSource <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DataSource</span><span class="br0">&#40;</span> <span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">employees</span> <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myDataSource.<span class="me1">responseType</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DataSource</span>.<span class="me1">TYPE_JSARRAY</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myDataSource.<span class="me1">responseSchema</span> <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    fields<span class="sy0">:</span> <span class="br0">&#91;</span> <span class="st0">&quot;first-name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;last-name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;dateofbirth&quot;</span> <span class="br0">&#93;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myDataSource <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DataSource</span><span class="br0">&#40;</span> <span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">employees</span> <span class="br0">&#41;</span><span class="sy0">;</span>
+myDataSource.<span class="me1">responseType</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DataSource</span>.<span class="me1">TYPE_JSARRAY</span><span class="sy0">;</span>
+myDataSource.<span class="me1">responseSchema</span> <span class="sy0">=</span> <span class="br0">&#123;</span>
+    fields<span class="sy0">:</span> <span class="br0">&#91;</span> <span class="st0">&quot;first-name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;last-name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;dateofbirth&quot;</span> <span class="br0">&#93;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-0ef830024d57d85e59ae562851fdc771-plain">var myDataSource = new YAHOO.util.DataSource( YAHOO.example.employees );
+myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+myDataSource.responseSchema = {
+    fields: [ "first-name", "last-name", "dateofbirth" ]
+};
+</textarea></div>        <p>If this bug is fixed in a future version of Flash Player, no modifications will be needed to the Charts Control to begin working with hyphenated field names, except to possibly change the minimum required version of Flash Player.</p>
+    </li>
+
+    <li>
+        <h4>Charts don't work inside a &lt;form&gt; tag with Internet Explorer</h4>
+        <p>SWFs embedded in HTML forms will not be initialized correctly when the page is viewed in Internet Explorer. When trying to embed a YUI chart into any descendant of a <code>&lt;form&gt;</code> tag, you may see an error that says <code>yuigen0 not found</code> and the chart will not be drawn. This problem has been fixed in Adobe Flash Player starting with version 9.0.115. If you must display a chart in an HTML form, you should override the <code>version</code> attribute to require a newer version of Flash Player:</p>
+<div id="syntax-245f99d4ad07844f2e8a67d408c6d32c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myChart <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColumnChart</span><span class="br0">&#40;</span><span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myDataSource<span class="sy0">,</span> <span class="br0">&#123;</span> version<span class="sy0">:</span> <span class="st0">&quot;9.0.115&quot;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myChart <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">ColumnChart</span><span class="br0">&#40;</span><span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myDataSource<span class="sy0">,</span> <span class="br0">&#123;</span> version<span class="sy0">:</span> <span class="st0">&quot;9.0.115&quot;</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-245f99d4ad07844f2e8a67d408c6d32c-plain">var myChart = new YAHOO.widget.ColumnChart("myContainer", myDataSource, { version: "9.0.115" });
+</textarea></div>    </li>
+	<li>
+		<h4>Issues with Charts using Logarithmic scaling</h4>
+		<p>There have been some issues in previous releases with charts that use a logarithmic scale. Changes in the 2.7.0 made these issues more apparent in some use cases.</p>
+	</li>
+</ul>
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+	  </div>
+         <div class="yui-u">
+			<div id="cheatsheet">
+				<h3>YUI Charts Control Cheat Sheet:</h3>
+				<a href="http://yuiblog.com/assets/pdf/cheatsheets/charts.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/charts.gif" width="178" height="130" alt="Cheat Sheet for the YUI Charts Control."></a>
+				<p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+			</div>
+<div id="examples">
+<h3>Charts Control Examples:</h3>
+
+<ul>
+<li><a href='../examples/charts/charts-quickstart.html'>Charts Quickstart Example</a></li>
+<li><a href='../examples/charts/charts-legend.html'>Chart with Legend Example</a></li>
+<li><a href='../examples/charts/charts-skins.html'>Skinning a Chart Example</a></li>
+<li><a href='../examples/charts/charts-datatable.html'>Chart and DataTable Example</a></li>
+<li><a href='../examples/charts/charts-xhr-polling.html'>Chart with DataSource Polling</a></li>
+<li><a href='../examples/charts/charts-stacked.html'>Stacked Bar Chart</a></li>
+<li><a href='../examples/charts/charts-tabview.html'>Charts in a TabView</a></li>
+<li><a href='../examples/charts/charts-rotation.html'>Column Chart with Rotated Title and Labels</a></li>
+<li><a href='../examples/charts/charts-styles.html'>Styling Lines, Borders and Fills</a></li>
+<li><a href='../examples/charts/charts-dualaxes.html'>Chart with 2 Numeric Axes</a></li>
+<li><a href='../examples/charts/charts-hideseries.html'>Hide series in a chart.</a></li>
+<li><a href='../examples/charts/charts-seriescustomization.html'>Customize series items</a></li>
+<li><a href='../examples/charts/charts-functionscope.html'>Apply scope to label functions</a></li>
+</ul>
+
+
+		
+</div>
+			<div id="morereading">
+				<h3>More Reading about the YUI Charts Control:</h3>
+				<ul>
+				  <li><a href="http://yuiblog.com/blog/2008/01/17/tables-and-charts/">Automatic conversion from simple, accessible data tables to YUI Charts</a>, by Christian Heilmann</li>
+			   </ul>
+		   </div>
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fcharts%2F--><h3 id="delicious">YUI Charts on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/charts/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/visualization" class="tag-size-1">visualization</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/graph" class="tag-size-1">graph</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/flash" class="tag-size-1">flash</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/chart" class="tag-size-1">chart</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/charts" class="tag-size-1">charts</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/29e46b2deca294bc768e87a7164684f6" class="saved-by">saved by <span>199</span>  people</a></p>
+   </div></div>
+		 </div>
+      </div>
+</div>
+</div>
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="selected "><a title="The YUI Charts Control" href="index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:19 PDT 2013 -->
+
+<!-- Localized -->

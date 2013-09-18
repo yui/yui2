@@ -1,0 +1,569 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Animation</title>
+
+
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+
+	<div id="pagetitle"><h1>YUI 2: Animation</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+
+<div id="promo" class="component">
+  <h1>YUI 2: Animation</h1>
+  <p>The Animation Utility enables the rapid prototyping and implementation of animations involving size, opacity, color, position, and other visual characteristics.  Animations created with the Animation Utility work across <a href="http://yuilibrary.com/yui/docs/tutorials/gbs/">the A-grade browser spectrum</a>. A simple, intuitive syntax for configuring animations makes the Animation Utility easy to implement even for complex animations.</p>
+
+  <div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#using">Using Animation</a></li>
+      <li><a href="#mobile">YUI on Mobile Devices</a></li>
+      <li><a href="#support">Support &amp; Community</a></li><li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/animation/index.html">Examples</a>: Explore examples of the Animation Utility in action.</li>
+      <li><a href="../docs/module_animation.html">API Documentation</a>: View the full API documentation for the Animation Utility.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.animation">Release Notes</a>: Detailed change log for the Animation Utility.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Animation Utility as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+</div>
+<h2 class="first" id="start">Getting Started</h2>
+<p>To use the Animation utility, include the following source files in your web page with the script tag:</p>
+<div id="syntax-db3f43aa6d824be1b1e6ff5f3f8b651f" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/javascript&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/javascript&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/javascript&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/javascript&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-db3f43aa6d824be1b1e6ff5f3f8b651f-plain"><!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js" type="text/javascript"></script>
+
+<!-- Source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js" type="text/javascript"></script>
+</textarea></div>
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>animation</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<p>Your Animation implementation will consist of one or more instances of the Anim object or its subclasses (Motion, Scroll).</p>
+<h3>Instantiating an Animation Object</h3>
+<p>To create an  Animation instance on your page, use the following
+  code:</p>
+<div id="syntax-b86bc1c4c5a45f6faa6b2d10b05e88b4" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;test&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;test&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-b86bc1c4c5a45f6faa6b2d10b05e88b4-plain"><div id="test"></div>
+</textarea></div>
+<div id="syntax-18b017747d720b2b1045a2aeafb63c11" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    width<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        to<span class="sy0">:</span> <span class="nu0">400</span> </div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span> </div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="sy0">,</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Easing</span>.<span class="me1">easeOut</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    width<span class="sy0">:</span> <span class="br0">&#123;</span>
+        to<span class="sy0">:</span> <span class="nu0">400</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="sy0">,</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Easing</span>.<span class="me1">easeOut</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-18b017747d720b2b1045a2aeafb63c11-plain">var myAnim = new YAHOO.util.Anim('test', {
+    width: {
+        to: 400
+    }
+}, 1, YAHOO.util.Easing.easeOut);
+</textarea></div><p>The Anim object constructor has one required parameter:  the ID string or
+  element reference to the element that will be animated. Optional parameters
+  are: </p>
+<ul class="topspace">
+<li> the actual attribute(s) that will comprise the animation (required to see any actual animation occur)</li>
+<li> the duration of the animation (defaults to 1 second) </li>
+<li>the easing method (defaults to YAHOO.util.Easing.easeNone) </li>
+ </ul>
+<p>We'll explore the optional parameters in more detail later in this document.</p>
+
+<p>To initiate the actual animation, call the animate method on your Animation instance:</p>
+<div id="syntax-fc046cc5439d15cd4b8c68ae14c411df" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-fc046cc5439d15cd4b8c68ae14c411df-plain">myAnim.animate();
+</textarea></div>
+<h3>Setting Animation Properties</h3>
+<p>In addition to passing detailed arguments to the Anim constructor, you can set the other parameters on your Animation instance via their respective properties:</p>
+<div id="syntax-d84e7f0e6537075692de92423dac2e3b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAnim.<span class="me1">attributes</span>.<span class="me1">width</span> <span class="sy0">=</span> <span class="br0">&#123;</span> to<span class="sy0">:</span> <span class="nu0">400</span> <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAnim.<span class="me1">duration</span> <span class="sy0">=</span> <span class="nu0">0.5</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAnim.<span class="me1">method</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Easing</span>.<span class="me1">easeOut</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myAnim.<span class="me1">attributes</span>.<span class="me1">width</span> <span class="sy0">=</span> <span class="br0">&#123;</span> to<span class="sy0">:</span> <span class="nu0">400</span> <span class="br0">&#125;</span><span class="sy0">;</span>
+myAnim.<span class="me1">duration</span> <span class="sy0">=</span> <span class="nu0">0.5</span><span class="sy0">;</span>
+myAnim.<span class="me1">method</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Easing</span>.<span class="me1">easeOut</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-d84e7f0e6537075692de92423dac2e3b-plain">var myAnim = new YAHOO.util.Anim('test');
+myAnim.attributes.width = { to: 400 };
+myAnim.duration = 0.5;
+myAnim.method = YAHOO.util.Easing.easeOut;
+</textarea></div><p>See <a href="../docs/module_animation.html">the API documentation for the Anim object</a> for more information about its methods and properties.</p>
+
+<h2 id="using">Using Animation</h2>
+<p>This section describes how to use the Animation utility in further detail.  It contains these subsections:</p>
+<ul class="topspace">
+<li><a href="#attributes">Using Animation Attributes</a></li>
+<li><a href="#relative">Using Relative Values</a></li>
+<li><a href="#start">Setting a Starting Value</a></li>
+<li><a href="#units">Specifying Attribute Units</a></li>
+<li><a href="#events">Listening for Events</a></li>
+<li><a href="#motion">Creating Animation with Motion</a></li>
+<li><a href="#curve">Creating Animation with Motion along a Curve</a></li>
+<li><a href="#scroll">Creating Animation with Scroll</a></li>
+</ul>
+
+<h3>Using Attributes<a name="attributes"></a></h3>
+<p>An attributes object is required to tell the Animation instance what to animate.  The members of this object comprise one or more style properties that accept a numeric value (width, height, opacity, top, left, borderWidth, padding, margin, and so on).</p>
+
+<p>An attribute consists of the attribute name (&quot;width&quot;, for example) and the value at which the animation should end, specified with the &quot;to&quot; or &quot;by&quot; properties.  By default, the Animation will attempt to start from the current value, although in some cases, this is not as reliable as providing the starting value explicitly (with the &quot;from&quot; property).</p>
+
+<p>The following code  animates an element from its current size to 400 by 400:</p>
+<div id="syntax-036732c926260e13c311afe50b916495" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> attributes <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">   width<span class="sy0">:</span> <span class="br0">&#123;</span> to<span class="sy0">:</span> <span class="nu0">400</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">   height<span class="sy0">:</span> <span class="br0">&#123;</span> to<span class="sy0">:</span> <span class="nu0">400</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> attributes<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> attributes <span class="sy0">=</span> <span class="br0">&#123;</span>
+   width<span class="sy0">:</span> <span class="br0">&#123;</span> to<span class="sy0">:</span> <span class="nu0">400</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+   height<span class="sy0">:</span> <span class="br0">&#123;</span> to<span class="sy0">:</span> <span class="nu0">400</span> <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> attributes<span class="br0">&#41;</span><span class="sy0">;</span>
+myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-036732c926260e13c311afe50b916495-plain">var attributes = {
+   width: { to: 400 },
+   height: { to: 400 }
+};
+
+var myAnim = new YAHOO.util.Anim('test', attributes);
+myAnim.animate();
+</textarea></div>
+<h3>Using Relative Values<a name="relative"></a></h3>
+<p>To animate an element <em>by</em> a given value rather than <em>to</em> a given value, use the &quot;by&quot;  property, rather than &quot;to&quot;.</p>
+
+<p>The following will expand the element with the id of test from its current size by 200 pixels:</p>
+<div id="syntax-246f96b72758a38c396f3cb4377350e5" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> attributes <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">   width<span class="sy0">:</span> <span class="br0">&#123;</span> by<span class="sy0">:</span> <span class="nu0">200</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">   height<span class="sy0">:</span> <span class="br0">&#123;</span> by<span class="sy0">:</span> <span class="nu0">200</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> attributes<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> attributes <span class="sy0">=</span> <span class="br0">&#123;</span>
+   width<span class="sy0">:</span> <span class="br0">&#123;</span> by<span class="sy0">:</span> <span class="nu0">200</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+   height<span class="sy0">:</span> <span class="br0">&#123;</span> by<span class="sy0">:</span> <span class="nu0">200</span> <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> attributes<span class="br0">&#41;</span><span class="sy0">;</span>
+myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-246f96b72758a38c396f3cb4377350e5-plain">var attributes = {
+   width: { by: 200 },
+   height: { by: 200 }
+};
+
+var myAnim = new YAHOO.util.Anim('test', attributes);
+myAnim.animate();
+</textarea></div>
+<h3>Setting a Starting Value<a name="start"></a></h3>
+<p>Use the optional &quot;from&quot; attribute property  to start the animation from a specific size:</p>
+<div id="syntax-5884d234d032ff19822611b1bc029522" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> attributes <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">   width<span class="sy0">:</span> <span class="br0">&#123;</span> from<span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span> by<span class="sy0">:</span> <span class="nu0">200</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">   height<span class="sy0">:</span> <span class="br0">&#123;</span> from<span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span> by<span class="sy0">:</span> <span class="nu0">200</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> attributes<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> attributes <span class="sy0">=</span> <span class="br0">&#123;</span>
+   width<span class="sy0">:</span> <span class="br0">&#123;</span> from<span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span> by<span class="sy0">:</span> <span class="nu0">200</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+   height<span class="sy0">:</span> <span class="br0">&#123;</span> from<span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span> by<span class="sy0">:</span> <span class="nu0">200</span> <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> attributes<span class="br0">&#41;</span><span class="sy0">;</span>
+myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-5884d234d032ff19822611b1bc029522-plain">var attributes = {
+   width: { from: 10, by: 200 },
+   height: { from: 10, by: 200 }
+};
+
+var myAnim = new YAHOO.util.Anim('test', attributes);
+myAnim.animate();
+</textarea></div>
+<h3>Specifying Attribute Units<a name="units"></a></h3>
+<p>By default, all attributes (except opacity) use pixels as the unit of measurement.  You can override this with the &quot;unit&quot; property.</p>
+
+<p>The following will animate the element's size from 1 to 20 EMs:</p>
+<div id="syntax-39de8c547a87b250b89ac9d9b3f06f8c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> attributes <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">   width<span class="sy0">:</span> <span class="br0">&#123;</span> from<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span> to<span class="sy0">:</span> <span class="nu0">20</span><span class="sy0">,</span> unit<span class="sy0">:</span> <span class="st0">'em'</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">   height<span class="sy0">:</span> <span class="br0">&#123;</span> from<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span> to<span class="sy0">:</span> <span class="nu0">20</span><span class="sy0">,</span> unit<span class="sy0">:</span> <span class="st0">'em'</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> attributes<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> attributes <span class="sy0">=</span> <span class="br0">&#123;</span>
+   width<span class="sy0">:</span> <span class="br0">&#123;</span> from<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span> to<span class="sy0">:</span> <span class="nu0">20</span><span class="sy0">,</span> unit<span class="sy0">:</span> <span class="st0">'em'</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+   height<span class="sy0">:</span> <span class="br0">&#123;</span> from<span class="sy0">:</span> <span class="nu0">1</span><span class="sy0">,</span> to<span class="sy0">:</span> <span class="nu0">20</span><span class="sy0">,</span> unit<span class="sy0">:</span> <span class="st0">'em'</span> <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> attributes<span class="br0">&#41;</span><span class="sy0">;</span>
+myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-39de8c547a87b250b89ac9d9b3f06f8c-plain">var attributes = {
+   width: { from: 1, to: 20, unit: 'em' },
+   height: { from: 1, to: 20, unit: 'em' }
+};
+
+var myAnim = new YAHOO.util.Anim('test', attributes);
+myAnim.animate();
+</textarea></div>
+<h3>Listening for Events<a name="events"></a></h3>
+<p>The Animation utility defines three events: onStart, onTween, and onComplete. Each of these events expose a subscribe method, enabling you to bind a callback function to that event.</p>
+
+<p>The following will remove the animated element (whose HTML ID is test) from its parent node upon completion of the animation:</p>
+<div id="syntax-631287ff8836d01f1713fe351580e718" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> removeElement <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">   <span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw1">this</span>.<span class="me1">getEl</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">   el.<span class="me1">parentNode</span>.<span class="me1">removeChild</span><span class="br0">&#40;</span>el<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> <span class="br0">&#123;</span> </div></li><li class="li1"><div class="de1">	  height<span class="sy0">:</span> <span class="br0">&#123;</span>to<span class="sy0">:</span> <span class="nu0">10</span><span class="br0">&#125;</span> </div></li><li class="li1"><div class="de1">	<span class="br0">&#125;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="sy0">,</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Easing</span>.<span class="me1">easeOut</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAnim.<span class="me1">onComplete</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>removeElement<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> removeElement <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+   <span class="kw2">var</span> el <span class="sy0">=</span> <span class="kw1">this</span>.<span class="me1">getEl</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+   el.<span class="me1">parentNode</span>.<span class="me1">removeChild</span><span class="br0">&#40;</span>el<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+<span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Anim</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+	  height<span class="sy0">:</span> <span class="br0">&#123;</span>to<span class="sy0">:</span> <span class="nu0">10</span><span class="br0">&#125;</span>
+	<span class="br0">&#125;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="sy0">,</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Easing</span>.<span class="me1">easeOut</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myAnim.<span class="me1">onComplete</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>removeElement<span class="br0">&#41;</span><span class="sy0">;</span>
+myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-631287ff8836d01f1713fe351580e718-plain">var removeElement = function() {
+   var el = this.getEl();
+   el.parentNode.removeChild(el);
+}
+var myAnim = new YAHOO.util.Anim('test', {
+	  height: {to: 10}
+	}, 1, YAHOO.util.Easing.easeOut);
+myAnim.onComplete.subscribe(removeElement);
+myAnim.animate();
+</textarea></div>
+<p>To avoid any potential race conditions, events should be subscribed to prior to calling the animate method.</p>
+
+<h3>Animating with ColorAnim</h3>
+
+<p>The YAHOO.util.ColorAnim subclass extends the Anim base class to allow animation of colors, including background, border, and color.  Colors can be specified either as hex or rgb.</p>
+
+
+<p>The following creates a ColorAnim animation that changes the background color of the element from its current background color to "#dcdcdc":</p>
+<div id="syntax-81c4b089782b40c3ec2a9225e27064d4" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> element <span class="sy0">=</span> document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">ColorAnim</span><span class="br0">&#40;</span>element<span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    backgroundColor<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        to<span class="sy0">:</span> <span class="st0">'#dcdcdc'</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span> </div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> element <span class="sy0">=</span> document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">ColorAnim</span><span class="br0">&#40;</span>element<span class="sy0">,</span> <span class="br0">&#123;</span>
+    backgroundColor<span class="sy0">:</span> <span class="br0">&#123;</span>
+        to<span class="sy0">:</span> <span class="st0">'#dcdcdc'</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-81c4b089782b40c3ec2a9225e27064d4-plain">var element = document.getElementById('test');
+var myAnim = new YAHOO.util.ColorAnim(element, {
+    backgroundColor: {
+        to: '#dcdcdc'
+    }
+});
+myAnim.animate();
+</textarea></div>
+
+<h3>Creating Animation with Motion<a name="motion"></a></h3>
+
+<p>The YAHOO.util.Motion subclass extends the ColorAnim class to move the animated element along a set of points. Points are defined by arrays of x,y coordinates.</p>
+
+<p>The following creates a Motion animation that moves from its current position to [400, 400] in page coordinates:</p>
+<div id="syntax-b69159f863262ebb9b816df8a7b7d2b6" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Motion</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    points<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        to<span class="sy0">:</span> <span class="br0">&#91;</span><span class="nu0">400</span><span class="sy0">,</span> <span class="nu0">400</span><span class="br0">&#93;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span> </div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Motion</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    points<span class="sy0">:</span> <span class="br0">&#123;</span>
+        to<span class="sy0">:</span> <span class="br0">&#91;</span><span class="nu0">400</span><span class="sy0">,</span> <span class="nu0">400</span><span class="br0">&#93;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-b69159f863262ebb9b816df8a7b7d2b6-plain">var myAnim = new YAHOO.util.Motion('test', {
+    points: {
+        to: [400, 400]
+    }
+});
+myAnim.animate();
+</textarea></div>
+<h3>Creating Animation with Motion along a Curve<a name="curve"></a></h3>
+
+<p>The YAHOO.util.Motion class also provides for curved animations.  A curve can be defined by one or more control points.  Control points are added to the points attribute via the &quot;control&quot; property.</p>
+
+<p>The following creates a Motion animation in which the animated element moves along a curved path from its current position to [400, 400]; the curved path is defined by two control points:</p>
+<div id="syntax-d09b1d8c135002819e86b59216fecd64" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> attributes <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">   points<span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">      to<span class="sy0">:</span> <span class="br0">&#91;</span><span class="nu0">400</span><span class="sy0">,</span> <span class="nu0">400</span><span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">      control<span class="sy0">:</span> <span class="br0">&#91;</span><span class="br0">&#91;</span><span class="nu0">800</span><span class="sy0">,</span> <span class="nu0">300</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="sy0">-</span><span class="nu0">200</span><span class="sy0">,</span> <span class="nu0">400</span><span class="br0">&#93;</span><span class="br0">&#93;</span></div></li><li class="li2"><div class="de2">   <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Motion</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> attributes<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> attributes <span class="sy0">=</span> <span class="br0">&#123;</span>
+   points<span class="sy0">:</span> <span class="br0">&#123;</span>
+      to<span class="sy0">:</span> <span class="br0">&#91;</span><span class="nu0">400</span><span class="sy0">,</span> <span class="nu0">400</span><span class="br0">&#93;</span><span class="sy0">,</span>
+      control<span class="sy0">:</span> <span class="br0">&#91;</span><span class="br0">&#91;</span><span class="nu0">800</span><span class="sy0">,</span> <span class="nu0">300</span><span class="br0">&#93;</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="sy0">-</span><span class="nu0">200</span><span class="sy0">,</span> <span class="nu0">400</span><span class="br0">&#93;</span><span class="br0">&#93;</span>
+   <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+<span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Motion</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="sy0">,</span> attributes<span class="br0">&#41;</span><span class="sy0">;</span>
+myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-d09b1d8c135002819e86b59216fecd64-plain">var attributes = {
+   points: {
+      to: [400, 400],
+      control: [[800, 300], [-200, 400]]
+   }
+};
+var myAnim = new YAHOO.util.Motion('test', attributes);
+myAnim.animate();
+</textarea></div>
+<h3>Creating Animation with Scroll<a name="scroll"></a></h3>
+
+<p>Like Motion, The YAHOO.util.Scroll subclass extends the ColorAnim class to scroll an overflowed element. Scroll values are defined as arrays of scrollTop and scrollLeft values.</p>
+
+
+<p>The following creates a Scroll animation that scrolls the element left from its current left-scroll position to 500:</p>
+<div id="syntax-5172e7aab1fc1737ff87a96010ccc2a6" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> element <span class="sy0">=</span> document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="kw3">Scroll</span><span class="br0">&#40;</span>element<span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">scroll</span><span class="sy0">:</span> <span class="br0">&#123;</span>    </div></li><li class="li1"><div class="de1">        to<span class="sy0">:</span> <span class="br0">&#91;</span> <span class="nu0">500</span><span class="sy0">,</span> test.<span class="me1">scrollTop</span> <span class="br0">&#93;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span> </div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> element <span class="sy0">=</span> document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">'test'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw2">var</span> myAnim <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="kw3">Scroll</span><span class="br0">&#40;</span>element<span class="sy0">,</span> <span class="br0">&#123;</span>
+    <span class="kw3">scroll</span><span class="sy0">:</span> <span class="br0">&#123;</span>
+        to<span class="sy0">:</span> <span class="br0">&#91;</span> <span class="nu0">500</span><span class="sy0">,</span> test.<span class="me1">scrollTop</span> <span class="br0">&#93;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myAnim.<span class="me1">animate</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-5172e7aab1fc1737ff87a96010ccc2a6-plain">var element = document.getElementById('test');
+var myAnim = new YAHOO.util.Scroll(element, {
+    scroll: {
+        to: [ 500, test.scrollTop ]
+    }
+});
+myAnim.animate();
+</textarea></div>
+
+<h2 id="mobile">YUI on Mobile: Using Animation Utility with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div><p>Animation on mobile devices is limited by processor and system overhead.  Even on PCs, animation within a web browser can tax the processor, and the processing power in mobile devices is much more limited.  In general, DOM animations will look choppy on a mobile device, so you may want to avoid them altogether if designing specifically for mobile.  Using an easing method in some cases helps to make the animation appear to run more smoothly.  On the iPhone specifically, the "easeBoth" easing, in our experience, provides the smoothest animation across most animation types.</p>
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+
+
+		</div>
+         <div class="yui-u">
+
+			<div id="cheatsheet">
+				<h3>Animation Utility Cheat Sheet:</h3>
+
+				<a href="http://yuiblog.com/assets/pdf/cheatsheets/animation.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/animation.gif" width="178" height="133" alt="Cheat Sheet for the Animation Utility."></a>
+
+				<p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+			</div>
+
+			<div id="examples">
+<h3>Animation Utility Examples:</h3>
+
+<ul>
+<li><a href='../examples/animation/basic.html'>Basic Animation</a></li>
+<li><a href='../examples/animation/easing.html'>Animation Easing</a></li>
+<li><a href='../examples/animation/from.html'>Animating From a Given Value</a></li>
+<li><a href='../examples/animation/units.html'>Using Custom Units for an Animation</a></li>
+<li><a href='../examples/animation/attributes.html'>Animating Multiple Attributes</a></li>
+<li><a href='../examples/animation/anim-chaining.html'>Chaining Animations Using <code>onComplete</code></a></li>
+<li><a href='../examples/animation/colors.html'>Animating Colors</a></li>
+<li><a href='../examples/animation/motion.html'>Animating Motion</a></li>
+<li><a href='../examples/animation/control.html'>Animating Along a Curved Path</a></li>
+<li><a href='../examples/animation/scroll.html'>Animated Scrolling</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Animation Utility:</h4>
+
+<ul>
+<li><a href='../examples/button/btn_example13.html'>Glowing Button</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
+<li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
+</ul>
+		   </div>
+
+		   	<div id="morereading">
+				<h3>More Reading about the YUI Animation Utility:</h3>
+
+				<ul>
+					<li><a href="http://informationr.net/ir/12-2/TB0701.html">Artisinal Animation</a>, by Terrence Brooks</li>
+					<li><a href="http://www.hedgerwow.com/360/mwd/accordion/demo.php?page=1">Accordion Menu made with YUI</a>, by Hedger Wang</li>
+
+			   </ul>
+		   </div>
+
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fanimation%2F--><h3 id="delicious">YUI Animation on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/animation/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/web" class="tag-size-1">web</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdesign" class="tag-size-1">webdesign</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/framework" class="tag-size-1">framework</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/animation" class="tag-size-1">animation</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ui" class="tag-size-1">ui</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/57415d07030c08c9a6733d18a5246666" class="saved-by">saved by <span>72</span>  people</a></p>
+   </div></div>
+
+		 </div>
+      </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="selected "><a title="The YUI Animation Utility" href="index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> -
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> -
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript">
+dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:12 PDT 2013 -->
+
+<!-- Localized -->

@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Connection Manager: Cross-Domain Transactions with Connection Manager</title>
+
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/reset/reset.css"> 
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/base/base.css"> 
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts.css"> 
+
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/json/json-min.js"></script>
+
+</head>
+
+<body>
+
+<h1>Connection Manager: Cross-Domain Transactions with Connection Manager</h1>
+
+<p><strong>This example has been deprecated and will no longer be supported.</strong> Please note that the XDR functionality of the Connection Manager requires that you host connection.swf on your own servers. YUI 2 is now in maintenance mode, so no future updates are planned and only critical fixes will be considered. For more information, please refer to the following blog posts:
+<ul>
+<li><a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/</a></li>
+<li><a href="http://www.yuiblog.com/blog/2010/12/17/yui-2-9-0-release-update/">http://www.yuiblog.com/blog/2010/12/17/yui-2-9-0-release-update/</a></li>
+</ul>
+</p>
+
+<button id="fetch" disabled="disabled" onClick="send()">Load JSON RSS news feed from Yahoo! Pipes.</button>
+
+<div id="output">
+	<ul id='list'>
+		<li>Content from Yahoo! Pipes feed will display here.</li>
+    </ul>
+</div>
+
+<script language="javascript">
+
+//Data fetched will be displayed in a UL in the
+//element #output:
+var output = document.getElementById('list'),
+YCM = YAHOO.util.Connect;
+
+//Event handler called when the transaction begins:
+var handleStart = function(e, a) {
+	YAHOO.log("Transaction " + a[0].tId + " is starting.", "info", "example");
+	output.innerHTML = "<li>Loading news stories via Yahoo! Pipes feed...</li>";
+}
+
+//Event handler for the success event -- use this handler to write the fetched
+//RSS items to the page.
+var handleSuccess = function(o) {
+
+	//We use JSON.parse to sanitize the JSON (as opposed to simply eval'ing
+	//it into the page):
+	var oRSS = YAHOO.lang.JSON.parse(o.responseText);
+
+	//From here, we simply access the JSON data from where it's provided
+	//in the Yahoo! Pipes output:
+	if (oRSS && oRSS.count) {
+
+		var s = "<!--begin news stories fetched via Yahoo! Pipes-->",
+			//t in this case is our simple template; this is fed to
+			//YAHOO.Lang.substitute as we loop through RSS items:
+			t = "<li><a href='{link}'>{title}</a>, {pubDate}</li>";
+
+		for (var i=0; i<oRSS.count; i++) {
+			s += YAHOO.lang.substitute(t, oRSS.value.items[i]);
+		}
+
+		//Output the string to the page:
+		output.innerHTML = s;
+
+	} else {
+		//No news stories were found in the feed.
+		output.innerHTML = "<li>The RSS feed did not return any items.</li>";
+	}
+}
+
+//In the event that the HTTP status returned is > 399, a
+//failure is reported and this function is called:
+var handleFailure = function(o) {
+	YAHOO.log("ERROR " + o.id + " " + o.argument, "info", "example");
+}
+
+//Set up the callback object used for the transaction.
+var callback = {
+	success: handleSuccess,
+	failure: handleFailure,
+	xdr: true
+};
+
+//Enable the request button when the Flash transport is
+//initialized.
+YCM.xdrReadyEvent.subscribe(function() {
+	document.getElementById('fetch').disabled = false;
+});
+
+//Listen for Connection Manager's start event.
+YCM.startEvent.subscribe(handleStart);
+
+//Initialize the Flash transport.
+YCM.transport('http://yui.yahooapis.com/2.9.0/build/connection/connection.swf');
+
+//Wire the button to a click handler to fire a request each
+//time the button is clicked:
+var send = function(o) {
+	YAHOO.log("Click detected; beginning io request to Yahoo! Pipes.", "info", "example");
+	var obj = YCM.asyncRequest('GET',
+		//this is a specific Pipes feed, populated with cycling news:
+		"http://pipes.yahooapis.com/pipes/pipe.run?_id=giWz8Vc33BG6rQEQo_NLYQ&_render=json",
+		callback
+	);
+}
+</script>
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:39 PDT 2013 -->

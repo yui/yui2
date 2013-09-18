@@ -1,0 +1,908 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: AutoComplete</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: AutoComplete</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+
+<div id="promo" class="component">
+  <h1>YUI 2: AutoComplete</h1>
+
+  <p><img src="assets/autocomplete.png" alt="An example of the YUI AutoComplete Widget running on Yahoo! Finance." width="300" height="183" class="example">The AutoComplete control provides the front-end logic for text-entry suggestion and completion functionality. See the <a href="http://developer.yahoo.com/ypatterns/pattern_autocomplete.php">Yahoo! UI Design Pattern Library description for AutoComplete</a> to get a fuller sense of the underlying design patterns in the AutoComplete family. AutoComplete provides a high degree of configurability so developers can implement these design patterns quickly and flexibly. Top features include custom formatting, query delimiters, animation, custom formatting, a rich Custom Event model, and much more.</p>
+  
+  <p><strong>Note: </strong>As of the 2.6.0 release, AutoComplete has been migrated to use YAHOO.util.DataSource, which is now a new required dependency. The YAHOO.widget.DataSource class, which used to be packaged with the AutoComplete Control has been removed. While backward compatibility has been maintained whenever possible, implementers who are upgrading from an earlier version are strongly advised to read the <a href="#upgrade">Upgrade Notes</a> to smooth the transition.</p>
+
+<div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#upgrade">Upgrade Notes</a></li>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#instantiating">Instantiating AutoComplete</a></li>
+      <li><a href="#generateRequest">Customizing the DataSource Request Syntax</a></li>
+      <li><a href="#configs">Common Configurations</a></li>
+      <li><a href="#formatting">Custom Formatting of Results</a></li>
+      <li><a href="#security">Security Considerations</a></li>
+      <li><a href="#data">Data Matching Algorithms</a></li>
+      <li><a href="#events">Custom Events and "doBefore" Abstract Methods</a></li>
+      <li><a href="#skinning">Skinning AutoComplete </a></li>
+      <li><a href="#storyboard">AutoComplete Storyboard Matrix</a></li>
+      <li><a href="#knownissues">Known Issues</a></li>
+      <li><a href="#mobile">YUI on Mobile Devices</a></li>
+      <li><a href="#support">Support &amp; Community</a></li><li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+</div>
+  
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/autocomplete/index.html">Examples</a>: Explore examples of the AutoComplete Control in action.</li>
+      <li><a href="../docs/module_autocomplete.html">API Documentation</a>: View the full API documentation for the AutoComplete Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.autocomplete">Release Notes</a>: Detailed change log for the AutoComplete Control.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the AutoComplete Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>  
+</div>
+
+<h2 id="upgrade" class="first">Upgrade Notes</h2>
+
+<p>Users new to AutoComplete can skip this section and proceed directly to the <a href="#start">Getting Started</a> section. Implementers who are upgrading from previous versions should note that as of version 2.6.0, AutoComplete has been migrated from YAHOO.widget.DataSource to YAHOO.util.DataSource, which is now a new external dependency. Implementers are strongly advised to review the <a href="../datasource/index.html">DataSource utility</a> and update their implementations at their earliest convenience. The following important changes to AutoComplete should also be noted:</p>
+
+<ul class="jump">
+<li>Implementers may now need to define an explicit width in CSS on the AutoComplete wrapper element that contains the input and container elements.</li>
+
+<li>The YAHOO.widget.DataSource properties <code>queryMatchCase</code>, <code>queryMatchContains</code>, and <code>queryMatchSubset</code> have been ported over to be YAHOO.widget.AutoComplete properties of the same name, and are now handled directly within AutoComplete code.</li>
+
+<li>The YAHOO.widget.DS_XHR properties <code>scriptQueryParam</code> and <code>scriptQueryAppend</code> have been deprecated in favor of the new customizeable YAHOO.widget.AutoComplete method <code>generateRequest()</code>.</li>
+
+<li>The YAHOO.widget.DS_XHR property <code>responseStripAfter</code> has been deprecated in favor of the new customizeable YAHOO.util.DataSource abstract method <code>doBeforeParseData</code>.</li>
+
+<li>Requests sent to XHR DataSources can now be configured not to insert the "?" in the query string by setting the <code>queryQuestionMark</code> property to <code>false</code>. To more fully customize the query syntax, implementers should override the new generateRequest() method.</li>
+
+<li>As a convenience, the formatResult() method now recieves a third parameter which is the query matching string for the result.</li>
+
+<li>The result object used within AutoComplete, which is one of the values passed to the <code>formatResult()</code> method supports either a backwards-compatible array structure or a more performant and robust object literal structure. The object literal structure is enabled by setting the <code>resultTypeList</code> property to <code>false</code>.</li>
+
+</ul>
+
+<h2 id="start">Getting Started</h2>
+
+<p>To use the AutoComplete control, include the following source files in your
+  web page with the script tag:</p>
+<div id="syntax-18f280d1cc8f0e7a4204299e18f6bb10" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!--CSS file (default YUI Sam Skin) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: Get (required only if using ScriptNodeDataSource) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/get/get-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: Connection (required only if using XHRDataSource) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: Animation (required only if enabling animation) --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: JSON (enables JSON validation) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/json/json-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/autocomplete/autocomplete-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!--CSS file (default YUI Sam Skin) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css&quot;</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: Get (required only if using ScriptNodeDataSource) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/get/get-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: Connection (required only if using XHRDataSource) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: Animation (required only if enabling animation) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: JSON (enables JSON validation) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/json/json-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/autocomplete/autocomplete-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-18f280d1cc8f0e7a4204299e18f6bb10-plain"><!--CSS file (default YUI Sam Skin) -->
+<link type="text/css" rel="stylesheet" href="http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css">
+
+<!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
+
+<!-- OPTIONAL: Get (required only if using ScriptNodeDataSource) -->
+<script src="http://yui.yahooapis.com/2.9.0/build/get/get-min.js"></script>
+
+<!-- OPTIONAL: Connection (required only if using XHRDataSource) -->
+<script src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
+
+<!-- OPTIONAL: Animation (required only if enabling animation) -->
+<script src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
+
+<!-- OPTIONAL: JSON (enables JSON validation) -->
+<script src="http://yui.yahooapis.com/2.9.0/build/json/json-min.js"></script>
+
+<!-- Source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/autocomplete/autocomplete-min.js"></script>
+</textarea></div>Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
+in which the AutoComplete Control lives.  You can usually accomplish this simply by putting the class on the 
+<code>&#60;body&#62;</code> tag:</p>
+<div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
+</textarea></div>
+<p class="lastP">For more information on skinning YUI components and making use of default skins, 
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+article here on the website.</p>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>autocomplete</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<h2 id="instantiating">Instantiating AutoComplete</h2>
+
+<p>Your AutoComplete implementation will consist of two objects:</p>
+
+<ul class="jump">
+  <li><strong>A DataSource instance.</strong> A DataSource manages the query-response cycle of data retrieval from a variety of sources, from local JavaScript arrays to remote online servers. Please refer to the <a href="../datasource/index.html">DataSource documentation</a> for more information on using this utility. Note that when using a LocalDataSource, the first item defined in the LocalDataSource schema's fields array points to the data values against which queries are matched.</li>
+  
+  <li><strong>An AutoComplete instance.</strong> AutoComplete queries the DataSource and presents the result data back to the user.</li>
+</ul>
+
+<p>The following code implements AutoComplete on your page:</p>
+  
+<div id="syntax-9d38384c337618d7a088a6ba42aa74c4" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1">// An outer container contains an input element and</div></li><li class="li1"><div class="de1">// a empty results container, both of which are passed</div></li><li class="li1"><div class="de1">// to the constructor</div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myAutoComplete&quot;</span>&gt;</span></div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myInput&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myContainer&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;">// An outer container contains an input element and
+// a empty results container, both of which are passed
+// to the constructor
+<span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myAutoComplete&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myInput&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myContainer&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-9d38384c337618d7a088a6ba42aa74c4-plain">// An outer container contains an input element and
+// a empty results container, both of which are passed
+// to the constructor
+<div id="myAutoComplete">
+    <input id="myInput" type="text">
+    <div id="myContainer"></div>
+</div>
+</textarea></div><div id="syntax-ed4a58560c1172699b938455648f7659" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"> <span class="kw2">var</span> myAutoComp <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">AutoComplete</span><span class="br0">&#40;</span><span class="st0">&quot;myInput&quot;</span><span class="sy0">,</span><span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myDataSource<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"> <span class="kw2">var</span> myAutoComp <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">AutoComplete</span><span class="br0">&#40;</span><span class="st0">&quot;myInput&quot;</span><span class="sy0">,</span><span class="st0">&quot;myContainer&quot;</span><span class="sy0">,</span> myDataSource<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-ed4a58560c1172699b938455648f7659-plain"> var myAutoComp = new YAHOO.widget.AutoComplete("myInput","myContainer", myDataSource);
+</textarea></div>
+<p>The AutoComplete constructor has three required parameters:</p>
+<ol>
+  <li>the ID string or element reference to the input field (a textbox or
+    textarea) where users will type queries</li>
+  <li>the ID string or element reference to the HTML container in which the
+    query results will be displayed</li>
+  <li>a DataSource instance</li>
+</ol>
+
+<h2 id="generateRequest">Customizing the DataSource Request Syntax</h2>
+
+
+<p>AutoComplete sends the user-typed query value directly to the DataSource for results. By default, requests sent to XHR DataSources are prepended with a "?" and the parameter name "query":
+<div id="syntax-552664c9e354ef9f4a0e4371a350d77b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// XHR request string sent to the DataSource</span></div></li><li class="li1"><div class="de1"><span class="st0">&quot;?query={query}&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// XHR request string sent to the DataSource</span>
+<span class="st0">&quot;?query={query}&quot;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-552664c9e354ef9f4a0e4371a350d77b-plain">// XHR request string sent to the DataSource
+"?query={query}";
+</textarea></div>
+<p>As of version 2.6.0, AutoComplete can be configured not to insert the "?" in the query string by setting the <code>queryQuestionMark</code> property to <code>false</code>:
+<div id="syntax-698aa6c10a2306fd3f93bbe342dde1a7" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// queryQuestionMark is set to false</span></div></li><li class="li1"><div class="de1"><span class="st0">&quot;query={query}&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// queryQuestionMark is set to false</span>
+<span class="st0">&quot;query={query}&quot;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-698aa6c10a2306fd3f93bbe342dde1a7-plain">// queryQuestionMark is set to false
+"query={query}";
+</textarea></div>
+<p>Implementers can entirely modify these requests by redefining the <code>generateRequest()</code> method, which is especially important for remote server requests that need to have a specific syntax.</p>
+
+<div id="syntax-b7c3de37adaaeb18d47e3835809e0d76" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myAutoComp.<span class="me1">generateRequest</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>sQuery<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">return</span> <span class="st0">&quot;/search/&quot;</span> <span class="sy0">+</span> sQuery <span class="sy0">+</span> <span class="st0">&quot;/other/data&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myAutoComp.<span class="me1">generateRequest</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>sQuery<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">return</span> <span class="st0">&quot;/search/&quot;</span> <span class="sy0">+</span> sQuery <span class="sy0">+</span> <span class="st0">&quot;/other/data&quot;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-b7c3de37adaaeb18d47e3835809e0d76-plain">myAutoComp.generateRequest = function(sQuery) {
+    return "/search/" + sQuery + "/other/data";
+};
+</textarea></div>
+
+<h2 id="configs">Common Configurations</h2>
+
+<p>The AutoComplete class provides many configuration parameters that allow you to fine-tune the user experience of your AutoComplete instance, including:</p>
+
+<ul class="topspace">
+<li><a href="#animation">Animation</a></li>
+<li><a href="#delim">Delimiter Characters</a></li>
+<li><a href="#maxresults">Maximum Results Displayed</a></li>
+<li><a href="#minquery">Minimum Query Length</a></li>
+<li><a href="#delay">Query Delay</a></li>
+<li><a href="#autohighlight">Auto-highlight</a></li>
+<li><a href="#highlight">Highlight Class Name</a></li>
+<li><a href="#prehighlight">Pre-highlight Class Name</a></li>
+<li><a href="#shadow">Use Shadow</a></li>
+<li><a href="#iframe">Use iFrame</a></li>
+<li><a href="#force">Force Selection</a></li>
+<li><a href="#typeahead">Type Ahead</a></li>
+<li><a href="#allowbrowserac">Allow Browser Autocomplete</a></li>
+<li><a href="#alwaysshow">Always Show Container</a></li>
+</ul>
+
+<h3 id="animation">Animation</h3>
+<p>If you include the YUI <a href="../animation/index.html">Animation utility</a> on your web page, you can enable animation on the transitions of the AutoComplete container element using the following code:</p>
+  
+<div id="syntax-7fa2636ec739f3bf3f40b54a71be7671" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Container will expand and collapse vertically</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">animVert</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Container will expand and collapse horizontally</span></div></li><li class="li2"><div class="de2">myAutoComp.<span class="me1">animHoriz</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Container animation will take 2 seconds to complete</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">animSpeed</span> <span class="sy0">=</span> <span class="nu0">2</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Container will expand and collapse vertically</span>
+myAutoComp.<span class="me1">animVert</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Container will expand and collapse horizontally</span>
+myAutoComp.<span class="me1">animHoriz</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Container animation will take 2 seconds to complete</span>
+myAutoComp.<span class="me1">animSpeed</span> <span class="sy0">=</span> <span class="nu0">2</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-7fa2636ec739f3bf3f40b54a71be7671-plain">// Container will expand and collapse vertically
+myAutoComp.animVert = true;
+
+// Container will expand and collapse horizontally
+myAutoComp.animHoriz = true;
+
+// Container animation will take 2 seconds to complete
+myAutoComp.animSpeed = 2;
+</textarea></div>
+<p>By default, if the Animation utility is present, the container will animate vertically, but not horizontally, over 0.3 seconds.</p>
+  
+<h3 id="delim">Delimiter Characters</h3>
+<p>By default, AutoComplete treats the user's input as a single string. Use the <code>delimChar</code> parameter to accept multiple delimited queries. Think about the way commas or semicolons are used to separate email addresses in an email application: enabling AutoComplete query delimiters is an easy way to help users address an email to multiple recipients in a single input box. By using <code>delimChar</code> to define an <em>array</em> of single characters, you may define more than one character that will delimit user queries. However, queries are not supported for when users are typing between existing delimited strings -- only the string after the last delimiter will be queried. <strong>Note:</strong> We do not recommend defining delimiter characters when the force selection feature (see below) is enabled, or vice versa.</p>
+  
+<div id="syntax-0ab68a69ccfb73843331ed1308c7edbe" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Semi-colons may delimited queries...</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">delimChar</span> <span class="sy0">=</span> <span class="st0">&quot;;&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// ...or commas and/or spaces may delimited queries...</span></div></li><li class="li2"><div class="de2">myAutoComp.<span class="me1">delimChar</span> <span class="sy0">=</span> <span class="br0">&#91;</span><span class="st0">&quot;,&quot;</span><span class="sy0">,</span><span class="st0">&quot; &quot;</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// ...or disable query delimiters altogether (default)</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">delimChar</span> <span class="sy0">=</span> <span class="st0">&quot;&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Semi-colons may delimited queries...</span>
+myAutoComp.<span class="me1">delimChar</span> <span class="sy0">=</span> <span class="st0">&quot;;&quot;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// ...or commas and/or spaces may delimited queries...</span>
+myAutoComp.<span class="me1">delimChar</span> <span class="sy0">=</span> <span class="br0">&#91;</span><span class="st0">&quot;,&quot;</span><span class="sy0">,</span><span class="st0">&quot; &quot;</span><span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// ...or disable query delimiters altogether (default)</span>
+myAutoComp.<span class="me1">delimChar</span> <span class="sy0">=</span> <span class="st0">&quot;&quot;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-0ab68a69ccfb73843331ed1308c7edbe-plain">// Semi-colons may delimited queries...
+myAutoComp.delimChar = ";";
+
+// ...or commas and/or spaces may delimited queries...
+myAutoComp.delimChar = [","," "];
+
+// ...or disable query delimiters altogether (default)
+myAutoComp.delimChar = "";
+</textarea></div>
+<h3 id="maxresults">Maximum Results Displayed</h3>
+<p>When query results return, an HTML unordered list element (&lt;ul&gt;) of up to ten items (&lt;li&gt; elements) are rendered into the container that you specify. If fewer than ten results are returned, the container's &lt;ul&gt; element will only have that number of &lt;li&gt; elements. Keep in mind that the height, width, and other style characteristics of the container are determined by CSS. You may use the following code to change the maximum number of &lt;li&gt; elements that may populate the &lt;ul&gt; element:</p>
+  
+<div id="syntax-d8134b5a64add8b5c165228d36435b9f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Display up to 20 results in the container</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">maxResultsDisplayed</span> <span class="sy0">=</span> <span class="nu0">20</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Display up to 20 results in the container</span>
+myAutoComp.<span class="me1">maxResultsDisplayed</span> <span class="sy0">=</span> <span class="nu0">20</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-d8134b5a64add8b5c165228d36435b9f-plain">// Display up to 20 results in the container
+myAutoComp.maxResultsDisplayed = 20;
+</textarea></div>
+<h3 id="minquery">Minimum Query Length</h3>
+<p>By default, as soon as a user starts typing characters into the input element, the AutoComplete control starts batching characters for a query to the DataSource. You may increase how many characters the user must type before triggering this batching, which can help reduce load on a server, especially if the first few characters of the input string will not produce meaningful query results. A value of 0 will enable null or empty string queries, which is particularly useful in conjunction with the Always Show Container feature. A negative number value will effectively turn off the widget.</p>
+  
+<div id="syntax-90e5dd0c1756077c6b33d4af158ad042" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Require user to type at least 3 characters before triggering a query</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">minQueryLength</span> <span class="sy0">=</span> <span class="nu0">3</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Require user to type at least 3 characters before triggering a query</span>
+myAutoComp.<span class="me1">minQueryLength</span> <span class="sy0">=</span> <span class="nu0">3</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-90e5dd0c1756077c6b33d4af158ad042-plain">// Require user to type at least 3 characters before triggering a query
+myAutoComp.minQueryLength = 3;
+</textarea></div>
+<h3 id="delay">Query Delay</h3>
+<p>By default, AutoComplete batches user input and sends queries 0.1 seconds from the last key input event. You may adjust this delay for optimum user experience and/or server load. Keep in mind that this value only reflects the delay before sending queries, and any delays in receiving query results that may be caused by server or computational latency will not be reflected in this value. This value must be a Number greater than 0.</p>
+
+<div id="syntax-7c5fb7c11d956a441add0c10c30986d3" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Key input events will trigger queries ASAP...</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">queryDelay</span> <span class="sy0">=</span> <span class="nu0">0.1</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// ...or queries will be sent after 3 seconds have passed </span></div></li><li class="li2"><div class="de2"><span class="co1">// since the last key input event</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">queryDelay</span> <span class="sy0">=</span> <span class="nu0">3</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Key input events will trigger queries ASAP...</span>
+myAutoComp.<span class="me1">queryDelay</span> <span class="sy0">=</span> <span class="nu0">0.1</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// ...or queries will be sent after 3 seconds have passed </span>
+<span class="co1">// since the last key input event</span>
+myAutoComp.<span class="me1">queryDelay</span> <span class="sy0">=</span> <span class="nu0">3</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-7c5fb7c11d956a441add0c10c30986d3-plain">// Key input events will trigger queries ASAP...
+myAutoComp.queryDelay = 0.1;
+
+// ...or queries will be sent after 3 seconds have passed 
+// since the last key input event
+myAutoComp.queryDelay = 3;
+</textarea></div>
+<h3 id="autohighlight">Auto-highlight</h3>
+<p>By default, when the container populates with query results, the first item in the list will be automatically highlighted for the user. Use the following code to disable this feature: </p>
+
+<div id="syntax-514a9220d85a5ee3cbe3817e862777dc" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Do not automatically highlight the first result item in the container</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">autoHighlight</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Do not automatically highlight the first result item in the container</span>
+myAutoComp.<span class="me1">autoHighlight</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-514a9220d85a5ee3cbe3817e862777dc-plain">// Do not automatically highlight the first result item in the container
+myAutoComp.autoHighlight = false;
+</textarea></div>
+<h3 id="highlight">Highlight Class Name</h3>
+<p>By default, each &lt;li&gt; element of the container's &lt;ul&gt; element is assigned the class name <code>yui-ac-highlight</code> when it is selected. Style sheet examples have been provided for you in the <a href="../examples/autocomplete/index.html">AutoComplete examples</a> . To customize the CSS of these elements, be sure to define a custom class and set the following configuration parameter:</p>
+
+<div id="syntax-3743252698b07f4a0dd97f1f66b72a76" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Use a custom class for LI elements</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">highlightClassName</span> <span class="sy0">=</span> <span class="st0">&quot;myCustomHighlightClass&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Use a custom class for LI elements</span>
+myAutoComp.<span class="me1">highlightClassName</span> <span class="sy0">=</span> <span class="st0">&quot;myCustomHighlightClass&quot;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-3743252698b07f4a0dd97f1f66b72a76-plain">// Use a custom class for LI elements
+myAutoComp.highlightClassName = "myCustomHighlightClass";
+</textarea></div>
+<h3 id="prehighlight">Pre-highlight Class Name</h3>
+<p>If you would like to have user mouseover events on results list items trigger a different visual cue than arrow-key events, be sure to define a custom prehighlight class and set the following configuration parameter:</p>
+
+<div id="syntax-5dd06cf02d57a0d7f821c95d49a5e95f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Use a custom class for mouseover events</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">prehighlightClassName</span> <span class="sy0">=</span> <span class="st0">&quot;myCustomPrehighlightClass&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Use a custom class for mouseover events</span>
+myAutoComp.<span class="me1">prehighlightClassName</span> <span class="sy0">=</span> <span class="st0">&quot;myCustomPrehighlightClass&quot;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-5dd06cf02d57a0d7f821c95d49a5e95f-plain">// Use a custom class for mouseover events
+myAutoComp.prehighlightClassName = "myCustomPrehighlightClass";
+</textarea></div>
+<h3 id="shadow">Use Shadow</h3>
+<p>If you would like the container element to have a drop-shadow, be sure to define a class <code>yui-ac-shadow</code> and enable the feature with the following code:</p>
+
+<div id="syntax-b78acd8a410ca13481725efd35aac718" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Enable a drop-shadow under the container element</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">useShadow</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Enable a drop-shadow under the container element</span>
+myAutoComp.<span class="me1">useShadow</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-b78acd8a410ca13481725efd35aac718-plain">// Enable a drop-shadow under the container element
+myAutoComp.useShadow = true;
+</textarea></div>
+<h3 id="iframe">Use iFrame</h3>
+<p>An iFrame under the container element is meant to work around a known IE6 bug that causes form select elements to be displayed over elements with a higher z-index. If you would like the container element to have an iFrame shim, be sure to enable the feature for IE5.x and IE6 users with the following code:</p>
+
+<div id="syntax-71e62b06fe034157cf95aa624d2903e6" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Enable an iFrame shim under the container element</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">useIFrame</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Enable an iFrame shim under the container element</span>
+myAutoComp.<span class="me1">useIFrame</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-71e62b06fe034157cf95aa624d2903e6-plain">// Enable an iFrame shim under the container element
+myAutoComp.useIFrame = true;
+</textarea></div>
+<h3 id="force">Force Selection</h3>
+<p>You can enable the force-selection feature to require your users to select a result from the container, or else the input field is cleared of whatever they have typed. If the user types a string that does not match any query result, the input will be deleted from the field. <strong>Note:</strong> We do not recommend enabling the force-selection feature when <code>delimChar</code> is defined, or vice versa.</p>
+
+<div id="syntax-288b520ad0c995af3927dd3b2e70fa9f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Enable force selection</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">forceSelection</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Enable force selection</span>
+myAutoComp.<span class="me1">forceSelection</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-288b520ad0c995af3927dd3b2e70fa9f-plain">// Enable force selection
+myAutoComp.forceSelection = true;
+</textarea></div>
+<h3 id="typeahead">Type Ahead</h3>
+<p>Enabling the type-ahead feature causes the user's input to be automatically completed with the first query result in the container list. The string in the input field is also pre-selected, so it can be deleted as the user continues typing.</p>
+
+<div id="syntax-a807374bed0e485336ede28cab95954c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Enable type ahead</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">typeAhead</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Enable type ahead</span>
+myAutoComp.<span class="me1">typeAhead</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-a807374bed0e485336ede28cab95954c-plain">// Enable type ahead
+myAutoComp.typeAhead = true;
+</textarea></div>
+<h3 id="allowbrowserac">Allow Browser Autocomplete</h3>
+<p>Some browsers support a non-standard attribute on form elements called "autocomplete". When "autocomplete" is set to "on", the browser provides a built-in automatic completion mechanism &mdash; and it will cache the user input for automatic display if the user uses the "Back" button to navigate back to the page. In order for the YUI AutoComplete control to perform properly, the built-in browser completion mechanism needs to be suppressed. Therefore, the control sets the <code>autocomplete</code> attribute to "off" when the user starts typing in in an AutoComplete input field. However, the control will set the <code>autocomplete</code> attribute back to "on" if the form is submitted, so that a user's input can be displayed, should the "Back" button get clicked after form submission. This caching of user input may not be desired for sensitive data such as credit card numbers.  Where you are dealing with sensitive user data, you should disable this feature with the following code:</p>
+
+<div id="syntax-548086b3a78f0c5b4f09c8a872e24cd7" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Disable the browser's built-in autocomplete caching mechanism</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">allowBrowserAutocomplete</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Disable the browser's built-in autocomplete caching mechanism</span>
+myAutoComp.<span class="me1">allowBrowserAutocomplete</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-548086b3a78f0c5b4f09c8a872e24cd7-plain">// Disable the browser's built-in autocomplete caching mechanism
+myAutoComp.allowBrowserAutocomplete = false;
+</textarea></div>
+<h3 id="alwaysshow">Always Show Container</h3>
+<p>By default, the AutoComplete control shows the container when it is populated with query results and then hides it when the user interaction is complete. Enabling <code>alwaysShowContainer</code> prevents the container from toggling to a collapsed state when the user is done interacting with the widget.</p>
+<div id="syntax-e1b8c3037d2cfdb56fcf88954750eb22" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Always show the container element</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">alwaysShowContainer</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Always show the container element</span>
+myAutoComp.<span class="me1">alwaysShowContainer</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-e1b8c3037d2cfdb56fcf88954750eb22-plain">// Always show the container element
+myAutoComp.alwaysShowContainer = true;
+</textarea></div>
+
+  
+<h2 id="formatting">Custom Formatting of Results</h2>
+<p>When query results are returned by the DataSource instance to the AutoComplete instance, the data is fed, one result at a time, into an AutoComplete instance method called <code>formatResult</code>. Many AutoComplete implementers override this method directly in their AutoComplete instance to achieve custom formatting. If you do this, start with the default formatResult method code to get started and make whatever changes you need.</p>
+
+<p>The <code>formatResult()</code> function processes one query result at a time and returns HTML markup to display for that result. Alternatively, the <code>formatEscapedResult()</code> function HTML-escapes the result strings before displaying to the user. The first argument to these methods is the data for the result (as defined by the DataSource <code>responseSchema.fields</code> property). The original user-typed query string as the second argument, and the specific matching field is passed in as the third argument. As of version 2.6.0, the result data can be passed in either as an array or an object literal, depending on the value of the <code>resultTypeList</code> property. For performance and robustness, the object literal mode is recommended:</p>
+
+<div id="syntax-3e907e1648db98b51b54519cbe9e1b20" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// This is the default formatResult function</span></div></li><li class="li1"><div class="de1">myAutoComplete.<span class="me1">formatResult</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oResultData<span class="sy0">,</span> sQuery<span class="sy0">,</span> sResultMatch<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> sMarkup <span class="sy0">=</span> <span class="br0">&#40;</span>sResultMatch<span class="br0">&#41;</span> <span class="sy0">?</span> sResultMatch <span class="sy0">:</span> <span class="st0">&quot;&quot;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">return</span> sMarkup<span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// This is the alternative formatEscapedResult function</span></div></li><li class="li1"><div class="de1">myAutoComplete.<span class="me1">formatEscapedResult</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oResultData<span class="sy0">,</span> sQuery<span class="sy0">,</span> sResultMatch<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> sResult <span class="sy0">=</span> <span class="br0">&#40;</span>sResultMatch<span class="br0">&#41;</span> <span class="sy0">?</span> sResultMatch <span class="sy0">:</span> <span class="st0">&quot;&quot;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="kw1">return</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">escapeHTML</span><span class="br0">&#40;</span>sResult<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Enable HTML-escaping of result strings</span></div></li><li class="li1"><div class="de1">myAutoComplete.<span class="me1">formatResult</span> <span class="sy0">=</span> myAutoComplete.<span class="me1">formatEscapedResult</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Result as object literal (recommended)</span></div></li><li class="li1"><div class="de1">myDataSource.<span class="me1">responseSchema</span> <span class="sy0">=</span> <span class="br0">&#123;</span>fields<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;moreData&quot;</span><span class="br0">&#93;</span><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">myAutoComplete.<span class="me1">resultTypeList</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">myAutoComplete.<span class="me1">formatResult</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oResultData<span class="sy0">,</span> sQuery<span class="sy0">,</span> sResultMatch<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">return</span> <span class="br0">&#40;</span>sResultMatch <span class="sy0">+</span> <span class="st0">&quot; (&quot;</span> <span class="sy0">+</span>  oResultData.<span class="me1">moreData</span> <span class="sy0">+</span> <span class="st0">&quot;)&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Result as array (backward compatible)</span></div></li><li class="li2"><div class="de2">myAutoComplete.<span class="me1">formatResult</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oResultItem<span class="sy0">,</span> sQuery<span class="sy0">,</span> sResultMatch<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> sKey <span class="sy0">=</span> sResultMatch<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> oAdditionalData <span class="sy0">=</span> oResultItem<span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">return</span> <span class="br0">&#40;</span>sKey <span class="sy0">+</span> <span class="st0">&quot; (&quot;</span> <span class="sy0">+</span> oAdditionalData.<span class="me1">moreData</span> <span class="sy0">+</span> <span class="st0">&quot;)&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// This is the default formatResult function</span>
+myAutoComplete.<span class="me1">formatResult</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oResultData<span class="sy0">,</span> sQuery<span class="sy0">,</span> sResultMatch<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> sMarkup <span class="sy0">=</span> <span class="br0">&#40;</span>sResultMatch<span class="br0">&#41;</span> <span class="sy0">?</span> sResultMatch <span class="sy0">:</span> <span class="st0">&quot;&quot;</span><span class="sy0">;</span>
+    <span class="kw1">return</span> sMarkup<span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// This is the alternative formatEscapedResult function</span>
+myAutoComplete.<span class="me1">formatEscapedResult</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oResultData<span class="sy0">,</span> sQuery<span class="sy0">,</span> sResultMatch<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> sResult <span class="sy0">=</span> <span class="br0">&#40;</span>sResultMatch<span class="br0">&#41;</span> <span class="sy0">?</span> sResultMatch <span class="sy0">:</span> <span class="st0">&quot;&quot;</span><span class="sy0">;</span>
+    <span class="kw1">return</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">escapeHTML</span><span class="br0">&#40;</span>sResult<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Enable HTML-escaping of result strings</span>
+myAutoComplete.<span class="me1">formatResult</span> <span class="sy0">=</span> myAutoComplete.<span class="me1">formatEscapedResult</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Result as object literal (recommended)</span>
+myDataSource.<span class="me1">responseSchema</span> <span class="sy0">=</span> <span class="br0">&#123;</span>fields<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span> <span class="st0">&quot;moreData&quot;</span><span class="br0">&#93;</span><span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+myAutoComplete.<span class="me1">resultTypeList</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+myAutoComplete.<span class="me1">formatResult</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oResultData<span class="sy0">,</span> sQuery<span class="sy0">,</span> sResultMatch<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">return</span> <span class="br0">&#40;</span>sResultMatch <span class="sy0">+</span> <span class="st0">&quot; (&quot;</span> <span class="sy0">+</span>  oResultData.<span class="me1">moreData</span> <span class="sy0">+</span> <span class="st0">&quot;)&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Result as array (backward compatible)</span>
+myAutoComplete.<span class="me1">formatResult</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oResultItem<span class="sy0">,</span> sQuery<span class="sy0">,</span> sResultMatch<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> sKey <span class="sy0">=</span> sResultMatch<span class="sy0">;</span>
+    <span class="kw2">var</span> oAdditionalData <span class="sy0">=</span> oResultItem<span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span><span class="sy0">;</span>
+    <span class="kw1">return</span> <span class="br0">&#40;</span>sKey <span class="sy0">+</span> <span class="st0">&quot; (&quot;</span> <span class="sy0">+</span> oAdditionalData.<span class="me1">moreData</span> <span class="sy0">+</span> <span class="st0">&quot;)&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-3e907e1648db98b51b54519cbe9e1b20-plain">// This is the default formatResult function
+myAutoComplete.formatResult = function(oResultData, sQuery, sResultMatch) {
+    var sMarkup = (sResultMatch) ? sResultMatch : "";
+    return sMarkup;
+};
+
+// This is the alternative formatEscapedResult function
+myAutoComplete.formatEscapedResult = function(oResultData, sQuery, sResultMatch) {
+    var sResult = (sResultMatch) ? sResultMatch : "";
+    return YAHOO.lang.escapeHTML(sResult);
+};
+
+// Enable HTML-escaping of result strings
+myAutoComplete.formatResult = myAutoComplete.formatEscapedResult;
+
+// Result as object literal (recommended)
+myDataSource.responseSchema = {fields: ["name", "moreData"]};
+
+myAutoComplete.resultTypeList = false;
+myAutoComplete.formatResult = function(oResultData, sQuery, sResultMatch) {
+    return (sResultMatch + " (" +  oResultData.moreData + ")");
+};
+
+// Result as array (backward compatible)
+myAutoComplete.formatResult = function(oResultItem, sQuery, sResultMatch) {
+    var sKey = sResultMatch;
+    var oAdditionalData = oResultItem[1];
+    return (sKey + " (" + oAdditionalData.moreData + ")");
+};
+</textarea></div>
+<p>Here's an example of a customized formatResult method that bolds the original query term and additionally displays two supplemental data points:</p>
+
+<div id="syntax-5fb040dc4f0f3d43862cadb59c67ea4c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// This function returns markup that bolds the original query,</span></div></li><li class="li1"><div class="de1"><span class="co1">// and also displays to additional pieces of supplemental data.</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">resultTypeList</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAutoComp.<span class="me1">formatResult</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oResultData<span class="sy0">,</span> sQuery<span class="sy0">,</span> sResultMatch<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">   <span class="kw2">var</span> sKey <span class="sy0">=</span> sResultMatch</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">   <span class="co1">// Extract the part of the match that the user did not type</span></div></li><li class="li1"><div class="de1">   <span class="kw2">var</span> sKeyRemainder <span class="sy0">=</span> sKey.<span class="me1">substr</span><span class="br0">&#40;</span>sQuery.<span class="me1">length</span><span class="br0">&#41;</span><span class="sy0">;</span> </div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">   <span class="co1">// some other piece of data defined by schema</span></div></li><li class="li1"><div class="de1">   <span class="kw2">var</span> moreData1 <span class="sy0">=</span> oResultData.<span class="me1">moreData1</span><span class="sy0">;</span> </div></li><li class="li1"><div class="de1">   <span class="co1">// and another piece of data defined by schema</span></div></li><li class="li1"><div class="de1">   <span class="kw2">var</span> moreData2 <span class="sy0">=</span> oResultData.<span class="me1">moreData2</span><span class="sy0">;</span> </div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">   <span class="kw2">var</span> aMarkup <span class="sy0">=</span> <span class="br0">&#91;</span><span class="st0">&quot;&lt;div class='myCustomResult'&gt;&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">      <span class="st0">&quot;&lt;span style='font-weight:bold'&gt;&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">      sKey<span class="sy0">,</span></div></li><li class="li1"><div class="de1">      <span class="st0">&quot;&lt;/span&gt;&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">      sKeyRemainder<span class="sy0">,</span></div></li><li class="li2"><div class="de2">      <span class="st0">&quot;: &quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">      moreData1<span class="sy0">,</span></div></li><li class="li1"><div class="de1">      <span class="st0">&quot;, &quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">      moreData2<span class="sy0">,</span></div></li><li class="li1"><div class="de1">      <span class="st0">&quot;&lt;/div&gt;&quot;</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">  <span class="kw1">return</span> <span class="br0">&#40;</span>aMarkup.<span class="me1">join</span><span class="br0">&#40;</span><span class="st0">&quot;&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// This function returns markup that bolds the original query,</span>
+<span class="co1">// and also displays to additional pieces of supplemental data.</span>
+myAutoComp.<span class="me1">resultTypeList</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+myAutoComp.<span class="me1">formatResult</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>oResultData<span class="sy0">,</span> sQuery<span class="sy0">,</span> sResultMatch<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+   <span class="kw2">var</span> sKey <span class="sy0">=</span> sResultMatch
+&nbsp;
+   <span class="co1">// Extract the part of the match that the user did not type</span>
+   <span class="kw2">var</span> sKeyRemainder <span class="sy0">=</span> sKey.<span class="me1">substr</span><span class="br0">&#40;</span>sQuery.<span class="me1">length</span><span class="br0">&#41;</span><span class="sy0">;</span> 
+&nbsp;
+   <span class="co1">// some other piece of data defined by schema</span>
+   <span class="kw2">var</span> moreData1 <span class="sy0">=</span> oResultData.<span class="me1">moreData1</span><span class="sy0">;</span> 
+   <span class="co1">// and another piece of data defined by schema</span>
+   <span class="kw2">var</span> moreData2 <span class="sy0">=</span> oResultData.<span class="me1">moreData2</span><span class="sy0">;</span> 
+&nbsp;
+   <span class="kw2">var</span> aMarkup <span class="sy0">=</span> <span class="br0">&#91;</span><span class="st0">&quot;&lt;div class='myCustomResult'&gt;&quot;</span><span class="sy0">,</span>
+      <span class="st0">&quot;&lt;span style='font-weight:bold'&gt;&quot;</span><span class="sy0">,</span>
+      sKey<span class="sy0">,</span>
+      <span class="st0">&quot;&lt;/span&gt;&quot;</span><span class="sy0">,</span>
+      sKeyRemainder<span class="sy0">,</span>
+      <span class="st0">&quot;: &quot;</span><span class="sy0">,</span>
+      moreData1<span class="sy0">,</span>
+      <span class="st0">&quot;, &quot;</span><span class="sy0">,</span>
+      moreData2<span class="sy0">,</span>
+      <span class="st0">&quot;&lt;/div&gt;&quot;</span><span class="br0">&#93;</span><span class="sy0">;</span>
+  <span class="kw1">return</span> <span class="br0">&#40;</span>aMarkup.<span class="me1">join</span><span class="br0">&#40;</span><span class="st0">&quot;&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-5fb040dc4f0f3d43862cadb59c67ea4c-plain">// This function returns markup that bolds the original query,
+// and also displays to additional pieces of supplemental data.
+myAutoComp.resultTypeList = false;
+myAutoComp.formatResult = function(oResultData, sQuery, sResultMatch) {
+   var sKey = sResultMatch
+   
+   // Extract the part of the match that the user did not type
+   var sKeyRemainder = sKey.substr(sQuery.length); 
+
+   // some other piece of data defined by schema
+   var moreData1 = oResultData.moreData1; 
+   // and another piece of data defined by schema
+   var moreData2 = oResultData.moreData2; 
+
+   var aMarkup = ["<div class='myCustomResult'>",
+      "<span style='font-weight:bold'>",
+      sKey,
+      "</span>",
+      sKeyRemainder,
+      ": ",
+      moreData1,
+      ", ",
+      moreData2,
+      "</div>"];
+  return (aMarkup.join(""));
+};
+</textarea></div>
+
+<h2 id="security">Security Considerations</h2>
+<p>When working with data from third-party sources, user input data, or otherwise untrustworthy sources, implementers need to be aware that these values  may be inserted into the DOM by AutoComplete. If you are working with questionable data, you may point to the <code>formatEscapedResult()</code> method available in version 2.9.0, which will HTML-escape all string data before insertion into the DOM:</p>
+
+<div id="syntax-b48b2bdea4dfe5d8b81f5f6f23d5557b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Point to the formatter that will HTML-escape your data</span></div></li><li class="li1"><div class="de1">myAutoComplete.<span class="me1">formatResult</span> <span class="sy0">=</span> myAutoComplete.<span class="me1">formatEscapedResult</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Point to the formatter that will HTML-escape your data</span>
+myAutoComplete.<span class="me1">formatResult</span> <span class="sy0">=</span> myAutoComplete.<span class="me1">formatEscapedResult</span><span class="sy0">;</span></pre></div><textarea id="syntax-b48b2bdea4dfe5d8b81f5f6f23d5557b-plain">// Point to the formatter that will HTML-escape your data
+myAutoComplete.formatResult = myAutoComplete.formatEscapedResult;</textarea></div>
+<p>Implementers who are overriding the <code>formatResult()</code> method should be sure to escape the data in their custom function as necessary. The <code>YAHOO.lang.escapeHTML()</code> method is available in version 2.9.0 for your convenience.</p>
+
+<h2 id="data">Data Matching Algorithms</h2>
+
+<p>Setting the <code>applyLocalFilter</code> property to true enables client-side data-matching on your result data via the overridable <code>filterResults()</code> method. Using a LocalDataSource automatically sets the <code>applyLocalFilter</code> property to be true, but otherwise you should be sure to set it explicitly. By default, <code>filterResults()</code> will match queries against result data values defined by the first item in the DataSource schema's fields array. Additionally, there are several built-in properties that can also be enabled in conjunction with <code>applyLocalFilter</code>:</p>
+
+<p>The <code>queryMatchCase</code> property enables case-sensitivity in the such that only case-sensitive matches will return.</p>
+
+<div id="syntax-30200b71533de5f1fe4df32f13ef0160" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Match case sensitivity</span></div></li><li class="li1"><div class="de1">myAutoComplete.<span class="me1">applyLocalFilter</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAutoComplete.<span class="me1">queryMatchCase</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Match case sensitivity</span>
+myAutoComplete.<span class="me1">applyLocalFilter</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+myAutoComplete.<span class="me1">queryMatchCase</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-30200b71533de5f1fe4df32f13ef0160-plain">// Match case sensitivity
+myAutoComplete.applyLocalFilter = true;
+myAutoComplete.queryMatchCase = true;
+</textarea></div>
+<p>The <code>queryMatchContains</code> property searches for results that "contain" the query string at any position, rather than only at the start.
+
+<div id="syntax-3a1d6bff9a65f3924b317471216fac94" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Match results that *contain* the query string as well as results that start with query string</span></div></li><li class="li1"><div class="de1">myAutoComplete.<span class="me1">applyLocalFilter</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAutoComplete.<span class="me1">queryMatchContains</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Match results that *contain* the query string as well as results that start with query string</span>
+myAutoComplete.<span class="me1">applyLocalFilter</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+myAutoComplete.<span class="me1">queryMatchContains</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-3a1d6bff9a65f3924b317471216fac94-plain">// Match results that *contain* the query string as well as results that start with query string
+myAutoComplete.applyLocalFilter = true;
+myAutoComplete.queryMatchContains = true;
+</textarea></div>
+<p>Subset matching can play an important role in achieving a robust and performant cache experience. When DataSource caching is enabled, AutoComplete queries for "foo" can get cached with 100 results. If <code>queryMatchSubset</code> is enabled, any query thereafter that starts with "foo" (e.g., "food" or "fool") goes first to the DataSource cache and retrieves results that are a subset of the 100 results that got cached for "foo". With subset caching off, "foo" and "food" are cached separately and treated as independent entries. If your data universe is enormous (as is often the case in Yahoo! applications), you probably want to return the best 100 matches for "foo" and the best 100 matches for "food" separately. On much smaller datasets where the cached results for "foo" will reliably contain the superset of matches for the query "food", subset caching can reduce trips to the live data source and help improve performance. Note that even with subset caching enabled, if the cache returns no valid results, a query will be made to the live data source.</p>
+  
+<div id="syntax-631e979736c7813187be2f45a992b1bc" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Match results of query strings that are cached *subsets* of the current query string</span></div></li><li class="li1"><div class="de1">myDataSource.<span class="me1">maxCacheEntries</span> <span class="sy0">=</span> <span class="nu0">100</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myAutoComplete.<span class="me1">queryMatchSubset</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Match results of query strings that are cached *subsets* of the current query string</span>
+myDataSource.<span class="me1">maxCacheEntries</span> <span class="sy0">=</span> <span class="nu0">100</span><span class="sy0">;</span>
+myAutoComplete.<span class="me1">queryMatchSubset</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-631e979736c7813187be2f45a992b1bc-plain">// Match results of query strings that are cached *subsets* of the current query string
+myDataSource.maxCacheEntries = 100;
+myAutoComplete.queryMatchSubset = true;
+</textarea></div>
+
+
+
+<h2 id="events">Custom Events and "doBefore" Abstract Methods</h2>
+<p>AutoComplete offers a robust set interesting moments via a set of <a href="../event/index.html#customevent">Custom Events</a> to which you can subscribe and "doBefore" abstract methods which you can implement.  The syntax for subscribing to AutoComplete events is simple; here's an example using <code>itemSelectEvent</code>, which gets passed an array argument (<code>aArgs</code>) containing the following members:</p>
+
+<ul class="jump">
+	<li><strong>AutoComplete instance:</strong> a reference to the AutoComplete instance that is firing the event;</li>
+	<li><strong>Element:</strong> a reference to the DOM list item element (LI) that has been selected in the container;</li>
+	<li><strong>Data:</strong> an object literal containing the data for the selected item, as defined by the DataSource <code>responseSchema</code>.
+</ul>
+
+<div id="syntax-955c96b3b9d58a112b4f0668d8cdeedc" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//define your itemSelect handler function:</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> itemSelectHandler <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>sType<span class="sy0">,</span> aArgs<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">	<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span>sType<span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// this is a string representing the event;</span></div></li><li class="li1"><div class="de1">				      <span class="co1">// e.g., &quot;itemSelectEvent&quot;</span></div></li><li class="li2"><div class="de2">	<span class="kw2">var</span> oMyAcInstance <span class="sy0">=</span> aArgs<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">// your AutoComplete instance</span></div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> elListItem <span class="sy0">=</span> aArgs<span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">// the &lt;li&gt; element selected in the suggestion</span></div></li><li class="li1"><div class="de1">	   					       <span class="co1">// container</span></div></li><li class="li1"><div class="de1">	<span class="kw2">var</span> oData <span class="sy0">=</span> aArgs<span class="br0">&#91;</span><span class="nu0">2</span><span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">// object literal of data for the result</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//subscribe your handler to the event, assuming</span></div></li><li class="li1"><div class="de1"><span class="co1">//you have an AutoComplete instance myAC:</span></div></li><li class="li1"><div class="de1">myAC.<span class="me1">itemSelectEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>itemSelectHandler<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//define your itemSelect handler function:</span>
+<span class="kw2">var</span> itemSelectHandler <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>sType<span class="sy0">,</span> aArgs<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+	<span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span>sType<span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// this is a string representing the event;</span>
+				      <span class="co1">// e.g., &quot;itemSelectEvent&quot;</span>
+	<span class="kw2">var</span> oMyAcInstance <span class="sy0">=</span> aArgs<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">// your AutoComplete instance</span>
+	<span class="kw2">var</span> elListItem <span class="sy0">=</span> aArgs<span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">// the &lt;li&gt; element selected in the suggestion</span>
+	   					       <span class="co1">// container</span>
+	<span class="kw2">var</span> oData <span class="sy0">=</span> aArgs<span class="br0">&#91;</span><span class="nu0">2</span><span class="br0">&#93;</span><span class="sy0">;</span> <span class="co1">// object literal of data for the result</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//subscribe your handler to the event, assuming</span>
+<span class="co1">//you have an AutoComplete instance myAC:</span>
+myAC.<span class="me1">itemSelectEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>itemSelectHandler<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-955c96b3b9d58a112b4f0668d8cdeedc-plain">//define your itemSelect handler function:
+var itemSelectHandler = function(sType, aArgs) {
+	YAHOO.log(sType); // this is a string representing the event;
+				      // e.g., "itemSelectEvent"
+	var oMyAcInstance = aArgs[0]; // your AutoComplete instance
+	var elListItem = aArgs[1]; // the <li> element selected in the suggestion
+	   					       // container
+	var oData = aArgs[2]; // object literal of data for the result
+};
+
+//subscribe your handler to the event, assuming
+//you have an AutoComplete instance myAC:
+myAC.itemSelectEvent.subscribe(itemSelectHandler);
+</textarea></div>
+<p>For a full list of AutoComplete events, see <a href="../docs/YAHOO.widget.AutoComplete.html">the event list in the AutoComplete API documentation</a>.</p>
+
+<p>The <code>doBeforeLoadData()</code> method gives implementers access to the DataSource response before it is consumed by the AutoComplete instance and rendered into the results container.</p>
+
+<p>The <code>doBeforeExpandContainer()</code> method gives implementers access to result data and DOM elements after the container has been rendered with results but before it is displayed to the user, for example to move the container to a different position on the screen.</p>
+
+
+
+<h2>Skinning AutoComplete <a name="skinning"></a></h2>
+<p>AutoComplete comes with a default presentation or "skin," part of the
+"Sam Skin" visual treatment that accompanies most YUI controls. You can read
+more about the general approach to skinning YUI components
+<a href="http://yuilibrary.com/yui/docs/tutorials/skins/">in this in-depth article</a>.</p>
+
+<p>The CSS provided with AutoComplete is comprised of core, functional CSS as
+well as the Sam Skin visual treatment.</p>
+
+<p><img src="../docs/assets/autocomplete.gif" alt="The AutoComplete Control" width="203" height="229" border="0" /></p>
+
+<p>To explore the CSS which controls the AutoComplete's presentation, please
+review <a href="../examples/autocomplete/ac_skinning.html">the AutoComplete
+Skinning Example</a> wherein the full CSS for the control is displayed.</p>
+
+<h2>AutoComplete Storyboard Matrix<a name="storyboard"></a></h2>
+<p>Storyboarding can be a powerful strategy for thinking through a rich interaction
+  during the design phase. We have created <a href="http://yuiblog.com/assets/pdf/autocomplete_storyboard.pdf">a storyboard matrix for AutoComplete</a> (also <a href="autocomplete_storyboard.doc">available as a .doc file</a>) that helps you track the actors and
+  the events that are important when a AutoComplete interaction is taking place.
+  Interesting moments (which correspond to the API events to which you can subscribe
+  handlers) are listed across the top; each row in the matrix represents an element.
+  Consider printing out the matrix and using it in planning sessions between
+  interaction architects and engineers as you think through the nuances of your
+  implementation.</p>
+<p><a href="http://yuiblog.com/assets/pdf/autocomplete_storyboard.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/autocomplete_storyboard.gif" alt="The AutoComplete storyboard matrix" width="312" height="200" border="0"></a></p>
+
+<h2>Top Known Issues<a name="knownissues"></a></h2>
+
+<p>Please see the bug repository at <a href="http://yuilibrary.com/projects/yui2/">YUILibrary.com</a> for a complete list of known issues.</p>
+
+<h4>Custom CSS Required for Vertically Stacking Multiple AutoCompletes</h4>
+
+<p>Vertically stacked AutoComplete instances need custom CSS for IE&lt;8. Please see the example here for the details of a workaround: <a href="../examples/autocomplete/ac_combobox.html">http://developer.yahoo.com/yui/examples/autocomplete/ac_combobox.html</a></p>
+
+<h4>Bleed-through Scrollbars on Mac Firefox</h4>
+
+<p>Due to a <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=187435">known bug</a>,
+the AutoComplete suggestion container may display underlying scrollbars.</p>
+
+
+<h2 id="mobile">YUI on Mobile: Using AutoComplete Control with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>
+<p>We've tested the AutoComplete Control on several high-end smart phones with
+varying degrees of success. Due to high network latency, limited real estate,
+and inconsistent user interface models, the AutoComplete Control is not
+recommended as a good fit for these devices at this time.</p>
+
+<p>Of the devices we've tested, the iPhone shows the most potential, and the following points are
+meant to give preliminary and cautionary guidance for developers implementing solely for that
+platform:</p>
+
+<ul>
+<li>At this time, there is no known workaround to disable the native browser
+<code>autocomplete</code> attribute. Therefore, the native suggestion box may be
+redundantly displayed during user interactions with the AutoComplete control.</li>
+<li>The <code>typeAhead</code> feature is not supported.</li>
+<li>High latency use cases are not recommended.</li>
+<li>Designs should take into careful consideration the very limited screen
+real estate caused by the keyboard display.  Before you implement, be sure to test this yourself on an iPhone or iPod Touch.  While AutoComplete works on those devices, the keyboard placement and pagezoom hide the suggestion container almost completely.</li>
+</ul>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+  </div>
+         <div class="yui-u">
+		 	
+			<div id="cheatsheet">
+				<h3>Cheat Sheet for the AutoComplete Control:</h3>
+				
+				<a href="http://yuiblog.com/assets/pdf/cheatsheets/autocomplete.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/autocomplete.gif" width="178" height="132" alt="Cheat Sheet for the AutoComplete Control."></a>
+				
+				<p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+			</div>
+			
+			<div id="examples">
+<h3>AutoComplete Control Examples:</h3>
+
+<ul>
+<li><a href='../examples/autocomplete/ac_basic_array.html'>Basic Local Data</a></li>
+<li><a href='../examples/autocomplete/ac_basic_xhr.html'>Basic Remote Data</a></li>
+<li><a href='../examples/autocomplete/ac_accessible.html'>Screenreader Accessibility</a></li>
+<li><a href='../examples/autocomplete/ac_xhr_customrequest.html'>Customizing Remote Requests</a></li>
+<li><a href='../examples/autocomplete/ac_formatting_proxyless.html'>Custom Formatting, with a Proxyless Remote DataSource</a></li>
+<li><a href='../examples/autocomplete/ac_itemselect.html'>Searching Field A, Submitting Field B with itemSelectEvent</a></li>
+<li><a href='../examples/autocomplete/ac_combobox.html'>Combobox, with CSS for Multiple Stacked Instances</a></li>
+<li><a href='../examples/autocomplete/ac_tags_alwaysshow.html'>Tagging Example with alwaysShowContainer</a></li>
+<li><a href='../examples/autocomplete/ac_fn_multfields.html'>FunctionDataSource to Search Multiple Fields of an Address Book at Runtime</a></li>
+<li><a href='../examples/autocomplete/ac_ysearch_json.html'>Centering AutoComplete On a Page</a></li>
+<li><a href='../examples/autocomplete/ac_ysearch_flat.html'>Subset Matching</a></li>
+<li><a href='../examples/autocomplete/ac_flickr_xml.html'>Find Photos on Flickr</a></li>
+<li><a href='../examples/autocomplete/ac_customize.html'>Configurations Dashboard</a></li>
+<li><a href='../examples/autocomplete/ac_skinning.html'>Skinning Model</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the AutoComplete Control:</h4>
+
+<ul>
+<li><a href='../examples/editor/flickr_editor.html'>Flickr Image Search</a> (included with examples for the <a href='../editor/index.html'>Rich Text Editor</a>)</li>
+<li><a href='../examples/logger/log_autocomplete.html'>Logger Integration with YUI Components</a> (included with examples for the <a href='../logger/index.html'>Logger Control</a>)</li>
+<li><a href='../examples/datatable/dt_autocomplete.html'>Datatable with Autocomplete</a> (included with examples for the <a href='../datatable/index.html'>DataTable Control</a>)</li>
+<li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
+</ul>		
+		   </div>
+	 
+			<div id="morereading">
+				<h3>More Reading about the YUI AutoComplete Control:</h3>
+				
+				<ul>
+                  <li><a href="http://www.insideria.com/2008/05/writing-your-first-yui-applica.html">Implementing Search Suggest with YUI and the Yahoo Search API</a>, by Eric Miraglia on InsideRIA</li>
+				  <li><a href="http://yuiblog.com/sandbox/yui/v0113/examples/dialog/ac_in_dialog.php">Using YUI AutoComplete within a Dialog</a>, by the YUI Team</li>
+                  <li><a href="http://jimmyg.org/2007/10/19/yui-autocomplete-ajax-select-drowdown-with-id/">YUI Autocomplete AJAX Select Drowdown with ID</a>, by James Gardner</li>
+				  <li><a href="http://www2.sys-con.com/webinararchive.cfm?pid=miraglia&registered=on">Video of an YUI AutoComplete conference presentation</a> by YUI engineer Eric Miraglia at Real-World Ajax, April 2006</li>
+			   </ul>
+		   </div>
+
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fautocomplete%2F--><h3 id="delicious">YUI AutoComplete on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/autocomplete/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/web2.0" class="tag-size-1">web2.0</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/autocomplete" class="tag-size-1">autocomplete</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdesign" class="tag-size-1">webdesign</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/development" class="tag-size-1">development</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdev" class="tag-size-1">webdev</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/tutorial" class="tag-size-1">tutorial</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/f8aa5e07d9cfa059061f3882bb1a3748" class="saved-by">saved by <span>139</span>  people</a></p>
+   </div></div>	 
+
+		 </div>
+      </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="selected "><a title="The YUI AutoComplete Control" href="index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:03 PDT 2013 -->
+
+<!-- Localized -->

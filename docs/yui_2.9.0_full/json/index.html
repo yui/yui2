@@ -1,0 +1,789 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: JSON utility</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: JSON utility</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+	  
+	  
+<div id="promo" class="component">
+  <h1>YUI 2: JSON utility</h1>
+  <p>The JSON Utility provides methods for translating data to and from <a href="http://json.org">JavaScript Object Notation</a>. JSON is a safe, efficient, and reliable data interchange format.  This utility defers to native JSON methods in browsers that have support, and provides JavaScript implementations that conform to the ECMAScript 5 specification for those that don't yet.</p>
+
+  <div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#upgrade">Upgrade Notes</a></li>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#using">Using lang.JSON</a></li>
+      <li><a href="#about">About the JSON format</a></li>
+      <li><a href="#native">Notes about current native JSON support</a></li>
+      <li><a href="#knownissues">Known Issues</a></li>
+      <li><a href="#support">Support &amp; Community</a></li>
+      <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/json/index.html">Examples</a>: Explore examples of the JSON Utility in action.</li>
+      <li><a href="../docs/module_json.html">API Documentation</a>: View the full API documentation for the JSON Utility.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.json">Release Notes</a>: Detailed change log for the JSON Utility.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the JSON Utility as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+</div>
+
+<h2 class="first" id="upgrade">Upgrade Notes</h2>
+<p>As of version 2.8.0, browser native <code>JSON.parse</code> and <code>JSON.stringify</code> will be used if present.  The native implementations are much faster and safer than any implementation done in JavaScript.</p>
+
+<p>In versions prior to 2.8, the signature and behavior of <code>YAHOO.lang.JSON.stringify</code> differed slightly from the reference implementation at <a href="https://github.com/douglascrockford/JSON-js/blob/master/json2.js">JSON.org</a> and the ECMAScript version 5 specification that grew from that.  In order to leverage native methods as browsers adopt the ECMAScript 5 spec, the YUI implementation of <code>stringify</code> had to change so the behavior would be consistent across browsers with and without native JSON support.</p>
+
+<p>Specifically, the <code>stringify</code> behavior that has changed from 2.7.0 to 2.8.0 is:</p>
+<ul>
+    <li>Cyclical object references are no longer replaced with <code>null</code>, but now throw an Error.  It is therefore recommended to wrap both <code>parse</code> and <code>stringify</code> calls in <code>try/catch</code> blocks.</li>
+    <li>The third parameter no longer limits the depth of object serialization, but is now used to trigger <a href="#space">formatted output</a>.</li>
+    <li>Objects with a <code>toJSON</code> method will be first transformed using this method.</li>
+    <li>Object keys are no longer sorted alphabetically.  This is possible to do with a <a href="#filtering">replacer function</a>.</li>
+    <li>Overriding <code>YAHOO.lang.JSON.dateToString</code> is no longer recommended because the default ISO 8601 serialization is defined in the spec.  If Dates must be formatted differently, either preprocess the data or set <code>useNativeStringify</code> to <code>false</code> after overriding <code>dateToString</code>.</li>
+</ul>
+
+<p>The implementation of <code>YAHOO.lang.JSON.parse</code> has not changed in a few versions and remains a safe approximation of the spec.  If your application requires specific functionality from 2.7.0 or prior, you can continue to use prior versions.  They should correctly parse and produce valid JSON.</p>
+
+<h2 id="start">Getting Started</h2>
+<p>To use the JSON Utility, include the following source files in your web page with the script tag:</p>
+<div id="syntax-a92d3054dc45d146188d21b7b7d88b53" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/json/json-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/json/json-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-a92d3054dc45d146188d21b7b7d88b53-plain"><!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js"></script>
+
+<!-- Source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/json/json-min.js"></script>
+</textarea></div>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>json</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<p><code>YAHOO.lang.JSON</code> is a static class that does not require instantiation. Simply access the methods you need from <code>YAHOO.lang.JSON</code>.</p>
+
+<h2 id="using">Using <code>YAHOO.lang.JSON</code></h2>
+<p>The JSON Utility extends <code>YAHOO.lang</code>, providing two static methods used for transforming data to and from JSON string format.  These methods are described in the following sections.</p>
+
+<ul>
+    <li><a href="#parse">Parsing JSON strings into JavaScript data</a></li>
+    <li><a href="#stringify">Turn JavaScript data into a JSON string</a></li>
+</ul>
+
+<h3 id="parse">Parsing JSON string data into JavaScript data</h3>
+<p>Pass a JSON string to <code>YAHOO.lang.JSON.parse</code> to convert it into live data. Optionally provide a second argument to filter or format the parsed object data during deserialization.</p>
+
+<div id="syntax-8fa77b0f79337f6c5c8b77c787876ef2" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> jsonString <span class="sy0">=</span> <span class="st0">'{&quot;productId&quot;:1234,&quot;price&quot;:24.5,&quot;inStock&quot;:true,&quot;bananas&quot;:null}'</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Parsing JSON strings can throw a SyntaxError exception, so we wrap the call</span></div></li><li class="li1"><div class="de1"><span class="co1">// in a try catch block</span></div></li><li class="li2"><div class="de2"><span class="kw1">try</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> prod <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">parse</span><span class="br0">&#40;</span>jsonString<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// We can now interact with the data</span></div></li><li class="li1"><div class="de1">    <span class="kw1">if</span> <span class="br0">&#40;</span>prod.<span class="me1">price</span> <span class="sy0">&lt;</span> <span class="nu0">25</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        prod.<span class="me1">price</span> <span class="sy0">+=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="co1">// Price increase!</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="kw1">catch</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Invalid product data&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> jsonString <span class="sy0">=</span> <span class="st0">'{&quot;productId&quot;:1234,&quot;price&quot;:24.5,&quot;inStock&quot;:true,&quot;bananas&quot;:null}'</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Parsing JSON strings can throw a SyntaxError exception, so we wrap the call</span>
+<span class="co1">// in a try catch block</span>
+<span class="kw1">try</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> prod <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">parse</span><span class="br0">&#40;</span>jsonString<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// We can now interact with the data</span>
+    <span class="kw1">if</span> <span class="br0">&#40;</span>prod.<span class="me1">price</span> <span class="sy0">&lt;</span> <span class="nu0">25</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        prod.<span class="me1">price</span> <span class="sy0">+=</span> <span class="nu0">10</span><span class="sy0">;</span> <span class="co1">// Price increase!</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span>
+<span class="kw1">catch</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Invalid product data&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-8fa77b0f79337f6c5c8b77c787876ef2-plain">var jsonString = '{"productId":1234,"price":24.5,"inStock":true,"bananas":null}';
+
+// Parsing JSON strings can throw a SyntaxError exception, so we wrap the call
+// in a try catch block
+try {
+    var prod = YAHOO.lang.JSON.parse(jsonString);
+
+    // We can now interact with the data
+    if (prod.price < 25) {
+        prod.price += 10; // Price increase!
+    }
+}
+catch (e) {
+    alert("Invalid product data");
+}
+</textarea></div>
+<p>You can filter out data or format data during parse by passing a function as the second argument to parse.  Values returned from the function will take the place of the original value.  Return undefined to omit a key:value pair from the returned object.</p>
+<div id="syntax-184167c8981c966fa11370f4d410f11b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> currencySymbol <span class="sy0">=</span> <span class="st0">&quot;$&quot;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> myFilter<span class="br0">&#40;</span>key<span class="sy0">,</span>val<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// format price as a string</span></div></li><li class="li1"><div class="de1">    <span class="kw1">if</span> <span class="br0">&#40;</span>key <span class="sy0">==</span> <span class="st0">&quot;price&quot;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        <span class="kw2">var</span> f_price <span class="sy0">=</span> currencySymbol <span class="sy0">+</span> val.<span class="me1">toFixed</span><span class="br0">&#40;</span><span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// omit keys by returning undefined</span></div></li><li class="li1"><div class="de1">    <span class="kw1">if</span> <span class="br0">&#40;</span>key <span class="sy0">==</span> <span class="st0">&quot;bananas&quot;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        <span class="kw1">return</span> undefined<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> formattedProd <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">parse</span><span class="br0">&#40;</span>jsonString<span class="sy0">,</span> myFilter<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// key &quot;bananas&quot; is not present in the formattedProd object</span></div></li><li class="li1"><div class="de1"><span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isUndefined</span><span class="br0">&#40;</span>formattedProd.<span class="me1">bananas</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;We have no bananas today&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// and the price is the formatted string &quot;$24.50&quot;</span></div></li><li class="li1"><div class="de1"><span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Your price: &quot;</span> <span class="sy0">+</span> formattedProd.<span class="me1">price</span><span class="br0">&#41;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> currencySymbol <span class="sy0">=</span> <span class="st0">&quot;$&quot;</span>
+<span class="kw2">function</span> myFilter<span class="br0">&#40;</span>key<span class="sy0">,</span>val<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">// format price as a string</span>
+    <span class="kw1">if</span> <span class="br0">&#40;</span>key <span class="sy0">==</span> <span class="st0">&quot;price&quot;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw2">var</span> f_price <span class="sy0">=</span> currencySymbol <span class="sy0">+</span> val.<span class="me1">toFixed</span><span class="br0">&#40;</span><span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+&nbsp;
+    <span class="co1">// omit keys by returning undefined</span>
+    <span class="kw1">if</span> <span class="br0">&#40;</span>key <span class="sy0">==</span> <span class="st0">&quot;bananas&quot;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw1">return</span> undefined<span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="kw2">var</span> formattedProd <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">parse</span><span class="br0">&#40;</span>jsonString<span class="sy0">,</span> myFilter<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// key &quot;bananas&quot; is not present in the formattedProd object</span>
+<span class="kw1">if</span> <span class="br0">&#40;</span><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">isUndefined</span><span class="br0">&#40;</span>formattedProd.<span class="me1">bananas</span><span class="br0">&#41;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;We have no bananas today&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="co1">// and the price is the formatted string &quot;$24.50&quot;</span>
+<span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Your price: &quot;</span> <span class="sy0">+</span> formattedProd.<span class="me1">price</span><span class="br0">&#41;</span>
+&nbsp;</pre></div><textarea id="syntax-184167c8981c966fa11370f4d410f11b-plain">var currencySymbol = "$"
+function myFilter(key,val) {
+    // format price as a string
+    if (key == "price") {
+        var f_price = currencySymbol + val.toFixed(2);
+    }
+
+    // omit keys by returning undefined
+    if (key == "bananas") {
+        return undefined;
+    }
+}
+
+var formattedProd = YAHOO.lang.JSON.parse(jsonString, myFilter);
+
+// key "bananas" is not present in the formattedProd object
+if (YAHOO.lang.isUndefined(formattedProd.bananas)) {
+    alert("We have no bananas today");
+}
+
+// and the price is the formatted string "$24.50"
+alert("Your price: " + formattedProd.price)
+</textarea></div>
+<h4>A word of caution against using <code>eval</code></h4>
+<p>JSON data format is a <em>subset</em> of JavaScript notation, meaning that it is possible to use JavaScript <code>eval</code> to transform JSON data to live data.  However, it is unsafe practice to assume that data reaching your code is safe.  <code>eval</code> is capable of executing JavaScript's full notation, including calling functions and accessing cookies with all the privileges of a <code>&lt;script&gt;</code>.</p>
+
+<p>To ensure that the data is safe in browsers that don't yet support native JSON functionality, <code>YAHOO.lang.JSON.parse</code> inspects the incoming string for potentially malevolent content (using methods derived from Douglas Crockford's <a href="https://github.com/douglascrockford/JSON-js/blob/master/json2.js">json2.js</a>) before giving it the green light to parse.</p>
+
+<div id="syntax-91be60e5d984ef65ac19d0b0bdeed413" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// UNSAFE</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> data <span class="sy0">=</span> <span class="kw1">eval</span><span class="br0">&#40;</span><span class="st0">'('</span> <span class="sy0">+</span> shouldBeJsonData <span class="sy0">+</span> <span class="st0">')'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Safe</span></div></li><li class="li2"><div class="de2"><span class="kw2">var</span> data <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">parse</span><span class="br0">&#40;</span>shouldBeJsonData<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// UNSAFE</span>
+<span class="kw2">var</span> data <span class="sy0">=</span> <span class="kw1">eval</span><span class="br0">&#40;</span><span class="st0">'('</span> <span class="sy0">+</span> shouldBeJsonData <span class="sy0">+</span> <span class="st0">')'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Safe</span>
+<span class="kw2">var</span> data <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">parse</span><span class="br0">&#40;</span>shouldBeJsonData<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-91be60e5d984ef65ac19d0b0bdeed413-plain">// UNSAFE
+var data = eval('(' + shouldBeJsonData + ')');
+
+// Safe
+var data = YAHOO.lang.JSON.parse(shouldBeJsonData);
+</textarea></div>
+<h3 id="stringify">Stringifying JavaScript data into a JSON string</h3>
+<p>To convert a JavaScript object (or any permissable value) to a JSON string, pass that object to <code>YAHOO.lang.JSON.stringify</code> and capture the returned string.</p>
+
+<div id="syntax-e7ecb7ab0cb1ac6e17f6b5e0e2183481" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myData <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    puppies <span class="sy0">:</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Ashley&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">12</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Abby&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span><span class="nu0">9</span> <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#93;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span> </div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> jsonStr <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="br0">&#40;</span>myData<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">// jsonStr now contains the string (without the leading comment slashes)</span></div></li><li class="li1"><div class="de1"><span class="co1">// {&quot;puppies&quot;:[{&quot;name&quot;:&quot;Ashley&quot;,&quot;age&quot;:12},{&quot;name&quot;:&quot;Abby&quot;,&quot;age&quot;:9}]}</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myData <span class="sy0">=</span> <span class="br0">&#123;</span>
+    puppies <span class="sy0">:</span> <span class="br0">&#91;</span>
+        <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Ashley&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">12</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+        <span class="br0">&#123;</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Abby&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span><span class="nu0">9</span> <span class="br0">&#125;</span>
+    <span class="br0">&#93;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span> 
+&nbsp;
+<span class="kw2">var</span> jsonStr <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="br0">&#40;</span>myData<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// jsonStr now contains the string (without the leading comment slashes)</span>
+<span class="co1">// {&quot;puppies&quot;:[{&quot;name&quot;:&quot;Ashley&quot;,&quot;age&quot;:12},{&quot;name&quot;:&quot;Abby&quot;,&quot;age&quot;:9}]}</span>
+&nbsp;</pre></div><textarea id="syntax-e7ecb7ab0cb1ac6e17f6b5e0e2183481-plain">var myData = {
+    puppies : [
+        { name: "Ashley", age: 12 },
+        { name: "Abby", age:9 }
+    ]
+}; 
+
+var jsonStr = YAHOO.lang.JSON.stringify(myData);
+
+// jsonStr now contains the string (without the leading comment slashes)
+// {"puppies":[{"name":"Ashley","age":12},{"name":"Abby","age":9}]}
+</textarea></div>
+<p>Stringify's full signature is</p>
+<div id="syntax-40bfff9d7938ceeb73ba63a3791b94d7" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span> <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>data<span class="sy0">,</span> filter<span class="sy0">,</span> indent<span class="br0">&#41;</span> <span class="br0">&#123;</span> ... <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span> <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span>data<span class="sy0">,</span> filter<span class="sy0">,</span> indent<span class="br0">&#41;</span> <span class="br0">&#123;</span> ... <span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-40bfff9d7938ceeb73ba63a3791b94d7-plain">YAHOO.lang.JSON.stringify = function (data, filter, indent) { ... };
+</textarea></div>
+<p>The following sections will discuss the second and third arguments.</p>
+
+<h4 id="filtering">Filtering data before serialization</h4>
+<p>The optional second argument to <code>stringify</code> accepts either an array of strings or a function.  Array values become a whitelist of object properties that should be serialized.  A function value is known as a &quot;replacer&quot;, and will be called for each object property:value pair, allowing you to modify the values or object structure as the input object is stringified.</p>
+
+<div id="syntax-3b4610c57b94341aab13cd8250168e3c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// a detailed object record set</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> records <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">1</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Bob&quot;</span><span class="sy0">,</span>   age<span class="sy0">:</span> <span class="nu0">47</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;blue&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">2</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Sally&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">30</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;mauve&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">3</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Tommy&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">13</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;black&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">4</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Chaz&quot;</span><span class="sy0">,</span>  age<span class="sy0">:</span> <span class="nu0">26</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;plaid&quot;</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Use an array of acceptable object key names as a whitelist.</span></div></li><li class="li2"><div class="de2"><span class="co1">// To create a JSON string with only age and id</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> jsonStr <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="br0">&#40;</span>records<span class="sy0">,</span><span class="br0">&#91;</span><span class="st0">&quot;id&quot;</span><span class="sy0">,</span><span class="st0">&quot;age&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// jsonStr now contains the string</span></div></li><li class="li1"><div class="de1"><span class="co1">// [{&quot;id&quot;:1,&quot;age&quot;:47},{&quot;id&quot;:2,&quot;age&quot;:30},{&quot;id&quot;:3,&quot;age&quot;:13},{&quot;id&quot;:4,&quot;age&quot;:26}]</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// OR use a replacer function to modify the object en route</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> replacer<span class="br0">&#40;</span>key<span class="sy0">,</span> value<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">if</span> <span class="br0">&#40;</span>key <span class="sy0">===</span> <span class="st0">'age'</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">return</span> value <span class="sy0">&gt;</span> <span class="nu0">35</span> <span class="sy0">?</span> <span class="st0">'36-'</span> <span class="sy0">:</span></div></li><li class="li2"><div class="de2">               value <span class="sy0">&gt;</span> <span class="nu0">25</span> <span class="sy0">?</span> <span class="st0">'26-35'</span> <span class="sy0">:</span></div></li><li class="li1"><div class="de1">               value <span class="sy0">&gt;</span> <span class="nu0">15</span> <span class="sy0">?</span> <span class="st0">'16-25'</span> <span class="sy0">:</span></div></li><li class="li1"><div class="de1">               <span class="st0">'under 16'</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="kw1">if</span> <span class="br0">&#40;</span>key <span class="sy0">===</span> <span class="st0">'name'</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">return</span> value<span class="sy0">;</span>     <span class="co1">// also accept the name property</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw1">return</span> undefined<span class="sy0">;</span> <span class="co1">// This will filter any other keys</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> jsonStr <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="br0">&#40;</span>records<span class="sy0">,</span> replacer<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// jsonStr now contains the string</span></div></li><li class="li1"><div class="de1"><span class="co1">// [{&quot;name&quot;:&quot;Bob&quot;,&quot;age&quot;:&quot;36-&quot;},{&quot;name&quot;:&quot;Sally&quot;,&quot;age&quot;:&quot;26-35&quot;},...</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// a detailed object record set</span>
+<span class="kw2">var</span> records <span class="sy0">=</span> <span class="br0">&#91;</span>
+    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">1</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Bob&quot;</span><span class="sy0">,</span>   age<span class="sy0">:</span> <span class="nu0">47</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;blue&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">2</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Sally&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">30</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;mauve&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">3</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Tommy&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">13</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;black&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">4</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Chaz&quot;</span><span class="sy0">,</span>  age<span class="sy0">:</span> <span class="nu0">26</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;plaid&quot;</span><span class="br0">&#125;</span>
+<span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Use an array of acceptable object key names as a whitelist.</span>
+<span class="co1">// To create a JSON string with only age and id</span>
+<span class="kw2">var</span> jsonStr <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="br0">&#40;</span>records<span class="sy0">,</span><span class="br0">&#91;</span><span class="st0">&quot;id&quot;</span><span class="sy0">,</span><span class="st0">&quot;age&quot;</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// jsonStr now contains the string</span>
+<span class="co1">// [{&quot;id&quot;:1,&quot;age&quot;:47},{&quot;id&quot;:2,&quot;age&quot;:30},{&quot;id&quot;:3,&quot;age&quot;:13},{&quot;id&quot;:4,&quot;age&quot;:26}]</span>
+&nbsp;
+<span class="co1">// OR use a replacer function to modify the object en route</span>
+<span class="kw2">function</span> replacer<span class="br0">&#40;</span>key<span class="sy0">,</span> value<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">if</span> <span class="br0">&#40;</span>key <span class="sy0">===</span> <span class="st0">'age'</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw1">return</span> value <span class="sy0">&gt;</span> <span class="nu0">35</span> <span class="sy0">?</span> <span class="st0">'36-'</span> <span class="sy0">:</span>
+               value <span class="sy0">&gt;</span> <span class="nu0">25</span> <span class="sy0">?</span> <span class="st0">'26-35'</span> <span class="sy0">:</span>
+               value <span class="sy0">&gt;</span> <span class="nu0">15</span> <span class="sy0">?</span> <span class="st0">'16-25'</span> <span class="sy0">:</span>
+               <span class="st0">'under 16'</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="kw1">if</span> <span class="br0">&#40;</span>key <span class="sy0">===</span> <span class="st0">'name'</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw1">return</span> value<span class="sy0">;</span>     <span class="co1">// also accept the name property</span>
+    <span class="br0">&#125;</span> <span class="kw1">else</span> <span class="br0">&#123;</span>
+        <span class="kw1">return</span> undefined<span class="sy0">;</span> <span class="co1">// This will filter any other keys</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span>
+<span class="kw2">var</span> jsonStr <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="br0">&#40;</span>records<span class="sy0">,</span> replacer<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// jsonStr now contains the string</span>
+<span class="co1">// [{&quot;name&quot;:&quot;Bob&quot;,&quot;age&quot;:&quot;36-&quot;},{&quot;name&quot;:&quot;Sally&quot;,&quot;age&quot;:&quot;26-35&quot;},...</span>
+&nbsp;</pre></div><textarea id="syntax-3b4610c57b94341aab13cd8250168e3c-plain">// a detailed object record set
+var records = [
+    {id:1, name: "Bob",   age: 47, favorite_color: "blue"},
+    {id:2, name: "Sally", age: 30, favorite_color: "mauve"},
+    {id:3, name: "Tommy", age: 13, favorite_color: "black"},
+    {id:4, name: "Chaz",  age: 26, favorite_color: "plaid"}
+];
+
+// Use an array of acceptable object key names as a whitelist.
+// To create a JSON string with only age and id
+var jsonStr = YAHOO.lang.JSON.stringify(records,["id","age"]);
+
+// jsonStr now contains the string
+// [{"id":1,"age":47},{"id":2,"age":30},{"id":3,"age":13},{"id":4,"age":26}]
+
+// OR use a replacer function to modify the object en route
+function replacer(key, value) {
+    if (key === 'age') {
+        return value > 35 ? '36-' :
+               value > 25 ? '26-35' :
+               value > 15 ? '16-25' :
+               'under 16';
+    } else if (key === 'name') {
+        return value;     // also accept the name property
+    } else {
+        return undefined; // This will filter any other keys
+    }
+}
+var jsonStr = YAHOO.lang.JSON.stringify(records, replacer);
+
+// jsonStr now contains the string
+// [{"name":"Bob","age":"36-"},{"name":"Sally","age":"26-35"},...
+</textarea></div>
+<h5 id="toJSON">Using toJSON to customize object serialization</h5>
+<p>Another option for including a special serialization strategy for your objects and classes is to assign a <code>toJSON</code> method.  The return value of <code>yourObject.toJSON()</code> will be used in place of the object itself, and <em>before the replacer is executed on that value</em>.</p>
+
+<div id="syntax-baeb948b40ff9b8810dc43ba52cc1807" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">function</span> Student<span class="br0">&#40;</span>first<span class="sy0">,</span> last<span class="sy0">,</span> level<span class="sy0">,</span> grades<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="me1">firstName</span> <span class="sy0">=</span> first<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="me1">lastName</span> <span class="sy0">=</span> last<span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="me1">gradeLevel</span> <span class="sy0">=</span> level<span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="kw1">this</span>.<span class="me1">grades</span> <span class="sy0">=</span> grades<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Offer a different object structure for JSON serialization</span></div></li><li class="li1"><div class="de1">Student.<span class="me1">prototype</span>.<span class="me1">toJSON</span> <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    <span class="kw2">var</span> gpa <span class="sy0">=</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        i <span class="sy0">=</span> <span class="kw1">this</span>.<span class="me1">grades</span>.<span class="me1">length</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw1">while</span> <span class="br0">&#40;</span>i<span class="sy0">--</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        gpa <span class="sy0">+=</span> <span class="kw1">this</span>.<span class="me1">grades</span><span class="br0">&#91;</span>i<span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw1">return</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw3">name</span><span class="sy0">:</span> <span class="kw1">this</span>.<span class="me1">lastName</span> <span class="sy0">+</span> <span class="st0">', '</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="me1">firstName</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        gpa<span class="sy0">:</span> <span class="br0">&#40;</span><span class="br0">&#40;</span>gpa <span class="co2">/ this.grades.length) /</span> <span class="nu0">25</span><span class="br0">&#41;</span>.<span class="me1">toFixed</span><span class="br0">&#40;</span><span class="nu0">1</span><span class="br0">&#41;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> students <span class="sy0">=</span> <span class="br0">&#91;</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">students.<span class="me1">push</span><span class="br0">&#40;</span> <span class="kw2">new</span> Student<span class="br0">&#40;</span><span class="st0">&quot;John&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Schmidt&quot;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="nu0">95</span><span class="sy0">,</span><span class="nu0">90</span><span class="sy0">,</span><span class="nu0">92</span><span class="sy0">,</span><span class="nu0">87</span><span class="sy0">,</span><span class="nu0">100</span><span class="sy0">,</span><span class="nu0">100</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">students.<span class="me1">push</span><span class="br0">&#40;</span> <span class="kw2">new</span> Student<span class="br0">&#40;</span><span class="st0">&quot;Irene&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Gamel&quot;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="nu0">72</span><span class="sy0">,</span><span class="nu0">70</span><span class="sy0">,</span><span class="nu0">88</span><span class="sy0">,</span><span class="nu0">76</span><span class="sy0">,</span><span class="nu0">100</span><span class="sy0">,</span><span class="nu0">95</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">students.<span class="me1">push</span><span class="br0">&#40;</span> <span class="kw2">new</span> Student<span class="br0">&#40;</span><span class="st0">&quot;Francis&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Yeh&quot;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="nu0">53</span><span class="sy0">,</span><span class="nu0">67</span><span class="sy0">,</span><span class="nu0">100</span><span class="sy0">,</span><span class="nu0">0</span><span class="sy0">,</span><span class="nu0">78</span><span class="sy0">,</span><span class="nu0">88</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> studentJSON <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="br0">&#40;</span>students<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">// studentsJSON now contains the string</span></div></li><li class="li1"><div class="de1"><span class="co1">// [{&quot;name&quot;:&quot;Schmidt, John&quot;,&quot;gpa&quot;:&quot;3.8&quot;},{&quot;name&quot;:&quot;Gamel, Irene&quot;,&quot;gpa&quot;:&quot;3.3&quot;},{&quot;name&quot;:&quot;Yeh, Francis&quot;,&quot;gpa&quot;:&quot;2.6&quot;}]</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">function</span> Student<span class="br0">&#40;</span>first<span class="sy0">,</span> last<span class="sy0">,</span> level<span class="sy0">,</span> grades<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">this</span>.<span class="me1">firstName</span> <span class="sy0">=</span> first<span class="sy0">;</span>
+    <span class="kw1">this</span>.<span class="me1">lastName</span> <span class="sy0">=</span> last<span class="sy0">;</span>
+    <span class="kw1">this</span>.<span class="me1">gradeLevel</span> <span class="sy0">=</span> level<span class="sy0">;</span>
+    <span class="kw1">this</span>.<span class="me1">grades</span> <span class="sy0">=</span> grades<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="co1">// Offer a different object structure for JSON serialization</span>
+Student.<span class="me1">prototype</span>.<span class="me1">toJSON</span> <span class="sy0">=</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> gpa <span class="sy0">=</span> <span class="nu0">0</span><span class="sy0">,</span>
+        i <span class="sy0">=</span> <span class="kw1">this</span>.<span class="me1">grades</span>.<span class="me1">length</span><span class="sy0">;</span>
+&nbsp;
+    <span class="kw1">while</span> <span class="br0">&#40;</span>i<span class="sy0">--</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        gpa <span class="sy0">+=</span> <span class="kw1">this</span>.<span class="me1">grades</span><span class="br0">&#91;</span>i<span class="br0">&#93;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+&nbsp;
+    <span class="kw1">return</span> <span class="br0">&#123;</span>
+        <span class="kw3">name</span><span class="sy0">:</span> <span class="kw1">this</span>.<span class="me1">lastName</span> <span class="sy0">+</span> <span class="st0">', '</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="me1">firstName</span><span class="sy0">,</span>
+        gpa<span class="sy0">:</span> <span class="br0">&#40;</span><span class="br0">&#40;</span>gpa <span class="co2">/ this.grades.length) /</span> <span class="nu0">25</span><span class="br0">&#41;</span>.<span class="me1">toFixed</span><span class="br0">&#40;</span><span class="nu0">1</span><span class="br0">&#41;</span>
+    <span class="br0">&#125;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> students <span class="sy0">=</span> <span class="br0">&#91;</span><span class="br0">&#93;</span><span class="sy0">;</span>
+students.<span class="me1">push</span><span class="br0">&#40;</span> <span class="kw2">new</span> Student<span class="br0">&#40;</span><span class="st0">&quot;John&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Schmidt&quot;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="nu0">95</span><span class="sy0">,</span><span class="nu0">90</span><span class="sy0">,</span><span class="nu0">92</span><span class="sy0">,</span><span class="nu0">87</span><span class="sy0">,</span><span class="nu0">100</span><span class="sy0">,</span><span class="nu0">100</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#41;</span><span class="sy0">;</span>
+students.<span class="me1">push</span><span class="br0">&#40;</span> <span class="kw2">new</span> Student<span class="br0">&#40;</span><span class="st0">&quot;Irene&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Gamel&quot;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="nu0">72</span><span class="sy0">,</span><span class="nu0">70</span><span class="sy0">,</span><span class="nu0">88</span><span class="sy0">,</span><span class="nu0">76</span><span class="sy0">,</span><span class="nu0">100</span><span class="sy0">,</span><span class="nu0">95</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#41;</span><span class="sy0">;</span>
+students.<span class="me1">push</span><span class="br0">&#40;</span> <span class="kw2">new</span> Student<span class="br0">&#40;</span><span class="st0">&quot;Francis&quot;</span><span class="sy0">,</span> <span class="st0">&quot;Yeh&quot;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="nu0">53</span><span class="sy0">,</span><span class="nu0">67</span><span class="sy0">,</span><span class="nu0">100</span><span class="sy0">,</span><span class="nu0">0</span><span class="sy0">,</span><span class="nu0">78</span><span class="sy0">,</span><span class="nu0">88</span><span class="br0">&#93;</span><span class="br0">&#41;</span> <span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> studentJSON <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="br0">&#40;</span>students<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// studentsJSON now contains the string</span>
+<span class="co1">// [{&quot;name&quot;:&quot;Schmidt, John&quot;,&quot;gpa&quot;:&quot;3.8&quot;},{&quot;name&quot;:&quot;Gamel, Irene&quot;,&quot;gpa&quot;:&quot;3.3&quot;},{&quot;name&quot;:&quot;Yeh, Francis&quot;,&quot;gpa&quot;:&quot;2.6&quot;}]</span>
+&nbsp;</pre></div><textarea id="syntax-baeb948b40ff9b8810dc43ba52cc1807-plain">function Student(first, last, level, grades) {
+    this.firstName = first;
+    this.lastName = last;
+    this.gradeLevel = level;
+    this.grades = grades;
+}
+
+// Offer a different object structure for JSON serialization
+Student.prototype.toJSON = function () {
+    var gpa = 0,
+        i = this.grades.length;
+
+    while (i--) {
+        gpa += this.grades[i];
+    }
+
+    return {
+        name: this.lastName + ', ' + this.firstName,
+        gpa: ((gpa / this.grades.length) / 25).toFixed(1)
+    };
+};
+
+var students = [];
+students.push( new Student("John", "Schmidt", 1, [95,90,92,87,100,100]) );
+students.push( new Student("Irene", "Gamel", 1, [72,70,88,76,100,95]) );
+students.push( new Student("Francis", "Yeh", 1, [53,67,100,0,78,88]) );
+
+var studentJSON = YAHOO.lang.JSON.stringify(students);
+
+// studentsJSON now contains the string
+// [{"name":"Schmidt, John","gpa":"3.8"},{"name":"Gamel, Irene","gpa":"3.3"},{"name":"Yeh, Francis","gpa":"2.6"}]
+</textarea></div>
+<p>Some native objects include a <code>toJSON</code> method.  For the most part, they do what you'd expect.  <code>new Boolean(true) => true</code>, for example.  One notable exception are <code>Date</code> instances, which serialize into an <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO 8601</a> format that looks like &quot;1987-12-25T21:04:32Z&quot;.</p>
+
+<h5 id="space">Formatting the JSON output</h5>
+<p>To have stringify output JSON that's more human readable, pass either a string or number as the third parameter.  Numbers will be translated into that number of spaces.  Including the third parameter will trigger the output to be formatted with carriage returns and indentation using the specified string.</p>
+
+<div id="syntax-cb7d167c3ac154028e3c30e9657e0b3f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> records <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">1</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Bob&quot;</span><span class="sy0">,</span>   age<span class="sy0">:</span> <span class="nu0">47</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;blue&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">2</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Sally&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">30</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;mauve&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">3</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Tommy&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">13</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;black&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">4</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Chaz&quot;</span><span class="sy0">,</span>  age<span class="sy0">:</span> <span class="nu0">26</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;plaid&quot;</span><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> formattedJsonStr <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="br0">&#40;</span>records<span class="sy0">,</span><span class="br0">&#91;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span><span class="st0">&quot;age&quot;</span><span class="br0">&#93;</span><span class="sy0">,</span><span class="nu0">4</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="coMULTI">/* formattedJsonStr now contains the string</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">[</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;   {</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;       &quot;name&quot;: &quot;Bob&quot;,</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;       &quot;age&quot;: 47</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;   },</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;   {</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;       &quot;name&quot;: &quot;Sally&quot;,</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;       &quot;age&quot;: 30</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;   },</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;   {</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;       &quot;name&quot;: &quot;Tommy&quot;,</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;       &quot;age&quot;: 13</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;   },</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;   {</span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;       &quot;name&quot;: &quot;Chaz&quot;,</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;       &quot;age&quot;: 26</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;   }</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">]</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">*/</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> records <span class="sy0">=</span> <span class="br0">&#91;</span>
+    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">1</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Bob&quot;</span><span class="sy0">,</span>   age<span class="sy0">:</span> <span class="nu0">47</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;blue&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">2</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Sally&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">30</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;mauve&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">3</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Tommy&quot;</span><span class="sy0">,</span> age<span class="sy0">:</span> <span class="nu0">13</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;black&quot;</span><span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span>id<span class="sy0">:</span><span class="nu0">4</span><span class="sy0">,</span> <span class="kw3">name</span><span class="sy0">:</span> <span class="st0">&quot;Chaz&quot;</span><span class="sy0">,</span>  age<span class="sy0">:</span> <span class="nu0">26</span><span class="sy0">,</span> favorite_color<span class="sy0">:</span> <span class="st0">&quot;plaid&quot;</span><span class="br0">&#125;</span>
+<span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> formattedJsonStr <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="br0">&#40;</span>records<span class="sy0">,</span><span class="br0">&#91;</span><span class="st0">&quot;name&quot;</span><span class="sy0">,</span><span class="st0">&quot;age&quot;</span><span class="br0">&#93;</span><span class="sy0">,</span><span class="nu0">4</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="coMULTI">/* formattedJsonStr now contains the string
+[
+    {
+        &quot;name&quot;: &quot;Bob&quot;,
+        &quot;age&quot;: 47
+    },
+    {
+        &quot;name&quot;: &quot;Sally&quot;,
+        &quot;age&quot;: 30
+    },
+    {
+        &quot;name&quot;: &quot;Tommy&quot;,
+        &quot;age&quot;: 13
+    },
+    {
+        &quot;name&quot;: &quot;Chaz&quot;,
+        &quot;age&quot;: 26
+    }
+]
+*/</span>
+&nbsp;</pre></div><textarea id="syntax-cb7d167c3ac154028e3c30e9657e0b3f-plain">var records = [
+    {id:1, name: "Bob",   age: 47, favorite_color: "blue"},
+    {id:2, name: "Sally", age: 30, favorite_color: "mauve"},
+    {id:3, name: "Tommy", age: 13, favorite_color: "black"},
+    {id:4, name: "Chaz",  age: 26, favorite_color: "plaid"}
+];
+
+var formattedJsonStr = YAHOO.lang.JSON.stringify(records,["name","age"],4);
+
+/* formattedJsonStr now contains the string
+[
+    {
+        "name": "Bob",
+        "age": 47
+    },
+    {
+        "name": "Sally",
+        "age": 30
+    },
+    {
+        "name": "Tommy",
+        "age": 13
+    },
+    {
+        "name": "Chaz",
+        "age": 26
+    }
+]
+*/
+</textarea></div>
+<p>Native implementations may differ slightly in their formatted output, but it should continue to be readable.</p>
+
+<h2 id="about">About the JSON format</h2>
+<p>JSON is a lightweight data format based on the object notation of the JavaScript language. It does not require JavaScript to read or write; it is easy to parse by any language and libraries and tools exist in many languages to handle JSON.  You'll find several examples of support for JSON data in the YUI Library.</p>
+
+<p>There is a wealth of good information about JSON and its distinction from XML as a data interchange format at Douglas Crockford's site, <a href="http://json.org">JSON.org</a>.
+
+<p>JSON data is characterized as a collection of objects, arrays, booleans, strings, numbers, and null. The notation follows these guidelines:</p>
+<ul>
+    <li>Objects begin and end with curly braces ({}).</li>
+    <li>Object members consist of a string key and an associated value separated by a colon ( "key" : VALUE ).</li>
+    <li>Objects may contain any number of members, separated by commas ({ "key1" : VALUE1, "key2" : VALUE2 }).</li>
+    <li>Arrays begin and end with square braces and contain any number of values, separated by commas ([ VALUE1, VALUE2 ]).</li>
+    <li>Values can be a string, a number, an object, an array, or the literals <code>true</code>, <code>false</code>, and <code>null</code>.</li>
+    <li>Strings are surrounded by double quotes and can contain Unicode characters and common backslash escapes ("new\nline").</li>
+</ul>
+
+<p><a href="http://json.org/">JSON.org</a> has helpful format diagrams and specific information on allowable string characters.</p>
+
+<p>Here is a simple example of a valid JSON string:</p>
+<div id="syntax-fab11c2f62da4fa07e885b596f4ec286" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="st0">&quot;Image&quot;</span><span class="sy0">:</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="st0">&quot;Width&quot;</span><span class="sy0">:</span><span class="nu0">800</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="st0">&quot;Height&quot;</span><span class="sy0">:</span><span class="nu0">600</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    <span class="st0">&quot;Title&quot;</span><span class="sy0">:</span><span class="st0">&quot;View from 15th Floor&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="st0">&quot;Thumbnail&quot;</span><span class="sy0">:</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">      <span class="st0">&quot;Url&quot;</span><span class="sy0">:</span><span class="st0">&quot;http:<span class="es0">\/</span><span class="es0">\/</span>scd.mm-b1.yimg.com<span class="es0">\/</span>image<span class="es0">\/</span>481989943&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">      <span class="st0">&quot;Height&quot;</span><span class="sy0">:</span> <span class="nu0">125</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">      <span class="st0">&quot;Width&quot;</span><span class="sy0">:</span> <span class="st0">&quot;100&quot;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="st0">&quot;IDs&quot;</span><span class="sy0">:</span><span class="br0">&#91;</span> <span class="nu0">116</span><span class="sy0">,</span> <span class="nu0">943</span><span class="sy0">,</span> <span class="nu0">234</span><span class="sy0">,</span> <span class="nu0">38793</span> <span class="br0">&#93;</span></div></li><li class="li1"><div class="de1">  <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="br0">&#123;</span>
+  <span class="st0">&quot;Image&quot;</span><span class="sy0">:</span> <span class="br0">&#123;</span>
+    <span class="st0">&quot;Width&quot;</span><span class="sy0">:</span><span class="nu0">800</span><span class="sy0">,</span>
+    <span class="st0">&quot;Height&quot;</span><span class="sy0">:</span><span class="nu0">600</span><span class="sy0">,</span>
+    <span class="st0">&quot;Title&quot;</span><span class="sy0">:</span><span class="st0">&quot;View from 15th Floor&quot;</span><span class="sy0">,</span>
+    <span class="st0">&quot;Thumbnail&quot;</span><span class="sy0">:</span>
+    <span class="br0">&#123;</span>
+      <span class="st0">&quot;Url&quot;</span><span class="sy0">:</span><span class="st0">&quot;http:<span class="es0">\/</span><span class="es0">\/</span>scd.mm-b1.yimg.com<span class="es0">\/</span>image<span class="es0">\/</span>481989943&quot;</span><span class="sy0">,</span>
+      <span class="st0">&quot;Height&quot;</span><span class="sy0">:</span> <span class="nu0">125</span><span class="sy0">,</span>
+      <span class="st0">&quot;Width&quot;</span><span class="sy0">:</span> <span class="st0">&quot;100&quot;</span>
+    <span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="st0">&quot;IDs&quot;</span><span class="sy0">:</span><span class="br0">&#91;</span> <span class="nu0">116</span><span class="sy0">,</span> <span class="nu0">943</span><span class="sy0">,</span> <span class="nu0">234</span><span class="sy0">,</span> <span class="nu0">38793</span> <span class="br0">&#93;</span>
+  <span class="br0">&#125;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-fab11c2f62da4fa07e885b596f4ec286-plain">{
+  "Image": {
+    "Width":800,
+    "Height":600,
+    "Title":"View from 15th Floor",
+    "Thumbnail":
+    {
+      "Url":"http:\/\/scd.mm-b1.yimg.com\/image\/481989943",
+      "Height": 125,
+      "Width": "100"
+    },
+    "IDs":[ 116, 943, 234, 38793 ]
+  }
+}
+</textarea></div>
+<p>This structure should look familiar to JavaScript programmers (for good reason).  Note, however the solidus (forward slash) characters in the &quot;Url&quot; value are escaped.</p>
+
+<h2 id="native">Notes about current native JSON support</h2>
+
+<p>Native JSON support in JavaScript is defined in the ECMAScript 5 specification (still in draft as of August 2009).  However, most of the major browser vendors have already implemented this feature in recent versions of their JavaScript engines.  Because the feature is new and the specification was still in draft while they were implementing the JSON API, there are gotchas involved in leveraging the disparate native behaviors.</p>
+
+<p>In general, it is preferable to use the native behavior for <code>JSON.parse</code> as it is much faster and safer than any JavaScript implementation.  There are also very few known critical issues with supporting browsers.</p>
+
+<p>Stringify has more pitfalls and inconsistencies, but they may not affect your use cases.  As with <code>parse</code>, the native implementation of <code>stringify</code> is faster, but only marginally so with reasonably sized input.  In most cases, choosing the JavaScript implementation will not affect performance and may be preferable for its cross browser consistency.</p>
+
+<p>As noted <a href="#upgrade">above</a>, YUI's JSON Utility will leverage native behavior in implementing browsers by default.  However, as of version 2.8.0, you can choose to use the JavaScript implementation of <code>parse</code> or <code>stringify</code> or both, by setting some new static properties.</p>
+
+<div id="syntax-bbe2d4ffc6adfa16406866dd32bc1745" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Always use the JavaScript implementation for parsing</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">useNativeParse</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Always use the JavaScript implementation for stringifying</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">useNativeStringify</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Always use the JavaScript implementation for parsing</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">useNativeParse</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Always use the JavaScript implementation for stringifying</span>
+<span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">useNativeStringify</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-bbe2d4ffc6adfa16406866dd32bc1745-plain">// Always use the JavaScript implementation for parsing
+YAHOO.lang.JSON.useNativeParse = false;
+
+// Always use the JavaScript implementation for stringifying
+YAHOO.lang.JSON.useNativeStringify = false;
+</textarea></div>
+<h2 id="knownissues">Known Issues</h2>
+<p>Older versions of PrototypeJS, and possibly other libraries, add several <code>toJSON</code> methods to native prototypes.  Most harmful is the <code>Array.prototype.toJSON</code> method which behaves differently than the ES5 specification recommends for <code>toJSON</code> implementations.  The result is that <code>stringify</code>ing objects that contain arrays will result in incorrect output.  The array will be double serialized.  For example:</p>
+
+<div id="syntax-3f39e0178f0aa566ab958e32f551e1ae" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> obj <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    property<span class="sy0">:</span> <span class="st0">&quot;value&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    boom<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">&quot;this&quot;</span><span class="sy0">,</span> <span class="st0">&quot;is&quot;</span><span class="sy0">,</span> <span class="st0">&quot;the&quot;</span><span class="sy0">,</span> <span class="st0">&quot;bug&quot;</span><span class="br0">&#93;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> output <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="br0">&#40;</span>obj<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// output should look like</span></div></li><li class="li1"><div class="de1"><span class="co1">// {&quot;property&quot;:&quot;value&quot;,&quot;boom&quot;:[&quot;this&quot;,&quot;is&quot;,&quot;the&quot;,&quot;bug&quot;]}</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// but with Array.prototype.toJSON added, results in</span></div></li><li class="li1"><div class="de1"><span class="co1">// {&quot;property&quot;:&quot;value&quot;,&quot;boom&quot;:&quot;[\&quot;this\&quot;,\&quot;is\&quot;,\&quot;the\&quot;,\&quot;bug\&quot;]&quot;}</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Note the value of the &quot;boom&quot; property is a string, not an array</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> obj <span class="sy0">=</span> <span class="br0">&#123;</span>
+    property<span class="sy0">:</span> <span class="st0">&quot;value&quot;</span><span class="sy0">,</span>
+    boom<span class="sy0">:</span> <span class="br0">&#91;</span><span class="st0">&quot;this&quot;</span><span class="sy0">,</span> <span class="st0">&quot;is&quot;</span><span class="sy0">,</span> <span class="st0">&quot;the&quot;</span><span class="sy0">,</span> <span class="st0">&quot;bug&quot;</span><span class="br0">&#93;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> output <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="br0">&#40;</span>obj<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// output should look like</span>
+<span class="co1">// {&quot;property&quot;:&quot;value&quot;,&quot;boom&quot;:[&quot;this&quot;,&quot;is&quot;,&quot;the&quot;,&quot;bug&quot;]}</span>
+&nbsp;
+<span class="co1">// but with Array.prototype.toJSON added, results in</span>
+<span class="co1">// {&quot;property&quot;:&quot;value&quot;,&quot;boom&quot;:&quot;[\&quot;this\&quot;,\&quot;is\&quot;,\&quot;the\&quot;,\&quot;bug\&quot;]&quot;}</span>
+&nbsp;
+<span class="co1">// Note the value of the &quot;boom&quot; property is a string, not an array</span>
+&nbsp;</pre></div><textarea id="syntax-3f39e0178f0aa566ab958e32f551e1ae-plain">var obj = {
+    property: "value",
+    boom: ["this", "is", "the", "bug"]
+};
+
+var output = YAHOO.lang.JSON.stringify(obj);
+
+// output should look like
+// {"property":"value","boom":["this","is","the","bug"]}
+
+// but with Array.prototype.toJSON added, results in
+// {"property":"value","boom":"[\"this\",\"is\",\"the\",\"bug\"]"}
+
+// Note the value of the "boom" property is a string, not an array
+</textarea></div>
+<p>This is the result from both the JavaScript implementation of <code>stringify</code> as well as the native implementation in modern browsers.</p>
+
+<p>The workaround for this recommended by Tobie Langel (maintainer of PrototypeJS) is:</p>
+
+<div id="syntax-352af085409c9bad2535081e64e94188" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw1">delete</span> Number.<span class="me1">prototype</span>.<span class="me1">toJSON</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw1">delete</span> Boolean.<span class="me1">prototype</span>.<span class="me1">toJSON</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw1">delete</span> String.<span class="me1">prototype</span>.<span class="me1">toJSON</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw1">delete</span> Array.<span class="me1">prototype</span>.<span class="me1">toJSON</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">Hash.<span class="me1">prototype</span>.<span class="me1">toJSON</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">return</span> <span class="kw1">this</span>.<span class="me1">toObject</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">Object.<span class="me1">toJSON</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw1">delete</span> Number.<span class="me1">prototype</span>.<span class="me1">toJSON</span><span class="sy0">;</span>
+<span class="kw1">delete</span> Boolean.<span class="me1">prototype</span>.<span class="me1">toJSON</span><span class="sy0">;</span>
+<span class="kw1">delete</span> String.<span class="me1">prototype</span>.<span class="me1">toJSON</span><span class="sy0">;</span>
+<span class="kw1">delete</span> Array.<span class="me1">prototype</span>.<span class="me1">toJSON</span><span class="sy0">;</span>
+&nbsp;
+Hash.<span class="me1">prototype</span>.<span class="me1">toJSON</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">return</span> <span class="kw1">this</span>.<span class="me1">toObject</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+Object.<span class="me1">toJSON</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">lang</span>.<span class="me1">JSON</span>.<span class="me1">stringify</span><span class="sy0">;</span></pre></div><textarea id="syntax-352af085409c9bad2535081e64e94188-plain">delete Number.prototype.toJSON;
+delete Boolean.prototype.toJSON;
+delete String.prototype.toJSON;
+delete Array.prototype.toJSON;
+
+Hash.prototype.toJSON = function() {
+    return this.toObject();
+};
+
+Object.toJSON = YAHOO.lang.JSON.stringify;</textarea></div>
+<h2 id="mobile">YUI on Mobile: Using JSON Utility with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div><p>There are no known concerns with the JSON Utility on mobile browsers at this time.</p>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+		</div>
+         <div class="yui-u">
+			<div id="cheatsheet">
+				<h3>JSON Utility Cheat Sheet:</h3>
+				
+				<a href="http://yuiblog.com/assets/pdf/cheatsheets/json.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/json.gif" width="178" height="135" alt="Cheat Sheet for the JSON Utility."></a>
+				
+				<p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+			</div>
+		 	
+			<div id="examples">
+<h3>JSON Utility Examples:</h3>
+
+<ul>
+<li><a href='../examples/json/json_connect.html'>JSON with Connection Manager</a></li>
+<li><a href='../examples/json/json_freeze_thaw.html'>Rebuilding class instances from JSON data</a></li>
+<li><a href='../examples/json/json_convert_values.html'>Adding new object members during parsing</a></li>
+</ul>
+
+
+		
+		   </div>
+		   
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fjson%2F--><h3 id="delicious">YUI JSON Utility on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/json/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/development" class="tag-size-1">development</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/web" class="tag-size-1">web</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/reference" class="tag-size-1">reference</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/programming" class="tag-size-1">programming</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/json" class="tag-size-1">json</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/c51ddaa242100f06444f5207c5449f63" class="saved-by">saved by <span>38</span>  people</a></p>
+   </div></div>
+
+		 </div>
+      </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="selected "><a title="The YUI JSON Utility" href="index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:17 PDT 2013 -->
+
+<!-- Localized -->

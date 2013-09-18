@@ -1,0 +1,667 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Dialog</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Dialog</h1></div>
+</div>
+<div id="bd">
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+<div id="promo" class="component">
+    <h1>YUI 2: Dialog</h1>
+    <p> The Dialog component is an extension of <a href="../panel/index.html">Panel</a> that is meant to emulate the behavior of an  dialog window using a floating, draggable HTML element. Dialog provides an interface for easily gathering information from the user without leaving the underlying page context.  The information is collected via a standard HTML form; Dialog supports the submission of form data either through an XMLHttpRequest, through a normal form submission, or through a fully script-based response (where the script reads and responds to the form values and the form is never actually submitted via HTTP to a server).</p>
+ 
+  <div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#using">Using Dialog</a></li>
+      <li><a href="#support">Support &amp; Community</a></li>
+      <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../../examples/container/index.html">Examples</a>: Explore examples of the Dialog Control in action.</li>
+      <li><a href="../../docs/module_container.html">API Documentation</a>: View the full API documentation for the Dialog Control.</li>
+	  <li><a id="releasenotes" href="../../releasenotes/README.container">Release Notes</a>: Detailed change log for the Dialog Control.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Dialog Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+</div>
+<h2 class="first">Getting Started<a name="start"></a></h2>
+<p>To use Dialog, include the following code in your page:</p>
+
+<div id="syntax-87a4055b272ff2a4decc3a7bbb0e45e3" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Sam Skin CSS --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: You only need the YUI Button CSS if you're including YUI Button, mentioned below. --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- OPTIONAL: Animation (only required if using ContainerEffect) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: Connection (only required if using asynchronous form submission) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: Drag &amp; Drop (only required if enabling Drag &amp; Drop) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: YUI Button (these 2 files only required if you want Dialog to use YUI Buttons, instead of HTML Buttons) --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/button/button-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Sam Skin CSS --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css&quot;</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: You only need the YUI Button CSS if you're including YUI Button, mentioned below. --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css&quot;</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: Animation (only required if using ContainerEffect) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: Connection (only required if using asynchronous form submission) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: Drag &amp; Drop (only required if enabling Drag &amp; Drop) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: YUI Button (these 2 files only required if you want Dialog to use YUI Buttons, instead of HTML Buttons) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/button/button-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-87a4055b272ff2a4decc3a7bbb0e45e3-plain"><!-- Sam Skin CSS -->
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css">
+
+<!-- OPTIONAL: You only need the YUI Button CSS if you're including YUI Button, mentioned below. -->
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css">
+
+<!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+
+<!-- OPTIONAL: Animation (only required if using ContainerEffect) -->
+<script src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
+
+<!-- OPTIONAL: Connection (only required if using asynchronous form submission) -->
+<script src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
+
+<!-- OPTIONAL: Drag & Drop (only required if enabling Drag & Drop) -->
+<script src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+
+<!-- OPTIONAL: YUI Button (these 2 files only required if you want Dialog to use YUI Buttons, instead of HTML Buttons) -->
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+<!-- Source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/container/container-min.js"></script>
+</textarea></div>
+
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
+in which the Dialog Control lives.  You can usually accomplish this simply by putting the class on the 
+<code>&#60;body&#62;</code> tag:</p>
+<div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
+</textarea></div>
+<p class="lastP">For more information on skinning YUI components and making use of default skins, 
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+article here on the website.</p>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../../yuiloader/index.html">YUI Loader</a>, its module name is <code>container</code>. (<a href="../../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<h2>Using Dialog<a name="using"></a></h2>
+<p>This section describes common tasks for creating and using Dialog. It contains
+these sections:</p>
+<ul>
+    <li><a href="#html">Defining Dialog Markup</a></li>
+    <li><a href="#button">Setting up Dialog Buttons and Callbacks </a></li>
+    <li><a href="#init">Initializing the Dialog </a></li>
+    <li><a href="#submit">Submitting Form Data</a></li>
+    <li><a href="#read">Reading Current Form Data  </a></li>
+    <li><a href="#config">Configuration Properties</a></li>
+    <li><a href="#events">Dialog Event Flow (diagram)</a></li>
+</ul>
+<p>Dialog inherits its constructor and configuration, as well as several other
+  important methods, from Panel, and thus from Overlay. See <a href="../panel/index.html">Panel</a> and <a href="../overlay/index.html">Overlay</a> for
+  more information on how to utilize Dialog's inherited features.</p>
+  
+<h3 id="html">Defining Dialog Markup</h3>
+<p>HTML markup for Dialog uses the same modular format underlying <a href="../module/index.html">Module</a>.
+  Because the core interaction supported by Dialog involves gathering information
+from the user via an HTML form, typically you place a form element in the "body" section
+of your Dialog module. Placing the form element in the page, rather than creating
+the form via script once the Dialog instance is created, enables you to use <a href="http://en.wikipedia.org/wiki/Progressive_Enhancement">Progressive
+Enhancement</a> &mdash; showing the full content and functionality to users who
+may have older browsers or who have JavaScript disabled while still providing
+a richer interaction to modern, standards-compatible browsers.</p>
+<p>The following example illustrates the markup for a Dialog module:</p>
+
+<div id="syntax-8ed5eb20296cda8d2e59c8ca81cf22df" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myDialog&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;hd&quot;</span>&gt;</span>Please enter your information<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;bd&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">form</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;dlgForm&quot;</span> <span class="kw3">method</span><span class="sy0">=</span><span class="st0">&quot;POST&quot;</span> <span class="kw3">action</span><span class="sy0">=</span><span class="st0">&quot;php/post.php&quot;</span>&gt;</span></div></li><li class="li2"><div class="de2">            <span class="sc2">&lt;<span class="kw2">p</span>&gt;</span>Please enter your personal contact information:<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">p</span>&gt;</span></div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;<span class="kw2">label</span> <span class="kw3">for</span><span class="sy0">=</span><span class="st0">&quot;firstname&quot;</span>&gt;</span>First Name:<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">label</span>&gt;&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;firstname&quot;</span> <span class="sy0">/</span>&gt;</span></div></li><li class="li1"><div class="de1">            <span class="sc2">&lt;<span class="kw2">label</span> <span class="kw3">for</span><span class="sy0">=</span><span class="st0">&quot;lastname&quot;</span>&gt;</span>Last Name:<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">label</span>&gt;&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;lastname&quot;</span> <span class="sy0">/</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">form</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myDialog&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;hd&quot;</span>&gt;</span>Please enter your information<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;bd&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">form</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;dlgForm&quot;</span> <span class="kw3">method</span><span class="sy0">=</span><span class="st0">&quot;POST&quot;</span> <span class="kw3">action</span><span class="sy0">=</span><span class="st0">&quot;php/post.php&quot;</span>&gt;</span>
+            <span class="sc2">&lt;<span class="kw2">p</span>&gt;</span>Please enter your personal contact information:<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">p</span>&gt;</span>
+            <span class="sc2">&lt;<span class="kw2">label</span> <span class="kw3">for</span><span class="sy0">=</span><span class="st0">&quot;firstname&quot;</span>&gt;</span>First Name:<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">label</span>&gt;&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;firstname&quot;</span> <span class="sy0">/</span>&gt;</span>
+            <span class="sc2">&lt;<span class="kw2">label</span> <span class="kw3">for</span><span class="sy0">=</span><span class="st0">&quot;lastname&quot;</span>&gt;</span>Last Name:<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">label</span>&gt;&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;lastname&quot;</span> <span class="sy0">/</span>&gt;</span>
+        <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">form</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-8ed5eb20296cda8d2e59c8ca81cf22df-plain"><div id="myDialog">
+    <div class="hd">Please enter your information</div>
+    <div class="bd">
+        <form name="dlgForm" method="POST" action="php/post.php">
+            <p>Please enter your personal contact information:</p>
+            <label for="firstname">First Name:</label><input type="text" name="firstname" />
+            <label for="lastname">Last Name:</label><input type="text" name="lastname" />
+        </form>
+    </div>
+</div>
+</textarea></div>
+
+<p>The "action" attribute specified in the form is the one that is used to submit
+  the data, regardless of whether  you have configured your Dialog (via the <code>postmethod</code> attribute)
+  to use XMLHttpRequest or standard form submission.</p>
+<p>If no form is specified in your markup, one is automatically  created for
+  you by  Dialog  (its name attribute will be "frm_<em>dialogid</em>", where
+  dialogid is the HTML element id you passed to the Dialog constructor). If you
+  allow Dialog to create the form for you dynamically, be sure to set the form's
+  action attribute by script if you wish the form to post via XMLHttpRequest
+  or standard form submisison.</p>
+<h3>Setting up Dialog Buttons<a name="button"></a></h3>
+<p>Dialog provides a  configuration property called "buttons" that allows you
+  to automatically wire up buttons with callbacks to display in the footer of
+  the Dialog. Buttons are configured by creating an array of objects as illustrated
+  in the following code sample. Note that you can configure a separate handler
+  script to respond to each of the buttons.</p>
+
+<div id="syntax-2c489f5e79a740d87a12a6e89f7cf43b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> handleCancel <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="me1">cancel</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> handleSubmit <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    <span class="kw1">this</span>.<span class="me1">submit</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myButtons <span class="sy0">=</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">&quot;Submit&quot;</span><span class="sy0">,</span> handler<span class="sy0">:</span> handleSubmit<span class="sy0">,</span> isDefault<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">&quot;Cancel&quot;</span><span class="sy0">,</span> handler<span class="sy0">:</span> handleCancel <span class="br0">&#125;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myDialog.<span class="me1">cfg</span>.<span class="me1">queueProperty</span><span class="br0">&#40;</span><span class="st0">&quot;buttons&quot;</span><span class="sy0">,</span> myButtons<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> handleCancel <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">this</span>.<span class="me1">cancel</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+<span class="kw2">var</span> handleSubmit <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">this</span>.<span class="me1">submit</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+<span class="kw2">var</span> myButtons <span class="sy0">=</span> <span class="br0">&#91;</span>
+    <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">&quot;Submit&quot;</span><span class="sy0">,</span> handler<span class="sy0">:</span> handleSubmit<span class="sy0">,</span> isDefault<span class="sy0">:</span> <span class="kw2">true</span> <span class="br0">&#125;</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span> text<span class="sy0">:</span> <span class="st0">&quot;Cancel&quot;</span><span class="sy0">,</span> handler<span class="sy0">:</span> handleCancel <span class="br0">&#125;</span>
+<span class="br0">&#93;</span><span class="sy0">;</span>
+myDialog.<span class="me1">cfg</span>.<span class="me1">queueProperty</span><span class="br0">&#40;</span><span class="st0">&quot;buttons&quot;</span><span class="sy0">,</span> myButtons<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-2c489f5e79a740d87a12a6e89f7cf43b-plain">var handleCancel = function() {
+    this.cancel();
+};
+var handleSubmit = function() {
+    this.submit();
+};
+var myButtons = [
+    { text: "Submit", handler: handleSubmit, isDefault: true },
+    { text: "Cancel", handler: handleCancel }
+];
+myDialog.cfg.queueProperty("buttons", myButtons);
+</textarea></div>
+
+<p>Each button object in the buttons array can have three properties:</p>
+<ul>
+  <li><strong>text</strong>: The text that will display on the face of the button;</li>
+  <li><strong>handler</strong>: the function that should fire when the button
+    is clicked (the scope of this function is always its Dialog instance);</li>
+  <li><strong>isDefault</strong>: an optional boolean value that specifies that
+    a button should be highlighted and focused by default. </li>
+</ul>
+<p>In the example above, the "buttons" property is queued up to be executed upon render of the Dialog.</p>
+
+<p><strong>NOTE:</strong> If you've included the optional YUI Button script on the page, the buttons created will be instances of <code>YAHOO.widget.Button</code> otherwise regular HTML Buttons will be created.</p>
+
+<h3>Initializing the Dialog<a name="init"></a></h3>
+<p>To instantiate a Dialog,  use this code:</p>
+
+<div id="syntax-3bf75fce75fb0204ae3c70747240071a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myDialog <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Dialog</span><span class="br0">&#40;</span><span class="st0">'myDialog'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myDialog <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Dialog</span><span class="br0">&#40;</span><span class="st0">'myDialog'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-3bf75fce75fb0204ae3c70747240071a-plain">var myDialog = new YAHOO.widget.Dialog('myDialog');
+</textarea></div>
+<p>This constructor uses an element with an HTML ID of "myDialog" on
+  the page; the markup example above provides a template for this markup. Once
+  instantiated, you may wish to configure the form's buttons (see above) and
+  then render your Dialog instance on the page:</p>
+
+<div id="syntax-42905b6cbc46bc0d28441c55ac33f177" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myDialog.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myDialog.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-42905b6cbc46bc0d28441c55ac33f177-plain">myDialog.render();
+</textarea></div>
+
+<p>Generally, Dialogs are hidden when the page loads and only appear when needed.  To reveal your Dialog on screen, invoke its <code>show</code> method:</p>
+
+
+<div id="syntax-02a7f5ec2814c4eaa5fb1a27784dec4c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myDialog.<span class="me1">show</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myDialog.<span class="me1">show</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-02a7f5ec2814c4eaa5fb1a27784dec4c-plain">myDialog.show();
+</textarea></div>
+
+<h3 id="submit">Submitting Form Data</h3>
+<p>Submitting the Dialog via script is as simple as calling the <code>submit</code> function on the Dialog object:</p>
+<div id="syntax-dd7d958e27f6c7fe3b1e647430364121" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myDialog.<span class="me1">submit</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myDialog.<span class="me1">submit</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-dd7d958e27f6c7fe3b1e647430364121-plain">myDialog.submit();
+</textarea></div>
+
+<p>The default <code>postmethod</code> for the Dialog is <code>async</code>. Upon submission of a Dialog whose <code>postmethod</code> configuration is set to <code>async</code> (meaning that it will use <a href="../../connection/index.html">Connection Manager</a> to post the form's data via XMLHttpRequest to the URI specified in the form element's <code>action</code> attribute), all of the appropriate <a href="../../connection/index.html">Connection Manager</a> callbacks documented in the API will be executed, allowing for easy handling of the response.  
+By default the Dialog is automatically hidden after submission, however the <code>hideaftersubmit</code> configuration property can be used to control this behavior.</p>
+
+<p>For example, to set up the handlers for both successful and failing Dialog submissions when using an asynchronous form post, the code might look like this:</p>
+
+<div id="syntax-d1b1dbdc338d6f9dff29a58703056796" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> onSuccess <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Your data was successfully submitted. The response was: &quot;</span> <span class="sy0">+</span> o.<span class="me1">responseText</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> onFailure <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Your submission failed. Status: &quot;</span> <span class="sy0">+</span> o.<span class="kw3">status</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myDialog.<span class="me1">callback</span>.<span class="me1">success</span> <span class="sy0">=</span> onSuccess<span class="sy0">;</span></div></li><li class="li1"><div class="de1">myDialog.<span class="me1">callback</span>.<span class="me1">failure</span> <span class="sy0">=</span> onFailure<span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> onSuccess <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Your data was successfully submitted. The response was: &quot;</span> <span class="sy0">+</span> o.<span class="me1">responseText</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+<span class="kw2">var</span> onFailure <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Your submission failed. Status: &quot;</span> <span class="sy0">+</span> o.<span class="kw3">status</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+myDialog.<span class="me1">callback</span>.<span class="me1">success</span> <span class="sy0">=</span> onSuccess<span class="sy0">;</span>
+myDialog.<span class="me1">callback</span>.<span class="me1">failure</span> <span class="sy0">=</span> onFailure<span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-d1b1dbdc338d6f9dff29a58703056796-plain">var onSuccess = function(o) {
+    alert("Your data was successfully submitted. The response was: " + o.responseText);
+};
+var onFailure = function(o) {
+    alert("Your submission failed. Status: " + o.status);
+};
+myDialog.callback.success = onSuccess;
+myDialog.callback.failure = onFailure;
+</textarea></div>
+<p>When using the <code>async</code> <code>postmethod</code>, if you need access to the connection object, you can listen for the <code>asyncSubmitEvent</code>, which is fired after the async request is dispatched. The connection object will be passed to listeners as the first argument:</p>
+
+<div id="syntax-e360db87bf98211f323571c9f58b0fd6" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myDialog.<span class="me1">asyncSubmitEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">function</span><span class="br0">&#40;</span>type<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> connectionObject <span class="sy0">=</span> args<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">        setTimeout<span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            <span class="kw1">if</span> <span class="br0">&#40;</span>userClosedDialog<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">abort</span><span class="br0">&#40;</span>connectionObject<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">            <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="sy0">,</span> <span class="nu0">1000</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myDialog.<span class="me1">asyncSubmitEvent</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span>
+    <span class="kw2">function</span><span class="br0">&#40;</span>type<span class="sy0">,</span> args<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw2">var</span> connectionObject <span class="sy0">=</span> args<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+        setTimeout<span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+            <span class="kw1">if</span> <span class="br0">&#40;</span>userClosedDialog<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+                <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Connect</span>.<span class="me1">abort</span><span class="br0">&#40;</span>connectionObject<span class="br0">&#41;</span><span class="sy0">;</span>
+            <span class="br0">&#125;</span>
+        <span class="br0">&#125;</span><span class="sy0">,</span> <span class="nu0">1000</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-e360db87bf98211f323571c9f58b0fd6-plain">myDialog.asyncSubmitEvent.subscribe(
+    function(type, args) {
+        var connectionObject = args[0];
+
+        setTimeout(function() {
+            if (userClosedDialog) {
+                YAHOO.util.Connect.abort(connectionObject);
+            }
+        }, 1000);
+    }
+);
+</textarea></div>
+<p>
+If the Dialog's form contains a file upload input control (<code>&#60input type="file"&#62;</code>) the Dialog will use Connection Manager's <a href="../../connection/index.html#file">file upload</a> support when sending
+out the async request. For file uploads Connection Manager expects the callback to be defined with a single <code>upload</code> handler, replacing the <code>success</code> and <code>failure</code> handlers. 
+The <code>upload</code> handler will be invoked on completion of the transaction: 
+</p>
+
+<div id="syntax-cd78ccfeb95277770f780128636c12a1" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> onUpload <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// NOTE: In this case, since Connection Manager uses an iframe for submission,</span></div></li><li class="li1"><div class="de1">    <span class="co1">// o.responseText will contain the contents of the iframe's document.body tag as a string.</span></div></li><li class="li1"><div class="de1">    <span class="co1">// See the Connection Manager documentation for more details</span></div></li><li class="li2"><div class="de2">    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Your data was successfully submitted. The response was: &quot;</span> <span class="sy0">+</span> o.<span class="me1">responseText</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">myDialog.<span class="me1">callback</span>.<span class="me1">upload</span> <span class="sy0">=</span> onUpload<span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> onUpload <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>o<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">// NOTE: In this case, since Connection Manager uses an iframe for submission,</span>
+    <span class="co1">// o.responseText will contain the contents of the iframe's document.body tag as a string.</span>
+    <span class="co1">// See the Connection Manager documentation for more details</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;Your data was successfully submitted. The response was: &quot;</span> <span class="sy0">+</span> o.<span class="me1">responseText</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+myDialog.<span class="me1">callback</span>.<span class="me1">upload</span> <span class="sy0">=</span> onUpload<span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-cd78ccfeb95277770f780128636c12a1-plain">var onUpload = function(o) {
+    // NOTE: In this case, since Connection Manager uses an iframe for submission,
+    // o.responseText will contain the contents of the iframe's document.body tag as a string.
+    // See the Connection Manager documentation for more details
+    alert("Your data was successfully submitted. The response was: " + o.responseText);
+}
+myDialog.callback.upload = onUpload;
+</textarea></div>
+<p>It's also valuable to note that the <code>callback</code> object referenced in the above example is passed directly to the Connection Manager, and therefore can accept the <code>argument</code> and <code>scope</code> properties in addition to <code>success</code> and <code>failure</code>. More information on the usage of these properties is available in the <a href="../../connection/index.html#async">Connection Manager documentation</a>.
+
+<h3 id="read">Reading Current Form Data</h3>
+<p>Dialog provides a function called getData that returns a simple object structure
+  with the form's current data. For instance, in the example above, if you wanted
+  to find out what someone typed in the field called "firstname" you could retrieve
+  that value from getData like such:</p>
+<div id="syntax-0b4b217de0c9c4d4709659d93d5e30df" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> firstname <span class="sy0">=</span> myDialog.<span class="me1">getData</span><span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="me1">firstname</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> firstname <span class="sy0">=</span> myDialog.<span class="me1">getData</span><span class="br0">&#40;</span><span class="br0">&#41;</span>.<span class="me1">firstname</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-0b4b217de0c9c4d4709659d93d5e30df-plain">var firstname = myDialog.getData().firstname;
+</textarea></div>
+
+<h3 id="config">Configuration Properties</h3>
+<p>Dialog has the following configuration properties:</p>
+<div class="apisummary short">
+    <table>
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+            </tr>
+            <tr class="odd">
+                <td>postmethod</td>
+                <td>String</td>
+                <td>"async"</td>
+                <td>The method in which the Dialog's form should be posted. Options are "async", "form", or "none".</td>
+            </tr>
+            <tr>
+                <td>postdata</td>
+                <td>String</td>
+                <td>null</td>
+                <td>Additional post data to send along with "async" POST requests. This string is expected to be the form of a name/value pair query string, as defined by the <a href="../../docs/YAHOO.util.Connect.html#method_asyncRequest">YAHOO.util.Connect.asyncRequest</a> method.</td>
+            </tr>
+            <tr class="odd">
+                <td>buttons</td>
+                <td>Object[]</td>
+                <td>null</td>
+                <td>Array of button objects to render at the bottom of the Dialog.</td>
+            </tr>
+            <tr>
+                <td>hideaftersubmit</td>
+                <td>Boolean</td>
+                <td>true</td>
+                <td>Whether or not to hide the Dialog after it is submitted.</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p>Dialog has the following inherited configuration properties:</p>
+<div class="apisummary">
+<table>
+    <tbody>
+    <tr><th> Name </th><th>Type</th><th>Default</th><th>Description</th></tr>
+    <tr class="odd"><td> visible </td><td> Boolean </td><td> true </td>
+    <td>  Sets whether or not the Dialog is visible on the page (Dialog uses the CSS "visibility" property to control this). </td></tr>
+    <tr><td> effect </td><td> Object / Object[] </td><td> none </td>
+    <td> Sets the ContainerEffect (one or many) that should be used when showing and hiding the Dialog. </td>
+    </tr>
+    <tr class="odd"><td> monitorresize </td><td> Boolean </td><td> true </td><td> Configures whether or not to create a hidden off-screen element that can be used to monitor for text size changes in the DOM. </td></tr>
+    <tr><td> x </td><td> Number </td><td> null </td><td> Sets the element's page X co-ordinate. </td></tr>
+    <tr class="odd"><td> y </td><td> Number </td><td> null </td><td> Sets the element's page Y co-ordinate. </td></tr>
+    <tr><td> xy </td><td> Array </td><td> null </td><td> Sets the element's page XY co-ordinates. </td></tr>
+    <tr class="odd"><td> context </td><td> Array </td><td> null </td>
+    <td>
+            Allows the Overlay to be aligned relative to a context element. The property expects an array value with the format: <code>[contextElementOrId, overlayCorner, contextElementCorner]</code>,
+            where "contextElementOrId" is the context element or the id of the context element. 
+            </p>
+            <p>
+            The corner parameters are one of the following string values: "tr" (top right), "tl" (top left), "br" (bottom right), or "bl" (bottom left) and define which corners of the overlay and context element should be aligned.
+            </p>
+            
+            <p>The array also supports optional 4th and 5th entries.</p>
+            
+            <p>The 4th entry is an optional array of event names, or Custom Event objects, which should trigger re-alignment of the Overlay with the currently configured context element. For example:</p> 
+            <p><code>[contextId, overlayCorner, contextCorner, ["beforeShow", "windowResize"]]</code></p>
+            <p>Will re-align the Overlay to the context element just before it's shown, and whenever the window is resized.</p>
+            
+            <p>The 5th entry is an optional XY pixel offset, which is to be applied <em>after</em> the Overlay is aligned to the specified corner of the context element, and can be used to add a pixel buffer between the context element and the Overlay.
+            For example:</p>
+            <p><code>[contextId, overlayCorner, contextCorner, triggerEvents, [10, 20]]</code></p>
+            <p>Will offset the Overlay by 10 pixels along the X axis, and 20 pixels along the Y axis, after aligning the specified corners.</p> 
+    </td>
+    </tr>
+    <tr><td> fixedcenter </td><td> Boolean </td><td> false </td><td> Specifies whether the Overlay should be automatically centered in the viewport on window scroll and resize. </td></tr>
+    <tr class="odd"><td> width </td><td> String </td><td> null </td><td> Sets the element's "width" style property. </td></tr>
+    <tr><td> height </td><td> String </td><td> null </td><td> Sets the element's "height" style property. </td></tr>
+    <tr class="odd"><td> zIndex </td><td> Number </td><td> null </td><td> Sets the element's "z-index" style property. </td></tr>
+    <tr><td> constraintoviewport </td><td> Boolean </td><td> false </td><td> If set to true the Overlay will try to remain inside the confines of the size of viewport. </td></tr>
+    <tr class="odd"><td> iframe </td><td> Boolean </td><td> false (true by default for IE 6 and below) </td><td> If set to true the Menu will have and iframe behind it to prevent other elements with a higher z-index from poking through. </td></tr>
+    <tr><td> close </td><td> Boolean </td><td> null </td><td> Whether a "close" icon should be displayed in the header. </td></tr>
+    <tr class="odd"><td> draggable </td><td> Boolean </td><td>  "true" if the Drag and Drop utility is included, otherwise "false." </td><td> Whether to allow the user to drag the Panel using its header. </td></tr>
+    <tr><td> underlay </td><td> String </td><td> "shadow" </td><td> Specifies the type of underlay to display under the Panel. Other options include "none", and "matte", which renders a small white matte under the Panel. </td></tr>
+    <tr class="odd"><td> modal </td><td> Boolean </td><td> false </td><td> Specifies whether the document should be shielded with a partially transparent mask to require the user to close the Panel before being able to activate any elements in the document. </td></tr>
+    <tr><td> keylisteners </td><td> YAHOO.util.KeyListener / Array </td><td> null </td><td> A KeyListener or Array of KeyListeners containing key events to enable when the Panel is displayed.</td></tr>
+    <tr class="odd"><td> hideaftersubmit </td><td> Boolean </td><td> true </td><td> If set to true, the Dialog is hidden after it's submitted. If false, it is left visible after form submission.</td></tr>
+    <tr>
+        <td> autofillheight </td>
+        <td> String </td>
+        <td> "body" </td>
+        <td> Which container element (header, body or footer) should be sized to fill out any remaining 
+        vertical space when a height is set on the container using the <code>height</code> configuration property. Supported values are "header", "body" and "footer". Can be set to null (or false) to turn off the feature.
+        </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<h2 id="events">Dialog Event Flow (diagram)</h2>
+
+<p><img src="../img/dialog-event-flow.png" alt="Diagram outlining the flow of custom events that happens in a typical Dialog Control lifecycle." width="700" height="345"></p>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+</div>
+         <div class="yui-u">
+            
+            <div id="cheatsheet">
+                <h3>Dialog/SimpleDialog Controls Cheat Sheet:</h3>
+                
+                <a href="http://yuiblog.com/assets/pdf/cheatsheets/dialog.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/css.gif" width="178" height="132" alt="Cheat Sheet for the Dialog and SimpleDialog Controls"></a>
+                
+                <p><a href="../../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+            </div>
+        
+            <div id="examples">
+<h3>Container Family Examples:</h3>
+
+<ul>
+<li><a href='../../examples/container/module.html'>The Module Control</a></li>
+<li><a href='../../examples/container/overlay.html'>Creating and Positioning an Overlay</a></li>
+<li><a href='../../examples/container/tooltip.html'>Simple Tooltip Example</a></li>
+<li><a href='../../examples/container/tooltip-multi.html'>One Tooltip, Many Context Elements</a></li>
+<li><a href='../../examples/container/panel.html'>Simple Panel Example</a></li>
+<li><a href='../../examples/container/panelskin1.html'>Skinning a Panel with Custom CSS: Introduction</a></li>
+<li><a href='../../examples/container/panelskin2.html'>Skinning a Panel with Custom CSS: Advanced</a></li>
+<li><a href='../../examples/container/panel-loading.html'>Creating a Modal "Loading" Panel</a></li>
+<li><a href='../../examples/container/panel-resize.html'>Creating a Resizable Panel</a></li>
+<li><a href='../../examples/container/dialog-quickstart.html'>Dialog Quickstart Example</a></li>
+<li><a href='../../examples/container/simpledialog-quickstart.html'>SimpleDialog Quickstart Example</a></li>
+<li><a href='../../examples/container/container-effect.html'>Using ContainerEffect Transitions</a></li>
+<li><a href='../../examples/container/overlaymanager.html'>Using the Overlay Manager to Manage Multiple Panels</a></li>
+<li><a href='../../examples/container/keylistener.html'>Implementing Container Keyboard Shortcuts with KeyListener</a></li>
+<li><a href='../../examples/container/container-ariaplugin.html'>Using the Container ARIA Plugin</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Container Family:</h4>
+
+<ul>
+<li><a href='../../examples/button/button-ariaplugin.html'>Using the Button ARIA Plugin</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/button/button-menu-select.html'>Using A Menu Button To Replace A &#60;select&#62; Element</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/button/button-menu-swap.html'>Replacing the content of a Button's Menu</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/colorpicker/colorpicker-dialog-from-script.html'>Example of Color Picker Built in a Dialog via JavaScript</a> (included with examples for the <a href='../../colorpicker/index.html'>Color Picker Control</a>)</li>
+<li><a href='../../examples/layout/panel_layout.html'>Layout inside a resizable Panel</a> (included with examples for the <a href='../../layout/index.html'>Layout Manager</a>)</li>
+<li><a href='../../examples/editor/dialog_editor.html'>Editor in a Dialog Control</a> (included with examples for the <a href='../../editor/index.html'>Rich Text Editor</a>)</li>
+<li><a href='../../examples/button/btn_example07.html'>Menu Buttons</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/calendar/calcontainer.html'>Popup Calendar - Advanced</a> (included with examples for the <a href='../../calendar/index.html'>Calendar Control</a>)</li>
+<li><a href='../../examples/datatable/dt_colshowhide.html'>Showing, Hiding, and Reordering Columns.</a> (included with examples for the <a href='../../datatable/index.html'>DataTable Control</a>)</li>
+<li><a href='../../examples/button/btn_example08.html'>Split Buttons</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/button/btn_example09.html'>Simple Calendar Menu Button</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/button/btn_example10.html'>Calendar Menu Button with Date on Button Face</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/button/btn_example11.html'>Color Picker Button</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/button/btn_example12.html'>Fixed Width Menu Button</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/menu/programsmenu.html'>OS-Style Programs Menu</a> (included with examples for the <a href='../../menu/index.html'>Menu Family</a>)</li>
+<li><a href='../../examples/menu/applicationmenubar.html'>Application Menubar</a> (included with examples for the <a href='../../menu/index.html'>Menu Family</a>)</li>
+<li><a href='../../examples/button/btn_example14.html'>Slider Button</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../../layout/index.html'>Layout Manager</a>)</li>
+</ul>		
+           </div>
+           
+            <div id="morereading">
+                <h3>More Reading about the YUI Dialog Control:</h3>
+                
+                <ul>
+                  <li><a href="http://thecodecentral.com/2007/07/13/creating-lightbox-with-yahoo-user-interface-library">Creating Lightbox with Yahoo! User Interface Library</a>, at TheCodeCentral</li>
+                  <li><a href="http://www.creativeui.com/2007/04/11/yui-part-iii-the-mighty-dialog/">YUI - Part III - The mighty dialog</a>, by David Baxter on the CreativeUI blog</li>
+               </ul>
+           </div>
+           
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fcontainer%2Fdialog%2F--><h3 id="delicious">YUI Dialog on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/container/dialog/" class="bookmark">bookmark on del.icio.us</a></p>
+            <p class="be-first">be the first to bookmark this page!</a></p>
+   </div></div>
+     
+         </div>
+      </div>
+</div>
+</div>
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="selected "><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:20 PDT 2013 -->
+
+<!-- Localized -->

@@ -1,0 +1,502 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Charts Control: Chart with 2 Numeric Axes</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/json/json-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/swf/swf-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/charts/charts-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+	#chart
+	{
+		width: 500px;
+		height: 350px;
+		margin-bottom: 10px;
+	}
+	.yui-dt-table {width: 500px;}
+
+	.chart_title
+	{
+		display: block;
+		font-size: 1.2em;
+		font-weight: bold;
+		margin-bottom: 0.4em;
+	}
+</style>
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	<div id="ygma"><a href="/"><img src="http://l.yimg.com/a/i/brand/purplelogo/uh/us/ydn.gif" width="266" height="34" border="0"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: Charts Control: Chart with 2 Numeric Axes</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Charts Control: Chart with 2 Numeric Axes</h1>
+	
+	<div class="exampleIntro">
+	<p>A <a href="http://developer.yahoo.com/yui/charts/">YUI Charts Control</a> may employ two Numeric Axes of different scale to display data sets with different ranges in the same area.</p>
+<p>Please note: The YUI Charts Control requires Flash Player 9.0.45 or higher. The latest version of Flash Player is available at the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.</p>			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="charts-dualaxes_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<span class="chart_title">Monthly Expenses</span>
+<div id="chart">Unable to load Flash content. The YUI Charts Control requires Flash Player 9.0.45 or higher. You can download the latest version of Flash Player from the <a href="http://www.adobe.com/go/getflashplayer">Adobe Flash Player Download Center</a>.</p></div>
+
+<div id="datatable"></div>
+
+<script type="text/javascript">
+
+	YAHOO.widget.Chart.SWFURL = "http://yui.yahooapis.com/2.9.0/build/charts/assets/charts.swf";
+
+	//--- data
+
+		YAHOO.example.monthlyExpenses =
+		[
+			{ month: "January", rent: 3880.00, car: 298.68, power:56.98, cable:115.50 },
+			{ month: "February", rent: 3880.00, car: 298.68, power:68.99, cable:115.42 },
+			{ month: "March", rent: 3880.00, car: 298.68, power:46.85, cable:123.76 },
+			{ month: "April", rent: 3880.00, car: 315.71, power:42.52, cable:105.44 },
+			{ month: "May", rent: 4010.00, car: 315.71, power:59.67, cable:111.42 },
+			{ month: "June", rent: 4910.00, car: 315.71, power:68.98, cable:114.32 }
+		];
+
+		//data source
+		var myDataSource = new YAHOO.util.DataSource( YAHOO.example.monthlyExpenses );
+		myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+		myDataSource.responseSchema =
+		{
+			fields: [ "month", "rent", "car", "power", "cable" ]
+		};
+
+		//label function
+		YAHOO.example.formatCurrencyAxisLabel = function( value )
+		{
+			return YAHOO.util.Number.format( value,
+			{
+				prefix: "$",
+				thousandsSeparator: ",",
+				decimalPlaces: 2
+			});
+		}
+
+		//dataTip function
+		YAHOO.example.getDataTipText = function( item, index, series )
+		{
+				var toolTipText = series.displayName + " for " + item.month;
+				toolTipText += "\n" + YAHOO.example.formatCurrencyAxisLabel( item[series.yField] );
+				return toolTipText;
+		}
+
+		//numeric axis
+		var currencyAxis = new YAHOO.widget.NumericAxis();
+		currencyAxis.labelFunction = YAHOO.example.formatCurrencyAxisLabel;
+		currencyAxis.alwaysShowZero = false;
+		currencyAxis.calculateByLabelSize = true;
+		currencyAxis.position = "right";
+		currencyAxis.title = "Utilities";
+
+		//secondary numeric axis
+		var currencyAxis2 = new YAHOO.widget.NumericAxis();
+		currencyAxis2.order = "secondary";
+		currencyAxis2.position = "left";
+		currencyAxis2.title = "Rent";
+		currencyAxis2.labelFunction = YAHOO.example.formatCurrencyAxisLabel;
+		currencyAxis2.alwaysShowZero = false;
+
+		//create an array of numeric axes
+		var axes = new Array();
+		axes.push(currencyAxis);
+		axes.push(currencyAxis2);	
+		
+		//series definition
+		var seriesDef =
+		[
+			{ displayName: "Rent", yField: "rent", axis:"secondary", style:{color:0x6238A7, size:8}},
+			{ displayName: "Car", yField: "car", axis:"primary", style:{color:0x00E72E, size:8} },
+			{ displayName: "Power", yField:"power", axis:"primary", style:{color:0xFFA329, size:8} },
+			{ displayName: "Cable", yField:"cable", axis:"primary", style:{color:0xFF4AD8, size:8} }
+		];		
+
+		//styles
+		var styleDef = {
+							padding:0,
+							border:{size:3, color:0x8899dd},
+							background:{color:0xaeb7dc}, 
+							dataTip:{font:{color:"#000000"}, background:{color:0x00E72E, alpha:.3}},
+							font:{color: "#eeeeee"},
+							yAxis:
+							{
+								labelDistance:0, 
+								titleRotation:-90, 
+								titleFont:{color:0xeeeeee}, 
+								minorTicks:{display:"none"}, 
+								majorGridLines:{color:0xeeeeee}, 
+								color:0xeeeeee, 
+								majorTicks:{color:0xeeeeee}
+							},
+							secondaryYAxis:
+							{ 
+								titleRotation:90
+							}, 
+							xAxis:
+							{
+								majorTicks:{display:"none"}, 
+								labelRotation:-45, 
+								size:0
+							}
+						}
+
+
+		//chart
+		var mychart = new YAHOO.widget.LineChart( "chart", myDataSource,
+		{
+			constrainViewport:false,
+			series: seriesDef,
+			xField: "month",
+			yAxes: axes,
+			style: styleDef
+		});
+
+</script>	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Create a DataSource</h2>
+
+<p>In this example the data provider for the LineChart is a standard JavaScript Array. Each object in this Array contains multiple values, any of which can be used for the series definition in the LineChart.</p>
+
+<textarea name="code" class="JScript" cols="60" rows="10">
+	YAHOO.example.monthlyExpenses =
+	[
+		{ month: "January", rent: 3880.00, car: 298.68, power:56.98, cable:115.50 },
+		{ month: "February", rent: 3880.00, car: 298.68, power:68.99, cable:115.42 },
+		{ month: "March", rent: 3880.00, car: 298.68, power:46.85, cable:123.76 },
+		{ month: "April", rent: 3880.00, car: 315.71, power:42.52, cable:105.44 },
+		{ month: "May", rent: 4010.00, car: 315.71, power:59.67, cable:111.42 },
+		{ month: "June", rent: 4910.00, car: 315.71, power:68.98, cable:114.32 }
+	];
+
+	var myDataSource = new YAHOO.util.DataSource( YAHOO.example.monthlyExpenses );
+	myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSARRAY;
+	myDataSource.responseSchema =
+	{
+		fields: [ "month", "rent", "car", "power", "cable" ]
+	};
+</textarea>
+
+<p>The Array is passed to a new DataSource instance, and fields are defined to specify which items will be used from the original source. In this case we'll use all of them: "month", "rent", "car", "power", and "cable".</p>
+
+<h2>Define our Text formatting functions</h2>
+
+<p>Next we will create methods to format the labels for our axes and data tip.</p>
+
+<textarea name="code" class="JScript" cols="60" rows="10">
+	YAHOO.example.formatCurrencyAxisLabel = function( value )
+	{
+		return YAHOO.util.Number.format( value,
+		{
+			prefix: "$",
+			thousandsSeparator: ",",
+			decimalPlaces: 2
+		});
+	}
+
+	YAHOO.example.getDataTipText = function( item, index, series )
+	{
+			var toolTipText = series.displayName + " for " + item.month;
+			toolTipText += "\n" + YAHOO.example.formatCurrencyAxisLabel( item[series.yField] );
+			return toolTipText;
+	}	
+	
+</textarea>
+
+<h2>Create the Numeric Axes</h2>
+<p>We will use two y-axes in this chart, so we will need to create two <code>NumericAxis</code> instances. When using dual axes, you need to define a primary and a secondary axis. This is defined by the <code>order</code> property of the NumericAxis. The default value for <code>order</code> is "primary". The NumericAxis also has a <code>position</code> property that enables us to select where each axis will appear on the chart. When the NumericAxes are on the y-axis, the primary axis will default to the left side. When the NumericAxes are on the x-axis, the primary axis will default to the bottom. In our example, we will position the primary axis on the right by explicitly setting <code>position</code> on both axes.</p>
+
+<textarea name="code" class="JScript" cols="60" rows="10">
+	var currencyAxis = new YAHOO.widget.NumericAxis();
+	currencyAxis.labelFunction = YAHOO.example.formatCurrencyAxisLabel;
+	currencyAxis.alwaysShowZero = false;
+	currencyAxis.calculateByLabelSize = true;
+	currencyAxis.position = "right";
+	currencyAxis.title = "Utilities";
+
+	var currencyAxis2 = new YAHOO.widget.NumericAxis();
+	currencyAxis2.order = "secondary";
+	currencyAxis2.position = "left";
+	currencyAxis2.title = "Rent";
+	currencyAxis2.labelFunction = YAHOO.example.formatCurrencyAxisLabel;
+	currencyAxis2.alwaysShowZero = false;
+
+	//place the two axis in an array to be passed to the chart as configuration attribute
+	var axes = new Array();
+	axes.push(currencyAxis);
+	axes.push(currencyAxis2);	
+</textarea>	
+
+<h2>Define a Series Definition</h2>
+
+<p>When using multiple axes, we bind each series to an axis with the <code>axis</code> property.</p>
+
+<textarea name="code" class="JScript" cols="60" rows="10">
+	var seriesDef =
+	[
+		{displayName: "Rent", yField: "rent", axis: "secondary", style: {color:0x6238A7, size:8}},
+		{displayName: "Car", yField: "car", axis: "primary", style: {color:0x00E72E, size:8}},
+		{displayName: "Power", yField: "power", axis: "primary", style: {color:0xFFA329, size:8}},
+		{displayName: "Cable", yField: "cable", axis: "primary", style: {color:0xFF4AD8, size:8}}
+	];
+</textarea>
+
+<p>In the series definition above, we bind the rent field to the secondary axis and the other fields to the primary axis.</p>
+
+<h2>Create the style definition for the chart.</h2>
+<p>When using two axes, the secondary axis will inherit styles from the primary axis. You can, however, override styles for the secondary axis. In our example, we will set the <code>secondaryYAxis</code> title rotation to 90 degrees.</p>
+<textarea name="code" class="JScript" cols="60" rows="6">
+	var styleDef = {
+						padding:0,
+						border:{size:3, color:0x8899dd},
+						background:{color:0xaeb7dc}, 
+						dataTip:{font:{color:"#000000"}, background:{color:0x00E72E, alpha:.3}},
+						font:{color: "#eeeeee"},
+						yAxis:
+						{
+							labelDistance:0, 
+							titleRotation:-90, 
+							titleFont:{color:0xeeeeee}, 
+							minorTicks:{display:"none"}, 
+							majorGridLines:{color:0xeeeeee}, 
+							color:0xeeeeee, 
+							majorTicks:{color:0xeeeeee}
+						},
+						secondaryYAxis:
+						{ 
+							titleRotation:90
+						}, 
+						xAxis:
+						{
+							majorTicks:{display:"none"}, 
+							labelRotation:-90, 
+							size:0
+						}
+					}	
+</textarea>
+
+<h2>Create the Chart</h2>
+
+<p>Because we have multiple axes, instead of using the <code>yAxis</code> attribute to set a single <code>NumericAxis</code>, we will use the <code>yAxes</code> attribute, passing our array of axes.</p>
+
+<textarea name="code" class="JScript" cols="60" rows="6">
+	var mychart = new YAHOO.widget.LineChart( "chart", myDataSource,
+	{
+		constrainViewport:false,
+		series: seriesDef,
+		xField: "month",
+		yAxes: axes,
+		style: styleDef
+	});
+</textarea>
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerDiv"></div>
+							<div id="loggerGloss">
+								<p><strong>Note:</strong> You are viewing this example in debug mode with logging enabled.  This can significantly slow performance.</p>
+	
+								<p class="loggerButton"><span id="loggerLink"><span class="first-child"><a href="charts-dualaxes.html">Reload with logging<br />and debugging disabled.</a></span></span></p>
+							</div>
+						</div>
+					
+				
+					<div id="examples">
+						<h3>Charts Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='../charts/charts-quickstart.html'>Charts Quickstart Example</a></li><li><a href='../charts/charts-legend.html'>Chart with Legend Example</a></li><li><a href='../charts/charts-skins.html'>Skinning a Chart Example</a></li><li><a href='../charts/charts-datatable.html'>Chart and DataTable Example</a></li><li><a href='../charts/charts-xhr-polling.html'>Chart with DataSource Polling</a></li><li><a href='../charts/charts-stacked.html'>Stacked Bar Chart</a></li><li><a href='../charts/charts-tabview.html'>Charts in a TabView</a></li><li><a href='../charts/charts-rotation.html'>Column Chart with Rotated Title and Labels</a></li><li><a href='../charts/charts-styles.html'>Styling Lines, Borders and Fills</a></li><li class='selected'><a href='../charts/charts-dualaxes.html'>Chart with 2 Numeric Axes</a></li><li><a href='../charts/charts-hideseries.html'>Hide series in a chart.</a></li><li><a href='../charts/charts-seriescustomization.html'>Customize series items</a></li><li><a href='../charts/charts-functionscope.html'>Apply scope to label functions</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Charts Control Resources:</h3>
+						<ul>
+							
+						<li><a href="../../docs/module_charts.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/charts.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="/yui/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="/yui/3/">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="/yui/license.html">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- proven and robust." href="/yui/2/">YUI 2</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="/yui/examples/">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="/yui/docs/">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="item"><a title="Configure your YUI implementation; serve YUI source files from Yahoo! -- free, fast, and simple" href="/yui/articles/hosting/">Dependency Configurator</a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="/yui/animation/">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="/yui/autocomplete/">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="/yui/history/">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="/yui/button/">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="/yui/calendar/">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="/yui/carousel/">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="/yui/charts/">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="/yui/colorpicker/">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="/yui/connection/">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="/yui/container/">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="/yui/cookie/">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="/yui/datasource/">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="/yui/datatable/">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="/yui/dom/">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="/yui/dragdrop/">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="/yui/element/">Element</a></li><li class="item"><a title="The YUI Event Utility" href="/yui/event/">Event</a></li><li class="item"><a title="The YUI Get Utility" href="/yui/get/">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="/yui/imagecropper/">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="/yui/imageloader/">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="/yui/json/">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="/yui/layout/">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="/yui/logger/">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="/yui/menu/">Menu</a></li><li class="item"><a title="The YUI Paginator" href="/yui/paginator/">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="/yui/profiler/">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="/yui/profilerviewer/">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="/yui/progressbar/">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="/yui/resize/">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="/yui/editor/">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="/yui/selector/">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="/yui/slider/">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="/yui/storage/">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="/yui/stylesheet/">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="/yui/swf/">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="/yui/swfstore/">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="/yui/tabview/">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="/yui/treeview/">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="/yui/uploader/">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="/yui/yahoo/">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="/yui/yuiloader/">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="/yui/yuitest/">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="/yui/reset/">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="/yui/base/">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="/yui/fonts/">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="/yui/grids/">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:47 PDT 2013 -->

@@ -1,0 +1,1095 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Event Utility</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Event Utility</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+      
+  <div id="promo" class="component">
+    <h1>YUI 2: Event Utility</h1>
+    <p>
+  The YUI Event Utility facilitates the creation of event-driven applications in
+  the browser by giving you a simplified interface for subscribing to DOM
+  events and for examining properties of the browser's Event object. The Event Utility package includes the Custom Event object; Custom Events allow you to
+  &quot;publish&quot; the interesting moments or events in your own code
+  so that other components on the page can &quot;subscribe&quot; to those events
+  and respond to them. The Event Utility package provides the following features: </p>
+
+    <ul>
+      <li> A flexible method of attaching an event handler to one or more elements</li>
+      <li> Automatic deferral of handler attachment for elements that are not yet available</li>
+      <li> Automatic scope correction, optional scope assignment</li>
+      <li> Automatic event object browser abstraction</li>
+      <li> The ability to include an arbitrary object to be sent to the handler
+        with the event</li>
+      <li> Utility methods to access event properties that require browser abstraction</li>
+      <li> Automatic listener cleanup</li>
+      <li> A mechanism for creating and subscribing to custom events</li>
+      <li> The ability to execute functions as soon as a DOM element is detected</li>
+   </ul>
+    
+    <div>
+        <h4>On This Page:</h4>
+        <ul>
+            <li><a href="#start">Getting Started</a></li>
+            <li><a href="#event">Using the Event Utility</a> </li>
+            <li><a href="#focusblur">Using the <code>focusin</code> and <code>focusout</code> Events</a></li>
+            <li><a href="#mouseentermouseleave">Using the <code>mouseenter</code> and <code>mouseleave</code> Events</a></li>
+            <li><a href="#delegate">Using the <code>delegate</code> Method</a></li>
+            <li><a href="#onavailable">Using the <code>onAvailable</code> and <code>onContentReady</code> Methods</a></li>
+            <li><a href="#ondomready">Using the <code>onDOMReady</code> Method</a></li>
+            <li><a href="#customevent">Using the CustomEvent Object </a></li>
+            <li><a href="#support">Support &amp; Community</a></li><li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+        </ul>
+    </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/event/index.html">Examples</a>: Explore examples of the YUI Event Utility in action.</li>
+      <li><a href="../docs/module_event.html">API Documentation</a>: View the full API documentation for the YUI Event Utility.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.event">Release Notes</a>: Detailed change log for the YUI Event Utility.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the YUI Event Utility as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>    
+  </div>
+
+  <h2 class="first">Getting Started<a name="start"></a></h2>
+  <p>To use the Event and Custom Event Utilities, include the following source
+  files in your web page with the <code>script</code> tag: </p>
+  
+<div id="syntax-d15120fd27a049888d64a263edee2fa4" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependency --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Event source file --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event/event-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependency --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Event source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event/event-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-d15120fd27a049888d64a263edee2fa4-plain"><!-- Dependency --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js" ></script>
+
+<!-- Event source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js" ></script>
+</textarea></div>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>event</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<p>The Event and Custom Event components are defined by <code>YAHOO.util.Event</code> and
+  <code>YAHOO.util.CustomEvent</code>, respectively. </p>
+<h3>Basic Events</h3>
+<p>To attach an event handler to the DOM, simply define your event handler and pass the event handler to the Event Utility along with a reference to the event for which you want to listen and the element to which you want attach the handler: </p>
+<div id="syntax-829fafe519dc2240c2306f57aa088c75" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> oElement <span class="sy0">=</span> document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">&quot;elementid&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> fnCallback<span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span>oElement<span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> oElement <span class="sy0">=</span> document.<span class="me1">getElementById</span><span class="br0">&#40;</span><span class="st0">&quot;elementid&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw2">function</span> fnCallback<span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="br0">&#125;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span>oElement<span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-829fafe519dc2240c2306f57aa088c75-plain">var oElement = document.getElementById("elementid");
+function fnCallback(e) { alert("click"); }
+YAHOO.util.Event.addListener(oElement, "click", fnCallback);
+</textarea></div>
+    <p>These lines of code:</p>
+    <ul>
+        <li>Declare a variable <code>oElement</code> and assign a specific element in the DOM to
+          that variable.</li>
+        <li>Define a callback function, <code>fnCallback(e)</code>, to handle  the specified
+          event.</li>
+        <li>Call the <code>addListener</code> method on the <code>YAHOO.util.Event</code> object to 
+          bind an event to the DOM element. The <code>addListener</code> method requires three
+          arguments: the element the event is bound to (<code>oElement</code>), the event
+          to bind (<code>"click"</code>, as a string), and the callback function  (<code>fnCallback</code>).</li>
+  </ul>
+    <p>
+    To attach an event handler by element ID, use this code: </p>
+<div id="syntax-e5c77998b29fba181bdae4585980e4b3" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">function</span> fnCallback<span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;elementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">function</span> fnCallback<span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="br0">&#125;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;elementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-e5c77998b29fba181bdae4585980e4b3-plain">function fnCallback(e) { alert("click"); }
+YAHOO.util.Event.addListener("elementid", "click", fnCallback);
+</textarea></div>
+    <p>This example is similar to the first.  However, in this case we are identifying the element by its HTML ID (<code>"elementid"</code> as a string) rather than by passing in a variable pointing to the element object. The Event Utility attempts to find the DOM element by this id value; should it fail to find the element immediately, it continues to seek the element for up to 15 seconds after the page has loaded. This "automatic deferral" enables you, in many cases, to write your event attachment code directly into your script rather than separating it out in a function that runs only after the page has loaded.</p>
+    <p>
+    To attach an event handler to multiple elements, use this code:     </p>
+
+<div id="syntax-08b9ba565c383c8572b494199706b69a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// array can contain object references, element ids, or both</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> ids <span class="sy0">=</span> <span class="br0">&#91;</span><span class="st0">&quot;el1&quot;</span><span class="sy0">,</span> <span class="st0">&quot;el2&quot;</span><span class="sy0">,</span> <span class="st0">&quot;el3&quot;</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> fnCallback<span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="kw3">alert</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span>ids<span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// array can contain object references, element ids, or both</span>
+<span class="kw2">var</span> ids <span class="sy0">=</span> <span class="br0">&#91;</span><span class="st0">&quot;el1&quot;</span><span class="sy0">,</span> <span class="st0">&quot;el2&quot;</span><span class="sy0">,</span> <span class="st0">&quot;el3&quot;</span><span class="br0">&#93;</span><span class="sy0">;</span>
+<span class="kw2">function</span> fnCallback<span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span> <span class="kw3">alert</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="br0">&#125;</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span>ids<span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-08b9ba565c383c8572b494199706b69a-plain">// array can contain object references, element ids, or both
+var ids = ["el1", "el2", "el3"];
+function fnCallback(e) { alert(this.id); }
+YAHOO.util.Event.addListener(ids, "click", fnCallback);
+</textarea></div>    
+    
+    
+    <p>These lines: </p>
+    <ul>
+        <li>Declare an array of ids corresponding to the HTML ID attributes of elements on the page. The array can contain HTML IDs as strings (as shown above); it can also accept variable object references.</li>
+        <li>Define a callback function, <code>fnCallback(e)</code>, to handle the specified event.</li>
+        <li>Call the <code>addListener</code> method of <code>YAHOO.util.Event</code> to bind an event to the
+          DOM element. In this case the first argument to the <code>addListener</code> method
+          is the ids array rather than a single element or ID. </li>
+    </ul>
+  <p>See the examples in <a href="#event">Using Event</a> and <a href="#customevent">Using
+  CustomEvent</a> or the <a href="../docs/YAHOO.util.CustomEvent.html">API Documentation</a> for more details.  See also <a href="../examples/event/eventsimple.html">the first Event Utility example</a> for a tutorial on how to attach events using <code>addListener</code>.</p>
+  
+  <p><strong>Note:</strong> Developers often wonder where they can find a comprehensive list of DOM events (e.g., "click", "mousemove", etc.) that shows in which browsers each event is supported. As far as we know, no perfect list exists.  Danny Goodman's <em><a href="http://www.oreillynet.com/catalog/9780596527402/">DHTML: The Definitive Reference</a></em> may have the most comprehensive information of this kind; PPK's <a href="http://www.quirksmode.org/dom/events/">Event Compatibility Table</a> on quirksmode may have the best compatibility assessment online.  The Event Utility does not place any constraints on the events for which you attach handlers; it will attempt to attach listeners for any event name you provide.  It's your responsibility to make sure that the event you're using is one that is supported in the browsers for which you're developing.</p>
+
+<h2 id="event">Using Event</h2>
+
+  <p>This section describes several common features and uses of the Event Utility.  It contains these sections: </p>
+  <ul>
+    <li><a href="#deferral">Handler Attachment Deferral</a></li>
+    <li><a href="#scope">Automatic Scope Correction</a></li>
+
+    <li><a href="#abstraction">Automatic Event Object Browser Abstraction</a></li>
+    <li><a href="#customobject">Send an Arbitrary Object to the Event Handler</a></li>
+
+  </ul>
+
+<h3 id="deferral">Handler Attachment Deferral</h3>
+
+<p>
+If you attempt to attach a handler to an element before the page is fully loaded,
+  the Event Utility attempts to locate the element. If the element is not
+  available, Event periodically checks for the element until the <code>window.onload</code>
+  event is triggered. Handler deferral only works when attaching handlers by
+  element id; if you attempt to attach to a DOM object reference that is not
+  yet available, the component has no way of knowing what object you are trying
+  to access.
+</p>
+
+<h3 id="scope">Automatic Scope Correction</h3>
+<p>
+Event handlers added with Internet Explorer's <code>attachEvent</code> method are executed
+  in the <code>window</code> scope, so the special variable <code>this</code> in your callback references
+  the <code>window</code> object. This is not very useful. Even more vexing is the fact that
+  the event object in Internet Explorer does not provide a reliable way of identifying
+  the element on which the event was registered; standards-based browsers supply
+  this as the <code>currentTarget</code> property, but this property is not present in IE.</p>
+  <p>By default, the Event Utility automatically adjusts the execution scope so that <code>this</code>
+  refers
+  to the DOM element to which the event was attached, conforming to the
+  behavior of <code>addEventListener</code> in W3C-compliant browsers. Moreover, the event
+  subscriber can override the scope so that <code>this</code> refers to a <a
+  href="#customobject">custom object</a> passed into the <code>addListener</code> call.
+  </p>
+
+<h3>Automatic Event Object Browser Abstraction <a name="abstraction"></a></h3>
+<p>
+The first parameter your callback receives when the event fires is always the
+actual event object.  There is no need to look at <code>window.event</code>.
+</p>
+
+<h3 id="customobject">Send an Arbitrary Object to the Event Handler</h3>
+<p>
+It is common in object-oriented JavaScript development to assign a custom object's member method to listen for
+  an event, access internal properties and execute internal methods in
+  response.  Because the event handler is (by default) executed in the scope of
+  the element, not in the scope of the listener method's parent object, the
+  custom object's properties are not available through the <code>this</code> property as
+  one might expect. You can work around this in a number of ways: (1) by creating
+  closures or (2) creating circular references between your custom object and the
+  element.</p>
+
+<p>The
+Event Utility  enables you to pass your custom objects directly to the event
+handler so you don't have to use any of these (potentially leaky) methods to
+gain access to that custom object. Pass your custom object as
+the fourth parameter to the <code>addListener</code> method, and that object is passed in
+as the second parameter to your callback function (the first is the event object itself):
+</p>
+
+<div id="syntax-7b32c9fa2a32bc4fe5d93e3a1bb612ad" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">function</span> MyObj<span class="br0">&#40;</span>elementId<span class="sy0">,</span> customProp<span class="sy0">,</span> callback<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">   <span class="kw1">this</span>.<span class="me1">elementId</span> <span class="sy0">=</span> elementId<span class="sy0">;</span></div></li><li class="li1"><div class="de1">   <span class="kw1">this</span>.<span class="me1">customProp</span> <span class="sy0">=</span> customProp<span class="sy0">;</span></div></li><li class="li1"><div class="de1">   <span class="kw1">this</span>.<span class="me1">callback</span> <span class="sy0">=</span> callback<span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">MyObj.<span class="me1">prototype</span>.<span class="me1">addClickHandler</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">   <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">elementId</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> <span class="kw1">this</span>.<span class="me1">callback</span><span class="sy0">,</span> <span class="kw1">this</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">function</span> fnCallback1<span class="br0">&#40;</span>e<span class="sy0">,</span> obj<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="co1">// the execution context is the html element (&quot;myelementid&quot;)</span></div></li><li class="li1"><div class="de1">  <span class="kw3">alert</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">id</span> <span class="sy0">+</span> <span class="st0">&quot; click event: &quot;</span> <span class="sy0">+</span> obj.<span class="me1">customProp</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">function</span> fnCallback2<span class="br0">&#40;</span>e<span class="sy0">,</span> obj<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">  <span class="co1">// the execution context is the custom object</span></div></li><li class="li1"><div class="de1">  <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;click event: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="me1">customProp</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myobj <span class="sy0">=</span> <span class="kw2">new</span> MyObj<span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;hello world&quot;</span><span class="sy0">,</span> fnCallback1<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> mydata <span class="sy0">=</span> <span class="br0">&#123;</span> id<span class="sy0">:</span> <span class="nu0">10</span> <span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// One way to add the handler:</span></div></li><li class="li2"><div class="de2">myobj.<span class="me1">addClickHandler</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// This will do the same thing:</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback1<span class="sy0">,</span> myobj<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">// If we pass true as the final parameter, the custom object that is passed</span></div></li><li class="li1"><div class="de1"><span class="co1">// is used for the execution scope (so it becomes &quot;this&quot; in the callback).</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback2<span class="sy0">,</span> myobj<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">// Alternatively, we can assign a completely different object to be the</span></div></li><li class="li1"><div class="de1"><span class="co1">// execution scope:</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback2<span class="sy0">,</span> mydata<span class="sy0">,</span> myobj<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">function</span> MyObj<span class="br0">&#40;</span>elementId<span class="sy0">,</span> customProp<span class="sy0">,</span> callback<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+   <span class="kw1">this</span>.<span class="me1">elementId</span> <span class="sy0">=</span> elementId<span class="sy0">;</span>
+   <span class="kw1">this</span>.<span class="me1">customProp</span> <span class="sy0">=</span> customProp<span class="sy0">;</span>
+   <span class="kw1">this</span>.<span class="me1">callback</span> <span class="sy0">=</span> callback<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+MyObj.<span class="me1">prototype</span>.<span class="me1">addClickHandler</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+   <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">elementId</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> <span class="kw1">this</span>.<span class="me1">callback</span><span class="sy0">,</span> <span class="kw1">this</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">function</span> fnCallback1<span class="br0">&#40;</span>e<span class="sy0">,</span> obj<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+  <span class="co1">// the execution context is the html element (&quot;myelementid&quot;)</span>
+  <span class="kw3">alert</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">id</span> <span class="sy0">+</span> <span class="st0">&quot; click event: &quot;</span> <span class="sy0">+</span> obj.<span class="me1">customProp</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="kw2">function</span> fnCallback2<span class="br0">&#40;</span>e<span class="sy0">,</span> obj<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+  <span class="co1">// the execution context is the custom object</span>
+  <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;click event: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="me1">customProp</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="kw2">var</span> myobj <span class="sy0">=</span> <span class="kw2">new</span> MyObj<span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;hello world&quot;</span><span class="sy0">,</span> fnCallback1<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw2">var</span> mydata <span class="sy0">=</span> <span class="br0">&#123;</span> id<span class="sy0">:</span> <span class="nu0">10</span> <span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// One way to add the handler:</span>
+myobj.<span class="me1">addClickHandler</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// This will do the same thing:</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback1<span class="sy0">,</span> myobj<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// If we pass true as the final parameter, the custom object that is passed</span>
+<span class="co1">// is used for the execution scope (so it becomes &quot;this&quot; in the callback).</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback2<span class="sy0">,</span> myobj<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+&nbsp;
+<span class="co1">// Alternatively, we can assign a completely different object to be the</span>
+<span class="co1">// execution scope:</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback2<span class="sy0">,</span> mydata<span class="sy0">,</span> myobj<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-7b32c9fa2a32bc4fe5d93e3a1bb612ad-plain">function MyObj(elementId, customProp, callback) {
+   this.elementId = elementId;
+   this.customProp = customProp;
+   this.callback = callback;
+}
+
+MyObj.prototype.addClickHandler = function() {
+   YAHOO.util.Event.addListener(this.elementId, "click", this.callback, this);
+};
+
+function fnCallback1(e, obj) {
+  // the execution context is the html element ("myelementid")
+  alert(this.id + " click event: " + obj.customProp);
+}
+
+function fnCallback2(e, obj) {
+  // the execution context is the custom object
+  alert("click event: " + this.customProp);
+}
+
+var myobj = new MyObj("myelementid", "hello world", fnCallback1);
+var mydata = { id: 10 };
+
+// One way to add the handler:
+myobj.addClickHandler();
+
+// This will do the same thing:
+YAHOO.util.Event.addListener("myelementid", "click", fnCallback1, myobj);
+
+// If we pass true as the final parameter, the custom object that is passed
+// is used for the execution scope (so it becomes "this" in the callback).
+YAHOO.util.Event.addListener("myelementid", "click", fnCallback2, myobj, true);
+
+
+// Alternatively, we can assign a completely different object to be the
+// execution scope:
+YAHOO.util.Event.addListener("myelementid", "click", fnCallback2, mydata, myobj);
+</textarea></div>
+
+<h2 id="removeevent">Removing Events</h2>
+
+<p>You can remove event listeners by calling <code>YAHOO.util.Event.removeListener</code> with the same event
+signature that you used to create the event.</p>
+
+<div id="syntax-9b5c9da0220fbdbac6fc984a5d4dc2b3" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">removeListener</span><span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback1<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">removeListener</span><span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> fnCallback1<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-9b5c9da0220fbdbac6fc984a5d4dc2b3-plain">YAHOO.util.Event.removeListener("myelementid", "click", fnCallback1);
+</textarea></div>
+<p>If it is not convenient to save a reference to the original callback you
+used to register the event, and you know you are the only listener to the
+event, you can call <code>removeListener</code> without the function argument.  Doing so
+will remove all listeners added via <code>addListener</code> for the specified element and event type.
+</p>
+<div id="syntax-6666d86ee727728878a8d1307e57e589" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">removeListener</span><span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">removeListener</span><span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-6666d86ee727728878a8d1307e57e589-plain">YAHOO.util.Event.removeListener("myelementid", "click");
+</textarea></div>
+
+
+<p><code>YAHOO.util.Event.getListeners</code> lets you retrieve all of the listeners that were attached to an element via
+<code>addListener</code>.  Optionally, you can retrieve all bound listeners of a given type:
+</p>
+<div id="syntax-88f9d1c142f48198f6f76ab794f8ed2e" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// all listeners</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> listeners <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">getListeners</span><span class="br0">&#40;</span>myelement<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw1">for</span> <span class="br0">&#40;</span><span class="kw2">var</span> i<span class="sy0">=</span><span class="nu0">0</span><span class="sy0">;</span> i<span class="sy0">&lt;</span>listeners.<span class="me1">length</span><span class="sy0">;</span> <span class="sy0">++</span>i<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> listener <span class="sy0">=</span> listeners<span class="br0">&#91;</span>i<span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="kw3">alert</span><span class="br0">&#40;</span> listener.<span class="me1">type</span>   <span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// The event type</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span> listener.<span class="me1">fn</span>     <span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// The function to execute</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span> listener.<span class="me1">obj</span>    <span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// The custom object passed into addListener</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span> listener.<span class="me1">adjust</span> <span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// Scope correction requested, if true, listener.obj</span></div></li><li class="li1"><div class="de1">                              <span class="co1">// is the scope, if an object, that object is the scope</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// only click listeners </span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> listeners <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">getListeners</span><span class="br0">&#40;</span>myelement<span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// all listeners</span>
+<span class="kw2">var</span> listeners <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">getListeners</span><span class="br0">&#40;</span>myelement<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw1">for</span> <span class="br0">&#40;</span><span class="kw2">var</span> i<span class="sy0">=</span><span class="nu0">0</span><span class="sy0">;</span> i<span class="sy0">&lt;</span>listeners.<span class="me1">length</span><span class="sy0">;</span> <span class="sy0">++</span>i<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> listener <span class="sy0">=</span> listeners<span class="br0">&#91;</span>i<span class="br0">&#93;</span><span class="sy0">;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span> listener.<span class="me1">type</span>   <span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// The event type</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span> listener.<span class="me1">fn</span>     <span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// The function to execute</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span> listener.<span class="me1">obj</span>    <span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// The custom object passed into addListener</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span> listener.<span class="me1">adjust</span> <span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// Scope correction requested, if true, listener.obj</span>
+                              <span class="co1">// is the scope, if an object, that object is the scope</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="co1">// only click listeners </span>
+<span class="kw2">var</span> listeners <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">getListeners</span><span class="br0">&#40;</span>myelement<span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-88f9d1c142f48198f6f76ab794f8ed2e-plain">// all listeners
+var listeners = YAHOO.util.Event.getListeners(myelement);
+for (var i=0; i<listeners.length; ++i) {
+    var listener = listeners[i];
+    alert( listener.type   ); // The event type
+    alert( listener.fn     ); // The function to execute
+    alert( listener.obj    ); // The custom object passed into addListener
+    alert( listener.adjust ); // Scope correction requested, if true, listener.obj
+                              // is the scope, if an object, that object is the scope
+}
+
+// only click listeners 
+var listeners = YAHOO.util.Event.getListeners(myelement, "click");
+</textarea></div>
+
+<p><code>YAHOO.util.Event.purgeElement</code> lets you remove all listeners that were registered via <code>addListener</code> from an element.
+Optionally, a specific type of listener can be specified. In addition, The element's children can
+also be purged.
+</p>
+<div id="syntax-7394097be5f41f16dc93b3496b2fa267" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// all listeners</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">purgeElement</span><span class="br0">&#40;</span>myelement<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">// all listeners and recurse children</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">purgeElement</span><span class="br0">&#40;</span>myelement<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="co1">// only click listeners</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">purgeElement</span><span class="br0">&#40;</span>myelement<span class="sy0">,</span> <span class="kw2">false</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// all listeners</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">purgeElement</span><span class="br0">&#40;</span>myelement<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">// all listeners and recurse children</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">purgeElement</span><span class="br0">&#40;</span>myelement<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">// only click listeners</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">purgeElement</span><span class="br0">&#40;</span>myelement<span class="sy0">,</span> <span class="kw2">false</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-7394097be5f41f16dc93b3496b2fa267-plain">// all listeners
+YAHOO.util.Event.purgeElement(myelement);
+// all listeners and recurse children
+YAHOO.util.Event.purgeElement(myelement, true);
+// only click listeners
+YAHOO.util.Event.purgeElement(myelement, false, "click");
+</textarea></div>
+
+
+<h2 id="focusblur">Using the <code>focusin</code> and <code>focusout</code> Events</h2>
+<p>
+Since the DOM <code>focus</code> and <code>blur</code> events do not bubble, use the Event Utility's 
+<code>focusin</code> and <code>focusout</code> events as an alternative to 
+attaching discrete DOM <code>focus</code> and <code>blur</code> event handlers to focusable 
+elements.  The <code>focusin</code> and <code>focusout</code> events make it possible to 
+attach a single listener to an element and listen for the <code>focus</code> and <code>blur</code>
+events fired by all its focusable descendants.  As reducing the number of 
+event listeners is a proven strategy for improving performance, using the 
+<code>focusin</code> and <code>focusout</code> events is a great way to help speed 
+up any page or application that requires listening for focus and blur.
+</p>
+
+<h3 id="creatingfocuslistener">Creating a <code>focusin</code> Listener</h3>
+<p>Consider the following HTML.</p>
+<div id="syntax-d30863cd3899381afd99baa0233e0422" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;toolbar&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;button-cut&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;button-cut&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;Cut&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;button-copy&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;button-copy&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;Copy&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;button-paste&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;button-paste&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;Paste&quot;</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;toolbar&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;button-cut&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;button-cut&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;Cut&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;button-copy&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;button-copy&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;Copy&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">input</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;button&quot;</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;button-paste&quot;</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;button-paste&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;Paste&quot;</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-d30863cd3899381afd99baa0233e0422-plain"><div id="toolbar">
+    <input type="button" id="button-cut" name="button-cut" value="Cut">
+    <input type="button" id="button-copy" name="button-copy" value="Copy">
+    <input type="button" id="button-paste" name="button-paste" value="Paste">
+</div>
+</textarea></div><p>
+Listening for the <code>focus</code> event for every button in the toolbar 
+would typically require attaching discrete event listeners to each button.
+However, using the Event Utility it is possible to attach a single listener to 
+the containing element (in this case <code>&#60;div id="toolbar"&#62;</code>)
+and be notified when each button is focused.
+</p>
+<div id="syntax-dc88f6eff03d523dbe2c5e329765803a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;toolbar&quot;</span><span class="sy0">,</span> <span class="st0">&quot;focusin&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;target: &quot;</span> <span class="sy0">+</span> e.<span class="me1">target</span>.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;toolbar&quot;</span><span class="sy0">,</span> <span class="st0">&quot;focusin&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;target: &quot;</span> <span class="sy0">+</span> e.<span class="me1">target</span>.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-dc88f6eff03d523dbe2c5e329765803a-plain">YAHOO.util.Event.on("toolbar", "focusin", function(e) {
+
+    YAHOO.log("target: " + e.target.id);
+
+});
+</textarea></div>
+
+<h2 id="mouseentermouseleave">Using the <code>mouseenter</code> and <code>mouseleave</code> Events</a></h2>
+<p>
+Inspired by Internet Explorer's 
+<a href="http://msdn.microsoft.com/en-us/library/ms536945(VS.85).aspx"><code>mouseenter</code></a> 
+and 
+<a href="http://msdn.microsoft.com/en-us/library/ms536946(VS.85).aspx"><code>mouseleave</code></a> 
+events, the Event Utility offers the ability to listen for the 
+<code>mouseenter</code> and <code>mouseleave</code> events in all 
+<a href="http://yuilibrary.com/yui/docs/tutorials/gbs/" title="YUI Library -- Graded Browser Support Policy">A-Grade Browsers</a>. 
+For DOM operations executed in response to 
+<code>mouseover</code> and <code>mouseout</code>, using <code>mouseenter</code> 
+and <code>mouseleave</code> can be performance-boosting alternatives in that 
+since they don't bubble, the changes to the DOM will be made less frequently.
+</p>
+
+<p>
+The <code>mouseenter</code> and <code>mouseleave</code> functionality is 
+bundled in a separate module that augments the Event Utility, so to listen 
+for either the <code>mouseenter</code> and <code>mouseleave</code> event it is 
+necessary to include the event-mouseenter module after the Event Utility.
+</p>
+ 
+<div id="syntax-28ef882bf58eb3c52d39c596b2a7cd4e" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependency --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Event source file --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event/event-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dom source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- MouseEnter source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event-mouseenter/event-mouseenter-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependency --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Event source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event/event-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Dom source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- MouseEnter source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event-mouseenter/event-mouseenter-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-28ef882bf58eb3c52d39c596b2a7cd4e-plain"><!-- Dependency --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js" ></script>
+
+<!-- Event source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js" ></script>
+
+<!-- Dom source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js" ></script>
+
+<!-- MouseEnter source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/event-mouseenter/event-mouseenter-min.js" ></script>
+</textarea></div>
+
+<h3 id="creatingmouseenterlistener">Creating a <code>mouseenter</code> and <code>mouseleave</code> Listener</h3>
+<p>Consider the following HTML.</p>
+<div id="syntax-907cde127d0a8df3d3b2ee3905c65895" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type One<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type Two<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li2"><div class="de2">        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type One<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type Two<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-907cde127d0a8df3d3b2ee3905c65895-plain"><div id="container">
+    <ul>
+        <li><em>Item Type One</em></li>
+        <li><em>Item Type Two</em></li>
+        <li><em>Item Type Three</em></li>
+    </ul>
+</div>
+</textarea></div>
+
+<p>
+The following will attach a <code>mouseenter</code> and <code>mouseleave</code> 
+listener to the list's container (<code>&#60;div id="container"&#62;</code>).  
+The <code>mouseenter</code> listener will be called once&#151;the first time the 
+mouse enters the container.  The <code>mouseleave</code> listener will be 
+called once as well&#151;the first time the mouse leaves the container.
+</p>
+<div id="syntax-d4083fe1689d3ed2c1ab0d0fa2ea331d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="st0">&quot;mouseenter&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Mouse entered: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="st0">&quot;mouseleave&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Mouse left: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="st0">&quot;mouseenter&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Mouse entered: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="st0">&quot;mouseleave&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>e<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Mouse left: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-d4083fe1689d3ed2c1ab0d0fa2ea331d-plain">YAHOO.util.Event.on("container", "mouseenter", function (e) {
+
+    YAHOO.log("Mouse entered: " + this.id);
+    
+});
+
+YAHOO.util.Event.on("container", "mouseleave", function (e) {
+
+    YAHOO.log("Mouse left: " + this.id);
+    
+});
+</textarea></div>
+
+<h3 id="delegate">Using the <code>delegate</code> Method</h3>
+<p>
+Event delegation is a technique whereby you use a single event handler on a 
+parent element to listen for interactions that affect the parent's descendant 
+elements; because events on the descendant elements will bubble up to the 
+parent, this can be a reliable and extremely efficient mitigation strategy for 
+reducing the number of resource-consuming event handlers you have on any given 
+page. (You can read more about Event Delegation in 
+<a href="http://yuiblog.com/blog/2007/01/17/event-plan/">this YUIBlog article</a>.)
+</p>
+<p>
+The Event Utility makes using event delegation easy by providing a 
+<code>delegate</code> method that enables the use of CSS selector 
+syntax to define the descendants of the delegation container for which the 
+event listener should be called.  <em>Note: Event's delegation functionality
+is packaged separately in an event-delegate module, which itself has  
+the Selector Utility as an optional requirement.</em>
+</p>
+<div id="syntax-ab209a8588b3db8ac9ed6f31f8fb2413" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependency --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/selector/selector-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Event source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event/event-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Delegation functionality source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event-delegate/event-delegate-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependency --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/selector/selector-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Event source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event/event-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Delegation functionality source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/event-delegate/event-delegate-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-ab209a8588b3db8ac9ed6f31f8fb2413-plain"><!-- Dependency --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo/yahoo-min.js" ></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/selector/selector-min.js" ></script>
+
+<!-- Event source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js" ></script>
+
+<!-- Delegation functionality source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/event-delegate/event-delegate-min.js" ></script>
+</textarea></div>
+
+<h3 id="creatingdelegatelistener">Creating A Delegated Event Listener</h3>
+<p>Consider the following HTML.</p>
+<div id="syntax-1818a362d0b82f5fffe3058090cbd8ef" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;item-1&quot;</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type One<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;item-2&quot;</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type Two<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li2"><div class="de2">        <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;item-3&quot;</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;item-1&quot;</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type One<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;item-2&quot;</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type Two<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;item-3&quot;</span>&gt;&lt;<span class="kw2">em</span>&gt;</span>Item Type Three<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">em</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-1818a362d0b82f5fffe3058090cbd8ef-plain"><div id="container">
+    <ul>
+        <li id="item-1"><em>Item Type One</em></li>
+        <li id="item-2"><em>Item Type Two</em></li>
+        <li id="item-3"><em>Item Type Three</em></li>
+    </ul>
+</div>
+</textarea></div><p>
+To use the <code>delegate</code> method, pass the id of the element that is 
+the delegation container as the first argument (in this case 
+<code>&#60;div id="container"&#62;</code>).  The second argument is the 
+type of event you want to delegate, and the third is the event listener.  The 
+forth argument is a CSS selector that defines the descendant elements that must 
+match the target of the event in order for the listener to be called.
+</p>
+<p>
+The following example will bind a single <code>click</code> event listener to 
+the container (<code>&#60;div id="container"&#62;</code>) but that listener will 
+only be called if the target of the event is an <code>&#60;li&#62;</code>.
+</p>
+<div id="syntax-6e3ff46e34127220529a577def4a1afa" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="sy0">,</span> matchedEl<span class="sy0">,</span> container<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">//  The list item that matched the provided selector is the default scope</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Default scope: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">//  The list item that matched the provided selector is also passed </span></div></li><li class="li1"><div class="de1">    <span class="co1">//  as the second argument in case the scope of the listener </span></div></li><li class="li1"><div class="de1">    <span class="co1">//  is adjusted</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Clicked list item: &quot;</span> <span class="sy0">+</span> matchedEl.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">//  The actual click target, which could be the matched item or a</span></div></li><li class="li1"><div class="de1">    <span class="co1">//  descendant of it.</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Event target: &quot;</span> <span class="sy0">+</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">getTarget</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>    </div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="co1">//  The delegation container is passed as a third argument</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Delegation container: &quot;</span> <span class="sy0">+</span> container.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">,</span> <span class="st0">&quot;li&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">delegate</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="st0">&quot;click&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>e<span class="sy0">,</span> matchedEl<span class="sy0">,</span> container<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+    <span class="co1">//  The list item that matched the provided selector is the default scope</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Default scope: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">//  The list item that matched the provided selector is also passed </span>
+    <span class="co1">//  as the second argument in case the scope of the listener </span>
+    <span class="co1">//  is adjusted</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Clicked list item: &quot;</span> <span class="sy0">+</span> matchedEl.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">//  The actual click target, which could be the matched item or a</span>
+    <span class="co1">//  descendant of it.</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Event target: &quot;</span> <span class="sy0">+</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">getTarget</span><span class="br0">&#40;</span>e<span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>    
+&nbsp;
+    <span class="co1">//  The delegation container is passed as a third argument</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Delegation container: &quot;</span> <span class="sy0">+</span> container.<span class="me1">id</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="sy0">,</span> <span class="st0">&quot;li&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-6e3ff46e34127220529a577def4a1afa-plain">YAHOO.util.Event.delegate("container", "click", function(e, matchedEl, container) {
+
+    //  The list item that matched the provided selector is the default scope
+    YAHOO.log("Default scope: " + this.id);
+
+    //  The list item that matched the provided selector is also passed 
+    //  as the second argument in case the scope of the listener 
+    //  is adjusted
+    YAHOO.log("Clicked list item: " + matchedEl.id);
+
+    //  The actual click target, which could be the matched item or a
+    //  descendant of it.
+    YAHOO.log("Event target: " + YAHOO.util.Event.getTarget(e));    
+
+    //  The delegation container is passed as a third argument
+    YAHOO.log("Delegation container: " + container.id);
+
+}, "li");
+</textarea></div>
+
+<h2 id="onavailable">Using the onAvailable and onContentReady Methods</h2>
+<p><code>onAvailable</code> lets you define a function that will execute as soon as an element
+  is detected in the DOM. The intent is to reduce the occurrence of timing issues
+  when rendering script and html inline. It is not meant to be used to define
+  handlers for elements that <em>may</em> eventually be in the document; it is meant to
+  be used to detect elements you are in the process of loading.
+</p>
+<p>
+    The argument signature for <code>onAvailable</code> is similar to that of <code>addListener</code>, omitting only the event type.
+</p>
+<div id="syntax-715e1199d63e8a25871d7e47b88d285e" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"> <span class="kw2">function</span> TestObj<span class="br0">&#40;</span>id<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">   <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onAvailable</span><span class="br0">&#40;</span>id<span class="sy0">,</span> <span class="kw1">this</span>.<span class="me1">handleOnAvailable</span><span class="sy0">,</span> <span class="kw1">this</span><span class="br0">&#41;</span><span class="sy0">;</span> </div></li><li class="li1"><div class="de1"> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"> TestObj.<span class="me1">prototype</span>.<span class="me1">handleOnAvailable</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>me<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">   <span class="kw3">alert</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">id</span> <span class="sy0">+</span> <span class="st0">&quot; is available&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"> <span class="kw2">var</span> obj <span class="sy0">=</span> <span class="kw2">new</span> TestObj<span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"> <span class="kw2">function</span> TestObj<span class="br0">&#40;</span>id<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+   <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onAvailable</span><span class="br0">&#40;</span>id<span class="sy0">,</span> <span class="kw1">this</span>.<span class="me1">handleOnAvailable</span><span class="sy0">,</span> <span class="kw1">this</span><span class="br0">&#41;</span><span class="sy0">;</span> 
+ <span class="br0">&#125;</span>
+&nbsp;
+ TestObj.<span class="me1">prototype</span>.<span class="me1">handleOnAvailable</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>me<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+   <span class="kw3">alert</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">id</span> <span class="sy0">+</span> <span class="st0">&quot; is available&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+ <span class="br0">&#125;</span>
+&nbsp;
+ <span class="kw2">var</span> obj <span class="sy0">=</span> <span class="kw2">new</span> TestObj<span class="br0">&#40;</span><span class="st0">&quot;myelementid&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-715e1199d63e8a25871d7e47b88d285e-plain"> function TestObj(id) {
+   YAHOO.util.Event.onAvailable(id, this.handleOnAvailable, this); 
+ }
+
+ TestObj.prototype.handleOnAvailable = function(me) {
+   alert(this.id + " is available");
+ }
+
+ var obj = new TestObj("myelementid");
+</textarea></div><div id="syntax-281eebfc36c4163f814e5d1fa27ca0fe" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"> <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myelementid&quot;</span>&gt;</span>my element<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"> <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myelementid&quot;</span>&gt;</span>my element<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-281eebfc36c4163f814e5d1fa27ca0fe-plain"> <div id="myelementid">my element</div>
+</textarea></div>
+
+<p>The <code>onContentReady</code> method shares an identical syntax with <code>onAvailable</code>.  The material difference between the two methods is that <code>onContentReady</code> waits until both the target element and its <code>nextSibling</code> in the DOM respond to <code>getElementById</code>.  This guarantees that the target element's contents will have loaded fully (excepting any dynamic content you might add later via script).  If <code>onContentReady</code> never detects a <code>nextSibling</code>, it fires with the <code>window.load</code> event.</p>
+
+<h2 id="ondomready">Using the onDOMReady Method</h2>
+<p><code>onDOMReady</code> lets you define a function that will execute as soon as the DOM is in a usable state.  The DOM is is not deemed "usable" until it is structurally complete; a number of bugs, primarily in IE, can lead to the browser crashing or failing to load the page successfully if scripts attempt to insert information into the DOM prior to the DOM being in a complete state.</p>
+
+<p>DOM readiness is achieved before images have finished loading, however, so <code>onDOMReady</code> is often an excellent alternative to using the <code>window</code> object's <code>load</code> event.</p>
+
+<div id="syntax-7965e48cd4795669d1c41f03641d2163" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"> <span class="kw2">function</span> init<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span><span class="st0">&quot;hidden_element&quot;</span><span class="sy0">,</span> <span class="st0">&quot;visibility&quot;</span><span class="sy0">,</span> <span class="st0">&quot;&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onDOMReady</span><span class="br0">&#40;</span>init<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"> <span class="co1">// As with addListener, onAvailable, and onContentReady, you can pass a data object and adjust the scope</span></div></li><li class="li1"><div class="de1"> <span class="co1">// YAHOO.util.Event.onDOMReady(init, data, scope);</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"> <span class="kw2">function</span> init<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span><span class="st0">&quot;hidden_element&quot;</span><span class="sy0">,</span> <span class="st0">&quot;visibility&quot;</span><span class="sy0">,</span> <span class="st0">&quot;&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+ <span class="br0">&#125;</span>
+ <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onDOMReady</span><span class="br0">&#40;</span>init<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+ <span class="co1">// As with addListener, onAvailable, and onContentReady, you can pass a data object and adjust the scope</span>
+ <span class="co1">// YAHOO.util.Event.onDOMReady(init, data, scope);</span>
+&nbsp;</pre></div><textarea id="syntax-7965e48cd4795669d1c41f03641d2163-plain"> function init() {
+    YAHOO.util.Dom.setStyle("hidden_element", "visibility", "");
+ }
+ YAHOO.util.Event.onDOMReady(init);
+
+ // As with addListener, onAvailable, and onContentReady, you can pass a data object and adjust the scope
+ // YAHOO.util.Event.onDOMReady(init, data, scope);
+</textarea></div>
+
+<h2 id="customevent">Using the CustomEvent Object </h2>
+<p>The CustomEvent object enables you to define and use events not available
+  by default in the DOM &mdash; events that are specific to and of interest in your own
+  application. This section describes several common uses of the CustomEvent component and provides some examples.  It contains these sections: </p>
+<ul>
+<li> <a href="#customdefine">Defining a Custom Event </a></li>
+<li> <a href="#customsubscribe">Subscribing (Listening) to a Custom Event </a></li>
+<li> <a href="#customcallback">Creating a Callback </a></li>
+<li><a href="#customfire"> Triggering the Event </a></li>
+</ul>
+
+<h3 id="customdefine">Defining a Custom Event</h3>
+<p>To define a custom event type, create a new instance of CustomEvent: </p>
+<div id="syntax-2ac57e8033267fb13c735bed73eb2f1a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// custom object</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> TestObj<span class="br0">&#40;</span><span class="kw3">name</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="kw3">name</span> <span class="sy0">=</span> <span class="kw3">name</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// define a custom event</span></div></li><li class="li2"><div class="de2">    <span class="kw1">this</span>.<span class="me1">event1</span> <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">CustomEvent</span><span class="br0">&#40;</span><span class="st0">&quot;event1&quot;</span><span class="sy0">,</span> <span class="kw1">this</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// custom object</span>
+<span class="kw2">function</span> TestObj<span class="br0">&#40;</span><span class="kw3">name</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">this</span>.<span class="kw3">name</span> <span class="sy0">=</span> <span class="kw3">name</span><span class="sy0">;</span>
+    <span class="co1">// define a custom event</span>
+    <span class="kw1">this</span>.<span class="me1">event1</span> <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">CustomEvent</span><span class="br0">&#40;</span><span class="st0">&quot;event1&quot;</span><span class="sy0">,</span> <span class="kw1">this</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-2ac57e8033267fb13c735bed73eb2f1a-plain">// custom object
+function TestObj(name) {
+    this.name = name;
+    // define a custom event
+    this.event1 = new YAHOO.util.CustomEvent("event1", this);
+}
+</textarea></div>
+<p>
+The CustomEvent constructor creates a new Custom Event; it takes one required parameter and three optional parameters:
+</p>
+  
+<ul>
+<li><strong>type</strong> &mdash; The type of event. This string is returned to listeners
+  that receive this event so that they know what event occurred.</li> 
+ <li><strong>scope</strong> &mdash; The scope in which listener methods should fire; if you do
+  not specify a scope here, the default scope will be the <code>window</code> object.</li>
+  <li><strong>silent</strong> &mdash; false by default.  If true, the activity for this event will
+      not be logged when in debug mode.</li>
+  <li><strong>signature</strong> &mdash; specifies the signature for the event listeners.  The choices are:
+     <ul>
+     <li><code>YAHOO.util.CustomEvent.LIST</code> (the default): 
+       <ul>
+       <li><strong>param1:</strong> event name</li>
+       <li><strong>param2:</strong> array of arguments sent to fire</li>
+       <li><strong>param3:</strong> (optional) a custom object supplied by the subscriber</li>
+       </ul>
+     </li>
+     <li><code>YAHOO.util.CustomEvent.FLAT</code>
+       <ul>
+       <li><strong>param1:</strong> the first argument passed to fire.  If you need to
+               pass multiple parameters, use and array or object literal</li>
+       <li><strong>param2:</strong> <optional> a custom object supplied by the subscriber</li>
+       </ul>
+     </li>
+     </ul>
+  </li>
+  
+  </ul>
+<p>
+The event subscriber can override the scope so that <code>this</code> refers to the custom object that was passed into the <code>subscribe</code> method.
+</p>
+
+<h3 id="customsubscribe">Subscribing (Listening) to a Custom Event</h3>
+<p>To subscribe to a custom event, use its <code>subscribe</code> method: </p>
+<div id="syntax-38cbd80d94496c336a3742f607b5385a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// a custom consumer object that will listen to &quot;event1&quot;</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> Consumer<span class="br0">&#40;</span><span class="kw3">name</span><span class="sy0">,</span> testObj<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="kw3">name</span> <span class="sy0">=</span> <span class="kw3">name</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="me1">testObj</span> <span class="sy0">=</span> testObj<span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="kw1">this</span>.<span class="me1">testObj</span>.<span class="me1">event1</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">onEvent1</span><span class="sy0">,</span> <span class="kw1">this</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// a custom consumer object that will listen to &quot;event1&quot;</span>
+<span class="kw2">function</span> Consumer<span class="br0">&#40;</span><span class="kw3">name</span><span class="sy0">,</span> testObj<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">this</span>.<span class="kw3">name</span> <span class="sy0">=</span> <span class="kw3">name</span><span class="sy0">;</span>
+    <span class="kw1">this</span>.<span class="me1">testObj</span> <span class="sy0">=</span> testObj<span class="sy0">;</span>
+    <span class="kw1">this</span>.<span class="me1">testObj</span>.<span class="me1">event1</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="kw1">this</span>.<span class="me1">onEvent1</span><span class="sy0">,</span> <span class="kw1">this</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-38cbd80d94496c336a3742f607b5385a-plain">// a custom consumer object that will listen to "event1"
+function Consumer(name, testObj) {
+    this.name = name;
+    this.testObj = testObj;
+    this.testObj.event1.subscribe(this.onEvent1, this);
+}
+</textarea></div>
+<p>
+In this example, <code>event1</code> is the Custom Event object that was created in the previous
+  section. Use the <code>subscribe</code> method to listen to that event. The <code>subscribe</code> method
+  takes two parameters. The first  is the callback; the second is a custom
+  object you can define (see <a href="#customobject">Send an Arbitrary Object
+  to the Event Handler</a>, earlier in this document). When the event is triggered, the callback is called
+  and the custom object is passed to that callback as the third argument (when using the default argument signature; when using the flat signature, the custom object is the second argument). </p>
+<h3 id="customcallback">Creating a Callback</h3>
+<p>To create a callback for a custom event: </p>
+
+<div id="syntax-3f4c8d8a9593ccd1bf9975a8f1f79b62" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">Consumer.<span class="me1">prototype</span>.<span class="me1">onEvent1</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>type<span class="sy0">,</span> args<span class="sy0">,</span> me<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot; this: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span> <span class="sy0">+</span></div></li><li class="li1"><div class="de1">        <span class="st0">&quot;<span class="es0">\n</span> this.name: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="kw3">name</span> <span class="sy0">+</span></div></li><li class="li1"><div class="de1">        <span class="st0">&quot;<span class="es0">\n</span> type: &quot;</span> <span class="sy0">+</span> type <span class="sy0">+</span></div></li><li class="li2"><div class="de2">        <span class="st0">&quot;<span class="es0">\n</span> args[0].data: &quot;</span> <span class="sy0">+</span> args<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>.<span class="me1">data</span> <span class="sy0">+</span></div></li><li class="li1"><div class="de1">        <span class="st0">&quot;<span class="es0">\n</span> me.name: &quot;</span> <span class="sy0">+</span> me.<span class="kw3">name</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">Consumer.<span class="me1">prototype</span>.<span class="me1">onEvent1</span> <span class="sy0">=</span> <span class="kw2">function</span><span class="br0">&#40;</span>type<span class="sy0">,</span> args<span class="sy0">,</span> me<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot; this: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span> <span class="sy0">+</span>
+        <span class="st0">&quot;<span class="es0">\n</span> this.name: &quot;</span> <span class="sy0">+</span> <span class="kw1">this</span>.<span class="kw3">name</span> <span class="sy0">+</span>
+        <span class="st0">&quot;<span class="es0">\n</span> type: &quot;</span> <span class="sy0">+</span> type <span class="sy0">+</span>
+        <span class="st0">&quot;<span class="es0">\n</span> args[0].data: &quot;</span> <span class="sy0">+</span> args<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>.<span class="me1">data</span> <span class="sy0">+</span>
+        <span class="st0">&quot;<span class="es0">\n</span> me.name: &quot;</span> <span class="sy0">+</span> me.<span class="kw3">name</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-3f4c8d8a9593ccd1bf9975a8f1f79b62-plain">Consumer.prototype.onEvent1 = function(type, args, me) {
+    alert(" this: " + this +
+        "\n this.name: " + this.name +
+        "\n type: " + type +
+        "\n args[0].data: " + args[0].data +
+        "\n me.name: " + me.name);
+}
+</textarea></div>
+<p>
+In this example the type argument is the event type (<code>"event1"</code> in this case),
+args is an array of all of the arguments that were passed to the Custom Event's
+<code>fire</code> method, and <code>me</code> is the custom object we passed in when we subscribed to
+the event.
+</p>
+<h3 id="customfire">Triggering the Event</h3>
+<p>To trigger or <code>fire</code> a custom event: </p>
+
+<div id="syntax-98865f414c142736f3c65a10ddf5a547" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// random test data to be used as an event argument</span></div></li><li class="li1"><div class="de1"><span class="kw2">function</span> TestData<span class="br0">&#40;</span>data<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">this</span>.<span class="me1">data</span> <span class="sy0">=</span> data<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// create an instance of our test object</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> t1 <span class="sy0">=</span> <span class="kw2">new</span> TestObj<span class="br0">&#40;</span><span class="st0">&quot;mytestobj1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// create the event consumer, passing in the custom </span></div></li><li class="li2"><div class="de2"><span class="co1">// object so that it can subscribe to the custom event</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> c1 <span class="sy0">=</span> <span class="kw2">new</span> Consumer<span class="br0">&#40;</span><span class="st0">&quot;mytestconsumer1&quot;</span><span class="sy0">,</span> t1<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// create a data object that will be passed to the consumer when the event fires</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> d1 <span class="sy0">=</span> <span class="kw2">new</span> TestData<span class="br0">&#40;</span><span class="st0">&quot;mydata1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// fire the test object's event1 event, passing the data object as a parameter</span></div></li><li class="li1"><div class="de1">t1.<span class="me1">event1</span>.<span class="me1">fire</span><span class="br0">&#40;</span>d1<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// random test data to be used as an event argument</span>
+<span class="kw2">function</span> TestData<span class="br0">&#40;</span>data<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw1">this</span>.<span class="me1">data</span> <span class="sy0">=</span> data<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="co1">// create an instance of our test object</span>
+<span class="kw2">var</span> t1 <span class="sy0">=</span> <span class="kw2">new</span> TestObj<span class="br0">&#40;</span><span class="st0">&quot;mytestobj1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// create the event consumer, passing in the custom </span>
+<span class="co1">// object so that it can subscribe to the custom event</span>
+<span class="kw2">var</span> c1 <span class="sy0">=</span> <span class="kw2">new</span> Consumer<span class="br0">&#40;</span><span class="st0">&quot;mytestconsumer1&quot;</span><span class="sy0">,</span> t1<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// create a data object that will be passed to the consumer when the event fires</span>
+<span class="kw2">var</span> d1 <span class="sy0">=</span> <span class="kw2">new</span> TestData<span class="br0">&#40;</span><span class="st0">&quot;mydata1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// fire the test object's event1 event, passing the data object as a parameter</span>
+t1.<span class="me1">event1</span>.<span class="me1">fire</span><span class="br0">&#40;</span>d1<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-98865f414c142736f3c65a10ddf5a547-plain">// random test data to be used as an event argument
+function TestData(data) {
+    this.data = data;
+}
+
+// create an instance of our test object
+var t1 = new TestObj("mytestobj1");
+
+// create the event consumer, passing in the custom 
+// object so that it can subscribe to the custom event
+var c1 = new Consumer("mytestconsumer1", t1);
+
+// create a data object that will be passed to the consumer when the event fires
+var d1 = new TestData("mydata1");
+
+// fire the test object's event1 event, passing the data object as a parameter
+t1.event1.fire(d1);
+</textarea></div>
+<p>
+In this example <code>t1</code> is the test object we created, <code>event1</code> is the CustomEvent instance
+  and <code>d1</code> is our test data. This example produces the following output:
+</p>
+
+<div id="syntax-b283a5dd8bf1387455a4639449abfc5e" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"> <span class="kw1">this</span><span class="sy0">:</span> <span class="br0">&#91;</span>object Object<span class="br0">&#93;</span></div></li><li class="li1"><div class="de1"> <span class="kw1">this</span>.<span class="kw3">name</span><span class="sy0">:</span> mytestobj1</div></li><li class="li1"><div class="de1"> type<span class="sy0">:</span> event1</div></li><li class="li1"><div class="de1"> args<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>.<span class="me1">data</span><span class="sy0">:</span> mydata1</div></li><li class="li2"><div class="de2"> me.<span class="kw3">name</span><span class="sy0">:</span> mytestconsumer1</div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"> <span class="kw1">this</span><span class="sy0">:</span> <span class="br0">&#91;</span>object Object<span class="br0">&#93;</span>
+ <span class="kw1">this</span>.<span class="kw3">name</span><span class="sy0">:</span> mytestobj1
+ type<span class="sy0">:</span> event1
+ args<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span>.<span class="me1">data</span><span class="sy0">:</span> mydata1
+ me.<span class="kw3">name</span><span class="sy0">:</span> mytestconsumer1
+&nbsp;</pre></div><textarea id="syntax-b283a5dd8bf1387455a4639449abfc5e-plain"> this: [object Object]
+ this.name: mytestobj1
+ type: event1
+ args[0].data: mydata1
+ me.name: mytestconsumer1
+</textarea></div>
+<h2 id="mobile">YUI on Mobile: Using YUI Event Utility with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>
+<p>The Event Utility works in any browser that has DOM2 event support.
+However, the user interaction model of mobile browsers can make certain browser
+events behave in a different manner than expected, or not at all.</p>
+
+<p>The iPhone's touch interface supports gestures that prevent
+certain mouse events from working correctly.  For instance, the 'mousedown'
+event does not fire when the user initially touches the screen over an element.
+It only fires once the user's finger is removed (the mousedown, mouseup, and
+click events all fire at this moment).  This makes is difficult or impossible
+to provide certain DHTML interactions that rely on these events, drag and drop
+being the most obvious.</p> 
+
+<p>Since the iPhone has a touch interface, there is
+no mouse cursor.  This means that there are no hover states for elements, and
+no mouseover events.</p>
+
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+      </div>
+         <div class="yui-u">
+            
+            <div id="cheatsheet">
+                <h3>Event Utility Cheat Sheet:</h3>
+                
+                <a href="http://yuiblog.com/assets/pdf/cheatsheets/event.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/event.gif" width="178" height="134" alt="Cheat Sheet for Event Utility and Custom Events."></a>
+                
+                <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+            </div>
+            
+            <div id="examples">
+<h3>Event Utility Examples:</h3>
+
+<ul>
+<li><a href='../examples/event/eventsimple.html'>Simple Event Handling and Processing</a></li>
+<li><a href='../examples/event/custom-event.html'>Using Custom Events</a></li>
+<li><a href='../examples/event/event-timing.html'>Using onAvailable, onContentReady, and onDOMReady</a></li>
+<li><a href='../examples/event/event-delegation.html'>Using Event Utility and Event Delegation to Improve Performance</a></li>
+<li><a href='../examples/event/event-focus-blur.html'>Skinning via Progressive Enhancement using the Event Utility and the YUILoader</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Event Utility:</h4>
+
+<ul>
+<li><a href='../examples/container/keylistener.html'>Implementing Container Keyboard Shortcuts with KeyListener</a> (included with examples for the <a href='../container/index.html'>Container Family</a>)</li>
+<li><a href='../examples/container/container-ariaplugin.html'>Using the Container ARIA Plugin</a> (included with examples for the <a href='../container/index.html'>Container Family</a>)</li>
+</ul>		
+           </div>
+     
+            <div id="morereading">
+                <h3>More Reading about Dom Events and the YUI Event Utility:</h3>
+                
+              <ul> 
+                  <li><a href="http://www.quirksmode.org/dom/events/">Event Compatibility Tables</a>, by PPK (quirksmode); a list of basic DOM events that breaks out their compatibility by browser version</li>
+                  <li><a href="http://yuiblog.com/blog/2007/01/17/event-plan/">Event-Driven Application Design</a>, by Christian Heilmann</li>
+                  <li><a href="http://icant.co.uk/sandbox/eventdelegation/">Event Delegation versus Event Handling</a>, by Christian Heilmann</li>
+                  <li><a href="http://www.dustindiaz.com/yahoo-event-utility/">Forget addEvent, use Yahoo!'s Event Utility</a>, by Dustin Diaz</li>
+                  <li><a href="http://www.klauskomenda.com/archives/2007/10/14/agent-yui-mission-1-attaching-events-the-easy-way/">Agent YUI: Mission 1 &mdash; Attaching Events (the easy way)</a>, by Klaus Komenda</li>
+              </ul>
+           </div>
+
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fevent%2F--><h3 id="delicious">YUI Event on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/event/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/web" class="tag-size-1">web</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/programming" class="tag-size-1">programming</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/events" class="tag-size-1">events</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ui" class="tag-size-1">ui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/event" class="tag-size-1">event</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/bb2684eb158908c0eb2ada125afcd492" class="saved-by">saved by <span>64</span>  people</a></p>
+   </div></div>
+
+         </div>
+      </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="selected "><a title="The YUI Event Utility" href="index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:12 PDT 2013 -->
+
+<!-- Localized -->

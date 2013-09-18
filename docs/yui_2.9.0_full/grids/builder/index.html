@@ -1,0 +1,233 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" >
+    <title>YUI: CSS Grid Builder</title>
+
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/reset-fonts-grids/reset-fonts-grids.css">
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.7.0/build/assets/skins/sam/skin.css">             
+    <link rel="stylesheet" type="text/css" href="http://l.yimg.com/d/i/ydn/yuiweb/css/dpsyntax-min-11.css">
+    <style  type="text/css">
+
+        #hd, #bd, #ft { border: 1px solid #808080; }
+        #hd h1 { font-size: 120%; }
+        #bd { min-height: 350px; }
+        #bd p { border: 2px solid #426FD9; background-color: #F2F2F2; height: 200px; padding: .25em; }
+        #bd p.nav { background-color: #EDF5FF; border-color: #7D98B8; }
+        body { position: relative; }
+        .bd { text-align: left; }
+
+        #toolBoxHolder { visibility: hidden; }
+        #toolBoxHolder fieldset { border: 1px solid #ccc; padding: .5em; margin: .5em 0; }
+        #toolBoxHolder p { padding-bottom: .25em }
+        #showSlider { position: relative; }
+        #sliderbg { background-image: url( bg-fader.gif ); background-repeat: repeat-x; position: relative; top: 10px; height: 40px; width: 209px; }
+        #sliderthumb { position: absolute; }
+        #custom-doc { margin:auto;text-align:left; }
+        #sliderValue { border: 1px solid #ccc; }
+        #toolBoxHolder .yui-button { margin: .25em 0; }
+        #showCode .bd { height: 310px; overflow: scroll; }
+        #showCode .ft { text-align: left; }
+
+        button.rowDel { 
+			background: transparent url(http://l.yimg.com/a/i/nt/ic/ut/bsc/del12_1.gif);
+			border: 0;
+			padding: 0;
+			float: left; 
+			height: 12px; 
+			overflow: hidden;
+			text-indent: 999px; 
+			width: 12px; 
+			margin: 4px 2px; 
+		}
+
+        #gridRowDel0 { background-image: none; }
+
+
+		li.yui-button-selectedmenuitem {
+			background: url(checkbox.png) left center no-repeat;
+		}
+
+		#doc .yui-button,
+		#doc2 .yui-button,
+		#doc3 .yui-button,
+		#doc4 .yui-button,
+		#custom-doc .yui-button {
+			border: solid 1px #808080;
+		    background: #ff9;
+		    margin: .25em;
+		}
+
+		#doc .yui-button .first-child,
+		#doc2 .yui-button .first-child,
+		#doc3 .yui-button .first-child,
+		#doc4 .yui-button .first-child,
+		#custom-doc .yui-button .first-child {
+		    border: 0;
+		    margin: 0;
+		}		
+
+		#doc .yui-button .first-child button,
+		#doc2 .yui-button .first-child button,
+		#doc3 .yui-button .first-child button,
+		#doc4 .yui-button .first-child button,
+		#custom-doc .yui-button .first-child button {
+		    padding: 0 20px 0 5px;
+		    font-size: 77%;  /* 10px */
+		    line-height: 1.5;
+		    min-height: 1.5em;
+		    color: #000;
+			font-weight: bold;
+		}
+
+		#hd h1,
+		#ft p {
+			min-height: 1.5em;
+			*height: 2em;
+		}
+
+		#doc p,
+		#doc2 p,
+		#doc3 p,
+		#doc4 p,
+		#custom-doc p,
+		#hd, 
+		#ft {
+			position: relative;
+		}
+		
+		.order-indicator {
+			font-size: 77%;
+			font-weight: bold;
+			position: absolute;
+			padding: 2px 4px;
+			right: 5px;
+			bottom: 5px;
+		    background: #fc6;
+			border: solid 1px #c60;		
+		}
+		
+		#hd .order-indicator,
+		#ft .order-indicator {
+			right: 3px;
+			bottom: 3px;			
+		}
+		
+		.first-row select {
+			margin-left: 16px;
+		}
+		
+    </style>
+</head>
+<body class="yui-skin-sam">
+
+<div id="doc" class="yui-t2">
+    <div id="hd"><h1>Header</h1></div>
+    <div id="bd"><p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat.Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat.Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Maecenas sit amet metus. Nunc quam elit, posuere nec, auctor in, rhoncus quis, dui. Aliquam erat volutpat. Ut dignissim, massa sit amet dignissim cursus, quam lacus feugiat.</p></div>
+    <div id="ft"><p>Footer</p></div>
+</div>
+
+<div id="toolBoxHolder">
+    <div class="hd">YUI CSS Grid Builder</div>
+    <div class="bd">
+    <form id="grids">
+        <fieldset>
+            <legend>Body Size</legend>
+            <select id="which_doc">
+                <option value="doc">750px</option>
+                <option value="doc2">950px</option>
+                <option value="doc4">974px</option>
+                <option value="doc3">100%</option>
+                <option value="custom-doc" id="customDoc">Custom</option>
+            </select>
+        </fieldset>
+        <fieldset>
+            <legend>Body Columns</legend>
+            <select id="which_grid">
+                <option value="yui-t7">No Columns</option>
+                <option value="yui-t1">Sidebar left 160px</option>
+                <option value="yui-t2">Sidebar left 180px</option>
+                <option value="yui-t3">Sidebar left 300px</option>
+                <option value="yui-t4">Sidebar right 180px</option>
+                <option value="yui-t5">Sidebar right 240px</option>
+                <option value="yui-t6">Sidebar right 300px</option>
+            </select>
+        </fieldset>
+        <fieldset>
+            <legend>Split Content</legend>
+
+			<div class="first-row">
+				<label>Row:
+					<select id="splitBody0">
+						<option value="1">1 Column (100)</option>
+						<option value="2">2 Column (50/50)</option>
+						<option value="7">2 Column (66/33)</option>
+						<option value="8">2 Column (33/66)</option>
+						<option value="9">2 Column (75/25)</option>
+						<option value="10">2 Column (25/75)</option>
+						<option value="3">3 Column (33/33/33)</option>
+						<option value="5">3 Column (50/25/25)</option>
+						<option value="6">3 Column (25/25/50)</option>
+						<option value="4">4 Column (25/25/25/25)</option>
+					</select>
+				</label>
+			</div>
+
+            <button type="button" id="addRow">Add Row</button>
+        </fieldset>
+
+        <fieldset>
+            <legend>Accessibility</legend>	
+			<div>
+				<input type="checkbox" id="use-aria" checked><label for="use-aria">Use ARIA Landmark Roles</label>
+			</div>
+			<div>
+				<input type="checkbox" id="show-order" checked><label for="show-order">Show Reading Order</label>
+			</div>
+        </fieldset>
+
+		<div>
+        	<button type="button" id="setHeader">Set Header Content</button>
+		</div>
+		<div>
+        	<button type="button" id="setFooter">Set Footer Content</button>
+		</div>
+
+		<div>
+        	<button type="button" id="show_code">Show Code</button>
+		</div>
+
+		<div>
+        	<button type="button" id="resetBuilder">Reset</button>
+		</div>
+		<div>
+        	<button type="button" id="doc_return">Return to Docs</button>
+		</div>
+
+    </form>
+    </div>
+</div>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/utilities/utilities.js"></script> 
+<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/button/button-min.js"></script> 
+<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/container/container-min.js"></script> 
+<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/menu/menu-min.js"></script> 
+<script type="text/javascript" src="http://yui.yahooapis.com/2.8.0r4/build/slider/slider-min.js"></script> 
+<script type="text/javascript" src="gridbuilder-2010.08.js"></script>
+<script src="http://l.yimg.com/d/i/ydn/yuiweb/js/dpsyntax-min-2.js"></script>
+<script type="text/javascript">
+/* Frame Buster  */
+if (top != self) top.location.href = location.href;
+
+YAHOO.util.Event.onDOMReady(function () {
+	YAHOO.util.GridBuilder.init();
+});
+</script>
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:59 PDT 2013 -->
+
+<!-- Localized -->

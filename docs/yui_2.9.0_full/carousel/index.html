@@ -1,0 +1,1154 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Carousel Control</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Carousel Control</h1></div>
+</div>
+<div id="bd">
+
+
+<div id="yui-main">
+    <div class="yui-b">
+        <div class="yui-ge">
+            <div class="yui-u first">
+                
+                <div id="promo" class="component">
+                    <h1>YUI 2: Carousel Control</h1>
+                    
+                    <p>
+                        The YUI Carousel Control provides a widget for browsing among
+                        a set of like objects arrayed vertically or horizontally in an
+                        overloaded page region.  The "carousel" metaphor derives from an
+                        analogy to slide carousels in the days of film photography; 
+                        the Carousel Control can maintain fidelity to this metaphor by
+                        allowing a continuous, circular navigation through all of the 
+                        content blocks. 
+                    </p>
+
+                    <p>
+                        The Carousel Control can consume content from page markup
+                        (progressive enhancement); alternatively, the Carousel can be created,
+                        configured and populated entirely via script.  Support for
+                        lazy-loading of content via XMLHttpRequest (using <a href="../connection/index.html">Connection
+                        Manager</a>) is built in.</p>
+                        
+                        <p>You can <a href="http://developer.yahoo.com/ypatterns/pattern.php?pattern=carousel">read more about the Carousel Design Pattern at the 
+                        Yahoo! Design Pattern Library</a>.</p>
+                        
+
+                    <div>
+                        <h4>On This Page:</h4>
+                        <ul>
+                            <li><a href="#start">Getting Started</a></li>
+                            <li>
+
+                                <a href="#usingcarousel">Using
+                                Carousel</a>
+                            </li>
+                            <li>
+                                <a href="#skinning">
+                                Skinning the Carousel Control</a>
+                            </li>
+                            <li><a href="#apiref">Reference Tables</a></li>
+
+                            <li><a href="#knownissues">Known Issues</a></li>
+                            <li>
+                                <a href="#mobile">
+                                YUI on Mobile Devices</a>
+                            </li>
+                            <li>
+                                <a href="#support">
+                                Support &amp; Community</a>
+
+                            </li>
+                            <li>
+                                <a href="#filingbugs">
+                                Filing Bugs and Feature Requests</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                      <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/carousel/index.html">Examples</a>: Explore examples of the Carousel Control in action.</li>
+      <li><a href="../docs/module_carousel.html">API Documentation</a>: View the full API documentation for the Carousel Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.carousel">Release Notes</a>: Detailed change log for the Carousel Control.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Carousel Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+                </div>
+                
+                <h2 class="first" id="start">Getting Started</h2>
+                <p>To use the Carousel Control, include the following source
+                files in your web page:</p>
+                
+<div id="syntax-4f0798574f527216de6321e492ce741a" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Core + Skin CSS --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/carousel/assets/skins/sam/carousel.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Optional: Animation library for animating the scrolling of items --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Optional: Connection library for dynamically loading items --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/carousel/carousel-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Core + Skin CSS --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/carousel/assets/skins/sam/carousel.css&quot;</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Dependencies --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Optional: Animation library for animating the scrolling of items --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc-1">&lt;!-- Optional: Connection library for dynamically loading items --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source file --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/carousel/carousel-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-4f0798574f527216de6321e492ce741a-plain"><!-- Core + Skin CSS --> 
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/carousel/assets/skins/sam/carousel.css">
+
+<!-- Dependencies --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+
+<!-- Optional: Animation library for animating the scrolling of items --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
+<!-- Optional: Connection library for dynamically loading items --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
+
+<!-- Source file --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/carousel/carousel-min.js"></script>
+</textarea></div>                
+                
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>carousel</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+                
+                <h3 id="basic">Basic Setup</h3>
+
+                <p>
+                    The Carousel Control can be created with or without
+                    existing HTML.  In either case, the Carousel's HTML is
+                    composed of a container <code>&lt;div&gt;</code> and a list of items
+                    within the container <code>&lt;ol&gt;</code> or <code>&lt;ul&gt;</code>.  The
+                    Carousel Control can construct the navigation elements
+                    also, if these are not already provided by the markup.
+                </p>
+
+                <p>
+                    The Carousel Control is defined by
+                    <code>YAHOO.widget.Carousel</code> and can be instantiated
+                    two ways:
+                </p>
+                <ul>
+                    <li>
+                        <a href="#buildfrommarkup">
+                            Using an existing list <code>&lt;ol&gt;</code> or <code>&lt;ul&gt;</code>
+
+                            element
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#buildfromjs">
+                            Using no existing HTML
+                        </a>
+                    </li>
+                </ul>
+
+                <h4 id="buildfrommarkup">
+                    Using an existing list <code>&lt;ol&gt;</code> or <code>&lt;ul&gt;</code> element
+                </h4>
+
+                <p>
+                    A Carousel Control can be created from an existing list of
+                    items (<code>&lt;li&gt;</code>) within an <code>&lt;ol&gt;</code> element. The component also can be configured to look for <code>&lt;ul&gt;</code> instead of the default &lt;ol&gt; by setting the <code>carouselEl</code> configuration attribute.
+                </p>
+
+<div id="syntax-ba31cc53609a9c9ae97a9a2ab417493b" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">ol</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">img</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;&quot;</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;...&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">        ...</div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ol</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">ol</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">img</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;&quot;</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;...&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+        ...
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ol</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-ba31cc53609a9c9ae97a9a2ab417493b-plain"><div id="container">
+    <ol>
+        <li><img alt="" src=".../index.html"></li>
+        ...
+    </ol>
+</div>
+</textarea></div>                <p>
+                    Pass the id of the Carousel's container element as the
+                    first argument to the Carousel's constructor.  If any
+                    additional configuration is needed, it can be set during
+                    the instantiation by specifying them in the object literal
+                    that is passed as the second argument to the Carousel's
+                    constructor.  Finally, call the <code>render</code> method
+                    of the Carousel to display the widget.
+                </p>
+<div id="syntax-98cb56642c7956c82dca7855b602cce2" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    isCircular<span class="sy0">:</span> <span class="kw2">true</span> <span class="co1">// for a circular Carousel</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">carousel.<span class="me1">show</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// display the widget (redundant from 2.8.0), but use if carousel.hide() has been run previously.</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    isCircular<span class="sy0">:</span> <span class="kw2">true</span> <span class="co1">// for a circular Carousel</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">show</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// display the widget (redundant from 2.8.0), but use if carousel.hide() has been run previously.</span>
+&nbsp;</pre></div><textarea id="syntax-98cb56642c7956c82dca7855b602cce2-plain">var carousel = new YAHOO.widget.Carousel("container", {
+    isCircular: true // for a circular Carousel
+});
+carousel.render();
+carousel.show(); // display the widget (redundant from 2.8.0), but use if carousel.hide() has been run previously.
+</textarea></div>
+                <p>
+                    Beginning with Carousel version 2.8.0, the <code>show</code> method need not be invoked for the initial rendering, just the <code>render</code> method is suffice.
+                    However, to display a Carousel again, you still need to invoke <code>show</code> after running <code>hide</code>.
+                </p>
+
+                <p>
+                    Similarly, to use the <code>&lt;ul&gt;</code> element, the <code>CarouselEl</code> configuration attribute should be set to <code>"UL"</code>.
+                </p>
+<div id="syntax-075b972e90dc860c762ecfff673f3bee" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">img</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;&quot;</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;...&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">        ...</div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">img</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;&quot;</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;...&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+        ...
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-075b972e90dc860c762ecfff673f3bee-plain"><div id="container">
+    <ul>
+        <li><img alt="" src=".../index.html"></li>
+        ...
+    </ul>
+</div>
+</textarea></div><div id="syntax-d4fba802f5662f3f1e6617a78176ec56" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    carouselEl<span class="sy0">:</span> <span class="st0">&quot;UL&quot;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    carouselEl<span class="sy0">:</span> <span class="st0">&quot;UL&quot;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-d4fba802f5662f3f1e6617a78176ec56-plain">var carousel = new YAHOO.widget.Carousel("container", {
+    carouselEl: "UL"
+});
+</textarea></div>                
+                <h4 id="buildfromjs">
+                    Using no existing HTML
+                </h4>
+
+                <p>
+                    A Carousel Control can be created purely from JavaScript,
+                    without any existing HTML for the Carousel items.
+                </p>
+<div id="syntax-9e979f61fd7dd21172df505f7c134a22" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;parentContainerId&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;parentContainerId&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-9e979f61fd7dd21172df505f7c134a22-plain"><div id="parentContainerId"></div>
+</textarea></div><div id="syntax-64f55aa020980f66f64299d76fa80718" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;parentContainerId&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">addItem</span><span class="br0">&#40;</span>...<span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// add an item to the Carousel</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">addItems</span><span class="br0">&#40;</span>...<span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// add multiple items at one go</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// render the widget inside the</span></div></li><li class="li2"><div class="de2">                   <span class="co1">// parentContainerId container </span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;parentContainerId&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">addItem</span><span class="br0">&#40;</span>...<span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// add an item to the Carousel</span>
+carousel.<span class="me1">addItems</span><span class="br0">&#40;</span>...<span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// add multiple items at one go</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// render the widget inside the</span>
+                   <span class="co1">// parentContainerId container </span>
+&nbsp;</pre></div><textarea id="syntax-64f55aa020980f66f64299d76fa80718-plain">var carousel = new YAHOO.widget.Carousel("parentContainerId");
+carousel.addItem(...); // add an item to the Carousel
+carousel.addItems(...); // add multiple items at one go
+carousel.render(); // render the widget inside the
+                   // parentContainerId container 
+</textarea></div>                <p>
+                    The constructor is passed with the parent container id within which the Carousel will be created.
+                </p>
+
+                <h2 id="usingcarousel">Using Carousel</h2>
+
+                <p>
+                    This section describes several common uses and
+                    customizations of the Carousel Control:
+                </p>
+
+                <ul>
+                    <li>
+                        <a href="#contentready">
+
+                            Using Carousel with
+                            YAHOO.util.Event.onContentReady
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#animation">
+                            Having the Carousel animate when items are
+                            scrolled through
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#autoplay">
+
+                            Setting up auto-play in Carousel
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#reveal">
+                            Revealing a sneak view of the previous and next
+                            items in a Carousel
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#vertical">A vertical Carousel</a>
+
+                    </li>
+                    <li>
+                        <a href="#events">Handling Events</a>
+                    </li>
+                    <li>
+                        <a href="#config">Configuration Attributes</a>
+                    </li>
+                </ul>
+
+                <h3 id="contentready">
+                    Using the Carousel with YAHOO.util.Event.onContentReady
+                </h3>
+
+                <p>
+                    As the Carousel Control can be used to progressively enhance
+                    a list of items, it is recommended that the Carousel Control                    be instantiated as soon as the contents of the Carousel
+                    Widget's container are ready.  This helps minimize any
+                    flicker or redraw that might occur when the DOM structure is modified during widget instantiation.
+                </p>
+
+                <p>
+                    To instantiate a Carousel instance as soon as the content
+                    for the Carousel's container element is available, use the
+                    <a
+                     href="../event/index.html#onavailable">onContentReady
+                     method of the YUI Event Utility</a>.  The example below
+                     illustrates how to do this.  Consider the following markup
+                     in your page:
+                </p>
+<div id="syntax-075b972e90dc860c762ecfff673f3bee" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">img</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;&quot;</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;...&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span></div></li><li class="li1"><div class="de1">        ...</div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;container&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">ul</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">li</span>&gt;&lt;<span class="kw2">img</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;&quot;</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;...&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">li</span>&gt;</span>
+        ...
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">ul</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-075b972e90dc860c762ecfff673f3bee-plain"><div id="container">
+    <ul>
+        <li><img alt="" src=".../index.html"></li>
+        ...
+    </ul>
+</div>
+</textarea></div>                <p>
+                    To instantiate the Carousel Control as soon as the content
+                    is available, pass the id of the container as the first
+                    argument to <a
+                    href="../event/index.html#onavailable">YAHOO.util.Event.onContentReady</a>
+
+                    method.  The second parameter to the method is the function
+                    in which you instantiate the widget.
+                </p>
+<div id="syntax-48f095e9da204872f107b28aadb47083" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onContentReady</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>ev<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onContentReady</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>ev<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-48f095e9da204872f107b28aadb47083-plain">YAHOO.util.Event.onContentReady("container", function (ev) {
+    var carousel = new YAHOO.widget.Carousel("container");
+    carousel.render();
+});
+</textarea></div>                <p>
+                    Usage of the <a
+                    href="../event/index.html#onavailable">onContentReady
+                    method</a> is demonstrated in many of the <a
+                    href="../examples/carousel/index.html">Carousel
+                    Widget examples</a>.  For more information, read the
+                    section titled <a
+                    href="../event/index.html#onavailable">Using
+                    the onAvailable and onContentReady Methods</a> section of
+                    the <a href="../event/index.html">Event
+                    utility's landing page</a>.
+                </p>
+
+                <h3 id="numvisible">
+                      Specifying how many items to display per page
+                  </h3>
+
+                  <p>
+                    By default, the Carousel displays three items per page. To override the default,
+                    simply set a Carousel's <code>numVisible</code> property to another <code>Number</code>. 
+                  </p>
+<div id="syntax-2c5ad30e32e245b93d7f009fb1cff165" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;numVisible&quot;</span><span class="sy0">,</span> <span class="nu0">4</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;numVisible&quot;</span><span class="sy0">,</span> <span class="nu0">4</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-2c5ad30e32e245b93d7f009fb1cff165-plain">var carousel = new YAHOO.widget.Carousel("container");
+carousel.set("numVisible", 4);
+carousel.render();
+</textarea></div>
+                <h3 id="animation">
+                    Animated scrolling of the Carousel contents
+                </h3>
+
+                <p>
+                    If you include the <a
+                    href="../animation/index.html">YUI
+                    Animation Utility</a> in your web page, you can enable
+                    animation on item scroll in a Carousel using the following
+                    syntax:
+                </p>
+<div id="syntax-8d10e1e4f39ad1a1f1771cd754ab121d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;animation&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> speed<span class="sy0">:</span> <span class="nu0">0.5</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;animation&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> speed<span class="sy0">:</span> <span class="nu0">0.5</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-8d10e1e4f39ad1a1f1771cd754ab121d-plain">var carousel = new YAHOO.widget.Carousel("container");
+carousel.set("animation", { speed: 0.5 });
+carousel.render();
+</textarea></div>
+                <p>
+                    Alternatively, you can set this property during the
+                    instantiation of Carousel itself.
+                </p>
+<div id="syntax-be3c550569f7a4328f65824aa1e3b0bb" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    animation<span class="sy0">:</span> <span class="br0">&#123;</span> speed<span class="sy0">:</span> <span class="nu0">0.5</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    animation<span class="sy0">:</span> <span class="br0">&#123;</span> speed<span class="sy0">:</span> <span class="nu0">0.5</span> <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-be3c550569f7a4328f65824aa1e3b0bb-plain">var carousel = new YAHOO.widget.Carousel("container", {
+    animation: { speed: 0.5 }
+});
+carousel.render();
+</textarea></div>
+                <h3 id="autoplay">Setting up auto-play in Carousel</h3>
+
+                <p>
+                    By default, the Carousel scrolls its contents only when
+                    the previous or next arrows are clicked, or when the pagination control
+                    is clicked.  You can make the Carousel <em>automatically
+                    scroll after a certain delay</em> by setting its
+                    <code>autoPlayInterval</code> configuration setting and
+                    invoking the <code>startAutoPlay</code> method.  The
+                    following example illustrates setting this property
+                    and also making the Carousel circular.
+                </p>
+
+<div id="syntax-6491d6f515d1c53f51fb5182fdba7085" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">// Set the delay (in milliseconds) to automatically scroll</span></div></li><li class="li1"><div class="de1"><span class="co1">// the Carousel.</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;autoPlayInterval&quot;</span><span class="sy0">,</span> <span class="nu0">2000</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;isCircular&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// make the widget circular</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Automatically scroll the Carousel after every</span></div></li><li class="li1"><div class="de1"><span class="co1">// autoPlayInterval millisecond.</span></div></li><li class="li2"><div class="de2">carousel.<span class="me1">startAutoPlay</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">// Set the delay (in milliseconds) to automatically scroll</span>
+<span class="co1">// the Carousel.</span>
+carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;autoPlayInterval&quot;</span><span class="sy0">,</span> <span class="nu0">2000</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;isCircular&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// make the widget circular</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Automatically scroll the Carousel after every</span>
+<span class="co1">// autoPlayInterval millisecond.</span>
+carousel.<span class="me1">startAutoPlay</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-6491d6f515d1c53f51fb5182fdba7085-plain">var carousel = new YAHOO.widget.Carousel("container");
+// Set the delay (in milliseconds) to automatically scroll
+// the Carousel.
+carousel.set("autoPlayInterval", 2000);
+carousel.set("isCircular", true); // make the widget circular
+carousel.render();
+
+// Automatically scroll the Carousel after every
+// autoPlayInterval millisecond.
+carousel.startAutoPlay();
+</textarea></div>                <p>
+                    Alternatively, you can set this property during the
+                    instantiation of Carousel itself.
+                </p>
+<div id="syntax-f2e032da821f5ca604a5b22833edfbdc" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    autoPlayInterval<span class="sy0">:</span> <span class="nu0">2000</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    isCircular<span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">// Automatically scroll the Carousel after every</span></div></li><li class="li1"><div class="de1"><span class="co1">// autoPlayInterval millisecond.</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">startAutoPlay</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    autoPlayInterval<span class="sy0">:</span> <span class="nu0">2000</span><span class="sy0">,</span>
+    isCircular<span class="sy0">:</span> <span class="kw2">true</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">// Automatically scroll the Carousel after every</span>
+<span class="co1">// autoPlayInterval millisecond.</span>
+carousel.<span class="me1">startAutoPlay</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-f2e032da821f5ca604a5b22833edfbdc-plain">var carousel = new YAHOO.widget.Carousel("container", {
+    autoPlayInterval: 2000,
+    isCircular: true
+});
+carousel.render();
+// Automatically scroll the Carousel after every
+// autoPlayInterval millisecond.
+carousel.startAutoPlay();
+</textarea></div>
+                <h3 id="reveal">
+                    Revealing a "sneak preview" of the previous and next
+                    items in a Carousel
+                </h3>
+
+                <p>
+                    There are times when you want to provide a slight reveal
+                    for the items before and after the clipping region in the
+                    Carousel Control.  This gives the user a sneak preview of
+                    the forthcoming items and invites the user to explore the
+                    content.
+                </p>
+                <p>
+                    You can set the <code>revealAmount</code> to the percentage
+                    of the size of an item to be revealed.  The following
+                    example illustrates setting the property.
+                </p>
+<div id="syntax-350d4b6173f1c818689a215dbfe5b532" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;revealAmount&quot;</span><span class="sy0">,</span> <span class="nu0">20</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;revealAmount&quot;</span><span class="sy0">,</span> <span class="nu0">20</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-350d4b6173f1c818689a215dbfe5b532-plain">var carousel = new YAHOO.widget.Carousel("container");
+carousel.set("revealAmount", 20);
+carousel.render();
+</textarea></div>
+                <p>
+                    Alternatively, you can set this property during the
+                    instantiation of Carousel itself.
+                </p>
+<div id="syntax-69b3e03f6f9a2aade8b96d8230a24c84" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    revealAmount<span class="sy0">:</span> <span class="nu0">20</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    revealAmount<span class="sy0">:</span> <span class="nu0">20</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-69b3e03f6f9a2aade8b96d8230a24c84-plain">var carousel = new YAHOO.widget.Carousel("container", {
+    revealAmount: 20
+});
+carousel.render();
+</textarea></div>
+                <h3 id="vertical">A vertical Carousel</h3>
+
+                <p>
+                    If you want to display a vertical Carousel Control, you can
+                    set the <code>isVertical</code> property to <code>true</code>.  The
+                    following example illustrates creating a vertical Carousel
+                    Widget.
+                </p>
+
+<div id="syntax-0dd01c8d06d04c2308864fe9cc950cd9" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;isVertical&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;isVertical&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-0dd01c8d06d04c2308864fe9cc950cd9-plain">var carousel = new YAHOO.widget.Carousel("container");
+carousel.set("isVertical", true);
+carousel.render();
+</textarea></div>                <p>
+                    Alternatively, you can set this property during the
+                    instantiation of Carousel itself.
+                </p>
+<div id="syntax-f4aa609c68e4d0880039b0dec1f63552" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    isVertical<span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    isVertical<span class="sy0">:</span> <span class="kw2">true</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-f4aa609c68e4d0880039b0dec1f63552-plain">var carousel = new YAHOO.widget.Carousel("container", {
+    isVertical: true
+});
+carousel.render();
+</textarea></div>
+                <h3 id="multi-row">A multi-row Carousel</h3>
+
+                <p>
+                    If you want to display a multi-row Carousel Control, you can
+                    pass the <code>numVisible</code> property an <code>Array</code> specifying rows 
+                    and columns (both <code>Numbers</code>).  The
+                    following example illustrates creating a multi-row Carousel
+                    Widget.
+                </p>
+
+<div id="syntax-e74b8220564497c2f323b6a281dc53bc" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;numVisible&quot;</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="nu0">3</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;numVisible&quot;</span><span class="sy0">,</span> <span class="br0">&#91;</span><span class="nu0">3</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#93;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-e74b8220564497c2f323b6a281dc53bc-plain">var carousel = new YAHOO.widget.Carousel("container");
+carousel.set("numVisible", [3, 2]);
+carousel.render();
+</textarea></div>
+                <h3 id="events">Handling Events</h3>
+
+                <p>
+                    All events expressed as part of the to subscribe to all of the Carousel Control's API can be subscribed using the <code>on</code> (or <code>addListener</code>) method (as is true of all YUI controls based on the <a href="../element/index.html">Element Utility</a>).  This includes even the DOM-based events like <code>click</code>.
+                </p>
+                <p>
+                    For custom events specific to this component, a data object is passed to the handler function as the first argument. For DOM events, this is the actual event object.
+                </p>
+<div id="syntax-f5002f13dcc272de52ab51c40e5740e1" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>ev<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// ev is the standard YUI Event object</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;click&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>ev<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">// ev is the standard YUI Event object</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-f5002f13dcc272de52ab51c40e5740e1-plain">var carousel = new YAHOO.widget.Carousel("container");
+carousel.on("click", function (ev) {
+    // ev is the standard YUI Event object
+});
+carousel.render();
+</textarea></div>
+                <p>
+                    For the Carousel Control-specific events, the first argument
+                    passed to the event listener is the information about the
+                    event.  This varies based on the event that is triggered.
+                    For example, for the scroll events the data object tells you about the first and
+                    last visible items in the Carousel and the direction of
+                    scroll.
+                </p>
+<div id="syntax-52d89965de6db6a1e6d1923563a5068a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;beforeScroll&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>obj<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co1">// obj contains the following information:</span></div></li><li class="li1"><div class="de1">    <span class="co1">// {</span></div></li><li class="li2"><div class="de2">    <span class="co1">//    first: firstVisibleIndex,</span></div></li><li class="li1"><div class="de1">    <span class="co1">//    last: lastVisibleIndex,</span></div></li><li class="li1"><div class="de1">    <span class="co1">//    dir: direction of scroll</span></div></li><li class="li1"><div class="de1">    <span class="co1">// }</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">&quot;beforeScroll&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>obj<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">// obj contains the following information:</span>
+    <span class="co1">// {</span>
+    <span class="co1">//    first: firstVisibleIndex,</span>
+    <span class="co1">//    last: lastVisibleIndex,</span>
+    <span class="co1">//    dir: direction of scroll</span>
+    <span class="co1">// }</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-52d89965de6db6a1e6d1923563a5068a-plain">var carousel = new YAHOO.widget.Carousel("container");
+carousel.on("beforeScroll", function (obj) {
+    // obj contains the following information:
+    // {
+    //    first: firstVisibleIndex,
+    //    last: lastVisibleIndex,
+    //    dir: direction of scroll
+    // }
+});
+carousel.render();
+</textarea></div>                <p>
+                    <strong>Note:</strong> If you want to abort the scrolling
+                    of the Carousel, you can subscribe to the
+                    <code>beforeScroll</code> event and then return the value
+                    <code>false</code> to abort scrolling.
+                </p>
+
+                <p>
+                    The event listeners can be removed via the
+                    <code>removeListener</code> method of the Carousel Control.
+                </p>
+<div id="syntax-d1482781af5062cb6dee502395c8cf87" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">function</span> scrollEvtHandler<span class="br0">&#40;</span>obj<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    <span class="co1">// ...</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">carousel.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;beforeScroll&quot;</span><span class="sy0">,</span> scrollEvtHandler<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">// ...</span></div></li><li class="li2"><div class="de2">carousel.<span class="me1">removeListener</span><span class="br0">&#40;</span><span class="st0">&quot;beforeScroll&quot;</span><span class="sy0">,</span> scrollEvtHandler<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">function</span> scrollEvtHandler<span class="br0">&#40;</span>obj<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="co1">// ...</span>
+<span class="br0">&#125;</span>
+&nbsp;
+carousel.<span class="me1">addListener</span><span class="br0">&#40;</span><span class="st0">&quot;beforeScroll&quot;</span><span class="sy0">,</span> scrollEvtHandler<span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">// ...</span>
+carousel.<span class="me1">removeListener</span><span class="br0">&#40;</span><span class="st0">&quot;beforeScroll&quot;</span><span class="sy0">,</span> scrollEvtHandler<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-d1482781af5062cb6dee502395c8cf87-plain">var carousel = new YAHOO.widget.Carousel("container");
+carousel.render();
+
+function scrollEvtHandler(obj) {
+    // ...
+}
+
+carousel.addListener("beforeScroll", scrollEvtHandler);
+// ...
+carousel.removeListener("beforeScroll", scrollEvtHandler);
+</textarea></div>
+                <h3 id="config">Configuration Attributes</h3>
+
+                <p>
+                    The Carousel Control's configuration can be obtained or set
+                    at runtime using its <code>get</code> and <code>set</code>
+                    methods.  For example:
+                </p>
+<div id="syntax-18fceda75ff70cfdd5fba5e4fd7c1e28" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="kw3">alert</span><span class="br0">&#40;</span>carousel.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;numVisible&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// alerts 3 (default)</span></div></li><li class="li1"><div class="de1">carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;numVisible&quot;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span>     <span class="co1">// override the default</span></div></li><li class="li2"><div class="de2"><span class="kw3">alert</span><span class="br0">&#40;</span>carousel.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;numVisible&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// alerts 1 (new value)</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> carousel <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Carousel</span><span class="br0">&#40;</span><span class="st0">&quot;container&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+carousel.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="kw3">alert</span><span class="br0">&#40;</span>carousel.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;numVisible&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// alerts 3 (default)</span>
+carousel.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">&quot;numVisible&quot;</span><span class="sy0">,</span> <span class="nu0">1</span><span class="br0">&#41;</span><span class="sy0">;</span>     <span class="co1">// override the default</span>
+<span class="kw3">alert</span><span class="br0">&#40;</span>carousel.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">&quot;numVisible&quot;</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span> <span class="co1">// alerts 1 (new value)</span>
+&nbsp;</pre></div><textarea id="syntax-18fceda75ff70cfdd5fba5e4fd7c1e28-plain">var carousel = new YAHOO.widget.Carousel("container");
+carousel.render();
+alert(carousel.get("numVisible")); // alerts 3 (default)
+carousel.set("numVisible", 1);     // override the default
+alert(carousel.get("numVisible")); // alerts 1 (new value)
+</textarea></div>                <p>
+
+                    See the <a href="#apiref">reference table below</a> as
+                    well as the API documentation for Carousel Control for the
+                    complete list of configuration attributes.
+                </p>
+
+                <h2 id="skinning">Skinning the Carousel Control</h2>
+
+                <p>
+                    Carousel comes with a default presentation or "skin," part
+                    of the "Sam Skin" visual treatment that accompanies most
+                    YUI controls. You can read more about the general approach
+                    to skinning YUI components <a
+                    href="http://yuilibrary.com/yui/docs/tutorials/skins/">in
+                    this in-depth article</a>.
+                </p>
+
+                <p>
+                    The CSS provided with Carousel is comprised of core,
+                    functional CSS as well as the Sam Skin visual treatment.
+                </p>
+                <img src="assets/carousel-sam-skin.jpg"
+                     alt="Carousel Widget using the Sam Skin" width="550">
+
+              <h2 id="apiref">Reference Tables</h2>
+
+                <p>
+                    The following tables contain information about
+                    configuration properties and CSS classes for the Carousel
+                    Widget:
+                </p>
+
+                <ul>
+                    <li>
+                        <a href="#carouselconfig">
+                        Carousel Control Configuration Attributes</a>
+                    </li>
+                    <li><a href="#cssref">CSS classes</a></li>
+                </ul>
+
+                <div class="apisummary" id="carouselconfig">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Default</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="odd">
+                                <td>firstVisible</td>
+                                <td>Number</td>
+
+                                <td>0</td>
+                                <td>The index to start the Carousel from
+                                (indices begin from zero)</td>
+                            </tr>
+                            <tr>
+                                <td>numVisible</td>
+                                <td>Number/Array</td>
+                                <td>3</td>
+                                <td>The number of visible items in the
+                                Carousel's viewport or an array of columns and rows to enable multi-row.</td>
+                            </tr>
+                            <tr class="odd">
+                                <td>scrollIncrement</td>
+                                <td>Number</td>
+                                <td>1</td>
+                                <td>The number of items to scroll by for arrow
+                                keys.</td>
+
+                            </tr>
+                            <tr>
+                                <td>selectedItem</td>
+                                <td>Number</td>
+                                <td>0</td>
+                                <td>The index of the selected item in the
+                                Carousel</td>
+                            </tr>
+
+                            <tr class="odd">
+                                <td>revealAmount</td>
+                                <td>Number</td>
+                                <td>0</td>
+                                <td>The percentage of the item to be revealed
+                                on each side of the Carousel (before and after
+                                the first and last item in the Carousel's
+                                viewport.)</td>
+                            </tr>
+                            <tr>
+
+                                <td>isCircular</td>
+                                <td>Boolean</td>
+                                <td>false</td>
+                                <td>Boolean to enable continuous scrolling of
+                                elements in the Carousel.</td>
+                            </tr>
+                            <tr class="odd">
+                                <td>isVertical</td>
+
+                                <td>Boolean</td>
+                                <td>false</td>
+                                <td>Boolean to enable vertical orientation of
+                                the Carousel Widget.</td>
+                            </tr>
+                            <tr>
+                                <td>navigation</td>
+                                <td>Object</td>
+
+                                <td><code>
+                                { prev: null, next: null }</code></td>
+                                <td>The set of navigation controls for the
+                                Carousel.  The Sam skin provides the set of
+                                navigation controls by default.  If you need to
+                                override them with your own set of buttons, you
+                                can set the ID of the buttons using the
+                                navigation configuration setting.</td>
+                            </tr>
+                            <tr class="odd">
+                                <td>animation</td>
+                                <td>Object</td>
+
+                                <td><code>
+                                { speed: 0, effect: null }</code></td>
+                                <td>The configuration of the animation
+                                attributes for the Carousel.  The speed
+                                attribute takes the value in seconds;  the
+                                effect attribute is used to set one of the
+                                  <a href="../animation/index.html">Animation Utility</a>'s built-in effects (like
+                                <code>YAHOO.util.Easing.easeOut</code>)</td>
+                            </tr>
+                            <tr>
+                                <td>autoPlayInterval</td>
+                                <td>Number</td>
+
+                                <td>0</td>
+                                <td>Set this time in milli-seconds to have the
+                                Carousel scroll the elements
+                                automatically.  The <code>startAutoPlay</code>
+                                method needs to be invoked to trigger auto
+                                scroll.</td>
+                            </tr>
+                            <tr class="odd">
+                                <td>numItems</td>
+                                <td>Number</td>
+                                <td></td>
+
+                                <td>Set the number of items in the Carousel.
+                                If the number of items specified is less than
+                                the number of items in the Carousel, the excess
+                                elements are removed from the Carousel.  If
+                                the number of items specified is greater, then
+                                the <code>loadItemsHandler</code> is called to
+                                load the additional items into the widget.</td>
+                            </tr>
+                            <tr>
+                                <td>loadItemsHandler</td>
+                                <td>Function</td>
+                                <td></td>
+
+                                <td>Set the lazy-load items handler for
+                                dynamically loading items in the Carousel.</td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4">
+                                    See the <a
+                                    href="../docs/YAHOO.widget.Carousel.html">API
+                                    documentation</a> for the complete list of
+                                    properties and methods.
+                                </td>
+
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+                <div class="apisummary" class="cssref">
+                    <p>
+                        The Carousel Control makes use of several CSS
+                        classes.  You can either use these CSS classes that
+                        come as part of the Sam skinning or provide a different
+                        style sheet to override their values.  The following
+                        table lists the CSS classes used by the
+                        Carousel Control:
+                    </p>
+
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <tr class="odd">
+                                <td>yui-carousel</td>
+                                <td>This class is applied to the Carousel's
+                                container element.</td>
+                            </tr>
+                            <tr>
+                                <td>yui-carousel-horizontal</td>
+                                <td>This class is applied to the Carousel's
+                                container element when its orientation is set
+                                to horizontal.</td>
+                            </tr>
+                            <tr class="odd">
+                                <td>yui-carousel-vertical</td>
+                                <td>This class is applied to the Carousel's
+                                container element when its orientation is set
+                                to vertical.</td>
+                            </tr>
+                            <tr>
+                                <td>yui-carousel-visible</td>
+
+                                <td>This class is applied to the Carousel's
+                                container when it is visible.</td>
+                            </tr>
+                            <tr class="odd">
+                                <td>yui-carousel-content</td>
+                                <td>This class is applied to the clipping
+                                region within the Carousel Widget.</td>
+                            </tr>
+                             <tr>
+                                <td>yui-carousel-multi-row</td>
+                                <td>This class is applied to the clipping
+                                region within the Carousel Widget when
+                                enabling multi-row.</td>
+                            </tr>
+                            <tr class="odd">
+                                <td>yui-carousel-nav</td>
+                                <td>This class is applied to the navigation
+                                container.</td>
+                            </tr>
+                            <tr>
+                                <td>yui-carousel-pager-item</td>
+                                <td>This class is applied to the pagination anchors.</td>
+                            </tr>
+                            <tr class="odd">
+                                <td>yui-carousel-button</td>
+                                <td>This class is applied to the Carousel's
+                                navigation buttons.</td>
+                            </tr>
+                            <tr>
+                                <td>yui-carousel-button-disabled</td>
+                                <td>This class is applied to the Carousel's
+                                navigation buttons when they are disabled.</td>
+                            </tr>
+                            <tr class="odd">
+                                <td>yui-carousel-pages</td>
+                                <td>This class is applied to the Carousel's
+                                page navigation buttons.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="knownissues">Known Issues</h2>
+                <!-- TODO: any known issues? -->
+                
+                <h2 id="mobile">YUI on Mobile: Using Carousel Control with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>
+                <p>
+                    <!-- TODO: Carousel on Apple's iPhone -->
+                </p>
+
+                	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+                
+            </div>
+
+            <div class="yui-u">
+                <div id="cheatsheet">
+                    <h3>Carousel Control Cheat Sheet:</h3>
+
+                    <a href="http://yuiblog.com/assets/pdf/cheatsheets/carousel.pdf">
+                        <img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/carousel.gif"
+                             width="178" height="128"
+                             alt="Cheat Sheet for the Carousel Control.">
+                    </a>
+                    <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+                </div>
+
+                <div id="examples">
+                    <h3>Carousel Control Examples:</h3>
+
+<ul>
+<li><a href='../examples/carousel/csl_selection.html'>Spotlight example</a></li>
+<li><a href='../examples/carousel/csl_circular.html'>Circular Carousel example</a></li>
+<li><a href='../examples/carousel/csl_reveal.html'>Partially revealing previous and next items</a></li>
+<li><a href='../examples/carousel/csl_imagentext.html'>Using both images and text within an item</a></li>
+<li><a href='../examples/carousel/csl_dynload2.html'>Using Ajax for deferred loading of items</a></li>
+<li><a href='../examples/carousel/csl_dynloadandreplace.html'>Using deferred loading of items and Carousel's built-in paginator</a></li>
+<li><a href='../examples/carousel/csl_multirow.html'>Multi-row example</a></li>
+<li><a href='../examples/carousel/csl_paginationtemplate.html'>Pagination template example</a></li>
+<li><a href='../examples/carousel/csl_pagination.html'>Using Paginator with Carousel</a></li>
+<li><a href='../examples/carousel/carousel-ariaplugin.html'>Using the Carousel ARIA Plugin</a></li>
+</ul>
+
+
+		
+                 </div
+
+                
+                ><!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fcarousel%2F-->                
+                <h3 id="delicious">YUI Carousel Control on del.icio.us:</h3>
+                <div class="delicious">
+                    <div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/carousel/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/web" class="tag-size-1">web</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/framework" class="tag-size-1">framework</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/slideshow" class="tag-size-1">slideshow</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdesign" class="tag-size-1">webdesign</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/carousel" class="tag-size-1">carousel</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/css" class="tag-size-1">css</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/1e280ba69a43989500a91475af5e00fb" class="saved-by">saved by <span>82</span>  people</a></p>
+   </div>                </div>
+                
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="selected "><a title="The YUI Carousel Control" href="index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:18 PDT 2013 -->
+
+<!-- Localized -->

@@ -1,0 +1,457 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Rich Text Editor: One Editor, Multiple Edit Areas</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/menu/assets/skins/sam/menu.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/editor/assets/skins/sam/editor.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/container/container-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/editor/editor-min.js"></script>
+
+<!--there is no custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: Rich Text Editor: One Editor, Multiple Edit Areas</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Rich Text Editor: One Editor, Multiple Edit Areas</h1>
+	
+	<div class="exampleIntro">
+	<p>This example demonstrates how to have one Editor instance control different editable areas on a page.</p>
+			
+	</div>	
+					
+	<div class="example-container module  newWindow">
+			<div id="example-canvas" class="bd">
+	
+		<p class="newWindowButton yui-skin-sam"><span id="newWindowLink"><span class="first-child"><a href="multi_editor_source.html" target="_blank">View example in new window.</a></span></span>		
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Setting up the HTML</h2>
+
+<p>First we place a textarea on the page and set it to visibility hidden, then create the editable areas and assign them a class of <code>editable</code></p>
+
+<p>By using the <code>.yui-editor-container</code> class, we are setting the Editor to an absolute position of -9999px top and -9999px left to render it off of the screen.</p>
+
+<textarea name="code" class="CSS">
+.yui-editor-container {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    z-index: 999; /* So Safari behaves */
+}
+#editor {
+    visibility: hidden;
+    position: absolute;
+}
+.editable {
+    border: 1px solid black;
+    margin: .25em;
+    float: left;
+    width: 350px;
+    height: 100px;
+}
+</textarea>
+<textarea name="code" class="HTML">
+&lt;textarea id="editor"&gt;&lt;/textarea&gt;
+
+<div id="editable_cont">
+    <div class="editable">#1. Double click me to edit the contents</div>
+    <div class="editable">#2. Double click me to edit the contents</div>
+    <div class="editable">#3. Double click me to edit the contents</div>
+    <div class="editable">#4. Double click me to edit the contents</div>
+    <div class="editable">#5. Double click me to edit the contents</div>
+    <div class="editable">#6. Double click me to edit the contents</div>
+</div>
+</textarea>
+
+<h2>Prep the Editor</h2>
+
+<p>First we are going to setup the editor with a smaller toolbar.</p>
+
+<textarea name="code" class="JScript">
+(function() {
+    var Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event,
+        editing = null;
+    
+    YAHOO.log('Setup a stripped down config for the editor', 'info', 'example');
+    var myConfig = {
+        height: '150px',
+        width: '380px',
+        animate: true,
+        limitCommands: true,
+        toolbar: {
+            titlebar: 'My Editor',
+            collapse: true,
+            buttons: [
+                { group: 'textstyle', label: 'Font Style',
+                    buttons: [
+                        { type: 'push', label: 'Bold', value: 'bold' },
+                        { type: 'push', label: 'Italic', value: 'italic' },
+                        { type: 'push', label: 'Underline', value: 'underline' },
+                        { type: 'separator' },
+                        { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
+                            menu: [
+                                { text: 'Arial', checked: true },
+                                { text: 'Arial Black' },
+                                { text: 'Comic Sans MS' },
+                                { text: 'Courier New' },
+                                { text: 'Lucida Console' },
+                                { text: 'Tahoma' },
+                                { text: 'Times New Roman' },
+                                { text: 'Trebuchet MS' },
+                                { text: 'Verdana' }
+                            ]
+                        },
+                        { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true },
+                        { type: 'separator' },
+                        { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
+                        { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true }
+                    ]
+                }
+            ]
+        }
+    };
+
+    YAHOO.log('Create the Editor..', 'info', 'example');
+    myEditor = new YAHOO.widget.Editor('editor', myConfig);
+    myEditor.render();
+})();
+</textarea>
+
+<h2>Showing the Editor</h2>
+<p>Now that we have the Editor rendered and positioned off of the screen, we need to be able to show it when you double click on an editable area.</p>
+
+<p>We add a <code>dblclick</code> listener to the container <code>editable_cont</code>.</p>
+
+<p>Inside of this listener, we grab the target of the event and check to see if it has the <code>editable</code> class.</p>
+<p><strong>Note:</strong> This logic may need to be refined for your use case as it relies on the user clicking the DIV with the editable class, so clicking on an element inside the div will fail. Most of the time, you would probably want the user to click on some sort of Edit button to exec this action.</p>
+<p>Once we have the DIV, we set the Editor's HTML with the innerHTML of the DIV.</p>
+<p>Next we position the Editor with the XY coordinates of the DIV.</p>
+
+<textarea name="code" class="JScript">
+    Event.on('editable_cont', 'dblclick', function(ev) {
+        var tar = Event.getTarget(ev);
+        while(tar.id != 'editable_cont') {
+            if (Dom.hasClass(tar, 'editable')) {
+                YAHOO.log('An element with the classname of editable was double clicked on.', 'info', 'example');
+                if (editing !== null) {
+                    YAHOO.log('There is an editor open, save its data before continuing..', 'info', 'example');
+                    myEditor.saveHTML();
+                    editing.innerHTML = myEditor.get('element').value;
+                }
+                YAHOO.log('Get the XY position of the Element that was clicked', 'info', 'example');
+                var xy = Dom.getXY(tar);
+                YAHOO.log('Set the Editors HTML with the elements innerHTML', 'info', 'example');
+                myEditor.setEditorHTML(tar.innerHTML);
+                YAHOO.log('Reposition the editor with the elements xy', 'info', 'example');
+                Dom.setXY(myEditor.get('element_cont').get('element'), xy);
+                editing = tar;
+            }
+            tar = tar.parentNode;
+        }
+    });
+</textarea>
+
+<h2>Saving the Editor with the toolbar</h2>
+<p>Now we need to setup a way to save the Editor's data, we are going to override the toolbar's collapse button and use it as a save button.</p>
+<p>First we need to override the text on the collapse button, we do that by overriding the var <code>STR_COLLAPSE</code> on the <code>YAHOO.widget.Toolbar</code>'s prototype.</p>
+<p>Now we listen for the <code>toolbarLoaded</code> event so we can attach our handler to the <code>toolbarCollapsed</code> event.</p>
+<p>Inside of the <code>toolbarCollapsed</code> event, we will save the Editor's data back to the editable area. Then we will set the position of the editor back to -9999px left and -9999px top.</p>
+<p><strong>Note:</strong> You could also do this using a Save button in the toolbar.</p>
+<textarea name="code" class="JScript">
+    YAHOO.log('Override the prototype of the toolbar to use a different string for the collapse button', 'info', 'example');
+    YAHOO.widget.Toolbar.prototype.STR_COLLAPSE = 'Click to close the editor.';
+    YAHOO.log('Create the Editor..', 'info', 'example');
+    myEditor = new YAHOO.widget.Editor('editor', myConfig);
+    myEditor.on('toolbarLoaded', function() {
+        YAHOO.log('Toolbar is loaded, add a listener for the toolbarCollapsed event', 'info', 'example');
+        this.toolbar.on('toolbarCollapsed', function() {
+            YAHOO.log('Toolbar was collapsed, reposition and save the editors data', 'info', 'example');
+            Dom.setXY(this.get('element_cont').get('element'), [-99999, -99999]);
+            Dom.removeClass(this.toolbar.get('cont').parentNode, 'yui-toolbar-container-collapsed');
+            myEditor.saveHTML();
+            editing.innerHTML = myEditor.get('element').value;
+            editing = null;
+        }, myEditor, true);
+    }, myEditor, true);
+    myEditor.render();
+</textarea>
+
+<h2>Full Example Javascript Source</h2>
+
+<textarea name="code" class="JScript">
+(function() {
+    var Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event,
+        editing = null;
+    
+    YAHOO.log('Setup a stripped down config for the editor', 'info', 'example');
+    var myConfig = {
+        height: '150px',
+        width: '380px',
+        animate: true,
+        limitCommands: true,
+        toolbar: {
+            titlebar: 'My Editor',
+            collapse: true,
+            buttons: [
+                { group: 'textstyle', label: 'Font Style',
+                    buttons: [
+                        { type: 'push', label: 'Bold', value: 'bold' },
+                        { type: 'push', label: 'Italic', value: 'italic' },
+                        { type: 'push', label: 'Underline', value: 'underline' },
+                        { type: 'separator' },
+                        { type: 'select', label: 'Arial', value: 'fontname', disabled: true,
+                            menu: [
+                                { text: 'Arial', checked: true },
+                                { text: 'Arial Black' },
+                                { text: 'Comic Sans MS' },
+                                { text: 'Courier New' },
+                                { text: 'Lucida Console' },
+                                { text: 'Tahoma' },
+                                { text: 'Times New Roman' },
+                                { text: 'Trebuchet MS' },
+                                { text: 'Verdana' }
+                            ]
+                        },
+                        { type: 'spin', label: '13', value: 'fontsize', range: [ 9, 75 ], disabled: true },
+                        { type: 'separator' },
+                        { type: 'color', label: 'Font Color', value: 'forecolor', disabled: true },
+                        { type: 'color', label: 'Background Color', value: 'backcolor', disabled: true }
+                    ]
+                }
+            ]
+        }
+    };
+
+    YAHOO.log('Override the prototype of the toolbar to use a different string for the collapse button', 'info', 'example');
+    YAHOO.widget.Toolbar.prototype.STR_COLLAPSE = 'Click to close the editor.';
+    YAHOO.log('Create the Editor..', 'info', 'example');
+    myEditor = new YAHOO.widget.Editor('editor', myConfig);
+    myEditor.on('toolbarLoaded', function() {
+        YAHOO.log('Toolbar is loaded, add a listener for the toolbarCollapsed event', 'info', 'example');
+        this.toolbar.on('toolbarCollapsed', function() {
+            YAHOO.log('Toolbar was collapsed, reposition and save the editors data', 'info', 'example');
+            Dom.setXY(this.get('element_cont').get('element'), [-99999, -99999]);
+            Dom.removeClass(this.toolbar.get('cont').parentNode, 'yui-toolbar-container-collapsed');
+            myEditor.saveHTML();
+            editing.innerHTML = myEditor.get('element').value;
+            editing = null;
+        }, myEditor, true);
+    }, myEditor, true);
+    myEditor.render();
+
+    Event.on('editable_cont', 'dblclick', function(ev) {
+        var tar = Event.getTarget(ev);
+        while(tar.id != 'editable_cont') {
+            if (Dom.hasClass(tar, 'editable')) {
+                YAHOO.log('An element with the classname of editable was double clicked on.', 'info', 'example');
+                if (editing !== null) {
+                    YAHOO.log('There is an editor open, save its data before continuing..', 'info', 'example');
+                    myEditor.saveHTML();
+                    editing.innerHTML = myEditor.get('element').value;
+                }
+                YAHOO.log('Get the XY position of the Element that was clicked', 'info', 'example');
+                var xy = Dom.getXY(tar);
+                YAHOO.log('Set the Editors HTML with the elements innerHTML', 'info', 'example');
+                myEditor.setEditorHTML(tar.innerHTML);
+                YAHOO.log('Reposition the editor with the elements xy', 'info', 'example');
+                Dom.setXY(myEditor.get('element_cont').get('element'), xy);
+                editing = tar;
+            }
+            tar = tar.parentNode;
+        }
+    });
+})();
+</textarea>
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+					
+				
+					<div id="examples">
+						<h3 class='firstContent'>Rich Text Editor Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='flickr_editor.html'>Flickr Image Search</a></li><li><a href='cal_editor.html'>Calendar Plugin</a></li><li><a href='icon_editor.html'>Icon Insertion</a></li><li><a href='switch_editor.html'>Plain Text Switcher</a></li><li><a href='post_editor.html'>Editor Data Post with Connection Manager</a></li><li><a href='skinning_editor.html'>Skinning the Editor</a></li><li><a href='toolbar_editor.html'>Default Toolbar Config</a></li><li><a href='code_editor.html'>Code Editor</a></li><li><a href='tabview_editor.html'>Editor inside a Tabview Control</a></li><li class='selected'><a href='multi_editor.html'>One Editor, Multiple Edit Areas</a></li><li><a href='imagebrowser_editor.html'>Editor with Custom Image Browser</a></li><li><a href='simple_editor.html'>Simple Editor &mdash; Basic Buttons</a></li><li><a href='simple_adv_editor.html'>Simple Editor &mdash; Advanced Buttons</a></li><li><a href='editor_adv_editor.html'>Editor &mdash; Basic Buttons</a></li><li><a href='autoheight_editor.html'>Editor Auto Adjusting Height</a></li><li><a href='dialog_editor.html'>Editor in a Dialog Control</a></li><li><a href='../resize/rte_resize.html'>Custom resizing for the Rich Text Editor (included with examples for Resize Utility)</a></li><li><a href='../layout/calrte_layout.html'>Simple Application (included with examples for Layout Manager)</a></li><li><a href='../layout/adv_layout.html'>Complex Application (included with examples for Layout Manager)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Rich Text Editor Resources:</h3>
+						<ul>
+							<li><a href="../../editor/index.html">User's Guide</a></li>
+						<li><a href="../../docs/module_editor.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/editor.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:30 PDT 2013 -->
+
+<!-- Localized -->

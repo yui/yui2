@@ -1,0 +1,245 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Grids CSS: Special Nesting Grid "F" (1/4, 3/4)</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+<!--there is no custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: Grids CSS: Special Nesting Grid "F" (1/4, 3/4)</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Grids CSS: Special Nesting Grid "F" (1/4, 3/4)</h1>
+	
+	<div class="exampleIntro">
+	<p>This example shows how to use Special Nesting Grid "F" to create two columns, the first at 1/4th and the second at 3/4ths of available space.</p>			
+	</div>	
+					
+	<div class="example-container module  newWindow">
+			<div id="example-canvas" class="bd">
+	
+		<p class="newWindowButton yui-skin-sam"><span id="newWindowLink"><span class="first-child"><a href="grids-gf_source.html" target="_blank">View example in new window.</a></span></span>		
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Subdividing Regions with Nesting Grids and Special Nesting Grids</h2>
+
+<p><a href="../../grids/index.html">YUI Grids CSS</a> offers three ways to control your page layout. Perhaps the most interesting and powerful aspect of YUI Grids is the ability to subdivide regions of the page into two or three columns of even (50%-50% or 33%-33%-33%) or uneven size (66%-33%, 25%-75%, etc).</p>
+
+<p>Nested subdivisions of spaces are created by the interplay of "grids" and "units". The "grids" are a parent container that tells its children how to behave. The Standard Nesting Grid's parent container is <code>div.yui-g</code>, where "g" stands for "grid" or "grid holder." Within this holder are two units that take direction from their parent. They look like this: <code>div.yui-u</code>, where "u" stands for units. The units are indentical except that we need to add a class to distinguish the first one from any others.</p>
+
+<h2>Here is the markup for a Standard Nesting Grid.</h2>
+
+<textarea name="code" class="HTML" cols="60" rows="1">
+<body>
+<div class="yui-gf">
+	<div class="yui-u first">
+		<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna.</p>
+	</div>
+	<div class="yui-u">
+		<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna.</p>
+	</div>
+</div>
+</body>
+</textarea>
+
+<p>The above markup will create two units. The first takes up 1/4 of the available space; the second takes up 3/4 of the available space offered by their parent (minus a gutter between them).</p>
+
+<h2>Available Nesting Grids</h2>
+
+<p>We refer to these Nesting Grids as either Standard (meaning their two children split space evenly) or Special (meaning they share space unevenly, for example 66% and 33%, or that there are three children instead of two, for example 33%, 33%, 33%).</p>
+
+<ul>
+	<li><code>div.yui-g</code> - Standard Nesting Grid - tells two children to each take up half the available space.</li>
+	<li><code>div.yui-gb</code> - Special Nesting Grid B - tells three children to each take up a third of the available space.</li>
+	<li><code>div.yui-gc</code> - Special Nesting Grid C - tells the first of two children to take up 66% of the available space.</li>
+	<li><code>div.yui-gd</code> - Special Nesting Grid D - tells the first of two children to take up 33% of the available space.</li>
+	<li><code>div.yui-ge</code> - Special Nesting Grid E - tells the first of two children to take up 75% of the available space.</li>
+	<li><code>div.yui-gf</code> - Special Nesting Grid F - tells the first of two children to take up 25% of the available space.</li>
+</ul>
+
+<p>This example showcases the Special Nesting Grid F (<code>div.yui-gf</code>).</p>
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+					
+				
+					<div id="examples">
+						<h3 class='firstContent'>Grids CSS Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='grids-doc.html'>Page Width = 750px</a></li><li><a href='grids-doc2.html'>Page Width = 950px</a></li><li><a href='grids-doc4.html'>Page Width = 974px</a></li><li><a href='grids-doc3.html'>Page Width = 100%</a></li><li><a href='grids-doc-custom.html'>Custom Page Width</a></li><li><a href='grids-t1.html'>Preset Template 1, 160px left</a></li><li><a href='grids-t2.html'>Preset Template 2, 180px left</a></li><li><a href='grids-t3.html'>Preset Template 3, 300px left</a></li><li><a href='grids-t4.html'>Preset Template 4, 180px right</a></li><li><a href='../resize/grids_resize.html'>Split Pane resizing with Grids CSS (included with examples for Resize Utility)</a></li><li><a href='../layout/grids_layout.html'>Using a Layout with Grids CSS (included with examples for Layout Manager)</a></li><li><a href='grids-t5.html'>Preset Template 5, 240px right</a></li><li><a href='grids-t6.html'>Preset Template 6, 300px right</a></li><li><a href='grids-g.html'>Standard Nesting Grid (1/2 - 1/2)</a></li><li><a href='grids-gb.html'>Special Nesting Grid "B" (1/3, 1/3, 1/3)</a></li><li><a href='grids-gc.html'>Special Nesting Grid "C" (2/3, 1/3)</a></li><li><a href='grids-gd.html'>Special Nesting Grid "D" (1/3, 2/3)</a></li><li><a href='grids-ge.html'>Special Nesting Grid "E" (3/4, 1/4)</a></li><li class='selected'><a href='grids-gf.html'>Special Nesting Grid "F" (1/4, 3/4)</a></li><li><a href='grids-gg.html'>Nested Standard Nesting Grids (1/4 - 1/4 - 1/4 - 1/4)</a></li><li><a href='grids-landmarks.html'>Using ARIA Landmark Roles With Grids</a></li><li><a href='../menu/leftnavfrommarkup.html'>Website Left Nav With Submenus Built From Markup (included with examples for Menu Family)</a></li><li><a href='../menu/leftnavfromjs.html'>Website Left Nav With Submenus From JavaScript (included with examples for Menu Family)</a></li><li><a href='../menu/topnavfrommarkup.html'>Website Top Nav With Submenus Built From Markup (included with examples for Menu Family)</a></li><li><a href='../menu/topnavfromjs.html'>Website Top Nav With Submenus From JavaScript (included with examples for Menu Family)</a></li><li><a href='../menu/leftnavfrommarkupwithanim.html'>Website Left Nav Using Animation With Submenus Built From Markup (included with examples for Menu Family)</a></li><li><a href='../menu/leftnavfromjswithanim.html'>Website Left Nav Using Animation With Submenus From JavaScript (included with examples for Menu Family)</a></li><li><a href='../menu/topnavfrommarkupwithanim.html'>Website Top Nav Using Animation With Submenus Built From Markup (included with examples for Menu Family)</a></li><li><a href='../menu/topnavfromjswithanim.html'>Website Top Nav Using Animation With Submenus From JavaScript (included with examples for Menu Family)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Grids CSS Resources:</h3>
+						<ul>
+							<li><a href="../../grids/index.html">User's Guide</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/css.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:00 PDT 2013 -->
+
+<!-- Localized -->

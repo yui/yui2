@@ -1,0 +1,651 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: TreeView Control: Custom TreeView with Check Boxes</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/logger/assets/skins/sam/logger.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/treeview/assets/skins/sam/treeview.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.6.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/logger/logger-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/treeview/treeview-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/element/element-beta-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.6.0/build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<!--Additional custom style rules for this example:-->
+<style type="text/css">
+
+.ygtvcheck0 { background: url(assets/img/check/check0.gif) 0 0 no-repeat; width:16px; cursor:pointer }
+.ygtvcheck1 { background: url(assets/img/check/check1.gif) 0 0 no-repeat; width:16px; cursor:pointer }
+.ygtvcheck2 { background: url(assets/img/check/check2.gif) 0 0 no-repeat; width:16px; cursor:pointer }
+
+</style>
+
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: TreeView Control: Custom TreeView with Check Boxes</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>TreeView Control: Custom TreeView with Check Boxes</h1>
+	
+	<div class="exampleIntro">
+	<p>The TaskNode example implements a task list using treeview.  It does so by extending the TextNode class to have additional, specific functionality.  In this example, each TaskNode has three potential states: Checked, partially-checked (not all subtasks complete), and unchecked.  Checking off a task automatically checks off all subtasks.</p>			
+	</div>	
+					
+	<div class="example-container module ">
+			<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<!-- Some style for the expand/contract section-->
+<style>
+#expandcontractdiv {border:1px solid #336600; background-color:#FFFFCC; margin:0 0 .5em 0; padding:0.2em;}
+#treeDiv1 { background: #fff }
+</style>
+
+<!-- markup for expand/contract links -->
+<div id="expandcontractdiv">
+	<a id="expand" href="#">Expand all</a>
+	<a id="collapse" href="#">Collapse all</a>
+	<a id="check" href="#">Check all</a>
+	<a id="uncheck" href="#">Uncheck all</a>
+	<a id="getchecked" href="#">Log array of checked nodes</a>
+</div>
+<div id="treeDiv1"></div>
+
+<script type="text/javascript" src="assets/js/TaskNode.js"></script>
+
+<script type="text/javascript">
+(function() {
+	var tree;
+	var nodes = [];
+	var nodeIndex;
+	
+	function treeInit() {
+		YAHOO.log("Initializing TaskNode TreeView instance.")
+		buildRandomTaskNodeTree();
+	}
+	
+	//handler for expanding all nodes
+	YAHOO.util.Event.on("expand", "click", function(e) {
+		YAHOO.log("Expanding all TreeView  nodes.", "info", "example");
+		tree.expandAll();
+		YAHOO.util.Event.preventDefault(e);
+	});
+	
+	//handler for collapsing all nodes
+	YAHOO.util.Event.on("collapse", "click", function(e) {
+		YAHOO.log("Collapsing all TreeView  nodes.", "info", "example");
+		tree.collapseAll();
+		YAHOO.util.Event.preventDefault(e);
+	});
+
+	//handler for checking all nodes
+	YAHOO.util.Event.on("check", "click", function(e) {
+		YAHOO.log("Checking all TreeView  nodes.", "info", "example");
+		checkAll();
+		YAHOO.util.Event.preventDefault(e);
+	});
+	
+	//handler for unchecking all nodes
+	YAHOO.util.Event.on("uncheck", "click", function(e) {
+		YAHOO.log("Unchecking all TreeView  nodes.", "info", "example");
+		uncheckAll();
+		YAHOO.util.Event.preventDefault(e);
+	});
+
+
+	YAHOO.util.Event.on("getchecked", "click", function(e) {
+		YAHOO.log("Checked nodes: " + YAHOO.lang.dump(getCheckedNodes()), "info", "example");
+            
+		YAHOO.util.Event.preventDefault(e);
+	});
+
+	//Function  creates the tree and 
+	//builds between 3 and 7 children of the root node:
+    function buildRandomTaskNodeTree() {
+	
+		//instantiate the tree:
+        tree = new YAHOO.widget.TreeView("treeDiv1");
+
+        for (var i = 0; i < Math.floor((Math.random()*4) + 3); i++) {
+            var tmpNode = new YAHOO.widget.TaskNode("label-" + i, tree.getRoot(), false);
+            // tmpNode.collapse();
+            // tmpNode.expand();
+            buildRandomTaskBranch(tmpNode);
+        }
+
+       // Expand and collapse happen prior to the actual expand/collapse,
+       // and can be used to cancel the operation
+       tree.subscribe("expand", function(node) {
+              YAHOO.log(node.index + " was expanded", "info", "example");
+              // return false; // return false to cancel the expand
+           });
+
+       tree.subscribe("collapse", function(node) {
+              YAHOO.log(node.index + " was collapsed", "info", "example");
+           });
+
+       // Trees with TextNodes will fire an event for when the label is clicked:
+       tree.subscribe("labelClick", function(node) {
+              YAHOO.log(node.index + " label was clicked", "info", "example");
+           });
+
+       // Trees with TaskNodes will fire an event for when a check box is clicked
+       tree.subscribe("checkClick", function(node) {
+              YAHOO.log(node.index + " check was clicked", "info", "example");
+           });
+
+       tree.subscribe("clickEvent", function(node) {
+              YAHOO.log(node.index + " clickEvent", "info", "example");
+           });
+
+		//The tree is not created in the DOM until this method is called:
+        tree.draw();
+    }
+
+	var callback = null;
+
+	function buildRandomTaskBranch(node) {
+		if (node.depth < 5) {
+			YAHOO.log("buildRandomTextBranch: " + node.index);
+			for ( var i = 0; i < Math.floor(Math.random() * 4) ; i++ ) {
+				var tmpNode = new YAHOO.widget.TaskNode(node.label + "-" + i, node, false);
+                //tmpNode.onCheckClick = onCheckClick;
+				buildRandomTaskBranch(tmpNode);
+			}
+		}
+	}
+
+    function onCheckClick(node) {
+        YAHOO.log(node.label + " check was clicked, new state: " + 
+                node.checkState, "info", "example");
+    }
+
+    function checkAll() {
+        var topNodes = tree.getRoot().children;
+        for(var i=0; i<topNodes.length; ++i) {
+            topNodes[i].check();
+        }
+    }
+
+    function uncheckAll() {
+        var topNodes = tree.getRoot().children;
+        for(var i=0; i<topNodes.length; ++i) {
+            topNodes[i].uncheck();
+        }
+    }
+
+   // Gets the labels of all of the fully checked nodes
+   // Could be updated to only return checked leaf nodes by evaluating
+   // the children collection first.
+    function getCheckedNodes(nodes) {
+        nodes = nodes || tree.getRoot().children;
+        checkedNodes = [];
+        for(var i=0, l=nodes.length; i<l; i=i+1) {
+            var n = nodes[i];
+            //if (n.checkState > 0) { // if we were interested in the nodes that have some but not all children checked
+            if (n.checkState === 2) {
+                checkedNodes.push(n.label); // just using label for simplicity
+            }
+
+            if (n.hasChildren()) {
+checkedNodes = checkedNodes.concat(getCheckedNodes(n.children));
+            }
+        }
+
+        return checkedNodes;
+    }
+
+
+	YAHOO.util.Event.onDOMReady(treeInit);
+})();
+</script>
+	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">The TaskNode Subclass</h2>
+
+<p>This example explores the extension of TreeView via a subclass of the TextNode class.  The full source of the TaskNode subclass follows:</p>
+
+
+<textarea name="code" class="JScript" cols="60" rows="1">/**
+ * The check box marks a task complete.  It is a simulated form field 
+ * with three states ...
+ * 0=unchecked, 1=some children checked, 2=all children checked
+ * When a task is clicked, the state of the nodes and parent and children
+ * are updated, and this behavior cascades.
+ *
+ * @extends YAHOO.widget.TextNode
+ * @constructor
+ * @param oData    {object}  A string or object containing the data that will
+ *                           be used to render this node.
+ * @param oParent  {Node}    This node's parent node
+ * @param expanded {boolean} The initial expanded/collapsed state
+ * @param checked  {boolean} The initial checked/unchecked state
+ */
+YAHOO.widget.TaskNode = function(oData, oParent, expanded, checked) {
+	YAHOO.widget.TaskNode.superclass.constructor.call(this,oData,oParent,expanded);
+    this.setUpCheck(checked || oData.checked);
+
+};
+
+YAHOO.extend(YAHOO.widget.TaskNode, YAHOO.widget.TextNode, {
+
+    /**
+     * True if checkstate is 1 (some children checked) or 2 (all children checked),
+     * false if 0.
+     * @type boolean
+     */
+    checked: false,
+
+    /**
+     * checkState
+     * 0=unchecked, 1=some children checked, 2=all children checked
+     * @type int
+     */
+    checkState: 0,
+
+	/**
+     * The node type
+     * @property _type
+     * @private
+     * @type string
+     * @default "TextNode"
+     */
+    _type: "TaskNode",
+	
+	taskNodeParentChange: function() {
+        //this.updateParent();
+    },
+	
+    setUpCheck: function(checked) {
+        // if this node is checked by default, run the check code to update
+        // the parent's display state
+        if (checked && checked === true) {
+            this.check();
+        // otherwise the parent needs to be updated only if its checkstate 
+        // needs to change from fully selected to partially selected
+        } else if (this.parent && 2 === this.parent.checkState) {
+             this.updateParent();
+        }
+
+        // set up the custom event on the tree for checkClick
+        /**
+         * Custom event that is fired when the check box is clicked.  The
+         * custom event is defined on the tree instance, so there is a single
+         * event that handles all nodes in the tree.  The node clicked is 
+         * provided as an argument.  Note, your custom node implentation can
+         * implement its own node specific events this way.
+         *
+         * @event checkClick
+         * @for YAHOO.widget.TreeView
+         * @param {YAHOO.widget.Node} node the node clicked
+         */
+        if (this.tree && !this.tree.hasEvent("checkClick")) {
+            this.tree.createEvent("checkClick", this.tree);
+        }
+
+		this.tree.subscribe('clickEvent',this.checkClick);
+        this.subscribe("parentChange", this.taskNodeParentChange);
+
+
+    },
+
+    /**
+     * The id of the check element
+     * @for YAHOO.widget.TaskNode
+     * @type string
+     */
+    getCheckElId: function() { 
+        return "ygtvcheck" + this.index; 
+    },
+
+    /**
+     * Returns the check box element
+     * @return the check html element (img)
+     */
+    getCheckEl: function() { 
+        return document.getElementById(this.getCheckElId()); 
+    },
+
+    /**
+     * The style of the check element, derived from its current state
+     * @return {string} the css style for the current check state
+     */
+    getCheckStyle: function() { 
+        return "ygtvcheck" + this.checkState;
+    },
+
+
+   /**
+     * Invoked when the user clicks the check box
+     */
+    checkClick: function(oArgs) { 
+		var node = oArgs.node;
+		var target = YAHOO.util.Event.getTarget(oArgs.event);
+		if (YAHOO.util.Dom.hasClass(target,'ygtvspacer')) {
+	        node.logger.log("previous checkstate: " + node.checkState);
+	        if (node.checkState === 0) {
+	            node.check();
+	        } else {
+	            node.uncheck();
+	        }
+
+	        node.onCheckClick(node);
+	        this.fireEvent("checkClick", node);
+		    return false;
+		}
+    },
+
+    /**
+     * Override to get the check click event
+     */
+    onCheckClick: function() { 
+        this.logger.log("onCheckClick: " + this);
+    },
+
+    /**
+     * Refresh the state of this node's parent, and cascade up.
+     */
+    updateParent: function() { 
+        var p = this.parent;
+
+        if (!p || !p.updateParent) {
+            this.logger.log("Abort udpate parent: " + this.index);
+            return;
+        }
+
+        var somethingChecked = false;
+        var somethingNotChecked = false;
+
+        for (var i=0, l=p.children.length;i<l;i=i+1) {
+
+            var n = p.children[i];
+
+            if ("checked" in n) {
+                if (n.checked) {
+                    somethingChecked = true;
+                    // checkState will be 1 if the child node has unchecked children
+                    if (n.checkState === 1) {
+                        somethingNotChecked = true;
+                    }
+                } else {
+                    somethingNotChecked = true;
+                }
+            }
+        }
+
+        if (somethingChecked) {
+            p.setCheckState( (somethingNotChecked) ? 1 : 2 );
+        } else {
+            p.setCheckState(0);
+        }
+
+        p.updateCheckHtml();
+        p.updateParent();
+    },
+
+    /**
+     * If the node has been rendered, update the html to reflect the current
+     * state of the node.
+     */
+    updateCheckHtml: function() { 
+        if (this.parent && this.parent.childrenRendered) {
+            this.getCheckEl().className = this.getCheckStyle();
+        }
+    },
+
+    /**
+     * Updates the state.  The checked property is true if the state is 1 or 2
+     * 
+     * @param the new check state
+     */
+    setCheckState: function(state) { 
+        this.checkState = state;
+        this.checked = (state > 0);
+    },
+
+    /**
+     * Check this node
+     */
+    check: function() { 
+        this.logger.log("check");
+        this.setCheckState(2);
+        for (var i=0, l=this.children.length; i<l; i=i+1) {
+            var c = this.children[i];
+            if (c.check) {
+                c.check();
+            }
+        }
+        this.updateCheckHtml();
+        this.updateParent();
+    },
+
+    /**
+     * Uncheck this node
+     */
+    uncheck: function() { 
+        this.setCheckState(0);
+        for (var i=0, l=this.children.length; i<l; i=i+1) {
+            var c = this.children[i];
+            if (c.uncheck) {
+                c.uncheck();
+            }
+        }
+        this.updateCheckHtml();
+        this.updateParent();
+    },
+    // Overrides YAHOO.widget.TextNode
+
+    getContentHtml: function() {                                                                                                                                           
+        var sb = [];                                                                                                                                                       
+        sb[sb.length] = '<td';                                                                                                                                             
+        sb[sb.length] = ' id="' + this.getCheckElId() + '"';                                                                                                               
+        sb[sb.length] = ' class="' + this.getCheckStyle() + '"';                                                                                                           
+        sb[sb.length] = '>';                                                                                                                                               
+        sb[sb.length] = '<div class="ygtvspacer"></div></td>';                                                                                                             
+                                                                                                                                                                           
+        sb[sb.length] = '<td><span';                                                                                                                                       
+        sb[sb.length] = ' id="' + this.labelElId + '"';                                                                                                                    
+        if (this.title) {                                                                                                                                                  
+            sb[sb.length] = ' title="' + this.title + '"';                                                                                                                 
+        }                                                                                                                                                                  
+        sb[sb.length] = ' class="' + this.labelStyle  + '"';                                                                                                               
+        sb[sb.length] = ' >';                                                                                                                                              
+        sb[sb.length] = this.label;                                                                                                                                        
+        sb[sb.length] = '</span></td>';                                                                                                                                    
+        return sb.join("");                                                                                                                                                
+    }  
+});</textarea>
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerDiv"></div>
+						</div>
+					
+				
+					<div id="examples">
+						<h3>TreeView Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='default_tree.html'>Default TreeView</a></li><li><a href='dynamic_tree.html'>Dynamically Loading Node Data</a></li><li><a href='folder_style.html'>Folder-Style TreeView Design</a></li><li><a href='menu_style.html'>Menu-Style TreeView Design</a></li><li><a href='customicons.html'>Using TreeView with Custom Icons</a></li><li class='selected'><a href='tasklist.html'>Custom TreeView with Check Boxes</a></li><li><a href='tv_tooltip.html'>TreeView with Tooltips</a></li><li><a href='tv-markup.html'>Three Ways to Define a TreeView: Markup (Progressive Enhancement), Existing TreeView Instance, and Object Literal </a></li><li><a href='tv-edit.html'>Inline Editing of TreeView Node Labels</a></li><li><a href='../menu/treeviewcontextmenu.html'>Adding A Context Menu To A TreeView (included with examples for Menu Family)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More TreeView Control Resources:</h3>
+						<ul>
+							<li><a href="../../treeview/index.html">User's Guide</a></li>
+						<li><a href="../../docs/module_treeview.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/treeview.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:34 PDT 2013 -->
+
+<!-- Localized -->

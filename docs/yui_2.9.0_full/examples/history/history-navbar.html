@@ -1,0 +1,442 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Browser History Manager: Simple Navigation Bar</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/history/history-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+<!--there is no custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: Browser History Manager: Simple Navigation Bar</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Browser History Manager: Simple Navigation Bar</h1>
+	
+	<div class="exampleIntro">
+	<p>This example demonstrates how to use the Browser History Manager to "ajaxify" a simple navigation bar.</p>			
+	</div>	
+					
+	<div class="example-container module  newWindow">
+			<div id="example-canvas" class="bd">
+	
+		<p class="newWindowButton yui-skin-sam"><span id="newWindowLink"><span class="first-child"><a href="history-navbar_source.html" target="_blank">View example in new window.</a></span></span>		
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Basic markup</h2>
+
+<textarea name="code" class="HTML" cols="60" rows="1">
+<html>
+  <head>
+    <title>YUI Browser History Manager - Simple Navigation Bar Example</title>
+  </head>
+  <body>
+    <div id="doc">
+      <div id="hd">
+        <h3>Navigation Links</h3>
+        <div id="nav">
+          <ul>
+            <li><a href="history-navbar-section=home.html">Home</a></li>
+            <li><a href="history-navbar-section=overview.html">Overview</a></li>
+            <li><a href="history-navbar-section=products.html">Products</a></li>
+            <li><a href="history-navbar-section=contactus.html">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+      <div id="bd">
+&lt;?php
+
+$section = "home";
+$sections = array("home", "overview", "products", "contactus");
+if (isset($_GET["section"]) && in_array($_GET["section"], $sections)) {
+    $section = $_GET["section"];
+}
+
+include( $section . ".php" );
+
+?&gt;
+      </div>
+      <div id="ft">YUI Browser History Manager - Simple Navigation Bar Example</div>
+    </div>
+  </body>
+</html>
+</textarea>
+
+<p>
+  The small portion of PHP code is responsible for including the content specified by the "section" parameter in the URL.
+  This technique avoids having to rewrite common parts of a web site such as header and footer.
+</p>
+
+<p>
+  This page is already fully functional. However, clicking on the links in the navigation bar will refresh the entire
+  page, including portions that are common to all the sections. This is highly inefficient (especially for a large web
+  site), and using AJAX will allow us to optimize this. The idea is to use client-side scripting to intercept the click
+  event, cancel it, and use the YUI Connection Manager to asynchronously load the content of the section, which we can
+  then write to the document using innerHTML. The only downside of this approach is that it breaks the back/forward
+  buttons, and individual sections cannot be bookmarked anymore. The Browser History Manager will help us work around
+  this issue.
+</p>
+
+<h2>Add the markup required by the Browser History Manager</h2>
+
+<textarea name="code" class="HTML" cols="60" rows="1">
+<iframe id="yui-history-iframe" src="assets/blank.html"></iframe>
+<input id="yui-history-field" type="hidden">
+</textarea>
+
+<p>
+  This markup should be inserted right after the opening <code>body</code> tag.
+</p>
+
+<h2>Import the source files and dependencies</h2>
+
+<p>
+  In our example, we need the Connection Manager, Event Utility, DOM Utility, and the Browser History Manager:
+</p>
+
+<textarea name="code" class="HTML" cols="60" rows="1">
+<script src="yahoo-dom-event.js"></script>
+<script src="connection.js"></script>
+<script src="history.js"></script>
+</textarea>
+
+<h2>Write the code necessary to load a section of the web site</h2>
+
+<p>
+  Use the YUI Connection Manager's <code>asyncRequest</code> to achieve this:
+</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+function loadSection(section) {
+    var url = section + ".php";
+
+    function successHandler(obj) {
+        // Use the response...
+        YAHOO.util.Dom.get("bd").innerHTML = obj.responseText;
+    }
+
+    function failureHandler(obj) {
+        // Fallback...
+        location.href = "?section=" + section;
+    }
+
+    YAHOO.util.Connect.asyncRequest("GET", url,
+        {
+            success:successHandler,
+            failure:failureHandler
+        }
+    );
+}
+</textarea>
+
+<h2>Design your application</h2>
+
+<p>
+  In our simple example, we have only one module, represented by the navigation bar. We will refer to this module using
+  the identifier "navbar". The state of the navigation module will be represented using the name of the corresponding
+  section ("home", "overview", "products", etc.)
+</p>
+
+<h2>Retrieve the initial state of the navigation module</h2>
+
+<p>
+  Use the <code>YAHOO.util.History.getBookmarkedState</code> method to find out the initial state of a module according
+  to the URL fragment identifier (which is present if the user had previously bookmarked the application). In our
+  example, we also use the <code>YAHOO.util.History.getQueryStringParameter</code> method to find out the initial state
+  of a module according to the query string (which is present if the user reached the page using a search engine, or if
+  the user did not have scripting enabled when previously bookmarking the page). Finally, default to "home":
+</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+var bookmarkedSection = YAHOO.util.History.getBookmarkedState("navbar");
+var querySection = YAHOO.util.History.getQueryStringParameter("section");
+var initialSection = bookmarkedSection || querySection || "home";
+</textarea>
+
+<h2>Register the navigation module</h2>
+
+<p>
+  Use the <code>YAHOO.util.History.register</code> method, passing in the navigation module identifier, the initial
+  state of the navigation module, and the callback function that will be called when the state of the navigation
+  module has changed:
+</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+YAHOO.util.History.register("navbar", initialSection, function (state) {
+    // Load the appropriate section:
+    loadSection(state);
+});
+</textarea>
+
+<h2>Write the code that initializes your application</h2>
+
+<p>
+  First of all, we want to change the behavior of the links in the navigation bar. In order to do this, we simply
+  enumerate them, and attach to each individual anchor an <code>onclick</code> handler. In the <code>onclick</code>
+  handler, we cancel the event's default behavior and do some custom action.
+</p>
+
+<p>
+  We also need to display the default section if a section was requested via the URL fragment identifier, and that
+  section is different from the one loaded using PHP:
+</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+function initializeNavigationBar() {
+    // Process links
+    var anchors, i, len, anchor, href, section, currentSection;
+    anchors = YAHOO.util.Dom.get("nav").getElementsByTagName("a");
+    for (i = 0, len = anchors.length; i < len; i++) {
+        anchor = anchors[i];
+        YAHOO.util.Event.addListener(anchor, "click", function (evt) {
+            href = this.getAttribute("href");
+            section = YAHOO.util.History.getQueryStringParameter("section", href) || "home";
+            // If the Browser History Manager was not successfuly initialized,
+            // the following call to YAHOO.util.History.navigate will throw an
+            // exception. We need to catch it and update the UI. The only
+            // problem is that this new state will not be added to the browser
+            // history.
+            //
+            // Another solution is to make sure this is an A-grade browser.
+            // In that case, under normal circumstances, no exception should
+            // be thrown here.
+            try {
+                YAHOO.util.History.navigate("navbar", section);
+            } catch (e) {
+                loadSection(section);
+            }
+            YAHOO.util.Event.preventDefault(evt);
+        });
+    }
+
+    // This is the tricky part... The window's onload handler is called when the
+    // user comes back to your page using the back button. In this case, the
+    // actual section that needs to be loaded corresponds to the last section
+    // visited before leaving the page, and not the initial section. This can
+    // be retrieved using getCurrentState:
+    currentSection = YAHOO.util.History.getCurrentState("navbar");
+    loadSection(currentSection);
+}
+</textarea>
+
+<h2>Use to the Browser History Manager <code>onReady</code> method</h2>
+
+<p>
+  Use the Browser History Manager <code>onReady</code> method to initialize the application.
+</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+YAHOO.util.History.onReady(function () {
+    initializeNavigationBar();
+});
+</textarea>
+
+<h2>Initialize the Browser History Manager</h2>
+
+<p>
+  Simply call <code>YAHOO.util.History.initialize</code>, passing in the id of the input field and IFrame we inserted
+  in our static markup:
+</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+// Initialize the browser history management library.
+try {
+    YAHOO.util.History.initialize("yui-history-field", "yui-history-iframe");
+} catch (e) {
+    // The only exception that gets thrown here is when the browser is
+    // not supported (Opera, or not A-grade) Degrade gracefully.
+    // Note that we have two options here to degrade gracefully:
+    //   1) Call initializeNavigationBar. The page will use Ajax/DHTML,
+    //      but the back/forward buttons will not work.
+    //   2) Initialize our module. The page will not use Ajax/DHTML,
+    //      but the back/forward buttons will work. This is what we
+    //      chose to do here:
+    loadSection(initSection);
+}
+</textarea>
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+					
+				
+					<div id="examples">
+						<h3 class='firstContent'>Browser History Manager Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li class='selected'><a href='history-navbar.html'>Simple Navigation Bar</a></li><li><a href='history-tabview.html'>TabView Control</a></li><li><a href='history-calendar.html'>Calendar Control</a></li><li><a href='history-multiple.html'>Multiple Modules</a></li><li><a href='../datatable/dt_bhm.html'>Integrating Browser History Manager with Server-side Pagination and Sorting (included with examples for DataTable Control)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Browser History Manager Resources:</h3>
+						<ul>
+							<li><a href="../../history/index.html">User's Guide</a></li>
+						<li><a href="../../docs/module_history.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/history.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:01 PDT 2013 -->
+
+<!-- Localized -->

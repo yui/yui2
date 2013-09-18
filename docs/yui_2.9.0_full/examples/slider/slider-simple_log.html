@@ -1,0 +1,493 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Slider Control: Basic Vertical Slider</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/slider/assets/skins/sam/slider.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/slider/slider-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+<!--there is no custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	<div id="ygma"><a href="/"><img src="http://l.yimg.com/a/i/brand/purplelogo/uh/us/ydn.gif" width="266" height="34" border="0"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: Slider Control: Basic Vertical Slider</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Slider Control: Basic Vertical Slider</h1>
+	
+	<div class="exampleIntro">
+	<p>This example demonstrates a simple vertical implementation of the <a href="http://developer.yahoo.com/yui/slider/">YUI Slider Control</a>.  Some characteristics of this implementation include the following:</p>
+<ul>
+<li>The slider range is 200 pixels.</li>
+<li>Custom logic is applied to convert the current pixel value
+(from 0 to 200) to a "real" value.  In this case the "real"
+range is 0 to 300.</li>
+<li>The value is set to 30 after the control is initialized</li>
+<li>Once the slider has focus, the up and down keys will move
+the thumb 20 pixels (changing the "real" value by 30).</li>
+<li>When the slider value changes, the UI is updated.  The title
+attribute of the slider background is updated with the current
+value, and the text field is updated with the current "real"
+value.  These techniques can help inform assistive technologies
+(like screen reader software) about the slider's current state.</li>
+</ul>
+			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="slider-simple_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<!-- 
+    You supply your own markup for the slider:
+    - The thumb element should be a child of the slider background
+    - The tabindex attribute lets this element receive focus in most browsers.
+    - If the slider background can receive focus, the arrow keys can be used to change
+      this slider's value.
+    - We use an img element rather than a css background for the thumb to get around
+      a performance bottleneck when animating the thumb in IE
+    - Both elements should have a position style: relative or absolute
+    - Don't apply a css border to the slider background
+-->
+
+<div id="slider-bg" class="yui-v-slider" tabindex="-1" title="Slider">
+    <div id="slider-thumb" class="yui-slider-thumb"><img src="assets/thumb-bar.gif"></div>
+</div>
+
+<p>Pixel value: <span id="slider-value">0</span></p>
+
+<p>Converted value:
+<input autocomplete="off" id="slider-converted-value" type="text" value="0" size="4" maxlength="4" />
+</p>
+
+<!--We'll use these to trigger interactions with the Slider API -->
+<button id="putval">Change slider value to 100 (converted value 150)</button>
+<button id="getval">Write current value to the Logger</button> 
+
+<script type="text/javascript">
+(function() {
+    var Event = YAHOO.util.Event,
+        Dom   = YAHOO.util.Dom,
+        lang  = YAHOO.lang,
+        slider, 
+        bg="slider-bg", thumb="slider-thumb", 
+        valuearea="slider-value", textfield="slider-converted-value"
+
+    // The slider can move 0 pixels up
+    var topConstraint = 0;
+
+    // The slider can move 200 pixels down
+    var bottomConstraint = 200;
+
+    // Custom scale factor for converting the pixel offset into a real value
+    var scaleFactor = 1.5;
+
+    // The amount the slider moves when the value is changed with the arrow
+    // keys
+    var keyIncrement = 20;
+
+    Event.onDOMReady(function() {
+
+        slider = YAHOO.widget.Slider.getVertSlider(bg, 
+                         thumb, topConstraint, bottomConstraint);
+
+        slider.getRealValue = function() {
+            return Math.round(this.getValue() * scaleFactor);
+        }
+
+        slider.subscribe("change", function(offsetFromStart) {
+
+            var valnode = Dom.get(valuearea);
+            var fld = Dom.get(textfield);
+
+            // Display the pixel value of the control
+            valnode.innerHTML = offsetFromStart;
+
+            // use the scale factor to convert the pixel offset into a real
+            // value
+            var actualValue = slider.getRealValue();
+
+            // update the text box with the actual value
+            fld.value = actualValue;
+
+            // Update the title attribute on the background.  This helps assistive
+            // technology to communicate the state change
+            Dom.get(bg).title = "slider value = " + actualValue;
+
+        });
+
+        slider.subscribe("slideStart", function() {
+                YAHOO.log("slideStart fired", "warn");
+            });
+
+        slider.subscribe("slideEnd", function() {
+                YAHOO.log("slideEnd fired", "warn");
+            });
+
+        // set an initial value
+        slider.setValue(20);
+
+        // Listen for keystrokes on the form field that displays the
+        // control's value.  While not provided by default, having a
+        // form field with the slider is a good way to help keep your
+        // application accessible.
+        Event.on(textfield, "keydown", function(e) {
+
+            // set the value when the 'return' key is detected
+            if (Event.getCharCode(e) === 13) {
+                var v = parseFloat(this.value, 10);
+                v = (lang.isNumber(v)) ? v : 0;
+
+                // convert the real value into a pixel offset
+                slider.setValue(Math.round(v/scaleFactor));
+            }
+        });
+        
+        // Use setValue to reset the value to white:
+        Event.on("putval", "click", function(e) {
+            slider.setValue(100, false); //false here means to animate if possible
+        });
+        
+        // Use the "get" method to get the current offset from the slider's start
+        // position in pixels.  By applying the scale factor, we can translate this
+        // into a "real value
+        Event.on("getval", "click", function(e) {
+            YAHOO.log("Current value: "   + slider.getValue() + "\n" + 
+                      "Converted value: " + slider.getRealValue(), "info", "example"); 
+        });
+    });
+})();
+</script>
+	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Building a Vertical Slider</h2>
+
+<p>You supply your own markup for the slider. Keep in mind the following points about markup for <a href="http://developer.yahoo.com/yui/slider/">YUI Slider Control</a> implementations:</p>
+<ul>
+<li>The thumb element should be a child of the slider background</li>
+<li>The tabindex attribute lets this element receive focus in most browsers.</li>
+<li>We use the Sam skin for a 200px vertical slider and use the <code>thumb-bar.gif</code> thumb image from the build assets</li>
+<li>If the slider background can receive focus, the arrow keys can be used to change
+  this slider's value.</li>
+  a performance bottleneck when animating the thumb's position in IE.</li>
+<li>Don't apply a CSS border to the slider background</li>
+</ul>
+
+<p>Markup:</p>
+<textarea name="code" class="HTML" cols="60" rows="1">
+<div id="slider-bg" class="yui-v-slider" tabindex="-1" title="Slider">
+    <div id="slider-thumb" class="yui-slider-thumb"><img src="http://yui.yahooapis.com/2.9.0/build/slider/assets/thumb-bar.gif"></div>
+</div>
+<p>Pixel value: <span id="slider-value">0</span></p>
+
+<p>Converted value:
+<input autocomplete="off" id="slider-converted-value" type="text" value="0" size="4" maxlength="4" />
+</p>
+
+<!--We'll use these to trigger interactions with the Slider API -->
+<button id="putval">Change slider value to 100 (converted value 150)</button>
+<button id="getval">Write current value to the Logger</button> 
+
+
+</textarea>
+
+<p>Code:</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+<script type="text/javascript">
+(function() {
+    var Event = YAHOO.util.Event,
+        Dom   = YAHOO.util.Dom,
+        lang  = YAHOO.lang,
+        slider, 
+        bg="slider-bg", thumb="slider-thumb", 
+        valuearea="slider-value", textfield="slider-converted-value"
+
+    // The slider can move 0 pixels up
+    var topConstraint = 0;
+
+    // The slider can move 200 pixels down
+    var bottomConstraint = 200;
+
+    // Custom scale factor for converting the pixel offset into a real value
+    var scaleFactor = 1.5;
+
+    // The amount the slider moves when the value is changed with the arrow
+    // keys
+    var keyIncrement = 20;
+
+    Event.onDOMReady(function() {
+
+        slider = YAHOO.widget.Slider.getVertSlider(bg, 
+                         thumb, topConstraint, bottomConstraint);
+
+        slider.getRealValue = function() {
+            return Math.round(this.getValue() * scaleFactor);
+        }
+
+        slider.subscribe("change", function(offsetFromStart) {
+
+            var valnode = Dom.get(valuearea);
+            var fld = Dom.get(textfield);
+
+            // Display the pixel value of the control
+            valnode.innerHTML = offsetFromStart;
+
+            // use the scale factor to convert the pixel offset into a real
+            // value
+            var actualValue = slider.getRealValue();
+
+            // update the text box with the actual value
+            fld.value = actualValue;
+
+            // Update the title attribute on the background.  This helps assistive
+            // technology to communicate the state change
+            Dom.get(bg).title = "slider value = " + actualValue;
+
+        });
+
+        slider.subscribe("slideStart", function() {
+                YAHOO.log("slideStart fired", "warn");
+            });
+
+        slider.subscribe("slideEnd", function() {
+                YAHOO.log("slideEnd fired", "warn");
+            });
+
+        // set an initial value
+        slider.setValue(20);
+
+        // Listen for keystrokes on the form field that displays the
+        // control's value.  While not provided by default, having a
+        // form field with the slider is a good way to help keep your
+        // application accessible.
+        Event.on(textfield, "keydown", function(e) {
+
+            // set the value when the 'return' key is detected
+            if (Event.getCharCode(e) === 13) {
+                var v = parseFloat(this.value, 10);
+                v = (lang.isNumber(v)) ? v : 0;
+
+                // convert the real value into a pixel offset
+                slider.setValue(Math.round(v/scaleFactor));
+            }
+        });
+        
+        // Use setValue to reset the value to white:
+        Event.on("putval", "click", function(e) {
+            slider.setValue(100, false); //false here means to animate if possible
+        });
+        
+        // Use the "get" method to get the current offset from the slider's start
+        // position in pixels.  By applying the scale factor, we can translate this
+        // into a "real value
+        Event.on("getval", "click", function(e) {
+            YAHOO.log("Current value: "   + slider.getValue() + "\n" + 
+                      "Converted value: " + slider.getRealValue(), "info", "example"); 
+        });
+    });
+})();
+</script>
+</textarea>
+
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerDiv"></div>
+							<div id="loggerGloss">
+								<p><strong>Note:</strong> You are viewing this example in debug mode with logging enabled.  This can significantly slow performance.</p>
+	
+								<p class="loggerButton"><span id="loggerLink"><span class="first-child"><a href="slider-simple.html">Reload with logging<br />and debugging disabled.</a></span></span></p>
+							</div>
+						</div>
+					
+				
+					<div id="examples">
+						<h3>Slider Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li class='selected'><a href='../slider/slider-simple.html'>Basic Vertical Slider</a></li><li><a href='../slider/slider-ticks.html'>Horizontal Slider with Tick Marks</a></li><li><a href='../slider/slider-rgb.html'>RGB Slider Control</a></li><li><a href='../slider/slider_vert_swapped.html'>Bottom to top Vertical Slider</a></li><li><a href='../slider/slider_dual_thumb.html'>Horizontal Slider with two thumbs</a></li><li><a href='../slider/slider_dual_with_highlight.html'>Dual-thumb Slider with range highlight</a></li><li><a href='../progressbar/pb_basic.html'>Basic Features (included with examples for ProgressBar Control)</a></li><li><a href='../progressbar/pb_events.html'>Events (included with examples for ProgressBar Control)</a></li><li><a href='../button/btn_example14.html'>Slider Button (included with examples for Button Control)</a></li><li><a href='../layout/adv_layout.html'>Complex Application (included with examples for Layout Manager)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Slider Control Resources:</h3>
+						<ul>
+							
+						<li><a href="../../docs/module_slider.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/slider.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="/yui/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="/yui/3/">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="/yui/license.html">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- proven and robust." href="/yui/2/">YUI 2</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="/yui/examples/">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="/yui/docs/">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="item"><a title="Configure your YUI implementation; serve YUI source files from Yahoo! -- free, fast, and simple" href="/yui/articles/hosting/">Dependency Configurator</a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="/yui/animation/">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="/yui/autocomplete/">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="/yui/history/">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="/yui/button/">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="/yui/calendar/">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="/yui/carousel/">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="/yui/charts/">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="/yui/colorpicker/">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="/yui/connection/">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="/yui/container/">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="/yui/cookie/">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="/yui/datasource/">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="/yui/datatable/">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="/yui/dom/">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="/yui/dragdrop/">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="/yui/element/">Element</a></li><li class="item"><a title="The YUI Event Utility" href="/yui/event/">Event</a></li><li class="item"><a title="The YUI Get Utility" href="/yui/get/">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="/yui/imagecropper/">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="/yui/imageloader/">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="/yui/json/">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="/yui/layout/">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="/yui/logger/">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="/yui/menu/">Menu</a></li><li class="item"><a title="The YUI Paginator" href="/yui/paginator/">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="/yui/profiler/">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="/yui/profilerviewer/">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="/yui/progressbar/">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="/yui/resize/">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="/yui/editor/">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="/yui/selector/">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="/yui/slider/">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="/yui/storage/">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="/yui/stylesheet/">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="/yui/swf/">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="/yui/swfstore/">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="/yui/tabview/">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="/yui/treeview/">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="/yui/uploader/">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="/yui/yahoo/">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="/yui/yuiloader/">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="/yui/yuitest/">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="/yui/reset/">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="/yui/base/">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="/yui/fonts/">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="/yui/grids/">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:51 PDT 2013 -->

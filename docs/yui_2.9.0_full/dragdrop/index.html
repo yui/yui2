@@ -1,0 +1,663 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Drag & Drop</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Drag & Drop</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+	  
+	  
+  <div id="promo" class="component">
+    <h1>YUI 2: Drag & Drop</h1>
+    <p> The Drag &amp; Drop Utility allows you to create a draggable interface efficiently, buffering you from browser-level abnormalities and enabling you to focus on the interesting logic surrounding your particular implementation. This component enables you to create a variety of standard draggable objects with just a few lines of code and then, using its extensive API, add your own specific implementation logic. </p>
+    <p>For more information about drag and drop as a design pattern, see the <a href="http://developer.yahoo.com/ypatterns/parent_dragdrop.php">Yahoo! Design Pattern Libary</a>.</p>
+    <div>
+      <h4>On This Page</h4>
+      <ul>
+        <li><a href="#start">Getting Started</a></li>
+        <li><a href="#using">Using Drag &amp; Drop</a> </li>
+        <li><a href="#notes">Notes on Performance </a></li>
+        <li><a href="#storyboard">Drag &amp; Drop Storyboard Matrix</a> </li>
+        <li><a href="#support">Support &amp; Community</a></li>
+		<li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+      </ul>
+    </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/dragdrop/index.html">Examples</a>: Explore examples of the Drag &amp; Drop Utility in action.</li>
+      <li><a href="../docs/module_dragdrop.html">API Documentation</a>: View the full API documentation for the Drag &amp; Drop Utility.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.dragdrop">Release Notes</a>: Detailed change log for the Drag &amp; Drop Utility.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Drag &amp; Drop Utility as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+  </div>
+  <h2 class="first"><a name="start"></a>Getting Started</h2>
+  <p>To use Drag and Drop, include the following source files in your web page with the script tag:</p>
+<div id="syntax-9aa1cb051c9fe6a0ceef4b5150068f91" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Drag and Drop source file --&gt;</span> </div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Drag and Drop source file --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-9aa1cb051c9fe6a0ceef4b5150068f91-plain"><!-- Dependencies --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js" ></script>
+
+<!-- Drag and Drop source file --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js" ></script>
+</textarea></div>
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>dragdrop</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+  <h3>Basic Drag and Drop</h3>
+  <p>To enable a simple drag and drop of any DOM element, create a new instance of <code>YAHOO.util.DD</code>, providing the constructor with the HTML id of the element you want to make draggable.  Optionally, you can provide an element reference instead of an id</p>
+<div id="syntax-dc39a2881df3f4e61ac553cc24199388" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> dd1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DD</span><span class="br0">&#40;</span><span class="st0">&quot;element1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">// alternatively, use an element reference</span></div></li><li class="li1"><div class="de1"><span class="co1">// var el=YAHOO.util.Dom.get(&quot;element1&quot;);</span></div></li><li class="li1"><div class="de1"><span class="co1">// var dd1 = new YAHOO.util.DD(el);</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> dd1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DD</span><span class="br0">&#40;</span><span class="st0">&quot;element1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">// alternatively, use an element reference</span>
+<span class="co1">// var el=YAHOO.util.Dom.get(&quot;element1&quot;);</span>
+<span class="co1">// var dd1 = new YAHOO.util.DD(el);</span>
+&nbsp;</pre></div><textarea id="syntax-dc39a2881df3f4e61ac553cc24199388-plain">var dd1 = new YAHOO.util.DD("element1");
+// alternatively, use an element reference
+// var el=YAHOO.util.Dom.get("element1");
+// var dd1 = new YAHOO.util.DD(el);
+</textarea></div>
+
+  <p>In this example, a new instance of <code>YAHOO.util.DD</code> is created for an element whose HTML id is "element1"; this enables "element1" to be dragged and dropped. Note that while the element can now be moved visually on the page, this visual motion is accomplished by changing the element's style properties.  Its actual location in the DOM itself remains unchanged.</p>
+  <p>In many Drag and Drop implementations, the dragged element does not track with the mouse while being moved &mdash; often because it is large and tends to obscure information beneath it during the drag.  One solution to this problem is to use a proxy element, usually a smaller visual representation of the original, that tracks with the mouse during a drag event. The Drag and Drop Utility makes it extremely easy to accomplish this effect; simply instantiate <code>YAHOO.util.DDProxy</code> instead of <code>YAHOO.util.DD</code>: </p>
+<div id="syntax-2f7c19116b4838fae8612a34321e950b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> dd2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDProxy</span><span class="br0">&#40;</span><span class="st0">&quot;element2&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> dd2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDProxy</span><span class="br0">&#40;</span><span class="st0">&quot;element2&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-2f7c19116b4838fae8612a34321e950b-plain">var dd2 = new YAHOO.util.DDProxy("element2");
+</textarea></div>
+
+  <p>In this case, "element2" is made draggable, but during the drag event it will be represented visually by a proxy element created automatically by the Drag and Drop Utility.  See the <a href="../docs/YAHOO.util.DDProxy.html">API documentation for <code>YAHOO.util.DDProxy</code></a> for more information about how to access and stylize this proxy element.  When the drag interaction is completed, "element2" will move to the drop position and the proxy element will be hidden.</p>
+  <p>In addition to <code>YAHOO.util.DD</code> and <code>YAHOO.util.DDProxy</code>, a third type of Drag and Drop object is available with the utility: the target object (<code>YAHOO.util.DDTarget</code>).  Targets are elements that participate in the drag interaction (that is, you are made aware that they are being dragged over or dropped upon) but that are not themselves draggable.</p>
+<div id="syntax-094381faa2feb896f83735884a978c34" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> dd3 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDTarget</span><span class="br0">&#40;</span><span class="st0">&quot;element3&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> dd3 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDTarget</span><span class="br0">&#40;</span><span class="st0">&quot;element3&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-094381faa2feb896f83735884a978c34-plain">var dd3 = new YAHOO.util.DDTarget("element3");
+</textarea></div>
+
+  <p>In the example above, the HTML element whose ID is "element3" serves as a target for Drag and Drop interactions, but the user cannot drag "element3" itself.</p>
+  <p>See the examples below in <a href="#using">Using Drag and Drop</a> or the <a href="../docs/module_dragdrop.html">API Documentation</a> for more details. </p>
+  <h2>Using Drag and Drop<a name="using"></a></h2>
+  <p>This section describes several common features and uses and of Drag and
+    Drop.  See the <a href="../examples/dragdrop/index.html">Examples</a> for additional code and implementation samples.</p>
+  <ul>
+    <li><a href="#ddm">The Drag and Drop Manager</a></li>
+	<li><a href="#groups">Using Interaction Groups</a></li>
+	<li><a href="#config">Optional Configuration Parameters</a></li>
+    <li><a href="#moments">Interesting Moments</a></li>
+    <li><a href="#customevents">Custom Events</a></li>
+    <li><a href="#intersect">Point mode versus Intersect mode</a></li>
+    <li><a href="#shim">Using the Drag Shim</a></li>
+  </ul>
+  
+  <h3><a name="ddm"></a>The Drag and Drop Manager</h3>
+<p>Drag and Drop operations within a page are managed by the Drag and Drop Manager, a singleton object accessible as <code>YAHOO.util.DragDropMgr</code> (this object can also be referenced via its shorter alias, <code>YAHOO.util.DDM</code>).  The Drag and Drop Manager controls a variety of key settings that may be of interest to you in configuring Drag and Drop interactions &mdash; for example, the time delay that defines when a mousedown event becomes a drag event is configured via <code>YAHOO.util.DragDropMgr</code>:</p>
+
+<div id="syntax-2e50609b12853bba18b304315809bd01" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//sets the time delay between a mousedown and a</span></div></li><li class="li1"><div class="de1"><span class="co1">//drag event to 1200 milliseconds:</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DragDropMgr</span>.<span class="me1">clickTimeThresh</span> <span class="sy0">=</span> <span class="nu0">1200</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//sets the time delay between a mousedown and a</span>
+<span class="co1">//drag event to 1200 milliseconds:</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DragDropMgr</span>.<span class="me1">clickTimeThresh</span> <span class="sy0">=</span> <span class="nu0">1200</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-2e50609b12853bba18b304315809bd01-plain">//sets the time delay between a mousedown and a
+//drag event to 1200 milliseconds:
+YAHOO.util.DragDropMgr.clickTimeThresh = 1200;
+</textarea></div>
+<p>A variety of other useful settings are configured via <code>YAHOO.util.DragDropMgr</code>; see the <a href="../docs/YAHOO.util.DragDropMgr.html">API documentation for this object</a> to read more about its capabilities.</p>
+
+  <h3><a name="groups"></a>Using Interaction Groups</h3>
+  <p> Each Drag and Drop object belongs to one or more interaction groups.  Drag and
+    Drop events fire only when the dragged element interacts with other objects
+    that with which it shares a group membership.  If no group is specified in the constructor, an object belongs to the "default" group.</p>
+
+<div id="syntax-526b6ffed116535a2e292f525fbb80c5" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// No group specified so dd0 is assigned to the &quot;default&quot; group</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> dd0 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DD</span><span class="br0">&#40;</span><span class="st0">&quot;elementid0&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> </div></li><li class="li1"><div class="de1"><span class="co1">// dd1 is a member of group1</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> dd1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DD</span><span class="br0">&#40;</span><span class="st0">&quot;elementid1&quot;</span><span class="sy0">,</span> <span class="st0">&quot;group1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> </div></li><li class="li2"><div class="de2"><span class="co1">// dd2 is a member of group2</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> dd2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DD</span><span class="br0">&#40;</span><span class="st0">&quot;elementid2&quot;</span><span class="sy0">,</span> <span class="st0">&quot;group2&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> </div></li><li class="li1"><div class="de1"><span class="co1">// dd3 is a member of both group1 and group2</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> dd3 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DD</span><span class="br0">&#40;</span><span class="st0">&quot;elementid3&quot;</span><span class="sy0">,</span> <span class="st0">&quot;group1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">dd3.<span class="me1">addToGroup</span><span class="br0">&#40;</span><span class="st0">&quot;group2&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="co1">//groups can be removed via script as well:</span></div></li><li class="li1"><div class="de1">dd1.<span class="me1">removeFromGroup</span><span class="br0">&#40;</span><span class="st0">&quot;group1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// No group specified so dd0 is assigned to the &quot;default&quot; group</span>
+<span class="kw2">var</span> dd0 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DD</span><span class="br0">&#40;</span><span class="st0">&quot;elementid0&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> 
+<span class="co1">// dd1 is a member of group1</span>
+<span class="kw2">var</span> dd1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DD</span><span class="br0">&#40;</span><span class="st0">&quot;elementid1&quot;</span><span class="sy0">,</span> <span class="st0">&quot;group1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> 
+<span class="co1">// dd2 is a member of group2</span>
+<span class="kw2">var</span> dd2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DD</span><span class="br0">&#40;</span><span class="st0">&quot;elementid2&quot;</span><span class="sy0">,</span> <span class="st0">&quot;group2&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span> 
+<span class="co1">// dd3 is a member of both group1 and group2</span>
+<span class="kw2">var</span> dd3 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DD</span><span class="br0">&#40;</span><span class="st0">&quot;elementid3&quot;</span><span class="sy0">,</span> <span class="st0">&quot;group1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+dd3.<span class="me1">addToGroup</span><span class="br0">&#40;</span><span class="st0">&quot;group2&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">//groups can be removed via script as well:</span>
+dd1.<span class="me1">removeFromGroup</span><span class="br0">&#40;</span><span class="st0">&quot;group1&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-526b6ffed116535a2e292f525fbb80c5-plain">// No group specified so dd0 is assigned to the "default" group
+var dd0 = new YAHOO.util.DD("elementid0"); 
+// dd1 is a member of group1
+var dd1 = new YAHOO.util.DD("elementid1", "group1"); 
+// dd2 is a member of group2
+var dd2 = new YAHOO.util.DD("elementid2", "group2"); 
+// dd3 is a member of both group1 and group2
+var dd3 = new YAHOO.util.DD("elementid3", "group1");
+dd3.addToGroup("group2");
+//groups can be removed via script as well:
+dd1.removeFromGroup("group1");
+</textarea></div>
+
+  <h3><a name="config"></a>Optional Configuration Parameters</h3>
+
+  <p>An optional third argument in drag-and-drop object constructors is an object literal containing
+  configuration info for well-known properties.  The following example uses this configuration object to specify an existing HTML element as the drag proxy for this instance instead
+  of the default:
+  </p>
+<div id="syntax-69cf3500e8580d71897da4b2e56b811c" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> dd <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">DDProxy</span><span class="br0">&#40;</span><span class="st0">&quot;dragDiv1&quot;</span><span class="sy0">,</span> <span class="st0">&quot;proxytest&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        dragElId<span class="sy0">:</span> <span class="st0">&quot;existingProxyDiv&quot;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> dd <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">example</span>.<span class="me1">DDProxy</span><span class="br0">&#40;</span><span class="st0">&quot;dragDiv1&quot;</span><span class="sy0">,</span> <span class="st0">&quot;proxytest&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+        dragElId<span class="sy0">:</span> <span class="st0">&quot;existingProxyDiv&quot;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-69cf3500e8580d71897da4b2e56b811c-plain">var dd = new YAHOO.example.DDProxy("dragDiv1", "proxytest", {
+        dragElId: "existingProxyDiv"
+});
+</textarea></div>
+<p>The following configuration properties are currently supported via the contructor's configuration object:</p>
+<ul>
+<li><strong><code>YAHOO.util.DragDrop</code>:</strong> padding, isTarget, maintainOffset, primaryButtonOnly</li>
+<li><strong><code>YAHOO.util.DD</code> (in addition to those in <code>YAHOO.util.DragDrop</code>):</strong> scroll</li>
+<li><strong><code>YAHOO.util.DDProxy</code> (in addition to those in <code>YAHOO.util.DD</code>):</strong> resizeFrame, centerFrame, dragElId</li>
+</ul>
+<p>All of these properties are public fields in the respective classes. See
+the <a href="../docs/module_dragdrop.html">API documentation</a> for information about the fields.</p>
+
+  <h3><a name="moments"></a>Interesting Moments</h3>
+  <p>Simply making an object draggable rarely suffices to achieve the desired interaction behavior for a drag-and-drop implementation.  In most cases, Drag and Drop requires that you write code to respond to the interesting moments in the interaction: when the drag event starts, when the dragged object enters another object, and so on.  The Drag and Drop Utility provides methods that fire during each of the interesting moments of the interaction. You customize your implementation by supplying the code for these methods (all of which are members of the <code>YAHOO.util.DD</code>, <code>YAHOO.util.DDProxy</code>, and <code>YAHOO.util.DDTarget</code>). </p>
+   <div class="apisummary short"><table border="0" id="ddevents">
+      <tr class="odd">
+      <th> Moment </th>
+      <th> Description </th>
+    </tr>
+   <tr><td> onMouseDown</td><td> Provides access to the mousedown event.  The mousedown does
+  not always result in a drag operation.</td></tr>
+<tr class="odd"><td> startDrag</td><td> Occurs after a mouse down and the drag threshold has been met.
+  The drag threshold default is either 3 pixels of mouse movement or 1 full second of holding the mousedown. </td></tr>
+<tr><td> onDrag</td><td> Occurs every mousemove event while dragging.</td></tr>
+<tr class="odd"><td> onDragEnter</td><td> Occurs when the dragged object first interacts with another
+  targettable drag and drop object. </td></tr>
+<tr><td> onDragOver</td><td> Fires every mousemove event while over a drag and drop object.</td></tr>
+<tr class="odd"><td> onDragOut</td><td> Fires when a dragged object is no longer over an object that had
+  the onDragEnter fire. </td></tr>
+<tr><td> onDragDrop</td><td> Fires when the dragged objects is dropped on another.</td></tr>
+<tr class="odd"><td> onInvalidDrop</td><td> Fires when the dragged objects is dropped in a location that contains no drop targets.</td></tr>
+<tr><td> endDrag </td><td> Fires on the mouseup event after a drag has been initiated (startDrag
+  fired).</td></tr>
+<tr class="odd"><td> onMouseUp</td><td> Fires on the mouseup event whether or not a drag was initiated. </td></tr>
+
+</table>
+</div>
+
+<h3 id="customevents">Custom Events</h3>
+<p>In version 2.5.0, Custom Events were added to all DragDrop instances. See the <a href="../docs/module_dragdrop.html">API documentation</a> for information about the events.</p>
+<div class="apisummary short">
+    <table border="0" id="ddevents">
+    <tr class="odd">
+        <th>Event</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>mouseDownEvent</td>
+        <td>Provides access to the mousedown event. The mousedown does not always result in a drag operation.</td>
+    </tr>
+    <tr class="odd">
+        <td>mouseUpEvent</td>
+        <td>Fired from inside DragDropMgr when the drag operation is finished.</td>
+    </tr>
+    <tr>
+        <td>startDragEvent</td>
+        <td>Occurs after a mouse down and the drag threshold has been met. The drag threshold default is either 3 pixels of mouse movement or 1 full second of holding the mousedown.</td>
+    </tr>
+    <tr class="odd">
+        <td>endDragEvent</td>
+        <td>Fires on the mouseup event after a drag has been initiated (startDrag fired).</td>
+    </tr>
+    <tr>
+        <td>dragEvent</td>
+        <td>Occurs every mousemove event while dragging.</td>
+    </tr>
+    <tr class="odd">
+        <td>invalidDropEvent</td>
+        <td>Fires when the dragged objects is dropped in a location that contains no drop targets.</td>
+    </tr>
+    <tr>
+        <td>dragOutEvent</td>
+        <td>Fires when a dragged object is no longer over an object that had the onDragEnter fire.</td>
+    </tr>
+    <tr class="odd">
+        <td>dragEnterEvent</td>
+        <td>Occurs when the dragged object first interacts with another targettable drag and drop object.</td>
+    </tr>
+    <tr>
+        <td>dragOverEvent</td>
+        <td>Fires every mousemove event while over a drag and drop object.</td>
+    </tr>
+    <tr class="odd">
+        <td>dragDropEvent</td>
+        <td>Fires when the dragged objects is dropped on another.</td>
+    </tr>
+</table>
+</div>
+
+<p>You can subscribe to these events using the <code>on</code> method for the DragDrop instance.</p>
+<div id="syntax-01ab6aace2281c86280a57c8c634c0d3" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> dd <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DD</span><span class="br0">&#40;</span><span class="st0">'demo'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">dd.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'dragEvent'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>ev<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">'Element is being dragged.'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">,</span> dd<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> dd <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DD</span><span class="br0">&#40;</span><span class="st0">'demo'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+dd.<span class="me1">on</span><span class="br0">&#40;</span><span class="st0">'dragEvent'</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span>ev<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">'Element is being dragged.'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="sy0">,</span> dd<span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-01ab6aace2281c86280a57c8c634c0d3-plain">var dd = new YAHOO.util.DD('demo');
+dd.on('dragEvent', function(ev) {
+    YAHOO.log('Element is being dragged.');
+}, dd, true);
+</textarea></div>
+
+
+  <h3>Point Mode versus Intersect Mode<a name="intersect"></a> </h3>
+  <p> By default, the drag and drop interaction is defined by the location of the
+    mouse cursor during the drag operation (Point mode).  Intersect mode takes into
+    account the dragged element's dimensions, reporting when that element intersects
+    with any other drag and drop element in its group or groups. </p>
+  <p> You can switch from point mode to intersect mode at any time by setting
+    the property <code>YAHOO.util.DDM.mode</code> to the constant <code>YAHOO.util.DDM.INTERSECT</code>.</p>
+<div id="syntax-2574a6b26bf6e70cba457ab6c890c936" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//set Drag and Drop to Intersect mode:</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDM</span>.<span class="me1">mode</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDM</span>.<span class="me1">INTERSECT</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//set Drag and Drop to Point mode (default):</span></div></li><li class="li2"><div class="de2"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDM</span>.<span class="me1">mode</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDM</span>.<span class="me1">POINT</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//set Drag and Drop to Intersect mode:</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDM</span>.<span class="me1">mode</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDM</span>.<span class="me1">INTERSECT</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//set Drag and Drop to Point mode (default):</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDM</span>.<span class="me1">mode</span> <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDM</span>.<span class="me1">POINT</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-2574a6b26bf6e70cba457ab6c890c936-plain">//set Drag and Drop to Intersect mode:
+YAHOO.util.DDM.mode = YAHOO.util.DDM.INTERSECT;
+
+//set Drag and Drop to Point mode (default):
+YAHOO.util.DDM.mode = YAHOO.util.DDM.POINT;
+</textarea></div>
+
+  <p> A major side effect of switching to intersect mode is that it becomes far more
+    likely that multiple Drag and Drop objects will be overlapping during a drag event &mdash; which means that events like <code>onDragEnter</code> and especially <code>onDragOver</code> will be firing much more often.</p>
+  <p>Because of this, the API's interesting moments are handled somewhat differently in each mode.  The following table describes the core differences between API events in Point mode and Intersect mode:</p>
+  <div class="apisummary short"><table border="0" id="ddevents">
+    <tr class="odd">
+      <th> Moment </th>
+      <th> Point Mode </th>
+      <th> Intersect Mode </th>
+      <th> Notes </th>
+    </tr>
+    <tr>
+      <td > onMouseDown </td>
+      <td> e </td>
+      <td> e </td>
+      <td> e is the mousedown event </td>
+    </tr>
+    <tr class="odd">
+      <td> startDrag </td>
+      <td> x, y </td>
+      <td> x, y </td>
+      <td> x,y is the location of the mousedown </td>
+    </tr>
+    <tr>
+      <td > onDrag </td>
+      <td> e </td>
+      <td> e </td>
+      <td> e is the mousemove event </td>
+    </tr>
+    <tr class="odd">
+      <td> onDragEnter </td>
+      <td> e, id </td>
+      <td> e, DDArray </td>
+      <td> e is the mousemove event; id is the drag and drop object involved; DDarray
+        is an array of drag and drop objects</td>
+    </tr>
+    <tr>
+      <td > onDragOver </td>
+      <td> e, id </td>
+      <td> e, DDArray </td>
+      <td> e is the mousemove event; id is the drag and drop object involved; DDarray
+        is an array of drag and drop objects</td>
+    </tr>
+    <tr class="odd">
+      <td> onDragOut </td>
+      <td> e, id </td>
+      <td> e, DDArray </td>
+      <td> e is the mousemove event; id is the drag and drop object involved; DDarray
+        is an array of drag and drop objects</td>
+    </tr>
+    <tr>
+      <td > onDragDrop </td>
+      <td> e, id </td>
+      <td> e, DDArray </td>
+      <td> e is the mouseup event; id is the drag and drop object involved; DDarray
+        is an array of drag and drop objects</td>
+    </tr>
+    <tr class="odd">
+      <td> onInvalidDrop </td>
+          <td> e </td>
+          <td> e </td>
+          <td> e is the mouseup event; </td>
+     </tr>
+    <tr>
+      <td> endDrag </td>
+      <td> e </td>
+      <td> e </td>
+      <td> e is the mouseup event;</td>
+    </tr>
+    <tr class="odd">
+      <td > onMouseUp </td>
+      <td> e </td>
+      <td> e </td>
+      <td> e is the mouseup event;</td>
+    </tr>
+  </table></div>
+
+  <p> Point mode returns the id of the target Drag and Drop object (e.g., the object over which you are dragging in <code>onDragDrop</code>), while
+    Intersect mode returns an array of Drag and Drop objects instead.<strong>Note:</strong> it
+    is possible to have stacked Drag and Drop objects &mdash; objects
+    which overlap each other spatially. In Point mode, a drop on two stacked
+    items would result in two <code>onDragDrop</code> events being fired; in Intersect mode,
+    only one event is triggered, but an array of targeted objects is passed to
+  that single event handler. </p>
+  <p> The reason the Drag and Drop objects are passed to the event handler in Intersect mode is that
+    they contain properties about the interaction that can help determine the most
+    appropriate response in your implementation:</p>
+  <ul>
+    <li> The <code>cursorIsOver</code> property is true if the mouse cursor was over the Drag and Drop element
+      when the interaction happened. Often this will be an important factor as you calculate the intent of the user. </li>
+    <li> The overlap property is a <code>YAHOO.util.Region</code> object that specifies the location
+      and dimensions of the overlap of the two Drag and Drop objects. The size of this region can be used to determine
+      which element had more overlap (<code>YAHOO.util.Region.getArea</code>). </li>
+    <li> The <code>getBestMatch</code> method uses the two strategies above to deduce
+      which among the multiple matches is the most significant. The <code>getBestMatch</code>
+      method  returns either the first match it finds for which <code>cursorIsOver</code>
+      is true, or (if the cursor is not over a target) the one with the largest
+      overlap. </li>
+  </ul>
+
+
+  <h3 id="shim">Using the Drag Shim</h3>
+    <p>2.6.0 introduces the use of the Drag Shim to help with dragging over troublesome nodes. The Drag Shim is used to track the <code>mousemove</code> at a higher level instead of at the <code>document</code> level.</p>
+    <p>You can use this setting to allow dragging a node over an iframe or other such element that traps mouse events.</p>
+    <p>You can either use the Drag Shim on a per instance basis or on all draggable nodes.</p>
+<div id="syntax-fbf5845a78df9f41865abf009deb49f3" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//Instance based at creation</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> dd <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDProxy</span><span class="br0">&#40;</span><span class="st0">'demo'</span><span class="sy0">,</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    useShim<span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">//Instance based at runtime</span></div></li><li class="li1"><div class="de1"><span class="co1">//Must be called before startDrag to take effect.</span></div></li><li class="li1"><div class="de1">dd.<span class="me1">useShim</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">//All DD objects on the page</span></div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDM</span>.<span class="me1">useShim</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//Instance based at creation</span>
+<span class="kw2">var</span> dd <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDProxy</span><span class="br0">&#40;</span><span class="st0">'demo'</span><span class="sy0">,</span> <span class="br0">&#123;</span>
+    useShim<span class="sy0">:</span> <span class="kw2">true</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//Instance based at runtime</span>
+<span class="co1">//Must be called before startDrag to take effect.</span>
+dd.<span class="me1">useShim</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//All DD objects on the page</span>
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">DDM</span>.<span class="me1">useShim</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-fbf5845a78df9f41865abf009deb49f3-plain">//Instance based at creation
+var dd = new YAHOO.util.DDProxy('demo', {
+    useShim: true
+});
+
+//Instance based at runtime
+//Must be called before startDrag to take effect.
+dd.useShim = true;
+
+//All DD objects on the page
+YAHOO.util.DDM.useShim = true;
+</textarea></div>
+
+  <h2> Notes on Performance <a name="notes"></a></h2>
+  <p> The complexity of the application logic in the interesting moments
+    of Drag and Drop can have significant performance implications. This is particularly
+    true of the onDrag event; <code>onDragOver</code> fires with every mouseMove event reported by the browser during a drag interaction.
+    Optimize your <code>onDrag</code> (and, similarly, your <code>onDragOver</code>) code as much as possible; try to avoid iterative code, opting for object hashtables in the event that you need to perform basic data lookups each time the event fires. </p>
+  <p> Getting and setting the position of elements, an intrinsic aspect of drag interactions, gets progressively more expensive
+    the deeper the element is in the DOM.  If you encounter performance issues
+    using Drag and Drop, consider using <code>YAHOO.util.DDProxy</code> instead of <code>YAHOO.util.DD</code>; the proxy element is absolutely positioned
+    in the document body and therefore requires fewer cycles for repositioning. </p>
+  <h2>Drag and Drop Storyboard Matrix<a name="storyboard"></a></h2>
+  <p>Storyboarding can be a powerful strategy for thinking through a rich interaction during the design phase.  We have created <a href="dragdrop_storyboard.zip">a storyboard matrix for Drag and Drop</a> (ZIPed XLS file) that helps you track the actors and the events that are important when a Drag and Drop interaction is taking place.  Interesting moments (which correspond to API events for which you can write handlers) are listed across the top; each row in the matrix represents an element.</p>
+  <p><a href="dragdrop_storyboard.zip"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/dragdrop_storyboard.gif" alt="Drag and Drop storyboard matrix" width="312" height="209" border="0" ></a></p>
+
+
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+		</div>
+         <div class="yui-u">
+		 	
+			<div id="cheatsheet">
+				<h3>Drag &amp; Drop Utility Cheat Sheet:</h3>
+				
+				<a href="http://yuiblog.com/assets/pdf/cheatsheets/dragdrop.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/dragdrop.gif" width="178" height="134" alt="Cheat Sheet for the Drag and Drop Utility."></a>
+				
+				<p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+			</div>
+			
+			<div id="examples">
+<h3>Drag &amp; Drop Examples:</h3>
+
+<ul>
+<li><a href='../examples/dragdrop/dd-basic.html'>Basic Drag and Drop</a></li>
+<li><a href='../examples/dragdrop/dd-handles.html'>Using Handles</a></li>
+<li><a href='../examples/dragdrop/dd-ontop.html'>Dragged Element on Top</a></li>
+<li><a href='../examples/dragdrop/dd-proxy.html'>Using a Proxy Element</a></li>
+<li><a href='../examples/dragdrop/dd-reorder.html'>Reordering a List</a></li>
+<li><a href='../examples/dragdrop/dd-groups.html'>Using Interaction Groups</a></li>
+<li><a href='../examples/dragdrop/dd-circle.html'>Custom Click Validator</a></li>
+<li><a href='../examples/dragdrop/dd-region.html'>Staying in a Region</a></li>
+<li><a href='../examples/dragdrop/dd-shim.html'>Using the Drag Shim</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Drag &amp; Drop:</h4>
+
+<ul>
+<li><a href='../examples/datatable/dt_ddrows.html'>Reorder Rows with Drag and Drop</a> (included with examples for the <a href='../datatable/index.html'>DataTable Control</a>)</li>
+</ul>		
+           </div>
+	 
+			<div id="morereading">
+				<h3>More Reading about the YUI Drag &amp; Drop Utility:</h3>
+				
+				<ul>
+				  <li><a href="http://yuiblog.com/sandbox/yui/v0121/examples/dragdrop/target.php">Targets and Groups in YUI Drag &amp; Drop</a>, by Eric Miraglia.</li>
+			   </ul>
+		   </div>
+		   
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fdragdrop%2F--><h3 id="delicious">YUI Drag &amp; Drop on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/dragdrop/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdesign" class="tag-size-1">webdesign</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ui" class="tag-size-1">ui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/dragdrop" class="tag-size-1">dragdrop</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdev" class="tag-size-1">webdev</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/tools" class="tag-size-1">tools</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/cb9ae47d9e9a1c1d4a7216ddcd03afda" class="saved-by">saved by <span>88</span>  people</a></p>
+   </div></div>
+
+		 </div>
+      </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="selected "><a title="The YUI Drag &amp; Drop Utility" href="index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:16 PDT 2013 -->
+
+<!-- Localized -->

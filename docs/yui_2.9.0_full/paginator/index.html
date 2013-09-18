@@ -1,0 +1,757 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Paginator</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Paginator</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+
+<div id="promo" class="component">
+
+    <h1>YUI 2: Paginator</h1>
+    <p>The Paginator Control allows you to reduce the page size and render time of your site or web application by breaking up large data sets into discrete pages.  Paginator addresses the navigation aspect of chunked content, offering a set of controls that it can render into your UI to allow users to navigate through logical sections of local or remote data.</p>
+    <p>The Paginator Control was introduced with <a href="../datatable/index.html">DataTable</a> in version 2.5.0, but it has been broken out for general use as of version 2.6.0.</p>
+    <div>
+        <h4>On This Page:</h4>
+        <ul>
+            <li><a href="#start">Getting Started</a></li>
+            <li><a href="#using">Using Paginator</a></li>
+            <li><a href="#mobile">YUI on Mobile Devices</a></li>
+            <li><a href="#support">Support &amp; Community</a></li>
+            <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+        </ul>
+        
+    </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/paginator/index.html">Examples</a>: Explore examples of the Paginator Control in action.</li>
+      <li><a href="../docs/module_paginator.html">API Documentation</a>: View the full API documentation for the Paginator Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.paginator">Release Notes</a>: Detailed change log for the Paginator Control.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Paginator Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>  
+</div>
+
+<h2 id="start" class="first">Getting Started</h2>
+<p>To use Paginator, include the following source files in the web page:</p>
+<div id="syntax-748de641e9e8cde3996ff48858f16cb7" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Core + Skin CSS --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/paginator/assets/skins/sam/paginator.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source File --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/paginator/paginator-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Core + Skin CSS --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/paginator/assets/skins/sam/paginator.css&quot;</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Dependencies --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source File --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/paginator/paginator-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-748de641e9e8cde3996ff48858f16cb7-plain"><!-- Core + Skin CSS -->
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/paginator/assets/skins/sam/paginator.css">
+
+<!-- Dependencies --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+
+<!-- Source File -->
+<script src="http://yui.yahooapis.com/2.9.0/build/paginator/paginator-min.js"></script>
+</textarea></div>
+
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
+in which the Paginator Control lives.  You can usually accomplish this simply by putting the class on the 
+<code>&#60;body&#62;</code> tag:</p>
+<div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
+</textarea></div>
+<p class="lastP">For more information on skinning YUI components and making use of default skins, 
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+article here on the website.</p>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>paginator</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<h3>Basic HTML Setup</h3>
+<p>Paginator does not have to render any controls, but it is likely that you will want to.  All you need in your markup are container nodes into which the Paginator can render its controls.  One Paginator instance can render controls into any number of containers.</p>
+
+<div id="syntax-a69220b1ef241af942cd717578b74881" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;pag1&quot;</span>&gt;</span><span class="sc-1">&lt;!-- pagination controls will go here --&gt;</span><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- depending on the pagination UI components you choose, you could also use --&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">span</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;pag2&quot;</span>&gt;</span><span class="sc-1">&lt;!-- and pagination controls will go here --&gt;</span><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">span</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">p</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;pag3&quot;</span>&gt;</span><span class="sc-1">&lt;!-- and pagination controls will go here --&gt;</span><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">p</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;pag1&quot;</span>&gt;</span><span class="sc-1">&lt;!-- pagination controls will go here --&gt;</span><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- depending on the pagination UI components you choose, you could also use --&gt;</span>
+&nbsp;
+<span class="sc2">&lt;<span class="kw2">span</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;pag2&quot;</span>&gt;</span><span class="sc-1">&lt;!-- and pagination controls will go here --&gt;</span><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">span</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">p</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;pag3&quot;</span>&gt;</span><span class="sc-1">&lt;!-- and pagination controls will go here --&gt;</span><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">p</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-a69220b1ef241af942cd717578b74881-plain"><div id="pag1"><!-- pagination controls will go here --></div>
+
+<!-- depending on the pagination UI components you choose, you could also use -->
+
+<span id="pag2"><!-- and pagination controls will go here --></span>
+<p id="pag3"><!-- and pagination controls will go here --></p>
+</textarea></div>
+<p>Currently, it is not strictly required that the container elements be included in the live DOM, but that may change to support future or custom UI components.</p>
+
+<h3>Initializing Paginator</h3>
+<p>The Paginator class is located at <code>YAHOO.widget.Paginator</code>.  The constructor takes a single argument, an object literal containing configuration values.</p>
+<div id="syntax-9f5f4a81d34e01f30ad7ff7024d45006" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> pag <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    rowsPerPage  <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    totalRecords <span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    containers   <span class="sy0">:</span> <span class="br0">&#91;</span> idStr1<span class="sy0">,</span> idStr2 <span class="br0">&#93;</span> <span class="co1">// or idStr or elem or [ elem, elem ]</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">pag.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> pag <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    rowsPerPage  <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span>
+    totalRecords <span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span>
+    containers   <span class="sy0">:</span> <span class="br0">&#91;</span> idStr1<span class="sy0">,</span> idStr2 <span class="br0">&#93;</span> <span class="co1">// or idStr or elem or [ elem, elem ]</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+pag.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-9f5f4a81d34e01f30ad7ff7024d45006-plain">var pag = new YAHOO.widget.Paginator({
+    rowsPerPage  : 10,
+    totalRecords : 100,
+    containers   : [ idStr1, idStr2 ] // or idStr or elem or [ elem, elem ]
+});
+pag.render();
+</textarea></div>
+<p>Configuration can be omitted at construction, but these attributes must be set before the Paginator is <code>render()</code>ed.</p>
+<div id="syntax-7d85102590fbc966ec36235a839aca68" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> pag <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">//...</span></div></li><li class="li1"><div class="de1">pag.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">'rowsPerPage'</span><span class="sy0">,</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">pag.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">'totalRecords'</span><span class="sy0">,</span> <span class="nu0">100</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">pag.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">'containers'</span><span class="sy0">,</span> containerEl<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// OR</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">pag.<span class="me1">setState</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    rowsPerPage  <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    totalRecords <span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    containers   <span class="sy0">:</span> containerEl</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">pag.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> pag <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">//...</span>
+pag.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">'rowsPerPage'</span><span class="sy0">,</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="sy0">;</span>
+pag.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">'totalRecords'</span><span class="sy0">,</span> <span class="nu0">100</span><span class="br0">&#41;</span><span class="sy0">;</span>
+pag.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">'containers'</span><span class="sy0">,</span> containerEl<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// OR</span>
+&nbsp;
+pag.<span class="me1">setState</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    rowsPerPage  <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span>
+    totalRecords <span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span>
+    containers   <span class="sy0">:</span> containerEl
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+pag.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-7d85102590fbc966ec36235a839aca68-plain">var pag = new YAHOO.widget.Paginator();
+//...
+pag.set('rowsPerPage', 10);
+pag.set('totalRecords', 100);
+pag.set('containers', containerEl);
+
+// OR
+
+pag.setState({
+    rowsPerPage  : 10,
+    totalRecords : 100,
+    containers   : containerEl
+});
+
+pag.render();
+</textarea></div>
+<p>By default, Paginator will render controls into each specified container like this:</p>
+<img src="images/paginator.png" width="500" height="39" class="screenshot" alt="A screenshot of the default set and orientation of Paginator controls with YUI Sam skin applied">
+
+<h2 id="using">Using the Paginator</h2>
+<p>This section describes how to customize the Paginator and includes:</p>
+<ul>
+    <li><a href="#setup">Attaching Paginator to Your Data</a></li>
+    <li><a href="#state">Pagination State</a></li>
+    <li><a href="#api">Public API methods</a></li>
+    <li><a href="#config">Paginator Configuration</a></li>
+    <li><a href="#events">Paginator Events</a></li>
+    <li><a href="#uicomponents">Templates and UI Components</a></li>
+    <li><a href="#datatable">Paginator and DataTable</a></li>
+</ul>
+
+<h3 id="setup">Attaching Paginator to Your Data</h3>
+<p>Paginator does not directly modify your content.  The key to wiring up Paginator to work with your page, application, or widget is to subscribe to its <code>changeRequest</code> event.</p>
+
+<div id="syntax-00debd91e2c3c46645df56bbe885826e" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> pag <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    rowsPerPage <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    totalRecords<span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    containers  <span class="sy0">:</span> <span class="st0">'paging'</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> MyApp <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="co2">/* application API */</span></div></li><li class="li1"><div class="de1">    <span class="co1">//...</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    handlePagination <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>newState<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="co1">// Collect page data using the requested page number</span></div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> pageContent <span class="sy0">=</span> MyApp.<span class="me1">getContent</span><span class="br0">&#40;</span>newState.<span class="me1">page</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">        <span class="co1">// Update the content area</span></div></li><li class="li1"><div class="de1">        MyApp.<span class="me1">replaceContent</span><span class="br0">&#40;</span>pageContent<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="co1">// Update the Paginator's state</span></div></li><li class="li1"><div class="de1">        pag.<span class="me1">setState</span><span class="br0">&#40;</span>newState<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">pag.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">'changeRequest'</span><span class="sy0">,</span>MyApp.<span class="me1">handlePagination</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> pag <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    rowsPerPage <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span>
+    totalRecords<span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span>
+    containers  <span class="sy0">:</span> <span class="st0">'paging'</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> MyApp <span class="sy0">=</span> <span class="br0">&#123;</span>
+    <span class="co2">/* application API */</span>
+    <span class="co1">//...</span>
+&nbsp;
+    handlePagination <span class="sy0">:</span> <span class="kw2">function</span> <span class="br0">&#40;</span>newState<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="co1">// Collect page data using the requested page number</span>
+        <span class="kw2">var</span> pageContent <span class="sy0">=</span> MyApp.<span class="me1">getContent</span><span class="br0">&#40;</span>newState.<span class="me1">page</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+        <span class="co1">// Update the content area</span>
+        MyApp.<span class="me1">replaceContent</span><span class="br0">&#40;</span>pageContent<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+        <span class="co1">// Update the Paginator's state</span>
+        pag.<span class="me1">setState</span><span class="br0">&#40;</span>newState<span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+pag.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">'changeRequest'</span><span class="sy0">,</span>MyApp.<span class="me1">handlePagination</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-00debd91e2c3c46645df56bbe885826e-plain">var pag = new YAHOO.widget.Paginator({
+    rowsPerPage : 10,
+    totalRecords: 100,
+    containers  : 'paging'
+});
+
+var MyApp = {
+    /* application API */
+    //...
+
+    handlePagination : function (newState) {
+        // Collect page data using the requested page number
+        var pageContent = MyApp.getContent(newState.page);
+
+        // Update the content area
+        MyApp.replaceContent(pageContent);
+
+        // Update the Paginator's state
+        pag.setState(newState);
+    }
+};
+
+pag.subscribe('changeRequest',MyApp.handlePagination);
+</textarea></div>
+<p>When users interact with any of the Paginator's controls (or calls are made to the Paginator's public API methods) the Paginator does not immediately update its state and UI.  Instead, it broadcasts its <code>changeRequest</code> event to all subscribers, passing an object describing the requested pagination state.</p>
+<p>As a subscriber, your app is then responsible for collecting and displaying the data or content appropriate for that state, then updating the Paginator's state accordingly. The Paginator's UI updates automatically when it's state is changed.</p>
+
+<img src="images/paginator_flow.png" height="309" width="408" alt="diagram of the workflow of an application that consumes Paginator">
+
+<h3 id="state">Pagination State</h3>
+<p>The object provided to <code>changeRequest</code> subscribers is the output from the Paginator's <code>getState</code> method.  Called without input, <code>getState</code> returns an object literal in the following form:</p>
+
+<div id="syntax-b36b3e4be814530e2fe401faa12c09ca" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    paginator    <span class="sy0">:</span> <span class="br0">&#40;</span>the Paginator instance<span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    page         <span class="sy0">:</span> <span class="br0">&#40;</span>int<span class="br0">&#41;</span><span class="sy0">,</span> <span class="co1">// the current page</span></div></li><li class="li1"><div class="de1">    records      <span class="sy0">:</span> <span class="br0">&#91;</span> <span class="br0">&#40;</span>int<span class="br0">&#41;</span><span class="sy0">,</span> <span class="br0">&#40;</span>int<span class="br0">&#125;</span> <span class="br0">&#93;</span><span class="sy0">,</span> <span class="co1">// index offsets of first and last records on the current page</span></div></li><li class="li2"><div class="de2">    recordOffset <span class="sy0">:</span> <span class="br0">&#40;</span>int<span class="br0">&#41;</span><span class="sy0">,</span> <span class="co1">// index offset of the first record on the current page</span></div></li><li class="li1"><div class="de1">    totalRecords <span class="sy0">:</span> <span class="br0">&#40;</span>int<span class="br0">&#41;</span><span class="sy0">,</span> <span class="co1">// current totalRecords value</span></div></li><li class="li1"><div class="de1">    rowsPerPage  <span class="sy0">:</span> <span class="br0">&#40;</span>int<span class="br0">&#41;</span>  <span class="co1">// current rowsPerPage value</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="br0">&#123;</span>
+    paginator    <span class="sy0">:</span> <span class="br0">&#40;</span>the Paginator instance<span class="br0">&#41;</span><span class="sy0">,</span>
+    page         <span class="sy0">:</span> <span class="br0">&#40;</span>int<span class="br0">&#41;</span><span class="sy0">,</span> <span class="co1">// the current page</span>
+    records      <span class="sy0">:</span> <span class="br0">&#91;</span> <span class="br0">&#40;</span>int<span class="br0">&#41;</span><span class="sy0">,</span> <span class="br0">&#40;</span>int<span class="br0">&#125;</span> <span class="br0">&#93;</span><span class="sy0">,</span> <span class="co1">// index offsets of first and last records on the current page</span>
+    recordOffset <span class="sy0">:</span> <span class="br0">&#40;</span>int<span class="br0">&#41;</span><span class="sy0">,</span> <span class="co1">// index offset of the first record on the current page</span>
+    totalRecords <span class="sy0">:</span> <span class="br0">&#40;</span>int<span class="br0">&#41;</span><span class="sy0">,</span> <span class="co1">// current totalRecords value</span>
+    rowsPerPage  <span class="sy0">:</span> <span class="br0">&#40;</span>int<span class="br0">&#41;</span>  <span class="co1">// current rowsPerPage value</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-b36b3e4be814530e2fe401faa12c09ca-plain">{
+    paginator    : (the Paginator instance),
+    page         : (int), // the current page
+    records      : [ (int), (int} ], // index offsets of first and last records on the current page
+    recordOffset : (int), // index offset of the first record on the current page
+    totalRecords : (int), // current totalRecords value
+    rowsPerPage  : (int)  // current rowsPerPage value
+}
+</textarea></div>
+<p>If passed an object literal with proposed values for any of these properties (except <code>paginator</code> and <code>records</code>), the returned state will contain the full calculated state given the provided modifications and an additional property, <code>before</code>.  The value assigned to <code>before</code> will be the current state.</p>
+
+<div id="syntax-c380e057853db4e6815948919254fa69" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Get the current pagination state</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> cur <span class="sy0">=</span> pag.<span class="me1">getState</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Get the proposed state if rowsPerPage were updated and we moved to page 6</span></div></li><li class="li2"><div class="de2"><span class="kw2">var</span> proposed <span class="sy0">=</span> pag.<span class="me1">getState</span><span class="br0">&#40;</span><span class="br0">&#123;</span> rowsPerPage <span class="sy0">:</span> <span class="nu0">15</span><span class="sy0">,</span> page <span class="sy0">:</span> <span class="nu0">6</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// The proposed state contains the current state, stored under 'before'</span></div></li><li class="li1"><div class="de1"><span class="co1">// Assert.areEqual(cur.page, proposed.before.page);</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Get the current pagination state</span>
+<span class="kw2">var</span> cur <span class="sy0">=</span> pag.<span class="me1">getState</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Get the proposed state if rowsPerPage were updated and we moved to page 6</span>
+<span class="kw2">var</span> proposed <span class="sy0">=</span> pag.<span class="me1">getState</span><span class="br0">&#40;</span><span class="br0">&#123;</span> rowsPerPage <span class="sy0">:</span> <span class="nu0">15</span><span class="sy0">,</span> page <span class="sy0">:</span> <span class="nu0">6</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// The proposed state contains the current state, stored under 'before'</span>
+<span class="co1">// Assert.areEqual(cur.page, proposed.before.page);</span>
+&nbsp;</pre></div><textarea id="syntax-c380e057853db4e6815948919254fa69-plain">// Get the current pagination state
+var cur = pag.getState();
+
+// Get the proposed state if rowsPerPage were updated and we moved to page 6
+var proposed = pag.getState({ rowsPerPage : 15, page : 6 });
+
+// The proposed state contains the current state, stored under 'before'
+// Assert.areEqual(cur.page, proposed.before.page);
+</textarea></div>
+<p>Paginator does not store transitional states.  When users interact with the UI, the <code>changeRequest</code> event is fired with the proposed state object and immediately forgotten.  Until the subscriber directly updates the Paginator's state, the Paginator will remain in its current state.</p>
+
+<h3 id="api">Public API methods</h3>
+<p>Some of the more useful methods in Paginator's API are:</p>
+<dl>
+    <dt>render()</dt>
+        <dd>Creates the content for the configured <a href="#uicomponents">template</a> in the specified containers.</dd>
+    <dt>getCurrentPage()</dt>
+        <dd>Returns the current page number.</dd>
+    <dt>getPageRecords(n)</dt>
+        <dd>Returns an array with two values: the index/offset associated with the first and last record on the current page or page supplied as an input parameter.</dd>
+    <dt>getTotalPages()</dt>
+        <dd>Returns the number of pages available for paging given the current totalRecords and rowsPerPage configuration.</dd>
+    <dt>getState(o)</dt>
+        <dd>Returns an object representing the current or proposed state, depending on the input.  See <a href="#state">Pagination State</a>.</dd>
+    <dt>hasPage(n)</dt>
+        <dd>Returns true if the input page is available to navigate to.</dd>
+    <dt>setPage(n)</dt>
+        <dd>Fires a <code>changeRequest</code> with the proposed page.</dd>
+    <dt>setRowsPerPage(n)</dt>
+        <dd>Fires a <code>changeRequest</code> with the proposed <code>rowsPerPage</code>.</dd>
+    <dt>setTotalRecords(n)</dt>
+        <dd>Fires a <code>changeRequest</code> with the proposed <code>totalRecords</code>.</dd>
+    <dt>setState(o)</dt>
+        <dd>Applies state information to the Paginator's attributes in batch, triggering a UI update if necessary.</dd>
+</dl>
+
+<p><em>Note</em>: the Paginator's state is maintained in its attributes <code>recordOffset</code>, <code>totalRecords</code>, and <code>rowsPerPage</code>.  Calling <code>set</code> directly on these attributes will cause the UI to update if necessary.  It will not trigger a <code>changeRequest</code>.</p>
+
+<div id="syntax-84ef49aa902aed151df1ff20704a6d74" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Broadcast a changeRequest to subscribers.  totalRecords remains unchanged</span></div></li><li class="li1"><div class="de1">pag.<span class="me1">setTotalRecords</span><span class="br0">&#40;</span><span class="nu0">100</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// totalRecords changed.  UI updated.  changeRequest will not be fired</span></div></li><li class="li2"><div class="de2">pag.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">'totalRecords'</span><span class="sy0">,</span><span class="nu0">100</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Broadcast a changeRequest to subscribers.  totalRecords remains unchanged</span>
+pag.<span class="me1">setTotalRecords</span><span class="br0">&#40;</span><span class="nu0">100</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// totalRecords changed.  UI updated.  changeRequest will not be fired</span>
+pag.<span class="me1">set</span><span class="br0">&#40;</span><span class="st0">'totalRecords'</span><span class="sy0">,</span><span class="nu0">100</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-84ef49aa902aed151df1ff20704a6d74-plain">// Broadcast a changeRequest to subscribers.  totalRecords remains unchanged
+pag.setTotalRecords(100);
+
+// totalRecords changed.  UI updated.  changeRequest will not be fired
+pag.set('totalRecords',100);
+</textarea></div>
+<h3 id="config">Paginator Configuration</h3>
+<p>A full list of configuration options is included in the <a href="../docs/module_paginator.html">API docs</a>.  The most common configurations passed at construction are:</p>
+<dl>
+    <dt>rowsPerPage</dt>
+        <dd>Number of records associated with a single &quot;page&quot;. <strong>(required)</strong>.</dd>
+    <dt>totalRecords</dt>
+        <dd>The number of records to paginate through. Set to <code>YAHOO.widget.Paginator.VALUE_UNLIMITED</code> if there is no logical limit to the set. <strong>(required)</strong>.</dd>
+    <dt>containers</dt>
+        <dd>Where to render the pagination UI. <strong>(required)</strong>.</dd>
+    <dt>template</dt>
+        <dd>An HTML string including UI Component placeholders that will be used to populate the configured container elements.  See <a href="#uicomponents">Templates and UI Components</a>.</dd>
+    <dt>alwaysVisible</dt>
+        <dd>Set to <code>false</code>, the configured containers will be hidden unless there is enough data for at least two pages.  <code>true</code> by default.</dd>
+</dl>
+
+<p>Additionally, <a href="#uicomponents">UI Components</a> add their configuration options onto the host Paginator, so their configuration can be done during construction as well.</p>
+
+<div id="syntax-648a10f2bbaa84b4cc5067d9b93b42b4" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> pag <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    rowsPerPage <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    totalRecords <span class="sy0">:</span> <span class="nu0">50</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    containers <span class="sy0">:</span> <span class="br0">&#91;</span> <span class="st0">&quot;pag-above&quot;</span><span class="sy0">,</span> <span class="st0">&quot;pag-below&quot;</span> <span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    template <span class="sy0">:</span> <span class="st0">&quot;{PageLinks} {RowsPerPageDropdown}&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    pageLinks <span class="sy0">:</span> <span class="nu0">5</span><span class="sy0">,</span> <span class="co1">// configure the PageLinks UI Component</span></div></li><li class="li1"><div class="de1">    rowsPerPageOptions <span class="sy0">:</span> <span class="br0">&#91;</span> <span class="nu0">10</span><span class="sy0">,</span> <span class="nu0">25</span><span class="sy0">,</span> <span class="nu0">50</span><span class="sy0">,</span> <span class="nu0">100</span> <span class="br0">&#93;</span> <span class="co1">// configure the RowsPerPageDropdown UI Component</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> pag <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    rowsPerPage <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span>
+    totalRecords <span class="sy0">:</span> <span class="nu0">50</span><span class="sy0">,</span>
+    containers <span class="sy0">:</span> <span class="br0">&#91;</span> <span class="st0">&quot;pag-above&quot;</span><span class="sy0">,</span> <span class="st0">&quot;pag-below&quot;</span> <span class="br0">&#93;</span><span class="sy0">,</span>
+    template <span class="sy0">:</span> <span class="st0">&quot;{PageLinks} {RowsPerPageDropdown}&quot;</span><span class="sy0">,</span>
+&nbsp;
+    pageLinks <span class="sy0">:</span> <span class="nu0">5</span><span class="sy0">,</span> <span class="co1">// configure the PageLinks UI Component</span>
+    rowsPerPageOptions <span class="sy0">:</span> <span class="br0">&#91;</span> <span class="nu0">10</span><span class="sy0">,</span> <span class="nu0">25</span><span class="sy0">,</span> <span class="nu0">50</span><span class="sy0">,</span> <span class="nu0">100</span> <span class="br0">&#93;</span> <span class="co1">// configure the RowsPerPageDropdown UI Component</span>
+&nbsp;</pre></div><textarea id="syntax-648a10f2bbaa84b4cc5067d9b93b42b4-plain">var pag = new YAHOO.widget.Paginator({
+    rowsPerPage : 10,
+    totalRecords : 50,
+    containers : [ "pag-above", "pag-below" ],
+    template : "{PageLinks} {RowsPerPageDropdown}",
+
+    pageLinks : 5, // configure the PageLinks UI Component
+    rowsPerPageOptions : [ 10, 25, 50, 100 ] // configure the RowsPerPageDropdown UI Component
+</textarea></div>
+<h3 id="events">Paginator Events</h3>
+<p>In addition to the <a href="http://yuiblog.com/blog/2008/06/24/buildingwidgets/#attributeprovider">de facto change events</a> emitted when its attributes are modified (e.g. <code>totalRecordsChange</code>), Paginator broadcasts the following interesting moments:</p>
+<dl>
+    <dt>changeRequest</dt>
+        <dd>Fired when a user interacts with the Paginator UI, or calls are made to certain <a href="#api">API methods</a>.  See <a href="#setup">Attaching  Paginator to Your Data</a>.</dd>
+    <dt>pageChange</dt>
+        <dd>Fired when an attribute change results in the current page changing.</dd>
+</dl>
+
+<h3 id="uicomponents">Templates and UI Components</h3>
+<p>This section describes how the Paginator's UI is constructed and configured.</p>
+<ul>
+    <li><a href="#uicomponentoverview">About UI Components</a></li>
+    <li><a href="#template">The Paginator's <code>template</code> configuration attribute</a></li>
+    <li><a href="#componentconfig">Common UI Component Configurations</a></li>
+    <li><a href="#customrender">Rendering UI Components Manually</a></li>
+    <li><a href="#createcomponent">Creating new UI Components</a></li>
+</ul>
+
+<h4 id="uicomponentoverview">About UI Components</h4>
+<p>Paginator is built on a core model and a UI Component framework.  The core (Paginator) is responsible for state calculations, and the UI Components are responsible for appropriately representing that state in the DOM.  Each UI Component is its own class, built to handle a specific function.  Included with the current Paginator release are the following UI Components:</p>
+
+<ul>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.FirstPageLink.html">FirstPageLink</a> - &lt;&lt; first</li>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.LastPageLink.html">LastPageLink</a> - last &gt;&gt;</li>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.PreviousPageLink.html">PreviousPageLink</a> - &lt; prev</li>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.NextPageLink.html">NextPageLink</a> - next &gt;</li>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.PageLinks.html">PageLinks</a> - 1 2 3 4 5</li>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.CurrentPageReport.html">CurrentPageReport</a> - (1 of 21)</li>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html">RowsPerPageDropdown</a> - [select element of rows-per-page options]</li>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.JumpToPageDropdown.html">JumpToPageDropdown</a> - [select element of page numbers] (as of 2.9.0)</li>
+</ul>
+
+<h4 id="template">The Paginator's <code>template</code> configuration attribute</h4>
+<p>The link between the Paginator core and the UI components is the Paginator's <code>template</code> configuration attribute.</p>
+
+<p>The <code>template</code> attribute contains a string of markup mixed with placeholders identifying where in the markup each UI component should reside.</p>
+
+<div id="syntax-b8f03ca35214cc0b750e1164c96464e2" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> pag <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    rowsPerPage <span class="sy0">:</span> <span class="nu0">50</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    totalRecords <span class="sy0">:</span> myData.<span class="me1">length</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    containers <span class="sy0">:</span> containerEl<span class="sy0">,</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    template <span class="sy0">:</span> <span class="st0">&quot;{PreviousPageLink} &lt;strong&gt;{CurrentPageReport}&lt;/strong&gt; {NextPageLink}&quot;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">pag.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> pag <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    rowsPerPage <span class="sy0">:</span> <span class="nu0">50</span><span class="sy0">,</span>
+    totalRecords <span class="sy0">:</span> myData.<span class="me1">length</span><span class="sy0">,</span>
+    containers <span class="sy0">:</span> containerEl<span class="sy0">,</span>
+&nbsp;
+    template <span class="sy0">:</span> <span class="st0">&quot;{PreviousPageLink} &lt;strong&gt;{CurrentPageReport}&lt;/strong&gt; {NextPageLink}&quot;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+pag.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-b8f03ca35214cc0b750e1164c96464e2-plain">var pag = new YAHOO.widget.Paginator({
+    rowsPerPage : 50,
+    totalRecords : myData.length,
+    containers : containerEl,
+
+    template : "{PreviousPageLink} <strong>{CurrentPageReport}</strong> {NextPageLink}"
+});
+
+pag.render();
+</textarea></div>
+<p>this would render something like this:</p>
+<img src="images/template.png" width="198" height="33" class="screenshot" alt="screen capture of a Paginator UI generated from a custom template">
+
+<p>If multiple containers are specified, the same markup will be generated into each container, so avoid including any elements with an <code>id</code> attribute in your template.</p>
+
+<h4 id="componentconfig">Common UI Component Configurations</h4>
+<p>Each UI Component comes with its own set of configuration attributes for added flexibility.  These attributes are added to the host Paginator, allowing configuration during the Paginator's construction.  For a full list of available configuration attributes, check the respective class definitions in the <a href="../docs/module_paginator.html">API docs</a> or the <a href="../examples/paginator/pag_configuration.html">configuration example</a>.</p>
+
+<p>Some more common UI Component configurations are:</p>
+<ul>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.PageLinks.html#config_pageLinks">pageLinks</a></li>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.RowsPerPageDropdown.html#config_rowsPerPageOptions">rowsPerPageOptions</a></li>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.CurrentPageReport.html#config_pageReportTemplate">pageReportTemplate</a></li>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.FirstPageLink.html#config_firstPageLinkLabel">firstPageLinkLabel</a></li>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.LastPageLink.html#config_lastPageLinkLabel">lastPageLinkLabel</a></li>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.PreviousPageLink.html#config_previousPageLinkLabel">previousPageLinkLabel</a></li>
+    <li><a href="../docs/YAHOO.widget.Paginator.ui.NextPageLink.html#config_nextPageLinkLabel">nextPageLinkLabel</a></li>
+</ul>
+
+<h4 id="customrender">Rendering UI Components Manually</h4>
+<p>The <code>template</code> mechanism is convenient for common cases, but it is possible to manually place individual UI Components on the page.  Each UI Component has a <code>render(id)</code> method that returns the generated DOM structure for that component.  Coupling this with the DOM methods <code>insertBefore</code> or <code>appendChild</code>, you can have complete control of where and how many UI Components are added to your page.</p>
+
+<div id="syntax-ca87c2ababbf572ca14edcb557a8f3f7" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> pag <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    rowsPerPage <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    totalRecords <span class="sy0">:</span> myData.<span class="me1">length</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> currentPageDisplay <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span>.<span class="me1">ui</span>.<span class="me1">CurrentPageReport</span><span class="br0">&#40;</span>pag<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'pageDisplay'</span><span class="br0">&#41;</span>.<span class="me1">appendChild</span><span class="br0">&#40;</span></div></li><li class="li1"><div class="de1">    currentPageDisplay.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">'pageDisplay'</span><span class="br0">&#41;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> pag <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    rowsPerPage <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span>
+    totalRecords <span class="sy0">:</span> myData.<span class="me1">length</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> currentPageDisplay <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span>.<span class="me1">ui</span>.<span class="me1">CurrentPageReport</span><span class="br0">&#40;</span>pag<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'pageDisplay'</span><span class="br0">&#41;</span>.<span class="me1">appendChild</span><span class="br0">&#40;</span>
+    currentPageDisplay.<span class="me1">render</span><span class="br0">&#40;</span><span class="st0">'pageDisplay'</span><span class="br0">&#41;</span>
+<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-ca87c2ababbf572ca14edcb557a8f3f7-plain">var pag = new YAHOO.widget.Paginator({
+    rowsPerPage : 10,
+    totalRecords : myData.length
+});
+
+var currentPageDisplay = new YAHOO.widget.Paginator.ui.CurrentPageReport(pag);
+
+YAHOO.util.Dom.get('pageDisplay').appendChild(
+    currentPageDisplay.render('pageDisplay')
+);
+</textarea></div>
+<p>Another approach to piecemeal rendering is to use the <code>paginator.renderUIComponent( placeholderElement, idSeed )</code> method to progressively enhance existing markup.  The placeholder element is inspected for a class name in the form of <code>yui-pg-ui-COMPONENT</code> where COMPONENT is the name of the UI component class you want rendered there. For example, the following code enhances a "last page" link from existing markup:</p>
+
+<div id="syntax-8d6cb27470b2364b60059eb2cf335a52" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Replaces &lt;a href=&quot;...&quot; id=&quot;last_pg&quot; class=&quot;yui-pg-ui-LastPageLink&quot;&gt;...&lt;/a&gt;</span></div></li><li class="li1"><div class="de1"><span class="co1">// in the markup with the rendered markup from an instance of</span></div></li><li class="li1"><div class="de1"><span class="co1">// YAHOO.widget.Paginator.ui.LastPageLink</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> paginator   <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span> ... <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    placeholder <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'last_pg'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// The second param is a string to help ensure id uniqueness.  It's up to you.</span></div></li><li class="li1"><div class="de1">pag.<span class="me1">renderUIComponent</span><span class="br0">&#40;</span>placeholder<span class="sy0">,</span> <span class="st0">'xyz'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Replaces &lt;a href=&quot;...&quot; id=&quot;last_pg&quot; class=&quot;yui-pg-ui-LastPageLink&quot;&gt;...&lt;/a&gt;</span>
+<span class="co1">// in the markup with the rendered markup from an instance of</span>
+<span class="co1">// YAHOO.widget.Paginator.ui.LastPageLink</span>
+<span class="kw2">var</span> paginator   <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span> ... <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">,</span>
+    placeholder <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="st0">'last_pg'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// The second param is a string to help ensure id uniqueness.  It's up to you.</span>
+pag.<span class="me1">renderUIComponent</span><span class="br0">&#40;</span>placeholder<span class="sy0">,</span> <span class="st0">'xyz'</span><span class="br0">&#41;</span><span class="sy0">;</span></pre></div><textarea id="syntax-8d6cb27470b2364b60059eb2cf335a52-plain">// Replaces <a href=".../index.html" id="last_pg" class="yui-pg-ui-LastPageLink">...</a>
+// in the markup with the rendered markup from an instance of
+// YAHOO.widget.Paginator.ui.LastPageLink
+var paginator   = new YAHOO.widget.Paginator({ ... }),
+    placeholder = YAHOO.util.Dom.get('last_pg');
+
+// The second param is a string to help ensure id uniqueness.  It's up to you.
+pag.renderUIComponent(placeholder, 'xyz');</textarea></div>
+<p>Notice the class to be instantiated is inferred from the placeholder's class name.  Also notice the <code>containers</code> configuration is not used in either case, nor is the Paginator <code>render()</code>ed.  When placing UI Components manually, neither is necessary.</p>
+
+<h4 id="createcomponent">Creating new UI Components</h4>
+<p>The Paginator core and UI Component architecture makes it easy to create new pagination controls.  When <code>render()</code>ing its <code>template</code>, Pagintor looks for UI Component classes in the <code>YAHOO.widget.Paginator.ui</code> namespace matching any bracketed placeholders.</p>
+
+<div id="syntax-01826cab0781795ae7fdf94be5828476" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// renders an instance of YAHOO.widget.Paginator.ui.FirstPageLink</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> pag1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    rowsPerPage <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    totalRecords <span class="sy0">:</span> myData.<span class="me1">length</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    containers <span class="sy0">:</span> <span class="st0">'foo'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    template <span class="sy0">:</span> <span class="st0">&quot;jump to {FirstPageLink}&quot;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Looks for a class YAHOO.widget.Paginator.ui.MyCustomControl to</span></div></li><li class="li2"><div class="de2"><span class="co1">// instantiate and render</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> pag2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    rowsPerPage <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    totalRecords <span class="sy0">:</span> myData.<span class="me1">length</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    containers <span class="sy0">:</span> <span class="st0">'bar'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    template <span class="sy0">:</span> <span class="st0">&quot;jump to {MyCustomControl}&quot;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// renders an instance of YAHOO.widget.Paginator.ui.FirstPageLink</span>
+<span class="kw2">var</span> pag1 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    rowsPerPage <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span>
+    totalRecords <span class="sy0">:</span> myData.<span class="me1">length</span><span class="sy0">,</span>
+    containers <span class="sy0">:</span> <span class="st0">'foo'</span><span class="sy0">,</span>
+    template <span class="sy0">:</span> <span class="st0">&quot;jump to {FirstPageLink}&quot;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Looks for a class YAHOO.widget.Paginator.ui.MyCustomControl to</span>
+<span class="co1">// instantiate and render</span>
+<span class="kw2">var</span> pag2 <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    rowsPerPage <span class="sy0">:</span> <span class="nu0">10</span><span class="sy0">,</span>
+    totalRecords <span class="sy0">:</span> myData.<span class="me1">length</span><span class="sy0">,</span>
+    containers <span class="sy0">:</span> <span class="st0">'bar'</span><span class="sy0">,</span>
+    template <span class="sy0">:</span> <span class="st0">&quot;jump to {MyCustomControl}&quot;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-01826cab0781795ae7fdf94be5828476-plain">// renders an instance of YAHOO.widget.Paginator.ui.FirstPageLink
+var pag1 = new YAHOO.widget.Paginator({
+    rowsPerPage : 10,
+    totalRecords : myData.length,
+    containers : 'foo',
+    template : "jump to {FirstPageLink}"
+});
+
+// Looks for a class YAHOO.widget.Paginator.ui.MyCustomControl to
+// instantiate and render
+var pag2 = new YAHOO.widget.Paginator({
+    rowsPerPage : 10,
+    totalRecords : myData.length,
+    containers : 'bar',
+    template : "jump to {MyCustomControl}"
+});
+</textarea></div>
+<p>New Paginator UI Components should follow some basic guidelines:</p>
+<ol>
+    <li>The class must live in the <code>YAHOO.widget.Paginator.ui</code> namespace.</li>
+    <li>Include static method <code>init(paginator)</code> to add any configurations to the Paginator instance.</li>
+    <li>Include an instance method <code>render(id_base)</code> to create and return the control's DOM structure.</li>
+    <li>Do only one thing.</li>
+    <li>Respect the separation of duties.  The component's job is to read the Paginator's state and display it.  It can <em>request</em> state modifications, but it should not directly modify the Paginator state.</li>
+    <li>Be mindful that each component's <code>render</code> method will be called once for every configured container, so don't create duplicate ids (the <code>id_base</code> is to help avoid this).</li>
+</ol>
+
+<p>Here is a <a href="assets/UIComponentTemplate.js">starting template</a> for new Paginator UI Components.</p>
+
+<p>Don't forget to share your own new components on <a href="http://yuilibrary.com/forum/">the YUI developer forums</a> or even <a href="http://yuilibrary.com/contrib/">contribute them directly to the library</a> with a pull request from your fork of the yui2 project.</p>
+
+<h3 id="datatable">Paginator and DataTable</h3>
+<p>Paginator started its life in the <a href="../datatable/index.html">DataTable</a> widget in version 2.5.0.  Beyond feature enhancements and bug fixes, Paginator has remained the same.  It can be <a href="../datatable/index.html#paginate">used with DataTable</a> in the same fashion now as then.</p>
+
+<div id="syntax-386861d4b3a39e63e63804311f91ef0f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> tblConfig <span class="sy0">=</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    paginator <span class="sy0">:</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span> rowsPerPage <span class="sy0">:</span> <span class="nu0">25</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    initialRequest <span class="sy0">:</span> <span class="st0">''</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    selectionMode <span class="sy0">:</span> <span class="st0">'single'</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> myDataTable <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">DataTable</span><span class="br0">&#40;</span>tblId<span class="sy0">,</span> colDef<span class="sy0">,</span> myDataSource<span class="sy0">,</span> tblConfig<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> tblConfig <span class="sy0">=</span> <span class="br0">&#123;</span>
+    paginator <span class="sy0">:</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Paginator</span><span class="br0">&#40;</span><span class="br0">&#123;</span> rowsPerPage <span class="sy0">:</span> <span class="nu0">25</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">,</span>
+&nbsp;
+    initialRequest <span class="sy0">:</span> <span class="st0">''</span><span class="sy0">,</span>
+    selectionMode <span class="sy0">:</span> <span class="st0">'single'</span>
+<span class="br0">&#125;</span><span class="sy0">;</span>
+&nbsp;
+<span class="kw2">var</span> myDataTable <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">DataTable</span><span class="br0">&#40;</span>tblId<span class="sy0">,</span> colDef<span class="sy0">,</span> myDataSource<span class="sy0">,</span> tblConfig<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-386861d4b3a39e63e63804311f91ef0f-plain">var tblConfig = {
+    paginator : new YAHOO.widget.Paginator({ rowsPerPage : 25 }),
+
+    initialRequest : '',
+    selectionMode : 'single'
+};
+
+var myDataTable = new YAHOO.widget.DataTable(tblId, colDef, myDataSource, tblConfig);
+</textarea></div>
+
+<h2 id="mobile">YUI on Mobile: Using Paginator Control with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>
+<p>There are no known issues with the rendering or operation of the Paginator on mobile devices.</p>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+        </div>
+         <div class="yui-u">
+            
+             <!--<div id="cheatsheet">
+           
+                <h3>Paginator Widget Cheat Sheet:</h3>
+                
+                <a href="http://yuiblog.com/assets/pdf/cheatsheets/paginator.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/paginator.gif" width="178" height="134" alt="Cheat Sheet for the Paginator Widget"></a>
+                <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+            </div>-->
+            
+            <div id="examples">
+<h3>Paginator Examples:</h3>
+
+<ul>
+<li><a href='../examples/paginator/pag_getting_started.html'>Getting started with Paginator</a></li>
+<li><a href='../examples/paginator/pag_multiple_containers.html'>Rendering controls into multiple containers</a></li>
+<li><a href='../examples/paginator/pag_manual_render.html'>Manually rendering Paginator UI Components</a></li>
+<li><a href='../examples/paginator/pag_configuration.html'>Configuring the Paginator</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Paginator:</h4>
+
+<ul>
+<li><a href='../examples/datatable/dt_clientpagination.html'>Client-side Pagination</a> (included with examples for the <a href='../datatable/index.html'>DataTable Control</a>)</li>
+<li><a href='../examples/datatable/dt_dynamicdata.html'>Server-side Pagination and Sorting for Dynamic Data</a> (included with examples for the <a href='../datatable/index.html'>DataTable Control</a>)</li>
+<li><a href='../examples/datatable/dt_complex.html'>Complex Example of Multiple Features</a> (included with examples for the <a href='../datatable/index.html'>DataTable Control</a>)</li>
+</ul>		
+           </div>
+
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fpaginator%2F--><h3 id="delicious">YUI Paginator on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/paginator/" class="bookmark">bookmark on del.icio.us</a></p>
+            <p class="be-first">be the first to bookmark this page!</a></p>
+   </div></div>
+         </div>
+      </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="selected "><a title="The YUI Paginator" href="index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:26 PDT 2013 -->
+
+<!-- Localized -->

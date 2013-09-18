@@ -1,0 +1,412 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Storage Utility: Simple Storage Example &mdash; Saving In-Progress Text Entry</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/cookie/cookie-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/swf/swf-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/swfstore/swfstore-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/storage/storage-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+
+#textentry {
+  height:100px;
+  width:400px;
+  background-color:#dedede;
+  color:#2D119F;
+  font-weight:bold;
+}
+
+#autosave {
+  margin-top: 5px;
+  font-size: 10px;
+  color: #666666;
+}
+
+</style>
+
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: Storage Utility: Simple Storage Example &mdash; Saving In-Progress Text Entry</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Storage Utility: Simple Storage Example &mdash; Saving In-Progress Text Entry</h1>
+	
+	<div class="exampleIntro">
+    <p><strong>This example has been deprecated and will no longer be supported.</strong> Please note that the SWF functionality of the Storage Utility requires that you host swfstore.swf on your own servers. YUI 2 is now in maintenance mode, so no future updates are planned and only critical fixes will be considered. For more information, please refer to the following blog posts:
+<ul>
+<li><a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/</a></li>
+<li><a href="http://www.yuiblog.com/blog/2010/12/17/yui-2-9-0-release-update/">http://www.yuiblog.com/blog/2010/12/17/yui-2-9-0-release-update/</a></li>
+</ul>
+</p>
+	<p>This example demonstrates a rudimentary use case for the <a href="../../storage/index.html">Storage Utility</a>.  When you enter text in the text field below, your content will be locally saved on every fifth <code>keypress</code>.  If your browser supports one of the Storage Utility's storage mechanisms (Gears, SWF, and HTML5 are tried, in that order), your last-saved content will persist when you reload the page.</p>
+
+<p>Watch the logger on the right side of the page as you type for feedback about what the example is doing.</p>
+			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="storage-simple_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<form action="." method="post" id="textentryform">
+
+   <textarea id="textentry">Text entered here will be autosaved as you type.</textarea>
+   <p id="autosave">#</p>
+
+</form>
+
+<!--Always include gears_init.js when you want to support Google Gears:-->
+<script type="text/javascript" src="assets/gears_init.js"></script> 
+
+<script language="javascript">
+
+YAHOO.util.Event.onDOMReady(function() {
+
+  var ctr = 0,
+      storageEngine;
+
+  YAHOO.util.StorageEngineSWF.SWFURL = 'swfstore.swf';
+
+  //wrap instantiation in a try/catch to handle situations where
+  //the client browser does not support any of your desired 
+  //storage engines; use the catch statement to handle those
+  //unsupported browsers.  In this case, we're using Storage as
+  //an enhancement, and we can fail gracefully if instantiation
+  //fails.
+  try {
+    storageEngine = YAHOO.util.StorageManager.get(
+      YAHOO.util.StorageEngineGears.ENGINE_NAME,
+      YAHOO.util.StorageManager.LOCATION_LOCAL,
+      {   
+        order: [
+          YAHOO.util.StorageEngineGears,
+          YAHOO.util.StorageEngineSWF,
+          YAHOO.util.StorageEngineHTML5
+          ],
+        force: false
+      }
+     );
+  } catch(e) {
+    YAHOO.log("No supported storage mechanism present.");
+    storageEngine = false;
+  }
+
+  //storageEngine will be truthy if instantiation succeeded and
+  //false if no engine was available or if instantiation failed
+  //for any reason.
+  if(storageEngine) {
+
+    //If we got a valid storage engine, we can make use of it.
+    //Use the custom event CE_READY to identify the moment
+    storageEngine.subscribe(storageEngine.CE_READY, function(e) {
+       YAHOO.log("A Storage instance is ready using " + 
+          storageEngine.getName() + 
+          "; start typing in the text box and content will be saved every five keystrokes.", "info", "example");
+
+        //Prepopulate the text field with saved contents, if present.
+       if(storageEngine.hasKey("simple-storage-textentry")) {
+         YAHOO.log(storageEngine.getItem("simple-storage-textentry"));
+         YAHOO.util.Dom.get("textentry").value = storageEngine.getItem("simple-storage-textentry");
+       }
+
+      //Set up an event listener to trigger the Storage set method 
+      //every five keystrokes.
+      YAHOO.util.Event.on("textentry", "keypress", function(e) {
+        ctr++;
+  
+        if(!(ctr%5)) { //on every fifth keystroke, autosave the contents
+          storageEngine.setItem("simple-storage-textentry", YAHOO.util.Dom.get("textentry").value);
+          document.getElementById("autosave").innerHTML = "last saved at " + (new Date).toString();
+          YAHOO.log("Autosaved textarea content to " + 
+            storageEngine.getName() + " via Storage Utility.", "info", "example");
+        }
+      });
+    });
+  }
+
+});
+</script>
+	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Getting Started with Storage</h2>
+
+<p>This example shows Storage being used in a simple context. The full source for the example follows.  Of particular interest here is the instantiation of Storage, wrapped in a try/catch statement, where the catch logic handles the logic for browsers that don't support one of your requested storage mechanisms.  Because we are allowing SWF storage here, we also wrap the followup logic &mdash; the logic that interacts with the fully instantiated Storage object &mdash; in the <code>CE_READY</code> custom event, ensuring that we are not trying to interact with the object before it's fully created.  (SWFStore has a slight asynchronous delay in instantiation; that's why it's important that we listen for this event when SWF is one of our possible storage mechanisms.)</p><p>In this example, we specify Gears as our preferred storage mechanism and we provide the order in which we want Storage to progress if Gears isn't present &mdash; from Gears to SWF to HTML5.</p>
+
+<p>Note that before the main code block below we have included the <code>gears_init.js</code> file to prepare the page for use of Gears:</p>
+
+<textarea name="code" class="HTML" cols="60" rows="1">
+<script type="text/javascript" src="assets/gears_init.js"></script> 
+</textarea>
+
+<p>Here is the main JS codeblock that drives this example, along with some inline comments to explain what's being done and why:</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+YAHOO.util.Event.onDOMReady(function() {
+
+  var ctr = 0,
+      storageEngine;
+
+  YAHOO.util.StorageEngineSWF.SWFURL = 'swfstore.swf';
+
+  //wrap instantiation in a try/catch to handle situations where
+  //the client browser does not support any of your desired 
+  //storage engine; use the catch statement to handle those
+  //unsupported browsers.  In this case, we're using Storage as
+  //an enhancement, and we can fail gracefully if instantiation
+  //fails.
+  try {
+    storageEngine = YAHOO.util.StorageManager.get(
+      YAHOO.util.StorageEngineGears.ENGINE_NAME,
+      YAHOO.util.StorageManager.LOCATION_LOCAL,
+      {   
+        order: [
+          YAHOO.util.StorageEngineGears,
+          YAHOO.util.StorageEngineSWF,
+          YAHOO.util.StorageEngineHTML5
+          ],
+        force: false
+      }
+     );
+  } catch(e) {
+    YAHOO.log("No supported storage mechanism present.");
+    storageEngine = false;
+  }
+
+  //storageEngine will be truthy if instantiation succeeded and
+  //false if no engine was available or if instantiation failed
+  //for any reason.
+  if(storageEngine) {
+
+    //If we got a valid storage egnine, we can make use of it.
+    //Use the custom event CE_READY to identify the moment
+    storageEngine.subscribe(storageEngine.CE_READY, function(e) {
+       YAHOO.log("A Storage instance is ready using " + 
+          storageEngine.getName() + 
+          "; start typing in the text box and content will be saved every five keystrokes.", "info", "example");
+
+        //Prepopulate the text field with saved contents, if present.
+       if(storageEngine.hasKey("simple-storage-textentry")) {
+         YAHOO.log(storageEngine.getItem("simple-storage-textentry"));
+         YAHOO.util.Dom.get("textentry").value = storageEngine.getItem("simple-storage-textentry");
+       }
+
+      //Set up an event listener to trigger the Storage set method 
+      //every five keystrokes.
+      YAHOO.util.Event.on("textentry", "keypress", function(e) {
+        ctr++;
+  
+        if(!(ctr%5)) { //on every fifth keystroke, autosave the contents
+          storageEngine.setItem("simple-storage-textentry", YAHOO.util.Dom.get("textentry").value);
+          document.getElementById("autosave").innerHTML = "last saved at " + (new Date).toString();
+          YAHOO.log("Autosaved textarea content to " + 
+            storageEngine.getName() + " via Storage Utility.", "info", "example");
+        }
+      });
+    });
+  }
+
+});
+</textarea>
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerDiv"></div>
+						</div>
+					
+				
+					<div id="examples">
+						<h3>Storage Utility Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li class='selected'><a href='storage-simple.html'>Simple Storage Example &mdash; Saving In-Progress Text Entry</a></li><li><a href='storage-advanced.html'>Advanced Storage Example</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Storage Utility Resources:</h3>
+						<ul>
+							<li><a href="../../storage/index.html">User's Guide</a></li>
+						<li><a href="../../docs/module_storage.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/storage.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:09 PDT 2013 -->
+
+<!-- Localized -->

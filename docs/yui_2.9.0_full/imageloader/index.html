@@ -1,0 +1,425 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: ImageLoader</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: ImageLoader</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+	  
+<div id="promo" class="component">
+  <h1>YUI 2: ImageLoader</h1>
+	<p>The ImageLoader Utility allows you as an implementer to delay the loading of images on your web page until such a time as your user is likely to see them.  This can improve your overall pageload performance by deferring the loading of some images that are not immediately visible at the time the page first renders.  Because images are often the heaviest components of a given page, deferring the loading of some images can yield a marked improvement in the way the page "feels" to your user.</p>
+	<p>The ImageLoader Utility lets you determine triggers and time limits to initiate image loading.  This allows you to ensure that the images are loaded before your user is likely to see them.  This technique, obviously, is appropriate only for images that are not immediately visible to your user at initial page load.</p>
+	
+	
+  <div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#using">Using ImageLoader</a></li>
+			<li><a href="#caveats">Important Usage Requirements</a></li>
+      <li><a href="#support">Support &amp; Community</a></li><li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/imageloader/index.html">Examples</a>: Explore examples of the ImageLoader Utility in action.</li>
+      <li><a href="../docs/module_imageloader.html">API Documentation</a>: View the full API documentation for the ImageLoader Utility.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.imageloader">Release Notes</a>: Detailed change log for the ImageLoader Utility.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the ImageLoader Utility as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+</div>
+
+
+<h2 class="first" id="start">Getting Started</h2>
+<p>To use the ImageLoader Utility, include the following source files in your web page with the script tag:</p>
+
+
+<div id="syntax-b83516fb27a8d516fbf45373407bf8c2" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/imageloader/imageloader-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/imageloader/imageloader-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-b83516fb27a8d516fbf45373407bf8c2-plain"><!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+
+<!-- Source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/imageloader/imageloader-min.js"></script>
+</textarea></div>
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>imageloader</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<h3>Creating an Image Group</h3>
+
+<p>Images are organized into groups. Each group has one or more triggers. A trigger is simply any DOM event, such as the <code>mouseover</code> of a specific <code>&lt;div&gt;</code>, a button click, or a window scroll. The images in a group won't load into the page until this trigger fires. Groups also have an optional time limit; if none of the group's triggers are activated before the time limit expires, the images are fetched anyway.</p>
+
+<p>A group is defined as an instance of <code>YAHOO.util.ImageLoader.group</code>.  It comprises a collection of images that will show up on the page based on the same triggers and time limit.</p>
+<div id="syntax-a19834fa0d87e8906e9f48a7cfd035bc" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myFirstGroup <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">ImageLoader</span>.<span class="me1">group</span><span class="br0">&#40;</span><span class="st0">'someDivId'</span><span class="sy0">,</span> <span class="st0">'mouseover'</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myFirstGroup <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">ImageLoader</span>.<span class="me1">group</span><span class="br0">&#40;</span><span class="st0">'someDivId'</span><span class="sy0">,</span> <span class="st0">'mouseover'</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-a19834fa0d87e8906e9f48a7cfd035bc-plain">var myFirstGroup = new YAHOO.util.ImageLoader.group('someDivId', 'mouseover', 2);
+</textarea></div>
+<p>This defines a group triggered by a <code>mouseover</code> of the <code>&lt;div&gt;</code> with the HTML ID of  <code>someDivId</code>; the third argument is the time limit, and in the code above we are specifying that all images in <code>myFirstGroup</code> should load two seconds after the window's <code>load</code> event fires even if our trigger hasn't been tripped.</p>
+
+<h3>Adding Images to the Group</h3>
+<p>Register one or more images with the group using the HTML ID of the image element and the URL for the image:
+</p>
+<div id="syntax-c4674f13e1307a6c4a52d19a321ccdfd" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myFirstGroup.<span class="me1">registerBgImage</span><span class="br0">&#40;</span><span class="st0">'idOfDivWaitingForImage'</span><span class="sy0">,</span> <span class="st0">'http://www.example.com/image/url'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myFirstGroup.<span class="me1">registerBgImage</span><span class="br0">&#40;</span><span class="st0">'idOfDivWaitingForImage'</span><span class="sy0">,</span> <span class="st0">'http://www.example.com/image/url'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-c4674f13e1307a6c4a52d19a321ccdfd-plain">myFirstGroup.registerBgImage('idOfDivWaitingForImage', 'http://www.example.com/image/url');
+</textarea></div>
+<p>This will set the image at <code>http://www.example.com/image/url</code> as the background image of the <code>&lt;div&gt;</code> with the ID <code>idOfDivWaitingForImage</code>.  There are three kinds of images you can register with an ImageLoader group instance; see <a href="#addimages">Adding Images</a> below for more details on this process.</p>
+
+
+
+<h2 id="using">Using ImageLoader</h2>
+<p>This section describes how to use the ImageLoader Utility in further detail.  It contains these subsections:</p>
+<ul class="topspace">
+<li><a href="#performance">Performance Considerations</a></li>
+<li><a href="#approach">Approach</a></li>
+<li><a href="#triggers">Triggers</a></li>
+<li><a href="#customtriggers">Custom Event Triggers</a></li>
+<li><a href="#addimages">Adding Images</a></li>
+<li><a href="#fold">Loading Images Below the Fold</a></li>
+<li><a href="#visibility">Image Visibility</a></li>
+<li><a href="#classnames">Using Class Names</a></li>
+</ul>
+
+<h3 id="performance">Performance Considerations</h3>
+<p>The images on your page require possible DNS lookups, new HTTP transactions, and ultimately the transmission of image data in packets over the wire.  While all this is happening, the user is often left waiting for the page to become fully functional. All of your <code>onload</code> JavaScript, for example, is deferred until after all the page's images have finished loading.</p>
+<p>Should the user have to wait for all of these images? If the images are front and center on the page, then yes, suffering the load time is necessary. But what about images that the user doesn't see right away &mdash the images below the fold; the images hidden towards the end of a carousel; the images that won't appear until a non-default tab of some module is clicked? ImageLoader allows you to delay the load of these images until after page load so that the page is fully functional more quickly. And, by using triggers, you can ensure that the images are loaded just before the user needs them so that there's no degradation of user experience.</p>
+
+<h3 id="approach">Approach</h3>
+<p>How can you anticipate when the user will be able to see images? Well, you as a developer know your page, and you know what actions are available to the user. You can utilize your knowledge to identify user events that indicate what the user is about to see.</p>
+<p>For example, you know that any image lying below the fold won't be visible until the user either scrolls the page or resizes the browser window. In a tabbed module, you know that the user can't click one of the tabs until she mouses over that tab.</p>
+<p>Consequently, you can use scroll events, mouseover events, or other indicators of user intent to stay one step ahead of the user and decide when to load images. The ImageLoader Utility lets you do exactly this.</p>
+
+<h3 id="triggers">Triggers</h3>
+<p>Images are grouped together in terms of which user action(s) should trigger their loading. A trigger is simply any DOM event. Your first step is to create an ImageLoader group object, with its trigger defined:</p>
+<div id="syntax-a19834fa0d87e8906e9f48a7cfd035bc" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myFirstGroup <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">ImageLoader</span>.<span class="me1">group</span><span class="br0">&#40;</span><span class="st0">'someDivId'</span><span class="sy0">,</span> <span class="st0">'mouseover'</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myFirstGroup <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">ImageLoader</span>.<span class="me1">group</span><span class="br0">&#40;</span><span class="st0">'someDivId'</span><span class="sy0">,</span> <span class="st0">'mouseover'</span><span class="sy0">,</span> <span class="nu0">2</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-a19834fa0d87e8906e9f48a7cfd035bc-plain">var myFirstGroup = new YAHOO.util.ImageLoader.group('someDivId', 'mouseover', 2);
+</textarea></div><p>The third parameter is a time limit for the group. If the user has not performed the trigger event within the specified time limit, the images are fetched anyway. Either the time limit or the trigger may be null (indicating the user must perform the trigger event, or there should only be a simple time delay, respectively.)</p>
+<p>You can have as many triggers as you wish for a group. Just add them with the <code>group</code> class's <code>addTrigger</code> method:</p>
+<div id="syntax-389c0029c46c49d366625643ce014645" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myFirstGroup.<span class="me1">addTrigger</span><span class="br0">&#40;</span><span class="st0">'someOtherDivId'</span><span class="sy0">,</span> <span class="st0">'click'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myFirstGroup.<span class="me1">addTrigger</span><span class="br0">&#40;</span><span class="st0">'someOtherDivId'</span><span class="sy0">,</span> <span class="st0">'click'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-389c0029c46c49d366625643ce014645-plain">myFirstGroup.addTrigger('someOtherDivId', 'click');
+</textarea></div><p>The trigger conditionals are disjunctive; the first one to fire initiates the image fetching.</p>
+
+<h3 id="customtriggers">Custom Event Triggers</h3>
+<p>You can also specify custom events as triggers. Call <code>addCustomTrigger</code> with any <code>YAHOO.util.CustomEvent</code> object:</p>
+<div id="syntax-5b993c8c3ac09e49a19aa878080a4924" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myILEvent <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">CustomEvent</span><span class="br0">&#40;</span><span class="st0">'anImageLoaderTrigger'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myFirstGroup.<span class="me1">addCustomTrigger</span><span class="br0">&#40;</span>myILEvent<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myILEvent <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">CustomEvent</span><span class="br0">&#40;</span><span class="st0">'anImageLoaderTrigger'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myFirstGroup.<span class="me1">addCustomTrigger</span><span class="br0">&#40;</span>myILEvent<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-5b993c8c3ac09e49a19aa878080a4924-plain">var myILEvent = new YAHOO.util.CustomEvent('anImageLoaderTrigger');
+myFirstGroup.addCustomTrigger(myILEvent);
+</textarea></div>
+<h3 id="addimages">Adding Images</h3>
+<p>Once a group is created, you can add as many images as you'd like to it. There are three types of images:</p>
+	<ol>
+		<li><strong>background image</strong> (a <code>&lt;div&gt;</code> with a background image; URL set in <code>style.backgroundImage</code>).  Use the <code>registerBgImage</code> method to register this kind of image.</li>
+		<li><strong>source image</strong> (an <code>&lt;img&gt;</code> tag; URL set in a <code>url</code> attribute).  Use the <code>registerSrcImage</code> method to register this kind of image.</li>
+		<li><strong>png background image</strong> (a <code>&lt;div&gt;</code> with a png background image; for IE6, sets an alpha filter <code>src</code>; for other browsers sets a background image).  Use the <code>registerPngBgImage</code> method to register this kind of image.</li>
+	</ol>
+
+<p>To add an image to a group, register the DOM ID of the image element and the image URL:</p>
+<div id="syntax-9ecbc8d33d63f24a66df4ad4d66631b1" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myFirstGroup.<span class="me1">registerBgImage</span><span class="br0">&#40;</span><span class="st0">'idOfDivWaitingForImage'</span><span class="sy0">,</span> <span class="st0">'http://www.example.com/image/url'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myFirstGroup.<span class="me1">registerSrcImage</span><span class="br0">&#40;</span><span class="st0">'idOfImgWaitingForImage'</span><span class="sy0">,</span> <span class="st0">'http://www.example.com/other/image/url'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myFirstGroup.<span class="me1">registerPngBgImage</span><span class="br0">&#40;</span><span class="st0">'idOfDivWaitingForPngImage'</span><span class="sy0">,</span> <span class="st0">'http://www.example.com/png/image/url'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myFirstGroup.<span class="me1">registerBgImage</span><span class="br0">&#40;</span><span class="st0">'idOfDivWaitingForImage'</span><span class="sy0">,</span> <span class="st0">'http://www.example.com/image/url'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myFirstGroup.<span class="me1">registerSrcImage</span><span class="br0">&#40;</span><span class="st0">'idOfImgWaitingForImage'</span><span class="sy0">,</span> <span class="st0">'http://www.example.com/other/image/url'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myFirstGroup.<span class="me1">registerPngBgImage</span><span class="br0">&#40;</span><span class="st0">'idOfDivWaitingForPngImage'</span><span class="sy0">,</span> <span class="st0">'http://www.example.com/png/image/url'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-9ecbc8d33d63f24a66df4ad4d66631b1-plain">myFirstGroup.registerBgImage('idOfDivWaitingForImage', 'http://www.example.com/image/url');
+myFirstGroup.registerSrcImage('idOfImgWaitingForImage', 'http://www.example.com/other/image/url');
+myFirstGroup.registerPngBgImage('idOfDivWaitingForPngImage', 'http://www.example.com/png/image/url');
+</textarea></div>
+
+<p>This will set the image at <code>http://www.example.com/image/url</code> as the background-image of the <code>&lt;div&gt;</code> with the ID <code>idOfDivWaitingForImage</code> and likewise with the two other image elements.</p>
+
+<h3 id="fold">Loading Images Below the Fold</h3>
+<p>A group can check its images during the <code>window</code> object's <code>load</code> event (or the <a href="../event/index.html">Event Utility</a>'s <a href="../event/index.html#ondomready">onDOMReady</a> event) and immediately begin loading those that are above the fold (i.e., inside the current viewport) while delaying the load of those that aren't. Just set the <code>foldConditional</code> property of the group to <code>true</code>. Usually the group will have window-scroll and window-resize triggers.</p>
+
+<div id="syntax-0d830dcab235a14e5005c0a8627d59a3" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> foldGroup <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">ImageLoader</span>.<span class="me1">group</span><span class="br0">&#40;</span>window<span class="sy0">,</span> <span class="st0">'scroll'</span><span class="sy0">,</span> <span class="kw2">null</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">foldGroup.<span class="me1">foldConditional</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">foldGroup.<span class="me1">registerBgImage</span><span class="br0">&#40;</span><span class="st0">'partwayDownPageImage'</span><span class="sy0">,</span> <span class="st0">'http://www.example.com/image/url'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">foldGroup.<span class="me1">addTrigger</span><span class="br0">&#40;</span>window<span class="sy0">,</span> <span class="st0">'resize'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> foldGroup <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">ImageLoader</span>.<span class="me1">group</span><span class="br0">&#40;</span>window<span class="sy0">,</span> <span class="st0">'scroll'</span><span class="sy0">,</span> <span class="kw2">null</span><span class="br0">&#41;</span><span class="sy0">;</span>
+foldGroup.<span class="me1">foldConditional</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+foldGroup.<span class="me1">registerBgImage</span><span class="br0">&#40;</span><span class="st0">'partwayDownPageImage'</span><span class="sy0">,</span> <span class="st0">'http://www.example.com/image/url'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+foldGroup.<span class="me1">addTrigger</span><span class="br0">&#40;</span>window<span class="sy0">,</span> <span class="st0">'resize'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-0d830dcab235a14e5005c0a8627d59a3-plain">var foldGroup = new YAHOO.util.ImageLoader.group(window, 'scroll', null);
+foldGroup.foldConditional = true;
+foldGroup.registerBgImage('partwayDownPageImage', 'http://www.example.com/image/url');
+foldGroup.addTrigger(window, 'resize');
+</textarea></div>
+<h3 id="visibility">Image Visibility</h3>
+<p>You can set your <code>&lt;img&gt;</code> tags to have the CSS property <code>visibility:hidden</code>. This will allow your page to keep its structure until the image is actually loaded. Since these images are probably out of the viewport anyway, this may not make a perceptible difference, but it will help some browsers avoid reflowing the page when deferred images are loaded. To accomplish this using ImageLoader, set the <code>setVisible</code> attribute of the image to <code>true</code>; ImageLoader will then set the <code>visibility</code> property to <code>visible</code> when the image is fetched.</p>
+<div id="syntax-acaf0bed6ed4aa3b7e260f7cb913d88b" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> someRegisteredImg <span class="sy0">=</span> someGroup.<span class="me1">registerSrcImage</span><span class="br0">&#40;</span><span class="st0">'someImgEl'</span><span class="sy0">,</span> <span class="st0">'http://www.example.com/image/url'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">someRegisteredImg.<span class="me1">setVisible</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> someRegisteredImg <span class="sy0">=</span> someGroup.<span class="me1">registerSrcImage</span><span class="br0">&#40;</span><span class="st0">'someImgEl'</span><span class="sy0">,</span> <span class="st0">'http://www.example.com/image/url'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+someRegisteredImg.<span class="me1">setVisible</span> <span class="sy0">=</span> <span class="kw2">true</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-acaf0bed6ed4aa3b7e260f7cb913d88b-plain">var someRegisteredImg = someGroup.registerSrcImage('someImgEl', 'http://www.example.com/image/url');
+someRegisteredImg.setVisible = true;
+</textarea></div>
+<h3 id="classnames">Using Class Names</h3>
+<p>As an alternative to registering each image with a group, you can use CSS class names to group images together. When using this approach, images that are part of the same group should all share a common class name. Each should also have its image set as the element's background image via CSS in the element's <code>style</code> attribute. To prevent the image from loading immediately when the element renders, create a CSS style definition for that class overriding the background image to <code>none</code>. Lastly, set the <code>className</code> property of the ImageLoader group.</p>
+
+<p>The following combination of CSS, HTML, and JavaScript illustrates this approach:</p>
+<div id="syntax-133f73dcab5c6860bd4da19c17663bb4" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="re1">.yui-imgload-somegroup</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">background</span><span class="sy0">:</span> <span class="kw2">none</span> !important<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="re1">.yui-imgload-somegroup</span> <span class="br0">&#123;</span>
+    <span class="kw1">background</span><span class="sy0">:</span> <span class="kw2">none</span> !important<span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-133f73dcab5c6860bd4da19c17663bb4-plain">.yui-imgload-somegroup {
+    background: none !important;
+}
+</textarea></div><div id="syntax-47f0aacd19051387deb8b1f595006a90" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-imgload-somegroup&quot;</span> <span class="kw3">style</span><span class="sy0">=</span><span class="st0">&quot;background-image: url(http://www.example.com/image/url);&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-imgload-somegroup&quot;</span> <span class="kw3">style</span><span class="sy0">=</span><span class="st0">&quot;background-image: url(http://www.example.com/image/url);&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-47f0aacd19051387deb8b1f595006a90-plain"><div class="yui-imgload-somegroup" style="background-image: url(http://www.example.com/image/url);"></div>
+</textarea></div><div id="syntax-b5b2ce3be4aba47bf6e92cc82177f155" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">someGroup.<span class="me1">className</span> <span class="sy0">=</span> <span class="st0">'yui-imgload-somegroup'</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">someGroup.<span class="me1">className</span> <span class="sy0">=</span> <span class="st0">'yui-imgload-somegroup'</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-b5b2ce3be4aba47bf6e92cc82177f155-plain">someGroup.className = 'yui-imgload-somegroup';
+</textarea></div>
+<h2 id="caveats">Important Usage Requirements</h2>
+<p>There are some important things to keep in mind while using the ImageLoader Utility. Otherwise it may not work the way you expect, or it may have some undesired side effects.</p>
+
+<h3>"src" Attribute of Source Images</h3>
+<p>When using ImageLoader with <code>&lt;img&gt;</code> elements (via the <code>registerSrcImage</code> method), leave the <code>src</code> attribute out of the HTML element altogether. Do not set an empty string for the value of <code>src</code>. Some browsers react to this by assuming the empty string means "/", and consequently the browser re-requests the current HTML page and tries to stuff it into the <code>&lt;img&gt;</code> element. This is bad news for performance.</p>
+
+<p><code>&lt;img id="anImgEl" /&gt;<br /><strike>&lt;img id="anImgEl" src="" /&gt;</strike></code></p>
+
+<h3>Resizing Images</h3>
+<p>When resizing <code>&lt;img&gt;</code> elements (via <code>registerSrcImage</code> method) on the fly (setting unnatural <code>width</code> and <code>height</code> attributes), the height and width of the image must be specified in the JavaScript. Do this by passing the width/height into the <code>registerSrcImage</code> call. Failure to do this will result in no resizing. Browsers ignore width/height set in the HTML when there is no <code>src</code> attribute. And when the <code>src</code> is finally set, the width/height end up being the image's natural size.</p>
+<p><code>someGroup.registerSrcImage("someImgDiv", "http://www.example.com/image/url", W, H);<br /><strike>someGroup.registerSrcImage("someImgDiv", "http://www.example.com/image/url");</strike></code></p>
+
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+	</div>
+         <div class="yui-u">
+		 	
+			<div id="cheatsheet">
+				<h3>ImageLoader Utility Cheat Sheet:</h3>
+				
+	
+				<a href="http://yuiblog.com/assets/pdf/cheatsheets/imageloader.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/imageloader.gif" width="178" height="135" alt="Cheat Sheet for the Animation Utility."></a>
+	
+
+				<p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+			</div>
+			
+			<div id="examples">
+<h3>ImageLoader Utility Examples:</h3>
+
+<ul>
+<li><a href='../examples/imageloader/imgloadbasics.html'>Basic Features of the ImageLoader Utility</a></li>
+<li><a href='../examples/imageloader/imgloadfold.html'>Loading Images Below the Fold</a></li>
+<li><a href='../examples/imageloader/imgloadclass.html'>Using ImageLoader with CSS Class Names</a></li>
+<li><a href='../examples/imageloader/imgloadtabs.html'>ImageLoader with TabView</a></li>
+</ul>
+
+
+		
+		   </div>
+		   
+		   <div id="componentvideo">
+				<h3>YUI Theater &mdash; Matt Mlinac: "The YUI ImageLoader Utility"</h3>
+				<a href="http://video.yahoo.com/video/play?vid=979796"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/theater/mlinac-imageloader.jpg" alt="Yahoo! Engineer Matt Mlinac introduces you to the ImageLoader Utility." width="178" height="134" border="0"></a>
+				<p>9 minutes; source: <a href="http://video.yahoo.com/video/play?vid=979796">Yahoo! Video</a> (Flash) or <a href="http://us.dl1.yimg.com/download.yahoo.com/dl/ydn/yui/theater/mlinac-imageloader.m4v">download.yahoo.com</a> (M4V, iPod/iPhone-compatible).  Yahoo! Engineer Matt Mlinac introduces you to the <a href="index.html">YUI ImageLoader Utility</a>.</p>
+			</div>
+		   
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fimageloader%2F--><h3 id="delicious">YUI ImageLoader on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/imageloader/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/web" class="tag-size-1">web</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/image" class="tag-size-1">image</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/programming" class="tag-size-1">programming</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/images" class="tag-size-1">images</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/performance" class="tag-size-1">performance</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/tools" class="tag-size-1">tools</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/c7dc2dfc9ee3f7dd89eddbede7045320" class="saved-by">saved by <span>107</span>  people</a></p>
+   </div></div>
+
+		 </div>
+      </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="selected "><a title="The YUI ImageLoader Utility" href="index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:31 PDT 2013 -->
+
+<!-- Localized -->

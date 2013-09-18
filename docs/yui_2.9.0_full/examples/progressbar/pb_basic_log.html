@@ -1,0 +1,526 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: ProgressBar Control: Basic Features</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/slider/assets/skins/sam/slider.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/progressbar/assets/skins/sam/progressbar.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/slider/slider-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/progressbar/progressbar-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+.yui-skin-sam .yui-h-slider {
+  width:128px;
+  background:transparent url(../progressbar/assets/slider-bg.gif) no-repeat scroll 5px 0pt;
+}
+
+#valueSet,#rangeSet,#sizeSet {
+	float:left;
+	clear:left;
+	width:40%;
+}
+
+#animSet{
+	float:right;
+	width:40%;
+}
+
+#basic .yui-pb{
+	margin:0 auto;
+}
+
+/* start ie workaround */
+#basic{
+	zoom:1;
+}
+
+fieldset {
+	border: thin solid silver;
+	background-color:#F0F0F0;
+	padding:1em;
+	margin:1em;
+
+	*position: relative;
+	*margin: 0 0 1em 0;
+    *padding-top:2em;
+}
+
+#control, #easing {
+    *margin-top:1em;
+}
+
+fieldset p {
+	margin:0 1em;
+}
+
+legend {
+	font-weight:bold;
+	margin:0 0.5em;
+	padding:0 0.2em;
+
+	*position:absolute;
+    *top: -.5em;
+    *left: .5em;
+}
+/* end ie workaround */
+
+.disabled {
+	color:silver;
+}
+
+.dp-highlighter th, .dp-highlighter td {
+	border:0;
+	padding:0;
+}
+.dp-highlighter .line1, .dp-highlighter  .line2 {
+	padding-left:10px;
+	white-space:nowrap;
+}
+</style>
+
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	<div id="ygma"><a href="/"><img src="http://l.yimg.com/a/i/brand/purplelogo/uh/us/ydn.gif" width="266" height="34" border="0"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: ProgressBar Control: Basic Features</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>ProgressBar Control: Basic Features</h1>
+	
+	<div class="exampleIntro">
+	<p>This example shows the simplest ProgressBar with the default "Sam" skin. Use the controls below to change various settings.</p>
+			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="pb_basic_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<div id="basic" ></div>
+<fieldset id="control">
+	<legend>Control</legend>
+	<fieldset id="valueSet">
+		<legend>Value</legend>
+		<div id="sliderValue" class="yui-h-slider" tabindex="-1" title="Value slider">
+			<div id="sliderValueThumb" class="yui-slider-thumb"><img src="../progressbar/assets/thumb-n.gif"></div>
+		</div>
+		<p>
+			<label>Set: <span id="value">50</span> </label> &nbsp;
+			<label> Actual <span id="actualValue">50</span></label>
+		</p>
+	</fieldset>
+
+	<fieldset id="rangeSet">
+		<legend>Range</legend>
+		<div id="sliderRange" class="yui-h-slider" title="Range slider">
+			<div id="sliderRangeMinThumb" class="yui-slider-thumb"><img src="../progressbar/assets/thumb-e.gif"></div>
+			<div id="sliderRangeMaxThumb" class="yui-slider-thumb"><img src="../progressbar/assets/thumb-w.gif"></div>
+		</div>
+		<p>
+			<label>Min: <span id="minValue">-50</span> </label>  &nbsp;
+			<label> Max: <span id="maxValue">50</span></label>
+		</p>
+	</fieldset>
+
+	<fieldset id="sizeSet">
+		<legend>Size</legend>
+
+		Width<div id="sliderWidth" class="yui-h-slider" tabindex="-1" title="Width slider">
+			<div id="sliderWidthThumb" class="yui-slider-thumb"><img src="../progressbar/assets/thumb-n.gif"></div>
+		</div>
+		Height
+		<div id="sliderHeight" class="yui-h-slider" tabindex="-1" title="Height slider">
+			<div id="sliderHeightThumb" class="yui-slider-thumb"><img src="../progressbar/assets/thumb-n.gif"></div>
+		</div>
+		<p><label>Width: <span id="width">200</span>px </label></p>
+		<p><label> Height: <span id="height">20</span>px</label></p>
+	</fieldset>
+	<fieldset id="animationSet" class="disabled">
+		<legend>Animation</legend>
+		<p style="color:black;"><input type="checkbox" id="anim" /> Enable animation</p>
+		Duration<div id="sliderDuration" class="yui-h-slider" tabindex="-1" title="Duration slider">
+			<div id="sliderDurationThumb" class="yui-slider-thumb"><img src="../progressbar/assets/thumb-n.gif"></div>
+		</div>
+		<p>
+			<label>Duration <span id="duration">200</span> second(s)</label>
+		</p>
+		<fieldset id="easing">
+			<legend>Easing</legend>
+			<input type="radio" name="easing" value="easeNone" id="easeNone"/> easeNone<br/>
+			<input type="radio" name="easing" value="backBoth" /> backBoth<br/>
+			<input type="radio" name="easing" value="backIn" /> backIn<br/>
+			<input type="radio" name="easing" value="backOut" /> backOut<br/>
+			<input type="radio" name="easing" value="bounceBoth" /> bounceBoth<br/>
+			<input type="radio" name="easing" value="bounceIn" /> bounceIn<br/>
+			<input type="radio" name="easing" value="bounceOut" /> bounceOut<br/>
+			<input type="radio" name="easing" value="easeBoth" /> easeBoth<br/>
+			<input type="radio" name="easing" value="easeBothStrong" /> easeBothStrong<br/>
+			<input type="radio" name="easing" value="easeIn" /> easeIn<br/>
+			<input type="radio" name="easing" value="easeInStrong" /> easeInStrong<br/>
+			<input type="radio" name="easing" value="easeOut" /> easeOut<br/>
+			<input type="radio" name="easing" value="easeOutStrong" /> easeOutStrong<br/>
+			<input type="radio" name="easing" value="elasticBoth" /> elasticBoth<br/>
+			<input type="radio" name="easing" value="elasticIn" /> elasticIn<br/>
+			<input type="radio" name="easing" value="elasticOut" /> elasticOut<br/>
+		</fieldset>
+	</fieldset>
+
+</fieldset>
+
+
+<script type="text/javascript">
+YAHOO.util.Event.onDOMReady( function () {
+	var Dom = YAHOO.util.Dom,
+		Event = YAHOO.util.Event;
+
+	var pb = new YAHOO.widget.ProgressBar({value:0,minValue:-50,maxValue:50}).render('basic');
+
+	var valueSlider = YAHOO.widget.Slider.getHorizSlider('sliderValue',
+        'sliderValueThumb', 0, 100, 0
+	);
+	valueSlider.animate = false;
+	valueSlider.setValue(50);
+
+	valueSlider.subscribe("change", function(offsetFromStart) {
+		var value = offsetFromStart   - 50;
+		Dom.get('value').innerHTML = value;
+	});
+
+	valueSlider.subscribe("slideEnd", function() {
+		var value = valueSlider.getValue()  - 50;
+		pb.set('value',value);
+		var actual = pb.get('value');
+		Dom.get('actualValue').innerHTML = actual;
+		if (actual != value) {
+			window.setTimeout(function() {
+				valueSlider.setValue(actual + 50,true,true,true); // make sure it doesn't fire the event again.
+			},1);
+		}
+	});
+
+	var rangeSlider = YAHOO.widget.Slider.getHorizDualSlider("sliderRange",
+        "sliderRangeMinThumb", "sliderRangeMaxThumb",
+        100, 0, [0,100]
+	);
+	rangeSlider.animate = false;
+	rangeSlider.subscribe('change', function() {
+		var value = Math.round(this.minVal  - 50);
+		Dom.get('minValue').innerHTML = value;
+		value = Math.round(this.maxVal  - 50);
+		Dom.get('maxValue').innerHTML = value;
+	});
+	rangeSlider.subscribe('slideEnd', function() {
+		var value = Math.round(this.minVal - 50);
+		pb.set('minValue',value);
+		value = Math.round(this.maxVal - 50);
+		pb.set('maxValue',value);
+	});
+
+	var widthSlider = YAHOO.widget.Slider.getHorizSlider('sliderWidth',
+        'sliderWidthThumb', 0, 100, 0
+	);
+	widthSlider.animate = false;
+	widthSlider.setValue(100);
+	widthSlider.subscribe("change", function(offsetFromStart) {
+		var value = offsetFromStart * 2;
+		Dom.get('width').innerHTML = value;
+	});
+	widthSlider.subscribe("slideEnd", function() {
+		var value = widthSlider.getValue() * 2;
+		pb.set('width',value);
+	});
+
+
+	var heightSlider = YAHOO.widget.Slider.getHorizSlider('sliderHeight',
+        'sliderHeightThumb', 0, 100, 0
+	);
+	heightSlider.animate = false;
+	heightSlider.setValue(50);
+	heightSlider.subscribe("change", function(offsetFromStart) {
+		var value = Math.round(offsetFromStart / 2.5);
+		Dom.get('height').innerHTML = value;
+	});
+	heightSlider.subscribe("slideEnd", function() {
+		var value = Math.round(heightSlider.getValue() / 2.5);
+		pb.set('height',value);
+	});
+
+	Dom.get('anim').checked = false;
+	Event.on('anim','click',function(ev) {
+		var checked = Event.getTarget(ev).checked;
+		pb.set('anim',checked);
+		if (checked) {
+			Dom.removeClass('animationSet','disabled');
+		} else {
+			Dom.addClass('animationSet','disabled');
+		}
+	});
+
+	var durationSlider = YAHOO.widget.Slider.getHorizSlider('sliderDuration',
+        'sliderDurationThumb', 0, 100, 0
+	);
+	durationSlider.animate = false;
+	durationSlider.setValue(20);
+	durationSlider.subscribe("change", function(offsetFromStart) {
+		var value = offsetFromStart / 20;
+		Dom.get('duration').innerHTML = value;
+	});
+	durationSlider.subscribe("slideEnd", function() {
+		var value = durationSlider.getValue() / 20;
+		var anim = pb.get('anim');
+		if (anim) { anim.duration = value; }
+	});
+
+	Dom.get('easeNone').checked = true;
+	Event.on('easing','click',function(ev) {
+		var anim = pb.get('anim');
+		if (!anim) { return; }
+		var input = Event.getTarget(ev);
+		if (input.tagName.toUpperCase() != 'INPUT') { return; }
+		anim.method = YAHOO.util.Easing[input.value];
+	});
+});
+</script>
+	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<p>The ProgressBar itself is created with this code:</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+	var pb = new YAHOO.widget.ProgressBar({value:50}).render('basic');
+</textarea>
+
+<p>Most of the code for this example deals with handling the interface, the sliders and other input controls.
+When a value is changed, it is simply applied to the corresponding attribute of the ProgressBar.
+The ProgressBar responds when the slider is released, not while it is moving.
+Leaving aside all the interface details, these are the statements that deal with those settings:</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+	pb.set('value',valueSlider.getValue());
+	pb.set('minValue',rangeSlider.minValue);
+	pb.set('maxValue',rangeSlider.minValue);
+	pb.set('width',widthSlider.getValue());
+	pb.set('height',heightSlider.getValue());
+
+	pb.set('anim',checkBoxEl.checked);
+
+	var anim = pb.get('anim');
+	if (anim) {
+		anim.duration = durationSlider.getValue();
+	}
+
+	var anim = pb.get('anim');
+	if (anim) {
+		anim.method = YAHOO.util.Easing[inputEl.value];
+	}
+</textarea>
+<p>In all cases, the scaling factors used to convert the slider pixel values to the
+values used for the ProgressBar have been omitted. The <code>anim</code>
+attribute, while it receives a boolean, returns either an instance of Animation or null.
+ The <code>value</code> attribute of the radio buttons
+for selecting the easing method have been set to the actual names of the methods
+so it is easy to locate them in the <code>YAHOO.util.Easing</code> object.
+The ProgressBar rejects values outside of the range
+given by <code>minValue</code> and <code>maxValue</code> so the slider goes
+back to the current value read from the ProgressBar itself.</p>
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerDiv"></div>
+							<div id="loggerGloss">
+								<p><strong>Note:</strong> You are viewing this example in debug mode with logging enabled.  This can significantly slow performance.</p>
+	
+								<p class="loggerButton"><span id="loggerLink"><span class="first-child"><a href="pb_basic.html">Reload with logging<br />and debugging disabled.</a></span></span></p>
+							</div>
+						</div>
+					
+				
+					<div id="examples">
+						<h3>ProgressBar Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li class='selected'><a href='../progressbar/pb_basic.html'>Basic Features</a></li><li><a href='../progressbar/pb_events.html'>Events</a></li><li><a href='../progressbar/pb_ratings.html'>Ratings</a></li><li><a href='../progressbar/pb_vumeter.html'>VU Meters</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More ProgressBar Control Resources:</h3>
+						<ul>
+							
+						<li><a href="../../docs/module_progressbar.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/progressbar.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="/yui/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="/yui/3/">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="/yui/license.html">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- proven and robust." href="/yui/2/">YUI 2</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="/yui/examples/">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="/yui/docs/">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="item"><a title="Configure your YUI implementation; serve YUI source files from Yahoo! -- free, fast, and simple" href="/yui/articles/hosting/">Dependency Configurator</a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="/yui/animation/">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="/yui/autocomplete/">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="/yui/history/">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="/yui/button/">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="/yui/calendar/">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="/yui/carousel/">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="/yui/charts/">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="/yui/colorpicker/">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="/yui/connection/">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="/yui/container/">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="/yui/cookie/">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="/yui/datasource/">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="/yui/datatable/">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="/yui/dom/">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="/yui/dragdrop/">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="/yui/element/">Element</a></li><li class="item"><a title="The YUI Event Utility" href="/yui/event/">Event</a></li><li class="item"><a title="The YUI Get Utility" href="/yui/get/">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="/yui/imagecropper/">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="/yui/imageloader/">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="/yui/json/">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="/yui/layout/">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="/yui/logger/">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="/yui/menu/">Menu</a></li><li class="item"><a title="The YUI Paginator" href="/yui/paginator/">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="/yui/profiler/">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="/yui/profilerviewer/">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="/yui/progressbar/">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="/yui/resize/">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="/yui/editor/">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="/yui/selector/">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="/yui/slider/">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="/yui/storage/">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="/yui/stylesheet/">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="/yui/swf/">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="/yui/swfstore/">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="/yui/tabview/">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="/yui/treeview/">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="/yui/uploader/">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="/yui/yahoo/">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="/yui/yuiloader/">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="/yui/yuitest/">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="/yui/reset/">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="/yui/base/">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="/yui/fonts/">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="/yui/grids/">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:50 PDT 2013 -->

@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Custom Formatting, with a Proxyless Remote DataSource</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/autocomplete/assets/skins/sam/autocomplete.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/get/get-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/datasource/datasource-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/autocomplete/autocomplete-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+label {
+    color:#E76300;
+    font-weight:bold;
+}
+#myAutoComplete {
+    width:30em; /* set width here or else widget will expand to fit its container */
+    padding-bottom:2em;
+}
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui-skin-sam">
+
+
+<h1>Custom Formatting, with a Proxyless Remote DataSource</h1>
+
+<div class="exampleIntro">
+	<p>This AutoComplete instance uses a ScriptNodeDataSource to to find craigslist ads via YQL without a proxy. The generateRequest() method must be customized to comply with the open API. Please note that the ScriptNodeDataSource requires that the webservice support a callback mechanism.</p>
+
+<p>A custom formatter function is defined in order to link to the ads from the results container.</p>
+
+<p>Implementers who are working with data from third-party sources, user input data, or otherwise untrustworthy sources should be sure to read the <a href="../../autocomplete/#security">Security Considerations</a> section of the AutoComplete user guide.</p>
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+<label for="myInput">Search craigslist:</label>
+<div id="myAutoComplete">
+	<input id="myInput" type="text" name="p">
+	<div id="myContainer"></div>
+</div>
+
+
+<script type="text/javascript">
+YAHOO.example.CustomFormatting = (function(){
+    // Instantiate DataSource
+    var oDS = new YAHOO.util.ScriptNodeDataSource("http://query.yahooapis.com/v1/public/yql?");
+    oDS.responseSchema = {
+        resultsList : "query.results.RDF.item",
+        fields : ["title[0]", "link"]
+    };
+    
+    // Setting to default value for demonstration purposes.
+    // The webservice needs to support execution of a callback function.
+    oDS.scriptCallbackParam = "callback";
+
+    // Instantiate AutoComplete
+    var oAC = new YAHOO.widget.AutoComplete("myInput","myContainer", oDS);
+
+    // Bump up the query delay to reduce server load
+    oAC.queryDelay = 1;
+    
+    // The webservice needs custom parameters
+    oAC.generateRequest = function(sQuery) {
+        return "q=select%20*%20from%20craigslist.search%20where%20location%3D%22sfbay%22%20and%20type%3D%22sss%22%20and%20query%3D%22" +
+            sQuery +
+            "%22&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
+    };
+    
+    // Result data passed as object for easy access from custom formatter.
+    oAC.resultTypeList = false;
+    // Customize formatter to show thumbnail images
+    oAC.formatResult = function(oResultData, sQuery, sResultMatch) {
+        return "<a href='"+ oResultData.link + "'>" + sResultMatch + "</a>";
+    };
+
+    // Stub for form validation
+    var validateForm = function() {
+        // Validation code goes here
+        return true;
+    };
+    
+    return {
+        oDS: oDS,
+        oAC: oAC,
+        validateForm: validateForm
+    }
+})();
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+
+<!--MyBlogLog instrumentation-->
+<script type="text/javascript" src="http://track2.mybloglog.com/js/jsserv.php?mblID=2007020704011645"></script>
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:38 PDT 2013 -->

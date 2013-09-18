@@ -1,0 +1,901 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Container</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Container</h1></div>
+</div>
+<div id="bd">
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+<div id="promo" class="component">
+  <h1>YUI 2: Container</h1>
+  <p>The Container family of components is designed to enable developers to create
+    different kinds of content-containing modules on the web. <a href="module/index.html">Module</a> and <a href="overlay/index.html">Overlay</a> are
+    the most basic containers, and they can be used directly or extended to build
+    custom containers. Also part of the Container family are four UI controls
+    that extend <a href="module/index.html">Module</a> and <a href="overlay/index.html">Overlay</a>: <a href="tooltip/index.html">Tooltip</a>, <a href="panel/index.html">Panel</a>, <a href="dialog/index.html">Dialog</a>,
+    and <a href="simpledialog/index.html">SimpleDialog</a>.</p>
+
+  <div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#family">The Container Family</a></li>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#model">Container Object Model</a></li>
+      <li><a href="#knownissues">Known Issues</a></li>
+      <li><a href="#mobile">YUI on Mobile Devices</a></li>
+      <li><a href="#support">Support &amp; Community</a></li>
+      <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+    <p>Upgrade notes for users moving to 2.6.0, can be found here: <a href="260upgrade.html">2.6.0 upgrade notes</a></p>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/container/index.html">Examples</a>: Explore examples of the Container Family in action.</li>
+      <li><a href="../docs/module_container.html">API Documentation</a>: View the full API documentation for the Container Family.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.container">Release Notes</a>: Detailed change log for the Container Family.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Container Family as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+</div>
+<div id="containerFamily">
+<h2 class="first"><a name="family"></a>The Container Family</h2>
+<h3><a href="module/index.html">Module</a></h3>
+<p>Module enables you to create a JavaScript object representation of any HTML
+  module marked up using Standard Module Format. With Module you can manipulate
+  existing modules on your pages or to create new ones dynamically. A Module
+  has no predefined styles or CSS associated with it and must be styled manually.</p>
+<h3><a href="overlay/index.html">Overlay</a></h3>
+<p>Overlay extends Module.  An Overlay represents a Module that you wish to position
+  absolutely on the page, one that will float above the document's inline content
+  without affecting page flow. As with Module, Overlay has no predefined styles
+  or CSS associated with it and must be styled manually.</p>
+<h3><a href="tooltip/index.html">Tooltip</a></h3>
+<p><a href="tooltip/index.html"><img class="example" src="http://l.yimg.com/a/i/ydn/yuiweb/img/tooltip_example.gif" height="98" width="200" alt="The YUI Tooltip Control"></a>Tooltip
+  extends Overlay and is used to generate small, floating boxes of the kind
+  often used to provide contextual help in operating systems. Tooltips are almost
+  always created dynamically based on user interaction (such as hovering over
+  an element with the mouse). The Tooltip control comes with a predefined default
+  CSS file to handle styling.</p>
+<h3><a href="panel/index.html"><img class="example" src="http://l.yimg.com/a/i/ydn/yuiweb/img/panel_example.gif" height="171" width="200" alt="The YUI Panel Control"></a><a href="panel/index.html">Panel</a></h3>
+<p>Panel extends Overlay and mimics the familiar behavior of an operating system window. Panels have built-in draggability, modality, drop shadow, matting, and many other configurable properties. Panels are primarily used to display informational content and require no action from the user; the user's expected interaction with Panel is merely to drag or dismiss the window.</p>
+<h3><a href="dialog/index.html"><img class="example" src="http://l.yimg.com/a/i/ydn/yuiweb/img/dialog_example.gif" height="171" width="200" alt="The YUI Dialog Control"></a><a href="dialog/index.html">Dialog</a></h3>
+<p>Dialog extends Panel and behaves like a system dialog. A Dialog instance must
+  contain a browser form. If one is not included, it is automatically  created.
+  Dialog provides built-in features for submitting form data in three ways:
+  asynchronously using <a href="../connection/index.html">Connection Manager</a>,
+  through a normal form submission, or with a script that listens
+  for and reacts to the form's posting solely within the page.</p>
+<h3><a href="simpledialog/index.html">SimpleDialog</a></h3>
+<p><a href="simpledialog/index.html"><img class="example" src="http://l.yimg.com/a/i/ydn/yuiweb/img/simpledialog_example.gif" height="118" width="200" alt="The YUI SimpleDialog Control"></a>SimpleDialog
+  extends Dialog and behaves like an operating system dialog (modal or non-modal).
+  The look and feel of a SimpleDialog instance is similar to that of a Panel,
+  but with SimpleDialog the user responds to a question with a single answer&mdash;  OK/Cancel,
+  Yes/No, and so on. Event handlers are attached to the buttons in a SimpleDialog
+  instance to enable your script to respond to whatever choice the user has made.</p>
+</div>
+<h2 class="first">Getting Started<a name="start"></a></h2>
+<p>We provide two separate builds of Container: One build (<code>container_core.js</code>)
+  includes just the two foundation classes, Module and Overlay, and a second,
+  larger build (<code>container.js</code>) contains the entire Container family,
+  including the four controls based on Module and Overlay: Tooltip, Panel, Dialog
+  and SimpleDialog. You can optimize your use of the Container family by understanding
+  the <a href="#model">Container  object model</a> and using the correct build
+  in your page:</p>
+<div class="apisummary short"><table>
+<tbody><tr><th>Container_Core (Foundations Only)</th>
+<th>Container (Foundations + UI controls)</th>
+</tr>
+<tr class="odd"><td><a href="module/index.html">Module</a></td>
+<td><a href="module/index.html">Module</a></td>
+</tr>
+<tr><td><a href="overlay/index.html">Overlay</a></td>
+<td><a href="overlay/index.html">Overlay</a></td>
+</tr>
+<tr class="odd"><td>&nbsp;  </td>
+<td><a href="tooltip/index.html">Tooltip</a></td>
+</tr>
+<tr><td>&nbsp;  </td>
+<td><a href="panel/index.html">Panel</a></td>
+</tr>
+<tr class="odd"><td>&nbsp;  </td>
+<td><a href="dialog/index.html">Dialog</a></td>
+</tr>
+<tr><td>&nbsp;  </td>
+<td><a href="simpledialog/index.html">SimpleDialog</a></td>
+</tr>
+</tbody>
+</table></div>
+<p>To use the Container family of components, include the following source code in your web page:</p>
+
+
+<div id="syntax-ae2bc36778760b8bf5a04c8153568577" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: Animation (only required if using ContainerEffect) --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: Connection (only required if using Dialog/SimpleDialog) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- OPTIONAL: Drag &amp; Drop (only required if enabling Drag &amp; Drop for Panel/Dialog/SimpleDialog) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: YUI Button (only required if using Dialog/SimpleDialog with YUI Buttons) --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!--</span></div></li><li class="li2"><div class="de2"><span class="sc-1">     You only need to include element and button if you're using Dialog or SimpleDialog</span></div></li><li class="li1"><div class="de1"><span class="sc-1">     and want the Dialog or SimpleDialog to use YUI Buttons, instead of HTML Buttons</span></div></li><li class="li1"><div class="de1"><span class="sc-1">--&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/button/button-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: Animation (only required if using ContainerEffect) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: Connection (only required if using Dialog/SimpleDialog) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: Drag &amp; Drop (only required if enabling Drag &amp; Drop for Panel/Dialog/SimpleDialog) --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: YUI Button (only required if using Dialog/SimpleDialog with YUI Buttons) --&gt;</span>
+<span class="sc-1">&lt;!--</span>
+<span class="sc-1">     You only need to include element and button if you're using Dialog or SimpleDialog</span>
+<span class="sc-1">     and want the Dialog or SimpleDialog to use YUI Buttons, instead of HTML Buttons</span>
+<span class="sc-1">--&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/button/button-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-ae2bc36778760b8bf5a04c8153568577-plain"><!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+
+<!-- OPTIONAL: Animation (only required if using ContainerEffect) -->
+<script src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script>
+
+<!-- OPTIONAL: Connection (only required if using Dialog/SimpleDialog) -->
+<script src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
+
+<!-- OPTIONAL: Drag & Drop (only required if enabling Drag & Drop for Panel/Dialog/SimpleDialog) -->
+<script src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+
+<!-- OPTIONAL: YUI Button (only required if using Dialog/SimpleDialog with YUI Buttons) -->
+<!--
+     You only need to include element and button if you're using Dialog or SimpleDialog
+     and want the Dialog or SimpleDialog to use YUI Buttons, instead of HTML Buttons
+-->
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+<!-- Source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/container/container-min.js"></script>
+</textarea></div>
+
+<p>And the following CSS files:</p>
+
+<div id="syntax-6fe0403529c6bb6252ec9238c95139d5" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Sam Skin CSS --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- OPTIONAL: You only need the YUI Button CSS if you're including the Button script fille, mentioned above. --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Sam Skin CSS --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css&quot;</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- OPTIONAL: You only need the YUI Button CSS if you're including the Button script fille, mentioned above. --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css&quot;</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-6fe0403529c6bb6252ec9238c95139d5-plain"><!-- Sam Skin CSS -->
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css">
+
+<!-- OPTIONAL: You only need the YUI Button CSS if you're including the Button script fille, mentioned above. -->
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css">
+</textarea></div>
+<p>If you are <em>not</em> using <a href="tooltip/index.html">Tooltip</a>, <a href="panel/index.html">Panel</a>, <a href="dialog/index.html">Dialog</a>, or <a href="simpledialog/index.html">SimpleDialog</a>, you may substitute 
+<code>container-min.js</code> with the smaller <code>container_core-min.js</code> file:</p>
+
+<div id="syntax-45403f06ce1fcf6750f93c9f536c10a0" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- If not using Tooltip, Panel, Dialog, or SimpleDialog: --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- If not using Tooltip, Panel, Dialog, or SimpleDialog: --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-45403f06ce1fcf6750f93c9f536c10a0-plain"><!-- If not using Tooltip, Panel, Dialog, or SimpleDialog: -->
+<script src="http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js"></script>
+</textarea></div>
+<p>Note that a CSS file is not required if you're only using <code>container_core-min.js</code>, however for the Overlay to operate as designed,
+it does need to be positioned absolutely.</p>
+
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
+in which the Container Family lives.  You can usually accomplish this simply by putting the class on the 
+<code>&#60;body&#62;</code> tag:</p>
+<div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
+</textarea></div>
+<p class="lastP">For more information on skinning YUI components and making use of default skins, 
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+article here on the website.</p>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>container</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<h2><a name="model"></a>Container Object Model</h2>
+<p align="center"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/container_objectmodel.gif" title="Container Object Model" ></p>
+
+<h2 id="knownissues">Known Issues</h2>
+
+<ul>
+    <li>
+        <h4>Overlay instances not rendered at correct z-index in IE</h4>
+        <p>
+          In IE, when an Overlay instance is rendered inside a relatively positioned 
+          element the z-index of the Overlay instance is now relative to its 
+          relatively positioned parent element.  This is not a bug in the 
+          Overlay class, but rather a bug in IE where relatively positioned elements 
+          establish a new stacking context for their child nodes.  To avoid this 
+          bug it is recommend that all Overlay instances that need to be able to float
+          above any other element in the document be made direct descendants of the 
+          &lt;body&gt; element.
+        </p>
+           [<a href="http://therealcrisp.xs4all.nl/meuk/IE-zindexbug.html">Read more on this issue</a>.]
+    </li>
+    <li>
+        <h4>Problems with Table content in IE6 and IE7 when the container is hidden</h4>
+
+        <p>In IE6 and IE7, if an Overlay contains a table with a <code>border-collapse:collapse</code> CSS property
+        applied, the borders of the table may remain visible, or become visible if the table is redrawn while 
+        overlay is hidden.</p>
+
+        <p>Also, if an Overlay contains a table with a caption, users will not be able to click on content underneath the table, when the overlay is hidden.</p>
+        
+        <p>These are fundamental bugs in IE, reproducible by placing the table in a regular <code>DIV</code> with <code>visibility:hidden</code></p>
+
+        <p>
+        As of version 2.7.0, Overlay based containers have an <code>yui-overlay-hidden</code> class 
+        applied to their outer <code>DIV</code> elements. This class can be used to either modify 
+        the <code>border-collapse</code> property, or hide the table completely (for the caption issue), 
+        when the container is hidden to workaround these issues in IE.
+        </p>
+
+        <p>For example:</p>
+
+<div id="syntax-9b34f4188ab9b18b483e3473da321d0f" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/*</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  Hide tables inside the overlay with id=&quot;overlay1&quot;, </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  for IE6, IE7 when the overlay is hidden</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">*/</span></div></li><li class="li2"><div class="de2"><span class="re0">#overlay1</span><span class="re1">.yui-overlay-hidden</span> table <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">*</span><span class="kw1">display</span><span class="sy0">:</span><span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="coMULTI">/* </span></div></li><li class="li2"><div class="de2"><span class="coMULTI">&nbsp;   For overlay2, switch to border-collapse:separate, when </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;   the overlay is hidden</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">*/</span></div></li><li class="li1"><div class="de1"><span class="re0">#overlay2</span><span class="re1">.yui-overlay-hidden</span> table <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">*</span><span class="kw1">border-collapse</span><span class="sy0">:</span><span class="kw2">separate</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="coMULTI">/* </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  For a Panel with id=&quot;panel1&quot; (&quot;panel1_c&quot; is the id of the outer element), </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  hide tables when hidden </span></div></li><li class="li2"><div class="de2"><span class="coMULTI">*/</span></div></li><li class="li1"><div class="de1"><span class="re0">#panel1_c</span><span class="re1">.yui-overlay-hidden</span> table <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="sy0">*</span><span class="kw1">display</span><span class="sy0">:</span><span class="kw2">none</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="coMULTI">/*
+   Hide tables inside the overlay with id=&quot;overlay1&quot;, 
+   for IE6, IE7 when the overlay is hidden
+*/</span>
+<span class="re0">#overlay1</span><span class="re1">.yui-overlay-hidden</span> table <span class="br0">&#123;</span>
+    <span class="sy0">*</span><span class="kw1">display</span><span class="sy0">:</span><span class="kw2">none</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="coMULTI">/* 
+    For overlay2, switch to border-collapse:separate, when 
+    the overlay is hidden
+*/</span>
+<span class="re0">#overlay2</span><span class="re1">.yui-overlay-hidden</span> table <span class="br0">&#123;</span>
+    <span class="sy0">*</span><span class="kw1">border-collapse</span><span class="sy0">:</span><span class="kw2">separate</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="coMULTI">/* 
+   For a Panel with id=&quot;panel1&quot; (&quot;panel1_c&quot; is the id of the outer element), 
+   hide tables when hidden 
+*/</span>
+<span class="re0">#panel1_c</span><span class="re1">.yui-overlay-hidden</span> table <span class="br0">&#123;</span>
+    <span class="sy0">*</span><span class="kw1">display</span><span class="sy0">:</span><span class="kw2">none</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-9b34f4188ab9b18b483e3473da321d0f-plain">/*
+   Hide tables inside the overlay with id="overlay1", 
+   for IE6, IE7 when the overlay is hidden
+*/
+#overlay1.yui-overlay-hidden table {
+    *display:none;
+}
+
+/* 
+    For overlay2, switch to border-collapse:separate, when 
+    the overlay is hidden
+*/
+#overlay2.yui-overlay-hidden table {
+    *border-collapse:separate;
+}
+
+/* 
+   For a Panel with id="panel1" ("panel1_c" is the id of the outer element), 
+   hide tables when hidden 
+*/
+#panel1_c.yui-overlay-hidden table {
+    *display:none;
+}
+</textarea></div>
+        <p>See the <a href="../examples/calendar/calcontainer.html">Calendar in Container</a> example 
+        to see a working example of how this method is used to hide Calendar's collapsed borders.</p>
+    </li>
+    <li>
+        <h4>Flash Movies appear on top of Overlay instances</h4>
+        <p>
+          Flash movies can appear on top of Overlay instances in IE and Gecko-based
+          browsers.  To fix this problem, set the "wmode" of the Flash movie to either
+          "transparent" or "opaque" as indicated below: 
+        </p>
+            
+        <h5>Via the &lt;object&gt; tag:</h5>
+<div id="syntax-0590b51a3e7d23780b26ae80b8a62c2c" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">object</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">param</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;wmode&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;opaque&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">object</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">object</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">param</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;wmode&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;transparent&quot;</span>&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">object</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">object</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">param</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;wmode&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;opaque&quot;</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">object</span>&gt;</span>
+&nbsp;
+<span class="sc2">&lt;<span class="kw2">object</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">param</span> <span class="kw3">name</span><span class="sy0">=</span><span class="st0">&quot;wmode&quot;</span> <span class="kw3">value</span><span class="sy0">=</span><span class="st0">&quot;transparent&quot;</span>&gt;</span> 
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">object</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-0590b51a3e7d23780b26ae80b8a62c2c-plain"><object>
+    <param name="wmode" value="opaque">
+</object>
+
+<object>
+    <param name="wmode" value="transparent"> 
+</object>
+</textarea></div>
+        <h5>Via the &lt;embed&gt; tag:</h5>
+<div id="syntax-b1f188b49c21cad6e9000ecb395a08cc" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;embed wmode<span class="sy0">=</span><span class="st0">&quot;transparent&quot;</span>&gt;</span> ... <span class="sc2">&lt;<span class="sy0">/</span>embed&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;embed wmode<span class="sy0">=</span><span class="st0">&quot;opaque&quot;</span>&gt;</span> ... <span class="sc2">&lt;<span class="sy0">/</span>embed&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;embed wmode<span class="sy0">=</span><span class="st0">&quot;transparent&quot;</span>&gt;</span> ... <span class="sc2">&lt;<span class="sy0">/</span>embed&gt;</span>
+<span class="sc2">&lt;embed wmode<span class="sy0">=</span><span class="st0">&quot;opaque&quot;</span>&gt;</span> ... <span class="sc2">&lt;<span class="sy0">/</span>embed&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-b1f188b49c21cad6e9000ecb395a08cc-plain"><embed wmode="transparent"> ... </embed>
+<embed wmode="opaque"> ... </embed>
+</textarea></div>        
+        <em>For more information see the <a href="http://kb.adobe.com/selfservice/viewContent.do?externalId=tn_15523">Adobe TechNote</a> on this issue.</em>
+           
+    </li>
+    <li>
+        <h4>Container instances render at 100% of the browser viewport</h4>
+        <p>
+          In IE 7 (Quirks Mode) and IE 6 (Quirks Mode and Standards Mode) if any of the 
+          child nodes of a Constainer instance's root element have "layout" and no value
+          has been specified for the "width" configuration property, the Container will 
+          render at 100% of the width of browser's viewport. To avoid triggering this 
+          IE bug you will need to specify a value for the "width" configuration property 
+          if you're adding content to the container which has "layout".
+        </p>  
+        For more information on IE and layout, see <a href="http://msdn2.microsoft.com/en-us/library/ms533776.aspx">MSDN's hasLayout reference</a>.
+    </li>
+    <li>
+        <h4>Elements with scrollbars poke through Overlay instances floating above them</h4>
+        <p>
+          There is a bug in Gecko-based browsers for Mac OS X where an element's 
+          scrollbars will poke through absolutely positioned elements floating above
+          them.  To fix this problem the "overflow" property of an Overlay instance's 
+          root element is toggled between "hidden" and "auto" (through the application 
+          and removal of the "hide-scrollbars" and "show-scrollbars" CSS classes) as its 
+          "visibility" configuration property is toggled between "false" and "true."
+        </p>
+        <p><strong>PLEASE NOTE:</strong></p>
+        <ol>
+            <li>The "hide-scrollbars" and "show-scrollbars" CSS classes classes are 
+             applied only for Gecko on Mac OS X and are added/removed to/from the 
+             Overlay's root HTML element (DIV) via the "hideMacGeckoScrollbars" and 
+             "showMacGeckoScrollbars" methods of YAHOO.widget.Overlay.</li>
+
+            <li>For Panel (and its subclasses) it is the underlay element, not the root 
+             element, whose "overflow" property is toggled between "hidden" and "auto."
+             The underlay element therefore acts as a shim to correct the 
+             scrollbar problem.</li>
+
+            <li>For Tooltip instances using the "Sam" skin it is the shadow element, not 
+             the root element, whose "overflow" property is toggled between "hidden" 
+             and "auto."  The shadow element therefore acts as a shim to correct the 
+             scrollbar problem.</li>
+
+            <li><p>Once the fix is applied the bug will reappear if the window loses focus.  
+             This can be remedied via Javascript by hiding and showing the Overlay 
+             instance when the window receives focus:</p>
+
+<div id="syntax-25babb0732c8a745b3f966f0f24af230" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span>window<span class="sy0">,</span> <span class="st0">&quot;focus&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    oMyOverlay.<span class="me1">hide</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    oMyOverlay.<span class="me1">show</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">on</span><span class="br0">&#40;</span>window<span class="sy0">,</span> <span class="st0">&quot;focus&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    oMyOverlay.<span class="me1">hide</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    oMyOverlay.<span class="me1">show</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-25babb0732c8a745b3f966f0f24af230-plain">YAHOO.util.Event.on(window, "focus", function () {
+    oMyOverlay.hide();
+    oMyOverlay.show();
+});
+</textarea></div>            </li>
+        </ol>  
+        <em>For more information see the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=187435">Mozilla bug report</a> for this issue.</em>
+    </li>
+    <li>
+        <h4>Scrollbars remain visible after an Overlay is hidden</h4>
+        <p>
+          There is a bug in Gecko-based browsers for Mac OS X where an element's 
+          scrollbars and the scrollbars of its child nodes remain visible when its 
+          "visibility" property property is set to "hidden."  To fix this problem,
+          the "overflow" property of an Overlay instance's root element and child nodes
+          is toggled between "hidden" and "auto" (through the application and removal 
+          of the "hide-scrollbars" and "show-scrollbars" CSS classes) as its 
+          "visibility" configuration property is toggled between "false" and "true."
+        </p>
+        <p><strong>PLEASE NOTE:</strong></p>
+        <ol>
+          <li>The "hide-scrollbars" and "show-scrollbars" CSS classes classes are 
+             applied only for Gecko on Mac OS X and are added/removed to/from the 
+             Overlay's root HTML element (DIV) via the "hideMacGeckoScrollbars" and 
+             "showMacGeckoScrollbars" methods of YAHOO.widget.Overlay.</li>
+          
+          <li><p>There may be instances where the CSS for a web page or application 
+             contains style rules whose specificity override the rules implemented by 
+             the Container CSS files to fix this bug.  In such cases, is necessary to 
+             leverage the provided "hide-scrollbars" and "show-scrollbars" classes to 
+             write custom style rules to guard against this bug. For example:</p>
+
+            <p>To fix the scrollbars issue for an Overlay instance with an id of 
+             "myoverlay" whose body element has scrollbars applied by default:</p>
+
+<div id="syntax-d27b9c9e84a66fdc18ca79b026b09327" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="re0">#myoverlay</span> <span class="re1">.bd</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">height</span><span class="sy0">:</span> <span class="re3">100px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="coMULTI">/* Apply scrollbars for all browsers. */</span></div></li><li class="li1"><div class="de1">    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">auto</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">#myoverlay</span><span class="re1">.hide-scrollbars</span> <span class="re1">.bd</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="coMULTI">/* Hide scrollbars by default for Gecko on OS X */</span></div></li><li class="li1"><div class="de1">    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">hidden</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re0">#myoverlay</span><span class="re1">.show-scrollbars</span> <span class="re1">.bd</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="coMULTI">/* Show scrollbars for Gecko on OS X when the Overlay is visible */</span></div></li><li class="li1"><div class="de1">    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">auto</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span>        </div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="re0">#myoverlay</span> <span class="re1">.bd</span> <span class="br0">&#123;</span>
+    <span class="kw1">height</span><span class="sy0">:</span> <span class="re3">100px</span><span class="sy0">;</span>
+    <span class="coMULTI">/* Apply scrollbars for all browsers. */</span>
+    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">auto</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#myoverlay</span><span class="re1">.hide-scrollbars</span> <span class="re1">.bd</span> <span class="br0">&#123;</span>
+    <span class="coMULTI">/* Hide scrollbars by default for Gecko on OS X */</span>
+    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">hidden</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re0">#myoverlay</span><span class="re1">.show-scrollbars</span> <span class="re1">.bd</span> <span class="br0">&#123;</span>
+    <span class="coMULTI">/* Show scrollbars for Gecko on OS X when the Overlay is visible */</span>
+    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">auto</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>        
+&nbsp;</pre></div><textarea id="syntax-d27b9c9e84a66fdc18ca79b026b09327-plain">#myoverlay .bd {
+    height: 100px;
+    /* Apply scrollbars for all browsers. */
+    overflow: auto;
+}
+
+#myoverlay.hide-scrollbars .bd {
+    /* Hide scrollbars by default for Gecko on OS X */
+    overflow: hidden;
+}
+
+#myoverlay.show-scrollbars .bd {
+    /* Show scrollbars for Gecko on OS X when the Overlay is visible */
+    overflow: auto;
+}        
+</textarea></div>
+                <p>
+                 To fix the scrollbars issue for a Panel instance with an id of "mypanel" 
+                 whose body element has scrollbars applied by default:
+                 </p>
+
+<div id="syntax-5f0091b16803b8437ebfe6c29531579b" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="re0">#mypanel</span> <span class="re1">.bd</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">height</span><span class="sy0">:</span> <span class="re3">100px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="coMULTI">/* Apply scrollbars for all browsers. */</span></div></li><li class="li1"><div class="de1">    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">auto</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re1">.yui-panel-container</span><span class="re1">.hide-scrollbars</span> <span class="re0">#mypanel</span> <span class="re1">.bd</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="coMULTI">/* Hide scrollbars by default for Gecko on OS X */</span></div></li><li class="li1"><div class="de1">    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">hidden</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="re1">.yui-panel-container</span><span class="re1">.show-scrollbars</span> <span class="re0">#mypanel</span> <span class="re1">.bd</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="coMULTI">/* Show scrollbars for Gecko on OS X when the Panel is visible  */</span></div></li><li class="li1"><div class="de1">    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">auto</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="re0">#mypanel</span> <span class="re1">.bd</span> <span class="br0">&#123;</span>
+    <span class="kw1">height</span><span class="sy0">:</span> <span class="re3">100px</span><span class="sy0">;</span>
+    <span class="coMULTI">/* Apply scrollbars for all browsers. */</span>
+    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">auto</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re1">.yui-panel-container</span><span class="re1">.hide-scrollbars</span> <span class="re0">#mypanel</span> <span class="re1">.bd</span> <span class="br0">&#123;</span>
+    <span class="coMULTI">/* Hide scrollbars by default for Gecko on OS X */</span>
+    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">hidden</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;
+<span class="re1">.yui-panel-container</span><span class="re1">.show-scrollbars</span> <span class="re0">#mypanel</span> <span class="re1">.bd</span> <span class="br0">&#123;</span>
+    <span class="coMULTI">/* Show scrollbars for Gecko on OS X when the Panel is visible  */</span>
+    <span class="kw1">overflow</span><span class="sy0">:</span> <span class="kw2">auto</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-5f0091b16803b8437ebfe6c29531579b-plain">#mypanel .bd {
+    height: 100px;
+    /* Apply scrollbars for all browsers. */
+    overflow: auto;
+}
+
+.yui-panel-container.hide-scrollbars #mypanel .bd {
+    /* Hide scrollbars by default for Gecko on OS X */
+    overflow: hidden;
+}
+
+.yui-panel-container.show-scrollbars #mypanel .bd {
+    /* Show scrollbars for Gecko on OS X when the Panel is visible  */
+    overflow: auto;
+}
+</textarea></div>            </li>
+        </ol>
+        <em>For more information see the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=187435">Mozilla bug report</a> for this issue.</em>
+    </li>
+    <li>
+        <h4>Panel instances render at 2px wider when using "Sam" skin</h4>
+        <p>
+          For the "Sam" skin a Panel instance's rounded corners are created via the 
+          application of negative 1px left and right margins on the header, body and 
+          footer elements.  These negative margins will cause a Panel instance to be 
+          rendered at 2px wider than the value specified by the "width" configuration 
+          property.  Therefore, when using the "Sam" skin consider the negative left 
+          and right margins and subtract 2 from the value passed to the "width" 
+          configuration property in order to have the Panel render at the desired 
+          width.  For example, to render a Panel 300px wide, pass a value of "298px" 
+          to the "width" configuration property.
+        </p>
+    </li>
+    <li>
+        <h4>Text input/Textarea caret not displayed in Firefox</h4>
+        <p>
+           When a Panel's "modal" or "iframe" options are enabled, Gecko-based browsers such as Firefox do not render the flashing caret 
+           for text input boxes or text areas contained inside the Panel.
+        </p>
+        <p>
+            This is a known problem with Gecko-based browsers related to text input fields being rendered on top of elements with overflow set to "auto" or "scroll", or iframes. More information 
+            can be found in the <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=167801">Mozilla bug report</a> for the issue.
+        </p>
+        <p>The simplest workaround when using the modal mask, would be to set overflow to "visible" (or "hidden") on the mask, overriding the default value of "auto":</p>
+
+<div id="syntax-1d4b3c23fee0930d3df8fe72eafdb7c3" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="re1">.mask</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">overflow</span><span class="sy0">:</span><span class="kw2">visible</span><span class="sy0">;</span> <span class="coMULTI">/* or overflow:hidden */</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="re1">.mask</span> <span class="br0">&#123;</span>
+    <span class="kw1">overflow</span><span class="sy0">:</span><span class="kw2">visible</span><span class="sy0">;</span> <span class="coMULTI">/* or overflow:hidden */</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-1d4b3c23fee0930d3df8fe72eafdb7c3-plain">.mask {
+    overflow:visible; /* or overflow:hidden */
+}
+</textarea></div>
+        <p><strong>However, there are side-effects associated with this simple mask workaround and it cannot always be applied.</strong></p>
+
+        <p>The value of "overflow:auto" applied to the mask by default is used to workaround another <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=187435">Mozilla bug</a> and 
+        prevents scrollbars in Gecko-based browsers on MacOS from bleeding through the mask. If you intend to support Gecko-based browsers on MacOS and your page has elements with scrollbars, then this workaround cannot be used.
+        Note that it also does not solve the problem if you have the "iframe" option enabled, or other page elements with overflow set to "auto" or "scroll" underneath the Panel.</p>
+
+        <p>A more complex workaround for the bug involves setting "overflow:auto" on the text field (or one of it's containers) and also flipping it's display 
+        property (see <a href="https://bugzilla.mozilla.org/show_bug.cgi?id=167801#c84">Mozilla Bug 167801, comment 84</a>). Although more complex, this workaround helps resolve the issue
+        for both the iframe and modal mask use cases, as well any other elements you may have on the page with overflow set to "auto" or "scroll".</p>
+
+        <p>See the following example with this workaround applied: <a href="http://yuiblog.com/sandbox/yui/v230/examples/container/ffcursor.html">Text Input Cursor Fix</a>.</p>
+    </li>
+    <li>
+        <h4>Container inherits text-align values</h4>
+        <p>
+           The container family, as currently implemented, does not force a default CSS <code>text-align</code> value for it's contents other than a <code>text-align:right</code> for Dialog's footer buttons.
+           By default, text will be aligned based on the <code>text-align</code> value <em>inherited</em> from the container's ancestor(s) in the document.
+        </p>
+        <p>
+           A common YUI scenario where you may see this is when YUI Grids is used. Containers rendered to document.body will have <code>text-align</code> 
+           evaluate to <code>center</code>, inherited from the YUI Grids rule for the body element.
+        </p>
+        <p>
+            If you do need to specify a default <code>text-align</code> value for any particular member of the container family (and it's subclasses), 
+            a simple option is to use the default class name, to define your default <code>text-align</code> value:
+        </p>
+<div id="syntax-dfdda9ae549b741b0b70fa127990154f" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="coMULTI">/* </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  Align text left by default, for Panel, Dialog and SimpleDialog (subclasses of Panel).</span></div></li><li class="li1"><div class="de1"><span class="coMULTI">&nbsp;  Module, Overlay and Tooltip are not affected. </span></div></li><li class="li1"><div class="de1"><span class="coMULTI">*/</span></div></li><li class="li2"><div class="de2"><span class="re1">.yui-panel</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">text-align</span><span class="sy0">:</span><span class="kw1">left</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="coMULTI">/* 
+   Align text left by default, for Panel, Dialog and SimpleDialog (subclasses of Panel).
+   Module, Overlay and Tooltip are not affected. 
+*/</span>
+<span class="re1">.yui-panel</span> <span class="br0">&#123;</span>
+    <span class="kw1">text-align</span><span class="sy0">:</span><span class="kw1">left</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-dfdda9ae549b741b0b70fa127990154f-plain">/* 
+   Align text left by default, for Panel, Dialog and SimpleDialog (subclasses of Panel).
+   Module, Overlay and Tooltip are not affected. 
+*/
+.yui-panel {
+    text-align:left;
+}
+</textarea></div>    </li>
+    <li>
+        <h4>HTML Validator Mozilla Add-on causes NS_BASE_STREAM_CLOSED chrome exception</h4>
+        <p>
+            The <a href="https://addons.mozilla.org/en-US/firefox/addon/249">HTML Validator add-on</a> for Mozilla browsers
+            is known to cause a <code>NS_BASE_STREAM_CLOSED</code> chrome exception, when <code>monitorresize</code> is enabled. The exception
+            does not impact container functionality.
+        </p>
+        <p>
+            This appears to be a bug in the HTML Validator add-on and it's ability to validate pages with iframes containing 
+            <code>data:</code> urls, which are used by container to implement the <code>monitorresize</code> 
+            functionality for Gecko browers. The <a href="http://www.htmlpedia.org/phpBB/viewtopic.php?f=9&t=119" title="HTML Validator bug post">issue</a> 
+            has been posted on the bug forum for the add-on. 
+        </p>
+        <p>
+            Disabling the add-on will fix the problem.
+        </p>
+    </li>
+</ul>
+
+<h2 id="mobile">YUI on Mobile: Using Container Family with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>
+<p>The Container family of controls has a few limitations when run on the default browsers for the Nokia N95 and Apple iPhone, but a majority of the feature set works correctly.</p>
+<p>Below is a list of know issues for the mobile environments tested:</p>
+<ul>
+    <li>
+        <strong>Draggable containers are not supported</strong>
+        <p>Neither the iPhone nor the Nokia N95 were able to generate the events required to support <a href="../dragdrop/index.html">Drag and Drop</a> within the browser, and hence draggable containers are not supported. The same limitation would apply to the resizable container example.</p>
+    </li>
+    <li>
+        <strong>Tooltips are not supported on the iPhone</strong>
+        <p>Due to the absence of consistent <code>mouseover</code>/<code>mouseout</code> events on the iPhone, <a href="tooltip/index.html">Tooltips</a> cannot be displayed reliably. It's likely that other touch based devices have similar limitations.</p>
+        <p>Tooltips will work on the Nokia N95, since it has a cursor, and it's likely they'd work on other cursor/joystick based devices</p>
+    </li>
+    <li>
+        <strong><code>constraintoviewport</code> and <code>fixedcenter</code> configuration properties are not accurate on the iPhone</strong>
+        <p>The viewport size for the iPhone (as retrieved via the <a href="../dom/index.html">Dom Collection</a>) is the same as the document size and does not reflect the visible screen region as it normally should.
+        As a result, <code>constraintoviewport</code> or <code>fixedcenter</code> are calculated relative to the document size rather than the actual visible screen size.
+        This is likely to result in the container being displayed outside of the visible screen region.        </p>
+    </li>
+    <li>
+        <strong>Shadows/Modal Mask appear opaque on the Nokia N95</strong>
+        <p>The default Webkit browser on the Nokia N95 does not honor CSS opacity values and hence partially opaque areas of the Container, such as the shadow and modal mask, appear solid black (100% opaque).</p>
+    </li>
+</ul>
+
+<h5>Design Considerations</h5>
+<p>Some general design issues to consider when working on mobile device solutions using Container.</p>
+<ul>
+    <li>
+        <strong>Latency, Slow Networks</strong>
+        <p>
+            The Container family allows you to generate Container controls from markup; in other words, the markup is delivered to the page and then transformed by JavaScript into the desired Container widget. When working on high-latency mobile networks, this could lead to the unmodified markup being displayed for a significant period of time before the control is actually rendered/hidden.
+            To account for this, you should avoid using the window <code>load</code> event to construct your control and use one of the earlier page lifecycle events &mdash; <a href="../event/index.html#onavailable"><code>onDOMReady</code>, <code>onContentReady</code>, or <code>onAvailable</code></a>; see <a href="../examples/event/event-timing.html">this example in the Event Utility section</a> for more information about these events.        </p>
+        <p>Alternatively, you could consider building the control from JavaScript, if progressive enhancement is not a requirement.</p>
+    </li>
+    <li>
+        <strong>UI Targets</strong>
+        <p>The default Sam Skin implementation for the Container family works well for mobile devices also.
+        It provides UI targets, such as close buttons, dialog buttons and title bars, which are large enough or have enough whitespace around them so as to be usable on touch devices such as the iPhone.</p>
+        <p>If you do wish to optimize the mobile experience for users, you may consider serving up custom skin CSS based on the mobile browser's user agent string.
+        The <a href="../yahoo/index.html#mobile">YAHOO mobile section</a> has an example of how to parse the user agent string on the client; the same logic can be applied on the server also.</p>
+        
+        <p>Some of the UI targets/CSS rules you may want to customize when <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">creating a custom mobile skin</a> for Panel based containers to increase their target areas are:</p>
+        <ul>
+            <li>Close Button: <em>.yui-skin-sam .yui-panel .container-close</em></li>
+            <li>Title Bar/Header: <em>.yui-skin-sam .yui-panel .hd</em></li>
+            <li>Dialogs Buttons: <a href="../button/index.html#cssref">YUI Button CSS</a></li>
+        </ul>
+    </li>
+</ul>
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+      </div>
+         <div class="yui-u">
+            
+            <div id="cheatsheet">
+                <h3>Cheat Sheets for Container-family Controls:</h3>
+
+                <h4>Dialog &amp; SimpleDialog</h4>
+                <a href="http://yuiblog.com/assets/pdf/cheatsheets/dialog.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/dialog.gif" width="178" height="132" alt="Cheat Sheet for the Dialog and SimpleDialog Controls."></a>
+
+                <h4>Panel</h4>
+                <a href="http://yuiblog.com/assets/pdf/cheatsheets/panel.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/panel.gif" width="178" height="133" alt="Cheat Sheet for the Panel Control."></a>
+
+                <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+            </div>
+
+            <div id="examples">
+<h3>Container Family Examples:</h3>
+
+<ul>
+<li><a href='../examples/container/module.html'>The Module Control</a></li>
+<li><a href='../examples/container/overlay.html'>Creating and Positioning an Overlay</a></li>
+<li><a href='../examples/container/tooltip.html'>Simple Tooltip Example</a></li>
+<li><a href='../examples/container/tooltip-multi.html'>One Tooltip, Many Context Elements</a></li>
+<li><a href='../examples/container/panel.html'>Simple Panel Example</a></li>
+<li><a href='../examples/container/panelskin1.html'>Skinning a Panel with Custom CSS: Introduction</a></li>
+<li><a href='../examples/container/panelskin2.html'>Skinning a Panel with Custom CSS: Advanced</a></li>
+<li><a href='../examples/container/panel-loading.html'>Creating a Modal "Loading" Panel</a></li>
+<li><a href='../examples/container/panel-resize.html'>Creating a Resizable Panel</a></li>
+<li><a href='../examples/container/dialog-quickstart.html'>Dialog Quickstart Example</a></li>
+<li><a href='../examples/container/simpledialog-quickstart.html'>SimpleDialog Quickstart Example</a></li>
+<li><a href='../examples/container/container-effect.html'>Using ContainerEffect Transitions</a></li>
+<li><a href='../examples/container/overlaymanager.html'>Using the Overlay Manager to Manage Multiple Panels</a></li>
+<li><a href='../examples/container/keylistener.html'>Implementing Container Keyboard Shortcuts with KeyListener</a></li>
+<li><a href='../examples/container/container-ariaplugin.html'>Using the Container ARIA Plugin</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Container Family:</h4>
+
+<ul>
+<li><a href='../examples/button/button-ariaplugin.html'>Using the Button ARIA Plugin</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
+<li><a href='../examples/button/button-menu-select.html'>Using A Menu Button To Replace A &#60;select&#62; Element</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
+<li><a href='../examples/button/button-menu-swap.html'>Replacing the content of a Button's Menu</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
+<li><a href='../examples/colorpicker/colorpicker-dialog-from-script.html'>Example of Color Picker Built in a Dialog via JavaScript</a> (included with examples for the <a href='../colorpicker/index.html'>Color Picker Control</a>)</li>
+<li><a href='../examples/layout/panel_layout.html'>Layout inside a resizable Panel</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
+<li><a href='../examples/editor/dialog_editor.html'>Editor in a Dialog Control</a> (included with examples for the <a href='../editor/index.html'>Rich Text Editor</a>)</li>
+<li><a href='../examples/button/btn_example07.html'>Menu Buttons</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
+<li><a href='../examples/calendar/calcontainer.html'>Popup Calendar - Advanced</a> (included with examples for the <a href='../calendar/index.html'>Calendar Control</a>)</li>
+<li><a href='../examples/datatable/dt_colshowhide.html'>Showing, Hiding, and Reordering Columns.</a> (included with examples for the <a href='../datatable/index.html'>DataTable Control</a>)</li>
+<li><a href='../examples/button/btn_example08.html'>Split Buttons</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
+<li><a href='../examples/button/btn_example09.html'>Simple Calendar Menu Button</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
+<li><a href='../examples/button/btn_example10.html'>Calendar Menu Button with Date on Button Face</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
+<li><a href='../examples/button/btn_example11.html'>Color Picker Button</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
+<li><a href='../examples/button/btn_example12.html'>Fixed Width Menu Button</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
+<li><a href='../examples/menu/programsmenu.html'>OS-Style Programs Menu</a> (included with examples for the <a href='../menu/index.html'>Menu Family</a>)</li>
+<li><a href='../examples/menu/applicationmenubar.html'>Application Menubar</a> (included with examples for the <a href='../menu/index.html'>Menu Family</a>)</li>
+<li><a href='../examples/button/btn_example14.html'>Slider Button</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
+<li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
+</ul>		
+           </div>    
+      
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fcontainer%2F--><h3 id="delicious">YUI Container on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/container/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/documentation" class="tag-size-1">documentation</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/reference" class="tag-size-1">reference</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdesign" class="tag-size-1">webdesign</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdev" class="tag-size-1">webdev</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/css" class="tag-size-1">css</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/327f0e55a7b9720ed2cc05bda2f7bfb3" class="saved-by">saved by <span>32</span>  people</a></p>
+   </div></div>
+
+         </div>
+      </div>
+
+</div>
+</div>
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="selected "><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:03 PDT 2013 -->
+
+<!-- Localized -->

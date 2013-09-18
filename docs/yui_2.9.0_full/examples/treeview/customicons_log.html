@@ -1,0 +1,375 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: TreeView Control: Using TreeView with Custom Icons</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/treeview/assets/skins/sam/treeview.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/treeview/treeview-debug.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<!--Bring in the folder-style TreeView CSS:-->
+<link rel="stylesheet" type="text/css" href="../treeview/assets/css/folders/tree.css"></link>
+
+<!--Additional custom style rules for this example:-->
+<style type="text/css">
+    #treewrapper {background: #fff; position:relative;}
+	#treediv {position:relative; width:250px; background: #fff; padding:1em;}
+    .icon-ppt { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 0px no-repeat; }
+    .icon-dmg { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 -36px no-repeat; }
+    .icon-prv { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 -72px no-repeat; }
+    .icon-gen { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 -108px no-repeat; }
+    .icon-doc { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 -144px no-repeat; }
+    .icon-jar { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 -180px no-repeat; }
+    .icon-zip { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 -216px no-repeat; }
+    .htmlnodelabel { margin-left: 20px; }
+</style>
+
+
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	<div id="ygma"><a href="/"><img src="http://l.yimg.com/a/i/brand/purplelogo/uh/us/ydn.gif" width="266" height="34" border="0"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: TreeView Control: Using TreeView with Custom Icons</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>TreeView Control: Using TreeView with Custom Icons</h1>
+	
+	<div class="exampleIntro">
+	<p>This example demonstrates the use of custom icon styles on <a href="http://developer.yahoo.com/yui/treeview/">TreeView Control</a> nodes through the use of a image sprite.  Read the tutorial below the example for full details on how to achieve this effect.</p>			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="customicons_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<div id="treewrapper">
+	<div id="treediv"> </div>
+</div>
+
+<script>
+//Wrap our initialization code in an anonymous function
+//to keep out of the global namespace:
+(function(){
+	var init = function() {
+		
+		//create the TreeView instance:
+		var tree = new YAHOO.widget.TreeView("treediv");
+		
+		//get a reusable reference to the root node:
+		var root = tree.getRoot();
+		
+		//for Ahmed's documents, we'll use TextNodes.
+		//First, create a parent node for his documents:
+		var ahmedDocs = new YAHOO.widget.TextNode("Ahmed's Documents", root, true);
+			//Create a child node for his Word document:
+			var ahmedMsWord = new YAHOO.widget.TextNode("Prospectus", ahmedDocs, false);
+			//Now, apply the "icon-doc" style to this node's
+			//label:
+			ahmedMsWord.labelStyle = "icon-doc";
+			var ahmedPpt = new YAHOO.widget.TextNode("Presentation", ahmedDocs, false);
+			ahmedPpt.labelStyle = "icon-ppt";
+			var ahmedPdf = new YAHOO.widget.TextNode("Prospectus-PDF version", ahmedDocs, false);
+			ahmedPdf.labelStyle = "icon-prv";
+	
+		//for Susheela's documents, we'll use HTMLNodes.
+		//First, create a parent node for her documents:
+		var sushDocs = new YAHOO.widget.TextNode("Susheela's Documents", root, true);
+			//Create a child node for her zipped files:
+			var sushZip = new YAHOO.widget.HTMLNode("<span class=\"htmlnodelabel\">Zipped Files</span>", sushDocs, false, true);
+			//Now, apply the "icon-zip" style to this HTML node's
+			//content:
+			sushZip.contentStyle = "icon-zip";
+			var sushDmg = new YAHOO.widget.HTMLNode("<span class=\"htmlnodelabel\">Files -- .dmg version</span>", sushDocs, false, true);
+			sushDmg.contentStyle = "icon-dmg";
+			var sushGen = new YAHOO.widget.HTMLNode("<span class=\"htmlnodelabel\">Script -- text version</span>", sushDocs, false, true);
+			sushGen.contentStyle = "icon-gen";
+			var sushJar = new YAHOO.widget.HTMLNode("<span class=\"htmlnodelabel\">JAR file</span>", sushDocs, false, true);
+			sushJar.contentStyle = "icon-jar";
+	
+		tree.draw();
+	}
+	//Add an onDOMReady handler to build the tree when the document is ready
+    YAHOO.util.Event.onDOMReady(init);
+})();
+</script>
+	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Creating and Applying Custom Node Icons for Your TreeView:</h2>
+
+<p>Many tree-style implementations call for using custom
+icons on a per-node basis.  In this example, we'll look at one strategy for
+apply custom icons to specific nodes using the <a
+href="http://developer.yahoo.com/yui/treeview/">YUI TreeView Control</a>.</p>
+
+<p>We'll start by using a single image containing our icon set and we'll use
+the technique known as "<a
+href="http://www.alistapart.com/articles/sprites">CSS Sprites</a>" to specify
+which icon we want to use for each specific style.  This allows us to combine
+seven images in a single HTTP request (<a
+        href="http://yuiblog.com/blog/2006/11/28/performance-research-part-1/">read more about why reducing HTTP requests is a good idea</a>).
+The raw image is displayed below.</p>
+
+<style>
+    #figure1 {background-color:#FFFCE9;padding:1em;border:1px solid grey}
+</style>
+
+<p><img id="figure1" src="assets/img/icons.png" width="18" height="252" alt="Our icon images are combined into a single png file to reduce HTTP requests." /></p>
+
+<p>With that image in place, we can now set up our style rules to identify icons for each file type.  
+We do that by positioning our <code>icons.png</code> image uniquely for each icon we want to display:</p>
+                
+<textarea name="code" class="HTML" cols="60" rows="1"><style type="text/css">
+.icon-ppt { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 0px no-repeat; }
+.icon-dmg { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 -36px no-repeat; }
+.icon-prv { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 -72px no-repeat; }
+.icon-gen { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 -108px no-repeat; }
+.icon-doc { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 -144px no-repeat; }
+.icon-jar { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 -180px no-repeat; }
+.icon-zip { display:block; height: 22px; padding-left: 20px; background: transparent url(../treeview/assets/img/icons.png) 0 -216px no-repeat; }
+.htmlnodelabel { margin-left: 20px; }
+</style></textarea>
+
+<p>The effect of these style rules is to create a 20-pixel space to the left of the styled object and to place the icon directly in that space.  The sheet of icons is positioned so that, for example, the zip-file icon will appear when the class <code>icon-zip</code> is applied.</p>
+
+<p>To apply these styles on a per-node basis in TreeView, we use the <a href="http://developer.yahoo.com/yui/docs/YAHOO.widget.TextNode.html#labelStyle">labelStyle</a> property of <a href="http://developer.yahoo.com/yui/docs/YAHOO.widget.TextNode.html">TextNodes</a> and <a href="http://developer.yahoo.com/yui/docs/YAHOO.widget.MenuNode.html">MenuNodes</a> and the <a href="http://developer.yahoo.com/yui/docs/YAHOO.widget.HTMLNode.html#contentStyle">contentStyle</a> property of <a href="http://developer.yahoo.com/yui/docs/YAHOO.widget.HTMLNode.html">HTMLNodes</a>.</p>
+
+<p>Here is the code used to create the TreeView instance above and to create the first node, "Ahmed's Documents," while applying the specific icon styles to each node:</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">//create the TreeView instance:
+var tree = new YAHOO.widget.TreeView("treediv");
+
+//get a reusable reference to the root node:
+var root = tree.getRoot();
+
+//for Ahmed's documents, we'll use TextNodes.
+//First, create a parent node for his documents:
+var ahmedDocs = new YAHOO.widget.TextNode("Ahmed's Documents", root, true);
+    //Create a child node for his Word document:
+    var ahmedMsWord = new YAHOO.widget.TextNode("Prospectus", ahmedDocs, false);
+    //Now, apply the "icon-doc" style to this node's
+    //label:
+    ahmedMsWord.labelStyle = "icon-doc";
+    var ahmedPpt = new YAHOO.widget.TextNode("Presentation", ahmedDocs, false);
+    ahmedPpt.labelStyle = "icon-ppt";
+    var ahmedPdf = new YAHOO.widget.TextNode("Prospectus-PDF version", ahmedDocs, false);
+    ahmedPdf.labelStyle = "icon-prv";</textarea>
+    
+<p>The script for creating Susheela's part of the tree is very similar.  Here, we'll use HTMLNodes, and we'll use the <code>contentStyle</code> property to apply the icon style:</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">//for Susheela's documents, we'll use HTMLNodes.
+//First, create a parent node for her documents:
+var sushDocs = new YAHOO.widget.TextNode("Susheela's Documents", root, true);
+    //Create a child node for her zipped files:
+    var sushZip = new YAHOO.widget.HTMLNode("<span class=\"htmlnodelabel\">Zipped Files</span>", sushDocs, false, true);
+    //Now, apply the "icon-zip" style to this HTML node's
+    //content:
+    sushZip.contentStyle = "icon-zip";
+    var sushDmg = new YAHOO.widget.HTMLNode("<span class=\"htmlnodelabel\">Files -- .dmg version</span>", sushDocs, false, true);
+    sushDmg.contentStyle = "icon-dmg";
+    var sushGen = new YAHOO.widget.HTMLNode("<span class=\"htmlnodelabel\">Script -- text version</span>", sushDocs, false, true);
+    sushGen.contentStyle = "icon-gen";
+    var sushJar = new YAHOO.widget.HTMLNode("<span class=\"htmlnodelabel\">JAR file</span>", sushDocs, false, true);
+    sushJar.contentStyle = "icon-jar";</textarea>
+    
+<p>Note that in this example we're also applying <a href="assets/css/folders/tree.css">the "folder style" CSS file</a> that is included with the TreeView Control's examples; you can find that file in <a href="http://yui.github.io/yui2/">the YUI distribution</a> under <code>/examples/treeview/assets/css/folders/tree.css</code>.</p>
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerDiv"></div>
+							<div id="loggerGloss">
+								<p><strong>Note:</strong> You are viewing this example in debug mode with logging enabled.  This can significantly slow performance.</p>
+	
+								<p class="loggerButton"><span id="loggerLink"><span class="first-child"><a href="customicons.html">Reload with logging<br />and debugging disabled.</a></span></span></p>
+							</div>
+						</div>
+					
+				
+					<div id="examples">
+						<h3>TreeView Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='../treeview/default_tree.html'>Default TreeView</a></li><li><a href='../treeview/dynamic_tree.html'>Dynamically Loading Node Data</a></li><li><a href='../treeview/folder_style.html'>Folder-Style TreeView Design</a></li><li><a href='../treeview/menu_style.html'>Menu-Style TreeView Design</a></li><li class='selected'><a href='../treeview/customicons.html'>Using TreeView with Custom Icons</a></li><li><a href='../treeview/tv_tooltip.html'>TreeView with Tooltips</a></li><li><a href='../treeview/tv_markup.html'>Three Ways to Define a TreeView: Markup (Progressive Enhancement), Existing TreeView Instance, and Object Literal </a></li><li><a href='../treeview/tv_edit.html'>Inline Editing of TreeView Node Labels</a></li><li><a href='../treeview/tv_highlight.html'>Treeview Node Selection and Checkbox Example</a></li><li><a href='../menu/treeviewcontextmenu.html'>Adding A Context Menu To A TreeView (included with examples for Menu Family)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More TreeView Control Resources:</h3>
+						<ul>
+							
+						<li><a href="../../docs/module_treeview.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/treeview.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="/yui/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="/yui/3/">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="/yui/license.html">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- proven and robust." href="/yui/2/">YUI 2</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="/yui/examples/">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="/yui/docs/">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="item"><a title="Configure your YUI implementation; serve YUI source files from Yahoo! -- free, fast, and simple" href="/yui/articles/hosting/">Dependency Configurator</a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="/yui/animation/">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="/yui/autocomplete/">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="/yui/history/">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="/yui/button/">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="/yui/calendar/">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="/yui/carousel/">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="/yui/charts/">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="/yui/colorpicker/">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="/yui/connection/">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="/yui/container/">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="/yui/cookie/">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="/yui/datasource/">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="/yui/datatable/">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="/yui/dom/">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="/yui/dragdrop/">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="/yui/element/">Element</a></li><li class="item"><a title="The YUI Event Utility" href="/yui/event/">Event</a></li><li class="item"><a title="The YUI Get Utility" href="/yui/get/">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="/yui/imagecropper/">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="/yui/imageloader/">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="/yui/json/">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="/yui/layout/">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="/yui/logger/">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="/yui/menu/">Menu</a></li><li class="item"><a title="The YUI Paginator" href="/yui/paginator/">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="/yui/profiler/">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="/yui/profilerviewer/">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="/yui/progressbar/">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="/yui/resize/">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="/yui/editor/">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="/yui/selector/">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="/yui/slider/">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="/yui/storage/">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="/yui/stylesheet/">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="/yui/swf/">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="/yui/swfstore/">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="/yui/tabview/">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="/yui/treeview/">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="/yui/uploader/">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="/yui/yahoo/">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="/yui/yuiloader/">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="/yui/yuitest/">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="/yui/reset/">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="/yui/base/">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="/yui/fonts/">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="/yui/grids/">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:53 PDT 2013 -->

@@ -1,0 +1,780 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Slider</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Slider</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+    <div class="yui-b">
+        <div class="yui-ge">
+            <div class="yui-u first">
+
+                <div id="promo" class="component">
+                    <h1>YUI 2: Slider</h1>
+                    <p>The Slider component is a UI control that enables the user to adjust values in a finite range along one or two axes. Typically, the Slider control is used in a web application as a rich, visual replacement for an input box that takes a number as input. The Slider control can also easily accommodate a second dimension, providing x,y output for a selection point chosen from a rectangular region.</p>
+
+                    <div>
+                        <h4>On This Page:</h4>
+                        <ul>
+                            <li><a href="#start">Getting Started</a></li>
+                            <li><a href="#using">Using Slider</a></li>
+                            <li><a href="#knownissues">Known Issues</a></li>
+                            <li><a href="#support">Support &amp; Community</a></li><li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+                        </ul>
+                    </div>
+
+                      <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/slider/index.html">Examples</a>: Explore examples of the Slider Control in action.</li>
+      <li><a href="../docs/module_slider.html">API Documentation</a>: View the full API documentation for the Slider Control.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.slider">Release Notes</a>: Detailed change log for the Slider Control.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Slider Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+                </div>
+
+<!-- indent     |<== here moved back for readability -->
+<h2 id="start" class="first">Getting Started</h2>
+<p>To use the Slider control, include the following source files in your web page with the script tag:</p>
+
+<div id="syntax-8c344e76fb32874aa37e038dc1bf5565" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Slider skin (optional) --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/slider/assets/skins/sam/slider.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Slider source file --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/slider/slider-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Slider skin (optional) --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/slider/assets/skins/sam/slider.css&quot;</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Slider source file --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/slider/slider-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-8c344e76fb32874aa37e038dc1bf5565-plain"><!-- Dependencies --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+
+<!-- Slider skin (optional) --> 
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/slider/assets/skins/sam/slider.css">
+
+<!-- Slider source file --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/slider/slider-min.js"></script>
+</textarea></div>
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>slider</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<p>The Slider component is defined by YAHOO.widget.Slider.</p>
+
+<h3>Basic HTML/CSS Setup</h3>
+<p>To create a slider you will need ID references to two page elements: one for the slider background and one for the thumb.  The thumb should be a child of the background element.</p>
+<div id="syntax-718a8cd71790305dadf8435d4bdab7f4" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;sliderbg&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;sliderthumb&quot;</span>&gt;&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;sliderthumbimg&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;sliderbg&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;sliderthumb&quot;</span>&gt;&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;sliderthumbimg&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-718a8cd71790305dadf8435d4bdab7f4-plain"><div id="sliderbg">
+    <div id="sliderthumb"><img src="sliderthumbimg/index.html"></div>
+</div>
+</textarea></div>
+<p>The elements can be styled as desired, but both elements should be positioned (eg., either <code>relative</code> or <code>absolute</code>).  As the background area is clickable, the size of the elements matters. In typical implementations you will need to make the background width (for horizontal sliders) or height (for vertical sliders) equal the total number of pixels you want the slider to be able to move plus the width or height of the thumb element.</p>
+
+<p>The following graphic illustrates the layout for a horizontal Slider (<strong>note:</strong> not to scale, and the dimensions are just an example, not a recommendation):</p>
+
+<img src="http://l.yimg.com/a/i/ydn/yuiweb/img/sliderlayout.png" alt="Slider Layout Visual" width="448" height="139">
+
+<h3>Initializing the Slider </h3>
+<p>The following example creates a horizontal slider object.</p>
+
+<div id="syntax-df38b9ee75a0ee8a3512afdb99bffd41" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> slider<span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">function</span> sliderInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    slider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getHorizSlider</span><span class="br0">&#40;</span><span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span> <span class="st0">&quot;sliderthumb&quot;</span><span class="sy0">,</span> <span class="nu0">0</span><span class="sy0">,</span> <span class="nu0">200</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> slider<span class="sy0">;</span>
+&nbsp;
+<span class="kw2">function</span> sliderInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    slider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getHorizSlider</span><span class="br0">&#40;</span><span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span> <span class="st0">&quot;sliderthumb&quot;</span><span class="sy0">,</span> <span class="nu0">0</span><span class="sy0">,</span> <span class="nu0">200</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-df38b9ee75a0ee8a3512afdb99bffd41-plain">var slider;
+
+function sliderInit() {
+    slider = YAHOO.widget.Slider.getHorizSlider("sliderbg", "sliderthumb", 0, 200);
+}
+</textarea></div>
+<p>The Slider instance in this example is configured so that it can be moved 200 pixels to the right, and 0 pixels to the left. It is also possible to configure the slider thumb to start in the center of the background, which would make sense if your default landing zone or zero value is in the middle of the range.</p>
+
+<p>The <code>getHorizSlider</code> method produces a horizontal slider.  The <code>getVertSlider</code>  method produces a vertical slider.  The full constructor for both looks like this:</p>    
+
+<p><code>YAHOO.widget.Slider.getHorizSlider(string bgid, string thumbid, int leftup, int rightdown, [int tick])</code></p>
+
+<p>Where:</p>
+<ul class="topspace">
+    <li><em>bgid</em> is  the id of the slider background</li>
+    <li><em>thumbid</em> is  the id of the slider thumb</li>
+    <li><em>leftup</em> is the number of pixels the slider can move left or up (depending on orientation)</li>
+    <li><em>rightdown</em> the number of pixels the slider can move right or down (depending on orientation)</li>
+    <li><em>tick</em> is the optional tick interval (see <a href="#ticks">Setting
+    up Tick Marks</a>   for more information)</li>
+</ul>
+
+<p>See the additional topics below in <a href="#using">Using Slider</a>, below, or on the <a href="#examples">Examples</a> page for functional examples.</p>
+
+<h2 id="using">Using Slider</h2>
+
+<p>This section describes customizations to the Slider.  It contains these sections:</p>
+<ul class="topspace">
+    <li><a href="#ticks">Setting Up Tick Marks</a></li>
+    <li><a href="#animation">Creating Slider Animation</a></li>
+    <li><a href="#events">Handling Slider Events</a></li>
+    <li><a href="#region">The Region Slider </a></li>
+    <li><a href="#dual">Dual Thumb Slider </a></li>
+    <li><a href="#skin">Using the Sam skin</a></li>
+</ul>
+
+<h3 id="ticks">Setting Up Tick Marks</h3>
+<p>Sometimes you may want your slider to move in fixed pixel increments instead of pixel by pixel.  Slider supports this with an optional fifth parameter to the <code>getHorizSlider</code> and <code>getVertSlider</code> methods for the tick interval. The following will produce a vertical slider with tick positions every 20 pixels:</p>
+
+<div id="syntax-5c3756e75968e5e7fdcb13fe51399669" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> slider<span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">function</span> sliderInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    slider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getVertSlider</span><span class="br0">&#40;</span><span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span> <span class="st0">&quot;sliderthumb&quot;</span><span class="sy0">,</span> <span class="nu0">0</span><span class="sy0">,</span> <span class="nu0">200</span><span class="sy0">,</span> <span class="nu0">20</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> slider<span class="sy0">;</span>
+&nbsp;
+<span class="kw2">function</span> sliderInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    slider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getVertSlider</span><span class="br0">&#40;</span><span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span> <span class="st0">&quot;sliderthumb&quot;</span><span class="sy0">,</span> <span class="nu0">0</span><span class="sy0">,</span> <span class="nu0">200</span><span class="sy0">,</span> <span class="nu0">20</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-5c3756e75968e5e7fdcb13fe51399669-plain">var slider;
+
+function sliderInit() {
+    slider = YAHOO.widget.Slider.getVertSlider("sliderbg", "sliderthumb", 0, 200, 20);
+}
+</textarea></div>
+<p>When the background is clicked, or the thumb dragged, the slider automatically snaps to the nearest tick position.</p>
+
+<h3 id="animation">Creating Slider Animation</h3>
+<p>If you include the YUI <a href="../animation/index.html">Animation Utility</a> in your web page, the slider animates when its  background is clicked.  The animation is a smooth &quot;ease-in&quot; transition unless you define tick marks for the slider. In that case the slider snaps to all tick marks on its way to the final destination.</p>
+
+<p>Animation may not be desirable in some implementations.  Some slider animations (for example, those using a CSS background image for the slider thumb) may cause performance issues for some browsers (notably IE). In the case of the  thumb performance can be improved by using a slider image (<code>&lt;img src=&quot;...&quot;&gt;</code>) rather than a CSS background on the slider HTML element.</p>
+
+<p>If you prefer not to use animation, you can disable animation either by omitting the reference to the <a href='../animation/index.html'>Animation</a> class or by explicitly turning it off:</p>
+
+<div id="syntax-62017e74c6bde41450184e6e99538375" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> slider<span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">function</span> sliderInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">   slider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getHorizSlider</span><span class="br0">&#40;</span><span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span> <span class="st0">&quot;sliderthumb&quot;</span><span class="sy0">,</span> <span class="nu0">100</span><span class="sy0">,</span> <span class="nu0">100</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">   slider.<span class="me1">animate</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> slider<span class="sy0">;</span>
+&nbsp;
+<span class="kw2">function</span> sliderInit<span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+   slider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getHorizSlider</span><span class="br0">&#40;</span><span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span> <span class="st0">&quot;sliderthumb&quot;</span><span class="sy0">,</span> <span class="nu0">100</span><span class="sy0">,</span> <span class="nu0">100</span><span class="br0">&#41;</span><span class="sy0">;</span>
+   slider.<span class="me1">animate</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-62017e74c6bde41450184e6e99538375-plain">var slider;
+
+function sliderInit() {
+   slider = YAHOO.widget.Slider.getHorizSlider("sliderbg", "sliderthumb", 100, 100);
+   slider.animate = false;
+}
+</textarea></div>
+<h3 id="events">Handling Slider Events</h3>
+<p>The Slider component fires these three events:</p>
+<div class="apisummary">
+    <table>
+    <thead>
+        <tr>
+            <th>Event</th>
+            <th>When</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="odd">
+            <td><a href="../docs/YAHOO.widget.Slider.html#event_change"><code>change</code></a></td>
+            <td>Continually when dragging the thumb <em>OR</em> once after a move caused by clicking the background</td>
+            <td>Indicates change in the thumb's position</td>
+        </tr>
+        <tr>
+            <td><a href="../docs/YAHOO.widget.Slider.html#event_slideStart"><code>slideStart</code></a></td>
+            <td>Once at the beginning of a slide operation</td>
+            <td>Indicates the moment the thumb begins moving</td>
+        </tr>
+        <tr class="odd">
+            <td><a href="../docs/YAHOO.widget.Slider.html#event_slideEnd"><code>slideEnd</code></a></td>
+            <td>Once after the thumb reaches its destination</td>
+            <td>Indicates the completion of a thumb drag or thumb move in response to a background click</td>
+        </tr>
+    </tbody>
+    </table>
+</div>
+
+<p>Additionally, <code>change</code> event subscribers are passed the number of pixels the thumb has moved from the position it was in when the component was initialized.  When a thumb is initially positioned in the center, for example, this value will be negative when the thumb is moved left or up (depending on orientation).</p>
+
+<div id="syntax-08b2a9143c4c2453d13e1a05b1de5098" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> slider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getHorizSlider</span><span class="br0">&#40;</span><span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span> <span class="st0">&quot;sliderthumb&quot;</span><span class="sy0">,</span> <span class="nu0">0</span><span class="sy0">,</span> <span class="nu0">200</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">slider.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">'change'</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>newOffset<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Thumb is now &quot;</span> <span class="sy0">+</span> newOffset <span class="sy0">+</span> <span class="st0">&quot; pixels from its starting position&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    myElement.<span class="me1">innerHTML</span> <span class="sy0">=</span> newOffset<span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">slider.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;slideStart&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Slider is a go!&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span>myElement<span class="sy0">,</span><span class="st0">'background-color'</span><span class="sy0">,</span><span class="st0">'#9f9'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">slider.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;slideEnd&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;The thumb has arrived&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span>myElement<span class="sy0">,</span><span class="st0">'background-color'</span><span class="sy0">,</span><span class="st0">'#9f9'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Move the thumb to an increment of 10 pixels</span></div></li><li class="li2"><div class="de2">    <span class="co1">// (see using ticks for a better option)</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> val <span class="sy0">=</span> slider.<span class="me1">getValue</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        roundedVal <span class="sy0">=</span> val <span class="sy0">-</span> <span class="br0">&#40;</span>val <span class="sy0">%</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Note: DO NOT attempt slider.setValue(x) here.</span></div></li><li class="li2"><div class="de2">    <span class="co1">// You CAN call setValue in a setTimeout from here, though.</span></div></li><li class="li1"><div class="de1">    <span class="kw1">if</span> <span class="br0">&#40;</span>val <span class="sy0">!==</span> roundedVal<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        setTimeout<span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span> slider.<span class="me1">setValue</span><span class="br0">&#40;</span>roundedVal<span class="br0">&#41;</span><span class="sy0">;</span> <span class="br0">&#125;</span><span class="sy0">,</span><span class="nu0">0</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> slider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getHorizSlider</span><span class="br0">&#40;</span><span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span> <span class="st0">&quot;sliderthumb&quot;</span><span class="sy0">,</span> <span class="nu0">0</span><span class="sy0">,</span> <span class="nu0">200</span><span class="br0">&#41;</span><span class="sy0">;</span>
+slider.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">'change'</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>newOffset<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Thumb is now &quot;</span> <span class="sy0">+</span> newOffset <span class="sy0">+</span> <span class="st0">&quot; pixels from its starting position&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    myElement.<span class="me1">innerHTML</span> <span class="sy0">=</span> newOffset<span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+slider.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;slideStart&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;Slider is a go!&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span>myElement<span class="sy0">,</span><span class="st0">'background-color'</span><span class="sy0">,</span><span class="st0">'#9f9'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+slider.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;slideEnd&quot;</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">log</span><span class="br0">&#40;</span><span class="st0">&quot;The thumb has arrived&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span>.<span class="me1">setStyle</span><span class="br0">&#40;</span>myElement<span class="sy0">,</span><span class="st0">'background-color'</span><span class="sy0">,</span><span class="st0">'#9f9'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Move the thumb to an increment of 10 pixels</span>
+    <span class="co1">// (see using ticks for a better option)</span>
+    <span class="kw2">var</span> val <span class="sy0">=</span> slider.<span class="me1">getValue</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">,</span>
+        roundedVal <span class="sy0">=</span> val <span class="sy0">-</span> <span class="br0">&#40;</span>val <span class="sy0">%</span> <span class="nu0">10</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Note: DO NOT attempt slider.setValue(x) here.</span>
+    <span class="co1">// You CAN call setValue in a setTimeout from here, though.</span>
+    <span class="kw1">if</span> <span class="br0">&#40;</span>val <span class="sy0">!==</span> roundedVal<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        setTimeout<span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span> slider.<span class="me1">setValue</span><span class="br0">&#40;</span>roundedVal<span class="br0">&#41;</span><span class="sy0">;</span> <span class="br0">&#125;</span><span class="sy0">,</span><span class="nu0">0</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-08b2a9143c4c2453d13e1a05b1de5098-plain">var slider = YAHOO.widget.Slider.getHorizSlider("sliderbg", "sliderthumb", 0, 200);
+slider.subscribe('change', function (newOffset) {
+    YAHOO.log("Thumb is now " + newOffset + " pixels from its starting position");
+
+    myElement.innerHTML = newOffset;
+});
+
+slider.subscribe("slideStart", function() {
+    YAHOO.log("Slider is a go!");
+
+    YAHOO.util.Dom.setStyle(myElement,'background-color','#9f9');
+});
+
+slider.subscribe("slideEnd", function() {
+    YAHOO.log("The thumb has arrived");
+
+    YAHOO.util.Dom.setStyle(myElement,'background-color','#9f9');
+    
+    // Move the thumb to an increment of 10 pixels
+    // (see using ticks for a better option)
+    var val = slider.getValue(),
+        roundedVal = val - (val % 10);
+
+    // Note: DO NOT attempt slider.setValue(x) here.
+    // You CAN call setValue in a setTimeout from here, though.
+    if (val !== roundedVal) {
+        setTimeout(function () { slider.setValue(roundedVal); },0);
+    }
+});
+</textarea></div>
+<h3 id="region">The Region Slider</h3>
+
+<img src="http://l.yimg.com/a/i/ydn/yuiweb/img/region-slider.gif" width="300" height="273">
+
+<p>A two-dimensional Slider is referred to as a Region Slider.  Region Sliders report two values in the <code>change</code> event (x offset, y offset) and have their own method for setting value in JavaScript: <code>setRegionValue</code> takes x offset and y offset as arguments, followed by the boolean flag for skipping animation.  Design considerations regarding range and thumb width apply in both vertical and horizontal dimensions.</p>
+
+<p>The following code sample illustrates the instantiation of a Region Slider whose thumb can move 0 pixels to the left, 300 to the right, 0 up, and 400 down.  The second line illustrates setting the thumb position by script to a position of 263 on the x-axis and 314 on the y-axis.</p>
+
+<div id="syntax-201ae4ce4d21526e76ac0b87b5f381b7" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> slider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getSliderRegion</span><span class="br0">&#40;</span><span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span> <span class="st0">&quot;sliderthumb&quot;</span><span class="sy0">,</span> <span class="nu0">0</span><span class="sy0">,</span> <span class="nu0">300</span><span class="sy0">,</span> <span class="nu0">0</span><span class="sy0">,</span> <span class="nu0">400</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">slider.<span class="me1">setRegionValue</span><span class="br0">&#40;</span><span class="nu0">263</span><span class="sy0">,</span> <span class="nu0">314</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> slider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getSliderRegion</span><span class="br0">&#40;</span><span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span> <span class="st0">&quot;sliderthumb&quot;</span><span class="sy0">,</span> <span class="nu0">0</span><span class="sy0">,</span> <span class="nu0">300</span><span class="sy0">,</span> <span class="nu0">0</span><span class="sy0">,</span> <span class="nu0">400</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+slider.<span class="me1">setRegionValue</span><span class="br0">&#40;</span><span class="nu0">263</span><span class="sy0">,</span> <span class="nu0">314</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-201ae4ce4d21526e76ac0b87b5f381b7-plain">var slider = YAHOO.widget.Slider.getSliderRegion("sliderbg", "sliderthumb", 0, 300, 0, 400);
+
+slider.setRegionValue(263, 314, true);
+</textarea></div>
+<h3 id="dual">The Dual Thumb Slider</h3>
+
+<img src="images/dual_slider_horiz.png">
+
+<p>Another Slider variation is the DualSlider, a horizontal or vertical Slider with two movable thumbs.  At its core, the DualSlider is just two Sliders sharing the same background element.</p>
+
+<p>The Slider instances that compose the DualSlider are stored in properties <code>minSlider</code> and <code>maxSlider</code>.  If you need to set specific Slider configurations, such as turning off animation, do the following:</p>
+
+<div id="syntax-3178f356805717e57783fe96a122515f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> dualSlider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getHorizDualSlider</span><span class="br0">&#40;</span></div></li><li class="li1"><div class="de1"><span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span><span class="st0">&quot;minthumb&quot;</span><span class="sy0">,</span><span class="st0">&quot;maxthumb&quot;</span><span class="sy0">,</span><span class="nu0">200</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Turn off thumb animation for the DualSlider</span></div></li><li class="li2"><div class="de2">dualSlider.<span class="me1">minSlider</span>.<span class="me1">animate</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">dualSlider.<span class="me1">maxSlider</span>.<span class="me1">animate</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> dualSlider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getHorizDualSlider</span><span class="br0">&#40;</span>
+<span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span><span class="st0">&quot;minthumb&quot;</span><span class="sy0">,</span><span class="st0">&quot;maxthumb&quot;</span><span class="sy0">,</span><span class="nu0">200</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Turn off thumb animation for the DualSlider</span>
+dualSlider.<span class="me1">minSlider</span>.<span class="me1">animate</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+dualSlider.<span class="me1">maxSlider</span>.<span class="me1">animate</span> <span class="sy0">=</span> <span class="kw2">false</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-3178f356805717e57783fe96a122515f-plain">var dualSlider = YAHOO.widget.Slider.getHorizDualSlider(
+"sliderbg","minthumb","maxthumb",200);
+
+// Turn off thumb animation for the DualSlider
+dualSlider.minSlider.animate = false;
+dualSlider.maxSlider.animate = false;
+</textarea></div>
+<p><code>change</code> event subscribers are passed the DualSlider instance as the first parameter.  The <code>minSlider</code> or </code>maxSlider</code> instance is passed as the parameter to <code>slideStart</code> and <code>slideEnd</code> subscribers (depending on which thumb is activated).</p>
+
+<p>DualSliders maintain two <em>read only</em> properties, <code>minVal</code> and <code>maxVal</code>, for the current positions of the two thumbs.  To set the values in your code, use methods <code>setMinValue(n)</code>, <code>setMaxValue(n)</code>, or <code>setValues(n,n)</code>.</p>
+
+<p>By default, DualSlider will let the thumbs bump up against one another, but not overlap.  Additional space can be maintained between the thumbs using the <code>minRange</code> property.</p>
+
+<div id="syntax-fb5e45b4ad5726a799baee4e29a8c8ef" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> dualSlider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getHorizDualSlider</span><span class="br0">&#40;</span></div></li><li class="li1"><div class="de1">                    <span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span><span class="st0">&quot;minthumb&quot;</span><span class="sy0">,</span><span class="st0">&quot;maxthumb&quot;</span><span class="sy0">,</span><span class="nu0">200</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// Maintain a minimum of 10px distance between the inner edges of the thumbs</span></div></li><li class="li2"><div class="de2">dualSlider.<span class="me1">minRange</span> <span class="sy0">=</span> <span class="nu0">10</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> dualSlider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getHorizDualSlider</span><span class="br0">&#40;</span>
+                    <span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span><span class="st0">&quot;minthumb&quot;</span><span class="sy0">,</span><span class="st0">&quot;maxthumb&quot;</span><span class="sy0">,</span><span class="nu0">200</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">// Maintain a minimum of 10px distance between the inner edges of the thumbs</span>
+dualSlider.<span class="me1">minRange</span> <span class="sy0">=</span> <span class="nu0">10</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-fb5e45b4ad5726a799baee4e29a8c8ef-plain">var dualSlider = YAHOO.widget.Slider.getHorizDualSlider(
+                    "sliderbg","minthumb","maxthumb",200);
+
+// Maintain a minimum of 10px distance between the inner edges of the thumbs
+dualSlider.minRange = 10;
+</textarea></div>
+<p>Keep in mind that <code>minVal</code> and <code>maxVal</code> are calculated from the <strong>center</strong> of the thumbs.  Unless the <code>minRange</code> is overridden to allow the thumbs to overlap, <em>the minimum value difference will be the sum of the inner portion of the thumbs from their respective mid points</em>.</p>
+
+<p>The min and max thumbs must both be initially <code>position: absolute</code> at the zero point on the background element.  DualSlider will place the max thumb at the end of the range during initialization.  You may request specific initial values in the sixth argument to the constructor.</p>
+
+<div id="syntax-3f7a55fa0b4743a165e3da8293223dda" class="yui-syntax-highlight"><div class="numbers"><pre class="css" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="re0">#sliderbg</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">position</span><span class="sy0">:</span> <span class="kw2">relative</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">height</span><span class="sy0">:</span> <span class="re3">20px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">220px</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="kw1">background</span><span class="sy0">:</span> <span class="re0">#fff</span> <span class="kw2">url</span><span class="br0">&#40;</span><span class="co2">yourbgimage.png</span><span class="br0">&#41;</span> <span class="kw2">repeat-x</span> <span class="nu0">0</span> <span class="nu0">0</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1"><span class="re0">#minthumb</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1"><span class="re0">#maxthumb</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">position</span><span class="sy0">:</span> <span class="kw2">absolute</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">    <span class="kw1">height</span><span class="sy0">:</span> <span class="re3">20px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">20px</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw1">left</span><span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span> <span class="coMULTI">/* assumed, but for redundancy */</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="css" style="font-family:monospace;"><span class="re0">#sliderbg</span> <span class="br0">&#123;</span>
+    <span class="kw1">position</span><span class="sy0">:</span> <span class="kw2">relative</span><span class="sy0">;</span>
+    <span class="kw1">height</span><span class="sy0">:</span> <span class="re3">20px</span><span class="sy0">;</span>
+    <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">220px</span><span class="sy0">;</span>
+    <span class="kw1">background</span><span class="sy0">:</span> <span class="re0">#fff</span> <span class="kw2">url</span><span class="br0">&#40;</span><span class="co2">yourbgimage.png</span><span class="br0">&#41;</span> <span class="kw2">repeat-x</span> <span class="nu0">0</span> <span class="nu0">0</span><span class="sy0">;</span>
+<span class="br0">&#125;</span>
+<span class="re0">#minthumb</span><span class="sy0">,</span>
+<span class="re0">#maxthumb</span> <span class="br0">&#123;</span>
+    <span class="kw1">position</span><span class="sy0">:</span> <span class="kw2">absolute</span><span class="sy0">;</span>
+    <span class="kw1">height</span><span class="sy0">:</span> <span class="re3">20px</span><span class="sy0">;</span>
+    <span class="kw1">width</span><span class="sy0">:</span> <span class="re3">20px</span><span class="sy0">;</span>
+    <span class="kw1">left</span><span class="sy0">:</span> <span class="nu0">0</span><span class="sy0">;</span> <span class="coMULTI">/* assumed, but for redundancy */</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-3f7a55fa0b4743a165e3da8293223dda-plain">#sliderbg {
+    position: relative;
+    height: 20px;
+    width: 220px;
+    background: #fff url(yourbgimage.png) repeat-x 0 0;
+}
+#minthumb,
+#maxthumb {
+    position: absolute;
+    height: 20px;
+    width: 20px;
+    left: 0; /* assumed, but for redundancy */
+}
+</textarea></div><div id="syntax-0f52318073024615a72139d0a51ccc46" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;sliderbg&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;minthumb&quot;</span>&gt;&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;yourthumbimage.png&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Thumb for min value in range&quot;</span> <span class="kw3">height</span><span class="sy0">=</span><span class="st0">&quot;20&quot;</span> <span class="kw3">width</span><span class="sy0">=</span><span class="st0">&quot;20&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;maxthumb&quot;</span>&gt;&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;yourthumbimage.png&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Thumb for max value in range&quot;</span> <span class="kw3">height</span><span class="sy0">=</span><span class="st0">&quot;20&quot;</span> <span class="kw3">width</span><span class="sy0">=</span><span class="st0">&quot;20&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;sliderbg&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;minthumb&quot;</span>&gt;&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;yourthumbimage.png&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Thumb for min value in range&quot;</span> <span class="kw3">height</span><span class="sy0">=</span><span class="st0">&quot;20&quot;</span> <span class="kw3">width</span><span class="sy0">=</span><span class="st0">&quot;20&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;maxthumb&quot;</span>&gt;&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;yourthumbimage.png&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;Thumb for max value in range&quot;</span> <span class="kw3">height</span><span class="sy0">=</span><span class="st0">&quot;20&quot;</span> <span class="kw3">width</span><span class="sy0">=</span><span class="st0">&quot;20&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-0f52318073024615a72139d0a51ccc46-plain"><div id="sliderbg">
+    <div id="minthumb"><img src="yourthumbimage.png" alt="Thumb for min value in range" height="20" width="20"></div>
+    <div id="maxthumb"><img src="yourthumbimage.png" alt="Thumb for max value in range" height="20" width="20"></div>
+</div>
+</textarea></div><div id="syntax-6a9871ebd60df79c0450b14b0f62d792" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="kw2">var</span> range <span class="sy0">=</span> <span class="nu0">200</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    tickSize <span class="sy0">=</span> <span class="nu0">0</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    initVals <span class="sy0">=</span> <span class="br0">&#91;</span> <span class="nu0">60</span><span class="sy0">,</span> <span class="nu0">130</span> <span class="br0">&#93;</span><span class="sy0">,</span> <span class="co1">// Values assigned during instantiation</span></div></li><li class="li1"><div class="de1">    dualSlider<span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="co1">// During instantiation, the min thumb will be moved to offset 60</span></div></li><li class="li1"><div class="de1"><span class="co1">// and the max thumb to offset 130.</span></div></li><li class="li2"><div class="de2">dualSlider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getHorizDualSlider</span><span class="br0">&#40;</span></div></li><li class="li1"><div class="de1">                <span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span><span class="st0">&quot;minthumb&quot;</span><span class="sy0">,</span><span class="st0">&quot;maxthumb&quot;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                range<span class="sy0">,</span> tickSize<span class="sy0">,</span> initVals<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+<span class="kw2">var</span> range <span class="sy0">=</span> <span class="nu0">200</span><span class="sy0">,</span>
+    tickSize <span class="sy0">=</span> <span class="nu0">0</span><span class="sy0">,</span>
+    initVals <span class="sy0">=</span> <span class="br0">&#91;</span> <span class="nu0">60</span><span class="sy0">,</span> <span class="nu0">130</span> <span class="br0">&#93;</span><span class="sy0">,</span> <span class="co1">// Values assigned during instantiation</span>
+    dualSlider<span class="sy0">;</span>
+&nbsp;
+<span class="co1">// During instantiation, the min thumb will be moved to offset 60</span>
+<span class="co1">// and the max thumb to offset 130.</span>
+dualSlider <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Slider</span>.<span class="me1">getHorizDualSlider</span><span class="br0">&#40;</span>
+                <span class="st0">&quot;sliderbg&quot;</span><span class="sy0">,</span><span class="st0">&quot;minthumb&quot;</span><span class="sy0">,</span><span class="st0">&quot;maxthumb&quot;</span><span class="sy0">,</span>
+                range<span class="sy0">,</span> tickSize<span class="sy0">,</span> initVals<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-6a9871ebd60df79c0450b14b0f62d792-plain">(function () {
+
+var range = 200,
+    tickSize = 0,
+    initVals = [ 60, 130 ], // Values assigned during instantiation
+    dualSlider;
+
+// During instantiation, the min thumb will be moved to offset 60
+// and the max thumb to offset 130.
+dualSlider = YAHOO.widget.Slider.getHorizDualSlider(
+                "sliderbg","minthumb","maxthumb",
+                range, tickSize, initVals);
+
+})();
+</textarea></div>
+
+<h3 id="skin">Using the Sam skin</h3>
+<p>As of version 2.6.0, Slider comes with a Sam skin treatment for Sliders and DualSliders (not region Sliders yet).</p>
+
+<p>Because the range of a Slider is configurable and the size of the elements is implementation specific, there was no way to create CSS for all cases.  The Sam skin offering provides standard rendering for a 200 pixel wide horizontal Slider or 200 pixel tall vertical Slider.</p>
+
+<div id="syntax-ff816d509a304fe197ef9990db96f7aa" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">...</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- horizontal slider --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;hsliderbg&quot;</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-h-slider&quot;</span> <span class="kw3">tabindex</span><span class="sy0">=</span><span class="st0">&quot;-1&quot;</span>&gt;</span></div></li><li class="li2"><div class="de2">    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;hsliderthumb&quot;</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-slider-thumb&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;path/to/yui/build/slider/assets/thumb-n.gif&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;slider thumb&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- vertical slider --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;vsliderbg&quot;</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-v-slider&quot;</span> <span class="kw3">tabindex</span><span class="sy0">=</span><span class="st0">&quot;-1&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;vsliderthumb&quot;</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-slider-thumb&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;path/to/yui/build/slider/assets/thumb-bar.gif&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;slider thumb&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">...</div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">body</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
+...
+<span class="sc-1">&lt;!-- horizontal slider --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;hsliderbg&quot;</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-h-slider&quot;</span> <span class="kw3">tabindex</span><span class="sy0">=</span><span class="st0">&quot;-1&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;hsliderthumb&quot;</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-slider-thumb&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;path/to/yui/build/slider/assets/thumb-n.gif&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;slider thumb&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- vertical slider --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;vsliderbg&quot;</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-v-slider&quot;</span> <span class="kw3">tabindex</span><span class="sy0">=</span><span class="st0">&quot;-1&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;vsliderthumb&quot;</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-slider-thumb&quot;</span>&gt;</span>
+        <span class="sc2">&lt;<span class="kw2">img</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;path/to/yui/build/slider/assets/thumb-bar.gif&quot;</span> <span class="kw3">alt</span><span class="sy0">=</span><span class="st0">&quot;slider thumb&quot;</span>&gt;</span>
+    <span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+...
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">body</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-ff816d509a304fe197ef9990db96f7aa-plain"><body class="yui-skin-sam">
+...
+<!-- horizontal slider -->
+<div id="hsliderbg" class="yui-h-slider" tabindex="-1">
+    <div id="hsliderthumb" class="yui-slider-thumb">
+        <img src="path/to/yui/build/slider/assets/thumb-n.gif" alt="slider thumb">
+    </div>
+</div>
+
+<!-- vertical slider -->
+<div id="vsliderbg" class="yui-v-slider" tabindex="-1">
+    <div id="vsliderthumb" class="yui-slider-thumb">
+        <img src="path/to/yui/build/slider/assets/thumb-bar.gif" alt="slider thumb">
+    </div>
+</div>
+...
+</body>
+</textarea></div>
+<p>Resulting in these renderings:</p>
+
+<img src="images/sam-hslider.png" alt="Sam skin horizontal Slider" width="215" height="31">
+
+<img src="images/sam-vslider.png" alt="Sam skin horizontal Slider" width="55" height="226">
+
+<p>If you want a different background or thumb image, the following images are provided in the <code>build/slider/assets/</code> directory:</p>
+
+<div class="apisummary">
+    <table>
+        <thead>
+            <tr>
+                <th>Image</th>
+                <th>File</th>
+                <th>Width</th>
+                <th>Height</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="odd">
+                <td><img src="images/thumb-n.gif" width="17" height="21" alt="thumb with point on top"></td>
+                <td>thumb-n.gif</td>
+                <td>17</td>
+                <td>21</td>
+            </tr>
+            <tr>
+                <td style="background-color: #fff"><img src="images/thumb-s.gif" width="17" height="21" alt="thumb with point on bottom"></td>
+                <td>thumb-s.gif</td>
+                <td>17</td>
+                <td>21</td>
+            </tr>
+            <tr class="odd">
+                <td><img src="images/thumb-e.gif" width="21" height="15" alt="thumb with point on right"></td>
+                <td>thumb-e.gif</td>
+                <td>21</td>
+                <td>15</td>
+            </tr>
+            <tr>
+                <td style="background-color: #fff"><img src="images/thumb-w.gif" width="21" height="15" alt="thumb with point on left"></td>
+                <td>thumb-w.gif</td>
+                <td>21</td>
+                <td>15</td>
+            </tr>
+            <tr class="odd">
+                <td><img src="images/left-thumb.png" width="21" height="20" alt="left thumb for use in DualSlider"></td>
+                <td>left-thumb.png</td>
+                <td>21</td>
+                <td>20</td>
+            </tr>
+            <tr>
+                <td style="background-color: #fff"><img src="images/right-thumb.png" width="21" height="20" alt="right thumb for use in DualSlider"></td>
+                <td>right-thumb.png</td>
+                <td>21</td>
+                <td>20</td>
+            </tr>
+            <tr class="odd">
+                <td><img src="images/thumb-bar.gif" width="48" height="26" alt="wide thumb for vertical Sliders"></td>
+                <td>thumb-bar.gif</td>
+                <td>48</td>
+                <td>26</td>
+            </tr>
+            <tr>
+                <td style="background-color: #fff"><img src="images/thumb-fader.gif" width="58" height="24" alt="wide thumb"></td>
+                <td>thumb-fader.gif</td>
+                <td>58</td>
+                <td>24</td>
+            </tr>
+            <tr class="odd">
+                <td><img src="images/bg-fader.gif" width="209" height="28" alt="horizontal bar with tick marks"></td>
+                <td>bg-fader.gif</td>
+                <td>209</td>
+                <td>28</td>
+            </tr>
+            <tr>
+                <td style="background-color: #fff"><img src="images/bg-h.gif" width="209" height="28" alt="horizontal bar"></td>
+                <td>bg-h.gif</td>
+                <td>209</td>
+                <td>28</td>
+            </tr>
+            <tr class="odd">
+                <td><img src="images/bg-v-e.gif" width="36" height="194" alt="vertical bar with tick marks"></td>
+                <td>bg-v-e.gif</td>
+                <td>36</td>
+                <td>194</td>
+            </tr>
+            <tr>
+                <td style="background-color: #fff"><img src="images/bg-v.gif" width="36" height="224" alt="vertical bar"></td>
+                <td>bg-v.gif</td>
+                <td>36</td>
+                <td>224</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<h2 id="knownissues">Known Issues</h2>
+<ul>
+    <li>
+        <h4>Sliders report <code>NaN</code> values when rendered in a hidden container</h4>
+        <p>Slider uses DragDrop logic for the thumb placement presuming the elements are in the live DOM and not obscured within an element with <code>display: none</code>.  When rendered off the displayed DOM, the initial calculated reference points are stored as <code>NaN</code>, causing all future reference calculations to result in <code>NaN</code>.  If it is not possible to delay the rendering of the Slider until its container is on DOM and displayed, you can use the workarounds illustrated on <a href="http://yuiblog.com/sandbox/yui/v251/examples/slider/slider_hidden.html">this page</a>.</p>
+    </li>
+</ul>
+
+<h2 id="mobile">YUI on Mobile: Using Slider Control with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+<!-- Indent | recovery -->
+            </div>
+
+            <div class="yui-u">
+                <div id="cheatsheet">
+                    <h3>Slider Control Cheat Sheet:</h3>
+
+                    <a href="http://yuiblog.com/assets/pdf/cheatsheets/slider.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/slider.gif" width="178" height="134" alt="Cheat Sheet for the Slider Control."></a>
+
+                    <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+                </div>
+
+                <div id="examples">
+                    <h3>Slider Control Examples:</h3>
+
+<ul>
+<li><a href='../examples/slider/slider-simple.html'>Basic Vertical Slider</a></li>
+<li><a href='../examples/slider/slider-ticks.html'>Horizontal Slider with Tick Marks</a></li>
+<li><a href='../examples/slider/slider-rgb.html'>RGB Slider Control</a></li>
+<li><a href='../examples/slider/slider_vert_swapped.html'>Bottom to top Vertical Slider</a></li>
+<li><a href='../examples/slider/slider_dual_thumb.html'>Horizontal Slider with two thumbs</a></li>
+<li><a href='../examples/slider/slider_dual_with_highlight.html'>Dual-thumb Slider with range highlight</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Slider Control:</h4>
+
+<ul>
+<li><a href='../examples/progressbar/pb_basic.html'>Basic Features</a> (included with examples for the <a href='../progressbar/index.html'>ProgressBar Control</a>)</li>
+<li><a href='../examples/progressbar/pb_events.html'>Events</a> (included with examples for the <a href='../progressbar/index.html'>ProgressBar Control</a>)</li>
+<li><a href='../examples/button/btn_example14.html'>Slider Button</a> (included with examples for the <a href='../button/index.html'>Button Control</a>)</li>
+<li><a href='../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../layout/index.html'>Layout Manager</a>)</li>
+</ul>		
+                </div>
+
+                <!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fslider%2F-->
+                <h3 id="delicious">YUI Slider on del.icio.us:</h3>
+                <div class="delicious">
+                    <div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/slider/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/development" class="tag-size-1">development</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/web" class="tag-size-1">web</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/webdesign" class="tag-size-1">webdesign</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/slider" class="tag-size-1">slider</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ui" class="tag-size-1">ui</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/4fd2b1f9a814ad1e4017b0132608e31e" class="saved-by">saved by <span>64</span>  people</a></p>
+   </div>                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="selected "><a title="The YUI Slider Control" href="index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:20 PDT 2013 -->
+
+<!-- Localized -->

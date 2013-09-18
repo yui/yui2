@@ -1,0 +1,108 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>Getting Content from an External Source</title>
+
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+</style>
+
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/fonts/fonts-min.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/tabview/assets/skins/sam/tabview.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/connection/connection-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/tabview/tabview-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+.yui-navset div.loading div {
+    background:url(assets/loading.gif) no-repeat center center;
+    height:8em; /* hold some space while loading */
+}
+
+.yui-navset div.loading div * {
+    display: none;
+}
+#example-canvas h2 {padding: 0 0 .5em 0;}
+</style>
+
+<!--end custom header content for this example-->
+
+</head>
+
+<body class="yui-skin-sam">
+
+
+<h1>Getting Content from an External Source</h1>
+
+<div class="exampleIntro">
+	<p>This demonstrates how to load Tab content from an external data source.</p>
+
+			
+</div>
+
+<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+
+
+<div id="container"><h2 class="first">Browser News</h2></div>
+<script type="text/javascript">
+(function() {
+    var tabView = new YAHOO.widget.TabView();
+    
+    tabView.addTab( new YAHOO.widget.Tab({
+        label: 'Opera',
+        dataSrc: 'assets/news.php?p=opera+browser',
+        cacheData: true,
+        active: true
+    }));
+
+    tabView.addTab( new YAHOO.widget.Tab({
+        label: 'Firefox',
+        dataSrc: 'assets/news.php?p=firefox+browser',
+        cacheData: true
+    }));
+
+    tabView.addTab( new YAHOO.widget.Tab({
+        label: 'Explorer',
+        dataSrc: 'assets/news.php?p=microsoft+explorer+browser',
+        cacheData: true
+    }));
+
+    tabView.addTab( new YAHOO.widget.Tab({
+        label: 'Safari',
+        dataSrc: 'assets/news.php?p=apple+safari+browser',
+        cacheData: true
+    }));
+
+    YAHOO.log("The example has finished loading; as you interact with it, you'll see log messages appearing here.", "info", "example");
+
+    tabView.appendTo('container');
+})();
+</script>
+
+<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+
+
+<!--MyBlogLog instrumentation-->
+<script type="text/javascript" src="http://track2.mybloglog.com/js/jsserv.php?mblID=2007020704011645"></script>
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:52 PDT 2013 -->

@@ -1,0 +1,515 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Storage Utility</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Storage Utility</h1></div>
+</div>
+<div id="bd">
+
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+      
+  <div id="promo" class="component">
+    <h1>YUI 2: Storage Utility</h1>
+
+    <p>The Storage Utility provides a mechanism for storing significant amounts of textual data, client-side, whether or not your browsers supports the proposed <a href="http://dev.w3.org/html5/webstorage/">HTML 5 Storage specification</a>.</p>
+
+<p>Each instance of the Storage Utility leverages one of three storage engines in order to store data:</p>
+
+<ol>
+  <li><strong>HTML 5:</strong> If the client browser supports HTML 5, then this engine will wrap the browser's native storage capability (<code>document.localStorage</code> and <code>document.sessionStorage</code>).</li>
+  <li><strong>Google Gears:</strong> <a href="http://gears.google.com/">Google Gears</a> is a browser extension that users can install on their machine. One of its features is a SQLite database; the Storage Utility uses this database for client-side storage when using the Gears engine.</li>
+  <li><strong>SWF:</strong> YUI provides a SWFStore Utility that normalizes access to the Flash Shared Object. This is the Storage Utility's fallback engine, which will work on most browsers due to the significant penetration of the Adobe Flash plugin.</li>
+</ol>
+
+<div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#yuiTheater">Video: Introducing the Storage Utility</a></li>
+      <li><a href="#gettingstarted">Getting Started</a></li>
+      <li><a href="#generaluse">General Usage Pattern</a></li>
+      <li><a href="#config">Configuring the Storage Utility</a></li>
+      <li><a href="#using">Using a Storage Engine</a></li>
+       <li><a href="#limitations">Limitations</a></li>
+      <li><a href="#mobile">YUI on Mobile Devices</a></li>
+      <li><a href="#support">Support &amp; Community</a></li>
+      <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+  </ul>
+</div>
+
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/storage/index.html">Examples</a>: Explore examples of the Storage Utility in action.</li>
+      <li><a href="../docs/module_storage.html">API Documentation</a>: View the full API documentation for the Storage Utility.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.storage">Release Notes</a>: Detailed change log for the Storage Utility.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Storage Utility as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>    
+  </div>
+
+
+<div class="yuiBodyContent" id="yuiTheater">
+<h3>YUI Theater: Matt Snider &mdash; Introducing the YUI 2.8.0 Storage Utility</h3><p>Matt Snider, the lead frontend engineer for Mint.com (recently acquired by Intuit), contributed the YUI Storage Utility in the 2.8.0 release.  In this session, he provides an overview of the Storage Utility's features and the nuances of the various storage backends.</p><p style=" width: 570; height=300;">
+<object width="570" height="300" allowFullScreen="true">
+ <param name="movie" value="http://d.yimg.com/m/up/ypp/default/player.swf" />
+ <param name="flashVars" value="vid=16467716&autoPlay=0" />
+ <param name="wmode" value="transparent" />
+ <embed width="570" height="300" allowFullScreen="true"
+ src="http://d.yimg.com/m/up/ypp/default/player.swf" type="application/x-shockwave-flash"
+ flashvars="vid=16467716&autoPlay=0">
+ </embed>
+</object>
+</p><p>[<a href='http://developer.yahoo.com/yui/theater/'>More Videos</a> | <a href='http://developer.yahoo.com/yui/theater/video.php?v=snider-yuiconf2009-storage'>Transcript</a>]</p></div>
+
+  <h2 id="gettingstarted">Getting Started<a name="start"></a></h2>
+  <p>The Storage Utility is dependant on <a href="../yahoo/index.html">the Yahoo Global Object</a>, <a href="../dom/index.html">Dom</a>, and <a href="../event/index.html">Event</a>. Optionally, if you wish to use session storage, then include <a href="../cookie/index.html">Cookie</a>, and if you plan to use SWF storage include <a href="../swfstore/index.html">SWF Store</a> and its dependencies.  In a common implementation that relied on both session storage and SWFStore, you would include the following source files in your web page:</p>
+  
+<div id="syntax-d708cc0f500c7c4f9fd8f8b742c316d9" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/cookie/cookie-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/swf/swf-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/storage/storage-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/cookie/cookie-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/swf/swf-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/storage/storage-min.js&quot;</span> &gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-d708cc0f500c7c4f9fd8f8b742c316d9-plain"><!-- Dependencies --> 
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js" ></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/cookie/cookie-min.js" ></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/swf/swf-min.js" ></script>
+<script src="http://yui.yahooapis.com/2.9.0/build/storage/storage-min.js" ></script>
+</textarea></div>
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>storage</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<p>With the Storage Utility present, you can now store large amounts of data on the client's machine. But first you must retrieve an engine instance by calling <code>StorageManager.get</code> with the following optional arguments:</p>
+
+<ol>
+  <li><strong>engineType:</strong> The textual name of the engine which you would like try first; by default if this engine doesn't exist, the system will try the other engines; these names are found at the <code>StorageEngineType.ENGINE_NAME</code> constants. Currently, you can choose from <code>YAHOO.util.StorageEngineGears</code>, <code>YAHOO.util.StorageEngineSWF</code>, and <code>YAHOO.util.StorageEngineHTML5</code>.</li>
+  <li><strong>location:</strong> The location where you would like to store data, either session or local; local remains between sessions, while session data clears when the user closes her browser.</li>
+  <li><strong>conf:</strong> The configuration object can be used to change the behavior of <code>StorageManager.get</code> and/or the engines instantiated.</li>
+</ol>
+
+<p>A sample instantiation might look like this:</p>
+
+<div id="syntax-ac9822df6950907ac5778caaa85d669a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> storageEngine <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">StorageManager</span>.<span class="me1">get</span><span class="br0">&#40;</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">StorageEngineHTML5</span>.<span class="me1">ENGINE_NAME</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">StorageManager</span>.<span class="me1">LOCATION_LOCAL</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">        force<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        order<span class="sy0">:</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">            <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">StorageEngineGears</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">StorageEngineSWF</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#93;</span></div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">//storageEngine will be an instance of YAHOO.util.Storage.</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> storageEngine <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">StorageManager</span>.<span class="me1">get</span><span class="br0">&#40;</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">StorageEngineHTML5</span>.<span class="me1">ENGINE_NAME</span><span class="sy0">,</span>
+    <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">StorageManager</span>.<span class="me1">LOCATION_LOCAL</span><span class="sy0">,</span>
+    <span class="br0">&#123;</span>
+        force<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span>
+        order<span class="sy0">:</span> <span class="br0">&#91;</span>
+            <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">StorageEngineGears</span><span class="sy0">,</span>
+            <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">StorageEngineSWF</span>
+        <span class="br0">&#93;</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">//storageEngine will be an instance of YAHOO.util.Storage.</span>
+&nbsp;</pre></div><textarea id="syntax-ac9822df6950907ac5778caaa85d669a-plain">var storageEngine = YAHOO.util.StorageManager.get(
+    YAHOO.util.StorageEngineHTML5.ENGINE_NAME,
+    YAHOO.util.StorageManager.LOCATION_LOCAL,
+    {
+        force: false,
+        order: [
+            YAHOO.util.StorageEngineGears,
+            YAHOO.util.StorageEngineSWF
+        ]
+    });
+//storageEngine will be an instance of YAHOO.util.Storage.
+</textarea></div>
+<h2 id="generaluse">General Usage Pattern</h2>
+
+<p>The following is the general code pattern used to fetch an engine, then write/read some data:</p>
+
+<div id="syntax-5d36a02cb405f73f28c119dee1f5e877" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// this will fetch the first available engine</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> storageEngine <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">StorageManager</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">storageEngine.<span class="me1">subscribe</span><span class="br0">&#40;</span>storageEngine.<span class="me1">CE_READY</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">    storageEngine.<span class="me1">setItem</span><span class="br0">&#40;</span><span class="st0">'testText'</span><span class="sy0">,</span> <span class="st0">'this is a triumph'</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    storageEngine.<span class="me1">setItem</span><span class="br0">&#40;</span><span class="st0">'testNumber'</span><span class="sy0">,</span> <span class="nu0">1234567890</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    storageEngine.<span class="me1">setItem</span><span class="br0">&#40;</span><span class="st0">'testBoolean'</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="kw3">alert</span><span class="br0">&#40;</span>storageEngine.<span class="me1">getItem</span><span class="br0">&#40;</span><span class="st0">'testText'</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// this will fetch the first available engine</span>
+<span class="kw2">var</span> storageEngine <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">StorageManager</span>.<span class="me1">get</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+storageEngine.<span class="me1">subscribe</span><span class="br0">&#40;</span>storageEngine.<span class="me1">CE_READY</span><span class="sy0">,</span> <span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    storageEngine.<span class="me1">setItem</span><span class="br0">&#40;</span><span class="st0">'testText'</span><span class="sy0">,</span> <span class="st0">'this is a triumph'</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    storageEngine.<span class="me1">setItem</span><span class="br0">&#40;</span><span class="st0">'testNumber'</span><span class="sy0">,</span> <span class="nu0">1234567890</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    storageEngine.<span class="me1">setItem</span><span class="br0">&#40;</span><span class="st0">'testBoolean'</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="kw3">alert</span><span class="br0">&#40;</span>storageEngine.<span class="me1">getItem</span><span class="br0">&#40;</span><span class="st0">'testText'</span><span class="br0">&#41;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-5d36a02cb405f73f28c119dee1f5e877-plain">// this will fetch the first available engine
+var storageEngine = YAHOO.util.StorageManager.get();
+
+storageEngine.subscribe(storageEngine.CE_READY, function() {
+    storageEngine.setItem('testText', 'this is a triumph');
+    storageEngine.setItem('testNumber', 1234567890);
+    storageEngine.setItem('testBoolean', true);
+    alert(storageEngine.getItem('testText'));
+});
+</textarea></div>
+
+<h2 id="config">Configuring the Storage Utility</h2>
+
+<p>The Storage Utility is configured via the third argument to the <code>get</code> method.  This optional argument is an object containing one or more of the following fields:</p>
+
+<div class="apisummary">
+
+<table>
+    <thead>
+        <tr>
+            <th>Configuration Option</th>
+            <th>Purpose</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr >
+            <td>force</td>
+            <td>(boolean) By default the StorageManager will attempt all engines until it finds one that works, but when <code>force</code> is true it will confine itself to the engine specified in the first argument.</td>
+        </tr>
+        <tr class="odd">
+            <td>order</td>
+            <td>(array) By default the StorageManager will attempt engines in the order that they appear in the code. If you would like to change the order in which storage engines are tried, then add them to this option. This is an array of storage engine classes; the possible values are <code>YAHOO.util.StorageEngineGears</code>, <code>YAHOO.util.StorageEngineSWF</code>, and <code>YAHOO.util.StorageEngineHTML5</code>.
+</td>
+        </tr>
+        <tr>
+            <td>engine</td>
+            <td>(object) The configuration object to pass into the engine.</td>
+        </tr>
+        <tr class="odd">
+            <td>engine.swfURL</td>
+            <td>(string) For SWFStore, this is the URL of the <code>swfstore.swf</code>; by default <code>/swfstore.swf</code> is used.</td>
+        </tr>
+        <tr >
+            <td>engine.containerID</td>
+            <td>(string) For SWFStore, the container into which the SWF will be inserted; by default it is inserted into body element.</td>
+        </tr>
+        <tr class="odd">
+            <td>engine.attributes</td>
+            <td>(object) For SWFStore, this object will be used by <code>swf.js</code> when creating the SWF object.</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<h2 id="using">Using A Storage Engine</h2>
+
+<p>Once a storage engine has been instantiated, the engine instance can be used to write and read data from the engine. Mostly <code>string</code>s should be stored, but we have added meta data to allow the storing of <code>number</code>, <code>boolean</code>, or <code>NULL</code> as well. Here's a summary of the methods available on the engine object:</p>
+
+<div class="apisummary">
+<table>
+    <thead>
+        <tr>
+            <th>Member</th>
+            <th>Contents</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="odd">
+            <td>length</td>
+            <td>(number) The number of keys currently stored in the engine.</td>
+        </tr>        
+        <tr>
+            <td>clear()</td>
+            <td>(function) Clears all keys and the data from the engine.</td>
+        </tr>
+        <tr class="odd">
+            <td>getItem(string)</td>
+            <td>(function) Fetches the data by a key. This method will return a <code>string</code>, <code>number</code>, <code>boolean</code>, or <code>NULL</code> dependending on what was provided to <code>setItem</code>.</td>
+        </tr>
+        <tr>
+            <td>getName()</td>
+            <td>(string) Fetches the Storage Engine's name constant.</td>
+        </tr>
+        <tr class="odd">
+            <td>hasKey(string)</td>
+            <td>(function) Evaluates if the provided key has a value.</td>
+        </tr>
+        <tr>
+            <td>key(number)</td>
+            <td>(string) Fetches the key at a given index.</td>
+        </tr>
+        <tr class="odd">
+            <td>removeKey(string)</td>
+            <td>(function) Removes the key and its value from the engine.</td>
+        </tr>
+        <tr>
+            <td>setItem(string, mixed)</td>
+            <td>(function) Adds or updates the value for a given key. The following data types can be stored and returned: <code>string</code>, <code>number</code>, <code>boolean</code>, or <code>NULL</code>.</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<h2 id="limitations">Limitations</h2>
+
+<p>Each storage engine has its own restrictions and limitations. The engine files themselves make note of these restrictions, but here is a summary:</p>
+
+<h3>HTML 5 Storage Engine</h3>
+<ol>
+  <li>Only the most recent versions of browsers support HTML 5 storage: FireFox 3, Safari 4, and IE 8;</li>
+  <li>IE 8 allows 10 MB of storage, but other browsers only allow 5 MB;</li>
+</ol>
+
+<h3>Gears Storage Engine</h3>
+<ol>
+  <li>Gears uses SQLite, which has limitations; see the <a href="http://www.sqlite.org/limits.html">SQLite limitations</a> article on SQLite.org for more information;</li>
+  <li>The end user must approve a site to use Gears;</li>
+  <li>Cookies must be used to emulate session storage;</li>
+  <li>SQLite only supports about 2 GB worth of data;</li>
+  <li>Under the hood, large strings must be fragmented as there is a limit to the number of characters that can be written per SQL statement;</li>
+</ol>
+
+<h3>SWF Storage Engine</h3>
+<ol>
+  <li>SWF data is stored in a shared SWF object, which can be located and read on the filesystem;</li>
+  <li>When more than 100kb of data is stored, the end user must approve a size increase;</li>
+  <li>Cookies must be used to emulate session storage;</li>
+  <li>There is a timing delay while the SWF loads; therefore, the <code>CE_READY</code> custom event must be subscribed to before using engine;</li>
+  <li>Flash will need to be installed and active on the end-user's browser (although most end-users have Flash installed);</li>
+</ol>
+
+
+<h2 id="mobile">YUI on Mobile: Using Storage Utility with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>  
+<p>The Storage Utility is fully supported on Apple's iPhone, which implements the HTML 5 storage proposal.  We have not tested the Storage Utility against other devices in this class.</p>
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+    </div>
+         <div class="yui-u">
+            
+            <div id="cheatsheet">
+                <h3>Storage Utility Cheat Sheet:</h3>
+                
+                <a href="http://yuiblog.com/assets/pdf/cheatsheets/storage.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/storage.gif" width="178" height="132" alt="Cheat Sheet for the Storage Utility."></a>
+                
+                <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+            </div>
+
+<div id="examples">
+<h3>Storage Utility Examples:</h3>
+
+<ul>
+<li><a href='../examples/storage/storage-simple.html'>Simple Storage Example &mdash; Saving In-Progress Text Entry</a></li>
+<li><a href='../examples/storage/storage-advanced.html'>Advanced Storage Example</a></li>
+</ul>
+
+
+		
+</div>
+
+<!--<div id="morereading">
+    <h3>More Reading about the Storage Utility:</h3>
+    
+  </div>-->
+
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fstorage%2F--><h3 id="delicious">YUI Storage Utility on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/storage/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/system:unfiled" class="tag-size-1">system:unfiled</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/storage" class="tag-size-1">storage</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/ajax" class="tag-size-1">ajax</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/localstorage" class="tag-size-1">localstorage</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/html5" class="tag-size-1">html5</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/persistence" class="tag-size-1">persistence</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/2285e1a45577ea84f0186ce843bbbd36" class="saved-by">saved by <span>21</span>  people</a></p>
+   </div></div>
+
+         </div>
+  </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="selected "><a title="The YUI Storage Utility" href="index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:17 PDT 2013 -->
+
+<!-- Localized -->

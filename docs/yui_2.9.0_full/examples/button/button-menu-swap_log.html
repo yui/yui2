@@ -1,0 +1,659 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Button Control: Replacing the content of a Button's Menu</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/menu/assets/skins/sam/menu.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/menu/menu-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-debug.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+
+	/*	Style the <fieldset> since the Reset CSS removes the default style. */
+    #pizza-order-form fieldset {
+
+        border: 2px groove #ccc;
+        margin: .5em;
+        padding: .5em;
+
+    }
+
+	pre {
+		border: solid 1px #000;
+		background-color: #ccc;
+		padding: 10px;
+		margin: 10px;
+	}
+
+	li.yui-button-selectedmenuitem {
+		background: url(../button/assets/checkbox.png) left center no-repeat;
+	}
+
+</style>
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	<div id="ygma"><a href="/"><img src="http://l.yimg.com/a/i/brand/purplelogo/uh/us/ydn.gif" width="266" height="34" border="0"></a></div>
+	<div id="pagetitle"><h1>YUI Library Examples: Button Control: Replacing the content of a Button's Menu</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Button Control: Replacing the content of a Button's Menu</h1>
+	
+	<div class="exampleIntro">
+	<p>
+This example illustrates how to replace the content of a Button's Menu on 
+the fly.
+</p>			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="button-menu-swap_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<script type="text/javascript">
+
+	YAHOO.util.Event.onContentReady("pizza-order-form", function () {
+		
+		//	Change the default node name for the ButtonGroup element 
+		//	so that the fieldset can be used.
+		
+		YAHOO.widget.ButtonGroup.prototype.NODE_NAME = "FIELDSET";
+	
+
+		//	Transform the existing radio buttons into a ButtonGroup control
+	
+		var oButtonGroup = new YAHOO.widget.ButtonGroup("pizza-types-fields"),
+
+			oType1Label = YAHOO.util.Dom.get("type1-label"),
+			oType2Label = YAHOO.util.Dom.get("type2-label"),
+
+			oButton1 = oButtonGroup.getButton(0),
+			oButton2 = oButtonGroup.getButton(1);
+
+
+		//	Set the "label" attribute of each Button to the text of 
+		//	its corresponding <label> element
+
+		oButton1.set("label", oType1Label.innerHTML);
+		oButton2.set("label", oType2Label.innerHTML);			
+
+
+		//	Remove the original labels, since Buttons of type "radio" 
+		//	are self labelling
+
+		oButtonGroup.removeChild(oType1Label);
+		oButtonGroup.removeChild(oType2Label);			
+	
+
+		//	Utility function to transform the data in HTML <option> 
+		//	elements into JavaScript arrays of MenuItem 
+		//	configuration properties
+	
+		var createMenuItemData = function (optiongroup) {
+		
+			var aOptions = YAHOO.util.Dom.get(optiongroup).getElementsByTagName("option"),
+				aMenuItemData = [],
+				nOptions = aOptions.length,
+				oOption;
+			
+			for (var i = 0; i < nOptions; i++) {
+				
+				oOption = aOptions[i];
+				aMenuItemData[i] = { text: oOption.text , value: oOption.value };
+
+			}
+
+			aMenuItemData.splice(0, 0, "Select Size");
+			
+			return aMenuItemData;
+			
+		};
+
+
+		//	Read the data out of the <select>'s <optgroup> elements so 
+		//	that it can be used to create MenuItems in a Button's Menu
+
+		var aThinCrustSizes = createMenuItemData("thin-crust-sizes"),
+			aDeepDishSizes = createMenuItemData("deep-dish-sizes");
+
+
+		var onCheckedChange = function (event, menuitems) {
+
+			var oMenu;
+
+			if (this.get("checked")) {
+
+				oMenu = oMenuButton.getMenu();
+
+				//	Use the "inDocument" method of the Dom utility to 
+				//	determine if the Button's Menu has been rendered.
+
+				if (YAHOO.util.Dom.inDocument(oMenuButton.getMenu().element)) {
+
+					//	If the Menu has been rendered, use Menu's "clearContent"
+					//	method to remove all existing MenuItems, then repopulate 
+					//	the Menu using the "addItems" method.
+
+					oMenu.clearContent();
+					oMenu.addItems(menuitems);
+					
+					//	Using the "clearContent" method removes all content
+					//	from a Menu instance, effectively restoring it to its 
+					//	pre-rendered state.  For this reason, it is necessary
+					//	to call the "render" method after using "clearContent"
+					//	so that the Menu's content is rendered into the Menu's 
+					//	body element (<div class="bd">).  However, since the 
+					//	Menu's root element is already in the page, it is not
+					//	necessary to pass an element reference when calling the 
+					//	"render" method.
+					
+					oMenu.render();
+
+				}
+				else {
+					
+					//	By default a Button's Menu is lazyloaded - meaning the 
+					//	creation and rendering of all MenuItems is 
+					//	deferred until the Menu is intially requested by the 
+					//	user.  If the "menu" attribute of a Button is set to 
+					//	an array of MenuItem configuration properties, as in 
+					//	this example, Button sets the "itemData" property of its 
+					//	Menu to the value of the "menu" attribute.  When the 
+					//	Button's Menu is first shown, Menu uses the value of 
+					//	the "itemData" to create and render all MenuItems.
+					
+					//	If the user clicks either the "Deep Dish" or 
+					//	"Thin Crust" Buttons before the content of the 
+					//	"Pizza Size" Menu has been rendered, simply set the 
+					//	Menu's "itemData" property to the to the array of 
+					//	MenuItem configuration properties that should be used 
+					//	to build the Menu when it is lazy loaded.
+					
+					oMenu.itemData = menuitems;
+				}					
+				
+			}
+
+		};
+
+		
+		//	Register a change event handler for each radio button's 
+		//	"checked" attribute that will rebuild the content of the 
+		//	menu button's Menu instance when the user toggles between 
+		//	the deep dish and thin crust pizzas
+
+		oButton1.on("checkedChange", onCheckedChange, aThinCrustSizes);
+		oButton2.on("checkedChange", onCheckedChange, aDeepDishSizes);			
+
+
+		//	Remove the existing <select> element from the <form>, and 
+		//	replace it with a menu button
+		
+
+		var oPizzaSizeSelect = YAHOO.util.Dom.get("pizza-size");
+		
+		oPizzaSizeSelect.parentNode.removeChild(oPizzaSizeSelect);
+
+
+		var oMenuButton = new YAHOO.widget.Button({	type: "menu", 
+														label: "Select Size", 
+														name: "pizza-size", 
+														menu: aThinCrustSizes, 
+														container: "pizza-size-fields" });
+
+
+		//	"selectedMenuItemChange" event handler for a Button that will set 
+		//	the Button's "label" attribute to the value of the "text" 
+		//	configuration property of the MenuItem that was clicked.
+
+		var onSelectedMenuItemChange = function (event) {
+
+			var oMenuItem = event.newValue;
+
+			this.set("label", oMenuItem.cfg.getProperty("text"));
+
+		};
+
+
+		//	Register a "selectedMenuItemChange" event handler that will sync the 
+		//	Button's "label" attribute to the MenuItem that was clicked.
+
+		oMenuButton.on("selectedMenuItemChange", onSelectedMenuItemChange);
+
+
+		//	"render" event handler for a Button's Menu - responsible for setting
+		//	 the default value for the Button's "selectedMenuItem" attribute.
+
+		var onMenuRender = function (type, args, button) {
+
+			button.set("selectedMenuItem", this.getItem(0));
+
+		};
+
+
+		//	"submit" event handler for a Button's parent form - repsonsible for 
+		//	rendering a Menu that was to be lazy loaded, but never clicked on, 
+		//	and therefore never rendered.
+
+		var onFormSubmit = function (event, button) {
+
+			var oMenuItem = button.get("selectedMenuItem"),
+				UA = YAHOO.env.ua,
+				oEvent,
+				oMenu;
+
+			if (!oMenuItem) {
+
+				//	Pause submission of the form until the Button's Menu 
+				//	is rendered
+				YAHOO.util.Event.preventDefault(event);
+
+				oMenu = button.getMenu();
+
+				oMenu.addItems(oMenu.itemData);
+
+				oMenu.subscribe("render", function () {
+
+					var bSubmitForm;
+
+					if (UA.ie) {
+						bSubmitForm = this.fireEvent("onsubmit");
+					}
+					else {  // Gecko, Opera, and Safari
+
+						oEvent = document.createEvent("HTMLEvents");
+						oEvent.initEvent("submit", true, true);
+						bSubmitForm = this.dispatchEvent(oEvent);
+
+					}
+
+					//	In IE and Safari, dispatching a "submit" event to a form 
+					//	WILL cause the form's "submit" event to fire, but WILL  
+					//	NOT submit the form.  Therefore, we need to call the 
+					//	"submit" method as well.
+
+					if ((UA.ie || UA.webkit) && bSubmitForm) {
+						this.submit();
+					}
+
+				}, this, true);
+
+				oMenu.render(oMenu.cfg.getProperty("container"));
+
+			}
+
+		};
+
+
+		oMenuButton.on("appendTo", function () {
+
+			var oMenu = this.getMenu();
+
+			//	If a Button's "selectedMenuItem" attribute is set, the selected 
+			//	MenuItem's name and value will be part of the form's data set 
+			//	when its parent form is submitted.  For Buttons with Menus built
+			//	entirely from script, the "selectedMenuItem" property is not 
+			//	set by default.  To set the "selectedMenuItem" to a default 
+			//	value, simply register a "render" event handler for the Button's
+			//	Menu that sets the Button's "selectedMenuItem" attribute to the
+			//	desired item in the Menu.
+
+			oMenu.subscribe("render", onMenuRender, this);
+
+
+			//	The items in a Button's Menu are lazy loaded by default: loaded 
+			//	when the Button is initially clicked.  If the user never clicks 
+			//	on the Button, its Menu will never be rendered, meaning the 
+			//	"render" event handler registered above will never be called, 
+			//	and the default value for the Button's "selectMenuItem"
+			//	attribute will never be set.  Therefore, add a "submit" event 
+			//	handler to the Button's parent form that will render the Menu 
+			//	if the Button's "selectedMenuItem" attribute is not set.
+
+			YAHOO.util.Event.on(this.getForm(), "submit", onFormSubmit, this);
+
+		});
+	
+
+		var oPlaceOrder = new YAHOO.widget.Button("place-order");
+		
+	});
+
+</script>
+
+
+<form id="pizza-order-form" method="post">
+
+	<fieldset>
+		<legend>Pizza Order Form</legend>
+
+		<fieldset id="pizza-types-fields">
+			<legend>Pizza Type</legend>
+			<label id="type1-label" for="type1">Thin Crust</label>
+			<input type="radio" name="pizza-type" id="type1" value="1" checked>
+			<label id="type2-label" for="type2">Deep Dish</label>
+			<input type="radio" name="pizza-type" id="type2" value="2">
+		</fieldset>
+
+ 		<div id="pizza-size-fields">
+			<label for="pizza-size">Size: </label>
+			<select name="pizza-size" id="pizza-size">
+				<option selected label="none" value="none">Select a size</option>
+				<optgroup label="Thin Crust" id="thin-crust-sizes">
+					<option value="1.1">Small</option>
+					<option value="1.2">Medium</option>
+					<option value="1.3">Large</option>
+					<option value="1.4">Extra Large</option>
+				</optgroup>
+				<optgroup label="Deep Dish" id="deep-dish-sizes">
+					<option value="2.1">Regular</option>
+					<option value="2.2">Large</option>
+				</optgroup>
+			</select>
+		</div>
+
+	</fieldset>
+	
+	<input type="submit" id="place-order" name="place-order" value="Place Order">
+
+</form>
+	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<p>
+Button's 
+<a href="/yui/docs/YAHOO.widget.Button.html#config_menu"><code>menu</code></a> 
+attribute is documented as being <code>writeOnce</code> &#151; meaning that the 
+attribute can only be set once, either via the the object literal passed to the 
+constructor, or on an instance via the 
+<a href="/yui/docs/YAHOO.util.AttributeProvider.html#method_set"><code>set</code></a> 
+method.  However, although the 
+<a href="/yui/docs/YAHOO.widget.Button.html#config_menu"><code>menu</code></a> 
+attribute can only be set once, the 
+<a href="/yui/docs/YAHOO.widget.Menu.html">Menu widget's API</a> 
+makes it easy to replace the content of a Menu instance on the fly.  In this 
+example, the content of the "Pizza Size" Menu is controlled by the type of pizza 
+the user has selected.
+</p>
+<p>
+The code used to replace the content of the "Pizza Size" Menu in this 
+example resides in the <code>onCheckedChange</code> function, a listener for 
+the 
+<a href="/yui/docs/YAHOO.widget.Button.html#event_checkedChange"><code>checkedChange</code></a> 
+event of the two radio buttons.  Each listener receives an array of MenuItem 
+configuration properties, used to rebuild the content of the "Pizza Size" Menu, 
+either by using the Menu's 
+<a href="/yui/docs/YAHOO.widget.Menu.html#method_clearContent"><code>clearContent</code></a> 
+method, or by setting the Menu's 
+<a href="/yui/docs/YAHOO.widget.Menu.html#property_itemData"><code>itemData</code></a>
+property.
+</p>
+<textarea name="code" class="JScript" cols="60" rows="1">
+var onCheckedChange = function (event, menuitems) {
+
+	var oMenu;
+
+	if (this.get("checked")) {
+
+		oMenu = oMenuButton.getMenu();
+
+		//	Use the "inDocument" method of the Dom utility to 
+		//	determine if the Button's Menu has been rendered.
+
+		if (YAHOO.util.Dom.inDocument(oMenuButton.getMenu().element)) {
+
+			//	If the Menu has been rendered, use Menu's "clearContent"
+			//	method to remove all existing MenuItems, then repopulate 
+			//	the Menu using the "addItems" method.
+
+			oMenu.clearContent();
+			oMenu.addItems(menuitems);
+			
+			//	Using the "clearContent" method removes all content
+			//	from a Menu instance, effectively restoring it to its 
+			//	pre-rendered state.  For this reason, it is necessary
+			//	to call the "render" method after using "clearContent"
+			//	so that the Menu's content is rendered into the Menu's 
+			//	body element (<div class="bd">).  However, since the 
+			//	Menu's root element is already in the page, it is not
+			//	necessary to pass an element reference when calling the 
+			//	"render" method.
+			
+			oMenu.render();
+
+		}
+		else {
+			
+			//	By default a Button's Menu is lazyloaded - meaning the 
+			//	creation and rendering of all MenuItems is 
+			//	deferred until the Menu is intially requested by the 
+			//	user.  If the "menu" attribute of a Button is set to 
+			//	an array of MenuItem configuration properties, as in 
+			//	this example, Button sets the "itemData" property of its 
+			//	Menu to the value of the "menu" attribute.  When the 
+			//	Button's Menu is first shown, Menu uses the value of 
+			//	the "itemData" to create and render all MenuItems.
+			
+			//	If the user clicks either the "Deep Dish" or 
+			//	"Thin Crust" Buttons before the content of the 
+			//	"Pizza Size" Menu has been rendered, simply set the 
+			//	Menu's "itemData" property to the to the array of 
+			//	MenuItem configuration properties that should be used 
+			//	to build the Menu when it is lazy loaded.
+			
+			oMenu.itemData = menuitems;
+		}					
+		
+	}
+
+};
+
+
+//	Register a change event handler for each radio button's 
+//	"checked" attribute that will rebuild the content of the 
+//	menu button's Menu instance when the user toggles between 
+//	the deep dish and thin crust pizzas
+
+oButton1.on("checkedChange", onCheckedChange, aThinCrustSizes);
+oButton2.on("checkedChange", onCheckedChange, aDeepDishSizes);
+</textarea>
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerDiv"></div>
+							<div id="loggerGloss">
+								<p><strong>Note:</strong> You are viewing this example in debug mode with logging enabled.  This can significantly slow performance.</p>
+	
+								<p class="loggerButton"><span id="loggerLink"><span class="first-child"><a href="button-menu-swap.html">Reload with logging<br />and debugging disabled.</a></span></span></p>
+							</div>
+						</div>
+					
+				
+					<div id="examples">
+						<h3>Button Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='../button/btn_example01.html'>Push Buttons</a></li><li><a href='../button/btn_example02.html'>Link Buttons</a></li><li><a href='../button/btn_example03.html'>Checkbox Buttons</a></li><li><a href='../button/btn_example04.html'>Radio Buttons</a></li><li><a href='../button/btn_example05.html'>Submit Buttons</a></li><li><a href='../button/btn_example06.html'>Reset Buttons</a></li><li><a href='../button/btn_example07.html'>Menu Buttons</a></li><li><a href='../button/btn_example08.html'>Split Buttons</a></li><li><a href='../button/btn_example09.html'>Simple Calendar Menu Button</a></li><li><a href='../button/btn_example10.html'>Calendar Menu Button with Date on Button Face</a></li><li><a href='../button/btn_example11.html'>Color Picker Button</a></li><li><a href='../button/btn_example12.html'>Fixed Width Menu Button</a></li><li><a href='../button/btn_example13.html'>Glowing Button</a></li><li><a href='../button/btn_example14.html'>Slider Button</a></li><li><a href='../button/button-ariaplugin.html'>Using the Button ARIA Plugin</a></li><li><a href='../button/button-menu-select.html'>Using A Menu Button To Replace A &#60;select&#62; Element</a></li><li class='selected'><a href='../button/button-menu-swap.html'>Replacing the content of a Button's Menu</a></li><li><a href='../autocomplete/ac_combobox.html'>Combobox, with CSS for Multiple Stacked Instances (included with examples for AutoComplete Control)</a></li><li><a href='../datatable/dt_colshowhide.html'>Showing, Hiding, and Reordering Columns. (included with examples for DataTable Control)</a></li><li><a href='../layout/adv_layout.html'>Complex Application (included with examples for Layout Manager)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Button Control Resources:</h3>
+						<ul>
+							
+						<li><a href="../../docs/module_button.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/button.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="/yui/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="/yui/3/">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="/yui/articles/reportingbugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="/yui/license.html">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- proven and robust." href="/yui/2/">YUI 2</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="/yui/examples/">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="/yui/docs/">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="item"><a title="Configure your YUI implementation; serve YUI source files from Yahoo! -- free, fast, and simple" href="/yui/articles/hosting/">Dependency Configurator</a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="/yui/animation/">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="/yui/autocomplete/">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="/yui/history/">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="/yui/button/">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="/yui/calendar/">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="/yui/carousel/">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="/yui/charts/">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="/yui/colorpicker/">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="/yui/connection/">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="/yui/container/">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="/yui/cookie/">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="/yui/datasource/">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="/yui/datatable/">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="/yui/dom/">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="/yui/dragdrop/">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="/yui/element/">Element</a></li><li class="item"><a title="The YUI Event Utility" href="/yui/event/">Event</a></li><li class="item"><a title="The YUI Get Utility" href="/yui/get/">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="/yui/imagecropper/">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="/yui/imageloader/">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="/yui/json/">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="/yui/layout/">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="/yui/logger/">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="/yui/menu/">Menu</a></li><li class="item"><a title="The YUI Paginator" href="/yui/paginator/">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="/yui/profiler/">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="/yui/profilerviewer/">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="/yui/progressbar/">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="/yui/resize/">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="/yui/editor/">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="/yui/selector/">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="/yui/slider/">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="/yui/storage/">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="/yui/stylesheet/">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="/yui/swf/">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="/yui/swfstore/">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="/yui/tabview/">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="/yui/treeview/">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="/yui/uploader/">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="/yui/yahoo/">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="/yui/yuiloader/">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="/yui/yuitest/">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="/yui/reset/">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="/yui/base/">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="/yui/fonts/">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="/yui/grids/">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:46 PDT 2013 -->

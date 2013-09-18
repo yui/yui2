@@ -1,0 +1,555 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Calendar Control: Popup Calendar - Advanced</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/container/assets/skins/sam/container.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/calendar/assets/skins/sam/calendar.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/container/container-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/calendar/calendar-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+    /* Clear calendar's float, using dialog inbuilt form element */
+    #container .bd form {
+        clear:left;
+    }
+
+    /* Have calendar squeeze upto bd bounding box */
+    #container .bd {
+        padding:0;
+    }
+
+    #container .hd {
+        text-align:left;
+    }
+
+    /* Center buttons in the footer */
+    #container .ft .button-group {
+        text-align:center;
+    }
+
+    /* Prevent border-collapse:collapse from bleeding through in IE6, IE7 */
+    #container_c.yui-overlay-hidden table {
+        *display:none;
+    }
+
+    /* Remove calendar's border and set padding in ems instead of px, so we can specify an width in ems for the container */
+    #cal {
+        border:none;
+        padding:1em;
+    }
+
+    /* Datefield look/feel */
+    .datefield {
+        position:relative;
+        top:10px;
+        left:10px;
+        white-space:nowrap;
+        border:1px solid black;
+        background-color:#eee;
+        width:25em;
+        padding:5px;
+    }
+
+    .datefield input,
+    .datefield button,
+    .datefield label  {
+        vertical-align:middle;
+    }
+
+    .datefield label  {
+        font-weight:bold;
+    }
+
+    .datefield input  {
+        width:15em;
+    }
+
+    .datefield button  {
+        padding:0 5px 0 5px;
+        margin-left:2px;
+    }
+
+    .datefield button img {
+        padding:0;
+        margin:0;
+        vertical-align:middle;
+    }
+
+    /* Example box */
+    .box {
+        position:relative;
+        height:30em;
+    }
+</style>
+
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: Calendar Control: Popup Calendar - Advanced</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Calendar Control: Popup Calendar - Advanced</h1>
+	
+	<div class="exampleIntro">
+	<p>The default Calendar/CalendarGroup controls do not provide positioning or dragdrop support natively, as the Container family's Overlay control and its subclasses do.</p>
+<p>This example demonstrates how the Calendar control can be wrapped in a Container (a Dialog control in this case) which allows you to leverage Container family features to position the Calendar relative to a context element. It also show how you can setup click listeners on the document, to hide the dialog when the user clicks somewhere outside of the dialog.</p>
+			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="calcontainer_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<script type="text/javascript">
+    YAHOO.util.Event.onDOMReady(function(){
+
+        var Event = YAHOO.util.Event,
+            Dom = YAHOO.util.Dom,
+            dialog,
+            calendar;
+
+        var showBtn = Dom.get("show");
+
+        Event.on(showBtn, "click", function() {
+
+            // Lazy Dialog Creation - Wait to create the Dialog, and setup document click listeners, until the first time the button is clicked.
+            if (!dialog) {
+
+                // Hide Calendar if we click anywhere in the document other than the calendar
+                Event.on(document, "click", function(e) {
+                    var el = Event.getTarget(e);
+                    var dialogEl = dialog.element;
+                    if (el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != showBtn && !Dom.isAncestor(showBtn, el)) {
+                        dialog.hide();
+                    }
+                });
+
+                function resetHandler() {
+                    // Reset the current calendar page to the select date, or 
+                    // to today if nothing is selected.
+                    var selDates = calendar.getSelectedDates();
+                    var resetDate;
+        
+                    if (selDates.length > 0) {
+                        resetDate = selDates[0];
+                    } else {
+                        resetDate = calendar.today;
+                    }
+        
+                    calendar.cfg.setProperty("pagedate", resetDate);
+                    calendar.render();
+                }
+        
+                function closeHandler() {
+                    dialog.hide();
+                }
+
+                dialog = new YAHOO.widget.Dialog("container", {
+                    visible:false,
+                    context:["show", "tl", "bl"],
+                    buttons:[ {text:"Reset", handler: resetHandler, isDefault:true}, {text:"Close", handler: closeHandler}],
+                    draggable:false,
+                    close:true
+                });
+                dialog.setHeader('Pick A Date');
+                dialog.setBody('<div id="cal"></div>');
+                dialog.render(document.body);
+
+                dialog.showEvent.subscribe(function() {
+                    if (YAHOO.env.ua.ie) {
+                        // Since we're hiding the table using yui-overlay-hidden, we 
+                        // want to let the dialog know that the content size has changed, when
+                        // shown
+                        dialog.fireEvent("changeContent");
+                    }
+                });
+            }
+
+            // Lazy Calendar Creation - Wait to create the Calendar until the first time the button is clicked.
+            if (!calendar) {
+
+                calendar = new YAHOO.widget.Calendar("cal", {
+                    iframe:false,          // Turn iframe off, since container has iframe support.
+                    hide_blank_weeks:true  // Enable, to demonstrate how we handle changing height, using changeContent
+                });
+                calendar.render();
+
+                calendar.selectEvent.subscribe(function() {
+                    if (calendar.getSelectedDates().length > 0) {
+
+                        var selDate = calendar.getSelectedDates()[0];
+
+                        // Pretty Date Output, using Calendar's Locale values: Friday, 8 February 2008
+                        var wStr = calendar.cfg.getProperty("WEEKDAYS_LONG")[selDate.getDay()];
+                        var dStr = selDate.getDate();
+                        var mStr = calendar.cfg.getProperty("MONTHS_LONG")[selDate.getMonth()];
+                        var yStr = selDate.getFullYear();
+        
+                        Dom.get("date").value = wStr + ", " + dStr + " " + mStr + " " + yStr;
+                    } else {
+                        Dom.get("date").value = "";
+                    }
+                    dialog.hide();
+                });
+
+                calendar.renderEvent.subscribe(function() {
+                    // Tell Dialog it's contents have changed, which allows 
+                    // container to redraw the underlay (for IE6/Safari2)
+                    dialog.fireEvent("changeContent");
+                });
+            }
+
+            var seldate = calendar.getSelectedDates();
+
+            if (seldate.length > 0) {
+                // Set the pagedate to show the selected date if it exists
+                calendar.cfg.setProperty("pagedate", seldate[0]);
+                calendar.render();
+            }
+
+            dialog.show();
+        });
+    });
+</script>
+<div class="box">
+   <div class="datefield">
+      <label for="date">Date: </label><input type="text" id="date" name="date" value="" /><button type="button" id="show" title="Show Calendar"><img src="assets/calbtn.gif" width="18" height="18" alt="Calendar" ></button>
+   </div>
+</div>
+	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Setting up the Calendar and Container</h2>
+
+<p>In this example, we'll see how we can leverage functionality present in the Container family's Dialog widget, to provide a more advanced popup Calendar, than the basic popup features which Calendar supports inherently.</p>
+
+<ul>
+    <li>We'll use Dialog's <code>context</code> configuration property to position the Calendar relative to a calendar icon button.</li>
+    <li>We also use Dialog's <code>buttons</code> property to provide a "Reset" button to set the calendar page to the selected date, and a more prominent "Close" button to hide the popup Calendar.</li>
+    <li>We set the Dialog's <code>draggable</code> property to <code>false</code> for this example, however if the application required it, we could set <code>draggable</code> to <code>true</code> to get a draggable popup Calendar</li>
+</ul>
+
+<p>The code we use to construct the Dialog which will hold the Calendar is shown below:</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+    function resetHandler() {
+        // Reset the current calendar page to the select date, or 
+        // to today if nothing is selected.
+        var selDates = calendar.getSelectedDates();
+        var resetDate;
+
+        if (selDates.length > 0) {
+            resetDate = selDates[0];
+        } else {
+            resetDate = calendar.today;
+        }
+
+        calendar.cfg.setProperty("pagedate", resetDate);
+        calendar.render();
+    }
+
+    function closeHandler() {
+        dialog.hide();
+    }
+
+    dialog = new YAHOO.widget.Dialog("container", {
+        visible:false,
+        context:["show", "tl", "bl"],
+        buttons:[ {text:"Reset", handler: resetHandler, isDefault:true}, {text:"Close", handler: closeHandler}],
+        draggable:false,
+        close:true
+    });
+</textarea>
+
+<p>We don't set a width on the Dialog, so that it will shrink-wrap the Calendar, which does not have a specific width defined (the width of the calendar is controlled by the width of its contents).</p>
+
+<p>The code to construct the Calendar is pretty straight forward, and is shown below:</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+    calendar = new YAHOO.widget.Calendar("cal", {
+        iframe:false,          // Turn iframe off, since container has iframe support.
+        hide_blank_weeks:true  // Enable, to demonstrate how we handle changing height, using changeContent
+    });
+    calendar.render();
+</textarea>
+
+<p>For this example, both the Dialog and the Calendar are constructed lazily. That is, we don't construct them until the "calendar" button is clicked on for the first time.</p>
+
+<h3>Container/Calendar Considerations</h3>
+
+<p>When creating a Calendar which is to be placed inside a Container control there are a few areas which require special attention.</p>
+
+<ol>
+   <li>
+      <strong>Dialog Content Changes</strong>
+      <p>Whenever the contents of the Calendar are changed we fire Dialog's <code>changeContent</code> event so any of Dialog's rendered elements which need to be kept in sync are redrawn <em>(such as the size of the shadow underlay for IE6/Safari2)</em>. We could optimize this, by checking for an actual change in dimensions before firing the <code>changeContent</code> event, using Calendar's <code>beforeRenderEvent</code> but the simpler approach is taken for the purposes of the example.<p>The Calendar has <code>hide_blank_weeks</code> set to <code>true</code> to illustrate the fact that the shadow is resized when the height of the Calendar changes.</p>
+
+      <textarea name="code" class="JScript" cols="60" rows="1">
+        calendar.renderEvent.subscribe(function() {
+            // Tell Dialog it's contents have changed. 
+            dialog.fireEvent("changeContent");
+        });
+      </textarea>
+
+      <p>Since we're using the <code>yui-overlay-hidden</code> class to hide all tables in IE, while the container is hidden (see the discussion on
+      border-collapse:collapse, below), we also fire the <code>changeContent</code> event for IE when showing the Dialog, to let it know that 
+      the tables have been re-shown, which may impact the height of the Dialog:</p>
+
+      <textarea name="code" class="JScript" cols="60" rows="1">
+        dialog.showEvent.subscribe(function() {
+            if (YAHOO.env.ua.ie) {
+                // Since we're hiding the table using yui-overlay-hidden, we 
+                // want to let the dialog know that the content size has changed, 
+                // when shown
+                dialog.fireEvent("changeContent");
+            }
+        });
+      </textarea>
+
+      <p><strong>NOTE:</strong> Normally if you were to change the contents of the Dialog's header, body or footer elements (e.g. using <code>dialog.setBody(...)</code>), <code>changeContent</code> would be fired automatically, but in this case, we're changing the contents of the Calendar, and not the body element directly so we need to inform the Dialog that something inside the body changed.</p>
+   </li> 
+   <li>
+      <strong>Handling Calendar's Float</strong>
+      <p>Since dialog has a form element, we'll use it to clear Calendar's float:left and allow the Dialog body element to wrap the Calendar.</p>
+      <textarea name="code" class="CSS" cols="60" rows="1">
+            /* Clear calendar's float for browsers which support :after */
+            #container .bd form {clear:left}
+      </textarea>
+      <p>For IE6/7, we want to avoid activating <code>hasLayout</code> (e.g. <code>zoom:1;</code>) to clear the float for IE. If <code>hasLayout</code> was activated, the Dialog would not shrink-wrap the Calendar correctly in IE6/7 and we'd need to define a specific width for the Dialog, hence we use an element to clear the left float.</p>
+   </li>
+   <li>
+       <strong>Double Iframe Shims</strong>
+       <p>Calendar's <code>iframe</code> property is set to <code>false</code> since the Dialog already provides iframe shim support and we want to avoid duplicating shims for performance reasons.</p>
+   </li>
+   <li>
+       <strong>Workaround IE's <code>border-collapse:collapse</code> Issue</strong>
+
+       <p>IE6 and IE7 have a known issue related to collapsed table borders remaining visible even though the table's containing element has its <code>visibility</code> set to <code>hidden</code> (See <a href="../../container/index.html#knownissues">Container known issues</a>).</p>
+
+       <p>
+       Since the Sam skin Calendar uses <code>border-collapse:collapse</code> and the Dialog is hidden using <code>visibility:hidden</code>, we need to use the workaround mentioned in the known issues section above, to make sure Calendar's table borders get hidden when the Dialog is hidden.
+       We use the <code>yui-overlay-hidden</code> class to define a rule which hides all tables, using <code>display:none</code>, when the container is hidden:
+       </p>
+
+       <textarea name="code" class="JScript" cols="60" rows="1">
+            /* Prevent border-collapse:collapse from bleeding through in IE6, IE7 */
+            #container_c.yui-overlay-hidden table {
+                *display:none;
+            }
+       </textarea>
+   </li>
+</ol>
+
+<h3>Hiding the Calendar</h3>
+
+<p>The example also shows how you can hide the dialog, when the user clicks on an area of the document outside of the dialog. A <code>click</code> listener is set up on the document, so it receives notification whenever the user clicks on the document. Inside the listener, we try to determine if the element the user clicked on (the event target) is inside the dialog's containing element (<code>dialog.element</code>) or the button which is used to display the dialog. It if is not, the dialog is hidden:</p>
+
+<textarea name="code" class="JScript" cols="60" rows="1">
+    // Hide Calendar if we click anywhere in the document other than the calendar
+    Event.on(document, "click", function(e) {
+
+        var el = Event.getTarget(e);
+        var dialogEl = dialog.element;
+
+        if (el != dialogEl && !Dom.isAncestor(dialogEl, el) && el != showBtn && !Dom.isAncestor(showBtn, el)) {
+            dialog.hide();
+        }
+    });
+</textarea>
+
+<p>As a side note, this example also shows how you can use the simpler version of the Calendar constructor, providing only the container id (available as of 2.4.0) and also how you can use Calendar's locale properties to create long date strings from a JavaScript Date object.</p>
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+					
+				
+					<div id="examples">
+						<h3 class='firstContent'>Calendar Control Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='quickstart.html'>Quickstart Tutorial</a></li><li><a href='multi.html'>Multi-Select Calendar</a></li><li><a href='calgrp.html'>Multi-Page Calendar</a></li><li><a href='minmax.html'>Minimum/Maximum Dates</a></li><li><a href='calnavigator.html'>Calendar Navigator</a></li><li><a href='events.html'>Handling Calendar Events</a></li><li><a href='formtxt.html'>Calendar and Text Fields</a></li><li><a href='formsel.html'>Calendar and Select Fields</a></li><li><a href='render.html'>Using the Render Stack</a></li><li><a href='popup.html'>Popup Calendar - Basic</a></li><li class='selected'><a href='calcontainer.html'>Popup Calendar - Advanced</a></li><li><a href='intervalcal.html'>Interval Selection Calendar</a></li><li><a href='germany.html'>Localization - Germany</a></li><li><a href='japan.html'>Localization - Japan</a></li><li><a href='taiwan.html'>Localization - Taiwan (Year Offset)</a></li><li><a href='calskin.html'>Skinning The Calendar</a></li><li><a href='../editor/cal_editor.html'>Calendar Plugin (included with examples for Rich Text Editor)</a></li><li><a href='../datatable/dt_cellediting.html'>Inline Cell Editing (included with examples for DataTable Control)</a></li><li><a href='../yuiloader/yl-basic.html'>Using YUI Loader to Load the Calendar Control (included with examples for YUI Loader Utility)</a></li><li><a href='../button/btn_example09.html'>Simple Calendar Menu Button (included with examples for Button Control)</a></li><li><a href='../button/btn_example10.html'>Calendar Menu Button with Date on Button Face (included with examples for Button Control)</a></li><li><a href='../layout/calrte_layout.html'>Simple Application (included with examples for Layout Manager)</a></li><li><a href='../layout/adv_layout.html'>Complex Application (included with examples for Layout Manager)</a></li><li><a href='../profilerviewer/pv-basic.html'>Simple Profiling (included with examples for ProfilerViewer Control)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Calendar Control Resources:</h3>
+						<ul>
+							<li><a href="../../calendar/index.html">User's Guide</a></li>
+						<li><a href="../../docs/module_calendar.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/calendar.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:11 PDT 2013 -->
+
+<!-- Localized -->

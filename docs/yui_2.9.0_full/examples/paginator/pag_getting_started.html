@@ -1,0 +1,515 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Paginator: Getting started with Paginator</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/paginator/assets/skins/sam/paginator.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/paginator/paginator-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+#content {
+    background: #fff;
+    border: 1px solid #ccc;
+    color: #000;
+    font-family: Times New Roman, serif;
+    padding: 1em 2em;
+}
+
+#content div {
+    display: none;
+}
+#demo .page1 div.page1,
+#demo .page2 div.page2,
+#demo .page3 div.page3,
+#demo .page4 div.page4,
+#demo .page5 div.page5 {
+    display: block;
+}
+</style>
+
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: Paginator: Getting started with Paginator</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Paginator: Getting started with Paginator</h1>
+	
+	<div class="exampleIntro">
+	<p>In this example we illustrate the basics of attaching a Paginator to your application.  We take a short story by Stephen Crane and divide it up into pages, then use Paginator to display the page navigation.</p>
+			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="pag_getting_started_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<div id="demo">
+    <h2 class="first">The Monster</h2>
+    <p>By Stephen Crane</p>
+
+    <div id="paging"></div>
+
+    <div id="content" class="page1">
+        <div class="page1">
+            <p>Little Jim was, for the time, engine Number 36, and he was making the run between Syracuse and Rochester. He was fourteen minutes behind time, and the throttle was wide open. In consequence, when he swung around the curve at the flower-bed, a wheel of his cart destroyed a peony. Number 36 slowed down at once and looked guiltily at his father, who was mowing the lawn. The doctor had his back to this accident, and he continued to pace slowly to and fro, pushing the mower.</p>     
+            <p>Jim dropped the tongue of the cart. He looked at his father and at the broken flower. Finally he went to the peony and tried to stand it on its pins, resuscitated, but the spine of it was hurt, and it would only hang limply from his hand. Jim could do no reparation. He looked again toward his father.</p>     
+        </div>
+        <div class="page2">
+            <p>He went on to the lawn, very slowly, and kicking wretchedly at the turf. Presently his father came along with the whirring machine, while the sweet, new grass blades spun from the knives. In a low voice, Jim said, “Pa!”</p>     
+            <p>The doctor was shaving this lawn as if it were a priest’s chin. All during the season he had worked at it in the coolness and peace of the evenings after supper. Even in the shadow of the cherry-trees the grass was strong and healthy. Jim raised his voice a trifle. “Pa!”</p>     
+            <p>The doctor paused, and with the howl of the machine no longer occupying the sense, one could hear the robins in the cherry-trees arranging their affairs. Jim’s hands were behind his back, and sometimes his fingers clasped and unclasped. Again he said, “Pa!” The child’s fresh and rosy lip was lowered.</p>     
+        </div>
+        <div class="page3">
+            <p>The doctor stared down at his son, thrusting his head forward and frowning attentively. “What is it, Jimmie?”</p>     
+            <p>“Pa!” repeated the child at length. Then he raised his finger and pointed at the flower-bed. “There!”</p>     
+            <p>“What?” said the doctor, frowning more. “What is it, Jim?”</p>     
+            <p>After a period of silence, during which the child may have undergone a severe mental tumult, he raised his finger and repeated his former word—“There!” The father had respected this silence with perfect courtesy. Afterward his glance carefully followed the direction indicated by the child’s finger, but he could see nothing which explained to him. “I don’t understand what you mean, Jimmie,” he said.</p>     
+        </div>
+        <div class="page4">
+            <p>It seemed that the importance of the whole thing had taken away the boy’s vocabulary. He could only reiterate, “There!”</p>     
+            <p>The doctor mused upon the situation, but he could make nothing of it. At last he said, “Come, show me.”</p>     
+            <p>Together they crossed the lawn toward the flower-bed. At some yards from the broken peony Jimmie began to lag. “There!” The word came almost breathlessly.</p>     
+            <p>“Where?” said the doctor.</p>     
+            <p>Jimmie kicked at the grass. “There!” he replied.</p>     
+        </div>
+        <div class="page5">
+            <p>The doctor was obliged to go forward alone. After some trouble he found the subject of the incident, the broken flower. Turning then, he saw the child lurking at the rear and scanning his countenance.</p>     
+            <p>The father reflected. After a time he said, “Jimmie, come here.” With an infinite modesty of demeanour the child came forward. “Jimmie, how did this happen?”</p>     
+            <p>The child answered, “Now&#8212;I was playin’ train&#8212;and&#8212;now&#8212;I runned over it.”</p>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+YAHOO.util.Event.onDOMReady(function () {
+
+// Set up the application under the YAHOO.example namespace
+var Ex = YAHOO.namespace('example');
+
+Ex.content    = YAHOO.util.Dom.get('content');
+
+Ex.handlePagination = function (state) {
+    // Show the appropriate content for the requested page
+    Ex.content.className = 'page' + state.page;
+    
+    // Update the Paginator's state, confirming change
+    Ex.paginator.setState(state);
+};
+
+// Create the Paginator widget and subscribe to its changeRequest event
+Ex.paginator = new YAHOO.widget.Paginator({
+    rowsPerPage : 1,
+    totalRecords : Ex.content.getElementsByTagName('div').length,
+    containers : 'paging'
+});
+
+Ex.paginator.subscribe('changeRequest', Ex.handlePagination);
+
+// Render the Paginator into the configured container(s)
+Ex.paginator.render();
+
+});
+</script>
+	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Start with your content</h2>
+<p>In this example we'll work with content that is already on the page in its entirety.  This is not a requirement.  The story has been divided up into a series of <code>&lt;div&gt;</code>s, each containing a &quot;page&quot; worth of the overall content.</p>
+
+<textarea name="code" class="HTML" rows="1" cols="60">
+<div id="content">
+    <div>
+        <p>Little Jim was, for the ...</p>
+        <p>Jim dropped the tongue of ...</p>
+    </div>
+    <div>
+        <p>He went on to the lawn...</p>
+        (and so on)
+</textarea>
+
+<p>Some CSS is added to identify the individual page divs, and hide all but the current page.</p>
+
+<textarea name="code" class="CSS" rows="1" cols="60">
+#content div { /* hide all pages */
+    display: none;
+}
+#demo .page1 div.page1,
+#demo .page2 div.page2,
+#demo .page3 div.page3,
+#demo .page4 div.page4,
+#demo .page5 div.page5 { /* display the current page */
+    display: block;
+}
+</textarea>
+
+<p>A container is added above the content for the pagination controls.</p>
+<textarea name="code" class="HTML" rows="1" cols="60">
+<div id="paging"></div>
+<div id="content" class="page1">
+    <div class="page1">
+        <p>Little Jim was, for the ...</p>
+        <p>Jim dropped the tongue of ...</p>
+    </div>
+    <div class="page2">
+        <p>He went on to the lawn...</p>
+        (and so on)
+</textarea>
+
+<p>This allows us to set a class on <code>div#content</code> and the higher specificity of the CSS selector will override the broadly applied <code>display: none</code>.</p>
+
+<h2>Add pagination support</h2>
+<p>In your JavaScript, create method to handle page change requests.</p>
+
+<textarea name="code" class="JScript" rows="1" cols="60">
+YAHOO.util.Event.onDOMReady(function () {
+
+// Set up the application under the YAHOO.example namespace
+var Ex = YAHOO.namespace('example');
+
+Ex.content = YAHOO.util.Dom.get('content');
+
+Ex.handlePagination = function (page) {
+    // Show the appropriate content for the requested page
+    Ex.content.className = 'page' + page;
+};
+
+...
+</textarea>
+
+<h2>Create a Paginator</h2>
+<p>Now create a Paginator instance to handle the UI and state management.</p>
+<textarea name="code" class="JScript" rows="1" cols="60">
+Ex.paginator = new YAHOO.widget.Paginator({
+    rowsPerPage : 1, // one div per page
+    totalRecords : Ex.content.getElementsByTagName('div').length,
+    containers : 'paging' // controls will be rendered into this element
+});
+</textarea>
+
+<p>Attach the Paginator instance to the method responsible for updating the content by subscribing to its <code>changeRequest</code> event.</p>
+
+<textarea name="code" class="JScript" rows="1" cols="60">
+
+Ex.paginator.subscribe('changeRequest', Ex.handlePagination);
+
+</textarea>
+
+<p>Paginator will pass its <code>changeRequest</code> subscribers a proposed state object, so we'll need to update the <code>handlePagination</code> method accordingly.  Also, Paginator UI interaction only <em>requests</em> a page change, so we need to confirm the change by updating the Paginator's state.</p>
+
+<textarea name="code" class="JScript" rows="1" cols="60">
+Ex.handlePagination = function (state) {
+    // Show the appropriate content for the requested page
+    Ex.content.className = 'page' + state.page;
+    
+    // Update the Paginator's state, confirming change
+    Ex.paginator.setState(state);
+};
+</textarea>
+
+<h2>Render the Paginator</h2>
+<p>The last step is to <code>render()</code> the Paginator instance.</p>
+
+<textarea name="code" class="JScript" rows="1" cols="60">
+
+Ex.paginator.render();
+
+</textarea>
+
+<h2>Full code listing</h2>
+<h3>CSS</h3>
+
+<textarea name="code" class="CSS" rows="1" cols="60">
+#content {
+    background: #fff;
+    border: 1px solid #ccc;
+    color: #000;
+    font-family: Times New Roman, serif;
+    padding: 1em 2em;
+}
+
+/* hide all pages */
+#content div {
+    display: none;
+}
+
+/* display the current page */
+#demo .page1 div.page1,
+#demo .page2 div.page2,
+#demo .page3 div.page3,
+#demo .page4 div.page4,
+#demo .page5 div.page5 {
+    display: block;
+}
+</textarea>
+
+<h3>HTML</h3>
+<p>Text content clipped for brevity.</p>
+<textarea name="code" class="HTML" rows="1" cols="60">
+<div id="demo">
+    <h2 class="first">The Monster</h2>
+    <p>By Stephen Crane</p>
+
+    <div id="paging"></div>
+
+    <div id="content" class="page1">
+        <div class="page1">
+            <p>Little Jim was...</p>
+            <p>Jim dropped the...</p>
+        </div>
+        <div class="page2">
+            <p>He went on to...</p>
+            <p>The doctor was...</p>
+            <p>The doctor paused...</p>
+        </div>
+        <div class="page3">
+            <p>The doctor stared...</p>
+            <p>“Pa!” repeated the...</p>
+            <p>“What?” said the...</p>
+            <p>After a period of...</p>
+        </div>
+        <div class="page4">
+            <p>It seemed that the...</p>
+            <p>The doctor mused...</p>
+            <p>Together they...</p>
+            <p>“Where?” said...</p>
+            <p>Jimmie kicked at...</p>
+        </div>
+        <div class="page5">
+            <p>The doctor was...</p>
+            <p>The father reflected...</p>
+            <p>The child answered...</p>
+        </div>
+    </div>
+</div>
+</textarea>
+
+<h3>JavaScript</h3>
+
+<textarea name="code" class="JScript" rows="1" cols="60">
+YAHOO.util.Event.onDOMReady(function () {
+
+// Set up the application under the YAHOO.example namespace
+var Ex = YAHOO.namespace('example');
+
+Ex.content    = YAHOO.util.Dom.get('content');
+
+Ex.handlePagination = function (state) {
+    // Show the appropriate content for the requested page
+    Ex.content.className = 'page' + state.page;
+    
+    // Update the Paginator's state, confirming change
+    Ex.paginator.setState(state);
+};
+
+// Create the Paginator widget and subscribe to its changeRequest event
+Ex.paginator = new YAHOO.widget.Paginator({
+    rowsPerPage : 1,
+    totalRecords : Ex.content.getElementsByTagName('div').length,
+    containers : 'paging'
+});
+
+Ex.paginator.subscribe('changeRequest', Ex.handlePagination);
+
+// Render the Paginator into the configured container(s)
+Ex.paginator.render();
+
+});
+</textarea>
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerGloss"><p><strong>Note:</strong> Logging and debugging is currently turned off for this example.</p> 
+							<p class="loggerButton"><span id="loggerLink"><span class="first-child"><a href="pag_getting_started_log.html">Reload with logging<br />
+	 and debugging enabled.</a></span></span></p></div>
+	
+						</div>
+					
+				
+					<div id="examples">
+						<h3>Paginator Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li class='selected'><a href='pag_getting_started.html'>Getting started with Paginator</a></li><li><a href='pag_multiple_containers.html'>Rendering controls into multiple containers</a></li><li><a href='pag_manual_render.html'>Manually rendering Paginator UI Components</a></li><li><a href='pag_configuration.html'>Configuring the Paginator</a></li><li><a href='../datatable/dt_clientpagination.html'>Client-side Pagination (included with examples for DataTable Control)</a></li><li><a href='../datatable/dt_dynamicdata.html'>Server-side Pagination and Sorting for Dynamic Data (included with examples for DataTable Control)</a></li><li><a href='../datatable/dt_complex.html'>Complex Example of Multiple Features (included with examples for DataTable Control)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Paginator Resources:</h3>
+						<ul>
+							<li><a href="../../paginator/index.html">User's Guide</a></li>
+						<li><a href="../../docs/module_paginator.html">API Documentation</a></li>
+</ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc3.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:31 PDT 2013 -->
+
+<!-- Localized -->

@@ -1,0 +1,633 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Layout Manager</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Layout Manager</h1></div>
+</div>
+<div id="bd">
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+	  
+	  
+<div id="promo" class="component">
+  <h1>YUI 2: Layout Manager</h1>
+    <p><img src="assets/layout.png" alt="The YUI Layout Manager" width="280" height="192" hspace="10" vspace="5" align="right">The YUI Layout Manager allows you to create cross-browser, pixel-perfect application layouts with little effort. Layout Manager establishes structured layouts containing top, bottom, left, right and center layout units.  Units can be resized or collapsed by the user; properties and contents of layout units can be modifed scriptologically through an extensive API.  Layout Manager can establish a new layout either at the body-element level (taking up the full viewport) or within a single element (such as within a <a href="../container/panel/index.html">Panel</a>).</p>
+    
+
+  <div>
+    <h4>On This Page:</h4>
+    <ul>
+        <li><a href="#start">Getting Started</a></li>
+        <li><a href="#layouts">Layouts</a></li>
+        <li><a href="#wireframe">Layout Wireframe</a></li>
+        <li><a href="#units">Layout Units</a></li>
+        <li><a href="#setuplayout">Setting up a Layout</a></li>
+        <li><a href="#setupunit">Setting up the Layout Units</a></li>
+        <li><a href="#configunit">Configuring a unit</a></li>
+        <li><a href="#cssclasses">Layout CSS Class Names</a></li>
+        <li><a href="#skinning">Skinning a Layout</a></li>
+        <li><a href="#mobile">YUI on Mobile Devices</a></li>
+        <li><a href="#support">Support &amp; Community</a></li>
+	    <li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../examples/layout/index.html">Examples</a>: Explore examples of the Layout Manager in action.</li>
+      <li><a href="../docs/module_layout.html">API Documentation</a>: View the full API documentation for the Layout Manager.</li>
+	  <li><a id="releasenotes" href="../releasenotes/README.layout">Release Notes</a>: Detailed change log for the Layout Manager.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Layout Manager as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+</div>
+<h2 class="first" id="start">Getting Started</h2>
+<p>To use the Layout Manager, include the following source files in your web page:</p>
+<div id="syntax-1d89071148e0b652a7483f003973fb66" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span><span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/reset-fonts-grids/reset-fonts-grids.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Skin CSS files resize.css must load before layout.css --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/resize.css&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/layout.css&quot;</span>&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc-1">&lt;!-- Utility Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Optional Animation Support--&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> </div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Optional Resize Support --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/resize/resize-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file for the Layout Manager --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/layout/layout-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span><span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/reset-fonts-grids/reset-fonts-grids.css&quot;</span>&gt;</span>
+<span class="sc-1">&lt;!-- Skin CSS files resize.css must load before layout.css --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/resize.css&quot;</span>&gt;</span>
+<span class="sc2">&lt;<span class="kw2">link</span> <span class="kw3">rel</span><span class="sy0">=</span><span class="st0">&quot;stylesheet&quot;</span> <span class="kw3">type</span><span class="sy0">=</span><span class="st0">&quot;text/css&quot;</span> <span class="kw3">href</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/layout.css&quot;</span>&gt;</span>
+<span class="sc-1">&lt;!-- Utility Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/element/element-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
+<span class="sc-1">&lt;!-- Optional Animation Support--&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span> 
+<span class="sc-1">&lt;!-- Optional Resize Support --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/resize/resize-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+<span class="sc-1">&lt;!-- Source file for the Layout Manager --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/layout/layout-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-1d89071148e0b652a7483f003973fb66-plain"><link rel="stylesheet" type="text/css"href="http://yui.yahooapis.com/2.9.0/build/reset-fonts-grids/reset-fonts-grids.css">
+<!-- Skin CSS files resize.css must load before layout.css -->
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/resize.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/assets/skins/sam/layout.css">
+<!-- Utility Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script> 
+<script src="http://yui.yahooapis.com/2.9.0/build/dragdrop/dragdrop-min.js"></script> 
+<script src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script> 
+<!-- Optional Animation Support-->
+<script src="http://yui.yahooapis.com/2.9.0/build/animation/animation-min.js"></script> 
+<!-- Optional Resize Support -->
+<script src="http://yui.yahooapis.com/2.9.0/build/resize/resize-min.js"></script>
+<!-- Source file for the Layout Manager -->
+<script src="http://yui.yahooapis.com/2.9.0/build/layout/layout-min.js"></script>
+</textarea></div>
+
+Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
+in which the Layout Manager lives.  You can usually accomplish this simply by putting the class on the 
+<code>&#60;body&#62;</code> tag:</p>
+<div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
+</textarea></div>
+<p class="lastP">For more information on skinning YUI components and making use of default skins, 
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+article here on the website.</p>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../yuiloader/index.html">YUI Loader</a>, its module name is <code>layout</code>. (<a href="../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+
+<h2 id="layouts">Layouts</h2>
+<p>There are 2 different types of layouts supported by the Layout Manager: full page and element-based.</p>
+<p>A full page layout will take over the entire screen and fill up all available space. <a href="../examples/layout/page_layout_source.html">View a full page example</a>.</p>
+<p>An element-based layout will take over the entire area of a given element on the page (like a panel or DIV). <a href="../examples/layout/panel_layout_source.html">View an element-based example</a>.</p>
+<p>Each layout is comprised of 1 to 5 Layout Units, each having is own set of configuration options. These units are then given a position inside the layout of: Top, Right, Bottom, Left or Center. There can be only one Layout Unit per position; Layout Manager will not let you add a unit to a position if it has already been filled.
+The only required Layout Unit is the one at the <code>center</code> position. The center unit is the fluid unit, it should not have a height or width assigned to it as it will automatically be calculated based on the sizes of the other units and the space available for the layout. It also cannot be resizable, the other units are responsible for this setting.</p>
+<p></p>
+
+<h2 id="wireframe">Layout Wireframe</h2>
+<p>Below is a wireframe showing the various positions of the layout. <a href="http://yuiblog.com/assets/pdf/LayoutManager.pdf">Download this PDF file for a more detailed view.</a></p>
+<center><a href="http://yuiblog.com/assets/pdf/LayoutManager.pdf"><img src="assets/wireframe.jpg" alt="Layout Wireframe" width="527" height="335"></a></center>
+
+<h2 id="units">Layout Units</h2>
+<p>Layout units are the individual areas inside of the main layout. Each unit is comprised of a modified version of the "<a href="../container/module/index.html#html">Standard Module Format</a>". The difference is that their CSS classnames have a <code>yui-layout</code> prefix.</p>
+
+<p>Each Layout Unit has the ability to be added and removed after the layout has been rendered. They are also highly customizable through the various configuration options. <a href="../docs/YAHOO.widget.LayoutUnit.html">See the API docs for a complete list.</a></p>
+
+<h2 id="setuplayout">Setting Up a Layout</h2>
+<p>Setting up a full page layout is as simple as passing in the config for the layout, if no element is passed as the first parameter the Layout Manager will assume that we are going to take the whole screen.</p>
+
+<div id="syntax-af7617c7a1dc0f0dec02b907ca999387" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">//Full Page Layout</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> layoutFull <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Layout</span><span class="br0">&#40;</span><span class="br0">&#123;</span> <span class="coMULTI">/* Config here */</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">layoutFull.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="co1">//Element Based Layout</span></div></li><li class="li1"><div class="de1"><span class="kw2">var</span> layoutEl <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Layout</span><span class="br0">&#40;</span><span class="st0">'demo'</span><span class="sy0">,</span> <span class="br0">&#123;</span> <span class="coMULTI">/* Config here */</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">layoutEl.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">//Full Page Layout</span>
+<span class="kw2">var</span> layoutFull <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Layout</span><span class="br0">&#40;</span><span class="br0">&#123;</span> <span class="coMULTI">/* Config here */</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+layoutFull.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="co1">//Element Based Layout</span>
+<span class="kw2">var</span> layoutEl <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Layout</span><span class="br0">&#40;</span><span class="st0">'demo'</span><span class="sy0">,</span> <span class="br0">&#123;</span> <span class="coMULTI">/* Config here */</span><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+layoutEl.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-af7617c7a1dc0f0dec02b907ca999387-plain">//Full Page Layout
+var layoutFull = new YAHOO.widget.Layout({ /* Config here */});
+layoutFull.render();
+
+//Element Based Layout
+var layoutEl = new YAHOO.widget.Layout('demo', { /* Config here */});
+layoutEl.render();
+</textarea></div>
+
+<h2 id="setupunit">Setting Up the Layout Units</h2>
+
+<p>Each area of the layout (top, right, bottom, left and center) are made up of <code>LayoutUnit</code>'s.</p>
+<p>The only <strong>required</strong> unit is the center unit. It will be the one that is fluid when styled.</p>
+<p>We can setup these units by passing them into the unit array configuration option.</p>
+
+<div id="syntax-0da733de67249d55b19814dc7d15fc72" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> layout <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Layout</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    units<span class="sy0">:</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span> position<span class="sy0">:</span> <span class="st0">'top'</span><span class="sy0">,</span> height<span class="sy0">:</span> <span class="nu0">50</span> <span class="br0">&#125;</span><span class="sy0">,</span> <span class="co1">//Height required here</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span> position<span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span> width<span class="sy0">:</span> <span class="nu0">300</span> <span class="br0">&#125;</span><span class="sy0">,</span> <span class="co1">//Width required here</span></div></li><li class="li2"><div class="de2">        <span class="br0">&#123;</span> position<span class="sy0">:</span> <span class="st0">'bottom'</span><span class="sy0">,</span> height<span class="sy0">:</span> <span class="nu0">100</span> <span class="br0">&#125;</span><span class="sy0">,</span> <span class="co1">//Height required here</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span> position<span class="sy0">:</span> <span class="st0">'left'</span><span class="sy0">,</span> width<span class="sy0">:</span> <span class="nu0">200</span> <span class="br0">&#125;</span><span class="sy0">,</span> <span class="co1">//Width required here</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#123;</span> position<span class="sy0">:</span> <span class="st0">'center'</span> <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#93;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">layout.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> layout <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Layout</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+    units<span class="sy0">:</span> <span class="br0">&#91;</span>
+        <span class="br0">&#123;</span> position<span class="sy0">:</span> <span class="st0">'top'</span><span class="sy0">,</span> height<span class="sy0">:</span> <span class="nu0">50</span> <span class="br0">&#125;</span><span class="sy0">,</span> <span class="co1">//Height required here</span>
+        <span class="br0">&#123;</span> position<span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span> width<span class="sy0">:</span> <span class="nu0">300</span> <span class="br0">&#125;</span><span class="sy0">,</span> <span class="co1">//Width required here</span>
+        <span class="br0">&#123;</span> position<span class="sy0">:</span> <span class="st0">'bottom'</span><span class="sy0">,</span> height<span class="sy0">:</span> <span class="nu0">100</span> <span class="br0">&#125;</span><span class="sy0">,</span> <span class="co1">//Height required here</span>
+        <span class="br0">&#123;</span> position<span class="sy0">:</span> <span class="st0">'left'</span><span class="sy0">,</span> width<span class="sy0">:</span> <span class="nu0">200</span> <span class="br0">&#125;</span><span class="sy0">,</span> <span class="co1">//Width required here</span>
+        <span class="br0">&#123;</span> position<span class="sy0">:</span> <span class="st0">'center'</span> <span class="br0">&#125;</span>
+    <span class="br0">&#93;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+layout.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-0da733de67249d55b19814dc7d15fc72-plain">var layout = new YAHOO.widget.Layout({
+    units: [
+        { position: 'top', height: 50 }, //Height required here
+        { position: 'right', width: 300 }, //Width required here
+        { position: 'bottom', height: 100 }, //Height required here
+        { position: 'left', width: 200 }, //Width required here
+        { position: 'center' }
+    ]
+});
+layout.render();
+</textarea></div>
+<h2 id="configunit">Configuring a Unit</h2>
+
+<p>Each unit has it's own configuration settings. In the example below we, will show the following options:
+<ul>
+    <li><code>position</code>: The position that this unit will take in the Layout.</li>
+    <li><code>header</code>: The string to use for the Header of the unit.</li>
+    <li><code>width</code>: The width (in pixels) that the unit will take up in the layout (only applies to left and right units and <strong>is required</strong>).</li>
+    <li><code>height</code>: The height (in pixels) that the unit will take up in the layout (only applies to top and bottom units and <strong>is required</strong>).</li>
+    <li><code>resize</code>: Boolean indicating whether this unit is resizeable.</li>
+    <li><code>gutter</code>: The gutter applied to the unit's wrapper, before the content.</li>
+    <li><code>footer</code>: An id or string to use as the footer of the unit.</li>
+    <li><code>collapse</code>: Boolean indicating whether this unit is collapsible (if <code>true</code>, places an icon in the header).</li>
+    <li><code>scroll</code>: Boolean indicating whether the unit's body should have scroll bars if the body content is larger than the display area.</li>
+    <li><code>body</code>: An id or string to be used as the unit's body</li>
+    <li><code>animate</code>: Boolean indicating whether the expand and collapse transitions should be animated; if <code>true</code>, requires the <a href="../animation/index.html">Animation Utility</a>.</li>
+</ul>
+</p>
+<p><strong>Note:</strong> The <code>center</code> LayoutUnit does not support the following configuration options: <code>resize, width, height, collapse, animate,  close</code></p>
+<p>See the <a href="../docs/module_layout.html">API docs</a> for more info on LayoutUnit options.</p>
+<h3>The configuration for the Right unit:</h3>
+<div id="syntax-10ecf8c4c3a9ef6532d82de11abd3a32" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    position<span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    header<span class="sy0">:</span> <span class="st0">'Right'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    width<span class="sy0">:</span> <span class="nu0">300</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    resize<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    footer<span class="sy0">:</span> <span class="st0">'Footer'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    collapse<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    <span class="kw3">scroll</span><span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">    body<span class="sy0">:</span> <span class="st0">'right1'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">    animate<span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="br0">&#123;</span>
+    position<span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span>
+    header<span class="sy0">:</span> <span class="st0">'Right'</span><span class="sy0">,</span>
+    width<span class="sy0">:</span> <span class="nu0">300</span><span class="sy0">,</span>
+    resize<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span>
+    footer<span class="sy0">:</span> <span class="st0">'Footer'</span><span class="sy0">,</span>
+    collapse<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+    <span class="kw3">scroll</span><span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+    body<span class="sy0">:</span> <span class="st0">'right1'</span><span class="sy0">,</span>
+    animate<span class="sy0">:</span> <span class="kw2">true</span>
+<span class="br0">&#125;</span>
+&nbsp;</pre></div><textarea id="syntax-10ecf8c4c3a9ef6532d82de11abd3a32-plain">{
+    position: 'right',
+    header: 'Right',
+    width: 300,
+    resize: true,
+    gutter: '5px',
+    footer: 'Footer',
+    collapse: true,
+    scroll: true,
+    body: 'right1',
+    animate: true
+}
+</textarea></div>
+<h3>A complete Layout configuration:</h3>
+<div id="syntax-52b5ed14a786669bc94e8b6b686aea8d" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">    <span class="kw2">var</span> Dom <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">        Event <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    Event.<span class="me1">onDOMReady</span><span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> layout <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Layout</span><span class="br0">&#40;</span><span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">            units<span class="sy0">:</span> <span class="br0">&#91;</span></div></li><li class="li1"><div class="de1">                <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                    position<span class="sy0">:</span> <span class="st0">'top'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">                    height<span class="sy0">:</span> <span class="nu0">50</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    resize<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    collapse<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    resize<span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li2"><div class="de2">                <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                    position<span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    header<span class="sy0">:</span> <span class="st0">'Right'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    width<span class="sy0">:</span> <span class="nu0">300</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">                    resize<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    footer<span class="sy0">:</span> <span class="st0">'Footer'</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    collapse<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    <span class="kw3">scroll</span><span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li2"><div class="de2">                <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                    position<span class="sy0">:</span> <span class="st0">'bottom'</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    header<span class="sy0">:</span> <span class="st0">'Bottom'</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    height<span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span> </div></li><li class="li2"><div class="de2">                    resize<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span> </div></li><li class="li1"><div class="de1">                    collapse<span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li1"><div class="de1">                <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">                    position<span class="sy0">:</span> <span class="st0">'left'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    header<span class="sy0">:</span> <span class="st0">'Left'</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    width<span class="sy0">:</span> <span class="nu0">200</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    resize<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">                    collapse<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    <span class="kw3">close</span><span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    collapseSize<span class="sy0">:</span> <span class="nu0">50</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">                    <span class="kw3">scroll</span><span class="sy0">:</span> <span class="kw2">true</span></div></li><li class="li1"><div class="de1">                <span class="br0">&#125;</span><span class="sy0">,</span></div></li><li class="li2"><div class="de2">                <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">                    position<span class="sy0">:</span> <span class="st0">'center'</span></div></li><li class="li1"><div class="de1">                <span class="br0">&#125;</span></div></li><li class="li1"><div class="de1">            <span class="br0">&#93;</span></div></li><li class="li1"><div class="de1">        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">        layout.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+    <span class="kw2">var</span> Dom <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Dom</span><span class="sy0">,</span>
+        Event <span class="sy0">=</span> <span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span><span class="sy0">;</span>
+&nbsp;
+    Event.<span class="me1">onDOMReady</span><span class="br0">&#40;</span><span class="kw2">function</span><span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+        <span class="kw2">var</span> layout <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Layout</span><span class="br0">&#40;</span><span class="br0">&#123;</span>
+            units<span class="sy0">:</span> <span class="br0">&#91;</span>
+                <span class="br0">&#123;</span>
+                    position<span class="sy0">:</span> <span class="st0">'top'</span><span class="sy0">,</span>
+                    height<span class="sy0">:</span> <span class="nu0">50</span><span class="sy0">,</span> 
+                    resize<span class="sy0">:</span> <span class="kw2">false</span><span class="sy0">,</span> 
+                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span> 
+                    collapse<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> 
+                    resize<span class="sy0">:</span> <span class="kw2">true</span>
+                <span class="br0">&#125;</span><span class="sy0">,</span>
+                <span class="br0">&#123;</span>
+                    position<span class="sy0">:</span> <span class="st0">'right'</span><span class="sy0">,</span>
+                    header<span class="sy0">:</span> <span class="st0">'Right'</span><span class="sy0">,</span>
+                    width<span class="sy0">:</span> <span class="nu0">300</span><span class="sy0">,</span>
+                    resize<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> 
+                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span> 
+                    footer<span class="sy0">:</span> <span class="st0">'Footer'</span><span class="sy0">,</span> 
+                    collapse<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> 
+                    <span class="kw3">scroll</span><span class="sy0">:</span> <span class="kw2">true</span>
+                <span class="br0">&#125;</span><span class="sy0">,</span>
+                <span class="br0">&#123;</span>
+                    position<span class="sy0">:</span> <span class="st0">'bottom'</span><span class="sy0">,</span> 
+                    header<span class="sy0">:</span> <span class="st0">'Bottom'</span><span class="sy0">,</span> 
+                    height<span class="sy0">:</span> <span class="nu0">100</span><span class="sy0">,</span> 
+                    resize<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span> 
+                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span> 
+                    collapse<span class="sy0">:</span> <span class="kw2">true</span>
+                <span class="br0">&#125;</span><span class="sy0">,</span>
+                <span class="br0">&#123;</span>
+                    position<span class="sy0">:</span> <span class="st0">'left'</span><span class="sy0">,</span>
+                    header<span class="sy0">:</span> <span class="st0">'Left'</span><span class="sy0">,</span>
+                    width<span class="sy0">:</span> <span class="nu0">200</span><span class="sy0">,</span>
+                    resize<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+                    gutter<span class="sy0">:</span> <span class="st0">'5px'</span><span class="sy0">,</span>
+                    collapse<span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+                    <span class="kw3">close</span><span class="sy0">:</span> <span class="kw2">true</span><span class="sy0">,</span>
+                    collapseSize<span class="sy0">:</span> <span class="nu0">50</span><span class="sy0">,</span>
+                    <span class="kw3">scroll</span><span class="sy0">:</span> <span class="kw2">true</span>
+                <span class="br0">&#125;</span><span class="sy0">,</span>
+                <span class="br0">&#123;</span>
+                    position<span class="sy0">:</span> <span class="st0">'center'</span>
+                <span class="br0">&#125;</span>
+            <span class="br0">&#93;</span>
+        <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+        layout.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-52b5ed14a786669bc94e8b6b686aea8d-plain">(function() {
+    var Dom = YAHOO.util.Dom,
+        Event = YAHOO.util.Event;
+
+    Event.onDOMReady(function() {
+        var layout = new YAHOO.widget.Layout({
+            units: [
+                {
+                    position: 'top',
+                    height: 50, 
+                    resize: false, 
+                    gutter: '5px', 
+                    collapse: true, 
+                    resize: true
+                },
+                {
+                    position: 'right',
+                    header: 'Right',
+                    width: 300,
+                    resize: true, 
+                    gutter: '5px', 
+                    footer: 'Footer', 
+                    collapse: true, 
+                    scroll: true
+                },
+                {
+                    position: 'bottom', 
+                    header: 'Bottom', 
+                    height: 100, 
+                    resize: true, 
+                    gutter: '5px', 
+                    collapse: true
+                },
+                {
+                    position: 'left',
+                    header: 'Left',
+                    width: 200,
+                    resize: true,
+                    gutter: '5px',
+                    collapse: true,
+                    close: true,
+                    collapseSize: 50,
+                    scroll: true
+                },
+                {
+                    position: 'center'
+                }
+            ]
+        });
+        layout.render();
+    });
+})();
+</textarea></div>
+
+<h2 id="cssclasses">Layout CSS Class Names</h2>
+<div class="apisummary short">
+    <table border="0" id="crop_config">
+        <tr class="odd">
+            <th>Class Name</th>
+            <th>Applied To</th>
+        </tr>
+        <tr>
+            <td>.yui-layout</td>
+            <td>Applied to the element that is the root of the layout.</td>
+        </tr>
+        <tr class="odd">
+            <td>.yui-layout-doc</td>
+            <td>Applied to the first wrapper around the layout.</td>
+        </tr>
+        <tr>
+            <td>.yui-layout-unit</td>
+            <td>Applied to root element of each layout unit.</td>
+        </tr>
+        <tr class="odd">
+            <td>.yui-layout-unit-left</td>
+            <td>Applied to the root element of the left unit.</td>
+        </tr>
+        <tr>
+            <td>.yui-layout-unit-right</td>
+            <td>Applied to the root element of the right unit.</td>
+        </tr>
+        <tr class="odd">
+            <td>.yui-layout-unit-top</td>
+            <td>Applied to the root element of the top unit.</td>
+        </tr>
+        <tr>
+            <td>.yui-layout-unit-bottom</td>
+            <td>Applied to the root element of the bottom unit.</td>
+        </tr>
+        <tr class="odd">
+            <td>.yui-layout-unit-center</td>
+            <td>Applied to the root element of the center unit.</td>
+        </tr>
+        <tr>
+            <td>.yui-layout-wrap</td>
+            <td>Applied to the wrapper around the Standard Module Format elements inside the root element.</td>
+        </tr>
+        <tr class="odd">
+            <td>.yui-layout-scroll</td>
+            <td>Applied to the root element of the unit when the config option <code>scroll</code> is set to true.</td>
+        </tr>
+        <tr>
+            <td>.yui-layout-hd</td>
+            <td>Applied to the header element of the unit.</td>
+        </tr>
+        <tr class="odd">
+            <td>.yui-layout-bd</td>
+            <td>Applied to the body element of the unit.</td>
+        </tr>
+        <tr>
+            <td>.yui-layout-bd-nohd</td>
+            <td>Applied to the body element of the unit if there is no header present.</td>
+        </tr>
+        <tr class="odd">
+            <td>.yui-layout-bd-noft</td>
+            <td>Applied to the body element of the unit if there is no footer elemen present.</td>
+        </tr>
+        <tr>
+            <td>.yui-layout-ft</td>
+            <td>Applied to the footer element of the unit.</td>
+        </tr>
+        <tr class="odd">
+            <td>.yui-resize*</td>
+            <td>If the unit is resizable, the Resize Utility's classes will be applied to the root element.</td>
+        </tr>
+    </table>
+</div>
+
+<h2 id="skinning">Skinning a Layout</h2>
+
+<p>The Layout Manager comes with a default presentation or "skin," part of the "Sam Skin" visual treatment that accompanies most YUI controls. You can read more about the general approach to skinning YUI components <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">in this in-depth article</a>.</p>
+
+<p>The CSS provided with the Layout Manager is comprised of core, functional CSS as well as the Sam Skin visual treatment.</p>
+
+<p>To explore the CSS which controls the Layout Manager's presentation, please review <a href="../examples/layout/skinning_layout.html">the Layout Manager's Skinning Example</a> wherein the full CSS for the control is displayed.</p>
+
+
+<h2 id="mobile">YUI on Mobile: Using Layout Manager with "A-Grade" Mobile Browsers</h2>
+
+<div class="include-notice"><p><strong>About this Section:</strong> YUI generally works well with mobile browsers that are based on A-Grade browser foundations.  For example, Nokia's N-series phones, including the N95, use a browser based on Webkit &#8212; the same foundation shared by Apple's Safari browser, which is found on the iPhone.  The fundamental challenges in developing for this emerging class of full, A-Grade-derived browsers on handheld devices are:</p>
+
+<ul>
+	<li><em>Screen size:</em> You have a much smaller canvas;</li>
+	<li><em>Input devices:</em> Mobile devices generally do not have mouse input, and therefore are missing some or all mouse events (like mouseover);
+	</li><li><em>Processor power:</em> Mobile devices have slower processors that can more easily be saturated by JavaScript and DOM interactions &#8212; and processor usage affects things like battery life in ways that don't have analogues in desktop browsers;
+	</li><li><em>Latency:</em> Most mobile devices have a much higher latency on the network than do terrestrially networked PCs; this can make pages with many script, css or other types of external files load much more slowly.</li>
+</ul>
+<p>There are other considerations, many of them device/browser specific (for example, current versions of the iPhone's Safari browser do not support Flash).  The goal of these sections on YUI User's Guides is to provide you some preliminary insights about how specific components perform on this emerging class of mobile devices.  Although we have not done exhaustive testing, and although these browsers are revving quickly and present a moving target, our goal is to provide some early, provisional advice to help you get started as you contemplate how your YUI-based application will render in the mobile world.</p>
+<p><strong>More Information:</strong></p>
+
+<ul>
+	<li><a href="http://yuiblog.com/blog/2007/10/02/challenges-of-interface-design-for-mobile-devices/">Challenges of Interface Design for Mobile Devices</a> - YUI Blog article by Lucas Pettinati, Yahoo! Sr. Interaction Designer.</li>
+	<li><a href="http://yuiblog.com/blog/2008/02/06/iphone-cacheability/">Performance Research, Part 5: iPhone Cacheability - Making it Stick</a> - YUI Blog article by Tenni Theurer and Wayne Shea from the Yahoo! Exceptional Performance Team</li>
+</ul></div>
+<p>The Layout Manager is not officially supported on a mobile device. Mobile devices tend to not report browser resize events properly or screen size properly. These events and properties are what the Layout Manager uses to make it's calculations. So if they are incorrect then the layout will render incorrectly.</p>
+
+<p>This situation is likely to improve over time, but for now Layout Manager is an implementation that you'd want to test very carefully before serving to mobile devices as part of your UI.  The documentation for the Yahoo Global Object has <a href="../yahoo/index.html#mobile">sample code you can use to target mobile devices in JavaScript</a>.</p>
+
+
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+
+		</div>
+         <div class="yui-u">
+		 	
+			<div id="cheatsheet">
+				<h3>Layout Manager Cheat Sheet:</h3>
+				
+				<a href="http://yuiblog.com/assets/pdf/cheatsheets/layout.pdf"><img src="http://l.yimg.com/a/i/ydn/yuiweb/img/cheatsheet-images/layout.gif" width="178" height="135" alt="Cheat Sheet for the Layout Manager."></a>
+				
+			  <p><a href="../docs/assets/cheatsheets.zip">Download full set of cheat sheets.</a></p>
+			</div>
+			
+			<div id="examples">
+<h3>Layout Manager Examples:</h3>
+
+<ul>
+<li><a href='../examples/layout/page_layout.html'>Full Page Layout</a></li>
+<li><a href='../examples/layout/panel_layout.html'>Layout inside a resizable Panel</a></li>
+<li><a href='../examples/layout/grids_layout.html'>Using a Layout with Grids CSS</a></li>
+<li><a href='../examples/layout/nested_layout.html'>Nesting a layout</a></li>
+<li><a href='../examples/layout/menu_layout.html'>Layout with Menu Controls</a></li>
+<li><a href='../examples/layout/calrte_layout.html'>Simple Application</a></li>
+<li><a href='../examples/layout/adv_layout.html'>Complex Application</a></li>
+<li><a href='../examples/layout/skinning_layout.html'>Skinning a Layout</a></li>
+</ul>
+
+
+		
+		   </div>
+		   
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Flayout%2F--><h3 id="delicious">YUI Layout Manager on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/layout/" class="bookmark">bookmark on del.icio.us</a></p>
+            <p class="be-first">be the first to bookmark this page!</a></p>
+   </div></div>
+
+		 </div>
+      </div>
+
+</div>
+</div>
+
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../json/index.html">JSON</a></li><li class="selected "><a title="The YUI Layout Manger" href="index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:12:23 PDT 2013 -->
+
+<!-- Localized -->

@@ -1,0 +1,627 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI 2: Module</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI 2: Module</h1></div>
+</div>
+<div id="bd">
+
+
+<div id="yui-main">
+<div class="yui-b">
+  <div class="yui-ge">
+      <div class="yui-u first">
+<div id="promo" class="component">
+  <h1>YUI 2: Module</h1>
+  <p>The Module control enables you to create a JavaScript object representation
+    of a basic module of content. It can be used to manipulate existing content
+    modules on your page or to create modules dynamically and append them to
+    the DOM. All other components in the <a href="../index.html">Container family</a> have
+    Module as their lowest-level base class. </p>
+  <p><strong>Note:</strong> Module is
+    fundamentally a building block for other UI controls; this document is of
+    most use to those interested in the inner workings of controls built on Module.</p>
+  <div>
+    <h4>On This Page:</h4>
+    <ul>
+      <li><a href="#start">Getting Started</a></li>
+      <li><a href="#using">Using Module</a></li>
+      <li><a href="#support">Support &amp; Community</a></li><li><a href="#filingbugs">Filing Bugs and Feature Requests</a></li>
+    </ul>
+  </div>
+
+  <div id="quicklinks">
+    <h4>Quick Links:</h4>
+    <ul>
+      <li><a href="../../examples/container/index.html">Examples</a>: Explore examples of the Module Control in action.</li>
+      <li><a href="../../docs/module_container.html">API Documentation</a>: View the full API documentation for the Module Control.</li>
+	  <li><a id="releasenotes" href="../../releasenotes/README.container">Release Notes</a>: Detailed change log for the Module Control.</li>
+      <li><a href="http://yuilibrary.com/license/">License</a>: The YUI Library is issued under a BSD license.</li>
+      <li><a href="http://yui.github.io/yui2/">Download</a>: Download the Module Control as part of the full YUI Library at <a href="http://yuilibrary.com/">YUILibrary.com</a>.</li>
+    </ul>
+  </div>
+</div>
+<h2 class="first">Getting Started<a name="start"></a></h2>
+<p>To use Module, include the following code in your page:</p> 
+<div id="syntax-0e043a2cacbf073e96f5954fbcccd296" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Dependencies --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- Source file --&gt;</span></div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- Dependencies --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;
+<span class="sc-1">&lt;!-- Source file --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-0e043a2cacbf073e96f5954fbcccd296-plain"><!-- Dependencies -->
+<script src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+
+<!-- Source file -->
+<script src="http://yui.yahooapis.com/2.9.0/build/container/container-min.js"></script>
+</textarea></div>
+<p>If you are <em>not</em> using <a href="../tooltip/index.html">Tooltip</a>, <a href="../panel/index.html">Panel</a>, <a href="../dialog/index.html">Dialog</a>, or <a href="../simpledialog/index.html">SimpleDialog</a>, you may substitute <code>container-min.js</code> with the smaller <code>container_core-min.js</code> file:</p>
+
+<div id="syntax-45403f06ce1fcf6750f93c9f536c10a0" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc-1">&lt;!-- If not using Tooltip, Panel, Dialog, or SimpleDialog: --&gt;</span></div></li><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc-1">&lt;!-- If not using Tooltip, Panel, Dialog, or SimpleDialog: --&gt;</span>
+<span class="sc2">&lt;<span class="kw2">script</span> <span class="kw3">src</span><span class="sy0">=</span><span class="st0">&quot;http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">script</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-45403f06ce1fcf6750f93c9f536c10a0-plain"><!-- If not using Tooltip, Panel, Dialog, or SimpleDialog: -->
+<script src="http://yui.yahooapis.com/2.9.0/build/container/container_core-min.js"></script>
+</textarea></div>Next, apply the <code>yui-skin-sam</code> class name to an element that is a parent of the element 
+in which the Module Control lives.  You can usually accomplish this simply by putting the class on the 
+<code>&#60;body&#62;</code> tag:</p>
+<div id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">body</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;yui-skin-sam&quot;</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-8860dcf21ff8adc0ce3e21d30a763ba1-plain"><body class="yui-skin-sam">
+</textarea></div>
+<p class="lastP">For more information on skinning YUI components and making use of default skins, 
+see our <a href="http://yuilibrary.com/yui/docs/tutorials/skins/">Understanding YUI Skins</a> 
+article here on the website.</p>
+
+
+<div class="configurator-notice">
+<p><a href="#"><img id="configuratorBadge" src="http://l.yimg.com/a/i/ydn/yuiweb/img/configure.png" alt="YUI dependency configurator." title="Use the YUI dependency Configurator determine the optimal file list for your desired components; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation." height="127" width="150"></a>
+
+<h3>YUI Dependency Configurator:</h3>
+<p>Instead of copying and pasting the filepaths above, try letting <a href="#">the YUI dependency Configurator determine the optimal file list for your desired components</a>; the Configurator uses YUI Loader to write out the full HTML for including the precise files you need for your implementation.</p>
+
+<p>
+  <strong>Note:</strong> If you wish to include this component via the <a href="../../yuiloader/index.html">YUI Loader</a>, its module name is <code>container</code>. (<a href="../../yuiloader/index.html#modulenames">Click here for the full list of module names for YUI Loader.</a>)
+  
+  </p>
+</div>
+
+
+<div class="include-notice"><p class="firstP"><strong>Where these files come from:</strong> The files included using the text above will be served from Yahoo! servers; see "<a href="#">Serving YUI Files from Yahoo!</a>" for important information about this service.  JavaScript files are minified, meaning that comments and white space have been removed to make them more efficient to download.  To use the full, commented versions or the <a href="http://yuilibrary.com/yui/docs/tutorials/faq/#debug"><code>-debug</code></a> versions of YUI JavaScript files, please <a href="http://yui.github.io/yui2/">download the library distribution</a> and host the files on your own server.</p>
+
+<p><strong>Order matters:</strong> As is the case generally with JavaScript and CSS, order matters; these files should be included in the order specified above.  If you include files in the wrong order, errors may result.</p>
+
+</div>
+<h2>Using Module<a name="using"></a></h2>
+<p>This section describes common tasks for creating and using Module.  It contains
+these sections:</p>
+<ul> 
+<li><a href="#html">Defining  Module Markup</a></li>
+<li><a href="#init">Initializing the Module</a></li>
+<li><a href="#config">Using Configuration Properties</a></li>
+<li><a href="#events">Monitoring Events</a></li>
+<li><a href="#render">Rendering the Module</a></li>
+<li><a href="#show">Showing and Hiding the Module</a></li>
+</ul>
+<h3> Defining  Module Markup <a name="html"></a></h3>
+<p>
+In its most basic form, the HTML markup for a Module might look like this:</p>
+<div id="syntax-827554f6c218b38b02a87e8479ef9d28" class="yui-syntax-highlight"><div class="numbers"><pre class="html4strict" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myModule&quot;</span>&gt;</span></div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;hd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> </div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;bd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> </div></li><li class="li1"><div class="de1">  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;ft&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> </div></li><li class="li2"><div class="de2"><span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="html4strict" style="font-family:monospace;"><span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">id</span><span class="sy0">=</span><span class="st0">&quot;myModule&quot;</span>&gt;</span>
+  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;hd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> 
+  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;bd&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> 
+  <span class="sc2">&lt;<span class="kw2">div</span> <span class="kw3">class</span><span class="sy0">=</span><span class="st0">&quot;ft&quot;</span>&gt;&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span> 
+<span class="sc2">&lt;<span class="sy0">/</span><span class="kw2">div</span>&gt;</span>
+&nbsp;</pre></div><textarea id="syntax-827554f6c218b38b02a87e8479ef9d28-plain"><div id="myModule">
+  <div class="hd"></div> 
+  <div class="bd"></div> 
+  <div class="ft"></div> 
+</div>
+</textarea></div><h3> Initializing the Module<a name="init"></a></h3>
+<p>
+To instantiate a Module around a pre-existing piece of markup, use this code:
+</p>
+<div id="syntax-f0d13ae4c5474dbcabda7cd81609c08a" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw2">var</span> myModule <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Module</span><span class="br0">&#40;</span><span class="st0">&quot;myModule&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw2">var</span> myModule <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Module</span><span class="br0">&#40;</span><span class="st0">&quot;myModule&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-f0d13ae4c5474dbcabda7cd81609c08a-plain">var myModule = new YAHOO.widget.Module("myModule");
+</textarea></div>
+
+<p>If the Module doesn't exist on the page, a new one will be created. Then, content (as an HTML string or as a DOM element) can be set into each section using the <code>setHeader</code>, <code>setBody</code>, and <code>setFooter</code> methods:</p>
+<div id="syntax-60bfaa32e29475ebb7a7fad5f992ac53" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1">myModule.<span class="me1">setHeader</span><span class="br0">&#40;</span><span class="st0">&quot;This is my header content&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myModule.<span class="me1">setBody</span><span class="br0">&#40;</span><span class="st0">&quot;This is my body content&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myModule.<span class="me1">setFooter</span><span class="br0">&#40;</span><span class="st0">&quot;This is my footer content&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;">myModule.<span class="me1">setHeader</span><span class="br0">&#40;</span><span class="st0">&quot;This is my header content&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myModule.<span class="me1">setBody</span><span class="br0">&#40;</span><span class="st0">&quot;This is my body content&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myModule.<span class="me1">setFooter</span><span class="br0">&#40;</span><span class="st0">&quot;This is my footer content&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-60bfaa32e29475ebb7a7fad5f992ac53-plain">myModule.setHeader("This is my header content");
+myModule.setBody("This is my body content");
+myModule.setFooter("This is my footer content");
+</textarea></div>
+<p>The <code>setHeader</code>, <code>setBody</code>, and <code>setFooter</code> methods can take either a DOM element or an HTML string as the argument.  Whatever argument you pass in to these methods will entirely replace the current contents of the section you are addressing &mdash; that is, <code>setBody</code> will set the body section's innerHTML to "" (empty string) prior to inserting your argument as the body content.
+</p>
+
+<h3 id="config">Using Configuration Properties</h3>
+
+<p>
+Configuration properties control the look and behavior of Module instances (and its subclasses). 
+These properties are managed by a configuration object (defined by 
+<a href="../../docs/YAHOO.util.Config.html">YAHOO.util.Config</a>) that is automatically instantiated 
+by Module's constructor.  The configuration object is accessible at runtime via its host object 
+instance's "cfg" property.  The following diagram illustrates the relationship of the configuration
+object and its properties with its host Container family object instance:
+</p>
+
+<img src="../img/config.png" width="150" height="211" alt="Illustration of the relation of the Configuration object to its host Module instance.">
+
+<p>
+There are two different ways to set the initial value of configuration properties:  The first is 
+via an object literal that is passed as a second argument to the Module's constructor.  
+Configuration properties can also be set via the configuration object's 
+<a href="../../docs/YAHOO.util.Config.html#method_queueProperty"><code>queueProperty</code></a> method.  In 
+either case, these properties are not applied to the Container family object instance until it is 
+rendered.  For example:
+</p>
+
+<div id="syntax-185413a824ce9136ee69e17a478dec60" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onDOMReady</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Set the initial value of the &quot;visible&quot; property to &quot;false&quot;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="kw2">var</span> oModule <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Module</span><span class="br0">&#40;</span><span class="st0">&quot;mymodule&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> visible<span class="sy0">:</span> <span class="kw2">false</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Set the initial value of the &quot;visible&quot; property to &quot;true&quot;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    oModule.<span class="me1">cfg</span>.<span class="me1">queueProperty</span><span class="br0">&#40;</span><span class="st0">&quot;visible&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    oModule.<span class="me1">setBody</span><span class="br0">&#40;</span><span class="st0">&quot;This is the body&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Render the Module instance, triggering the application of the &quot;visible&quot; </span></div></li><li class="li1"><div class="de1">    <span class="co1">// configuration property</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    oModule.<span class="me1">render</span><span class="br0">&#40;</span>document.<span class="me1">body</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onDOMReady</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+    <span class="co1">// Set the initial value of the &quot;visible&quot; property to &quot;false&quot;</span>
+&nbsp;
+    <span class="kw2">var</span> oModule <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Module</span><span class="br0">&#40;</span><span class="st0">&quot;mymodule&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> visible<span class="sy0">:</span> <span class="kw2">false</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Set the initial value of the &quot;visible&quot; property to &quot;true&quot;</span>
+&nbsp;
+    oModule.<span class="me1">cfg</span>.<span class="me1">queueProperty</span><span class="br0">&#40;</span><span class="st0">&quot;visible&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    oModule.<span class="me1">setBody</span><span class="br0">&#40;</span><span class="st0">&quot;This is the body&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="co1">// Render the Module instance, triggering the application of the &quot;visible&quot; </span>
+    <span class="co1">// configuration property</span>
+&nbsp;
+    oModule.<span class="me1">render</span><span class="br0">&#40;</span>document.<span class="me1">body</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-185413a824ce9136ee69e17a478dec60-plain">YAHOO.util.Event.onDOMReady(function () {
+
+    // Set the initial value of the "visible" property to "false"
+
+    var oModule = new YAHOO.widget.Module("mymodule", { visible: false });
+
+    // Set the initial value of the "visible" property to "true"
+
+    oModule.cfg.queueProperty("visible", true);
+
+    oModule.setBody("This is the body");
+    
+    // Render the Module instance, triggering the application of the "visible" 
+    // configuration property
+    
+    oModule.render(document.body);
+
+});
+</textarea></div>
+<p>
+Once rendered, a Container object instance's configuration properties are accessible at runtime 
+through the configuration object's 
+<a href="../../docs/YAHOO.util.Config.html#method_getProperty"><code>getProperty</code></a> 
+and <a href="../../docs/YAHOO.util.Config.html#method_setProperty"><code>setProperty</code></a> 
+methods. It is possible to listen for when the value of a specific configuration property changes by 
+using the configuration object's 
+<a href="../../docs/YAHOO.util.Config.html#method_subscribeToConfigEvent"><code>subscribeToConfigEvent</code></a> 
+method.  Additionally, the configuration fires a "configChanged" event that can be used to listen 
+for changes made to the value of any configuration property.  For example:
+</p>
+
+<div id="syntax-d0b0917fd9a7101db52d15be73f362b0" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onDOMReady</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Set the initial value of the &quot;visible&quot; property to &quot;false&quot;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="kw2">var</span> oModule <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Module</span><span class="br0">&#40;</span><span class="st0">&quot;mymodule&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> visible<span class="sy0">:</span> <span class="kw2">false</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    oModule.<span class="me1">setBody</span><span class="br0">&#40;</span><span class="st0">&quot;This is the body&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Render the Module instance, triggering the application of the &quot;visible&quot; </span></div></li><li class="li1"><div class="de1">    <span class="co1">// configuration property</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    oModule.<span class="me1">render</span><span class="br0">&#40;</span>document.<span class="me1">body</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Add an event listener for changes to the &quot;visible&quot; configuration property</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    oModule.<span class="me1">cfg</span>.<span class="me1">subscribeToConfigEvent</span><span class="br0">&#40;</span><span class="st0">&quot;visible&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>p_sType<span class="sy0">,</span> p_aArgs<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> oValue <span class="sy0">=</span> p_aArgs<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;The value of the visible property was changed to: &quot;</span> <span class="sy0">+</span> oValue<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Add an event listener for all changes to configuration properties</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">    oModule.<span class="me1">cfg</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;configChanged&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>p_sType<span class="sy0">,</span> p_aArgs<span class="br0">&#41;</span> <span class="br0">&#123;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="kw2">var</span> aProperty <span class="sy0">=</span> p_aArgs<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            sPropertyName <span class="sy0">=</span> aProperty<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">,</span></div></li><li class="li1"><div class="de1">            oPropertyValue <span class="sy0">=</span> aProperty<span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span><span class="sy0">;</span></div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;The value of the &quot;</span> <span class="sy0">+</span> sPropertyName <span class="sy0">+</span> <span class="st0">&quot; property was changed to: &quot;</span> <span class="sy0">+</span> oPropertyValue<span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2">&nbsp;</div></li><li class="li1"><div class="de1">    <span class="co1">// Set the &quot;visible&quot; configuration property to &quot;true&quot;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li1"><div class="de1">    oModule.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;visible&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li><li class="li2"><div class="de2"><span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="kw4">YAHOO</span>.<span class="me1">util</span>.<span class="me1">Event</span>.<span class="me1">onDOMReady</span><span class="br0">&#40;</span><span class="kw2">function</span> <span class="br0">&#40;</span><span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+    <span class="co1">// Set the initial value of the &quot;visible&quot; property to &quot;false&quot;</span>
+&nbsp;
+    <span class="kw2">var</span> oModule <span class="sy0">=</span> <span class="kw2">new</span> <span class="kw4">YAHOO</span>.<span class="me1">widget</span>.<span class="me1">Module</span><span class="br0">&#40;</span><span class="st0">&quot;mymodule&quot;</span><span class="sy0">,</span> <span class="br0">&#123;</span> visible<span class="sy0">:</span> <span class="kw2">false</span> <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+&nbsp;
+    oModule.<span class="me1">setBody</span><span class="br0">&#40;</span><span class="st0">&quot;This is the body&quot;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+&nbsp;
+    <span class="co1">// Render the Module instance, triggering the application of the &quot;visible&quot; </span>
+    <span class="co1">// configuration property</span>
+&nbsp;
+    oModule.<span class="me1">render</span><span class="br0">&#40;</span>document.<span class="me1">body</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+&nbsp;
+    <span class="co1">// Add an event listener for changes to the &quot;visible&quot; configuration property</span>
+&nbsp;
+    oModule.<span class="me1">cfg</span>.<span class="me1">subscribeToConfigEvent</span><span class="br0">&#40;</span><span class="st0">&quot;visible&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>p_sType<span class="sy0">,</span> p_aArgs<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+        <span class="kw2">var</span> oValue <span class="sy0">=</span> p_aArgs<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;The value of the visible property was changed to: &quot;</span> <span class="sy0">+</span> oValue<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+&nbsp;
+    <span class="co1">// Add an event listener for all changes to configuration properties</span>
+&nbsp;
+    oModule.<span class="me1">cfg</span>.<span class="me1">subscribe</span><span class="br0">&#40;</span><span class="st0">&quot;configChanged&quot;</span><span class="sy0">,</span> <span class="kw2">function</span> <span class="br0">&#40;</span>p_sType<span class="sy0">,</span> p_aArgs<span class="br0">&#41;</span> <span class="br0">&#123;</span>
+&nbsp;
+        <span class="kw2">var</span> aProperty <span class="sy0">=</span> p_aArgs<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">,</span>
+            sPropertyName <span class="sy0">=</span> aProperty<span class="br0">&#91;</span><span class="nu0">0</span><span class="br0">&#93;</span><span class="sy0">,</span>
+            oPropertyValue <span class="sy0">=</span> aProperty<span class="br0">&#91;</span><span class="nu0">1</span><span class="br0">&#93;</span><span class="sy0">;</span>
+&nbsp;
+        <span class="kw3">alert</span><span class="br0">&#40;</span><span class="st0">&quot;The value of the &quot;</span> <span class="sy0">+</span> sPropertyName <span class="sy0">+</span> <span class="st0">&quot; property was changed to: &quot;</span> <span class="sy0">+</span> oPropertyValue<span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+    <span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+&nbsp;
+    <span class="co1">// Set the &quot;visible&quot; configuration property to &quot;true&quot;</span>
+&nbsp;
+    oModule.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;visible&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;
+<span class="br0">&#125;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-d0b0917fd9a7101db52d15be73f362b0-plain">YAHOO.util.Event.onDOMReady(function () {
+
+    // Set the initial value of the "visible" property to "false"
+
+    var oModule = new YAHOO.widget.Module("mymodule", { visible: false });
+
+
+    oModule.setBody("This is the body");
+    
+
+    // Render the Module instance, triggering the application of the "visible" 
+    // configuration property
+    
+    oModule.render(document.body);
+
+
+    // Add an event listener for changes to the "visible" configuration property
+
+    oModule.cfg.subscribeToConfigEvent("visible", function (p_sType, p_aArgs) {
+    
+        var oValue = p_aArgs[0];
+    
+        alert("The value of the visible property was changed to: " + oValue);
+    
+    });
+
+
+    // Add an event listener for all changes to configuration properties
+
+    oModule.cfg.subscribe("configChanged", function (p_sType, p_aArgs) {
+    
+        var aProperty = p_aArgs[0],
+            sPropertyName = aProperty[0],
+            oPropertyValue = aProperty[1];
+    
+        alert("The value of the " + sPropertyName + " property was changed to: " + oPropertyValue);
+    
+    });
+
+
+    // Set the "visible" configuration property to "true"
+
+    oModule.cfg.setProperty("visible", true);
+
+});
+</textarea></div>
+<p>
+See the <a href="../../docs/YAHOO.util.Config.html">Configuration object's API documentation</a> for its full list of properties and methods.
+</p>
+
+<p>Module has the following configuration properties, which it passes on to all of its subclasses through inheritance:</p>
+<div class="apisummary">
+<table>
+    <thead>
+        <tr>
+            <th>Name </th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr class="odd">
+            <td>visible</td>
+            <td>Boolean</td>
+            <td>true</td>
+            <td>Sets whether or not the Module is visible on the page (Module uses the CSS "display" property to control this).</td>
+        </tr>
+
+        <tr>
+            <td>monitorresize</td>
+            <td>Boolean</td>
+            <td>true</td>
+            <td>Configures whether or not to create a hidden off-screen element that can be used to monitor for text size changes in the DOM. </td>
+        </tr>
+
+        <tr class="odd">
+            <td>effect</td>
+            <td>Object</td>
+            <td>null</td>
+            <td>
+                Object or array of objects representing the ContainerEffect classes that are active for animating the container.
+                <strong>NOTE:</strong> The effect configuration property is introduced at the Module class, however Container does
+                not ship with a ContainerEffect implementation for the Module class so setting the effect property on a Module instance
+                has no impact. Overlay is the lowest Container class for which ContainerEffects are implemented out of the box.
+            </td>
+        </tr>
+
+        <tr>
+            <td>appendtodocumentbody</td>
+            <td>Boolean</td>
+            <td>false</td>
+            <td>
+                <p>Specifies if the module should be rendered as the first child of document.body or appended as the last child when render is called with document.body as the "appendToNode".</p>
+                <p>Appending to the body while the DOM is still being constructed can lead to Operation Aborted errors in IE hence this flag is set to false by default.</p>            
+            </td>
+        </tr>
+
+    </tbody>
+</table>
+
+</div>
+<h3>Monitoring Events<a name="events"></a></h3>
+<p>Module and its subclasses each introduce hooks for <a href="../../event/index.html">Custom Events</a> to which a listener can subscribe. By listening for the execution of these events, you have the ability to react to the various interesting moments that occur during the lifecycle of a Module. See the <a href="../../docs/container/YAHOO.widget.Module.html">full API documentation</a> for more information on the events that are available to listening subscribers.</p>
+<h3>Rendering the Module<a name="render"></a></h3>
+<p>
+Once a Module is successfully instantiated, a call to its <code>render</code> function is required so that all visual properties are properly applied to the Module. If the Module is already in the DOM, you can simply call: </p>
+<div id="syntax-1a952e34ffc775b15d6eff17bf0b9013" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Render the Module that is already in the DOM</span></div></li><li class="li1"><div class="de1">myModule.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Render the Module that is already in the DOM</span>
+myModule.<span class="me1">render</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-1a952e34ffc775b15d6eff17bf0b9013-plain">// Render the Module that is already in the DOM
+myModule.render();
+</textarea></div>
+<p>If you have created a module scriptologically with no pre-existing markup, you must pass an element to the render function so that the Module can be inserted into the DOM:</p>
+<div id="syntax-072d061af85adeab2f7622af4f9f6a5f" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// Render the Module into the body of the document.</span></div></li><li class="li1"><div class="de1">myModule.<span class="me1">render</span><span class="br0">&#40;</span>document.<span class="me1">body</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// Render the Module into the body of the document.</span>
+myModule.<span class="me1">render</span><span class="br0">&#40;</span>document.<span class="me1">body</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-072d061af85adeab2f7622af4f9f6a5f-plain">// Render the Module into the body of the document.
+myModule.render(document.body);
+</textarea></div>
+<h3>Showing and Hiding the Module<a name="show"></a></h3>
+<p>
+Showing and hiding a rendered Module instance (as well as rendered instances of all Module subclasses) is very easy. You can change the visibility of the Module two ways:</p>
+<div id="syntax-ab3e6224d5b6461466cadb478b53dc3e" class="yui-syntax-highlight"><div class="numbers"><pre class="javascript" style="font-family:monospace;"><ol><li class="li1"><div class="de1"><span class="co1">// 1. Using show() and hide()</span></div></li><li class="li1"><div class="de1">myModule.<span class="me1">show</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myModule.<span class="me1">hide</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1"><span class="co1">// 2. Using the configuration properties</span></div></li><li class="li2"><div class="de2">myModule.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;visible&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">myModule.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;visible&quot;</span><span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span></div></li><li class="li1"><div class="de1">&nbsp;</div></li></ol></pre></div><div class="nonumbers"><pre class="javascript" style="font-family:monospace;"><span class="co1">// 1. Using show() and hide()</span>
+myModule.<span class="me1">show</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myModule.<span class="me1">hide</span><span class="br0">&#40;</span><span class="br0">&#41;</span><span class="sy0">;</span>
+<span class="co1">// 2. Using the configuration properties</span>
+myModule.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;visible&quot;</span><span class="sy0">,</span> <span class="kw2">true</span><span class="br0">&#41;</span><span class="sy0">;</span>
+myModule.<span class="me1">cfg</span>.<span class="me1">setProperty</span><span class="br0">&#40;</span><span class="st0">&quot;visible&quot;</span><span class="sy0">,</span> <span class="kw2">false</span><span class="br0">&#41;</span><span class="sy0">;</span>
+&nbsp;</pre></div><textarea id="syntax-ab3e6224d5b6461466cadb478b53dc3e-plain">// 1. Using show() and hide()
+myModule.show();
+myModule.hide();
+// 2. Using the configuration properties
+myModule.cfg.setProperty("visible", true);
+myModule.cfg.setProperty("visible", false);
+</textarea></div>
+	<h2 id="support">Support &amp; Community</h2>
+	<p>The YUI Library and related topics are discussed on the on the <a href="http://yuilibrary.com/forum/">YUILibrary.com forums</a>.</p>
+
+    <p>Also be sure to check out <a href="http://yuiblog.com">YUIBlog</a> for updates and articles about the YUI Library written by the library's developers.</p>
+	
+	<h2 id="filingbugs">Filing Bugs &amp; Feature Requests</h2>
+	
+	<p>The YUI Library's public bug tracking and feature request repositories are located on <a href="http://yuilibrary.com/projects">the YUILibrary.com site</a>.  Before filing new feature requests or bug reports, please review <a href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">our reporting guidelines</a>.</p>
+	
+        </div>
+         <div class="yui-u">
+            
+            <div id="examples">
+<h3>Container Family Examples:</h3>
+
+<ul>
+<li><a href='../../examples/container/module.html'>The Module Control</a></li>
+<li><a href='../../examples/container/overlay.html'>Creating and Positioning an Overlay</a></li>
+<li><a href='../../examples/container/tooltip.html'>Simple Tooltip Example</a></li>
+<li><a href='../../examples/container/tooltip-multi.html'>One Tooltip, Many Context Elements</a></li>
+<li><a href='../../examples/container/panel.html'>Simple Panel Example</a></li>
+<li><a href='../../examples/container/panelskin1.html'>Skinning a Panel with Custom CSS: Introduction</a></li>
+<li><a href='../../examples/container/panelskin2.html'>Skinning a Panel with Custom CSS: Advanced</a></li>
+<li><a href='../../examples/container/panel-loading.html'>Creating a Modal "Loading" Panel</a></li>
+<li><a href='../../examples/container/panel-resize.html'>Creating a Resizable Panel</a></li>
+<li><a href='../../examples/container/dialog-quickstart.html'>Dialog Quickstart Example</a></li>
+<li><a href='../../examples/container/simpledialog-quickstart.html'>SimpleDialog Quickstart Example</a></li>
+<li><a href='../../examples/container/container-effect.html'>Using ContainerEffect Transitions</a></li>
+<li><a href='../../examples/container/overlaymanager.html'>Using the Overlay Manager to Manage Multiple Panels</a></li>
+<li><a href='../../examples/container/keylistener.html'>Implementing Container Keyboard Shortcuts with KeyListener</a></li>
+<li><a href='../../examples/container/container-ariaplugin.html'>Using the Container ARIA Plugin</a></li>
+</ul>
+
+
+
+
+<h4 id='relatedExamples'>Other YUI Examples That Make Use of the Container Family:</h4>
+
+<ul>
+<li><a href='../../examples/button/button-ariaplugin.html'>Using the Button ARIA Plugin</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/button/button-menu-select.html'>Using A Menu Button To Replace A &#60;select&#62; Element</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/button/button-menu-swap.html'>Replacing the content of a Button's Menu</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/colorpicker/colorpicker-dialog-from-script.html'>Example of Color Picker Built in a Dialog via JavaScript</a> (included with examples for the <a href='../../colorpicker/index.html'>Color Picker Control</a>)</li>
+<li><a href='../../examples/layout/panel_layout.html'>Layout inside a resizable Panel</a> (included with examples for the <a href='../../layout/index.html'>Layout Manager</a>)</li>
+<li><a href='../../examples/editor/dialog_editor.html'>Editor in a Dialog Control</a> (included with examples for the <a href='../../editor/index.html'>Rich Text Editor</a>)</li>
+<li><a href='../../examples/button/btn_example07.html'>Menu Buttons</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/calendar/calcontainer.html'>Popup Calendar - Advanced</a> (included with examples for the <a href='../../calendar/index.html'>Calendar Control</a>)</li>
+<li><a href='../../examples/datatable/dt_colshowhide.html'>Showing, Hiding, and Reordering Columns.</a> (included with examples for the <a href='../../datatable/index.html'>DataTable Control</a>)</li>
+<li><a href='../../examples/button/btn_example08.html'>Split Buttons</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/button/btn_example09.html'>Simple Calendar Menu Button</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/button/btn_example10.html'>Calendar Menu Button with Date on Button Face</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/button/btn_example11.html'>Color Picker Button</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/button/btn_example12.html'>Fixed Width Menu Button</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/menu/programsmenu.html'>OS-Style Programs Menu</a> (included with examples for the <a href='../../menu/index.html'>Menu Family</a>)</li>
+<li><a href='../../examples/menu/applicationmenubar.html'>Application Menubar</a> (included with examples for the <a href='../../menu/index.html'>Menu Family</a>)</li>
+<li><a href='../../examples/button/btn_example14.html'>Slider Button</a> (included with examples for the <a href='../../button/index.html'>Button Control</a>)</li>
+<li><a href='../../examples/layout/adv_layout.html'>Complex Application</a> (included with examples for the <a href='../../layout/index.html'>Layout Manager</a>)</li>
+</ul>		
+           </div>
+
+            <div id="morereading">
+                <h3>More Reading about the YUI Module Control:</h3>
+                
+                <ul>
+                  <li><a href="http://vani.vox.com/library/post/yui-simple-showhide-div-using-module.html">YUI: Simple show/hide div using Module</a>, by Vani</li>
+               </ul>
+           </div>
+<!-- 1 --><!--http%3A%2F%2Fdeveloper.yahoo.com%2Fyui%2Fcontainer%2Fmodule%2F--><h3 id="delicious">YUI Module on del.icio.us:</h3>
+<div class="delicious">
+<div id="delicious-badge">
+   <p><a href="http://del.icio.us/post?url=http://developer.yahoo.com/yui/container/module/" class="bookmark">bookmark on del.icio.us</a></p>
+      <div>
+      <span>tags:</span>
+      <ul>
+                     <li><a href="http://del.icio.us/tag/web" class="tag-size-1">web</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/documentation" class="tag-size-1">documentation</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/toddkloots" class="tag-size-1">toddkloots</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/javascript" class="tag-size-1">javascript</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yahoo" class="tag-size-1">yahoo</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/alte_Bookmarks" class="tag-size-1">alte_Bookmarks</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yui" class="tag-size-1">yui</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/yuimodule" class="tag-size-1">yuimodule</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/library" class="tag-size-1">library</a><!--(1)--></li>
+                     <li><a href="http://del.icio.us/tag/tutorials" class="tag-size-1">tutorials</a><!--(1)--></li>
+               </ul>
+   </div>
+            <p><a href="http://del.icio.us/url/3a2e11e1c8623d68dde16b91b5ed0a87" class="saved-by">saved by <span>4</span>  people</a></p>
+   </div></div>
+
+         </div>
+      </div>
+</div>
+</div>
+
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="item"><a title="Examples of every YUI utility and control in action" href="../../examples/index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="selected "><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+<script type="text/javascript" src="http://yui.yahooapis.com/combo?2.9.0/build/yuiloader-dom-event/yuiloader-dom-event.js&3.3.0/build/yui/yui-min.js"></script>
+<!--Page specific appends:-->	<script type="text/javascript" src="../assets/yuiModuleMeta.js"></script>
+	<script type="text/javascript" src="../../docs/assets/readme.js?v=4"></script>
+
+<script>
+var yuiConfig = {};
+</script>
+<script src="http://yuilibrary.com/old/syntax.js"></script>
+
+<!-- Yahoo! Web Analytics - All rights reserved -->
+<script type="text/javascript" src="http://d.yimg.com/mi/ywa.js"></script>
+<script type="text/javascript">
+/*globals YWA*/
+var YWATracker = YWA.getTracker("10001393677061");
+//YWATracker.setDocumentName("");
+//YWATracker.setDocumentGroup("");
+YWATracker.submit();
+</script>
+<noscript>
+<div><img src="http://a.analytics.yahoo.com/p.pl?a=10001393677061&js=no" width="1" height="1" alt="" /></div>
+</noscript>
+
+
+</body>
+</html>
+
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc2.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:18 PDT 2013 -->
+
+<!-- Localized -->

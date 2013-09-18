@@ -1,0 +1,661 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+	<title>YUI Library Examples: Get Utility: Getting a Script Node with JSON Data from a Web Service</title>
+
+    
+
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+    	<link rel="stylesheet" type="text/css" href="../../assets/yui-v=3.css" >
+	<link rel="stylesheet" type="text/css" href="../../assets/dpSyntaxHighlighter.css">
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/logger/assets/skins/sam/logger.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yuiloader/yuiloader-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/event/event-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/logger/logger-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button-min.js"></script>
+
+
+<!--begin custom header content for this example-->
+<style type="text/css">
+#container ol {
+	/*bringing lists on to the page with breathing room */
+	margin-left:2em !important;
+}
+
+#container ol li {
+	/*giving OL's LIs generated numbers*/
+	list-style: decimal outside !important;	
+}
+
+#container h3 {
+	margin-top: 1em;
+}
+</style>
+<!--end custom header content for this example-->
+
+
+<style>
+    #upgrade-yui, #tocWrapper > p {
+        padding: 0 0 1em;
+        margin: 0;
+    }
+    #upgrade-yui p {
+        padding: 0.5em;
+        margin: 0;
+        background: #FAFFB7;
+        color: #000;
+        border: 1px solid #B6CDE1;
+        -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        font: 177% Helvetica, Arial, sans-serif;
+        text-align: center;
+        -moz-text-shadow: 1px 1px 0 #fff;
+        -webkit-text-shadow: 1px 1px 0 #fff;
+        text-shadow: 1px 1px 0 #fff;
+        white-space: nowrap;
+    }
+    #upgrade-yui span {
+        display: block;
+    }
+    #upgrade-yui span .recommend {
+        color: #000;
+        text-decoration: none;
+        font-weight: bold;
+    }
+    #upgrade-yui p .recommend:hover {
+        text-decoration: underline;
+    }
+</style>
+
+</head>
+<body id="yahoo-com" class="yui-skin-sam">
+<div id="deprecatewrapper">
+  <style>
+    #deprecatemsg {
+      background-color: #355E95;
+      margin: 0px;
+      padding: .8em;
+      color: #FFF;
+    }
+    #deprecatemsg a {
+      text-decoration: none;
+      color: #F29752;
+    }
+    #deprecatemsg p {
+      margin: .5em;
+    }
+    #deprecatemsg p.dep-hd {
+      font-size: 177%;
+    }
+
+    #deprecatemsg p.dep-subhd,
+    #deprecatemsg p.dep-details {
+      font-size: 120%;
+    }
+  </style>
+  <div id="deprecatemsg">
+      <p class="dep-hd">YUI recommends <a href="http://yuilibrary.com/">YUI3</a>.</p>
+      <p class="dep-subhd">YUI 2 has been <a href="http://www.yuiblog.com/blog/2011/04/13/announcing-yui-2-9-0/">deprecated</a> since 2011. This site acts as an archive for files and documentation.</p>
+      <p class="dep-details">This <a href="http://yui.github.io/yui2/">documentation</a> is no longer maintained.</p>
+  </div>
+</div>
+<div id="doc3" class="yui-t2">
+<div id="hd">
+	<div id="ygunav">
+		<p><em>
+			<a href="http://yuilibrary.com/">YUI Library Home</a> <i> - </i>	
+			<a href="http://yui.github.io/yui2/">YUI2 Archives</a>
+			</em>
+		</p>
+		<form action="http://search.yahoo.com/search" id="sitesearchform">
+		<input name="vs" type="hidden" value="http://yui.github.io/yui2/">
+		<div id="sitesearch">
+			<label for="searchinput">Site Search: </label>
+			<input type="text" id="searchinput" name="p">
+			<input type="submit" value="Search" id="searchsubmit" class="ygbt">
+		</div>
+		</form>
+	</div>
+
+	
+	<div id="pagetitle"><h1>YUI Library Examples: Get Utility: Getting a Script Node with JSON Data from a Web Service</h1></div>
+</div>
+<div id="bd">
+
+
+		
+	
+	<div id="yui-main">
+		<div class="yui-b">
+		  <div class="yui-ge">
+			  <div class="yui-u first example">
+
+    
+	<div class="promo">
+	<h1>Get Utility: Getting a Script Node with JSON Data from a Web Service</h1>
+	
+	<div class="exampleIntro">
+	<p>This example employs the <a href="../../get/index.html">YUI Get Utility</a> in a simple use case: retrieving JSON data from a cross-domain web service. While this is a relatively common usage, it's important to understand the security ramifications of this technique. Scripts loaded via the Get Utility (or any other &quot;script node&quot; solution) execute immediately once they are loaded. If you do not fully control (or fully trust) the script's source, this is not a safe technique and it can put the security of your users' data at risk. (For more information on the dangers of cross-site scripting [XSS] exploits, <a href="http://en.wikipedia.org/wiki/Cross-site_scripting">check out the Wikipedia entry on this subject</a>.)</p>
+<p>Here, we will use a trusted Yahoo! Search web service called <a href="http://developer.yahoo.com/search/siteexplorer/V1/inlinkData.html">Site Explorer</a> to return a list of inbound links for a given URL. The principal difference between this example and similar examples using <a href="../../connection/index.html">YUI Connection Manager</a> is that this technique does not require a server-side proxy. The browser connects directly to the third-party web service without bouncing through a proxy page as is required when using the XMLHttpRequest object (on which Connection Manager relies).</p>
+			
+	</div>	
+					
+	<div class="example-container module ">
+			<div class="hd exampleHd">
+			<p class="newWindowButton yui-skin-sam"><!--<span id="newWindowLinkx"><span class="first-child">--><a href="get-script-basic_clean.html" target="_blank">View example in new window.</a><!--</span></span>-->		
+		</div>		<div id="example-canvas" class="bd">
+	
+		
+	<!--BEGIN SOURCE CODE FOR EXAMPLE =============================== -->
+	
+	<div id="container">
+
+    <!--Use a real form that works without JavaScript:-->
+    <form method="GET" action="http://siteexplorer.search.yahoo.com/advsearch" id="siteExplorer">
+
+        <label for="searchString">Site URL:</label> <input type="text" name="p" id="searchString" value="http://developer.yahoo.com/yui" size="40">
+        
+        <input type="hidden" name="bwm" value="i">
+        <input type="hidden" name="bwms" value="p">
+    
+        <input type="submit" id="getSiteExplorerData" value="Click here to get JSON data.">
+    
+    </form>
+
+    <div id="results">
+        <!--JSON output will be written to the DOM here-->
+        
+    </div>
+</div>
+
+<script type="text/javascript">
+//create a namespace for this example:
+YAHOO.namespace("example.SiteExplorer");
+
+//This example uses the "Module Pattern"; a full explanation of 
+//this pattern can be found on yuiblog:
+// http://yuiblog.com/blog/2007/06/12/module-pattern
+YAHOO.example.SiteExplorer = function() {
+
+    //set up some shortcuts in case our typing fingers
+    //get lazy:
+    var Event = YAHOO.util.Event,
+        Dom = YAHOO.util.Dom,
+        Button = YAHOO.widget.Button,
+        Get = YAHOO.util.Get,
+        elResults = Dom.get("results"),
+        tIds = {},
+        loading = false,
+        current = null;
+        
+    // We use the Get Utility's success handler in conjunction with
+    // the web service callback in order to detect bad responses 
+    // from the web service.
+    var onSiteExplorerSuccess = function(o) {
+
+        // stop blocking requests
+        loading = false;
+
+        // A success response means the script node is inserted.  However, the
+        // utility is unable to detect whether or not the content of the script
+        // node is correct, or even if there was a bad response (like a 404
+        // error).  To get around this, we use the web service callback to
+        // verify that the script contents was correct.
+        if (o.tId in tIds) {
+YAHOO.log("The Get Utility has fired the success handler indicating that the " +
+          "requested script has loaded and is ready for use.", "info", "example");
+        } else {
+YAHOO.log("The Get utility has fired onSuccess but the webservice callback did not " +
+          "fire.  We could retry the transaction here, or notify the user of the " +
+          "failure.", "info", "example");
+        }
+
+    }
+
+    var onSiteExplorerFailure = function(o) {
+YAHOO.log("The Get Utility failed.", "info", "example");
+    }
+    
+    //function to retrieve data from Yahoo! Site Explorer web service --
+    // http://developer.yahoo.com/search/siteexplorer/V1/inlinkData.html
+    var getSiteExplorerData = function() {
+        YAHOO.log("Button clicked; getSiteExplorerData firing.", "info", "example");
+
+        // block multiple requests
+        if (loading) {
+            return;
+        }
+        loading = true;
+        
+        //Load the transitional state of the results section:
+        elResults.innerHTML = "<h3>Retrieving incoming links for " +
+            Dom.get("searchString").value + ":</h3>" +
+            "<img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/busybar_1.gif' " +
+            "alt='Please wait...'>";
+        
+        //prepare the URL for the Yahoo Site Explorer API:
+        var sURL = "http://search.yahooapis.com/SiteExplorerService/V1/inlinkData?" +
+            "appid=3wEDxLHV34HvAU2lMnI51S4Qra5m.baugqoSv4gcRllqqVZm3UrMDZWToMivf5BJ3Mom" +
+            "&results=20&output=json&omit_inlinks=domain" +
+            "&callback=YAHOO.example.SiteExplorer.callback" +
+            "&query=" + encodeURIComponent(Dom.get("searchString").value);
+        
+        //This simple line is the call to the Get Utility; we pass
+        //in the URL and the configuration object, which in this case
+        //consists merely of our success and failure callbacks:
+        var transactionObj = Get.script(sURL, {
+            onSuccess: onSiteExplorerSuccess,
+            onFailure: onSiteExplorerFailure,
+            scope    : this
+        });
+        
+        //The script method returns a single-field object containing the
+        //tranaction id:
+        YAHOO.log("Get Utility transaction started; transaction object: " + YAHOO.lang.dump(transactionObj), "info", "example");
+
+        // keep track of the current transaction id.  The transaction will be
+        // considered complete only if the web service callback is executed.
+        current = transactionObj.tId; 
+    }
+    return {
+        init: function() {
+                
+            //suppress default form behavior
+            Event.on("siteExplorer", "submit", function(e) {
+                Event.preventDefault(e);
+                getSiteExplorerData();
+            }, this, true);
+        
+            //instantiate Button:
+            var oButton = new Button("getSiteExplorerData");
+            YAHOO.log("Button instantiated.", "info", "example");
+        },
+
+        callback: function(results) {
+            YAHOO.log("Web service returned data to YAHOO.example.SiteExplorer.callback; beginning to process.", "info", "example");
+
+            // Mark the transaction as complete.  This will be checked by the onSuccess
+            // handler to determine if the transaction really succeeded.
+            tIds[current] = true;
+            
+            //work with the returned data to extract meaningful fields:
+            var aResults = results.ResultSet.Result;
+            var totalLinks = results.ResultSet.totalResultsAvailable;
+            var returnedLinkCount = results.ResultSet.totalResultsReturned;
+            
+            if(aResults) {//there are inbound links; process and display them:
+            
+                //write header and open list of inbound links:          
+                var html = "<h3>There are " +
+                    totalLinks + 
+                    " inbound links for this page; here are the first " + 
+                    returnedLinkCount +
+                    ":</h3><ol>";
+                
+                //process list of inbound links:
+                for (var i=0; i < aResults.length; i++) {
+                    html += "<li><strong>" +
+                        aResults[i].Title +
+                        ":</strong> <a href='" +
+                        aResults[i].Url +
+                        "'>" + aResults[i].Url +
+                        "</a></li>";
+                }
+                
+                //close list of inbound links
+                html += "</ol>";
+                
+            } else {//no inbound links exist for this page:
+            
+                var html = "<h3>There are no inbound links for the page specified.</h3";
+                
+            }
+            
+            //insert string into DOM:
+            elResults.innerHTML = html;
+        }
+    }
+}();
+
+//Initialize the example when the DOM is completely loaded:
+YAHOO.util.Event.onDOMReady(
+    YAHOO.example.SiteExplorer.init, 
+    YAHOO.example.SiteExplorer,         //pass this object to init and...
+    true);                              //...run init in the passed object's
+                                        //scope
+
+
+</script>
+	
+	<!--END SOURCE CODE FOR EXAMPLE =============================== -->
+	
+		
+		</div>
+		
+	
+	</div>			
+	</div>
+		
+	<h2 class="first">Using the Get Utility to Get a Script File with JSON-formatted Contents</h2>
+
+<p>Here, we'll use <a href="../../get/index.html">the YUI Get Utility</a> to retrieve data via the <a href="http://developer.yahoo.com/search/siteexplorer/V1/inlinkData.html">Yahoo! Search Site-Explorer web service</a>, one of many Yahoo! APIs that support JSON.</p>
+
+<p>This example has the following dependencies:</p>
+
+<textarea name="code" class="HTML" cols="60" rows="1"><link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/button/assets/skins/sam/button.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/element/element.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/button/button.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.9.0/build/get/get.js"></script></textarea>
+
+<p>First, we create a plain HTML form that will work for users who do not have JavaScript enabled:</p>
+
+
+<textarea name="code" class="HTML" cols="60" rows="1"><div id="container">
+
+	<!--Use a real form that works without JavaScript:-->
+	<form method="GET" action="http://siteexplorer.search.yahoo.com/advsearch" id="siteExplorer">
+
+        <label for="searchString">Site URL:</label> <input type="text" name="searchString" id="p" value="http://developer.yahoo.com/yui" size="40">
+        
+        <input type="hidden" name="bwm" value="i">
+        <input type="hidden" name="bwms" value="p">
+    
+        <input type="submit" id="getSiteExplorerData" value="Click here to get JSON data.">
+    
+    </form>
+
+	<div id="results">
+    	<!--JSON output will be written to the DOM here-->
+        
+    </div>
+</div></textarea>
+
+<p>With this in place, we can progressively enhance the form to create an in-page interaction for users with JavaScript turned on.</p>
+
+<p>The most important JavaScript piece here is the method that we fire on form submission.  This method triggers our call to the Get Utility. This method, called <code>getSiteExplorerData</code>, accomplishes four things:</p>
+<ol>
+  <li>It loads a transitional state for the display, alerting the user to the fact that data is being retrieved as a result of her action (line 7ff);</li>
+  <li>It prepares the URL that will be passed to the Get Utility (line 13ff);</li>
+  <li>It calls the Get Utility, passing in the URL of the script resource to load (in this case, the URL of our web service with the relevant paramaters assembled in the querystring) (line 22ff);</li>
+  <li>It specifies the callback (line 23) and the scope in which the callback should run (line 24). Note that in this example the web service itself provides callback functionality, allowing us to pass a globally accessible callback function name as one of the parameters of the REST API; you can see this reference in line 16 below. As a result, we're making direct use of the intrinsic web service callback in this example and just stubbing out the built-in Get Utility callback for the sake of illustration.</li>
+</ol>
+<p>
+  <textarea name="code" class="JScript" cols="60" rows="1">//function to retrieve data from Yahoo! Site Explorer web service --
+// http://developer.yahoo.com/search/siteexplorer/V1/inlinkData.html
+var getSiteExplorerData = function() {
+    YAHOO.log("Button clicked; getSiteExplorerData firing.", "info", "example");
+
+    // block multiple requests
+    if (loading) {
+        return;
+    }
+    loading = true;
+    
+    //Load the transitional state of the results section:
+    elResults.innerHTML = "<h3>Retrieving incoming links for " +
+        Dom.get("searchString").value + ":</h3>" +
+        "<img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/busybar_1.gif' " +
+        "alt='Please wait...'>";
+    
+    //prepare the URL for the Yahoo Site Explorer API:
+    var sURL = "http://search.yahooapis.com/SiteExplorerService/V1/inlinkData?" +
+        "appid=3wEDxLHV34HvAU2lMnI51S4Qra5m.baugqoSv4gcRllqqVZm3UrMDZWToMivf5BJ3Mom" +
+        "&results=20&output=json&omit_inlinks=domain" +
+        "&callback=YAHOO.example.SiteExplorer.callback" +
+        "&query=" + encodeURIComponent(Dom.get("searchString").value);
+    
+    //This simple line is the call to the Get Utility; we pass
+    //in the URL and the configuration object, which in this case
+    //consists merely of our success and failure callbacks:
+    var transactionObj = Get.script(sURL, {
+        onSuccess: onSiteExplorerSuccess,
+        onFailure: onSiteExplorerFailure,
+        scope    : this
+    });
+    
+    //The script method returns a single-field object containing the
+    //tranaction id:
+    YAHOO.log("Get Utility transaction started; transaction object: " + YAHOO.lang.dump(transactionObj), "info", "example");
+
+    // keep track of the current transaction id.  The transaction will be
+    // considered complete only if the web service callback is executed.
+    current = transactionObj.tId; 
+}
+</textarea>
+</p>
+<p>The full JavaScript codeblock for this example reads as follows:</p>
+<textarea name="code" class="JScript" cols="60" rows="1">//create a namespace for this example:
+YAHOO.namespace("example.SiteExplorer");
+
+//This example uses the "Module Pattern"; a full explanation of 
+//this pattern can be found on yuiblog:
+// http://yuiblog.com/blog/2007/06/12/module-pattern
+YAHOO.example.SiteExplorer = function() {
+
+    //set up some shortcuts in case our typing fingers
+    //get lazy:
+    var Event = YAHOO.util.Event,
+        Dom = YAHOO.util.Dom,
+        Button = YAHOO.widget.Button,
+        Get = YAHOO.util.Get,
+        elResults = Dom.get("results"),
+        tIds = {},
+        loading = false,
+        current = null;
+        
+    // We use the Get Utility's success handler in conjunction with
+    // the web service callback in order to detect bad responses 
+    // from the web service.
+    var onSiteExplorerSuccess = function(o) {
+
+        // stop blocking requests
+        loading = false;
+
+        // A success response means the script node is inserted.  However, the
+        // utility is unable to detect whether or not the content of the script
+        // node is correct, or even if there was a bad response (like a 404
+        // error).  To get around this, we use the web service callback to
+        // verify that the script contents was correct.
+        if (o.tId in tIds) {
+YAHOO.log("The Get Utility has fired the success handler indicating that the " +
+          "requested script has loaded and is ready for use.", "info", "example");
+        } else {
+YAHOO.log("The Get utility has fired onSuccess but the webservice callback did not " +
+          "fire.  We could retry the transaction here, or notify the user of the " +
+          "failure.", "info", "example");
+        }
+
+    }
+
+    var onSiteExplorerFailure = function(o) {
+YAHOO.log("The Get Utility failed.", "info", "example");
+    }
+    
+    //function to retrieve data from Yahoo! Site Explorer web service --
+    // http://developer.yahoo.com/search/siteexplorer/V1/inlinkData.html
+    var getSiteExplorerData = function() {
+        YAHOO.log("Button clicked; getSiteExplorerData firing.", "info", "example");
+
+        // block multiple requests
+        if (loading) {
+            return;
+        }
+        loading = true;
+        
+        //Load the transitional state of the results section:
+        elResults.innerHTML = "<h3>Retrieving incoming links for " +
+            Dom.get("searchString").value + ":</h3>" +
+            "<img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/busybar_1.gif' " +
+            "alt='Please wait...'>";
+        
+        //prepare the URL for the Yahoo Site Explorer API:
+        var sURL = "http://search.yahooapis.com/SiteExplorerService/V1/inlinkData?" +
+            "appid=3wEDxLHV34HvAU2lMnI51S4Qra5m.baugqoSv4gcRllqqVZm3UrMDZWToMivf5BJ3Mom" +
+            "&results=20&output=json&omit_inlinks=domain" +
+            "&callback=YAHOO.example.SiteExplorer.callback" +
+            "&query=" + encodeURIComponent(Dom.get("searchString").value);
+        
+        //This simple line is the call to the Get Utility; we pass
+        //in the URL and the configuration object, which in this case
+        //consists merely of our success and failure callbacks:
+        var transactionObj = Get.script(sURL, {
+            onSuccess: onSiteExplorerSuccess,
+            onFailure: onSiteExplorerFailure,
+            scope    : this
+        });
+        
+        //The script method returns a single-field object containing the
+        //tranaction id:
+        YAHOO.log("Get Utility transaction started; transaction object: " + YAHOO.lang.dump(transactionObj), "info", "example");
+
+        // keep track of the current transaction id.  The transaction will be
+        // considered complete only if the web service callback is executed.
+        current = transactionObj.tId; 
+    }
+    return {
+        init: function() {
+                
+            //suppress default form behavior
+            Event.on("siteExplorer", "submit", function(e) {
+                Event.preventDefault(e);
+                getSiteExplorerData();
+            }, this, true);
+        
+            //instantiate Button:
+            var oButton = new Button("getSiteExplorerData");
+            YAHOO.log("Button instantiated.", "info", "example");
+        },
+
+        callback: function(results) {
+            YAHOO.log("Web service returned data to YAHOO.example.SiteExplorer.callback; beginning to process.", "info", "example");
+
+            // Mark the transaction as complete.  This will be checked by the onSuccess
+            // handler to determine if the transaction really succeeded.
+            tIds[current] = true;
+            
+            //work with the returned data to extract meaningful fields:
+            var aResults = results.ResultSet.Result;
+            var totalLinks = results.ResultSet.totalResultsAvailable;
+            var returnedLinkCount = results.ResultSet.totalResultsReturned;
+            
+            if(aResults) {//there are inbound links; process and display them:
+            
+                //write header and open list of inbound links:          
+                var html = "<h3>There are " +
+                    totalLinks + 
+                    " inbound links for this page; here are the first " + 
+                    returnedLinkCount +
+                    ":</h3><ol>";
+                
+                //process list of inbound links:
+                for (var i=0; i < aResults.length; i++) {
+                    html += "<li><strong>" +
+                        aResults[i].Title +
+                        ":</strong> <a href='%20+%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20aResults%5Bi%5D.Url%20+%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20'>" + aResults[i].Url +
+                        "</a></li>";
+                }
+                
+                //close list of inbound links
+                html += "</ol>";
+                
+            } else {//no inbound links exist for this page:
+            
+                var html = "<h3>There are no inbound links for the page specified.</h3";
+                
+            }
+            
+            //insert string into DOM:
+            elResults.innerHTML = html;
+        }
+    }
+}();
+
+//Initialize the example when the DOM is completely loaded:
+YAHOO.util.Event.onDOMReady(
+    YAHOO.example.SiteExplorer.init, 
+    YAHOO.example.SiteExplorer,         //pass this object to init and...
+    true);                              //...run init in the passed object's
+                                        //scope
+</textarea>
+
+
+
+<p></p>
+
+				</div>
+				<div class="yui-u">
+						<div id="loggerModule" class="yui-skin-sam">
+						<h3 class="firstContent">YUI Logger Output:</h3>
+								<div id="loggerDiv"></div>
+						</div>
+					
+				
+					<div id="examples">
+						<h3>Get Utility Examples:</h3>
+	
+						<div id="exampleToc">
+							<ul>
+								<li><a href='get-script-simple.html'>Quickstart Example: Getting a Script File with YUI Get</a></li><li class='selected'><a href='get-script-basic.html'>Getting a Script Node with JSON Data from a Web Service</a></li><li><a href='../layout/adv_layout.html'>Complex Application (included with examples for Layout Manager)</a></li>							</ul>
+						</div>
+					</div>
+					
+					<div id="module">
+						<h3>More Get Utility Resources:</h3>
+						<ul>
+							<li><a href="../../get/index.html">User's Guide</a></li>
+						<li><a href="../../docs/module_get.html">API Documentation</a></li>
+                            
+                            
+							<li><a href="http://yuiblog.com/assets/pdf/cheatsheets/get.pdf">Cheat Sheet PDF</a></li></ul>
+					</div>
+			  </div>
+		</div>
+		
+		</div>
+	</div>
+
+
+	
+<div class="yui-b" id="tocWrapper">
+
+<p><strong>All YUI 2.x users should review the <a href="http://yuilibrary.com/support/2.8.2/">YUI 2.8.2 security bulletin</a>, which discusses a vulnerability present in YUI 2.4.0-2.8.1.</strong></p>
+
+<!-- TABLE OF CONTENTS -->
+
+<div id="toc">
+<ul>
+<li class="sect first">YUI Library</li><li class="item"><a title="The Yahoo! User Interface Library (YUI)" href="http://yuilibrary.com/">YUI Home</a></li><li class="item"><a title="YUI 3 -- more powerful, more secure, faster, easier to use." href="http://yuilibrary.com">YUI 3</a></li><li class="item"><a title="The Yahoo! User Interface Blog" href="http://yuiblog.com">YUIBlog</a></li><li class="item"><a title="Reporting Bugs and Making Feature Requests for YUI Components" href="http://yuilibrary.com/yui/docs/tutorials/report-bugs/">Bug Reports/Feature Requests</a></li><li class="item"><a title="The YUI Library source can be checked out from GitHub" href="http://github.com/yui/">YUI on GitHub</a></li><li class="item"><a title="YUI is free and open, offered under a BSD license." href="http://yuilibrary.com/license/">YUI License</a></li><li class="sect">YUI 2.x Resources</li><li class="item"><a title="YUI 2 -- deprecated. Use YUI3 instead." href="http://yui.github.io/yui2/">YUI 2 Archives</a></li><li class="selected "><a title="Examples of every YUI utility and control in action" href="../index.html">YUI 2 Examples</a></li><li class="item"><a title="Instantly searchable API documentation for all of YUI 2." href="../../docs/index.html">YUI 2 API Docs</a></li><li class="item"><a title="YUILibrary.com hosts the YUI community forums" href="https://groups.google.com/forum/#!forum/yui-deprecated">YUI 2 Discussion Forums <img src='http://l.yimg.com/a/i/nt/ic/ut/bsc/post12_1.gif'></a></li><li class="sect">YUI Components</li><li class="item"><a title="The YUI Animation Utility" href="../../animation/index.html">Animation</a></li><li class="item"><a title="The YUI AutoComplete Control" href="../../autocomplete/index.html">AutoComplete</a></li><li class="item"><a title="The YUI Browser History Manager" href="../../history/index.html">Browser History Manager</a></li><li class="item"><a title="The YUI Button Control" href="../../button/index.html">Button</a></li><li class="item"><a title="The YUI Calendar Control" href="../../calendar/index.html">Calendar</a></li><li class="item"><a title="The YUI Carousel Control" href="../../carousel/index.html">Carousel</a></li><li class="item"><a title="The YUI Charts Control" href="../../charts/index.html">Charts</a></li><li class="item"><a title="The YUI Color Picker Control" href="../../colorpicker/index.html">Color Picker</a></li><li class="item"><a title="The YUI Connection Manager (AJAX)" href="../../connection/index.html">Connection Manager</a></li><li class="item"><a title="The YUI Container Family (Module, Overlay, Tooltip, Panel, Dialog, SimpleDialog)" href="../../container/index.html">Container</a></li><li class="item"><a title="The YUI Cookie Utility" href="../../cookie/index.html">Cookie</a></li><li class="item"><a title="The YUI DataSource Utility" href="../../datasource/index.html">DataSource</a></li><li class="item"><a title="The YUI DataTable Control" href="../../datatable/index.html">DataTable</a></li><li class="item"><a title="The YUI Dom Collection" href="../../dom/index.html">Dom</a></li><li class="item"><a title="The YUI Drag &amp; Drop Utility" href="../../dragdrop/index.html">Drag &amp; Drop</a></li><li class="item"><a title="The YUI Element Utility" href="../../element/index.html">Element</a></li><li class="item"><a title="The YUI Event Utility" href="../../event/index.html">Event</a></li><li class="item"><a title="The YUI Get Utility" href="../../get/index.html">Get</a></li><li class="item"><a title="The YUI ImageCropper Control" href="../../imagecropper/index.html">ImageCropper</a></li><li class="item"><a title="The YUI ImageLoader Utility" href="../../imageloader/index.html">ImageLoader</a></li><li class="item"><a title="The YUI JSON Utility" href="../../json/index.html">JSON</a></li><li class="item"><a title="The YUI Layout Manger" href="../../layout/index.html">Layout Manager</a></li><li class="item"><a title="The YUI Logger Control" href="../../logger/index.html">Logger</a></li><li class="item"><a title="The YUI Menu Control" href="../../menu/index.html">Menu</a></li><li class="item"><a title="The YUI Paginator" href="../../paginator/index.html">Paginator</a></li><li class="item"><a title="The YUI Profiler" href="../../profiler/index.html">Profiler</a></li><li class="item"><a title="The YUI ProfierViewer Control" href="../../profilerviewer/index.html">ProfilerViewer</a></li><li class="item"><a title="The YUI ProgressBar Control" href="../../progressbar/index.html">ProgressBar</a></li><li class="item"><a title="The YUI Resize Utility" href="../../resize/index.html">Resize</a></li><li class="item"><a title="The YUI Rich Text Editor" href="../../editor/index.html">Rich Text Editor</a></li><li class="item"><a title="The YUI Selector Utility" href="../../selector/index.html">Selector</a></li><li class="item"><a title="The YUI Slider Control" href="../../slider/index.html">Slider</a></li><li class="item"><a title="The YUI Storage Utility" href="../../storage/index.html">Storage</a></li><li class="item"><a title="The YUI StyleSheet Utility" href="../../stylesheet/index.html">StyleSheet</a></li><li class="item"><a title="The YUI Swf Utility" href="../../swf/index.html">SWF</a></li><li class="item"><a title="The YUI SwfStore Utility" href="../../swfstore/index.html">SWFStore</a></li><li class="item"><a title="The YUI TabView Control" href="../../tabview/index.html">TabView</a></li><li class="item"><a title="The YUI TreeView Control" href="../../treeview/index.html">TreeView</a></li><li class="item"><a title="The YUI Uploader Control" href="../../uploader/index.html">Uploader</a></li><li class="item"><a title="The YUI YAHOO Global Object" href="../../yahoo/index.html">Yahoo Global Object</a></li><li class="item"><a title="The YUI Loader Utility" href="../../yuiloader/index.html">YUI Loader</a></li><li class="item"><a title="The YUI Test Utility" href="../../yuitest/index.html">YUI Test</a></li><li class="item"><a title="YUI Reset CSS" href="../../reset/index.html">Reset CSS</a></li><li class="item"><a title="YUI Base CSS" href="../../base/index.html">Base CSS</a></li><li class="item"><a title="YUI Fonts CSS" href="../../fonts/index.html">Fonts CSS</a></li><li class="item"><a title="YUI Grids CSS" href="../../grids/index.html">Grids CSS</a></li></ul>
+</div>
+</div>
+
+	<div id="ft">
+        <p class="first">Copyright &copy; 2013 Yahoo! Inc. All rights reserved.</p>
+        <p><a href="http://info.yahoo.com/privacy/us/yahoo/devel/details.html">Privacy Policy</a> - 
+            <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright Policy</a> - 
+            <a href="http://careers.yahoo.com/">Job Openings</a></p>
+	</div>
+</div>
+
+<script src="../../assets/dpSyntaxHighlighter.js"></script>
+<script language="javascript"> 
+dp.SyntaxHighlighter.HighlightAll('code'); 
+</script>
+
+
+
+<script src='../../assets/YUIexamples.js'></script>
+
+
+</body>
+</html>
+
+<!-- SpaceID=0 robot -->
+
+<!-- VER-3.0.235613 -->
+<!-- doc1.ydn.gq1.yahoo.com compressed/chunked Tue Jul 30 21:13:06 PDT 2013 -->
+
+<!-- Localized -->
