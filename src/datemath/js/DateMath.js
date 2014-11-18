@@ -340,7 +340,7 @@ YAHOO.widget.DateMath = {
     * @return {Date}  The JavaScript Date representing the first day of the month
     */
     findMonthStart : function(date) {
-        var start = this.getDate(date.getFullYear(), date.getMonth(), 1);
+        var start = this.getDate(date.getFullYear(), date.getMonth(), 1, 12);
         return start;
     },
 
