@@ -219,17 +219,30 @@ are output in the logger to the right. <br />View the source to see how it's don
 
         test_substitute: function() {
 
+            var l = YAHOO.lang;
+
+            ////////////////////////////////////////////////////////////////////////////////
+
+            var braces = l.substitute("{foo} {bar}", { foo:1, bar:"{" } );
+            Assert.areEqual("1 {", braces, "Single open brace in replacement string");
+
+            var no_saved = l.substitute("~-0-~ {foo} {bar}", {bar:1});
+            Assert.areEqual("~-0-~ {foo} 1", no_saved, "Ensure that ~-0-~ does not get caught.");
+
+            var empty_brace = l.substitute("{a} {}", {a:1});
+            Assert.areEqual("1 {}", empty_brace, "Ensure that empty braces are ok.");
+
             ////////////////////////////////////////////////////////////////////////////////
 
             var param = {domain: 'valvion.com', 
                          media: 'http://media.{domain}/', /* nested */
                          contextdomain: { context1: 'context{domain}', context2: 'yahoo.com' },  /* the value is an object, we will use a custom function to extract the correct data */
                          contextmedia: 'http://contextmedia.{contextdomain context1}/'};
-            var url, l=YAHOO.lang;
+            var url;
 
             // standard replace, nested
             url = l.substitute("{media}logo.gif", param, null, true);
-            Assert.areEqual(url, "http://media.valvion.com/logo.gif");
+            Assert.areEqual("http://media.valvion.com/logo.gif", url);
 
             
             // If the replacement value is an object, use the meta info as a key to extract the
@@ -241,7 +254,7 @@ are output in the logger to the right. <br />View the source to see how it's don
             // "random data" is not used since the value for the contextmedia key is a string.  
             // contextdomain uses "context1" as a key to expand the string correctly
             url = l.substitute("{contextmedia random data}logo.gif", param, multipleChoice, true);
-            Assert.areEqual(url, "http://contextmedia.contextvalvion.com/logo.gif");
+            Assert.areEqual("http://contextmedia.contextvalvion.com/logo.gif", url);
 
             ////////////////////////////////////////////////////////////////////////////////
 
