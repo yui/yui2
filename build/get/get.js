@@ -306,7 +306,7 @@ YAHOO.util.Get = function() {
         // no way to make the css requests synchronous. This means that the css
         // rules in multiple files could be applied out of order in this browser
         // if a later request returns before an earlier one.  Safari too.
-        if ((ua.webkit || ua.gecko) && q.type === "css") {
+        if ((ua.webkit || ua.gecko < 9) && q.type === "css") {
             _next(id, url);
         }
     },
