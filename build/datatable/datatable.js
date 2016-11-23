@@ -163,7 +163,6 @@ YAHOO.util.Chain.prototype = {
     }
 };
 YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
-
 /**
  * Augments the Event Utility with a <code>delegate</code> method that 
  * facilitates easy creation of delegated event listeners.  (Note: Using CSS 
@@ -1625,7 +1624,6 @@ Selector.combinators['~'] = {
     axis: 'previousSibling'
 };
 YAHOO.register("selector", YAHOO.util.Selector, {version: "@VERSION@", build: "@BUILD@"});
-
 
 
 /****************************************************************************/
@@ -3113,7 +3111,6 @@ if(YAHOO.util.DD) {
  * @deprecated Pass configs directly to CellEditor constructor. 
  */
 
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -3948,7 +3945,6 @@ YAHOO.widget.Record.prototype = {
 };
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -4280,6 +4276,17 @@ lang.augmentObject(DT, {
     CLASS_FIRST : "yui-dt-first",
 
     /**
+     * Class name assigned to first shown columns.
+     *
+     * @property DataTable.CLASS_FIRST_SHOWN
+     * @type String
+     * @static
+     * @final
+     * @default "yui-dt-first-shown"
+     */
+    CLASS_FIRST_SHOWN : "yui-dt-first-shown",
+
+    /**
      * Class name assigned to last elements.
      *
      * @property DataTable.CLASS_LAST
@@ -4289,6 +4296,17 @@ lang.augmentObject(DT, {
      * @default "yui-dt-last"
      */
     CLASS_LAST : "yui-dt-last",
+
+    /**
+     * Class name assigned to last shown columns.
+     *
+     * @property DataTable.CLASS_LAST_SHOWN
+     * @type String
+     * @static
+     * @final
+     * @default "yui-dt-last-shown"
+     */
+    CLASS_LAST_SHOWN : "yui-dt-last-shown",
 
     /**
      * Class name assigned to Record elements.
@@ -5630,6 +5648,24 @@ _elMsgTr : null,
 _elMsgTd : null,
 
 /**
+ * Reference to the first (from the left) shown column.
+ *
+ * @property _firstShownColumn
+ * @type YAHOO.widget.Column
+ * @private
+ */
+_firstShownColumn : null,
+
+/**
+ * Reference to the last (from the left) shown column.
+ *
+ * @property _lastShownColumn
+ * @type YAHOO.widget.Column
+ * @private
+ */
+_lastShownColumn : null,
+
+/**
  * Element reference to shared Column drag target.
  *
  * @property _elColumnDragTarget
@@ -6927,6 +6963,14 @@ _getColumnClassNames : function (oColumn, aAddClasses) {
     if(oColumn.hidden) {
         allClasses[allClasses.length] = DT.CLASS_HIDDEN;
     }
+    else {
+        if (oColumn === this._firstShownColumn) {
+            allClasses[allClasses.length] = DT.CLASS_FIRST_SHOWN;
+        }
+        if (oColumn === this._lastShownColumn) {
+            allClasses[allClasses.length] = DT.CLASS_LAST_SHOWN;
+        }
+    }
     // Selected
     if(oColumn.selected) {
         allClasses[allClasses.length] = DT.CLASS_SELECTED;
@@ -7402,6 +7446,8 @@ _onRenderChainEnd : function() {
             oSelf.fireEvent("renderEvent");
             // Backward compatibility
             oSelf.fireEvent("refreshEvent");
+
+            oSelf._refreshFirstLastShown();
     
             // Post-render routine
             oSelf.validateColumnWidths();
@@ -9937,6 +9983,103 @@ _restoreMinWidth : function(oColumn) {
 },
 
 /**
+ * Refreshes the internal _firstShownColumn and _lastShownColumn variables.
+ *
+ * @method _refreshFirstLastShown
+ * @private
+ */
+_refreshFirstLastShown : function() {
+    var old_first = this._firstShownColumn;
+    var old_last  = this._lastShownColumn;
+
+    var keys = this._oColumnSet.keys;
+
+    var first_changed, last_changed;
+    var new_first_index, new_last_index;
+
+    var old_first_key = old_first && old_first.key;
+    var old_last_key  = old_last && old_last.key;
+
+    for (var k=0,cur_k; cur_k=keys[k++]; /* */) {
+        if (!cur_k.hidden) {
+            this._firstShownColumn = cur_k;
+            break;
+        }
+    }
+
+    if (!old_first || !cur_k || old_first._nKeyIndex !== cur_k._nKeyIndex || old_first_key !== cur_k.key) {
+        first_changed = true;
+        new_first_index = cur_k && cur_k.getKeyIndex();
+
+        if (old_first) {
+            var f = old_first;
+            do {
+                Dom.removeClass(f.getThEl(), DT.CLASS_FIRST_SHOWN);
+            } while (f = f.getParent());
+        }
+
+        if (cur_k) {
+            var f = cur_k;
+            do {
+                Dom.addClass(f.getThEl(), DT.CLASS_FIRST_SHOWN);
+            } while (f = f.getParent());
+        }
+    }
+
+    for (var k=keys.length-1,cur_k; cur_k=keys[k--]; /* */) {
+        if (!cur_k.hidden) {
+            this._lastShownColumn = cur_k;
+            break;
+        }
+    }
+
+    if (!old_last || !cur_k || old_last._nKeyIndex !== cur_k._nKeyIndex || old_last_key !== cur_k.key) {
+        last_changed = true;
+        new_last_index = cur_k && cur_k.getKeyIndex();
+
+        if (old_last) {
+            var f = old_last;
+            do {
+                Dom.removeClass(f.getThEl(), DT.CLASS_LAST_SHOWN);
+            } while (f = f.getParent());
+        }
+
+        if (cur_k) {
+            var f = cur_k;
+            do {
+                Dom.addClass(f.getThEl(), DT.CLASS_LAST_SHOWN);
+            } while (f = f.getParent());
+        }
+    }
+
+    if (first_changed || last_changed) {
+        var rows = this._elTbody.rows;
+        var cells;
+        var old_first_index = old_first_key ? this.getColumn(old_first_key).getKeyIndex() : null;
+        var old_last_index  = old_first_key ? this.getColumn(old_last_key).getKeyIndex()  : null;
+        for (var r=0,cur_r; cur_r=rows[r++]; /* */) {
+            cells = cur_r.cells;
+            if (first_changed) {
+                if (old_first_index !== null) {
+                    Dom.removeClass( cells[old_first_index], DT.CLASS_FIRST_SHOWN );
+                }
+                if (new_first_index !== undefined) {
+                    Dom.addClass( cells[new_first_index], DT.CLASS_FIRST_SHOWN );
+                }
+            }
+            if (last_changed) {
+                if (old_last_index !== null) {
+                    Dom.removeClass( cells[old_last_index], DT.CLASS_LAST_SHOWN );
+                }
+                if (new_last_index !== undefined) {
+                    Dom.addClass( cells[new_last_index], DT.CLASS_LAST_SHOWN );
+                }
+            }
+        }
+    }
+},
+
+/**
  * Hides given Column. NOTE: You cannot hide/show nested Columns. You can only
  * hide/show non-nested Columns, and top-level parent Columns (which will
  * hide/show all children Columns).
@@ -9956,7 +10099,7 @@ hideColumn : function(oColumn) {
         var allrows = this.getTbodyEl().rows;
         var l = allrows.length;
         var allDescendants = this._oColumnSet.getDescendants(oColumn);
-        
+
         // Hide each nested Column
         for(var i=0, len=allDescendants.length; i<len; i++) {
             var thisColumn = allDescendants[i];
@@ -9979,7 +10122,9 @@ hideColumn : function(oColumn) {
             
             this.fireEvent("columnHideEvent",{column:thisColumn});
         }
-      
+
+        this._refreshFirstLastShown();
+
         this._repaintOpera();
         this._clearTrTemplateEl();
     }
@@ -10030,6 +10175,9 @@ showColumn : function(oColumn) {
 
             this.fireEvent("columnShowEvent",{column:thisColumn});
         }
+
+        this._refreshFirstLastShown();
+
         this._clearTrTemplateEl();
     }
     else {
@@ -10337,17 +10485,17 @@ reorderColumn : function(oColumn, index) {
                                 for(; i < len; ++i) {
                                     tmpTds = [];
                                     thisTr = allRows[i];
-                                    
+
                                     // Remove each TD
                                     for(j=aIndexes.length-1; j>-1; j--) {
                                         tmpTds.push(thisTr.removeChild(thisTr.childNodes[aIndexes[j]]));
                                     }
-                                    
+
                                     // Insert each TD
                                     nextSibling = thisTr.childNodes[newIndex] || null;
                                     for(j=tmpTds.length-1; j>-1; j--) {
                                         thisTr.insertBefore(tmpTds[j], nextSibling);
-                                    }                                    
+                                    }
                                 }
                                 oArg.nCurrentRow = i;
                             }
@@ -10359,8 +10507,11 @@ reorderColumn : function(oColumn, index) {
                     });
                     this._runRenderChain();
                 }
-        
+
+                this._refreshFirstLastShown();
+
                 this.fireEvent("columnReorderEvent",{column:oNewColumn, oldIndex:nOrigTreeIndex});
+
                 return oNewColumn;
             }
         }
@@ -15870,7 +16021,6 @@ DT.editTextarea = function() {};
 DT.editTextbox= function() {};
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -17167,7 +17317,6 @@ _onTheadKeydown : function(e, oSelf) {
 });
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -19070,5 +19219,4 @@ lang.augmentObject(CE, BCE);
 
 
 })();
-
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});
