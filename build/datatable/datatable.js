@@ -15902,6 +15902,7 @@ widget.ScrollingDataTable = function(elContainer,aColumnDefs,oDataSource,oConfig
     
     // Prevent infinite loop
     if(oConfigs.scrollable) {
+    	oConfigs = lang.merge(oConfigs);
         oConfigs.scrollable = false;
     }
 
