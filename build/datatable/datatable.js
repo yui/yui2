@@ -163,7 +163,6 @@ YAHOO.util.Chain.prototype = {
     }
 };
 YAHOO.lang.augmentProto(YAHOO.util.Chain,YAHOO.util.EventProvider);
-
 /**
  * Augments the Event Utility with a <code>delegate</code> method that 
  * facilitates easy creation of delegated event listeners.  (Note: Using CSS 
@@ -1625,7 +1624,6 @@ Selector.combinators['~'] = {
     axis: 'previousSibling'
 };
 YAHOO.register("selector", YAHOO.util.Selector, {version: "@VERSION@", build: "@BUILD@"});
-
 
 
 /****************************************************************************/
@@ -3113,7 +3111,6 @@ if(YAHOO.util.DD) {
  * @deprecated Pass configs directly to CellEditor constructor. 
  */
 
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -3948,7 +3945,6 @@ YAHOO.widget.Record.prototype = {
 };
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -10326,28 +10322,55 @@ reorderColumn : function(oColumn, index) {
                 var allRows = this._elTbody.rows;
                 if(allRows.length > 0) {
                     var loopN = this.get("renderLoopSize"),
-                        loopEnd = allRows.length;
+                        loopEnd = allRows.length,
+                        keys_last_i = this._oColumnSet.keys.length - 1,
+                        drag_to_first   = newIndex === 0,
+                        drag_from_first = aOrigKeyIndexes[0] === 0,
+                        drag_to_last    = newIndex === keys_last_i,
+                        drag_from_last  = aOrigKeyIndexes[aOrigKeyIndexes.length-1] === keys_last_i,
+                        class_first  = DT.CLASS_FIRST,
+                        class_last   = DT.CLASS_LAST;
+
                     this._oChainRender.add({
                         method: function(oArg) {
                             if((this instanceof DT) && this._sId) {
                                 var i = oArg.nCurrentRow, j, tmpTds, nextSibling,
                                     len = loopN > 0 ? Math.min(i + loopN,allRows.length) : allRows.length,
-                                    aIndexes = oArg.aIndexes, thisTr;
+                                    aIndexes = oArg.aIndexes, thisTr, thisTd, tds;
                                 // For each row
                                 for(; i < len; ++i) {
                                     tmpTds = [];
                                     thisTr = allRows[i];
-                                    
+                                    tds = thisTr.childNodes;  //it's a-LIVE...!
+
                                     // Remove each TD
                                     for(j=aIndexes.length-1; j>-1; j--) {
-                                        tmpTds.push(thisTr.removeChild(thisTr.childNodes[aIndexes[j]]));
+                                        tmpTds.push(thisTd = thisTr.removeChild(tds[aIndexes[j]]));
                                     }
-                                    
+
+                                    if (drag_from_first) {
+                                        Dom.removeClass(thisTd,class_first);
+                                        Dom.addClass(tds[0],class_first);
+                                    }
+                                    else if (drag_from_last) {
+                                        Dom.removeClass(tmpTds[0],class_last);
+                                        Dom.addClass(tds[tds.length-1],class_last);
+                                    }
+
                                     // Insert each TD
-                                    nextSibling = thisTr.childNodes[newIndex] || null;
+                                    nextSibling = tds[newIndex] || null;
                                     for(j=tmpTds.length-1; j>-1; j--) {
                                         thisTr.insertBefore(tmpTds[j], nextSibling);
-                                    }                                    
+                                    }
+
+                                    if (drag_to_first) {
+                                        Dom.removeClass(nextSibling, class_first);
+                                        Dom.addClass(tds[0], class_first);
+                                    }
+                                    else if (drag_to_last) {
+                                        Dom.removeClass(tds[newIndex-1], class_last);
+                                        DOM.addClass(tmpTds[0], class_last);
+                                    }
                                 }
                                 oArg.nCurrentRow = i;
                             }
@@ -15870,7 +15893,6 @@ DT.editTextarea = function() {};
 DT.editTextbox= function() {};
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -17167,7 +17189,6 @@ _onTheadKeydown : function(e, oSelf) {
 });
 
 })();
-
 (function () {
 
 var lang   = YAHOO.lang,
@@ -19070,5 +19091,4 @@ lang.augmentObject(CE, BCE);
 
 
 })();
-
 YAHOO.register("datatable", YAHOO.widget.DataTable, {version: "@VERSION@", build: "@BUILD@"});
