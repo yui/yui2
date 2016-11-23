@@ -684,7 +684,7 @@ Paginator.prototype = {
                 for (i = 0, len = rppOptions.length; i < len; ++i) {
                     opt = rppOptions[i];
                     // account for value 'all'
-                    if (lang.isNumber(opt || opt.value)) {
+                    if (lang.isNumber(opt.value || opt)) {
                         rpp = Math.min(rpp, (opt.value || opt));
                     }
                 }
